@@ -1,0 +1,40 @@
+<div class="product-details rotated" (click)="sidebarCollapsed=false; showDialog=true; onSelect('all')">
+  <span>PRODUCT DETAILS</span>
+  <i class="fa fa-angle-left"></i>
+</div>
+
+<div class="product-details-dialog-wrapper" *ngIf="showDialog" (click)="sidebarCollapsed=true; showDialog=false"></div>
+<div class="product-details-dialog"  [ngClass]="{'show-sidebar': !sidebarCollapsed, 'hide-sidebar': sidebarCollapsed }">
+  <div class="header">
+    <span>Product Details</span>
+  </div>
+  <div class="search-products">
+    <input type="text" [(ngModel)]="queryString" id="search" placeholder="Search products here...">
+    <img src="assets/images/add-button.png">
+  </div>
+  <div class="product-type-select">
+    <span>Product type: </span>
+    <select [(ngModel)]="selected" (ngModelChange)="onSelect(selected)">
+      <option value='all'>All product types</option>
+      <option *ngFor="let type of productType" [value]="type">{{type}}</option>
+    </select>
+  </div>
+  <div class="products-table">
+    <table>
+      <tr>
+        <th>MODEL</th>
+        <th>NAME</th>
+        <th>SKU</th>
+        <th>QTY</th>
+        <th>PRICE</th>
+      </tr>
+      <tr *ngFor="let productInfo of selectedData | sort:'productName' | SearchPipe: queryString : searchableList ">
+        <td>{{productInfo.model}}</td>
+        <td>{{productInfo.productName}}</td>
+        <td>{{productInfo.sku}}</td>
+        <td>{{productInfo.qty}}</td>
+        <td>{{productInfo.unitPrice}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

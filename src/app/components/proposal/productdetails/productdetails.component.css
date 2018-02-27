@@ -1,0 +1,159 @@
+.product-details {
+	width:50px;
+	height: calc(100vh - 135px);
+	background-color: #f5f5f5;
+	color: #9b9ea0;
+	font-size: 2rem;
+	text-align: center;
+	cursor: pointer;
+}
+  
+.rotated {
+	writing-mode: tb-rl;
+	transform: rotate(-180deg);
+}
+.product-details>span {
+	line-height: 2.5;
+	margin-top: 100px;
+	letter-spacing: 1px;
+}
+/* Modal CSS */
+
+.product-details-dialog-wrapper {
+	width:100%;
+	height: 100%;
+	z-index: 9990;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.product-details-dialog {
+	position: absolute;
+	top: 66px;
+	margin: 0;
+	left: 0;
+	background: white;
+	z-index: 9991;
+	min-height: calc(100vh - 135px);
+	background-color: #f5f5f5;
+	min-width: 380px;
+	transition: all 0.5s ease-in;
+}
+
+.hide-sidebar {
+  /* transition: 1s all; */
+	left: -30%;
+	visibility: hidden;
+}
+
+.show-sidebar {
+	/* transition: 1s all; */
+	width: 30%;
+	visibility: visible;
+}
+
+.product-details-dialog .header {
+	padding: 10px;
+	font-size: 1.4em;
+	border-bottom: solid 1px lightgray;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: center;
+	color: #9b9ea0;
+}
+
+.search-products {
+	padding: 12px 5px 3px;
+	border-bottom: 1px solid lightgray;
+	margin-left: 20px;
+	margin-right: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.search-products input {
+	padding-left: 5px;
+	border: 0;	
+	background: transparent;
+	width: 100%;
+}
+
+.search-products input:focus {
+	outline: none;
+}
+
+.search-products img {
+	width: 20px;
+	height: 20px;
+}
+
+.product-type-select {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 5px 20px;
+}
+
+.product-type-select span {
+	margin-right: 10px;
+	color: #95989A;
+	white-space: nowrap;
+}
+
+.product-type-select select {
+	width: 100%;
+  height: 31px;
+  background: white;
+  border: 1px solid lightgray;
+  border-radius: 0;
+  -webkit-appearance: none;
+  padding-left: 20px;
+  color: #95989A;
+  background: url(/assets/images/down-arrow.png) no-repeat;
+  background-position: right 10px center;
+	background-size: 3%;
+	margin: 20px;
+	background-color: white;
+}
+
+table {
+  width: 100%;
+  color: gray;
+}
+
+td {
+  padding: 7px 0 7px 10px;
+  font-size: 10px;
+  text-align: left;
+}
+
+th {
+  padding: 8px;
+  font-size: 10px;
+  border: 1px solid lightgray;
+  border-collapse: collapse;
+  font-weight: 400;
+}
+
+th:first-child {
+  border-left: none;
+  padding-left: 3%;
+}
+
+th:last-child {
+  border-right: none;
+}
+
+
+@media screen and (max-width: 1200px) {
+	.product-details {
+		width:40px;
+		font-size: 1.7rem;
+	}
+}
+

@@ -1,0 +1,94 @@
+<div class="work-order-settings" [ngClass]="{'work-order-settings-origin-collapsed': !settingsCollapsed}">
+  <span (click)="settingsCollapsed = !settingsCollapsed">Settings</span>
+  <div class="btn-section" >
+    <button class="cancel-btn" >
+      Cancel
+    </button>
+    <button class="save-btn">
+      Save & Close
+    </button>
+  </div>
+</div>
+<div class="work-order-settings-expanded" [ngClass]="{'work-order-settings-collapsed': settingsCollapsed}">
+  <div class="settings-header">
+    <span>WORK ORDER SETTINGS</span>
+    <img src="assets/images/x-sign-red.png" (click)="settingsCollapsed = !settingsCollapsed">
+  </div>
+  <div class="settings-content">
+    <div class="reminder-update">
+      <div class="settings-feature">
+        <div class="reminder" (click)="showReminderModal=true;">
+          <img src="assets/images/alarm-clock.png">
+          <div class="settings-desc">
+            <span>SET REMINDER</span>
+            <span>Set a time or day aside from the settings to send a reminder to the staff and clients</span>
+          </div>
+        </div>
+      </div>
+      <div class="settings-feature">
+        <div class="request">
+          <img src="assets/images/exchange.png">
+          <div class="settings-desc">
+            <span>REQUEST FOR UPDATE</span>
+            <span>Send out a request to the staff to update the Work Order</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="print-billable">
+      <div class="settings-feature">
+        <div class="print">
+          <img src="assets/images/printer.png">
+          <div class="settings-desc">
+            <span>PRINT</span>
+            <span>Print important documents such as the invoice, receipt, and pick lists</span>
+          </div>
+        </div>
+      </div>
+      <div class="settings-feature">
+        <div class="billable">
+          <img src="assets/images/credit-card.png">
+          <div class="settings-desc">
+            <span>BILLABLE WORK ORDER</span>
+            <span>This work order is a billable to the client, by checking this 
+                  once the work order is complete, system will generate an invoice</span>
+          </div>
+        </div>
+        <div class="switch">
+          <img src="assets/images/switch.png" *ngIf="switchOn" (click)="switchOn = !switchOn">
+          <img src="assets/images/switch-off.png" *ngIf="!switchOn" (click)="switchOn = !switchOn">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="reminder-modal-wrapper" *ngIf="showReminderModal" ></div>
+<div [ngClass]="{'reminder-modal': showReminderModal, 'reminder-modal-hide': !showReminderModal }">
+  <div class="header">
+    <span>SET REMINDER</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showReminderModal=false" />
+  </div>
+  <div class="content" >
+    <div class="reminder-content">
+      <div><span>Reminder</span></div>
+      <select>
+        <option>Hours</option>
+        <option>Days</option>
+        <option>Weeks</option>
+      </select>
+      <input placeholder="0.00" [(ngModel)]="reminderTime">
+    </div>
+    <div class="modal-btn-section" >
+      <button class="save-btn" (click)="showReminderModal=false;" >
+        Confirm
+      </button>
+      <button class="cancel-btn" (click)="showReminderModal=false;" >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div> 
+

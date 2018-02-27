@@ -1,0 +1,45 @@
+.card {
+	border-radius: 2px;
+	padding: 10px;
+	position: relative;
+	box-shadow: #e3e3e3 0px 0 2px 2px;
+	background-color: #F6F6F6;
+	display: flex;
+	flex-direction: column;
+	margin: 10px 0 30px 0;
+}
+
+h4 {
+	text-align: left;
+	color: #a3a5a7;
+	font-weight: 400;
+}
+
+.card>div {
+	display: flex;
+	justify-content: space-between;
+}
+
+h2 {
+	color: #82ebc8;
+	font-weight: 400;
+	margin-top: 10px;
+}
+
+span {
+	color: #c0c2c3;
+	font-weight: 300;
+	font-size: 12px;
+}
+
+@media screen and (max-width: 1500px) {
+	h2 {
+		font-size: 2.4rem;
+	}
+}
+
+@media screen and (max-width: 1200px) {
+	h2 {
+		font-size: 1.8rem;
+	}
+}

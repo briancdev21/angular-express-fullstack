@@ -1,0 +1,19 @@
+.main-content {
+  position: absolute;  
+  padding: 10px;
+  text-align: center;
+}
+
+.main-content-small {
+  transition: 0.2s all;
+  right: 0;
+  left: 200px;
+  top: 69px;
+}
+
+.main-content-large {
+  top: 69px;
+  right: 0;
+  left: 68px;
+  transition: 0.2s all;
+}

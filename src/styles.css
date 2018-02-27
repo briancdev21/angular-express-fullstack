@@ -1,0 +1,221 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+@import "~fullcalendar/dist/fullcalendar.min.css";
+
+.editor tabs .tabs__tab-bar {
+  display: block;
+  border: 0;
+  -ms-flex-item-align: start !important;
+  align-self: flex-start;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 0;
+  padding: 3px 10px 3px;
+  border-radius: 0;
+  border-bottom: solid 1px #F5F5F5;
+  color: #95989A;
+}
+
+.editor tabs .tabs__tab.active, .content>tabs .tabs__tab.active {
+  border-bottom: solid 3px #87d6c7 !important;
+  color: #95989A !important;
+  background: none !important;
+}
+
+.editor tabs .tabs__panel, .content>tabs .tabs__panel {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.editor tab input {
+  border: 1px solid #F5F5F5;
+}
+
+/* card tabs css */
+.content>tabs .tabs__tab-bar {
+	width: 100%;
+	text-align: left;
+	border: 0;
+	line-height: 3rem;
+  font-size: 1.3rem;
+  border-radius: 0 !important;
+  border-bottom: solid 1px #F5F5F5;
+	margin-bottom: 0 !important;
+}
+
+.content>tabs .tabs__tab {
+  width: 20%;
+  text-align: center;
+}
+
+.add-lead-modal .content>tabs .tabs__tab {
+  width: 25%;
+  text-align: center;
+  color: #95989A;
+}
+
+.content>tabs .tabs__tab {
+  border-right: 1px solid #F5F5F5;
+}
+
+/* Form Editor CSS */
+
+.form-editor i {
+	background-color: #f5f5f5;
+	font-size: 12px !important;
+}
+
+.fr-wrapper {
+	background-color: #f5f5f5 !important;
+	height: 400px;
+}
+
+.fr-toolbar.fr-top {
+  border-top: 1px solid lightgray;
+}
+
+
+
+@media screen and (max-width: 1200px) {
+	.tabs__tab-bar>li {
+    font-size: 10px;
+    font-weight: 500;
+	}
+}
+
+/* Add a Log Modal CSS in leads page */
+
+.add-log-modal tabs__tab {
+  padding: 4px 20px;
+}
+
+/* Calendar Style CSS*/
+
+.owl-dt-inline-container, .owl-dt-popup-container {
+  width: 200px;
+}
+
+.owl-dt-inline-container .owl-dt-calendar, .owl-dt-popup-container .owl-dt-calendar {
+  height: 235px;
+}
+
+.created-from input, .created-to input, .updated-from input, .updated-to input   {
+  width: 100%;
+  height: 32px;
+  padding-left: 5px;
+  font-size: 12px;
+	background: url(/assets/images/down-arrow.png) no-repeat;
+	background-position: right 6px center;
+	background-size: 9%;
+  border: 1px solid lightgray;
+}
+
+.created-from input::placeholder, .created-to input::placeholder, .updated-from input::placeholder, .updated-to input::placeholder {
+  color: #D5D5D5;
+  font-size: 10px;
+}  
+
+/* Range slider CSS */
+
+.irs-line .irs-line-right, .irs-line .irs-line-left, .irs-line .irs-line-mid {
+  background: #D3F8EE;
+  height: 15px;
+} 
+
+.irs .irs-line {
+  height: 15px;
+} 
+
+.irs-line .irs-line-left {
+  border-radius: 7px 0 0 7px;
+}
+
+.irs-line .irs-line-right {
+  border-radius: 0 7px 7px 0;
+}
+
+.irs .irs-from, .irs .irs-to {
+  background: transparent;
+  color: #AFB2B3;
+  top: 7px;
+  font-size: 8px;
+}
+
+.irs .irs-from::after, .irs .irs-to::after {
+  display: none;
+} 
+
+.irs .irs-min, .irs .irs-max {
+  display: none;
+}
+
+.irs .irs-bar {
+  background: #6FEBCA;
+  border-radius: 7px;
+  height: 15px;
+}
+
+.irs .irs-slider.type_last, .irs .irs-slider.from {
+  background: gray;
+  width: 2px;
+  margin-top: 0px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.irs-slider {
+  width: 2px !important;
+  background: gray !important;
+  cursor: pointer !important;
+  
+}
+
+/* ng2 completer css */
+.completer-input {
+    border: solid 1px #F5F5F5;
+    padding-left: 7px;
+    font-size: 13px;
+    width: 100%;
+    height: 35px;
+    color: #646464;
+}
+
+.completer-dropdown-holder {
+  font-size: 12px;
+  padding-right: 5px;
+}
+
+/* Calender Style */
+
+.calendar-view .fc-event {
+  background-color: #5DCDB6;
+  border: none;
+}
+
+.calendar-view .fc td, .calendar-view .fc th {
+  font-size: 11px;
+}
+
+.calendar-view .fc-center h2 {
+  font-size: 22px;
+  font-weight: 300;
+}
+
+.calendar-view .fc button {
+  font-size: 10px;
+  height: 20px;
+  background: none;
+}
+
+.calendar-view .fc-right button {
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  outline-color: lightgray;
+}
+
+.calendar-view .fc-right .fc-state-active {
+  background-color: #5DCDB6;
+}

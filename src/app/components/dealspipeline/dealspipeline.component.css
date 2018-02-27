@@ -1,0 +1,274 @@
+.main-content {
+  position: absolute;  
+  text-align: center;
+  color: #464646;
+}
+
+.main-content-small {
+  transition: 0.2s all;
+  right: 0;
+  left: 200px;
+}
+
+.main-content-large {
+  right: 0;
+  left: 68px;
+  transition: 0.2s all;
+}
+
+.empty-top-bar {
+  height:129px; 
+  margin: 0 20px;
+}
+
+.top-nav-bar {
+  display: flex;
+  padding: 15px 30px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 2rem;
+}
+
+.top-nav-bar span:first-child {
+  color: #6eb1dd;
+  margin-right: 25px; 
+}
+
+.top-nav-bar i {
+  margin: 0 25px 0 10px; 
+}
+
+.top-nav-bar i:last-child {
+  font-size: 1.5rem;
+}
+
+.main-content-box {
+  width: 100%;
+  border-top: 1px solid #F5F5F5;
+  display: flex;
+  flex-direction: column;
+  height: 75vh;
+  overflow: auto;
+}
+
+.deals-filter {
+  display: flex;
+  align-items: center;
+}
+
+.top-nav-bar .deals-filter span {
+  font-size: 16px;
+  color: #464646;
+}
+
+.deals-filter>div {
+  margin: 0;
+  padding: 0;
+  background: #F5F5F5;
+}
+
+.deals-filter select {
+  background-color: #F7F7F7;
+  -webkit-appearance: none;
+  background: url(/assets/images/down-arrow.png) no-repeat;
+  background-position: right 17px center;
+  background-size: 9%;
+  height: 26px;
+  font-size: 12px;
+  color: #6D6D6D;
+  border-radius: 0;
+  border: 0;
+  padding-left: 20px;
+  padding-right: 35px;
+}
+
+
+
+* {margin: 0; padding: 0; box-sizing: border-box}
+
+html, body {
+	height: 100%; 
+	background-color: #333;
+}
+	
+.container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+	min-width: 480px;
+	padding: 0 40px;
+}
+
+.breadcrumb {
+	display: flex;
+	border-radius: 0;
+	overflow: hidden;
+	text-align: center;
+	top: 50%;
+	width: 100%;
+	height: 80px;
+	z-index: 1;
+	background-color: white;
+	font-size: 14px;
+  border-bottom: 1px solid #F5F5F5;
+}
+
+.breadcrumb a {
+  position: relative;
+  display: flex;
+  flex-grow: 2;
+  text-decoration: none;
+  margin: auto;
+  height: 100%;
+  padding-left: 50px;
+  padding-right: 0;
+  color: #666;
+}
+
+.breadcrumb a:first-child {
+  padding-left: 20px;
+}
+
+.breadcrumb a:last-child {
+  padding-right: 20px;
+}
+
+.breadcrumb a:after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  width: 75px;
+  height: 80px;
+  top: 0;
+  right: -65px;
+  background-color: white;
+  border-top-right-radius: 0;
+  -webkit-transform: scale(0.707) rotate(45deg);
+  transform: scale(0.707) rotate(45deg);
+  box-shadow: 4px -4px #F5F5F5;
+  z-index: 1;
+}
+
+.breadcrumb a:last-child:after {
+  content: none;
+}
+
+.breadcrumb__inner {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-left: 40px;
+  z-index: 2;
+}
+
+.breadcrumb__title {
+  font-size: 18px;
+  text-align: left;
+  margin-bottom: 3px;
+}
+
+.breadcrumb__desc {
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 300;
+  width: 120px;
+}
+
+.breadcrumb__desc span {
+  margin-right: 10px;
+}
+
+
+@media all and (max-width: 1000px) {
+	.breadcrumb {
+		font-size: 12px;
+	}
+}
+
+@media all and (max-width: 710px) {
+	.breadcrumb__desc {
+		display: none;
+	}
+	
+	.breadcrumb {
+		height: 75px;
+	}
+	
+	.breadcrumb a {
+		padding-left: 35px;
+	}
+	
+	.breadcrumb a:after {
+			content: "";
+			width: 50px;
+			height: 50px;
+			right: -25px;
+			transform: scale(0.707) rotate(45deg);
+		}
+}
+
+
+/* Draggable Table CSS */
+
+.draggable-table-content {
+  display: flex;
+  user-select: none;
+}
+
+.draggable-table-content>div {
+  width: 14.5%
+}
+
+.draggable-table-content>div:last-child {
+  width: 13.8%;
+} 
+
+.draggable-column {
+  height: 60vh;
+  border-right: 1px solid #F5F5F5;
+}
+
+.draggable {
+  height: 100px;
+  align-items: center;
+  display: flex;
+  border-bottom: 1px solid #F5f5f5;
+  font-size: 11px;
+  color: #646464;
+  text-align: left;
+  padding: 10px 10px 10px 10%;
+  cursor: pointer;
+}
+
+.deal-content {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+}
+
+.deal-content>span:first-child {
+  font-size: 16px;
+  color: #464646;
+  margin-bottom: 3px;
+}
+
+.deal-id-created {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-size: 10px;
+  margin-top: -45px;
+}
+
+.follow-up-content .individual:nth-child(odd),
+.demo-content .individual:nth-child(odd),
+.won-content .individual:nth-child(odd),
+.new-content .individual:nth-child(even),
+.seen-content .individual:nth-child(even),
+.negotiation-content .individual:nth-child(even),
+.lost-content .individual:nth-child(even)
+  {
+    background: #F5F5F5;
+  }

@@ -1,0 +1,13 @@
+<div class="content-title-bar" >
+  <input class="title" placeholder="Work Order Title Here" [(ngModel)]="orderTitle" (clickOutside)="clickOutsideTitle(orderTitle)">
+  <div class="titlebar-right">
+    <span (click)="openAvailabilityModal();">Check Availability</span>
+    <div class="followers" > 
+      <div class="follower" *ngFor="let user of availableStaff; let i = index">
+        <a [title]='user.name'><img [src]='user.imageUrl'/></a>
+      </div> 
+    </div>
+    <div class="status">{{orderProfileInfo.orderStatus}}</div>
+  <div>
+ 
+</div>

@@ -1,0 +1,98 @@
+.main-content {
+  position: absolute;
+  text-align: center;
+  right: 0;
+  top: 69px;
+  overflow: hidden;
+}
+
+.main-content-small {
+  transition: 0.2s all;
+  left: 200px;
+}
+
+.main-content-large {
+  left: 68px;
+  transition: 0.2s all;
+}
+
+.proposalInfo-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 2.5rem;
+  color: #9b9ea0;
+  padding: 15px;
+  border-bottom: 1px solid lightgray;
+  font-weight: 300;
+  align-items: center;
+}
+
+.root {
+  color: #72b3de;
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.proposalInfo-top i {
+  font-size: 2.5rem;
+  margin: 0 10px;
+}
+
+.contactName {
+  margin-left: -100px;
+}
+
+.proposalInfo-top>span:last-child {
+  color: #74ebcb;
+}
+
+.proposalInfo-top>div:first-child {
+  align-items: center;
+  display: flex;
+}
+
+.proposal-content {
+  display: flex;
+}
+
+.main {
+  width: 100%;
+}
+
+.main>div {
+  width: 100%;
+}
+
+.content-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 20px;
+}
+
+.proposalInfo-down {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  max-width: 30%;
+}
+
+.proposalInfo-down>div {
+  display: flex;
+  flex-direction: column;
+}
+
+app-addproposaltask, app-searchproject {
+  width: 30%;
+}
+
+.proposalInfo-down>div>span:first-child {
+  font-size: 11px;
+  color: #adafb1;
+}
+
+.proposalInfo-down>div>span:last-child {
+  font-size: 1.7rem;
+  color: #74ebcb;
+}
+

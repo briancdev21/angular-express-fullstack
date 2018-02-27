@@ -1,0 +1,358 @@
+<div class="cmp-content" >
+	<div class="table-header">
+		<div class="not-started">
+			<img src="assets/images/Add-Button.svg" (click)="addTicket();">
+			<span>NOT STARTED</span>
+		</div>
+		<div>
+			<span>IN PROGRESS</span>
+		</div>
+		<div>
+			<span>COMPLETE</span>
+		</div>
+		<div>
+			<span>NOT COMPLETED</span>
+		</div>
+		<div class="issue-tickets">
+			<span>ISSUE TICKETS</span>
+			<img src="assets/images/Add-Button.svg" (click)="addIssueTicket(); $event.stopPropagation();">
+		</div>
+	</div>
+	<div class="draggable-table-content">
+		<!--Not started column-->
+		<div class="not-started-content">
+			<div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='notStarted'>
+				<div *ngFor="let task of notStarted; let i = index;">
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
+						<span>{{task.description}}</span>
+						<span class="estimated">
+							<span>Estimated</span>
+							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
+							<span *ngIf="task.estimateMin">{{task.estimateMin}} min</span>
+						</span>
+						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
+					</div>
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+						<div>
+							<input placeholder="Type your task here" [(ngModel)]="task.description" [value]="task.description">
+							<span class="create-date">{{task.createdDate}}</span>
+						</div>
+						<div>
+							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
+							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
+							<!-- Start Small Dialog when clicking images to add time -->
+							<div 
+								class="time-estimation-modal"  
+								[ngClass]="{'show-modal': timeEstimationModalCollapsed[i], 'hide-modal': !timeEstimationModalCollapsed[i] }"
+								(clickOutside)="closeTimeEstimationModal(i)">
+								<div class="mdl-content">
+									<input placeholder="00" type="number" maxlength="2" [(ngModel)]="task.estimateHour" [value]="task.estimateHour">
+									<span>:</span>
+									<input placeholder="00" type="number" maxlength="2" [(ngModel)]="task.estimateMin" [value]="task.estimateMin">
+								</div>
+							</div>
+							<!--End Add time -->
+							<!-- Start Small Dialog when clicking images to add dependency -->
+							
+							<div 
+								class="dependency-modal"
+								[ngClass]="{'show-modal': dependencyModalCollapsed[i], 'hide-modal': !dependencyModalCollapsed[i] }"
+								(clickOutside)="closeDependencyModal(i)">
+								<div class="dependency-mdl-content">
+									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
+										<option [value]="'default'">Select Dependency</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+									</select>
+								</div>
+							</div>
+							<!--End Add Dependency -->
+							<!-- Start Small Dialog when clicking images to add Priority -->
+							
+							<div 
+								class="priority-modal"  
+								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
+								(clickOutside)="closePriorityModal(i)">
+								<div class="priority-mdl-content">
+									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
+										<option [value]="'default'">Select Priority</option>
+										<option [value]="'level1'">Level 1</option>
+										<option [value]="'level2'">Level 2</option>
+										<option [value]="'level3'">Level 3</option>
+									</select>
+								</div>
+							</div>
+							<!--End Add Priority -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="in-progress-content">
+			<div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='inProgress'>
+				<div *ngFor="let task of inProgress; let i = index;" >
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
+						<span>{{task.description}}</span>
+						<span class="estimated">
+							<span>Estimated</span>
+							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
+							<span *ngIf="task.estimateMin">{{task.estimateMin}} min</span>
+						</span>
+						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
+					</div>
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+						<div>
+							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
+							<span class="create-date">{{task.createdDate}}</span>
+						</div>
+						<div>
+							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
+							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
+							<!-- Start Small Dialog when clicking images to edit tickets -->
+							
+							<div 
+								class="time-estimation-modal"  
+								[ngClass]="{'show-modal': timeEstimationModalCollapsed[i], 'hide-modal': !timeEstimationModalCollapsed[i] }"
+								(clickOutside)="closeTimeEstimationModal(i)">
+								<div class="mdl-content">
+									<input placeholder="00" type="number" maxlength="2" [(ngModel)]="task.estimateHour" [value]="task.estimateHour">
+									<span>:</span>
+									<input placeholder="00" type="number" maxlength="2" [(ngModel)]="task.estimateMin" [value]="task.estimateMin">
+								</div>
+							</div>
+							<!-- Start Small Dialog when clicking images to add dependency -->
+							
+							<div 
+								class="dependency-modal"  
+								[ngClass]="{'show-modal': dependencyModalCollapsed[i], 'hide-modal': !dependencyModalCollapsed[i] }"
+								(clickOutside)="closeDependencyModal(i)">
+								<div class="dependency-mdl-content">
+									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
+										<option [value]="'default'">Select Dependency</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+									</select>
+								</div>
+							</div>
+							<!--End Add Dependency -->
+							<!-- Start Small Dialog when clicking images to add Priority -->
+							
+							<div 
+								class="priority-modal"  
+								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
+								(clickOutside)="closePriorityModal(i)">
+								<div class="priority-mdl-content">
+									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
+										<option [value]="'default'">Select Priority</option>
+										<option [value]="'level1'">Level 1</option>
+										<option [value]="'level2'">Level 2</option>
+										<option [value]="'level3'">Level 3</option>
+									</select>
+								</div>
+							</div>
+							<!--End Add Priority -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="complete-content">
+			<div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='complete'>
+				<div *ngFor="let task of complete; let i = index;" >
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
+						<span>{{task.description}}</span>
+						<span class="estimated">
+							<span>Estimated</span>
+							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
+							<span *ngIf="task.estimateMin">{{task.estimateMin}} min</span>
+						</span>
+						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
+					</div>
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+						<div>
+							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
+							<span class="create-date">{{task.createdDate}}</span>
+						</div>
+						<div>
+							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
+							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
+							<!-- Start Small Dialog when clicking images to edit tickets -->
+							
+							<div 
+								class="time-estimation-modal"  
+								[ngClass]="{'show-modal': timeEstimationModalCollapsed[i], 'hide-modal': !timeEstimationModalCollapsed[i] }"
+								(clickOutside)="closeTimeEstimationModal(i)">
+								<div class="mdl-content">
+									<input placeholder="00" type="number" maxlength="2" [(ngModel)]="task.estimateHour" [value]="task.estimateHour">
+									<span>:</span>
+									<input placeholder="00" type="number" maxlength="2" [(ngModel)]="task.estimateMin" [value]="task.estimateMin">
+								</div>
+							</div>
+							<!-- Start Small Dialog when clicking images to add dependency -->
+							
+							<div 
+								class="dependency-modal"  
+								[ngClass]="{'show-modal': dependencyModalCollapsed[i], 'hide-modal': !dependencyModalCollapsed[i] }"
+								(clickOutside)="closeDependencyModal(i)">
+								<div class="dependency-mdl-content">
+									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
+										<option [value]="'default'">Select Dependency</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+									</select>
+								</div>
+							</div>
+							<!--End Add Dependency -->
+							<!-- Start Small Dialog when clicking images to add Priority -->
+							
+							<div 
+								class="priority-modal"  
+								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
+								(clickOutside)="closePriorityModal(i)">
+								<div class="priority-mdl-content">
+									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
+										<option [value]="'default'">Select Priority</option>
+										<option [value]="'level1'">Level 1</option>
+										<option [value]="'level2'">Level 2</option>
+										<option [value]="'level3'">Level 3</option>
+									</select>
+								</div>
+							</div>
+							<!--End Add Priority -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="not-complete-content">
+			<div [dragula]="'dragItem'"  class="draggable-column" [dragulaModel]='notComplete'>
+				<div *ngFor="let task of notComplete; let i = index;">
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
+						<span>{{task.description}}</span>
+						<span class="estimated">
+							<span>Estimated</span>
+							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
+							<span *ngIf="task.estimateMin">{{task.estimateMin}} min</span>
+						</span>
+						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
+					</div>
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+						<div>
+							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
+							<span class="create-date">{{task.createdDate}}</span>
+						</div>
+						<div class="img-section">
+							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
+							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
+							<!-- Start Small Dialog when clicking images to edit tickets -->
+							
+							<div 
+								class="time-estimation-modal"  
+								[ngClass]="{'show-modal': timeEstimationModalCollapsed[i], 'hide-modal': !timeEstimationModalCollapsed[i] }"
+								(clickOutside)="closeTimeEstimationModal(i)">
+								<div class="mdl-content">
+									<input placeholder="00" type="number" maxlength="2" [(ngModel)]="task.estimateHour" [value]="task.estimateHour">
+									<span>:</span>
+									<input placeholder="00" type="number" maxlength="2" [(ngModel)]="task.estimateMin" [value]="task.estimateMin">
+								</div>
+							</div>
+							<!-- Start Small Dialog when clicking images to add dependency -->
+							
+							<div 
+								class="dependency-modal"  
+								[ngClass]="{'show-modal': dependencyModalCollapsed[i], 'hide-modal': !dependencyModalCollapsed[i] }"
+								(clickOutside)="closeDependencyModal(i)">
+								<div class="dependency-mdl-content">
+									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
+										<option [value]="'default'">Select Dependency</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+									</select>
+								</div>
+							</div>
+							<!--End Add Dependency -->
+							<!-- Start Small Dialog when clicking images to add Priority -->
+							
+							<div 
+								class="priority-modal"  
+								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
+								(clickOutside)="closePriorityModal(i)">
+								<div class="priority-mdl-content">
+									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
+										<option [value]="'default'">Select Priority</option>
+										<option [value]="'level1'">Level 1</option>
+										<option [value]="'level2'">Level 2</option>
+										<option [value]="'level3'">Level 3</option>
+									</select>
+								</div>
+							</div>
+							<!--End Add Priority -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="issue-tickets-content">
+			<div [dragula]="'dragItemIssue'" class="draggable-column" [dragulaModel]='issueTicket'>
+				<div *ngFor="let issue of issueTickets; let i = index;" >
+					<div class="draggable issue-ticket orange " *ngIf="issue.visibility" (dblclick)="changeIssueVisibility(issue, i)">
+						<span>{{issue.description}}</span>
+						<div class="time-imgs">
+							<span class="estimated">
+								<span>{{issue.createdDate}}</span>
+							</span>
+							<img src="assets/images/attachment.png" class="img-attachment" (click)="downloadAttachment(issue)">
+						</div>
+					</div>
+					<div class="issue-ticket-column issue-style edit-form draggable" *ngIf="!issue.visibility" (clickOutside)="onIssueClickedOutside(i, issue)">
+						<input [(ngModel)]="issue.description" [value]="issue.description" placeholder="Type your issue here">
+						<div class="img-section">
+							<span class="create-date">{{issue.createdDate}}</span>
+							<div>
+								<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, issue); $event.stopPropagation();">
+								<img src="assets/images/attachment.png" (click)="addAttachment(i, issue); $event.stopPropagation();">
+							</div>
+						</div>
+						<!-- Start Small Dialog when clicking images to add dependency -->
+							
+							<div 
+								class="dependency-modal"  
+								[ngClass]="{'show-modal': dependencyModalCollapsed[i], 'hide-modal': !dependencyModalCollapsed[i] }"
+								(clickOutside)="closeDependencyModal(i)">
+								<div class="dependency-mdl-content">
+									<select [(ngModel)]="selectedDependency" (ngModelChange)="onIssueDependencySelect($event, issue)" >
+										<option [value]="'default'">Select Dependency</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+									</select>
+								</div>
+							</div>
+							<!--End Add Dependency -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<!-- Confirm Delete Alert Box -->
+<div class="confirm-delete-modal-wrapper" *ngIf="showDeleteConfirmModal" ></div>
+<div [ngClass]="{'confirm-modal': showDeleteConfirmModal, 'confirm-modal-hide': !showDeleteConfirmModal }">
+  <div class="header">
+    <span>Confirm Delete</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showDeleteConfirmModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      Do you really want to delete?
+    </div>
+    <div class="center-btn-section" >
+			<button class="cancel-btn" (click)="showDeleteConfirmModal=false" >
+        Cancel
+      </button>
+      <button class="confirm-btn" (click)="confirmDelete();" >
+        Confirm
+      </button>
+    </div>
+  </div>
+</div> 

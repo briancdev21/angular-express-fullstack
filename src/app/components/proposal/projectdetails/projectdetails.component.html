@@ -1,0 +1,261 @@
+<div class="project-details rotated" (click)="sidebarCollapsed=false; showDialog=true">
+  <span>PROJECT DETAILS</span>
+  <i class="fa fa-angle-right"></i>
+</div>
+
+<div class="sidebar-wrapper" *ngIf="showDialog" (click)="sidebarCollapsed=true; showDialog=false"></div>
+<div class="project-details-sidebar"  [ngClass]="{'show-sidebar': !sidebarCollapsed, 'hide-sidebar': sidebarCollapsed }">
+  <div class="header">
+    <span>Project Details</span>
+  </div>
+  <div class="content">
+    <div class="details-buttons">
+      <div (click)="ProposalInfoModalCollapsed=false; showProposalInfo=true; tabActiveFirst=true; tabActiveSecond=false; tabActiveThird=false">Client Details</div>
+      <div (click)="ProposalInfoModalCollapsed=false; showProposalInfo=true; tabActiveFirst=false; tabActiveSecond=true; tabActiveThird=false">Project Details</div>
+      <div (click)="ProposalInfoModalCollapsed=false; showProposalInfo=true; tabActiveFirst=false; tabActiveSecond=false; tabActiveThird=true">Scope of work</div>
+    </div>
+    <div class="project-category">
+      <span>Category</span>
+      <app-multikeywordselect [keywords]="projectCategory" ></app-multikeywordselect>
+    </div>
+
+    <div class="subproject-category">
+      <span>Subcategory</span>
+      <app-multikeywordselect [keywords]="projectSubCategory" ></app-multikeywordselect>
+    </div>
+
+    <div class="client-notes">
+      <span>Client Notes</span>
+      <textarea></textarea>
+    </div>
+
+    <div class="internal-notes">
+      <span>Internal Notes</span>
+      <textarea></textarea>
+    </div>
+
+    <div class="recent-activity">
+      <span>Recent Activity</span>
+      <div class="content">
+        <app-ng2timeline [timelineData]="timelineData" [oneSide]="true"></app-ng2timeline>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proposal-info-wrapper" *ngIf="showProposalInfo" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"></div>
+<div class="proposal-info"  [ngClass]="{'show-proposal-info': !ProposalInfoModalCollapsed, 'hide-proposal-info': ProposalInfoModalCollapsed }">
+  <div class="header">
+    <span>Proposal Infomation</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false" />
+  </div>
+
+  <div class="content" >
+    <tabs>
+      <tab tabTitle="CLIENT DETAILS" [(active)]="tabActiveFirst">
+        <div class="tab-one">
+          <div class="name-col tab-row">
+            <div>
+              <span>Customer Name</span>
+              <input placeholder="Enter Customer Name" [value]="proposalInfo.contactName">
+            </div>
+            <div class="collaborators">
+              <span>Collaborators</span>
+              <div>
+                <img src="{{proposalInfo.owner.imageUrl}}" alt="">
+              </div>
+            </div>
+          </div>
+
+          <div class="project-acc tab-row">
+            <div>
+              <div class="desc">
+                <span>Project Management</span>
+                <div>
+                  <img src="assets/images/switch.png" *ngIf="switchIconManagement" (click)="clickIconManagement()">
+                  <img src="assets/images/switch-off.png" *ngIf="!switchIconManagement" (click)="clickIconManagement()">
+                  <span>Same as customer</span>
+                </div>
+              </div>
+              <input placeholder="Enter Project Manager" [value]="projectManager">
+            </div>
+
+            <div>
+              <div class="desc">
+                <span>Account Receivable</span>
+                <div>
+                  <img src="assets/images/switch.png" *ngIf="switchIconReceivable" (click)="clickIconReceivable()">
+                  <img src="assets/images/switch-off.png" *ngIf="!switchIconReceivable" (click)="clickIconReceivable()">
+                  <span>Same as customer</span>
+                </div>
+              </div>
+              <input placeholder="Enter Name" [value]="receivable">
+            </div>
+          </div>
+
+          <div class="other-pri tab-row">
+            <div>
+              <span>Other Associations</span>
+              <input placeholder="Enter Customer Name">
+            </div>
+            <div>
+              <span>Proposal Pricing</span>
+              <div>
+                <select>
+                  <option value="test">Friends and Family</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="name-type tab-row">
+            <div>
+              <span>Project Name</span>
+              <input placeholder="Enter Project Name" [value]="proposalInfo.projectName">
+            </div>
+            <div>
+              <span>Project Type</span>
+              <div>
+                <input placeholder="Enter Project Type" [value]="proposalInfo.projectType">
+              </div>
+            </div>
+          </div>
+
+          <div class="shipping-address ">
+            <div class="desc">
+              <span>Shipping Address</span>
+              <div>
+                <img src="assets/images/switch.png" *ngIf="switchIconShipping" (click)="clickIconShipping()">
+                <img src="assets/images/switch-off.png" *ngIf="!switchIconShipping" (click)="clickIconShipping()">
+                <span>Same as the customer profile</span>
+              </div>
+            </div>
+            <input placeholder="Enter Shipping Address" class="address" [value]="shippingAddress">
+
+            <div class="city-state">
+              <input placeholder="Enter City">
+              <input placeholder="Enter State">
+            </div>
+            <div class="country-zip">
+              <input placeholder="Enter Country">
+              <input placeholder="Enter Zipcode">
+            </div>
+          </div>
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
+              Cancel
+            </button>
+            <button class="save-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
+              Save
+            </button>
+          </div>
+        </div>
+      </tab>
+      <tab tabTitle="PROJECT DETAILS" class="tab-won" [(active)]="tabActiveSecond">
+        <div class="tab-two">
+          <div class="dis-id tab-row">
+            <div class="discount">
+              <span>Discount</span>
+              <div>
+                <select>
+                  <option *ngFor="let type of projectDetails.discount.type">{{type}}</option>
+                </select>
+                <input value="0">
+              </div>
+            </div>
+            <div>
+              <span>Project ID</span>
+              <input value="{{projectDetails.projectId}}">
+            </div>
+          </div>
+
+          <div class="cate-subcate tab-row">
+            <div>
+              <span>Project Categories</span>
+              <div class="category-box">
+                <span *ngFor="let category of projectDetails.projectCategoriesAll">{{category}}</span>
+              </div>
+            </div>
+            <div>
+              <span>Project Subcategories</span>
+              <div class="subcategory-box">
+                <span *ngFor="let subCategory of projectDetails.projectSubCategoriesAll">{{subCategory}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="comp-sche tab-row">
+            <div class="completion">
+              <span>Completion Date</span>
+              <div>
+                <input value="{{projectDetails.completionDate}}">
+                <img src="assets/images/calendar-plain.png" alt="">
+              </div>
+            </div>
+            <div class="schedule">
+              <div>
+                <span>Payment Schedule</span>
+                <span>0%</span>
+              </div>
+              <div class="milestones">
+                <span *ngFor="let schedule of projectDetails.paymentSchedule">{{schedule}}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="account-project tab-row">
+            <div>
+              <span>Account Manager</span>
+              <div class="member-container">
+                <img src="{{proposalInfo.owner.imageUrl}}" alt="">
+              </div>
+            </div>
+            <div>
+              <span>Project Manager</span>
+              <div class="member-container">
+                <img src="{{projectDetails.projectManager.imageUrl}}" alt="">
+              </div>
+            </div>
+          </div>
+
+          <div class="design-custom tab-row">
+            <div>
+              <span>Designer</span>
+              <div class="member-container">
+                <img src="{{projectDetails.designer.imageUrl}}" alt="">
+              </div>
+            </div>
+            <div>
+              <span>Custom Field</span>
+              <input>
+            </div>
+          </div>
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
+              Cancel
+            </button>
+            <button class="save-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
+              Save
+            </button>
+          </div>
+        </div>
+      </tab>
+      <tab tabTitle="SCOPE OF WORK" class="tab-won" [(active)]="tabActiveThird">
+        <div class="tab-three">
+          <span>Scope of work</span>
+          <div [froalaEditor] class="form-editor">Hello, Froala!</div>
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
+              Cancel
+            </button>
+            <button class="save-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
+              Save
+            </button>
+          </div>
+        </div>
+      </tab>
+    </tabs>
+  </div>
+
+  
+</div>

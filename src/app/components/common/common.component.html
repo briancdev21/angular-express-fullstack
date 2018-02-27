@@ -1,0 +1,112 @@
+<div  class="left-nav" [ngClass]="{'nav-close': mRotateMenu, 'nav-open': !mRotateMenu }">
+  <div class="logo">
+    <a href="javascript:void(0)">
+      <span class="logo-open" [ngClass]="{'hidden': mRotateMenu, 'visible': !mRotateMenu }">Logo Horizontal</span>
+      <span class="logo-collapsed" [ngClass]="{'visible': mRotateMenu, 'hidden': !mRotateMenu }">Logo</span>
+    </a>
+  </div>
+  <ul class="clearfix" [ngClass]="{'nav-collapsed': mRotateMenu}">
+    <!--Apply .nav-active to active nav element-->
+    <li [routerLinkActive]="['nav-active']" [routerLinkActiveOptions]="{exact:true}" >
+      <a routerLink="/" >
+          <span class="icon">
+              <img src="assets/images/dashboard.svg">
+          </span>
+        <span class="title">Dashboard</span>
+      </a>
+    </li>
+    <li [routerLinkActive]="['nav-active']" [routerLinkActiveOptions]="{exact:true}" >
+      <a routerLink="/crm" >
+          <span class="icon">
+              <img src="assets/images/contact.svg">
+          </span>
+        <span class="title">CRM</span>
+      </a>
+    </li>
+    <li [routerLinkActive]="['nav-active']" [routerLinkActiveOptions]="{exact:true}" >
+      <a routerLink="/sales"  >
+          <span class="icon">
+              <img src="assets/images/sales.svg">
+          </span>
+        <span class="title">Sales</span>
+      </a>
+    </li>
+    <li [routerLinkActive]="['nav-active']" [routerLinkActiveOptions]="{exact:true}" >
+      <a routerLink="/pm" >
+          <span class="icon">
+              <img src="assets/images/project-management.svg">
+          </span>
+        <span class="title">Projects</span>
+      </a>
+    </li>
+    <li [routerLinkActive]="['nav-active']" [routerLinkActiveOptions]="{exact:true}" >
+      <a routerLink="/inventory" >
+          <span class="icon">
+              <img src="assets/images/inventory.svg">
+          </span>
+        <span class="title">Inventory</span>
+      </a>
+    </li>
+    <li [routerLinkActive]="['nav-active']" [routerLinkActiveOptions]="{exact:true}" >
+      <a routerLink="/orderprofile" >
+          <span class="icon">
+              <img src="assets/images/collaborators.svg">
+          </span>
+        <span class="title">Collaborators</span>
+      </a>
+    </li>
+    <li [routerLinkActive]="['nav-active']" [routerLinkActiveOptions]="{exact:true}" >
+      <a routerLink="/servicing" >
+          <span class="icon">
+              <img src="assets/images/servicing.svg">
+          </span>
+        <span class="title">Servicing</span>
+      </a>
+    </li>
+    <li [routerLinkActive]="['nav-active']" [routerLinkActiveOptions]="{exact:true}" >
+      <a routerLink="/reports" >
+          <span class="icon">
+              <img src="assets/images/report.svg">
+          </span>
+        <span class="title">Reports</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div class="top-bar" [ngClass]="{'top-bar-large': mRotateMenu, 'top-bar-small': !mRotateMenu }">
+  <div class="menu-left col-sm-6 clearfix">
+    <div class="menu pull-left" (click)="toggleMenuRotate()">
+      <!---Apply .menu-rotate to rotate icon-->
+      <i [ngClass]="{'menu-rotate': !mRotateMenu}">
+        <img src="assets/images/menu.svg">
+      </i>
+    </div>
+    <div class="search pull-left">
+      <input type="text" placeholder="Search here..."/>
+    </div>
+  </div>
+  <div class="menu-right col-sm-6 clearfix">
+    <!--This Open up profile-opened section-->
+    <div appStopEventPropagation (click)="openProfile()"  class="user-profile pull-right">
+      <a href="javascript:void(0)">
+        <img src="assets/images/sep-profile.jpg">
+      </a>
+    </div>
+    <!--This Open up notifications-opened section-->
+    <div appStopEventPropagation (click)="openNotifications()" class="new-notifications pull-right">
+      <a href="javascript:void(0)">
+        <i class="glyphicon glyphicon-bell"></i>
+      </a>
+      <div class="notifications-numbers">20
+      </div>
+    </div>
+    <!---This Open up profile-opened section-->
+    <div appStopEventPropagation (click)="openAlerts()" class="msg-alert pull-right">
+      <a href="javascript:void(0)"></a>
+      <div class="red-top"></div>
+    </div>
+  </div>
+</div>
+<div appStopEventPropagation class="alert-opened" [ngClass]="{'alerts-active': mAlertOpened}">Alert</div>
+<div appStopEventPropagation class="notifications-opened" [ngClass]="{'notifications-active': mNotificationOpened}">Notify</div>
+<div appStopEventPropagation class="profile-opened" [ngClass]="{'profile-active': mProfileOpened}">Profile</div>

@@ -1,0 +1,67 @@
+<div class="cmp-content">
+	<div class="content-left" >
+		<div class="customer-project">
+			<div class="customer-name">
+				<span>Customer name</span>
+				<input [value]="orderProfileInfo.customerName" disabled>
+			</div>
+			<div class="project">
+				<span>Project</span>
+				<input [value]="orderProfileInfo.productName" disabled>
+			</div>
+		</div>
+		<div class="shipping-address">
+			<div class="desc">
+				<span>Shipping Address</span>
+				<div class="switching-icon">
+					<img src="assets/images/switch.png" *ngIf="switchIconShipping" (click)="clickIconShipping()">
+					<img src="assets/images/switch-off.png" *ngIf="!switchIconShipping" (click)="clickIconShipping()">
+					<span>Use customer address</span>
+				</div>
+			</div>
+			<input placeholder="Enter Shipping Address" class="address" [value]="street">
+			<div class="city-state">
+				<input placeholder="Enter City" [value]="city">
+				<input placeholder="Enter State" [value]="state">
+			</div>
+			<div class="country-zip">
+				<input placeholder="Enter Country" [value]="country">
+				<input placeholder="Enter Zipcode" [value]="zipcode">
+			</div>
+		</div>
+	</div>
+	<div class="content-right" >
+		<div>
+			<span>Work Order #</span>
+			<input placeholder="Enter Work order" [value]="orderProfileInfo.workOrder">
+		</div>
+		<div class="start-date">
+			<span>Start Date</span>
+			<div>
+				<input [owlDateTimeTrigger]="startDate" [owlDateTime]="startDate"  (dateTimeChange)="onStartDate($event)" [max]="startMax" [(ngModel)]="startDateValue" dateA11yLabel>
+				<owl-date-time [pickerType]="'calendar'" #startDate ></owl-date-time>
+			</div>
+		</div>
+		<div class="start-time">
+			<span>Start Time</span>
+			<div>
+				<input [owlDateTimeTrigger]="startTime" [owlDateTime]="startTime"  (dateTimeChange)="onStartTime($event)" [(ngModel)]="startTimeValue" >
+				<owl-date-time [pickerType]="'timer'" #startTime ></owl-date-time>
+			</div>
+		</div>
+		<div class="end-date">
+			<span>End Date</span>
+			<div>
+				<input [owlDateTimeTrigger]="endDate" [owlDateTime]="endDate" (dateTimeChange)="onEndDate($event)" [min]="endMin" [(ngModel)]="endDateValue" >
+				<owl-date-time [pickerType]="'calendar'" #endDate ></owl-date-time>
+			</div>
+		</div>
+		<div class="end-time">
+			<span>End Time</span>
+			<div>
+				<input [owlDateTimeTrigger]="endTime" [owlDateTime]="endTime" (dateTimeChange)="onEndTime($event)"[(ngModel)]="endTimeValue" >
+				<owl-date-time [pickerType]="'timer'" #endTime ></owl-date-time>
+			</div>
+		</div>
+	</div>
+</div>

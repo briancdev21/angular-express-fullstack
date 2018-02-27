@@ -1,0 +1,47 @@
+<app-common (expandSidebar)="toggleMenubar($event)"></app-common>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
+  <div class="proposalInfo-top">
+    <div>
+			<span class="root">Proposal</span>
+			<i class="fa fa-angle-right"></i>
+			<span>{{proposalInfo.projectName}}</span>
+    </div>
+    <span class="contactName">{{proposalInfo.contactName}}</span>
+    <span>{{proposalInfo.proposalId}}</span>
+  </div>
+  <div class="proposal-content">
+    <div class="sidebar-left">
+			<app-productdetails [productsInfoAll]="productsInfoAll" [productType]="productType"></app-productdetails>
+		</div>
+		<div class="main">
+			<div class="content-top">
+				
+				<app-addproposaltask></app-addproposaltask>
+				<div class="proposalInfo-down">
+					<div>
+						<span>Last Updated</span>
+						<span>{{proposalInfo.createdDate}}</span>
+					</div>
+					<div>
+						<span>Project Total</span>
+						<span>$ {{proposalInfo.proposalAmount}}</span>
+					</div>
+					<div>
+						<span>Lead Status</span>
+						<span>{{proposalInfo.dealStatus}}</span>
+					</div>
+				</div>
+				<app-searchproject></app-searchproject>
+			</div>
+			<div class="btn-edit-section">
+				<app-massedit></app-massedit>
+			</div>
+			<div class="product-list">
+				<app-productlisttable [proposalProductList]="proposalProductList" [(proposalInfo)]="proposalInfo"></app-productlisttable>
+			</div>
+		</div>
+    <div class="sidebar-right">
+			<app-projectdetails [projectCategory]="projectCategory" [projectSubCategory]="projectSubCategory" [proposalInfo]="proposalInfo" [projectDetails]="projectDetails"></app-projectdetails>
+		</div>
+  </div>
+</div>

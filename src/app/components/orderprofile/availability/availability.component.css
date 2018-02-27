@@ -1,0 +1,74 @@
+.availability-content {
+  padding: 25px 25px 25px 15px;
+  display: flex;
+}
+
+span, input, select {
+  color: #95989A;
+}
+
+input::placeholder {
+  color: #D3D3D3;
+}
+
+.calendar-view {
+  width: 74%;
+  margin-left: 1%;
+}
+
+.red {
+  background: #FFCBCB;
+}
+
+.green {
+  background: #E7EFAA;
+}
+
+.gray {
+  background: #D3D3D3 !important;
+}
+
+.resources-available {
+  width: 25%;
+}
+
+.resources-list .resource-img-selected {
+  width: 14px;
+  height: 14px;
+}
+
+.resources-list img {
+  width: 28px;
+  height: 28px;
+}
+
+.resources-list span {
+  font-size: 14px;
+  color: #95989A;
+  margin-left: 7px;
+}
+
+.resource-style {
+  display: flex;
+  padding: 5px;
+  justify-content: space-between;
+  align-items: center;
+  width: 85%;
+  margin: 0px auto 10px; 
+  cursor: pointer;
+}
+
+.resources-available>span {
+  font-size: 16px;
+}
+
+.resources-available>input {
+  height: 38px;
+  padding-left: 7px;
+  outline: none;
+  border: 0;
+  border-top: 1px solid #D3D3D3;
+  border-bottom: 1px solid #D3D3D3;
+  margin: 15px 0;
+  width: 100%;
+}

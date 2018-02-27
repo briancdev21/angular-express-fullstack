@@ -1,0 +1,54 @@
+<div class="card">
+	<div class="card-heading">
+		<h4>Collaborators</h4>
+		<img (click)="showCollaboratorsDialog=true" src="assets/images/Add-Button.svg"/>
+	</div>
+	<div class="card-content">
+		<img *ngFor="let collaborator of collaborators.collInfo; let i = index;" src="{{collaborator.imageUrl}}"/>
+	</div>
+</div>
+
+<div class="collaborators-dialog-wrapper" *ngIf="showCollaboratorsDialog" ></div>
+<div  [ngClass]="{'collaborators-dialog': showCollaboratorsDialog, 'collaborators-dialog-hide': !showCollaboratorsDialog }">
+  <div class="header">
+    <span>Collaborators</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showCollaboratorsDialog=false" />
+  </div>
+  <div class="content">
+    <table width="100%">
+			<tr>
+				<td style="padding-right: 20px;">
+					<div class="text-label">Project Manager</div>
+					<div class="keywords">
+						<app-multikeywordselect [keywords]="collaborators.projectManager" ></app-multikeywordselect>
+					</div>
+				</td>
+				<td>
+					<div class="text-label">Sales Team</div>
+					<div class="keywords">
+						<app-multikeywordselect [keywords]="collaborators.teamMembers" ></app-multikeywordselect>
+					</div>
+				</td>
+			</tr>
+      <tr>
+        <td style="padding-right: 20px;">
+          <div class="text-label">Service Team</div>
+          <div class="keywords">
+            <app-multikeywordselect [keywords]="collaborators.serviceTeam" ></app-multikeywordselect>
+          </div>
+        </td>
+        <td>
+          <div class="text-label">Other Members</div>
+          <div class="keywords">
+            <app-multikeywordselect [keywords]="collaborators.otherMembers" ></app-multikeywordselect>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="showCollaboratorsDialog=false" >
+        Done!
+      </button>
+    </div>
+  </div>
+</div>

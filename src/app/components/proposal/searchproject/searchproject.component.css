@@ -1,0 +1,23 @@
+.content {
+	border-bottom: 1px solid lightgray;
+    display: flex;
+    justify-content: space-between;
+    margin-right: 10px;
+}
+
+input {
+	line-height: 25px;
+    border: none;
+	width: 100%;
+	padding-left: 10px;
+}
+
+input:focus {
+	outline: none;
+}
+
+input::-webkit-input-placeholder {
+	color: lightgray;
+	font-size: 1.6rem;
+	font-weight: 300;
+}

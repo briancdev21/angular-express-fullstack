@@ -1,0 +1,103 @@
+<div class="card">
+	<div class="card-heading">
+		<a routerLink="/collaboration">
+			<h4>Upcoming Appointments</h4>
+		</a>
+		<a  >
+			<img src="assets/images/Add-Button.svg" (click)="showModal=true"/>
+		</a>
+	</div>
+	<div class="card-content">
+		<img src="assets/images/barrow.png"/>
+		<div>
+			<div class="content-top">
+				<h5>Install at {{userInfo.name}}</h5>
+			</div>
+			<div class="content-down">
+				<div>
+					<span>{{cards.appointmentsDate}}</span><br>
+					<span>{{cards.appointmentsAddress}}</span>
+				</div>
+				<span>{{cards.appointmentsTime}}</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal-wrapper" *ngIf="showModal" (click)="showModal=false;" ></div>
+<div [ngClass]="{'modal-box': showModal, 'modal-box-hide': !showModal }">
+  <div class="date">
+		<h4>{{upcomingModal.week}}</h4>
+		<h4>{{upcomingModal.date}}</h4>
+		<span>{{upcomingModal.start}} to {{upcomingModal.end}}</span>
+	</div>
+	<div class="title">
+		<div class="circle"></div>
+		<input placeholder="Title">
+	</div>
+	<div class="switch">
+		<img src="assets/images/time.png">
+		<div class="full-width">
+			<span>All Day</span>
+			<img src="assets/images/switch.png" *ngIf="switchIcon" (click)="switchIcon=!switchIcon">
+			<img src="assets/images/switch-off.png" *ngIf="!switchIcon" (click)="switchIcon=!switchIcon">
+		</div>
+	</div>
+	<div class="duration" *ngIf="!switchIcon">
+		<span>Duration is {{upcomingModal.duration}}</span>
+	</div>
+
+	<div class="">
+		<img src="assets/images/man.png">
+		<div class="full-width">
+			<span>People</span>
+			<img class="arrow-right" src="assets/images/arrow-right.png">
+		</div>
+	</div>
+
+	<div class="">
+		<img src="assets/images/placeholder.png">
+		<div class="full-width">
+			<span>Location</span>
+			<img class="arrow-right" src="assets/images/arrow-right.png">
+		</div>
+	</div>
+
+	<div class="description">
+		<img src="assets/images/attachment.png">
+		<textarea class="full-width" placeholder="Description"></textarea>
+	</div>
+	
+	<div class="repeat">
+		<img src="assets/images/repeat.png">
+		<div class="full-width">
+			<span>Repeat</span>
+			<div>
+				<span>None</span>
+				<img class="arrow-right" src="assets/images/arrow-right.png">
+			</div>
+		</div>
+	</div>
+
+	<div class="">
+		<img src="assets/images/alarm.png">
+		<div class="full-width">
+			<span>Alert</span>
+			<div>
+				<span>30 Minutes before</span>
+				<img class="arrow-right" src="assets/images/arrow-right.png">
+			</div>
+		</div>
+	</div>
+
+	<div class="showAs">
+		<img src="assets/images/smartphone.png">
+		<div class="full-width">
+			<span>Show As</span>
+			<div>
+				<span>Busy</span>
+				<img class="arrow-right" src="assets/images/arrow-right.png">
+			</div>
+		</div>
+	</div>
+</div>  

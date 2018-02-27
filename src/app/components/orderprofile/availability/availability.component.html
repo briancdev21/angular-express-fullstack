@@ -1,0 +1,26 @@
+<div class="availability-content">
+  <div class="resources-available">
+    <span>RESOURCES AVAILABLE</span>
+    <input type="text" [(ngModel)]="queryString" id="search" placeholder="Search here...">
+    <div class="resources-list">
+      <div 
+        *ngFor="let resource of resourcesInfo | SearchPipe: queryString : searchableList; let i = index; " 
+        class="resource-style" 
+        [ngClass]="{'red': !resource.available, 'green': resource.available, 'gray': resource.selected}"
+        (click)="selectResource(resource)">
+        <div> 
+          <img src="{{resource.imageUrl}}">
+          <span>{{resource.name}}</span>
+        </div>
+        <div>
+          <img class="resource-img-selected" src="assets/images/add-button.png" *ngIf="!resource.selected" (click)="addResource(i);">
+          <img class="resource-img-selected" src="assets/images/error.png" *ngIf="resource.selected" (click)="removeResource(i);">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="calendar-view">
+    <angular2-fullcalendar [(options)]="res.resourceEvents" ></angular2-fullcalendar>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<ul  class="timeline" *ngIf="!oneSide">
+  <li *ngFor="let data of timelineData; let i = index;" >
+    <a >
+      <div  class="timeline-badge primary" [ngClass]="data.timelineBtnColor" >
+        <i class="fa {{data.icon}}"></i>
+      </div>
+    </a>
+    <div class="timeline-date" >
+      <div>{{data.date | getDateStatus }}</div>
+      <div>{{data.date | getDate }}</div>
+    </div>
+    <div  class="timeline-panel completedEvent">
+      <div  class="timeline-heading">
+        <h4  class="timeline-title">{{data.title}}</h4>
+      </div>
+      <div  class="timeline-body">
+        <h6 *ngIf="data.subject">subject: {{data.subject}}</h6>
+        <h6 *ngIf="data.contact">subject: {{data.contact}}</h6>
+        <p >{{data.content}}</p>
+      </div>
+      <div class="btn-container" >
+        <button [ngClass]="data.timelineBtnColor" (click)="doAction(data.buttonClickEventHandlerName)" >{{data.buttontitle}}</button>
+      </div>
+    </div>
+  </li>
+</ul>
+
+
+<ul  class="one-side-timeline" *ngIf="oneSide">
+  <li *ngFor="let data of timelineData; let i = index;" >
+    <a >
+      <div  class="one-side-timeline-badge primary" [ngClass]="data.timelineBtnColor" >
+        <i class="fa {{data.icon}}"></i>
+      </div>
+    </a>
+    
+    <div  class="one-side-timeline-panel completedEvent">
+      <div  class="timeline-heading">
+        <h4  class="timeline-title">{{data.title}}</h4>
+      </div>
+      <div  class="timeline-body">
+        <h6 *ngIf="data.subject">subject: {{data.subject}}</h6>
+        <h6 *ngIf="data.contact">subject: {{data.contact}}</h6>
+        <p >{{data.content}}</p>
+      </div>
+      <div class="one-side-timeline-footer">
+        <div class="one-side-timeline-date" >
+          <div>{{data.date | getDateStatus }}</div>
+          <div>{{data.date | getDate }}</div>
+        </div>
+        <div class="one-side-btn-container" >
+          <button [ngClass]="data.timelineBtnColor" (click)="doAction(data.buttonClickEventHandlerName)" >{{data.buttontitle}}</button>
+        </div>
+      </div>
+      <div class="empty-space"></div>
+    </div>
+  </li>
+</ul>

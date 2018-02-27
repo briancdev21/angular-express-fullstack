@@ -1,0 +1,220 @@
+<div class="content">
+  <table>
+    <tr>
+      <th (click)="sortArray('name')">LEAD NAME</th>
+      <th>PHONE NUMBER</th> 
+      <th>EMAIL ADDRESS</th>
+      <th (click)="sortCreateDateArray('createDate')">LEAD DATE</th>
+      <th (click)="SortLeadStatus()">LEAD STATUS</th> 
+      <th (click)="sortArray('score')">LEAD SCORE <img src="assets/images/Edit.png"></th>
+    </tr>
+    <tr *ngFor="let lead of leadsListInfo; let i = index">
+      <td>{{lead.name}}</td>
+      <td>{{lead.phone}}</td>
+      <td>{{lead.email}}</td> 
+      <td [ngClass]="getDateColor(lead.status)">{{lead.createDate}}</td>
+      <td>{{lead.status}}</td>
+      <td>
+        <span [ngClass]="getScoreColor(lead.score)">{{lead.score}}</span> 
+        <img src="assets/images/three-dots.png" (click)="openLeadModal(i)" style="cursor: pointer;">
+        <div 
+          class="lead-expand-modal-wrapper" 
+          *ngIf="leadModalInfoCollapsed[i]" 
+          (click)="leadModalInfoCollapsed[i]=false; showLeadModalInfo=false">
+        </div>
+        <!-- Start Small Dialog when clicking three dot icom -->
+        <div 
+          class="lead-expand-modal"  
+          [ngClass]="{'show-lead-modal': leadModalInfoCollapsed[i], 'hide-lead-modal': !leadModalInfoCollapsed[i] }">
+          <div class="dots-icon"><img src="assets/images/three-dots.png"></div>
+          <div>
+            <div><a routerLink="/" ><img src="assets/images/Convert.png"><span>Convert</span></a></div>
+            <div (click)="addLogModalCollapsed=false; 
+                      showAddLogModal=true; 
+                      leadModalInfoCollapsed[i]=false; 
+                      showLeadModalInfo=false">
+                      <img src="assets/images/phone log.png">
+                      <span>Add a log</span>
+            </div>
+          </div>
+          <div>
+            <div (click)="cloneRow(lead, i)"><img src="assets/images/Delete.png"><span>Clone</span></div>
+            <div (click)="deleteRow(i)"><img src="assets/images/Convert.png"><span>Delete</span></div>
+          </div>
+          <div (click)="showModal=true; leadModalInfoCollapsed[i]=false; showLeadModalInfo=false"><img src="assets/images/calendar with Edit.png"><span>Appointment</span></div>
+        </div>
+        <!-- End Small Dialog when clicking three dot icom -->
+      </td> 
+    </tr>
+  </table>
+</div>
+
+<!--Start Add Log Modal-->
+
+<div class="add-log-modal-wrapper" *ngIf="showAddLogModal" (click)="addLogModalCollapsed=true; showAddLogModal=false"></div>
+<div class="add-log-modal"  [ngClass]="{'show-modal': !addLogModalCollapsed, 'hide-modal': addLogModalCollapsed }" >
+  <div class="header">
+    <span>ADD A LOG</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addLogModalCollapsed=true; showAddLogModal=false" />
+  </div>
+  <div class="content-modal">
+    <div class="editor" >
+      <tabs >
+        <tab tabTitle="Notes"  >
+          <textarea placeholder="Start tying..." #textarea1 (input)="activity.content=textarea1.value" (keyup.enter)="addNewTimelineItem(); textarea1.value=''" ></textarea>
+        </tab>
+        <tab tabTitle="Email" class="tab-email" >
+          <div>
+            <input placeholder="Subject" #emailsubject (input)="activity.subject=emailsubject.value"  />
+            <select #emailcontacts (change)="activity.contact=emailcontacts.value">
+              <option value="firstContact" >
+                Choose Contact Associated
+              </option>
+            </select>
+          </div>
+          <textarea  #textarea2 (input)="activity.content=textarea2.value" (keyup.enter)="addNewTimelineItem(); textarea2.value=''; emailsubject.value='' " ></textarea>
+        </tab>
+        <tab tabTitle="Call" class="tab-call" >
+          <select #callcontacts (change)="activity.contact=callcontacts.selectedValue" >
+            <option value="first contact">
+                Choose contact associated
+            </option>
+          </select>
+          <textarea #textarea3 (input)="activity.content=textarea3.value" (keyup.enter)="addNewTimelineItem(); textarea3.value=''"></textarea>
+        </tab>
+      </tabs>
+    </div>
+  </div>
+  <div class="btn-section" >
+    <button class="save-btn" (click)="addLogModalCollapsed=true; showAddLogModal=false"  >
+      Done
+    </button>
+  </div>
+</div>
+
+<!--End Add Log Modal-->
+<!--Start Appointment right sidebar-->
+
+<div class="modal-wrapper" *ngIf="showModal" (click)="showModal=false;" ></div>
+<div [ngClass]="{'modal-box': showModal, 'modal-box-hide': !showModal }">
+  <div class="date">
+		<h4>{{upcomingModal.week}}</h4>
+		<h4>{{upcomingModal.date}}</h4>
+		<span>{{upcomingModal.start}} to {{upcomingModal.end}}</span>
+	</div>
+	<div class="title">
+		<div class="circle"></div>
+		<input placeholder="Title">
+	</div>
+	<div class="switch">
+		<img src="assets/images/time.png">
+		<div class="full-width">
+			<span>All Day</span>
+			<img src="assets/images/switch.png" *ngIf="switchIcon" (click)="switchIcon=!switchIcon">
+			<img src="assets/images/switch-off.png" *ngIf="!switchIcon" (click)="switchIcon=!switchIcon">
+		</div>
+	</div>
+	<div class="duration" *ngIf="!switchIcon">
+		<span>Duration is {{upcomingModal.duration}}</span>
+	</div>
+
+	<div class="">
+		<img src="assets/images/man.png">
+		<div class="full-width">
+			<span>People</span>
+			<img class="arrow-right" src="assets/images/arrow-right.png">
+		</div>
+	</div>
+
+	<div class="">
+		<img src="assets/images/placeholder.png">
+		<div class="full-width">
+			<span>Location</span>
+			<img class="arrow-right" src="assets/images/arrow-right.png">
+		</div>
+	</div>
+
+	<div class="description">
+		<img src="assets/images/attachment.png">
+		<textarea class="full-width" placeholder="Description"></textarea>
+	</div>
+	
+	<div class="repeat">
+		<img src="assets/images/repeat.png">
+		<div class="full-width">
+			<span>Repeat</span>
+			<div>
+				<span>None</span>
+				<img class="arrow-right" src="assets/images/arrow-right.png">
+			</div>
+		</div>
+	</div>
+
+	<div class="">
+		<img src="assets/images/alarm.png">
+		<div class="full-width">
+			<span>Alert</span>
+			<div>
+				<span>30 Minutes before</span>
+				<img class="arrow-right" src="assets/images/arrow-right.png">
+			</div>
+		</div>
+	</div>
+
+	<div class="showAs">
+		<img src="assets/images/smartphone.png">
+		<div class="full-width">
+			<span>Show As</span>
+			<div>
+				<span>Busy</span>
+				<img class="arrow-right" src="assets/images/arrow-right.png">
+			</div>
+		</div>
+	</div>
+</div>  
+
+<!--End Appointment right sidebar-->
+
+<!-- Confirm Clone Alert Box -->
+<div class="confirm-clone-modal-wrapper" *ngIf="showCloneConfirmModal" ></div>
+<div [ngClass]="{'confirm-modal': showCloneConfirmModal, 'confirm-modal-hide': !showCloneConfirmModal }">
+  <div class="header">
+    <span>Confirm Clone</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showCloneConfirmModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      Do you really want to clone?
+    </div>
+    <div class="center-btn-section" >
+      <button class="confirm-btn" (click)="confirmClone();showCloneConfirmModal=false" >
+        Confirm
+      </button>
+      <button class="cancel-btn" (click)="showCloneConfirmModal=false" >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div> 
+
+<!-- Confirm Delete Alert Box -->
+<div class="confirm-delete-modal-wrapper" *ngIf="showDeleteConfirmModal" ></div>
+<div [ngClass]="{'confirm-modal': showDeleteConfirmModal, 'confirm-modal-hide': !showDeleteConfirmModal }">
+  <div class="header">
+    <span>Confirm Delete</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showDeleteConfirmModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      Do you really want to delete?
+    </div>
+    <div class="center-btn-section" >
+      <button class="confirm-btn" (click)="confirmDelete();showDeleteConfirmModal=false" >
+        Confirm
+      </button>
+      <button class="cancel-btn" (click)="showDeleteConfirmModal=false" >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div> 

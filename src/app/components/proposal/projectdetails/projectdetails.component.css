@@ -1,0 +1,418 @@
+.project-details {
+	width:50px;
+	height: calc(100vh - 135px);
+	background-color: #f5f5f5;
+	color: #9b9ea0;
+	font-size: 2rem;
+	text-align: center;
+	cursor: pointer;
+}
+  
+.rotated {
+	writing-mode: tb-rl;
+	transform: rotate(-180deg);
+}
+.project-details>span {
+	line-height: 2.5;
+	margin-top: 100px;
+	letter-spacing: 1px;
+}
+/* Modal CSS */
+
+.sidebar-wrapper {
+	width:100%;
+	height: 100%;
+	z-index: 9990;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.project-details-sidebar {
+	position: absolute;
+	top: 66px;
+	margin: 0;
+	right: 0;
+	background: white;
+	z-index: 9991;
+	min-height: calc(100vh - 135px);
+	background-color: #f5f5f5;
+	min-width: 380px;
+	transition: all 0.5s ease-in;
+}
+
+.hide-sidebar {
+	width: 30%;
+	right: -30%;
+	visibility: hidden;
+}
+
+.show-sidebar {
+	width: 30%;
+	visibility: visible;
+}
+
+.project-details-sidebar .header {
+	padding: 10px;
+	font-size: 1.4em;
+	border-bottom: solid 1px lightgray;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: center;
+	color: #9b9ea0;
+}
+
+
+.details-buttons {
+	display: flex;
+	justify-content: center;
+	padding: 15px;
+}
+
+.details-buttons>div {
+	background-color: #a4eedb;
+	padding: 3px 20px;
+	color: gray;
+	font-size: 10px;
+	cursor: pointer;
+	border-radius: 5px;
+	margin: 0 8px;
+}
+
+.project-category, .subproject-category {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px 30px 0 30px;
+}
+
+.subproject-category {
+	margin-top: 10px;
+}
+
+.project-category span, .subproject-category span {
+	font-size: 11px;
+	color: #95989a;
+	width: 18%;
+	margin-right: 2%;
+	text-align: left;
+}
+
+:host ::ng-deep .project-details-sidebar .content-box {
+	background-color: white;
+	display: table;
+	width: 100%;
+}
+
+:host ::ng-deep .project-details-sidebar .content-box ul li{
+	margin: 3px 5px !important;
+	float: left;
+}
+
+:host ::ng-deep .project-details-sidebar .content-box ul li.add-keyword {
+	float: right;
+}
+
+:host ::ng-deep .project-details-sidebar .content-box ul {
+	display: block;
+	padding: 1px;
+}
+
+app-multikeywordselect {
+	width: 80%;
+}
+
+.client-notes, .internal-notes, .recent-activity {
+	display: flex;
+	flex-direction: column;
+	font-size: 11px;
+	margin: 10px 30px;
+
+}
+
+.client-notes span, .internal-notes span, .recent-activity span {
+	color: #95989a;
+	text-align: left;
+	margin-bottom: 7px;
+}
+
+.client-notes textarea, .internal-notes textarea {
+	border: none;
+	outline: none;
+	resize: none;
+	height: 130px;
+	padding: 10px;
+}
+
+.recent-activity .content {
+	background-color: white;
+	height: 130px;
+	overflow: scroll;
+}
+
+
+/* Proposal Info Modal CSS */
+
+.proposal-info-wrapper {
+	width:100%;
+	height: 100%;
+	z-index: 9992;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: rgba(156,152,152,0.5);
+}
+
+.proposal-info {
+	position: fixed;
+	top: 10px;
+	margin: 0;
+	right: 20%;
+	width: 60%;
+	background: white;
+	z-index: 9993;
+	background-color: white;
+	transition: all 0.5s ease-in;
+	border-radius: 5px;
+}
+
+.hide-proposal-info {
+	top: -30%;
+	visibility: hidden;
+}
+
+.show-proposal-info {
+	visibility: visible;
+}
+
+.proposal-info .header {
+	padding: 20px 25px;
+	border-bottom: solid 1px lightgray;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: space-between;
+}
+
+.proposal-info span {
+	color: #646464;
+	font-weight: inherit;
+}
+
+.proposal-info .header span {
+	font-size: 1.1em;
+}
+
+.save-btn {
+	background-color: #a9f2df;
+	border-radius: 3px;
+	height: 1.5em;
+	font-size: 1em;
+	border: 0;
+	width: 80px;
+	outline: none;
+	box-shadow: inset #99f3db 0 0 1px 1px;
+	margin: 5px;
+}
+
+.cancel-btn {
+	background-color: lightgray;
+	border-radius: 3px;
+	height: 1.5em;
+	font-size: 1em;
+	border: 0;
+	width: 80px;
+	outline: none;
+	margin: 5px;
+}
+
+.done-btn:focus {
+	background: #8decd4;
+}
+
+.close-btn {
+	cursor: pointer;
+	font-size: 1.5em;
+	width: 22px;
+	height: 22px;
+}
+
+tabs {
+	padding: 0;
+	min-height: 0;
+	height: 100%;
+}
+
+/* Tab Client Details CSS */
+
+.tab-one, .tab-two, .tab-three {
+	padding: 25px;
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+}
+
+tab img {
+	width: 20px;
+	height: 20px;
+}
+
+.tab-row {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+	margin-bottom: 15px;
+}
+
+.tab-row>div {
+	width: 48%;
+}
+
+tab span {
+	color: #95989A;
+	font-size: 12px;
+}
+
+tab input, tab select {
+	width: 100%;
+	border: 1px solid lightgray;
+	padding-left: 7px;
+	border-radius: 0 !important;
+	color: #95989A;
+}
+
+tab select {
+	background: none;
+	-webkit-appearance: none;
+	background: url(/assets/images/down-arrow.png) no-repeat;
+	background-position: right 10px center;
+	background-size: 3%;
+	height: 24px;
+	font-size: 12px;
+}
+
+.tab-one .desc {
+	display: flex;
+	justify-content: space-between;
+}
+
+input::placeholder {
+	font-size: 12px;
+	color: lightgray;
+}
+
+.city-state, .country-zip {
+	display: flex;
+	justify-content: space-between
+}
+
+.city-state input, .country-zip input {
+	width: 48%;
+	margin-bottom: 15px;
+}
+
+.address {
+	margin-bottom: 15px;
+}
+
+.collaborators>div {
+	width: 100%;
+	border: 1px solid lightgray;
+}
+
+.collaborators img {
+	border-radius: 100%;
+	margin: 1px 5px;
+}
+
+.btn-section {
+	display: flex;
+	justify-content: flex-end;
+}
+
+/* Tab Project Details CSS */
+
+.discount>div {
+	display: flex;
+}
+
+.discount select {
+	width: 50px;
+	background-size: 25%;
+	margin-right: 15px;
+}
+
+.discount input {
+	width: 100%;
+}
+
+.category-box, .subcategory-box {
+	min-height: 70px;
+	border: 1px solid lightgray;
+	padding: 7px;
+}
+
+.category-box span, .subcategory-box span, .milestones span {
+	background-color: #eee;
+	padding: 1px 4px;
+	margin-right: 5px;
+	display: inline-block;
+	margin: 2px;
+}
+
+.completion>div {
+	display: flex;
+	border: 1px solid lightgray;
+	align-items: center;
+}
+
+.completion input {
+	border: 0;
+	outline: none;
+}
+
+.completion img {
+	border-radius: 40%;
+	width: 18px;
+	height: 18px;
+	margin-right: 7px;
+	cursor: pointer;
+}
+
+.milestones {
+	border: 1px solid lightgray;
+	padding-left: 5px;
+}
+
+.member-container {
+	border: 1px solid lightgray;
+}
+
+.member-container img {
+	margin: 2px 5px;
+}
+
+/* Tab scope of work css */
+
+.tab-three>span {
+	font-size: 14px;
+	margin-bottom: 15px;
+}
+
+.tab-three .btn-section {
+	margin-top: 20px;
+}
+
+@media screen and (max-width: 1200px) {
+	.project-details {
+		width:40px;
+		font-size: 1.7rem;
+	}
+}

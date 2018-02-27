@@ -1,0 +1,18 @@
+<div class="card">
+	<div class="card-heading">
+		<h4>Tasks</h4>
+	</div>
+	<div class="card-content">
+
+		<div *ngFor="let task of tasks; let i = index;" class="content-down">
+			<div>
+				<input type="checkbox" name="vehicle" value="Bike" [checked]="task.checkStatus" > 
+				<a routerLink="/pm"><span>{{task.name}}</span></a>
+			</div>
+			<div>
+				<img *ngFor="let em of task.pm" src="{{em.imageUrl}}">
+				<i class="fa fa-star" aria-hidden="true" [style.color]="task.favorite ? '#f0ce4a': '#6d6d6d'" (click)='task.favorite=!task.favorite'></i>
+			</div>
+		</div>
+	</div>
+</div>

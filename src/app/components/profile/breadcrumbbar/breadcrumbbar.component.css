@@ -1,0 +1,79 @@
+
+.breadcrumb-bar {
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  border-bottom: solid 1px #95989A;
+  height: 50px;
+}
+
+.breadcrumb-section {
+  flex: 1;
+}
+
+.followers {
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  color: #95989A;
+  position: relative;
+  justify-content: flex-end;
+}
+
+.followers img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: darkcyan;
+  margin: 3px;
+}
+
+.followers .add-follower {
+  background-image: '';
+  cursor: pointer;
+  
+}
+.edit-followers {
+  position: absolute;
+  top: 45px;
+  border: solid 1px lightgray;
+  background: white;
+  padding: 5px;
+  z-index: 9;
+}
+
+.edit-followers ul {
+  margin: 0;
+  padding: 0;
+}
+
+.edit-followers li {
+  list-style: none;
+  display: inline-block;
+  padding: 3px;
+  background: lightblue;
+  border-radius: 1px;
+  margin: 2px;
+}
+.edit-followers input {
+  width: 100%;
+}
+
+.editbtn {
+  background-color: #a8f2df;
+  padding: 4px;
+  width: 100px;
+  font-size: 0.7em;
+  border-radius: 3px;
+  border: none;
+  color: black;
+  outline: none;
+}
+.editbtn:focus {
+  outline: none;
+}
+
+.closebtn {
+  cursor: pointer;
+}

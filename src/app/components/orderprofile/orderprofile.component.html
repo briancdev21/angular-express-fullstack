@@ -1,0 +1,118 @@
+<app-common (expandSidebar)="toggleMenubar($event)"></app-common>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
+  <div class="empty-top-bar"></div>
+  <div class="title-bar">
+    <app-titlebar [orderProfileInfo]="orderProfileInfo" [(showAvailabilityModal)]="showAvailabilityModal"></app-titlebar>
+  </div>
+  <div class="order-page-content">
+    <div class="progress">
+      <div class="progress-bar " role="progressbar" [attr.aria-valuenow]="orderProfileInfo.completion" aria-valuemin="0" aria-valuemax ="100" 
+        style="min-width: 30px; background-color: #FFAC58; border-radius: 15px; position: relative;" [style.width]="(orderProfileInfo.completion/100)*100 + '%'">
+        <span class="progress-title">{{orderProfileInfo.completion}}% Completion</span>
+      </div>
+    </div>
+
+    <div class="order-details">
+      <app-orderdetails [orderProfileInfo]="orderProfileInfo"></app-orderdetails>
+    </div>
+
+    <div class="draggable-ticket">
+      <app-draggableticket [(orderProfileInfo)]="orderProfileInfo" [(taskTicketInfo)]="taskTicketInfo"></app-draggableticket>
+    </div>
+
+    <div class="delivery-description">
+      <div class="product-delivery">
+        <span>PRODUCT DELIVERY</span>
+        <div class="table-content">
+          <table>
+            <tr>
+              <th>SKU</th>
+              <th>MODEL</th>
+              <th>NAME</th>
+              <th>QUANTITY</th>
+              <th>DELIVERY</th>
+            </tr>
+            <tr *ngFor="let product of productDelivery" [ngClass]="getColor(product)">
+              <td>{{product.sku}}</td>
+              <td>{{product.model}}</td>
+              <td>{{product.productName}}</td>
+              <td><input [(ngModel)]="product.quantity" (input)="checkDelivered(product)"></td>
+              <td><input [(ngModel)]="product.delivery" (input)="checkDelivered(product)"></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="work-order-delivery">
+        <span>WORK ORDER DESCRIPTION</span>
+        <textarea 
+          placeholder="Enter Description here..." 
+          [(ngModel)]="workOrderDescription"  
+          (clickOutside)="clickOutsideDesc(workOrderDescription)">
+        </textarea>
+      </div>
+    </div>
+
+    <div class="activity-notes">
+      <div class="order-activity">
+        <span>WORK ORDER ACTIVITY</span>
+        <div>
+          <app-ng2timeline [timelineData]="timelineData" [oneSide]="true"></app-ng2timeline>
+        </div>
+      </div>
+      <div class="internal-notes order-followers">
+        <span>INTERNAL NOTES</span>
+        <textarea 
+          placeholder="Enter internal notes here..." 
+          [(ngModel)]="internalNotes"
+          (clickOutside)="clickOutsideNotes(internalNotes)">
+        </textarea>
+        <div class="followers-section">
+          <div class="followers"> 
+            <span>Followers</span>
+            <div class="follower" *ngFor="let user of orderProfileInfo.followers; let i = index" (click)='editable=true;$event.stopPropagation();'>
+              <a [title]='user.name' ><img [src]='user.imageUrl'/></a>
+            </div> 
+            <div class="follower add-follower" >
+              <a title='user.name' (click)="editable=true;$event.stopPropagation()" ><img src='assets/images/Add-Button.svg'/></a>
+            </div> 
+            <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+              <ul>
+                <li *ngFor="let user of orderProfileInfo.followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                <li style="background: none; width: 100%; margin: 0;">
+                    <input autocomplete [config]="config2" [items]="items2"
+                    (inputChangedEvent)="onInputChangedEvent($event)"
+                    (selectEvent)="onSelect($event)">
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="work-order-settings">
+    <app-ordersettings></app-ordersettings>
+  </div>
+
+  <div class="availability-modal-wrapper" *ngIf="showAvailabilityModal" ></div>
+  <div [ngClass]="{'availability-modal': showAvailabilityModal, 'availability-modal-hide': !showAvailabilityModal }">
+    <div class="header">
+      <span>AVAILABILITY WORK ORDER</span>
+      <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showAvailabilityModal=false" />
+    </div>
+    <div class="content" >
+      <app-availability></app-availability>
+      <div class="modal-btn-section" >
+        <button class="cancel-btn" (click)="showAvailabilityModal=false;" >
+          Cancel
+        </button>
+        <button class="save-btn" (click)="saveAvailability()" >
+          Save
+        </button>
+      </div>
+    </div>
+  </div> 
+  
+</div>
+
+

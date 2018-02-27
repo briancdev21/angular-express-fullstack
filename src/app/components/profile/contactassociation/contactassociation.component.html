@@ -1,0 +1,55 @@
+<h4 (click)="showContactAssoDialog=true" >Contact Association</h4>
+<div>
+  <ul class="tree-view" >
+    <li><img src="assets/users/man.png" />{{contactUser}}</li>
+    <li *ngFor="let asso_user of subAssoUsers; let i = index" [ngClass]="i === 0 ? 'first-sub-tree' : 'sub-tree'" ><span></span><img src="assets/users/man.png" />{{asso_user}}</li>
+
+  </ul>
+</div>
+
+<div class="contact-asso-dialog-wrapper" *ngIf="showContactAssoDialog" ></div>
+<div [ngClass]="{'contact-asso-dialog': showContactAssoDialog, 'contact-asso-dialog-hide': !showContactAssoDialog }">
+  <div class="header">
+    <span>Contact Association</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showContactAssoDialog=false" />
+  </div>
+  <div class="content" >
+    <table width="100%" >
+      <tr>
+        <td width="50%" style="padding-right: 20px;">
+          <div class="text-label">Project Name</div>
+          <div>
+            <select>
+              <option>Remodel with your Nu Life</option>
+            </select>
+          </div>
+        </td>
+        <td>
+          <div class="text-label">Project Manager</div>
+          <div class="project-manager">
+            Hayati Homes
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-right: 20px;">
+          <div class="text-label">Accounts Receivable</div>
+          <div>
+            <input type="text" placeholder="Enter contact's names" />
+          </div>
+        </td>
+        <td>
+          <div class="text-label">Other Associates</div>
+          <div>
+            <input type="text" placeholder="Enter contact's name" />
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="showContactAssoDialog=false" >
+        Done!
+      </button>
+    </div>
+  </div>
+</div>

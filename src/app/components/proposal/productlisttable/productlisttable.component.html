@@ -1,0 +1,36 @@
+<div class="content">
+  <table>
+    <tr>
+      <th>SKU</th>
+      <th>BRAND</th> 
+      <th>MODEL</th>
+      <th>PRODUCT NAME</th>
+      <th>PRODUCT TYPE</th> 
+      <th>QYT</th>
+      <th>UNIT PRICE</th>
+      <th>DISCOUNT %</th> 
+      <th>TOTAL</th>
+      <th>TAX RATE</th>
+      <th>CATEGORY</th> 
+      <th>SUBCATEGORY</th>
+    </tr>
+    <tr
+      *ngFor="let product of proposalProductList;let i = index"
+      (click)="onRowSelect(product, i)"
+      [ngStyle]="{'background-color': selectedRows.includes(i) ? '#dcdbdb':'white'}"
+    >
+      <td><img src="assets/images/right-arrow.png">{{product.sku}}</td>
+      <td>{{product.brand}}</td> 
+      <td>{{product.model}}</td>
+      <td>{{product.productName}}</td>
+      <td>{{product.productType}}</td> 
+      <td>{{product.qty}}</td>
+      <td>${{product.unitPrice}}</td>
+      <td>{{product.discount}}</td> 
+      <td>${{product.unitPrice * product.qty * (100 - product.discount)/100}}</td>
+      <td>{{product.taxRate}}</td>
+      <td>{{product.category}}</td> 
+      <td>{{product.subcategory}}</td>
+    </tr>
+  </table>
+</div>

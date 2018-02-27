@@ -1,0 +1,93 @@
+
+.followers {
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  color: #95989A;
+  position: relative;
+  justify-content: flex-end;
+  margin: 0 15px;
+}
+
+.followers img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: darkcyan;
+  margin: 3px;
+}
+
+.followers .add-follower {
+  background-image: '';
+  cursor: pointer;
+}
+
+.edit-followers {
+  position: absolute;
+  top: 38px;
+  border: solid 1px lightgray;
+  background: white;
+  padding: 5px;
+  z-index: 9;
+  width: 150px;
+  left: 0;
+}
+
+.edit-followers ul {
+  margin: 0;
+  padding: 0;
+}
+
+.edit-followers li {
+  list-style: none;
+  display: inline-block;
+  padding: 3px;
+  background: lightblue;
+  border-radius: 1px;
+  margin: 2px;
+}
+.edit-followers input {
+  width: 100%;
+}
+
+.closebtn {
+  cursor: pointer;
+}
+
+.content-title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 25px;
+  color: #464646;
+  font-weight: 300;
+  border: 0;
+  outline: none;
+  width: 50%;
+}
+
+.title::placeholder {
+  color: #95989A;
+  font-weight: 300;
+}
+
+.titlebar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.titlebar-right>span:first-child {
+  color: #A8D0EA;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.status {
+  color: #6FEBCA;
+  font-size: 25px;
+  font-weight: 300;
+}

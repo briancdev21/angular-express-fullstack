@@ -1,0 +1,185 @@
+.card {
+	border-radius: 2px;
+	padding: 10px;
+	position: relative;
+	box-shadow: #e3e3e3 0px 0 2px 2px;
+	background-color: #F6F6F6;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 30px;
+}
+
+.card-heading{
+	display: flex;
+	justify-content: space-between;
+}
+
+.card-heading img {
+	width: 23px;
+	height: 40px;
+	cursor: pointer;
+}
+h4 {
+	text-align: left;
+	color: #a3a5a7;
+	font-weight: 400;
+}
+
+.card-content {
+	display: flex;
+	margin-top: 20px;
+}
+
+.card-content>div {
+	width: 100%;
+}
+
+.card-content img {
+	width: 20px;
+	height: 25px;
+}
+
+.content-top h5 {
+	margin: 0;
+	color: #82ebc8;
+	font-size: 16px;
+}
+
+.content-top span {
+	font-size: 16px;
+}
+
+.content-top, .content-down {
+	display: flex;
+	justify-content: space-between;
+	margin-left: 10px;
+}
+
+.content-down>span:first-child {
+	margin-left: 15px;
+}
+
+span {
+	color: #c0c2c3;
+	font-weight: 300;
+	font-size: 12px;
+}
+
+@media screen and (max-width: 1500px) {
+	.content-top h5, .content-top span {
+		font-size: 14px;
+	}
+}
+
+@media screen and (max-width: 1300px) {
+	.content-top, .content-down {
+		margin-left: 0;
+	}
+}
+
+/* Modal CSS */
+  
+.contact-asso-dialog-wrapper {
+	background: rgba(156,152,152,0.5);
+	width:100%;
+	height: 100%;
+	z-index: 9990;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+.contact-asso-dialog {
+	position: fixed;
+	top: 5px;
+	width: 60%;
+	margin: 0 20%;
+	left: 0;
+	background: white;
+	z-index: 9999;
+	border-radius: 5px;
+	transition: all 0.5s
+}
+
+.contact-asso-dialog-hide {
+	position: fixed;
+	top: -500px;
+	margin: 0 20%;
+	left: 0;
+	z-index: 9999;
+	border-radius: 5px;
+	transition: all 0.5s
+}
+
+.contact-asso-dialog .content {
+	font-size: 0.8em;
+}
+
+
+.contact-asso-dialog .header {
+	padding: 20px 25px;
+	border-bottom: solid 1px lightgray;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: space-between;
+}
+
+.contact-asso-dialog span {
+	color: #646464;
+	font-weight: inherit;
+}
+
+.header span {
+	font-size: 1.1em;
+}
+
+.done-btn {
+	background-color:#a9f2df; 
+	border-radius: 5px;
+	height: 2.5em;
+	font-size: 1.4em;
+	border: 0;
+	width: 130px;
+	outline: none;
+	box-shadow: inset #99f3db 0 0 1px 1px;
+	margin: 35px;
+}
+
+.done-btn:focus {
+	background: #8decd4;
+}
+
+.close-btn {
+	cursor: pointer;
+	font-size: 1.5em;
+	width: 22px;
+	height: 22px;
+}
+
+tabs {
+	padding: 0;
+	min-height: 0;
+	height: 100%;
+}
+
+table {
+	width: 100%;
+}
+
+table, th, td {
+	border: 1px solid lightgray;
+	border-collapse: collapse;
+	padding: 12px;
+	font-weight: 500;
+	color: gray;
+}
+
+table img {
+	width: 18px;
+	height: 18px;
+	margin: 0 3px;
+}
