@@ -1,0 +1,66 @@
+<div class="top">
+  <div class="title">
+    <span>FILTER</span>
+    <img src="assets/images/add-button.png" *ngIf="filterClicked">
+  </div>
+  <button class="filter-apply" (click)="applyFilter()">Apply</button>
+</div>
+
+<div class="filter-content">
+  <div class="score-range-filter">
+    <span>Contact Score</span>
+    <ion-range-slider #sliderElement
+          type="double"
+          min="0"
+          max="100"
+          [from]="filters.scoreFrom"
+          [to]="filters.scoreTo"
+          postfix="%"
+          (onChange)="rangeSliderChange($event)"></ion-range-slider>
+  </div>
+  <div class="location">
+    <span>Location</span>
+    <input [(ngModel)]="filters.location" >
+  </div>
+  <div class="contact-status">
+    <span>Contact status</span>
+    <select [(ngModel)]="filters.selectStatus">
+      <option value="choose" default>Choose status</option>
+      <option *ngFor="let status of contactStatus" [value]="status">{{status}}</option>
+    </select>
+  </div>
+  <div class="contact-created-date">
+    <span>Created on</span>
+    <div>
+      <div class="created-from">
+        <input [owlDateTimeTrigger]="createdFrom" [owlDateTime]="createdFrom" placeholder="From" (dateTimeChange)="selectCreatedFrom($event)" [max]="createdMax" [(ngModel)]="filters.createdFrom" >
+        <owl-date-time [pickerType]="'calendar'" #createdFrom ></owl-date-time>
+      </div>
+      <div class="created-to">
+        <input [owlDateTime]="createdTo" [owlDateTimeTrigger]="createdTo" placeholder="To" (dateTimeChange)="selectCreatedTo($event)" [min]="createdMin" [(ngModel)]="filters.createdTo" >
+        <owl-date-time [pickerType]="'calendar'" #createdTo></owl-date-time>
+      </div>
+    </div>
+  </div>
+  <div class="contact-updated-date">
+    <span>Updated on</span>
+    <div>
+      <div class="updated-from">
+        <input [owlDateTimeTrigger]="updatedFrom" [owlDateTime]="updatedFrom" placeholder="From" (dateTimeChange)="selectUpdatedFrom($event)" [max]="updatedMax" [(ngModel)]="filters.updatedFrom"  >
+        <owl-date-time [pickerType]="'calendar'" #updatedFrom ></owl-date-time>
+      </div>
+      <div class="updated-to">
+        <input [owlDateTime]="updatedTo" [owlDateTimeTrigger]="updatedTo" placeholder="To" (dateTimeChange)="selectUpdatedTo($event)" [min]="updatedMin" [(ngModel)]="filters.updatedTo">
+        <owl-date-time [pickerType]="'calendar'" #updatedTo></owl-date-time>
+      </div>
+    </div>
+  </div>
+  <div class="owner">
+    <span>Owner</span>
+    <select [(ngModel)]="filters.selectOwner">
+      <option default>Choose owner</option>
+      <option *ngFor="let owner of contactOwners" [value]="owner" #contactOwner>{{owner}}</option>
+    </select>
+  </div>
+  <button class="reset-filter" (click)="resetFilter()">Reset Filter</button>
+</div>

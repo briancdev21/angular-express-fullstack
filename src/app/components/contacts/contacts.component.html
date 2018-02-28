@@ -1,0 +1,77 @@
+<app-common (expandSidebar)="toggleMenubar($event)"></app-common>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
+  <div class="empty-top-bar"></div>
+  <div class="top-nav-bar">
+    <div class="breadcrumb-bar">
+      <span>Contacts</span>
+      <i class="fa fa-angle-right"></i>
+      <span *ngIf="!filterClicked">My Contacts</span>      
+      <div class="saved-filters">
+        <i *ngIf="!filterClicked" class="fa fa-angle-down" (click)="clickSavedFilters()"></i>
+        <div class="saved-filters-list-wrapper" *ngIf="openSavedFiltersList" (click)="savedFiltersListCollapsed=true; openSavedFiltersList=false"></div>
+        <div class="saved-filters-list "  [ngClass]="{'show-modal': !savedFiltersListCollapsed, 'hide-modal': savedFiltersListCollapsed }">
+          <ul>
+            <li (click)="removeFilter()">Remove filters</li>
+            <li *ngFor="let filter of savedFiltersArr" (click)="applySavedFilter(filter)">{{filter.savedFilterName}}</li>
+          </ul>
+        </div>
+      </div>
+      <span *ngIf="filterClicked">Filter Option</span>   
+      <img *ngIf="filterClicked" src="assets/images/X sign Red.png" (click)="cancelFilter()">   
+      <img *ngIf="filterClicked" src="assets/images/Checkmark Green.png" (click)="saveFilterModalCollapsed = false; showSaveFilterModal = true;">
+    </div>
+
+    <div class="contacts-btn-group">
+      <div class="contacts-add-btn">
+        <app-addcontact [contactsListInfo]="contactsListInfo" [contactOwners]="contactOwners" [contactStatus]="contactStatus"></app-addcontact>
+      </div>
+      <div class="contacts-import-btn">Import contacts</div>
+    </div>
+  </div>
+
+  <div class="main-content-box">
+    <div class="contacts-table">
+      <app-contactslisttable [(contactsListInfo)]="contactsListInfo"></app-contactslisttable>
+    </div>
+    <div class="contacts-filter">
+      <app-contactfilter [(contactsListInfo)]="contactsListInfo" [(filters)]="filters" [contactOwners]="contactOwners" [contactStatus]="contactStatus" (filterParent)="getFilter($event)"></app-contactfilter>
+    </div>
+  </div>
+</div>
+
+<div class="modal-wrapper" *ngIf="showSaveFilterModal" (click)="saveFilterModalCollapsed=true; showSaveFilterModal=false"></div>
+<div class="save-filter-modal common"  [ngClass]="{'show-modal': !saveFilterModalCollapsed, 'hide-modal': saveFilterModalCollapsed }">
+  <div class="header">
+    <span>SAVE AS</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="closeModal()" />
+  </div>
+
+  <div class="save-filter-content" >
+    <div class="filter-name">
+      <span>Filter Name *</span>
+      <input [(ngModel)]="filterName">
+    </div>
+    <div class="available">
+      <span>Available to</span>
+      <div>
+        <div>
+          <input name="radio-applied-to" type="radio" value="me" #me (click)="onChangeAcailable(me.value)">
+          <label>Only me</label>
+        </div>
+        <div >
+          <input name="radio-applied-to" type="radio" [checked]="true" value="everyone" #everyone (click)="onChangeAcailable(everyone.value)">
+          <label for="percent">Everyone</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-section" >
+    <button class="cancel-btn" (click)="closeModal()"  >
+      Cancel
+    </button>
+    <button class="save-btn" (click)="saveFilter()"  >
+      Save Filter
+    </button>
+  </div>
+</div>
+
