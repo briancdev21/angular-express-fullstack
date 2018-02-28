@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { SubnavHandlerService } from '../services/subnav-handler.service';
+import { SubnavHandlerService } from '../../services/subnav-handler.service';
 
 @Component({
   selector: 'app-submenu',
