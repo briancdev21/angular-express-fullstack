@@ -18,12 +18,11 @@ import { Ng2CompleterModule } from 'ng2-completer';
 
 
 
-
 @NgModule({
   declarations: [
     ContactsListTableComponent,
     ContactFilterComponent,
-    AddContactComponent
+    AddContactComponent,
   ],
   imports: [
     BrowserModule,

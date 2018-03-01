@@ -89,10 +89,10 @@ table i {
 
 .contact-expand-modal {
 	position: absolute;
-	top: 27px;
+	top: 23px;
 	margin: 0;
-	right: 9%;
-	width: 150px;
+	right: 5%;
+	min-width: 150px;
 	background: white;
 	z-index: 9993;
 	background-color: white;
@@ -131,20 +131,20 @@ table i {
   width: 25px;
   height: 25px;
   float: right;
-  margin: -6px 10px;
+  margin: -4px 10px;
 }
 
-.contact-expand-modal>div {
+.contact-expand-modal>div>div {
   border-bottom: 1px solid #F5F5F5;
   padding: 5px 0;
 }
 
-.contact-expand-modal>div:last-child {
+.contact-expand-modal>div>div:last-child {
   border: none;
   cursor: pointer;
 }
 
-.contact-expand-modal>div>div {
+.contact-expand-modal>div>div>div {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -152,6 +152,27 @@ table i {
 
 table a:hover {
   text-decoration: none;
+}
+
+.info-modal-top {
+  display: flex;
+  align-items: center;
+}
+
+.mini-info {
+  display: flex;
+  border-bottom: 0 !important;
+}
+
+.mini-info img {
+  width: 20px;
+  height: 20px;
+  margin: 0 7px;
+}
+
+.mini-info a {
+  color: #7cb8e0;
+  display: inline-table;
 }
 
 /* Add a log Modal CSS */

@@ -25,6 +25,10 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { DragulaModule } from 'ng2-dragula';
 
+import { Pipe, PipeTransform } from '@angular/core';
+import { PhonePipe } from './pipes/phone.pipe';
+
+
 
 @NgModule({
   declarations: [
@@ -35,7 +39,8 @@ import { DragulaModule } from 'ng2-dragula';
     OrderProfileComponent,
     DealsPipelineComponent,
     ContactsComponent,
-    StopEventPropagationDirective
+    StopEventPropagationDirective,
+    PhonePipe
   ],
   imports: [
     BrowserModule,
@@ -53,6 +58,9 @@ import { DragulaModule } from 'ng2-dragula';
     ClickOutsideModule,
     DragulaModule,
     ContactsCmpModule
+  ],
+  exports: [
+    PhonePipe
   ],
   providers: [],
   bootstrap: [AppComponent]
