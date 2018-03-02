@@ -15,7 +15,7 @@ import { ContactsListTableComponent } from './contactslisttable/contactslisttabl
 import { ContactFilterComponent } from './contactfilter/contactfilter.component';
 import { AddContactComponent } from './addcontact/addcontact.component';
 import { Ng2CompleterModule } from 'ng2-completer';
-
+import { AutocompleteModule } from 'ng2-input-autocomplete';
 
 
 @NgModule({
@@ -34,7 +34,8 @@ import { Ng2CompleterModule } from 'ng2-completer';
     OwlNativeDateTimeModule,
     BrowserAnimationsModule,
     ProfileCmpModule,
-    Ng2CompleterModule
+    Ng2CompleterModule,
+    AutocompleteModule
   ],
   exports: [
     ContactsListTableComponent,

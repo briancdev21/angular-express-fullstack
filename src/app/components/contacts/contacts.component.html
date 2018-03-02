@@ -34,7 +34,14 @@
       <app-contactslisttable [(contactsListInfo)]="contactsListInfo"></app-contactslisttable>
     </div>
     <div class="contacts-filter">
-      <app-contactfilter [(contactsListInfo)]="contactsListInfo" [(filters)]="filters" [contactOwners]="contactOwners" [contactStatus]="contactStatus" (filterParent)="getFilter($event)"></app-contactfilter>
+      <app-contactfilter 
+        [(contactsListInfo)]="contactsListInfo" 
+        [(filters)]="filters" 
+        [contactOwners]="contactOwners" 
+        [contactStatus]="contactStatus" 
+        (filterParent)="getFilter($event)"
+        [(contactTypes)]="contactTypes">
+      </app-contactfilter>
     </div>
   </div>
 </div>

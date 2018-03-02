@@ -61,12 +61,12 @@ img {
   margin-bottom: 5px;
 }
 
-.contact-created-date>div, .contact-updated-date>div{
+.contact-created-date>div, .contact-updated-date>div, .contact-last-date>div {
   display: flex;
   justify-content: space-between;
 }
 
-.created-from, .created-to, .updated-from, .updated-to {
+.created-from, .created-to, .updated-from, .updated-to, .last-from, .last-to {
   width: 45%;
 }
 
@@ -84,4 +84,66 @@ img {
   cursor: pointer;
   border: 0;
   width: 100%;
+}
+
+/* owners section css */
+
+.owners {
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  color: #95989A;
+  position: relative;
+  justify-content: flex-start;
+  margin-top: 1px solid #D3D3D3;
+  border: 1px solid lightgray;
+  padding: 0 8px;
+}
+
+.owners .add-owner {
+  background-image: '';
+  cursor: pointer;
+  min-height: 32px;
+}
+
+.edit-owners {
+  position: absolute;
+  top: 30px;
+  border: solid 1px lightgray;
+  background: white;
+  padding: 5px;
+  z-index: 9;
+  min-width: 150px;
+  max-width: 300px;
+  left: 0;
+}
+
+.edit-owners ul {
+  margin: 0;
+  padding: 0;
+}
+
+.edit-owners li {
+  list-style: none;
+  display: inline-block;
+  padding: 3px;
+  background: lightblue;
+  border-radius: 1px;
+  margin: 2px;
+}
+
+.edit-owners input {
+  width: 100%;
+}
+
+.owners>span {
+  padding-right: 15px;
+  font-size: 13px;
+}
+
+.contact-owner {
+  background: #f5f5f5;
+  padding: 5px;
+  margin-right: 5px;
+  color: #646464;
 }

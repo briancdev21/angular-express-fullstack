@@ -105,9 +105,9 @@ export class ContactsListTableComponent implements OnInit {
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
       this.contactsListInfo.sort( function(name1, name2) {
-        if ( name1[field] < name2[field] ) {
+        if ( Number(name1[field]) < Number(name2[field]) ) {
           return -1;
-        } else if ( name1[field] > name2[field]) {
+        } else if ( Number(name1[field]) > Number(name2[field])) {
           return 1;
         } else {
           return 0;

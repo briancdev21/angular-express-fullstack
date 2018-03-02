@@ -30,8 +30,8 @@ export class ContactsComponent implements OnInit {
   }
 
   public filters  = {
-    scoreFrom : 0,
-    scoreTo : 100,
+    // scoreFrom : 0,
+    // scoreTo : 100,
     createdDateFrom: '',
     createdDateTo: '',
     updatedDateFrom: '',
@@ -41,6 +41,10 @@ export class ContactsComponent implements OnInit {
     selectStatus: '',
   };
 
+  public contactOwners: Array<Object> = [
+    'John Smith',
+  ];
+
   public contactsListInfo: Array<Object> = [
     {
       name: 'John Moss',
@@ -49,13 +53,13 @@ export class ContactsComponent implements OnInit {
       createDate: 'Januanry 19, 2018',
       updatedDate: 'Januanry 25, 2018',
       lastContactedDate: 'Januanry 25, 2018',
-      rating: 95,
+      rating: '95',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
       owner: 'Diana Ilic',
-      account: 1,
-      association: 0,
-      totalDeals: 1,
-      accountType: 'individual',
+      account: '1',
+      association: '0',
+      totalDeals: '1',
+      accountType: 'Individual',
     },
     {
       name: 'Rob Harding',
@@ -64,13 +68,13 @@ export class ContactsComponent implements OnInit {
       createDate: 'Januanry 19, 2017',
       updatedDate: 'Januanry 25, 2018',
       lastContactedDate: 'Januanry 25, 2018',
-      rating: 100,
+      rating: '100',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'Rob Harding',
-      account: 0,
-      association: 0,
-      totalDeals: 3,
-      accountType: 'individual',
+      owner: 'John Moss',
+      account: '0',
+      association: '0',
+      totalDeals: '3',
+      accountType: 'Individual',
     },
     {
       name: 'Hugh Williamson',
@@ -79,13 +83,13 @@ export class ContactsComponent implements OnInit {
       createDate: 'June 19, 2016',
       updatedDate: 'Januanry 25, 2017',
       lastContactedDate: 'Januanry 25, 2018',
-      rating: 82,
+      rating: '82',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'Hugh Williamson',
-      account: 0,
-      association: 1,
-      totalDeals: 2,
-      accountType: 'individual',
+      owner: 'John Smith',
+      account: '0',
+      association: '1',
+      totalDeals: '2',
+      accountType: 'Individual',
     },
     {
       name: 'Danny Shibley',
@@ -94,12 +98,12 @@ export class ContactsComponent implements OnInit {
       createDate: 'Januanry 19, 2018',
       updatedDate: 'Januanry 25, 2018',
       lastContactedDate: 'Januanry 25, 2018',
-      rating: 75,
+      rating: '75',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
       owner: 'Diana Ilic',
-      account: 1,
-      association: 1,
-      totalDeals: 1,
+      account: '1',
+      association: '1',
+      totalDeals: '1',
       accountType: 'Business',
     },
     {
@@ -109,27 +113,27 @@ export class ContactsComponent implements OnInit {
       createDate: 'April 29, 2017',
       updatedDate: 'Januanry 25, 2018',
       lastContactedDate: 'Januanry 25, 2018',
-      rating: 75,
+      rating: '75',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
       owner: 'Diana Ilic',
-      account: 0,
-      association: 0,
-      totalDeals: 0,
-      accountType: 'individual',
+      account: '0',
+      association: '0',
+      totalDeals: '0',
+      accountType: 'Individual',
     },
     {
       name: 'John Stephen',
       phone: '1039692343',
       email: 'john.Stephen@outlook.com',
-      createDate: 'Januanry 19, 2018',
+      createDate: 'Mar 19, 2018',
       updatedDate: 'Januanry 25, 2018',
       lastContactedDate: 'Januanry 25, 2018',
-      rating: 85,
+      rating: '85',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'Diana Ilic',
-      account: 0,
-      association: 0,
-      totalDeals: 1,
+      owner: 'John Smith',
+      account: '0',
+      association: '0',
+      totalDeals: '1',
       accountType: 'Business',
     },
     {
@@ -139,28 +143,27 @@ export class ContactsComponent implements OnInit {
       createDate: 'December 19, 2017',
       updatedDate: 'April 5, 2018',
       lastContactedDate: 'June 25, 2018',
-      rating: 73,
+      rating: '73',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'Rockwood Homes',
-      account: 0,
-      association: 0,
-      totalDeals: 1,
-      accountType: 'individual',
+      owner: 'John Moss',
+      account: '0',
+      association: '0',
+      totalDeals: '1',
+      accountType: 'Individual',
     }
   ];
 
-  public contactOwners = [
-    'Diana Ilic', 'John Smith', 'Greg Johnson'
+  public contactStatus = [
+    'Project', 'Invoice', 'Project and Invoice'
   ];
 
-  public contactStatus = [
-    'New', 'Seen', 'Follow-up', 'Demo'
-  ];
+  public contactTypes = ['Individual', 'Business'];
   ngOnInit() {
     this.backUpContacts = this.contactsListInfo;
   }
 
   getFilter(event) {
+    console.log('111', event);
     this.contactsListInfo = event.filtered;
     this.filterClicked = event.clicked;
   }
@@ -178,8 +181,8 @@ export class ContactsComponent implements OnInit {
 
   cancelFilter() {
     this.filters = {
-      scoreFrom : 0,
-      scoreTo : 100,
+      // scoreFrom : 0,
+      // scoreTo : 100,
       createdDateFrom: '',
       createdDateTo: '',
       updatedDateFrom: '',
