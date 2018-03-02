@@ -60,7 +60,7 @@
 					<div class=" tab-row">
             <div>
               <span>Email</span>
-              <input placeholder="Enter email">
+              <input placeholder="Enter email" [(ngModel)]="newEmail">
             </div>
             <div>
               <span>Department</span>
@@ -78,11 +78,11 @@
             </div>
             <div *ngIf="!typeAccountTypeChange">
               <span>Mobile</span>
-              <input placeholder="Enter mobile number" >
+              <input placeholder="Enter mobile number" [(ngModel)]="mobileNumber" >
             </div>
 						<div *ngIf="typeAccountTypeChange">
               <span>Secondary number</span>
-              <input placeholder="Enter secondary number" >
+              <input placeholder="Enter secondary number" [(ngModel)]="secondaryNumber" >
             </div>
           </div>
 
@@ -95,15 +95,15 @@
                 <span>Same as the customer profile</span>
               </div>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [value]="shippingAddress">
+            <input placeholder="Enter Shipping Address" class="address" [value]="shippingAddress" [(ngModel)]="newAddress" >
 
             <div class="city-state">
-              <input placeholder="Enter City">
-              <input placeholder="Enter State">
+              <input placeholder="Enter City" [(ngModel)]="newCity" >
+              <input placeholder="Enter State" [(ngModel)]="newState" >
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country">
-              <input placeholder="Enter Zipcode">
+              <input placeholder="Enter Country" [(ngModel)]="newCountry" >
+              <input placeholder="Enter Zipcode" [(ngModel)]="newZipcode" >
             </div>
           </div>
 
@@ -183,8 +183,8 @@
             <div>
               <span>Owner</span>
               <div>
-                <select>
-                  <option value="test">Sepehr Shoarinejad</option>
+                <select [(ngModel)]="selectOwner">
+                  <option value="Sepehr Shoarinejad">Sepehr Shoarinejad</option>
                 </select>
               </div>
             </div>

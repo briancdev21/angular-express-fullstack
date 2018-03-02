@@ -163,9 +163,12 @@ export class ContactsComponent implements OnInit {
   }
 
   getFilter(event) {
-    console.log('111', event);
     this.contactsListInfo = event.filtered;
     this.filterClicked = event.clicked;
+  }
+
+  addNewContact(event) {
+    this.contactsListInfo.push(event.data);
   }
 
   toggleMenubar(data: boolean) {

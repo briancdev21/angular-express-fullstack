@@ -87,7 +87,6 @@ export class LeadFilterComponent implements OnInit {
   }
 
   resetFilter() {
-    console.log('reset');
     this.scoreFrom = 0;
     this.scoreTo = 100;
     this.filters = {
@@ -105,7 +104,6 @@ export class LeadFilterComponent implements OnInit {
   }
 
   applyFilter() {
-    console.log('filters:', this.filters);
     this.filters.scoreFrom = this.scoreFrom;
     this.filters.scoreTo = this.scoreTo;
     this.applyClicked = true;

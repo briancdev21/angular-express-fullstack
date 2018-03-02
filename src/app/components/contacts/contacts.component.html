@@ -23,7 +23,7 @@
 
     <div class="contacts-btn-group">
       <div class="contacts-add-btn">
-        <app-addcontact [contactsListInfo]="contactsListInfo" [contactOwners]="contactOwners" [contactStatus]="contactStatus"></app-addcontact>
+        <app-addcontact [contactsListInfo]="contactsListInfo" [contactOwners]="contactOwners" [contactStatus]="contactStatus " (addToContactsList)="addNewContact($event)"></app-addcontact>
       </div>
       <div class="contacts-import-btn">Import contacts</div>
     </div>

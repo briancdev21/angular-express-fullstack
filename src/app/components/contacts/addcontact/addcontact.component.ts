@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, } from '@angular/core';
+import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../profile/multikeywordselect/multikeywordselect.component';
 import { CompleterService, CompleterData } from 'ng2-completer';
@@ -17,6 +17,7 @@ export class AddContactComponent implements OnInit {
   @Input() contactsListInfo;
   @Input() contactOwners;
   @Input() contactStatus;
+  @Output() addToContactsList: EventEmitter<any> = new EventEmitter;
   protected searchStr: string;
   protected captain: string;
   protected captainSource: string;
@@ -59,6 +60,9 @@ export class AddContactComponent implements OnInit {
   invalidDefaultPricing = false;
   invalidPrimaryNumber = false;
   sourceValue = true;
+  newEmail = '';
+  newAddress = '';
+  selectOwner = '';
 
   constructor(private completerService: CompleterService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
@@ -218,6 +222,23 @@ export class AddContactComponent implements OnInit {
     }
   }
   clickSaveContact() {
+
+    const newContact = {
+      name: this.firstName + this.lastName,
+      phone: this.primaryNumber,
+      email: this.newEmail,
+      createDate: new Date(),
+      updateDate: new Date(),
+      lastContactedDate: new Date(),
+      rating: '0',
+      address: this.newAddress,
+      owner: this.selectOwner,
+      account: '0',
+      association: '0',
+      totalDeals: '0',
+      accountType: this.businessType,
+    };
+
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
     this.invalidDefaultPricing = false;
@@ -226,6 +247,7 @@ export class AddContactComponent implements OnInit {
       this.showAddContactModal = false;
       this.tabActiveFirst = true;
       this.tabActiveSecond = false;
+      this.addToContactsList.emit({data: newContact});
     } else {
       if (!this.defaultCurrency) {
         this.invalidDefaultCurrency = true;
