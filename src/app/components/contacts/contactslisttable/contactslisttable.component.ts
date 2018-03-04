@@ -52,10 +52,14 @@ export class ContactsListTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private router: Router ) {
   }
 
   ngOnInit() {
+  }
+
+  redirectTo(id) {
+    this.router.navigate(['../profile/' + id]);
   }
 
   selectedFilterEventHandler(filteredList) {

@@ -19,6 +19,7 @@ export const routes: Routes = [
   { path: 'orderprofile', component: OrderProfileComponent },
   { path: 'servicing', component: TestComponent },
   { path: 'reports', component: TestComponent },
+  { path: '**', component: TestComponent },
 ];
 
 export const routing = RouterModule.forRoot(routes);

@@ -47,6 +47,7 @@ export class ContactsComponent implements OnInit {
 
   public contactsListInfo: Array<Object> = [
     {
+      id: 0,
       name: 'John Moss',
       phone: '4039696480',
       email: 'John.Moss@outlook.com',
@@ -62,6 +63,7 @@ export class ContactsComponent implements OnInit {
       accountType: 'Individual',
     },
     {
+      id: 1,
       name: 'Rob Harding',
       phone: '4039696434',
       email: 'Rob.Harding@outlook.com',
@@ -77,6 +79,7 @@ export class ContactsComponent implements OnInit {
       accountType: 'Individual',
     },
     {
+      id: 2,
       name: 'Hugh Williamson',
       phone: '4039436423',
       email: 'HughWilliamson@outlook.com',
@@ -92,6 +95,7 @@ export class ContactsComponent implements OnInit {
       accountType: 'Individual',
     },
     {
+      id: 3,
       name: 'Danny Shibley',
       phone: '4039602348',
       email: 'DannyShibley@outlook.com',
@@ -107,6 +111,7 @@ export class ContactsComponent implements OnInit {
       accountType: 'Business',
     },
     {
+      id: 4,
       name: 'Hayati Homes',
       phone: '5439696481',
       email: 'Hayati.Homes@outlook.com',
@@ -122,6 +127,7 @@ export class ContactsComponent implements OnInit {
       accountType: 'Individual',
     },
     {
+      id: 5,
       name: 'John Stephen',
       phone: '1039692343',
       email: 'john.Stephen@outlook.com',
@@ -137,6 +143,7 @@ export class ContactsComponent implements OnInit {
       accountType: 'Business',
     },
     {
+      id: 6,
       name: 'Rockwood Homes',
       phone: '4039623086',
       email: 'Rockwood.Homes@outlook.com',
