@@ -224,7 +224,7 @@ export class AddContactComponent implements OnInit {
   clickSaveContact() {
 
     const newContact = {
-      name: this.firstName + this.lastName,
+      name: this.firstName + ' ' + this.lastName,
       phone: this.primaryNumber,
       email: this.newEmail,
       createDate: new Date(),
