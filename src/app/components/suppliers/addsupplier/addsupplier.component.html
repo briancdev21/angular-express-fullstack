@@ -1,0 +1,244 @@
+<div class="btn-add-contact" (click)="addContactModalCollapsed=false; showAddContactModal=true;">Add contact</div>
+
+<!-- ADD CONTACT MODAL VIEW -->
+
+<div class="add-contact-modal-wrapper" *ngIf="showAddContactModal" ></div>
+<div class="add-contact-modal"  [ngClass]="{'show-modal': !addContactModalCollapsed, 'hide-modal': addContactModalCollapsed }">
+  <div class="header">
+    <span>ADD CONTACT</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addContactModalCollapsed=true; showAddContactModal=false" />
+  </div>
+
+  <div class="content" >
+    <tabs (currentTabChange)="tabChange($event)" >
+      <tab tabTitle="BASIC INFORMATION" [active]="tabActiveFirst" >
+        <div class="tab-one">
+          <div class="tab-row" *ngIf="!typeAccountTypeChange">
+            <div>
+              <span>First Name (*required)</span>
+              <input placeholder="Enter first name" [ngClass]="{'validation-required': invalidFirstname}" [(ngModel)]="firstName" [value]="firstName">
+            </div>
+            <div>
+              <span>Last Name (*required)</span>
+              <input placeholder="Enter last name" [ngClass]="{'validation-required': invalidLastname}" [(ngModel)]="lastName" [value]="lastName">
+            </div>
+          </div>
+
+          <div class="tab-row" *ngIf="typeAccountTypeChange">
+						<div>
+							<span>Business Name (*required)</span>
+							<input placeholder="Enter business name" [ngClass]="{'validation-required': invalidBusinessName}" [(ngModel)]="businessName" [value]="businessName">
+						</div>  
+            <div>
+							<span>Head contact</span>
+							<div>
+                <select>
+                  <option value="test">Choose head contact</option>
+                </select>
+              </div>
+						</div> 
+          </div>
+
+          <div class="tab-row">
+            
+            <div>
+              <span>Account type (*required)</span>
+              <div class="account-type">
+                <select [(ngModel)]='businessType' #accountType (ngModelChange)="onAccountTypeChange(businessType)" [ngClass]="{'validation-required': invalidAccountType}" >
+                  <option value="" selected disabled class="default-option">Choose an account type</option>
+									<option value="individual">Individual</option>
+                  <option value="business">Business</option>
+                </select>
+              </div>
+            </div>
+						<div>
+              <span>Job title</span>
+              <input placeholder="Enter job title">
+            </div>
+          </div>
+
+					<div class=" tab-row">
+            <div>
+              <span>Email</span>
+              <input placeholder="Enter email" [(ngModel)]="newEmail">
+            </div>
+            <div>
+              <span>Department</span>
+              <div>
+                <ng2-completer [(ngModel)]="captain" [datasource]="captains" [minSearchLength]="0" (keyup.enter)="onEnter()"></ng2-completer>
+              </div>
+            </div>
+						
+          </div>
+
+          <div class="name-type tab-row">
+            <div>
+              <span>Primary number (*required)</span>
+              <input placeholder="Enter primary phone number" [ngClass]="{'validation-required': invalidPrimaryNumber}" [(ngModel)]="primaryNumber" [value]="primaryNumber">
+            </div>
+            <div *ngIf="!typeAccountTypeChange">
+              <span>Mobile</span>
+              <input placeholder="Enter mobile number" [(ngModel)]="mobileNumber" >
+            </div>
+						<div *ngIf="typeAccountTypeChange">
+              <span>Secondary number</span>
+              <input placeholder="Enter secondary number" [(ngModel)]="secondaryNumber" >
+            </div>
+          </div>
+
+          <div class="shipping-address ">
+            <div class="desc">
+              <span>Shipping Address</span>
+              <div class="switch-bar">
+                <img src="assets/images/switch.png" *ngIf="switchIconShipping" (click)="clickIconShipping()">
+                <img src="assets/images/switch-off.png" *ngIf="!switchIconShipping" (click)="clickIconShipping()">
+                <span>Same as the customer profile</span>
+              </div>
+            </div>
+            <input placeholder="Enter Shipping Address" class="address" [value]="shippingAddress" [(ngModel)]="newAddress" >
+
+            <div class="city-state">
+              <input placeholder="Enter City" [(ngModel)]="newCity" >
+              <input placeholder="Enter State" [(ngModel)]="newState" >
+            </div>
+            <div class="country-zip">
+              <input placeholder="Enter Country" [(ngModel)]="newCountry" >
+              <input placeholder="Enter Zipcode" [(ngModel)]="newZipcode" >
+            </div>
+          </div>
+
+					<div class="name-type tab-row">
+						<div>
+              <span>Keywords</span>
+              <div class="keywords">
+                <app-multikeywordselect [keywords]="keywords" ></app-multikeywordselect>
+              </div>
+            </div>
+            <div *ngIf="!typeAccountTypeChange">
+              <span>Business association</span>
+              <div>
+                <select>
+                  <option value="business" class="default-option" disabled selected>Choose a business account</option>
+                  <option value="business">Choose a  account</option>
+                  <option value="business">Choose a business </option>
+                </select>
+              </div>
+            </div>
+						<div *ngIf="typeAccountTypeChange">
+              <span>Contact associations</span>
+              <div class="keywords">
+                <app-multikeywordselect [keywords]="contactAssociation" ></app-multikeywordselect>
+              </div>
+            </div>
+            
+          </div>
+
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="addContactModalCollapsed=true; showAddContactModal=false"  >
+              Cancel
+            </button>
+            <button class="save-btn" (click)="clickNext()"  >
+              Next
+            </button>
+          </div>
+        </div>
+      </tab>
+      <tab tabTitle="ADVANCED INFORMATION" class="tab-won" [active]="tabActiveSecond">
+        <div class="tab-two">
+          <div class=" tab-row">
+            <div>
+              <span>Default pricing (*required)</span>
+              <div>
+                <select [(ngModel)]="defaultPricing" [ngClass]="{'validation-required': invalidDefaultPricing}">
+                  <option [value]="" default disabled class="default-option">Choose the default pricing</option>
+                  <option [value]="family" >Family & Friend</option>
+                  <option [value]="royalty" >Royalty Program</option>
+                  <option [value]="retail" >Retail</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <span>Default currency (*required)</span>
+              <div>
+                <select [(ngModel)]="defaultCurrency" [ngClass]="{'validation-required': invalidDefaultCurrency}">
+                  <option [value]="" disabled selected class="default-option">Choose the default currency</option>
+                  <option [value]="euro" >UERO</option>
+                  <option [value]="cad" >CAD</option>
+                  <option [value]="usd" >USD</option>
+                </select>
+              </div>
+            </div>
+          </div>
+					<div class="tab-row">
+            <div>
+              <span>Default terms (*required)</span>
+              <div>
+                <select [(ngModel)]="defaultTerm" [ngClass]="{'validation-required': invalidDefaultTerm}">
+                  <option [value]="" disabled selected class="default-option">Choose the default terms</option>
+                  <option [value]="Test1" >Test1</option>
+                  <option [value]="Test2" >Test2</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <span>Owner</span>
+              <div>
+                <select [(ngModel)]="selectOwner">
+                  <option value="Sepehr Shoarinejad">Sepehr Shoarinejad</option>
+                </select>
+              </div>
+            </div>
+          </div>
+					<div class=" tab-row">
+            <div>
+              <span>Source</span>
+              <div>
+                <ng2-completer [(ngModel)]="captainSource" [datasource]="captainsSource" [minSearchLength]="0" (keyup.enter)="onEnter()" (selected)="checkSource($event)"></ng2-completer>
+              </div>
+            </div>
+            <div>
+              <span>Contact name</span>
+              <div>
+                <select [disabled]="sourceValue">
+                  <option value="" class="default-option">Choose contact</option>
+                  <option value="test" class="default-option">Contact 1</option>
+                  <option value="test" class="default-option">Contact 2</option>
+                </select>
+              </div>
+            </div>
+          </div>
+					<div class="shipping-address ">
+            <div class="desc">
+              <span>Shipping Address</span>
+            </div>
+            <input placeholder="Enter Shipping Address" class="address" [value]="shippingAddress">
+
+            <div class="city-state">
+              <input placeholder="Enter City">
+              <input placeholder="Enter State">
+            </div>
+            <div class="country-zip">
+              <input placeholder="Enter Country">
+              <input placeholder="Enter Zipcode">
+            </div>
+          </div>
+					<div class="customer-notes">
+						<span>Notes</span>
+						<textarea placeholder="Enter customer notes here"></textarea>
+					</div>
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="addContactModalCollapsed=true; showAddContactModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
+              Cancel
+            </button>
+            <button class="save-btn" (click)="clickSaveContact()"  >
+              Save contact
+            </button>
+          </div>
+        </div>
+      </tab>
+      
+    </tabs>
+  </div>
+
+  
+</div>

@@ -12,6 +12,7 @@ import { LeadsComponent } from './components/leads/leads.component';
 import { OrderProfileComponent } from './components/orderprofile/orderprofile.component';
 import { DealsPipelineComponent } from './components/dealspipeline/dealspipeline.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
+import { SuppliersComponent } from './components/suppliers/suppliers.component';
 import { SubmenuComponent } from './components/submenu/submenu.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
@@ -20,6 +21,7 @@ import { LeadsCmpModule } from './components/leads/leads.module';
 import { OrderProfileCmpModule } from './components/orderprofile/orderprofile.module';
 import { DealspipelineCmpModule } from './components/dealspipeline/dealspipeline.module';
 import { ContactsCmpModule } from './components/contacts/contacts.module';
+import { SuppliersCmpModule } from './components/suppliers/suppliers.module';
 import { CommonCmpModule } from './components/common/common.module';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
@@ -45,6 +47,7 @@ import { SubnavHandlerService } from './services/subnav-handler.service';
     SubmenuComponent,
     StopEventPropagationDirective,
     PhonePipe,
+    SuppliersComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +57,8 @@ import { SubnavHandlerService } from './services/subnav-handler.service';
     CommonCmpModule,
     ProposalCmpModule,
     OrderProfileCmpModule,
+    ContactsCmpModule,
+    SuppliersCmpModule,
     DealspipelineCmpModule,
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
@@ -61,7 +66,6 @@ import { SubnavHandlerService } from './services/subnav-handler.service';
     AutocompleteModule,
     ClickOutsideModule,
     DragulaModule,
-    ContactsCmpModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule
   ],
