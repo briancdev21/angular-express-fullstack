@@ -33,10 +33,12 @@ export class SubmenuComponent implements OnInit {
     this._ser.topmenuhandler(false);
   }
   datePicker(event: any) {
-    const mSelected = event._selected.toString();
-    const mSelectedDate = mSelected.split(' ');
-    this.mDisplaydate = mSelectedDate[2];
-    this.mcalendarIcon = true;
+    if (event._selected) {
+      const mSelected = event._selected.toString();
+      const mSelectedDate = mSelected.split(' ');
+      this.mDisplaydate = mSelectedDate[2];
+      this.mcalendarIcon = true;
+    }
   }
   onSubmit(formval: any): any {
     this.mOutputData.next(formval.value);
