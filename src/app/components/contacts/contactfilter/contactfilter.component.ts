@@ -128,13 +128,12 @@ export class ContactFilterComponent implements OnInit {
   filterTxt (arr, searchKey) {
     return arr.filter(function(obj){
       return Object.keys(obj).some(function(key) {
-        return obj[key].includes(searchKey);
+        return obj[key].toString().includes(searchKey);
       });
     });
   }
 
   resetFilter() {
-    console.log('reset');
     // this.scoreFrom = 0;
     // this.scoreTo = 100;
     this.filters = {
@@ -154,7 +153,6 @@ export class ContactFilterComponent implements OnInit {
   }
 
   applyFilter() {
-    console.log('filters:', this.filters);
     // this.filters.scoreFrom = this.scoreFrom;
     // this.filters.scoreTo = this.scoreTo;
     this.applyClicked = true;
@@ -179,7 +177,6 @@ export class ContactFilterComponent implements OnInit {
     // );
 
     if (this.filters.selectStatus) {
-      console.log('selectStatus:', this.selectStatus);
       if (this.filters.selectStatus == 'Project') {
         this.filteredContacts = this.filteredContacts.filter(contact => contact.account > 0);
       } else if (this.filters.selectStatus == 'Invoice') {
