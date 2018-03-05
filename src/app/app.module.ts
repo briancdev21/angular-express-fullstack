@@ -12,6 +12,7 @@ import { LeadsComponent } from './components/leads/leads.component';
 import { OrderProfileComponent } from './components/orderprofile/orderprofile.component';
 import { DealsPipelineComponent } from './components/dealspipeline/dealspipeline.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
+import { SubmenuComponent } from './components/submenu/submenu.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
@@ -24,10 +25,12 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { DragulaModule } from 'ng2-dragula';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { Pipe, PipeTransform } from '@angular/core';
 import { PhonePipe } from './pipes/phone.pipe';
 
+import { SubnavHandlerService } from './services/subnav-handler.service';
 
 
 @NgModule({
@@ -39,8 +42,9 @@ import { PhonePipe } from './pipes/phone.pipe';
     OrderProfileComponent,
     DealsPipelineComponent,
     ContactsComponent,
+    SubmenuComponent,
     StopEventPropagationDirective,
-    PhonePipe
+    PhonePipe,
   ],
   imports: [
     BrowserModule,
@@ -57,12 +61,15 @@ import { PhonePipe } from './pipes/phone.pipe';
     AutocompleteModule,
     ClickOutsideModule,
     DragulaModule,
-    ContactsCmpModule
+    ContactsCmpModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ],
   exports: [
+    SubmenuComponent,
     PhonePipe
   ],
-  providers: [],
+  providers: [SubnavHandlerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

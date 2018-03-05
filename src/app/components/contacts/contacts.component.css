@@ -11,9 +11,13 @@
 }
 
 .main-content-large {
+	top: 68px;
   right: 0;
   left: 68px;
   transition: 0.2s all;
+}
+
+app-submenu {
 }
 
 .empty-top-bar {

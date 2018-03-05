@@ -1,0 +1,284 @@
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+
+.form-horizontal {
+	padding-bottom: 15px;
+}
+
+input {
+  outline: none !important;
+}
+
+.icons {
+  width: 20px;
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+}
+
+.assigned-to {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 180px;
+  height: 0;
+  background: #F5F5F5;
+  margin-left: -90px;
+  margin-top: 28px;
+  overflow: hidden;
+  transition: 0.5s all;
+}
+
+.assign-active {
+  height: 230px;
+  border: 1px solid #D3D3D3;
+}
+
+.assigned-header {
+  border-bottom: 1px solid #D3D3D3;
+  padding: 5px 0;
+  text-align: center;
+  text-transform: uppercase;
+  color: #646464;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.nav-content {
+	height: 60px;
+	width: 50%;
+	border-bottom: 1px solid #95989a;
+	margin-left: 30px;
+	display: flex;
+	/* justify-content: baseline; */
+	align-items: flex-end;
+	padding: 0px 10px;
+}
+
+.nav-content .col-sm-10, .nav-content .col-sm-5 {
+  padding: 0px;
+}
+
+.nav-content .col-sm-10 input, .nav-content .col-sm-5 input, .nav-content .col-sm-7 input {
+  border:none;
+  box-shadow: none;
+  padding-left: 0px;
+  padding-bottom: 0;
+}
+
+.nav-content .col-sm-2 {
+  padding: 0px;
+  margin-bottom: 6px;
+}
+
+.nav-content .col-sm-5, .nav-content .col-sm-7 {
+  padding: 0px;
+}
+
+.sub-nav-right button.active, .sub-nav-right button:hover, .sub-nav-right button:focus {
+  width: 100%;
+  background: #70EACA !important;
+  outline: none !important;
+}
+
+.sub-nav-right button {
+  width: 100%;
+  background: #F5F5F5;
+  color: #95989A;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border: none;
+  box-shadow: none !important;
+  padding: 6px 0;
+  margin-top: 3px;
+  text-transform: uppercase;
+  outline: none;
+}
+
+@media only screen and (max-width: 1025px) {
+  .nav-content .col-sm-10, .nav-content .col-sm-6 {
+    width: 76%;
+  }
+
+  .nav-content .col-sm-2, .nav-content .col-sm-6 {
+    width: 24%;
+  }
+
+  .sub-nav-right button {
+    font-size: 9px;
+    margin-top: 8px;
+  }
+}
+
+@media only screen and (max-width: 967px) {
+  .sub-nav-right button {
+    text-transform: capitalize;
+  }
+}
+
+@media only screen and (max-width: 979px) {
+
+}
+
+@media only screen and (min-width: 980px) and (max-width: 1200px) {
+  .collaborators .icons {
+    width: 16px;
+  }
+  .time-picker input, .dates-separator, .from-date button {
+    font-size: 10px !important;
+  }
+  .from-date button {
+    margin-top: 5px !important;
+  }
+  .time-picker {
+    width: 52px !important;
+  }
+  .collaborators .sub-nav-left .nav-content .col-sm-5 {
+    width: 31%;
+  }
+  .collaborators .sub-nav-left .nav-content .col-sm-7 {
+    width: 69%;
+  }
+}
+
+
+.time-trigger {
+  position: absolute;
+  visibility: hidden;
+}
+
+.date-setter {
+  border: none;
+  position: absolute;
+  background: transparent;
+  top: 0;
+  left: 0;
+  outline: none !important;
+  pointer-events: none;
+  width: 20px;
+  text-align: center;
+  color: #000;
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.collaborators .date-setter {
+  left: -9999px;
+  visibility: hidden;
+}
+
+.start-radio {
+  position: absolute;
+  visibility: hidden;
+}
+
+.assigned-to input {
+  border: none;
+  border-bottom: 1px solid #cdcdcd;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.collaborators .sub-nav-left form button.btn-submit img {
+  width: 100%;
+}
+
+
+.collaborators .icons {
+  top: -3px;
+}
+
+.from-date {
+  border: 1px solid #D3D3D3;
+  width: auto !important;
+  padding: 0 4px;
+  position: relative;
+  top: 4px !important;
+}
+
+.time-picker {
+  width: 60px;
+  float: left;
+  overflow: hidden;
+}
+
+.time-picker input {
+  outline: none !important;
+  color: #95989A;
+  font-size: 12px;
+  background: transparent;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.from-date button {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  outline: none !important;
+  float: left;
+  padding: 0px;
+  color: #95989A;
+  font-size: 12px;
+  margin-top: 3px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.dates-separator {
+  color: #95989A;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  position: relative;
+  text-align: center;
+}
+
+.to-date {
+  border: 1px solid #D3D3D3;
+  width: auto !important;
+  padding: 0 4px;
+  position: relative;
+  top: 4px !important;
+}
+
+.dollar-icon input {
+  position: absolute;
+  visibility: hidden;
+}
+
+.hidden-field {
+  position: absolute;
+  left: -9999px;
+  visibility: hidden;
+}
+
+.subnav-calendar-add {
+  margin: 0 5px;
+}
+
+.collaborators .subnav-user {
+  margin: 0 5px;
+}
+
+.dollar-icon {
+  margin-right: 3px;
+}
+
+.text-invalid{
+  border: 1px solid red !important ;
+}
+.text-valid{
+  border: 1px solid #D3D3D3 !important;
+}
+
+.no-border {
+  border: none !important;
+}
+
+.low-opacity {
+  opacity: 0.3;
+}
+
+.high-opacity {
+  opacity: 1;
+}
+
+.collaborators .sub-nav-left .nav-content {
+  height: 35px;
+}
