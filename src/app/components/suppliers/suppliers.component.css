@@ -52,17 +52,17 @@ app-submenu {
   display: flex;
 }
 
-.contacts-table {
+.suppliers-table {
   flex: 4;
 	border-right: 1px solid #F5F5F5;
 	height: 79vh;
 }
 
-.contacts-filter {
+.suppliers-filter {
   flex: 1
 }
 
-.contacts-import-btn {
+.suppliers-import-btn {
   font-size: 10px;
   padding: 5px 20px;
   letter-spacing: 0;
@@ -72,7 +72,7 @@ app-submenu {
   color: #868686;
 }
 
-.contacts-btn-group {
+.suppliers-btn-group {
   display: flex;
   align-items: center;
 }

@@ -22,27 +22,27 @@
       <img *ngIf="filterClicked" src="assets/images/Checkmark Green.png" (click)="saveFilterModalCollapsed = false; showSaveFilterModal = true;">
     </div>
 
-    <div class="contacts-btn-group">
-      <div class="contacts-add-btn">
-        <app-addcontact [contactsListInfo]="contactsListInfo" [contactOwners]="contactOwners" [contactStatus]="contactStatus " (addToContactsList)="addNewContact($event)"></app-addcontact>
+    <div class="suppliers-btn-group">
+      <div class="suppliers-add-btn">
+        <app-addsupplier [suppliersListInfo]="suppliersListInfo" [supplierOwners]="supplierOwners" [supplierStatus]="supplierStatus " (addToSuppliersList)="addNewSupplier($event)"></app-addsupplier>
       </div>
-      <div class="contacts-import-btn">Import contacts</div>
+      <div class="suppliers-import-btn">Import suppliers</div>
     </div>
   </div>
 
   <div class="main-content-box">
-    <div class="contacts-table">
-      <app-contactslisttable [(contactsListInfo)]="contactsListInfo"></app-contactslisttable>
+    <div class="suppliers-table">
+      <app-supplierslisttable [(suppliersListInfo)]="suppliersListInfo"></app-supplierslisttable>
     </div>
-    <div class="contacts-filter">
-      <app-contactfilter 
-        [(contactsListInfo)]="contactsListInfo" 
+    <div class="suppliers-filter">
+      <app-supplierfilter 
+        [(suppliersListInfo)]="suppliersListInfo" 
         [(filters)]="filters" 
-        [contactOwners]="contactOwners" 
-        [contactStatus]="contactStatus" 
+        [supplierOwners]="supplierOwners" 
+        [supplierStatus]="supplierStatus" 
         (filterParent)="getFilter($event)"
-        [(contactTypes)]="contactTypes">
-      </app-contactfilter>
+        [(supplierTypes)]="supplierTypes">
+      </app-supplierfilter>
     </div>
   </div>
 </div>

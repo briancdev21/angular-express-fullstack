@@ -18,7 +18,7 @@ export class SuppliersComponent implements OnInit {
   saveFilterModalCollapsed = true;
   showSaveFilterModal = false;
   filterClicked = false;
-  backUpContacts: any;
+  backUpSuppliers: any;
   openSavedFiltersList = false;
   savedFiltersListCollapsed = true;
   savedFiltersArr = [];
@@ -41,141 +41,90 @@ export class SuppliersComponent implements OnInit {
     selectStatus: '',
   };
 
-  public contactOwners: Array<Object> = [
+  public supplierOwners: Array<Object> = [
     'John Smith',
   ];
 
-  public contactsListInfo: Array<Object> = [
+  public suppliersListInfo: Array<Object> = [
     {
       id: 0,
-      name: 'John Moss',
-      phone: '4039696480',
-      email: 'John.Moss@outlook.com',
-      createDate: 'Januanry 19, 2018',
-      updatedDate: 'Januanry 25, 2018',
-      lastContactedDate: 'Januanry 25, 2018',
-      rating: '95',
+      supplierName: 'Alliance Video Distribution',
+      contactName: 'Jeff Neilson',
+      supplierPhone: '4039696480',
+      supplierEmail: 'alliance@outlook.com',
+      contactPhone: '4039696480',
+      contactEmail: 'jeff.neilson@outlook.com',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'Diana Ilic',
-      account: '1',
-      association: '0',
-      totalDeals: '1',
-      accountType: 'Individual',
+      term: 'Net 30',
+      accountNumber: '320ATATECH0001',
+      currency: 'CAD',
+      country: 'Canada',
+      state: 'Alberta',
+      tags: ['Control4', 'Alliance']
     },
     {
       id: 1,
-      name: 'Rob Harding',
-      phone: '4039696434',
-      email: 'Rob.Harding@outlook.com',
-      createDate: 'Januanry 19, 2017',
-      updatedDate: 'Januanry 25, 2018',
-      lastContactedDate: 'Januanry 25, 2018',
-      rating: '100',
+      supplierName: 'Control4',
+      contactName: 'Jordan Chase',
+      supplierPhone: '4039696480',
+      supplierEmail: 'control4@outlook.com',
+      contactPhone: '4039696481',
+      contactEmail: 'jordan.chase@outlook.com',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'John Moss',
-      account: '0',
-      association: '0',
-      totalDeals: '3',
-      accountType: 'Individual',
+      term: 'Net 15',
+      accountNumber: 'CAD32000232',
+      currency: 'CAD',
+      country: 'Canada',
+      state: 'Alberta',
+      tags: ['Control4', 'House']
     },
     {
       id: 2,
-      name: 'Hugh Williamson',
-      phone: '4039436423',
-      email: 'HughWilliamson@outlook.com',
-      createDate: 'June 19, 2016',
-      updatedDate: 'Januanry 25, 2017',
-      lastContactedDate: 'Januanry 25, 2018',
-      rating: '82',
+      supplierName: 'House Logixs',
+      contactName: '',
+      supplierPhone: '4039696480',
+      supplierEmail: 'alliance@outlook.com',
+      contactPhone: '',
+      contactEmail: '',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'John Smith',
-      account: '0',
-      association: '1',
-      totalDeals: '2',
-      accountType: 'Individual',
+      term: 'Due on Receipt',
+      accountNumber: '',
+      currency: 'USD',
+      country: 'USA',
+      state: 'Florida',
+      tags: ['House', 'Logixs']
     },
     {
       id: 3,
-      name: 'Danny Shibley',
-      phone: '4039602348',
-      email: 'DannyShibley@outlook.com',
-      createDate: 'Januanry 19, 2018',
-      updatedDate: 'Januanry 25, 2018',
-      lastContactedDate: 'Januanry 25, 2018',
-      rating: '75',
+      supplierName: 'Best Buy',
+      contactName: 'Shayan Lotifi',
+      supplierPhone: '4039696480',
+      supplierEmail: 'bestbuy@outlook.com',
+      contactPhone: '4039696482',
+      contactEmail: 'shayan.lotify@outlook.com',
       address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'Diana Ilic',
-      account: '1',
-      association: '1',
-      totalDeals: '1',
-      accountType: 'Business',
+      term: 'Due on Receipt',
+      accountNumber: '',
+      currency: 'CAD',
+      country: 'Canada',
+      state: 'British Colombia',
+      tags: ['Buy', 'Best']
     },
-    {
-      id: 4,
-      name: 'Hayati Homes',
-      phone: '5439696481',
-      email: 'Hayati.Homes@outlook.com',
-      createDate: 'April 29, 2017',
-      updatedDate: 'Januanry 25, 2018',
-      lastContactedDate: 'Januanry 25, 2018',
-      rating: '75',
-      address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'Diana Ilic',
-      account: '0',
-      association: '0',
-      totalDeals: '0',
-      accountType: 'Individual',
-    },
-    {
-      id: 5,
-      name: 'John Stephen',
-      phone: '1039692343',
-      email: 'john.Stephen@outlook.com',
-      createDate: 'Mar 19, 2018',
-      updatedDate: 'Januanry 25, 2018',
-      lastContactedDate: 'Januanry 25, 2018',
-      rating: '85',
-      address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'John Smith',
-      account: '0',
-      association: '0',
-      totalDeals: '1',
-      accountType: 'Business',
-    },
-    {
-      id: 6,
-      name: 'Rockwood Homes',
-      phone: '4039623086',
-      email: 'Rockwood.Homes@outlook.com',
-      createDate: 'December 19, 2017',
-      updatedDate: 'April 5, 2018',
-      lastContactedDate: 'June 25, 2018',
-      rating: '73',
-      address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      owner: 'John Moss',
-      account: '0',
-      association: '0',
-      totalDeals: '1',
-      accountType: 'Individual',
-    }
   ];
 
-  public contactStatus = [
-    'Project', 'Invoice', 'Project and Invoice'
-  ];
 
-  public contactTypes = ['Individual', 'Business'];
+  public termsType = ['Net 30', 'Due on Receipt'];
   ngOnInit() {
-    this.backUpContacts = this.contactsListInfo;
+    this.backUpSuppliers = this.suppliersListInfo;
   }
 
   getFilter(event) {
-    this.contactsListInfo = event.filtered;
+    this.suppliersListInfo = event.filtered;
     this.filterClicked = event.clicked;
   }
 
-  addNewContact(event) {
-    this.contactsListInfo.push(event.data);
+  addNewSupplier(event) {
+    this.suppliersListInfo.push(event.data);
   }
 
   toggleMenubar(data: boolean) {
@@ -186,7 +135,7 @@ export class SuppliersComponent implements OnInit {
     this.saveFilterModalCollapsed = true;
     this.showSaveFilterModal = false;
     this.filterClicked = false;
-    this.contactsListInfo = this.backUpContacts;
+    this.suppliersListInfo = this.backUpSuppliers;
   }
 
   cancelFilter() {
@@ -202,7 +151,7 @@ export class SuppliersComponent implements OnInit {
       selectStatus: '',
     };
     this.filterClicked = false;
-    this.contactsListInfo = this.backUpContacts;
+    this.suppliersListInfo = this.backUpSuppliers;
   }
 
   clickSavedFilters() {
@@ -215,28 +164,28 @@ export class SuppliersComponent implements OnInit {
   }
 
   saveFilter() {
-    // const savingFilterData = this.contactsListInfo;
+    // const savingFilterData = this.suppliersListInfo;
     // const savingFilterName = this.filterName;
     // const savingAvailability = this.filterAvaliableTo;
     this.savedFiltersArr.push({
-                          savedFilter: this.contactsListInfo,
+                          savedFilter: this.suppliersListInfo,
                           savedFilterName: this.filterName,
                           savedAvailabilty: this.filterAvaliableTo
                         });
     this.saveFilterModalCollapsed = true;
     this.showSaveFilterModal = false;
     this.filterClicked = false;
-    this.contactsListInfo = this.backUpContacts;
+    this.suppliersListInfo = this.backUpSuppliers;
   }
 
   applySavedFilter(selectedFilter) {
-    this.contactsListInfo = selectedFilter.savedFilter;
+    this.suppliersListInfo = selectedFilter.savedFilter;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
   }
 
   removeFilter() {
-    this.contactsListInfo = this.backUpContacts;
+    this.suppliersListInfo = this.backUpSuppliers;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
   }

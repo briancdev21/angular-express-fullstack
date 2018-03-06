@@ -14,10 +14,10 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 
 export class AddSupplierComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
-  @Input() contactsListInfo;
-  @Input() contactOwners;
-  @Input() contactStatus;
-  @Output() addToContactsList: EventEmitter<any> = new EventEmitter;
+  @Input() suppliersListInfo;
+  @Input() supplierOwners;
+  @Input() supplierStatus;
+  @Output() addToSuppliersList: EventEmitter<any> = new EventEmitter;
   protected searchStr: string;
   protected captain: string;
   protected captainSource: string;
@@ -31,16 +31,16 @@ export class AddSupplierComponent implements OnInit {
     { color: 'yellow', value: '#ff0' },
     { color: 'black', value: '#000' }
   ];
-  protected captains = ['Head Contact', 'Accounts Receivable'];
-  protected captainsSource = ['Contact referal'];
+  protected captains = ['Head Supplier', 'Accounts Receivable'];
+  protected captainsSource = ['Supplier referal'];
 
-  addContactModalCollapsed = true;
-  showAddContactModal = false;
+  addSupplierModalCollapsed = true;
+  showAddSupplierModal = false;
   switchIconShipping: boolean = true;
   shippingAddress: string = '';
   typeAccountTypeChange = false;
   keywords: any;
-  contactAssociation: any;
+  supplierAssociation: any;
   businessType: any;
   tabActiveFirst = true;
   tabActiveSecond = false;
@@ -67,7 +67,7 @@ export class AddSupplierComponent implements OnInit {
   constructor(private completerService: CompleterService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.keywords = ['control4', 'theatre', 'renovation'];
-    this.contactAssociation = ['Danny Shibley', 'John Stephen'];
+    this.supplierAssociation = ['Danny Shibley', 'John Stephen'];
   }
 
   ngOnInit() {
@@ -95,7 +95,7 @@ export class AddSupplierComponent implements OnInit {
   }
 
   checkSource(event) {
-    if (this.captainSource === 'Contact referal') {
+    if (this.captainSource === 'Supplier referal') {
       this.sourceValue = false;
     } else {
       this.sourceValue = true;
@@ -221,16 +221,16 @@ export class AddSupplierComponent implements OnInit {
       }
     }
   }
-  clickSaveContact() {
+  clickSaveSupplier() {
 
-    const newContact = {
-      id: this.contactsListInfo.length,
+    const newSupplier = {
+      id: this.suppliersListInfo.length,
       name: this.firstName + ' ' + this.lastName,
       phone: this.primaryNumber,
       email: this.newEmail,
       createDate: new Date(),
       updateDate: new Date(),
-      lastContactedDate: new Date(),
+      lastSupplieredDate: new Date(),
       rating: '0',
       address: this.newAddress,
       owner: this.selectOwner,
@@ -244,11 +244,11 @@ export class AddSupplierComponent implements OnInit {
     this.invalidDefaultCurrency = false;
     this.invalidDefaultPricing = false;
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
-      this.addContactModalCollapsed = true;
-      this.showAddContactModal = false;
+      this.addSupplierModalCollapsed = true;
+      this.showAddSupplierModal = false;
       this.tabActiveFirst = true;
       this.tabActiveSecond = false;
-      this.addToContactsList.emit({data: newContact});
+      this.addToSuppliersList.emit({data: newSupplier});
     } else {
       if (!this.defaultCurrency) {
         this.invalidDefaultCurrency = true;

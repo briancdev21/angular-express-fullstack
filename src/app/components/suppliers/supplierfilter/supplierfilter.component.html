@@ -8,7 +8,7 @@
 
 <div class="filter-content">
   <!-- <div class="score-range-filter">
-    <span>Contact Score</span>
+    <span>Supplier Score</span>
     <ion-range-slider #sliderElement
           type="double"
           min="0"
@@ -23,18 +23,18 @@
     <span>Collaborators</span>
     <!-- <select [(ngModel)]="filters.selectOwner">
       <option default>Choose owner</option>
-      <option *ngFor="let owner of contactOwners" [value]="owner" #contactOwner>{{owner}}</option>
+      <option *ngFor="let owner of supplierOwners" [value]="owner" #supplierOwner>{{owner}}</option>
     </select> -->
     <div class="owners" (click)='editable=true;$event.stopPropagation();'> 
-      <div class="follower" *ngFor="let user of contactOwners; let i = index" >
-        <span class="contact-owner">{{user}}</span>
+      <div class="follower" *ngFor="let user of supplierOwners; let i = index" >
+        <span class="supplier-owner">{{user}}</span>
       </div> 
       <div class="follower add-owner" (click)="editable=true;$event.stopPropagation()">
         <a (click)="editable=true;$event.stopPropagation()" ></a>
       </div> 
       <div class="edit-owners" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
         <ul>
-          <li *ngFor="let user of contactOwners; let i = index">{{user}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li *ngFor="let user of supplierOwners; let i = index">{{user}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;">
               <input autocomplete [config]="config2" [items]="items2"
               (inputChangedEvent)="onInputChangedEvent($event)"
@@ -49,23 +49,23 @@
     <input [(ngModel)]="filters.location" >
   </div>
 
-  <div class="contact-status">
-    <span>Contact status</span>
+  <div class="supplier-status">
+    <span>Supplier status</span>
     <select [(ngModel)]="filters.selectStatus">
       <option value="choose" default>Choose status</option>
-      <option *ngFor="let status of contactStatus" [value]="status">{{status}}</option>
+      <option *ngFor="let status of supplierStatus" [value]="status">{{status}}</option>
     </select>
   </div>
 
-  <div class="contact-type">
+  <div class="supplier-type">
     <span>Type</span>
     <select [(ngModel)]="filters.selectType">
       <option value="choose" default>Choose status</option>
-      <option *ngFor="let type of contactTypes" [value]="type">{{type}}</option>
+      <option *ngFor="let type of supplierTypes" [value]="type">{{type}}</option>
     </select>
   </div>
 
-  <div class="contact-created-date">
+  <div class="supplier-created-date">
     <span>Created at Range</span>
     <div>
       <div class="created-from">
@@ -78,7 +78,7 @@
       </div>
     </div>
   </div>
-  <div class="contact-updated-date">
+  <div class="supplier-updated-date">
     <span>Updated at Range</span>
     <div>
       <div class="updated-from">
@@ -92,8 +92,8 @@
     </div>
   </div>
 
-  <div class="contact-last-date">
-    <span>Last Contacted Range</span>
+  <div class="supplier-last-date">
+    <span>Last Suppliered Range</span>
     <div>
       <div class="last-from">
         <input [owlDateTimeTrigger]="lastFrom" [owlDateTime]="lastFrom" placeholder="From" (dateTimeChange)="selectLastFrom($event)" [max]="lastMax" [(ngModel)]="filters.lastFrom"  >

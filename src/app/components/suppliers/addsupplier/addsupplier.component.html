@@ -1,12 +1,12 @@
-<div class="btn-add-contact" (click)="addContactModalCollapsed=false; showAddContactModal=true;">Add contact</div>
+<div class="btn-add-supplier" (click)="addSupplierModalCollapsed=false; showAddSupplierModal=true;">Add supplier</div>
 
 <!-- ADD CONTACT MODAL VIEW -->
 
-<div class="add-contact-modal-wrapper" *ngIf="showAddContactModal" ></div>
-<div class="add-contact-modal"  [ngClass]="{'show-modal': !addContactModalCollapsed, 'hide-modal': addContactModalCollapsed }">
+<div class="add-supplier-modal-wrapper" *ngIf="showAddSupplierModal" ></div>
+<div class="add-supplier-modal"  [ngClass]="{'show-modal': !addSupplierModalCollapsed, 'hide-modal': addSupplierModalCollapsed }">
   <div class="header">
     <span>ADD CONTACT</span>
-    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addContactModalCollapsed=true; showAddContactModal=false" />
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addSupplierModalCollapsed=true; showAddSupplierModal=false" />
   </div>
 
   <div class="content" >
@@ -30,10 +30,10 @@
 							<input placeholder="Enter business name" [ngClass]="{'validation-required': invalidBusinessName}" [(ngModel)]="businessName" [value]="businessName">
 						</div>  
             <div>
-							<span>Head contact</span>
+							<span>Head supplier</span>
 							<div>
                 <select>
-                  <option value="test">Choose head contact</option>
+                  <option value="test">Choose head supplier</option>
                 </select>
               </div>
 						</div> 
@@ -125,16 +125,16 @@
               </div>
             </div>
 						<div *ngIf="typeAccountTypeChange">
-              <span>Contact associations</span>
+              <span>Supplier associations</span>
               <div class="keywords">
-                <app-multikeywordselect [keywords]="contactAssociation" ></app-multikeywordselect>
+                <app-multikeywordselect [keywords]="supplierAssociation" ></app-multikeywordselect>
               </div>
             </div>
             
           </div>
 
           <div class="btn-section" >
-            <button class="cancel-btn" (click)="addContactModalCollapsed=true; showAddContactModal=false"  >
+            <button class="cancel-btn" (click)="addSupplierModalCollapsed=true; showAddSupplierModal=false"  >
               Cancel
             </button>
             <button class="save-btn" (click)="clickNext()"  >
@@ -197,12 +197,12 @@
               </div>
             </div>
             <div>
-              <span>Contact name</span>
+              <span>Supplier name</span>
               <div>
                 <select [disabled]="sourceValue">
-                  <option value="" class="default-option">Choose contact</option>
-                  <option value="test" class="default-option">Contact 1</option>
-                  <option value="test" class="default-option">Contact 2</option>
+                  <option value="" class="default-option">Choose supplier</option>
+                  <option value="test" class="default-option">Supplier 1</option>
+                  <option value="test" class="default-option">Supplier 2</option>
                 </select>
               </div>
             </div>
@@ -227,11 +227,11 @@
 						<textarea placeholder="Enter customer notes here"></textarea>
 					</div>
           <div class="btn-section" >
-            <button class="cancel-btn" (click)="addContactModalCollapsed=true; showAddContactModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
+            <button class="cancel-btn" (click)="addSupplierModalCollapsed=true; showAddSupplierModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
               Cancel
             </button>
-            <button class="save-btn" (click)="clickSaveContact()"  >
-              Save contact
+            <button class="save-btn" (click)="clickSaveSupplier()"  >
+              Save supplier
             </button>
           </div>
         </div>

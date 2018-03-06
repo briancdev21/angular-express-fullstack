@@ -67,6 +67,7 @@ th:last-child, td:last-child {
   border: none;
   justify-content: space-between;
   position: relative;
+  align-items: center;
 }
 
 table i {
@@ -82,7 +83,7 @@ table i {
 
 /* Modal CSS */
 
-.contact-expand-modal-wrapper {
+.supplier-expand-modal-wrapper {
 	width:100%;
 	height: 100%;
 	z-index: 9992;
@@ -92,7 +93,7 @@ table i {
 	background: transparent
 }
 
-.contact-expand-modal {
+.supplier-expand-modal {
 	position: absolute;
 	top: 23px;
 	margin: 0;
@@ -106,27 +107,27 @@ table i {
   color: #95989A;
 }
 
-.contact-expand-modal a {
+.supplier-expand-modal a {
   color: #95989A;
 }
 
-.hide-contact-modal {
+.hide-supplier-modal {
   height: 1px;
 	visibility: hidden;
 }
 
-.show-contact-modal {
+.show-supplier-modal {
   height: auto;
 	visibility: visible;
 }
 
-.contact-expand-modal img {
+.supplier-expand-modal img {
   width: 15px;
   height: 15px;
   margin: 4px 10px;
 }
 
-.contact-expand-modal .dots-icon {
+.supplier-expand-modal .dots-icon {
   width: 100%;
   border-bottom: 0;
   height: 25px;
@@ -139,17 +140,17 @@ table i {
   margin: -4px 10px;
 }
 
-.contact-expand-modal>div>div {
+.supplier-expand-modal>div>div {
   border-bottom: 1px solid #F5F5F5;
   padding: 5px 0;
 }
 
-.contact-expand-modal>div>div:last-child {
+.supplier-expand-modal>div>div:last-child {
   border: none;
   cursor: pointer;
 }
 
-.contact-expand-modal>div>div>div {
+.supplier-expand-modal>div>div>div {
   display: flex;
   align-items: center;
   cursor: pointer;

@@ -16,11 +16,11 @@ import { FilterService } from '../filter.service';
 
 export class SupplierFilterComponent implements OnInit {
 
-  @Input() contactsListInfo;
+  @Input() suppliersListInfo;
   @Input() filters;
-  @Input() contactOwners;
-  @Input() contactStatus;
-  @Input() contactTypes;
+  @Input() supplierOwners;
+  @Input() supplierStatus;
+  @Input() supplierTypes;
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
 
 
@@ -48,10 +48,10 @@ export class SupplierFilterComponent implements OnInit {
   selectOwner: string;
   location: string;
   selectStatus: string;
-  filteredContactsList: any;
+  filteredSuppliersList: any;
   applyClicked = false;
-  filteredContacts: any;
-  backUpContacts: any;
+  filteredSuppliers: any;
+  backUpSuppliers: any;
   editable: boolean;
   newKeyword: string;
   selectedItem: any = '';
@@ -65,8 +65,8 @@ export class SupplierFilterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.filteredContacts = this.contactsListInfo;
-    this.backUpContacts = this.contactsListInfo;
+    this.filteredSuppliers = this.suppliersListInfo;
+    this.backUpSuppliers = this.suppliersListInfo;
     this.originFilters = Object.assign({}, this.filters);
     // this.scoreFrom = this.filters.scoreFrom;
     // this.scoreTo = this.filters.scoreTo;
@@ -77,7 +77,7 @@ export class SupplierFilterComponent implements OnInit {
     this.items2 = this.items2.filter(function( obj ) {
       return obj !== item;
     });
-    this.contactOwners.push(item);
+    this.supplierOwners.push(item);
   }
 
   onInputChangedEvent(val: string) {
@@ -85,9 +85,9 @@ export class SupplierFilterComponent implements OnInit {
   }
 
   removeUser(i: number) {
-    const item = this.contactOwners[i];
+    const item = this.supplierOwners[i];
     this.items2.push(item);
-    this.contactOwners.splice(i, 1);
+    this.supplierOwners.splice(i, 1);
   }
 
   // rangeSliderChange(event) {
@@ -128,7 +128,7 @@ export class SupplierFilterComponent implements OnInit {
   filterTxt (arr, searchKey) {
     return arr.filter(function(obj){
       return Object.keys(obj).some(function(key) {
-        return obj[key].includes(searchKey);
+        return obj[key].toString().includes(searchKey);
       });
     });
   }
@@ -158,75 +158,75 @@ export class SupplierFilterComponent implements OnInit {
     // this.filters.scoreFrom = this.scoreFrom;
     // this.filters.scoreTo = this.scoreTo;
     this.applyClicked = true;
-    this.filteredContacts = this.backUpContacts;
+    this.filteredSuppliers = this.backUpSuppliers;
 
-    if (this.contactOwners[0]) {
+    if (this.supplierOwners[0]) {
       let ownerFiltered = [];
       let ownerFilteredList = [];
-      for ( let i = 0; i <= this.contactOwners.length - 1; i ++) {
-        ownerFiltered = this.filterTxt(this.contactsListInfo, this.contactOwners[i]);
+      for ( let i = 0; i <= this.supplierOwners.length - 1; i ++) {
+        ownerFiltered = this.filterTxt(this.suppliersListInfo, this.supplierOwners[i]);
         ownerFilteredList = ownerFilteredList.concat(ownerFiltered);
       }
-      this.filteredContacts = ownerFilteredList;
+      this.filteredSuppliers = ownerFilteredList;
     }
 
     if (this.filters.location) {
-      this.filteredContacts = this.filterTxt(this.contactsListInfo, this.filters.location);
+      this.filteredSuppliers = this.filterTxt(this.suppliersListInfo, this.filters.location);
     }
 
-    // this.filteredContacts = this.filteredContacts.filter(
-    //   contact => contact.score >= this.filters.scoreFrom && contact.score <= this.filters.scoreTo
+    // this.filteredSuppliers = this.filteredSuppliers.filter(
+    //   supplier => supplier.score >= this.filters.scoreFrom && supplier.score <= this.filters.scoreTo
     // );
 
     if (this.filters.selectStatus) {
       console.log('selectStatus:', this.selectStatus);
       if (this.filters.selectStatus == 'Project') {
-        this.filteredContacts = this.filteredContacts.filter(contact => contact.account > 0);
+        this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.account > 0);
       } else if (this.filters.selectStatus == 'Invoice') {
-        this.filteredContacts = this.filteredContacts.filter(contact => contact.association > 0);
+        this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.association > 0);
       } else {
-        this.filteredContacts = this.filteredContacts.filter(contact => contact.association > 0 && contact.account > 0);
+        this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.association > 0 && supplier.account > 0);
       }
     }
 
     if (this.filters.selectType) {
-      this.filteredContacts = this.filteredContacts.filter(contact => contact.accountType == this.filters.selectType);
+      this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.accountType == this.filters.selectType);
     }
 
     if (this.filters.createdFrom) {
-      this.filteredContacts = this.filteredContacts.filter(
-        contact => Date.parse(contact.createDate) >= Number(this.filters.createdFrom)
+      this.filteredSuppliers = this.filteredSuppliers.filter(
+        supplier => Date.parse(supplier.createDate) >= Number(this.filters.createdFrom)
       );
     }
     if (this.filters.createdTo) {
-      this.filteredContacts = this.filteredContacts.filter(
-        contact => Date.parse(contact.createDate) <= Number(this.filters.createdTo)
+      this.filteredSuppliers = this.filteredSuppliers.filter(
+        supplier => Date.parse(supplier.createDate) <= Number(this.filters.createdTo)
       );
     }
 
     if (this.filters.updatedFrom) {
-      this.filteredContacts = this.filteredContacts.filter(
-        contact => Date.parse(contact.updatedDate) >= Number(this.filters.updatedFrom)
+      this.filteredSuppliers = this.filteredSuppliers.filter(
+        supplier => Date.parse(supplier.updatedDate) >= Number(this.filters.updatedFrom)
       );
     }
     if (this.filters.updatedTo) {
-      this.filteredContacts = this.filteredContacts.filter(
-        contact => Date.parse(contact.updatedDate) <= Number(this.filters.updatedTo)
+      this.filteredSuppliers = this.filteredSuppliers.filter(
+        supplier => Date.parse(supplier.updatedDate) <= Number(this.filters.updatedTo)
       );
     }
 
     if (this.filters.lastFrom) {
-      this.filteredContacts = this.filteredContacts.filter(
-        contact => Date.parse(contact.lastContactedDate) >= Number(this.filters.lastFrom)
+      this.filteredSuppliers = this.filteredSuppliers.filter(
+        supplier => Date.parse(supplier.lastSupplieredDate) >= Number(this.filters.lastFrom)
       );
     }
 
     if (this.filters.lastTo) {
-      this.filteredContacts = this.filteredContacts.filter(
-        contact => Date.parse(contact.lastContactedDate) <= Number(this.filters.lastTo)
+      this.filteredSuppliers = this.filteredSuppliers.filter(
+        supplier => Date.parse(supplier.lastSupplieredDate) <= Number(this.filters.lastTo)
       );
     }
 
-    this.filterParent.emit({filtered: this.filteredContacts, clicked: this.applyClicked});
+    this.filterParent.emit({filtered: this.filteredSuppliers, clicked: this.applyClicked});
   }
 }

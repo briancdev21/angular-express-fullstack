@@ -15,11 +15,11 @@ import * as _ from 'lodash';
 
 export class SuppliersListTableComponent implements OnInit {
 
-  @Input() contactsListInfo;
+  @Input() suppliersListInfo;
   addLogModalCollapsed = true;
   showAddLogModal = false;
-  showContactModalInfo = false;
-  contactModalInfoCollapsed = [];
+  showSupplierModalInfo = false;
+  supplierModalInfoCollapsed = [];
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
@@ -27,10 +27,10 @@ export class SuppliersListTableComponent implements OnInit {
   switchIcon: boolean = false;
   showCloneConfirmModal = false;
   showDeleteConfirmModal = false;
-  clonedRowContact: any;
+  clonedRowSupplier: any;
   clonedRowIndex: number;
   deletedRowIndex: number;
-  sortContactStatusArr: any;
+  sortSupplierStatusArr: any;
   clickSettingCount = 0;
   expandedInfoModal = false;
   phoneClicked = false;
@@ -41,7 +41,7 @@ export class SuppliersListTableComponent implements OnInit {
   activity: {
     title: string;
     subject: string;
-    contact: string;
+    supplier: string;
     content: string;
   };
 
@@ -73,24 +73,24 @@ export class SuppliersListTableComponent implements OnInit {
     return value === 'Follow-up' ? 'orange' : value === 'Lost' ? 'orange' : 'green';
   }
 
-  openContactModal(index) {
+  openSupplierModal(index) {
     this.clickSettingCount ++;
     // switch (this.clickSettingCount % 3) {
-    //   case 0: this.contactModalInfoCollapsed[index] = false;
+    //   case 0: this.supplierModalInfoCollapsed[index] = false;
     //   break;
-    //   case 1: this.contactModalInfoCollapsed[index] = true;
+    //   case 1: this.supplierModalInfoCollapsed[index] = true;
     //   break;
-    //   default: this.contactModalInfoCollapsed[index] = true;
+    //   default: this.supplierModalInfoCollapsed[index] = true;
     //   break;
     // }
-    this.contactModalInfoCollapsed[index] = true;
+    this.supplierModalInfoCollapsed[index] = true;
   }
 
   sortArray(field) {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.contactsListInfo.sort( function(name1, name2) {
+      this.suppliersListInfo.sort( function(name1, name2) {
         if ( name1[field] < name2[field] ) {
           return -1;
         } else if ( name1[field] > name2[field]) {
@@ -100,33 +100,15 @@ export class SuppliersListTableComponent implements OnInit {
         }
       });
     } else {
-      this.contactsListInfo.reverse();
+      this.suppliersListInfo.reverse();
     }
   }
 
-  sortRatingArray(field) {
+  sortGeneralList(field, list) {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.contactsListInfo.sort( function(name1, name2) {
-        if ( Number(name1[field]) < Number(name2[field]) ) {
-          return -1;
-        } else if ( Number(name1[field]) > Number(name2[field])) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-    } else {
-      this.contactsListInfo.reverse();
-    }
-  }
-
-  sortDealsArray(field) {
-    const cmp = this;
-    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
-    if (!cmp.sortScoreClicked) {
-      this.contactsListInfo.sort( function(name1, name2) {
+      list.sort( function(name1, name2) {
         if ( name1[field] < name2[field] ) {
           return -1;
         } else if ( name1[field] > name2[field]) {
@@ -136,24 +118,33 @@ export class SuppliersListTableComponent implements OnInit {
         }
       });
     } else {
-      this.contactsListInfo.reverse();
+      list.reverse();
     }
   }
 
-  // SortContactStatus() {
+  sortStateArray(state) {
+    const cadList = this.suppliersListInfo.filter(s => s.country === 'Canada');
+    this.sortGeneralList('state', cadList);
+    const usaList = this.suppliersListInfo.filter(s => s.country === 'USA');
+    this.sortGeneralList('state', usaList);
+    this.suppliersListInfo = cadList.concat(usaList);
+    console.log('000', this.suppliersListInfo);
+  }
+
+  // SortSupplierStatus() {
   //   const cmp = this;
   //   cmp.sortScoreClicked = ! cmp.sortScoreClicked;
   //   if (!cmp.sortScoreClicked) {
-  //     this.sortContactStatusArr = this.contactsListInfo.filter(contact => contact.status === 'New');
-  //     this.sortContactStatusArr.push(this.contactsListInfo.filter(contact => contact.status === 'Follow-up'));
-  //     this.sortContactStatusArr.push(this.contactsListInfo.filter(contact => contact.status === 'Seen'));
-  //     this.sortContactStatusArr.push(this.contactsListInfo.filter(contact => contact.status === 'Demo'));
-  //     this.sortContactStatusArr.push(this.contactsListInfo.filter(contact => contact.status === 'Negotiation'));
-  //     this.sortContactStatusArr.push(this.contactsListInfo.filter(contact => contact.status === 'Won'));
-  //     this.sortContactStatusArr.push(this.contactsListInfo.filter(contact => contact.status === 'Lost'));
-  //     this.contactsListInfo = _.flatten(this.sortContactStatusArr);
+  //     this.sortSupplierStatusArr = this.suppliersListInfo.filter(supplier => supplier.status === 'New');
+  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Follow-up'));
+  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Seen'));
+  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Demo'));
+  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Negotiation'));
+  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Won'));
+  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Lost'));
+  //     this.suppliersListInfo = _.flatten(this.sortSupplierStatusArr);
   //   } else {
-  //     this.contactsListInfo.reverse();
+  //     this.suppliersListInfo.reverse();
   //   }
   // }
 
@@ -171,7 +162,7 @@ export class SuppliersListTableComponent implements OnInit {
       date: today,
       buttonClickEventHandlerName: 'getMoreInfo',
       subject: this.activity.subject,
-      contact: this.activity.contact
+      supplier: this.activity.supplier
     };
 
     switch (nitem.title) {
@@ -190,41 +181,41 @@ export class SuppliersListTableComponent implements OnInit {
     }
   }
 
-  cloneRow(contact, index) {
+  cloneRow(supplier, index) {
     this.clonedRowIndex = index;
-    this.clonedRowContact = contact;
-    this.contactModalInfoCollapsed[index] = false;
-    this.showContactModalInfo = false;
+    this.clonedRowSupplier = supplier;
+    this.supplierModalInfoCollapsed[index] = false;
+    this.showSupplierModalInfo = false;
     this.showCloneConfirmModal = true;
   }
 
   deleteRow(index) {
     this.deletedRowIndex = index;
-    this.contactModalInfoCollapsed[index] = false;
-    this.showContactModalInfo = false;
+    this.supplierModalInfoCollapsed[index] = false;
+    this.showSupplierModalInfo = false;
     this.showDeleteConfirmModal = true;
   }
 
   confirmClone() {
-    this.contactsListInfo.splice(this.clonedRowIndex, 0, this.clonedRowContact);
+    this.suppliersListInfo.splice(this.clonedRowIndex, 0, this.clonedRowSupplier);
   }
 
   confirmDelete() {
-    this.contactsListInfo.splice(this.deletedRowIndex, 1);
+    this.suppliersListInfo.splice(this.deletedRowIndex, 1);
   }
 
   clickOutsideInfo(i) {
-    this.contactModalInfoCollapsed[i] = false;
-    this.showContactModalInfo = false;
+    this.supplierModalInfoCollapsed[i] = false;
+    this.showSupplierModalInfo = false;
     this.phoneClicked = false;
     this.emailClicked = false;
   }
 
-  phoneClick(contact) {
+  phoneClick(supplier) {
     this.phoneClicked = true;
     this.emailClicked = false;
     this.expandedInfoModal = false;
-    this.formatedPhone = this.formatPhoneNumber(contact.phone);
+    this.formatedPhone = this.formatPhoneNumber(supplier.phone);
   }
 
   emailClick() {
@@ -235,7 +226,7 @@ export class SuppliersListTableComponent implements OnInit {
 
   mapClick(task) {}
 
-  expandContactModal(index) {
+  expandSupplierModal(index) {
     this.phoneClicked = false;
     this.emailClicked = false;
     this.clickSettingCount ++;
@@ -251,5 +242,7 @@ export class SuppliersListTableComponent implements OnInit {
     const m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
     return (!m) ? null : '(' + m[1] + ') ' + m[2] + '-' + m[3];
   }
+
+  
 }
 

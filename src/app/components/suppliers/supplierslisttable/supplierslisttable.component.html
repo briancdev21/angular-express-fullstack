@@ -1,62 +1,67 @@
 <div class="content">
   <table>
     <tr>
-      <th (click)="sortArray('name')">CONTACT NAME</th>
-      <th (click)="sortRatingArray('rating')">ACCOUNT RATING</th>
-      <th (click)="sortDealsArray('totalDeals')">TOTAL DEALS</th>
-      <th>STATUS</th> 
-      <th>TYPE <img src="assets/images/Edit.png"></th>
+      <th (click)="sortArray('supplierName')">SUPPLIER NAME</th>
+      <th (click)="sortArray('contactName')">CONTACT NAME</th>
+      <th (click)="sortArray('term')">TERMS</th>
+      <th >ACCOUNT NUMBER</th>
+      <th (click)="sortArray('currency')">CURRENCY</th>
+      <th (click)="sortArray('country')">COUNTRY</th>
+      <th (click)="sortStateArray('state')">STATE <img src="assets/images/Edit.png"></th>
     </tr>
-    <tr *ngFor="let contact of contactsListInfo; let i = index" (click)="redirectTo(contact.id)">
-      <td>{{contact.name}}</td>
-      <td [ngClass]="{'green': contact.rating > 80}">{{contact.rating}}%</td>
-      <td [ngClass]="{'green': contact.totalDeals > 0}">{{contact.totalDeals}}</td> 
-      <td >
-        <span *ngIf="contact.association != 0">{{contact.association}} Invoice </span>
-        <span *ngIf="(contact.association != 0) && (contact.account != 0)">,</span>
-        <span *ngIf="(contact.association == 0) || (contact.account != 0)">{{contact.account}} Project</span>
-      </td>
+    <tr *ngFor="let supplier of suppliersListInfo; let i = index" (click)="redirectTo(supplier.id)">
+      <td>{{supplier.supplierName}}</td>
+      <td>{{supplier.contactName}}</td>
+      <td>{{supplier.term}}</td>
+      <td>{{supplier.accountNumber}}</td>
+      <td>{{supplier.currency}}</td>
+      <td>{{supplier.country}}</td>
+      <!-- <td >
+        <span *ngIf="supplier.association != 0">{{supplier.association}} Invoice </span>
+        <span *ngIf="(supplier.association != 0) && (supplier.account != 0)">,</span>
+        <span *ngIf="(supplier.association == 0) || (supplier.account != 0)">{{supplier.account}} Project</span>
+      </td> -->
       <td>
-        <span >{{contact.accountType}}</span> 
-        <img src="assets/images/three-dots.png" (click)="openContactModal(i)" style="cursor: pointer;">
+        <span >{{supplier.state}}</span> 
+        <img src="assets/images/three-dots.png" (click)="openSupplierModal(i)" style="cursor: pointer;">
         <div 
-          class="contact-expand-modal-wrapper" 
-          *ngIf="contactModalInfoCollapsed[i]" 
+          class="supplier-expand-modal-wrapper" 
+          *ngIf="supplierModalInfoCollapsed[i]" 
           (click)="clickOutsideInfo(i)">
         </div>
         <!-- Start Small Dialog when clicking three dot icom -->
         <div 
-          class="contact-expand-modal"  
-          [ngClass]="{'show-contact-modal': contactModalInfoCollapsed[i], 'hide-contact-modal': !contactModalInfoCollapsed[i] }">
+          class="supplier-expand-modal"  
+          [ngClass]="{'show-supplier-modal': supplierModalInfoCollapsed[i], 'hide-supplier-modal': !supplierModalInfoCollapsed[i] }">
           <div class="info-modal-top">
             <div class="mini-info">
-              <img src="assets/images/ringing.png" (click)="phoneClick(contact)">
-              <a href="tel: +.${{contact.phone}}" *ngIf="phoneClicked">{{ formatedPhone }}</a>
+              <img src="assets/images/ringing.png" (click)="phoneClick(supplier)">
+              <a href="tel: +.${{supplier.phone}}" *ngIf="phoneClicked">{{ formatedPhone }}</a>
               <img src="assets/images/envelope.png" (click)="emailClick()">
-              <a href="mailto:.${{contact.email}}" *ngIf="emailClicked">{{contact.email}}</a>
+              <a href="mailto:.${{supplier.email}}" *ngIf="emailClicked">{{supplier.email}}</a>
               <!-- <a ><img src="assets/images/info.png"></a> -->
-              <a href="http://maps.google.com/maps?q={{contact.address}}" target="_blank">
+              <a href="http://maps.google.com/maps?q={{supplier.address}}" target="_blank">
                 <img src="assets/images/info.png">
               </a>
             </div>
-            <div class="dots-icon"><img src="assets/images/three-dots.png"  (click)="expandContactModal(i)"></div>
+            <div class="dots-icon"><img src="assets/images/three-dots.png"  (click)="expandSupplierModal(i)"></div>
           </div>
           
           <div class="expanded-info-modal" *ngIf="expandedInfoModal">
             <div>
               <div (click)="addLogModalCollapsed=false; 
                         showAddLogModal=true; 
-                        contactModalInfoCollapsed[i]=false; 
-                        showContactModalInfo=false">
+                        supplierModalInfoCollapsed[i]=false; 
+                        showSupplierModalInfo=false">
                         <img src="assets/images/phone log.png">
                         <span>Add a log</span>
               </div>
             </div>
             <div>
-              <div (click)="cloneRow(contact, i)"><img src="assets/images/Delete.png"><span>Clone</span></div>
+              <div (click)="cloneRow(supplier, i)"><img src="assets/images/Delete.png"><span>Clone</span></div>
               <div (click)="deleteRow(i)"><img src="assets/images/Convert.png"><span>Delete</span></div>
             </div>
-            <div (click)="showModal=true; contactModalInfoCollapsed[i]=false; showContactModalInfo=false"><img src="assets/images/calendar with Edit.png"><span>Appointment</span></div>
+            <div (click)="showModal=true; supplierModalInfoCollapsed[i]=false; showSupplierModalInfo=false"><img src="assets/images/calendar with Edit.png"><span>Appointment</span></div>
           </div>
          </div>
         <!-- End Small Dialog when clicking three dot icom -->
@@ -82,18 +87,18 @@
         <tab tabTitle="Email" class="tab-email" >
           <div>
             <input placeholder="Subject" #emailsubject (input)="activity.subject=emailsubject.value"  />
-            <select #emailcontacts (change)="activity.contact=emailcontacts.value">
-              <option value="firstContact" >
-                Choose Contact Associated
+            <select #emailsuppliers (change)="activity.supplier=emailsuppliers.value">
+              <option value="firstSupplier" >
+                Choose Supplier Associated
               </option>
             </select>
           </div>
           <textarea  #textarea2 (input)="activity.content=textarea2.value" (keyup.enter)="addNewTimelineItem(); textarea2.value=''; emailsubject.value='' " ></textarea>
         </tab>
         <tab tabTitle="Call" class="tab-call" >
-          <select #callcontacts (change)="activity.contact=callcontacts.selectedValue" >
-            <option value="first contact">
-                Choose contact associated
+          <select #callsuppliers (change)="activity.supplier=callsuppliers.selectedValue" >
+            <option value="first supplier">
+                Choose supplier associated
             </option>
           </select>
           <textarea #textarea3 (input)="activity.content=textarea3.value" (keyup.enter)="addNewTimelineItem(); textarea3.value=''"></textarea>
