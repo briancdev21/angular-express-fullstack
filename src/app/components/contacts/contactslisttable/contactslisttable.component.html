@@ -18,7 +18,7 @@
       </td>
       <td>
         <span >{{contact.accountType}}</span> 
-        <img src="assets/images/three-dots.png" (click)="openContactModal(i)" style="cursor: pointer;">
+        <img src="assets/images/three-dots.png" (click)="openContactModal(i); $event.stopPropagation();" style="cursor: pointer;">
         <div 
           class="contact-expand-modal-wrapper" 
           *ngIf="contactModalInfoCollapsed[i]" 
@@ -30,16 +30,16 @@
           [ngClass]="{'show-contact-modal': contactModalInfoCollapsed[i], 'hide-contact-modal': !contactModalInfoCollapsed[i] }">
           <div class="info-modal-top">
             <div class="mini-info">
-              <img src="assets/images/ringing.png" (click)="phoneClick(contact)">
+              <img src="assets/images/ringing.png" (click)="phoneClick(contact); $event.stopPropagation();">
               <a href="tel: +.${{contact.phone}}" *ngIf="phoneClicked">{{ formatedPhone }}</a>
-              <img src="assets/images/envelope.png" (click)="emailClick()">
+              <img src="assets/images/envelope.png" (click)="emailClick(); $event.stopPropagation();">
               <a href="mailto:.${{contact.email}}" *ngIf="emailClicked">{{contact.email}}</a>
               <!-- <a ><img src="assets/images/info.png"></a> -->
               <a href="http://maps.google.com/maps?q={{contact.address}}" target="_blank">
                 <img src="assets/images/info.png">
               </a>
             </div>
-            <div class="dots-icon"><img src="assets/images/three-dots.png"  (click)="expandContactModal(i)"></div>
+            <div class="dots-icon"><img src="assets/images/three-dots.png"  (click)="expandContactModal(i); $event.stopPropagation();"></div>
           </div>
           
           <div class="expanded-info-modal" *ngIf="expandedInfoModal">
@@ -47,16 +47,17 @@
               <div (click)="addLogModalCollapsed=false; 
                         showAddLogModal=true; 
                         contactModalInfoCollapsed[i]=false; 
-                        showContactModalInfo=false">
+                        showContactModalInfo=false; 
+                        $event.stopPropagation();">
                         <img src="assets/images/phone log.png">
                         <span>Add a log</span>
               </div>
             </div>
             <div>
-              <div (click)="cloneRow(contact, i)"><img src="assets/images/Delete.png"><span>Clone</span></div>
-              <div (click)="deleteRow(i)"><img src="assets/images/Convert.png"><span>Delete</span></div>
+              <div (click)="cloneRow(contact, i); $event.stopPropagation();"><img src="assets/images/Delete.png"><span>Clone</span></div>
+              <div (click)="deleteRow(i); $event.stopPropagation();"><img src="assets/images/Convert.png"><span>Delete</span></div>
             </div>
-            <div (click)="showModal=true; contactModalInfoCollapsed[i]=false; showContactModalInfo=false"><img src="assets/images/calendar with Edit.png"><span>Appointment</span></div>
+            <div (click)="showModal=true; contactModalInfoCollapsed[i]=false; showContactModalInfo=false; $event.stopPropagation();"><img src="assets/images/calendar with Edit.png"><span>Appointment</span></div>
           </div>
          </div>
         <!-- End Small Dialog when clicking three dot icom -->

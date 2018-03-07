@@ -128,26 +128,7 @@ export class SuppliersListTableComponent implements OnInit {
     const usaList = this.suppliersListInfo.filter(s => s.country === 'USA');
     this.sortGeneralList('state', usaList);
     this.suppliersListInfo = cadList.concat(usaList);
-    console.log('000', this.suppliersListInfo);
   }
-
-  // SortSupplierStatus() {
-  //   const cmp = this;
-  //   cmp.sortScoreClicked = ! cmp.sortScoreClicked;
-  //   if (!cmp.sortScoreClicked) {
-  //     this.sortSupplierStatusArr = this.suppliersListInfo.filter(supplier => supplier.status === 'New');
-  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Follow-up'));
-  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Seen'));
-  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Demo'));
-  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Negotiation'));
-  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Won'));
-  //     this.sortSupplierStatusArr.push(this.suppliersListInfo.filter(supplier => supplier.status === 'Lost'));
-  //     this.suppliersListInfo = _.flatten(this.sortSupplierStatusArr);
-  //   } else {
-  //     this.suppliersListInfo.reverse();
-  //   }
-  // }
-
 
   addNewTimelineItem() {
     const date = new Date();
