@@ -7,6 +7,7 @@ import { OrderProfileComponent } from './components/orderprofile/orderprofile.co
 import { DealsPipelineComponent } from './components/dealspipeline/dealspipeline.component';
 import { ContactsComponent } from './components/contacts/contacts.component';
 import { SuppliersComponent } from './components/suppliers/suppliers.component';
+import { ProductsComponent } from './components/products/products.component';
 
 
 import { CommonComponent } from './components/common/common.component';
@@ -18,7 +19,7 @@ export const routes: Routes = [
   { path: 'pm', component: ContactsComponent },
   { path: 'inventory', component: SuppliersComponent },
   { path: 'orderprofile', component: OrderProfileComponent },
-  { path: 'servicing', component: TestComponent },
+  { path: 'servicing', component: ProductsComponent },
   { path: 'reports', component: TestComponent },
   { path: '**', component: TestComponent },
 ];
