@@ -44,11 +44,9 @@ input {
 
 .nav-content {
 	height: 60px;
-	width: 50%;
+	width: 100%;
 	border-bottom: 1px solid #95989a;
-	margin-left: 30px;
 	display: flex;
-	/* justify-content: baseline; */
 	align-items: flex-end;
 	padding: 0px 10px;
 }
