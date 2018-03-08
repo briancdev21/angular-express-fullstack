@@ -30,7 +30,7 @@ export class SuppliersListTableComponent implements OnInit {
   clonedRowSupplier: any;
   clonedRowIndex: number;
   deletedRowIndex: number;
-  sortSupplierStatusArr: any;
+  sortSupplierTermArr: any;
   clickSettingCount = 0;
   expandedInfoModal = false;
   phoneClicked = false;
@@ -196,7 +196,7 @@ export class SuppliersListTableComponent implements OnInit {
     this.phoneClicked = true;
     this.emailClicked = false;
     this.expandedInfoModal = false;
-    this.formatedPhone = this.formatPhoneNumber(supplier.phone);
+    this.formatedPhone = this.formatPhoneNumber(supplier.supplierPhone);
   }
 
   emailClick() {

@@ -9,6 +9,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ProfileCmpModule } from '../profile/profile.module';
+import { CommonCmpModule } from '../common/common.module';
 
 import { FilterService } from './filter.service';
 import { SuppliersListTableComponent } from './supplierslisttable/supplierslisttable.component';
@@ -35,7 +36,8 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     BrowserAnimationsModule,
     ProfileCmpModule,
     Ng2CompleterModule,
-    AutocompleteModule
+    AutocompleteModule,
+    CommonCmpModule
   ],
   exports: [
     SuppliersListTableComponent,

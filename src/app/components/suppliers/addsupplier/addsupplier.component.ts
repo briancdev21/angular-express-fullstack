@@ -15,8 +15,8 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 export class AddSupplierComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
   @Input() suppliersListInfo;
-  @Input() supplierOwners;
-  @Input() supplierStatus;
+  @Input() supplierTags;
+  @Input() supplierTerm;
   @Output() addToSuppliersList: EventEmitter<any> = new EventEmitter;
   protected searchStr: string;
   protected captain: string;
@@ -62,7 +62,7 @@ export class AddSupplierComponent implements OnInit {
   sourceValue = true;
   newEmail = '';
   newAddress = '';
-  selectOwner = '';
+  selectTag = '';
 
   constructor(private completerService: CompleterService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
@@ -233,7 +233,7 @@ export class AddSupplierComponent implements OnInit {
       lastSupplieredDate: new Date(),
       rating: '0',
       address: this.newAddress,
-      owner: this.selectOwner,
+      tag: this.selectTag,
       account: '0',
       association: '0',
       totalDeals: '0',

@@ -24,7 +24,7 @@
 
     <div class="suppliers-btn-group">
       <div class="suppliers-add-btn">
-        <app-addsupplier [suppliersListInfo]="suppliersListInfo" [supplierOwners]="supplierOwners" [supplierStatus]="supplierStatus " (addToSuppliersList)="addNewSupplier($event)"></app-addsupplier>
+        <app-addsupplier [suppliersListInfo]="suppliersListInfo" [supplierTags]="supplierTags" [supplierTerm]="supplierTerm " (addToSuppliersList)="addNewSupplier($event)"></app-addsupplier>
       </div>
       <div class="suppliers-import-btn">Import suppliers</div>
     </div>
@@ -38,10 +38,10 @@
       <app-supplierfilter 
         [(suppliersListInfo)]="suppliersListInfo" 
         [(filters)]="filters" 
-        [supplierOwners]="supplierOwners" 
-        [supplierStatus]="supplierStatus" 
+        [supplierTags]="supplierTags" 
+        [supplierTerm]="supplierTerm" 
         (filterParent)="getFilter($event)"
-        [(supplierTypes)]="supplierTypes">
+        [(supplierCurrencies)]="supplierCurrencies">
       </app-supplierfilter>
     </div>
   </div>

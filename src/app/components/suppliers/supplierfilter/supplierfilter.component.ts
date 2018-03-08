@@ -2,6 +2,7 @@ import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { FilterService } from '../filter.service';
+import { Ng2CompleterComponent } from '../../common/ng2completer/ng2completer.component';
 
 
 @Component({
@@ -18,36 +19,25 @@ export class SupplierFilterComponent implements OnInit {
 
   @Input() suppliersListInfo;
   @Input() filters;
-  @Input() supplierOwners;
-  @Input() supplierStatus;
-  @Input() supplierTypes;
+  @Input() supplierTags;
+  @Input() supplierTerm;
+  @Input() supplierCurrencies;
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
 
-
+  suppliersList = [];
+  contactsList = [];
   items2: any[] = [
-    'John Smith', 'John Moss', 'Diana Ilic'
+    'Control4', 'Alliance', 'House', 'Logixs', 'Buy', 'Best'
   ];
   config2: any = {'placeholder': 'Type here', 'sourceField': ''};
 
   public selectedMoment = new Date();
-  public createdMin;
-  public updatedMin;
-  public createdMax;
-  public updatedMax;
-  public lastMax;
-  public lastMin;
   public originFilters;
-  // scoreFrom = 28;
-  // scoreTo = 60;
-  createdDateFrom: Date;
-  createdDateTo: Date;
-  updatedDateFrom: Date;
-  updatedDateTo: Date;
-  lastDateTo: Date;
-  lastDateFrom: Date;
-  selectOwner: string;
-  location: string;
-  selectStatus: string;
+  public searchStr = 'asdasd';
+
+  selectTag: string;
+  accountNumber: string;
+  selectTerm: string;
   filteredSuppliersList: any;
   applyClicked = false;
   filteredSuppliers: any;
@@ -56,6 +46,8 @@ export class SupplierFilterComponent implements OnInit {
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
+  selectSupplier =  '';
+  selectContact = '';
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -68,8 +60,10 @@ export class SupplierFilterComponent implements OnInit {
     this.filteredSuppliers = this.suppliersListInfo;
     this.backUpSuppliers = this.suppliersListInfo;
     this.originFilters = Object.assign({}, this.filters);
-    // this.scoreFrom = this.filters.scoreFrom;
-    // this.scoreTo = this.filters.scoreTo;
+
+    // Get list and remove empty space
+    this.suppliersList = this.suppliersListInfo.map(s => s.supplierName).filter(e => String(e).trim());
+    this.contactsList = this.suppliersListInfo.map( s => s.contactName).filter(e => String(e).trim());
   }
 
   onSelect(item: any) {
@@ -77,7 +71,7 @@ export class SupplierFilterComponent implements OnInit {
     this.items2 = this.items2.filter(function( obj ) {
       return obj !== item;
     });
-    this.supplierOwners.push(item);
+    this.supplierTags.push(item);
   }
 
   onInputChangedEvent(val: string) {
@@ -85,44 +79,9 @@ export class SupplierFilterComponent implements OnInit {
   }
 
   removeUser(i: number) {
-    const item = this.supplierOwners[i];
+    const item = this.supplierTags[i];
     this.items2.push(item);
-    this.supplierOwners.splice(i, 1);
-  }
-
-  // rangeSliderChange(event) {
-  //   this.scoreFrom = event.from;
-  //   this.scoreTo = event.to;
-  // }
-
-  selectCreatedFrom(event) {
-    this.createdDateFrom = event.value;
-    this.createdMin = this.createdDateFrom;
-  }
-
-  selectCreatedTo(event) {
-    this.createdDateTo = event.value;
-    this.createdMax = this.createdDateTo;
-  }
-
-  selectLastFrom(event) {
-    this.lastDateFrom = event.value;
-    this.lastMin = this.lastDateFrom;
-  }
-
-  selectLastTo(event) {
-    this.lastDateTo = event.value;
-    this.lastMax = this.lastDateTo;
-  }
-
-  selectUpdatedFrom(event) {
-    this.updatedDateFrom = event.value;
-    this.updatedMin = this.updatedDateFrom;
-  }
-
-  selectUpdatedTo(event) {
-    this.updatedDateTo = event.value;
-    this.updatedMax = this.updatedDateTo;
+    this.supplierTags.splice(i, 1);
   }
 
   filterTxt (arr, searchKey) {
@@ -133,99 +92,66 @@ export class SupplierFilterComponent implements OnInit {
     });
   }
 
+  onSelectedSupplier(val) {
+    this.filters.selectSupplier = val;
+    this.selectSupplier = val;
+  }
+
+  onSelectedContact(val) {
+    this.filters.selectContact = val;
+    this.selectContact = val;
+  }
+
   resetFilter() {
-    console.log('reset');
-    // this.scoreFrom = 0;
-    // this.scoreTo = 100;
+    this.selectSupplier = '';
+    this.selectContact = '';
     this.filters = {
-      // scoreFrom : 0,
-      // scoreTo : 100,
-      createdDateFrom: '',
-      createdDateTo: '',
-      updatedDateFrom: '',
-      updatedDateTo: '',
-      lastDateFrom: '',
-      lastDateTo: '',
-      selectOwner: '',
-      location: '',
-      selectStatus: '',
+      selectSupplier: '',
+      selectContact: '',
+      selectCurrency: '',
+      accountNumber: '',
+      selectTerm: '',
     };
+    this.supplierTags = ['Control4'];
     this.ref.detectChanges();
   }
 
   applyFilter() {
-    console.log('filters:', this.filters);
-    // this.filters.scoreFrom = this.scoreFrom;
-    // this.filters.scoreTo = this.scoreTo;
     this.applyClicked = true;
     this.filteredSuppliers = this.backUpSuppliers;
 
-    if (this.supplierOwners[0]) {
-      let ownerFiltered = [];
-      let ownerFilteredList = [];
-      for ( let i = 0; i <= this.supplierOwners.length - 1; i ++) {
-        ownerFiltered = this.filterTxt(this.suppliersListInfo, this.supplierOwners[i]);
-        ownerFilteredList = ownerFilteredList.concat(ownerFiltered);
+    if (this.supplierTags[0]) {
+      let tagFiltered = [];
+      let tagFilteredList = [];
+      for ( let i = 0; i <= this.supplierTags.length - 1; i ++) {
+        tagFiltered = this.filterTxt(this.suppliersListInfo, this.supplierTags[i]);
+        tagFilteredList = tagFilteredList.concat(tagFiltered);
       }
-      this.filteredSuppliers = ownerFilteredList;
+      this.filteredSuppliers = tagFilteredList;
     }
 
-    if (this.filters.location) {
-      this.filteredSuppliers = this.filterTxt(this.suppliersListInfo, this.filters.location);
+    if (this.filters.selectSupplier) {
+      this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.supplierName === this.filters.selectSupplier);
     }
 
-    // this.filteredSuppliers = this.filteredSuppliers.filter(
-    //   supplier => supplier.score >= this.filters.scoreFrom && supplier.score <= this.filters.scoreTo
-    // );
-
-    if (this.filters.selectStatus) {
-      console.log('selectStatus:', this.selectStatus);
-      if (this.filters.selectStatus == 'Project') {
-        this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.account > 0);
-      } else if (this.filters.selectStatus == 'Invoice') {
-        this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.association > 0);
-      } else {
-        this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.association > 0 && supplier.account > 0);
-      }
+    if (this.filters.selectContact) {
+      this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.contactName === this.filters.selectContact);
     }
 
-    if (this.filters.selectType) {
-      this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.accountType == this.filters.selectType);
+    if (this.filters.accountNumber) {
+      this.filteredSuppliers = this.filterTxt(this.suppliersListInfo, this.filters.accountNumber);
     }
 
-    if (this.filters.createdFrom) {
-      this.filteredSuppliers = this.filteredSuppliers.filter(
-        supplier => Date.parse(supplier.createDate) >= Number(this.filters.createdFrom)
-      );
-    }
-    if (this.filters.createdTo) {
-      this.filteredSuppliers = this.filteredSuppliers.filter(
-        supplier => Date.parse(supplier.createDate) <= Number(this.filters.createdTo)
-      );
+    if (this.filters.selectTerm) {
+      this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.term === this.filters.selectTerm);
     }
 
-    if (this.filters.updatedFrom) {
-      this.filteredSuppliers = this.filteredSuppliers.filter(
-        supplier => Date.parse(supplier.updatedDate) >= Number(this.filters.updatedFrom)
-      );
-    }
-    if (this.filters.updatedTo) {
-      this.filteredSuppliers = this.filteredSuppliers.filter(
-        supplier => Date.parse(supplier.updatedDate) <= Number(this.filters.updatedTo)
-      );
+    if (this.filters.selectCurrency) {
+      this.filteredSuppliers = this.filteredSuppliers.filter(supplier => supplier.currency === this.filters.selectCurrency);
     }
 
-    if (this.filters.lastFrom) {
-      this.filteredSuppliers = this.filteredSuppliers.filter(
-        supplier => Date.parse(supplier.lastSupplieredDate) >= Number(this.filters.lastFrom)
-      );
-    }
-
-    if (this.filters.lastTo) {
-      this.filteredSuppliers = this.filteredSuppliers.filter(
-        supplier => Date.parse(supplier.lastSupplieredDate) <= Number(this.filters.lastTo)
-      );
-    }
+    // remove duplicates from array
+    this.filteredSuppliers = Array.from(new Set(this.filteredSuppliers));
 
     this.filterParent.emit({filtered: this.filteredSuppliers, clicked: this.applyClicked});
   }

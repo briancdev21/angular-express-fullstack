@@ -22,7 +22,8 @@
         <div 
           class="contact-expand-modal-wrapper" 
           *ngIf="contactModalInfoCollapsed[i]" 
-          (click)="clickOutsideInfo(i)">
+          (click)="clickOutsideInfo(i);
+          $event.stopPropagation();">
         </div>
         <!-- Start Small Dialog when clicking three dot icom -->
         <div 

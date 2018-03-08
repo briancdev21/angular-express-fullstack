@@ -30,19 +30,14 @@ export class SuppliersComponent implements OnInit {
   }
 
   public filters  = {
-    // scoreFrom : 0,
-    // scoreTo : 100,
-    createdDateFrom: '',
-    createdDateTo: '',
-    updatedDateFrom: '',
-    updatedDateTo: '',
-    selectOwner: '',
-    location: '',
-    selectStatus: '',
+    selectTag: '',
+    accountNumber: '',
+    selectTerm: '',
+    selectCurrency: '',
   };
 
-  public supplierOwners: Array<Object> = [
-    'John Smith',
+  public supplierTags: Array<Object> = [
+    'Control4',
   ];
 
   public suppliersListInfo: Array<Object> = [
@@ -113,7 +108,9 @@ export class SuppliersComponent implements OnInit {
   ];
 
 
-  public termsType = ['Net 30', 'Due on Receipt'];
+  public supplierTerm = ['Net 15', 'Net 30', 'Due on Receipt'];
+  public supplierCurrencies = ['CAD', 'USD'];
+
   ngOnInit() {
     this.backUpSuppliers = this.suppliersListInfo;
   }
@@ -140,15 +137,10 @@ export class SuppliersComponent implements OnInit {
 
   cancelFilter() {
     this.filters = {
-      // scoreFrom : 0,
-      // scoreTo : 100,
-      createdDateFrom: '',
-      createdDateTo: '',
-      updatedDateFrom: '',
-      updatedDateTo: '',
-      selectOwner: '',
-      location: '',
-      selectStatus: '',
+      selectTag: '',
+      accountNumber: '',
+      selectTerm: '',
+      selectCurrency: '',
     };
     this.filterClicked = false;
     this.suppliersListInfo = this.backUpSuppliers;
