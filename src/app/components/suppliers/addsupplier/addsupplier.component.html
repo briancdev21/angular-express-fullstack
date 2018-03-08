@@ -11,91 +11,57 @@
 
   <div class="content" >
     <tabs (currentTabChange)="tabChange($event)" >
-      <tab tabTitle="BASIC INFORMATION" [active]="tabActiveFirst" >
+      <tab tabTitle="CONTACT DETAILS" [active]="tabActiveFirst" >
         <div class="tab-one">
-          <div class="tab-row" *ngIf="!typeAccountTypeChange">
+          <div class="tab-row">
             <div>
-              <span>First Name (*required)</span>
-              <input placeholder="Enter first name" [ngClass]="{'validation-required': invalidFirstname}" [(ngModel)]="firstName" [value]="firstName">
+              <span>Supplier Name (*required)</span>
+              <input placeholder="Enter supplier name" [ngClass]="{'validation-required': invalidSupplierName}" [(ngModel)]="supplierName" [value]="supplierName">
             </div>
             <div>
-              <span>Last Name (*required)</span>
-              <input placeholder="Enter last name" [ngClass]="{'validation-required': invalidLastname}" [(ngModel)]="lastName" [value]="lastName">
+              <span>Contact Name (*required)</span>
+              <input placeholder="Enter last name" [ngClass]="{'validation-required': invalidContactName}" [(ngModel)]="contactName" [value]="contactName">
             </div>
-          </div>
-
-          <div class="tab-row" *ngIf="typeAccountTypeChange">
-						<div>
-							<span>Business Name (*required)</span>
-							<input placeholder="Enter business name" [ngClass]="{'validation-required': invalidBusinessName}" [(ngModel)]="businessName" [value]="businessName">
-						</div>  
-            <div>
-							<span>Head supplier</span>
-							<div>
-                <select>
-                  <option value="test">Choose head supplier</option>
-                </select>
-              </div>
-						</div> 
           </div>
 
           <div class="tab-row">
-            
             <div>
-              <span>Account type (*required)</span>
-              <div class="account-type">
-                <select [(ngModel)]='businessType' #accountType (ngModelChange)="onAccountTypeChange(businessType)" [ngClass]="{'validation-required': invalidAccountType}" >
-                  <option value="" selected disabled class="default-option">Choose an account type</option>
-									<option value="individual">Individual</option>
-                  <option value="business">Business</option>
-                </select>
-              </div>
+              <span>Supplier Phone (*required)</span>
+              <input placeholder="Enter supplier phone" [ngClass]="{'validation-required': invalidSupplierPhone}" [(ngModel)]="supplierPhone" [value]="supplierPhone">
             </div>
-						<div>
-              <span>Job title</span>
-              <input placeholder="Enter job title">
+            <div>
+              <span>Contact Email (*required)</span>
+              <input placeholder="Enter contact email" [ngClass]="{'validation-required': invalidContactEmail}" [(ngModel)]="contactEmail" [value]="contactEmail">
             </div>
           </div>
 
-					<div class=" tab-row">
+          <div class="tab-row">
             <div>
-              <span>Email</span>
-              <input placeholder="Enter email" [(ngModel)]="newEmail">
+              <span>Account Payable Email</span>
+              <input placeholder="Enter account payable email" [(ngModel)]="payableEmail" [value]="payableEmail">
             </div>
             <div>
-              <span>Department</span>
-              <div>
-                <ng2-completer [(ngModel)]="captain" [datasource]="captains" [minSearchLength]="0" (keyup.enter)="onEnter()"></ng2-completer>
-              </div>
+              <span>Contact Phone</span>
+              <input placeholder="Enter contact phone" [(ngModel)]="contactPhone" [value]="contactPhone">
             </div>
-						
           </div>
 
-          <div class="name-type tab-row">
+          <div class="tab-row">
             <div>
-              <span>Primary number (*required)</span>
-              <input placeholder="Enter primary phone number" [ngClass]="{'validation-required': invalidPrimaryNumber}" [(ngModel)]="primaryNumber" [value]="primaryNumber">
+              <span>Account Payable Phone</span>
+              <input placeholder="Enter account payable phone" [(ngModel)]="payablePhone" [value]="payablePhone">
             </div>
-            <div *ngIf="!typeAccountTypeChange">
-              <span>Mobile</span>
-              <input placeholder="Enter mobile number" [(ngModel)]="mobileNumber" >
-            </div>
-						<div *ngIf="typeAccountTypeChange">
-              <span>Secondary number</span>
-              <input placeholder="Enter secondary number" [(ngModel)]="secondaryNumber" >
+            <div>
+              <span>Business Number</span>
+              <input placeholder="Enter business number" [(ngModel)]="businessNumber" [value]="businessNumber">
             </div>
           </div>
 
           <div class="shipping-address ">
             <div class="desc">
-              <span>Shipping Address</span>
-              <div class="switch-bar">
-                <img src="assets/images/switch.png" *ngIf="switchIconShipping" (click)="clickIconShipping()">
-                <img src="assets/images/switch-off.png" *ngIf="!switchIconShipping" (click)="clickIconShipping()">
-                <span>Same as the customer profile</span>
-              </div>
+              <span>Address</span>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [value]="shippingAddress" [(ngModel)]="newAddress" >
+            <input placeholder="Enter Shipping Address" class="address" [ngClass]="{'validation-required': invalidAddress}" [value]="shippingAddress" [(ngModel)]="newAddress" >
 
             <div class="city-state">
               <input placeholder="Enter City" [(ngModel)]="newCity" >
@@ -105,32 +71,6 @@
               <input placeholder="Enter Country" [(ngModel)]="newCountry" >
               <input placeholder="Enter Zipcode" [(ngModel)]="newZipcode" >
             </div>
-          </div>
-
-					<div class="name-type tab-row">
-						<div>
-              <span>Keywords</span>
-              <div class="keywords">
-                <app-multikeywordselect [keywords]="keywords" ></app-multikeywordselect>
-              </div>
-            </div>
-            <div *ngIf="!typeAccountTypeChange">
-              <span>Business association</span>
-              <div>
-                <select>
-                  <option value="business" class="default-option" disabled selected>Choose a business account</option>
-                  <option value="business">Choose a  account</option>
-                  <option value="business">Choose a business </option>
-                </select>
-              </div>
-            </div>
-						<div *ngIf="typeAccountTypeChange">
-              <span>Supplier associations</span>
-              <div class="keywords">
-                <app-multikeywordselect [keywords]="supplierAssociation" ></app-multikeywordselect>
-              </div>
-            </div>
-            
           </div>
 
           <div class="btn-section" >
@@ -143,19 +83,34 @@
           </div>
         </div>
       </tab>
-      <tab tabTitle="ADVANCED INFORMATION" class="tab-won" [active]="tabActiveSecond">
+      <tab tabTitle="SUPPLIER DETAILS" class="tab-won" [active]="tabActiveSecond">
         <div class="tab-two">
-          <div class=" tab-row">
+          <div class="tab-row">
             <div>
-              <span>Default pricing (*required)</span>
+              <span>Account Number (*required)</span>
+              <input 
+                placeholder="Enter your account number for this supplier" 
+                [ngClass]="{'validation-required': invalidAccountNumber}" 
+                [(ngModel)]="accountNumber" 
+                [value]="accountNumber"
+              >
+            </div>
+            <div>
+              <span>Default terms (*required)</span>
               <div>
-                <select [(ngModel)]="defaultPricing" [ngClass]="{'validation-required': invalidDefaultPricing}">
-                  <option [value]="" default disabled class="default-option">Choose the default pricing</option>
-                  <option [value]="family" >Family & Friend</option>
-                  <option [value]="royalty" >Royalty Program</option>
-                  <option [value]="retail" >Retail</option>
+                <select [(ngModel)]="defaultTerm" [ngClass]="{'validation-required': invalidDefaultTerm}">
+                  <option [value]="" disabled selected class="default-option">Choose the default terms</option>
+                  <option [value]="Test1" >Test1</option>
+                  <option [value]="Test2" >Test2</option>
                 </select>
               </div>
+            </div>
+            
+          </div>
+					<div class="tab-row">
+            <div>
+              <span>Account Payable Phone</span>
+              <input placeholder="Enter account payable phone" [(ngModel)]="payablePhone" [value]="payablePhone">
             </div>
             <div>
               <span>Default currency (*required)</span>
@@ -171,61 +126,23 @@
           </div>
 					<div class="tab-row">
             <div>
-              <span>Default terms (*required)</span>
-              <div>
-                <select [(ngModel)]="defaultTerm" [ngClass]="{'validation-required': invalidDefaultTerm}">
-                  <option [value]="" disabled selected class="default-option">Choose the default terms</option>
-                  <option [value]="Test1" >Test1</option>
-                  <option [value]="Test2" >Test2</option>
-                </select>
-              </div>
+              <span>Account Payable Phone</span>
+              <input placeholder="Enter account payable phone" [(ngModel)]="payablePhone" [value]="payablePhone">
             </div>
-            <div>
-              <span>Tag</span>
-              <div>
-                <select [(ngModel)]="selectTag">
-                  <option value="Sepehr Shoarinejad">Sepehr Shoarinejad</option>
-                </select>
-              </div>
-            </div>
+            <div></div>
           </div>
-					<div class=" tab-row">
-            <div>
-              <span>Source</span>
-              <div>
-                <ng2-completer [(ngModel)]="captainSource" [datasource]="captainsSource" [minSearchLength]="0" (keyup.enter)="onEnter()" (selected)="checkSource($event)"></ng2-completer>
-              </div>
-            </div>
-            <div>
-              <span>Supplier name</span>
-              <div>
-                <select [disabled]="sourceValue">
-                  <option value="" class="default-option">Choose supplier</option>
-                  <option value="test" class="default-option">Supplier 1</option>
-                  <option value="test" class="default-option">Supplier 2</option>
-                </select>
-              </div>
-            </div>
-          </div>
-					<div class="shipping-address ">
-            <div class="desc">
-              <span>Shipping Address</span>
-            </div>
-            <input placeholder="Enter Shipping Address" class="address" [value]="shippingAddress">
-
-            <div class="city-state">
-              <input placeholder="Enter City">
-              <input placeholder="Enter State">
-            </div>
-            <div class="country-zip">
-              <input placeholder="Enter Country">
-              <input placeholder="Enter Zipcode">
-            </div>
-          </div>
+					
 					<div class="customer-notes">
 						<span>Notes</span>
-						<textarea placeholder="Enter customer notes here"></textarea>
-					</div>
+						<textarea placeholder="Enter internal notes here for your team to see..." [(ngModel)]="productNotes"></textarea>
+          </div>
+          
+          <div class="product-tags">
+            <span>tags</span>
+            <div class="keywords">
+              <app-multikeywordselect [keywords]="keywords" ></app-multikeywordselect>
+            </div>
+          </div>
           <div class="btn-section" >
             <button class="cancel-btn" (click)="addSupplierModalCollapsed=true; showAddSupplierModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
               Cancel

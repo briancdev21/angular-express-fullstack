@@ -44,12 +44,12 @@ export class AddSupplierComponent implements OnInit {
   businessType: any;
   tabActiveFirst = true;
   tabActiveSecond = false;
-  invalidFirstname = false;
-  invalidLastname = false;
+  invalidSupplierName = false;
+  invalidContactName = false;
   invalidBusinessName = false;
   invalidAccountType = false;
-  firstName = '';
-  lastName = '';
+  supplierName = '';
+  contactName = '';
   businessName = '';
   defaultTerm = '';
   defaultCurrency = '';
@@ -74,8 +74,8 @@ export class AddSupplierComponent implements OnInit {
   }
 
   onAccountTypeChange(event) {
-    this.invalidFirstname = false;
-    this.invalidLastname = false;
+    this.invalidSupplierName = false;
+    this.invalidContactName = false;
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
@@ -103,21 +103,21 @@ export class AddSupplierComponent implements OnInit {
   }
 
   clickNext() {
-    this.invalidFirstname = false;
-    this.invalidLastname = false;
+    this.invalidSupplierName = false;
+    this.invalidContactName = false;
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
     if (this.businessType === 'individual') {
-      if (this.firstName && this.lastName && this.primaryNumber) {
+      if (this.supplierName && this.contactName && this.primaryNumber) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
-        if (!this.firstName) {
-          this.invalidFirstname = true;
+        if (!this.supplierName) {
+          this.invalidSupplierName = true;
         }
-        if (!this.lastName) {
-          this.invalidLastname = true;
+        if (!this.contactName) {
+          this.invalidContactName = true;
         }
         if (!this.primaryNumber) {
           this.invalidPrimaryNumber = true;
@@ -137,11 +137,11 @@ export class AddSupplierComponent implements OnInit {
       }
     } else {
       this.invalidAccountType = true;
-      if (!this.firstName) {
-        this.invalidFirstname = true;
+      if (!this.supplierName) {
+        this.invalidSupplierName = true;
       }
-      if (!this.lastName) {
-        this.invalidLastname = true;
+      if (!this.contactName) {
+        this.invalidContactName = true;
       }
       if (!this.primaryNumber) {
         this.invalidPrimaryNumber = true;
@@ -159,14 +159,14 @@ export class AddSupplierComponent implements OnInit {
       case 'ADVANCED INFORMATION': {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
-        this.invalidFirstname = false;
-        this.invalidLastname = false;
+        this.invalidSupplierName = false;
+        this.invalidContactName = false;
         this.invalidBusinessName = false;
         this.invalidAccountType = false;
         this.invalidPrimaryNumber = false;
 
         if (this.businessType === 'individual') {
-          if (this.firstName && this.lastName && this.primaryNumber) {
+          if (this.supplierName && this.contactName && this.primaryNumber) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
             break;
@@ -175,11 +175,11 @@ export class AddSupplierComponent implements OnInit {
               this.tabActiveFirst = true;
               this.tabActiveSecond = false;
             });
-            if (!this.firstName) {
-              this.invalidFirstname = true;
+            if (!this.supplierName) {
+              this.invalidSupplierName = true;
             }
-            if (!this.lastName) {
-              this.invalidLastname = true;
+            if (!this.contactName) {
+              this.invalidContactName = true;
             }
             if (!this.primaryNumber) {
               this.invalidPrimaryNumber = true;
@@ -207,11 +207,11 @@ export class AddSupplierComponent implements OnInit {
             this.tabActiveSecond = false;
           });
           this.invalidAccountType = true;
-          if (!this.firstName) {
-            this.invalidFirstname = true;
+          if (!this.supplierName) {
+            this.invalidSupplierName = true;
           }
-          if (!this.lastName) {
-            this.invalidLastname = true;
+          if (!this.contactName) {
+            this.invalidContactName = true;
           }
           if (!this.primaryNumber) {
             this.invalidPrimaryNumber = true;
@@ -225,7 +225,7 @@ export class AddSupplierComponent implements OnInit {
 
     const newSupplier = {
       id: this.suppliersListInfo.length,
-      name: this.firstName + ' ' + this.lastName,
+      name: this.supplierName + ' ' + this.contactName,
       phone: this.primaryNumber,
       email: this.newEmail,
       createDate: new Date(),
