@@ -186,6 +186,10 @@ table a:hover {
   display: inline-table;
 }
 
+.phone-number a {
+  width: 100px;
+}
+
 /* Add a log Modal CSS */
 
 .add-log-modal-wrapper {

@@ -168,9 +168,15 @@ table a:hover {
   align-items: center;
 }
 
+.mini-info a {
+  color: #7cb8e0;
+  display: inline-table;
+}
+
 .mini-info {
   display: flex;
   border-bottom: 0 !important;
+  align-items: center;
 }
 
 .mini-info img {
@@ -182,6 +188,10 @@ table a:hover {
 .mini-info a {
   color: #7cb8e0;
   display: inline-table;
+}
+
+.phone-number a {
+  width: 100px;
 }
 
 /* Add a log Modal CSS */
