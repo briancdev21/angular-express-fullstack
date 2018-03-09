@@ -43,16 +43,14 @@
           [ngClass]="{'show-supplier-modal': supplierModalInfoCollapsed[i], 'hide-supplier-modal': !supplierModalInfoCollapsed[i] }">
           <div class="info-modal-top">
             <div class="mini-info">
-              <div>
-                  <img src="assets/images/ringing.png" (click)="phoneClick(supplier); $event.stopPropagation();">
-                  <a href="tel: +.${{supplier.supplierPhone}}" *ngIf="phoneClicked">{{ formatedPhone }}</a>
+              <div class="phone-number">
+                <img src="assets/images/ringing.png" (click)="phoneClick(supplier); $event.stopPropagation();">
+                <a href="tel: +.${{supplier.supplierPhone}}" *ngIf="phoneClicked">{{ formatedPhone }}</a>
               </div>
               <div>
-                  <img src="assets/images/envelope.png" (click)="emailClick(); $event.stopPropagation();">
-                  <a href="mailto:.${{supplier.supplierEmail}}" *ngIf="emailClicked">{{supplier.supplierEmail}}</a>
+                <img src="assets/images/envelope.png" (click)="emailClick(); $event.stopPropagation();">
+                <a href="mailto:.${{supplier.supplierEmail}}" *ngIf="emailClicked">{{supplier.supplierEmail}}</a>
               </div>
-              
-              <!-- <a ><img src="assets/images/info.png"></a> -->
               <a href="http://maps.google.com/maps?q={{supplier.address}}" target="_blank">
                 <img src="assets/images/info.png">
               </a>

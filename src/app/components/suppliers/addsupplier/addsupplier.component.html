@@ -61,7 +61,7 @@
             <div class="desc">
               <span>Address</span>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [ngClass]="{'validation-required': invalidAddress}" [value]="shippingAddress" [(ngModel)]="newAddress" >
+            <input placeholder="Enter Shipping Address" class="address" [ngClass]="{'validation-required': invalidAddress}" [(ngModel)]="newAddress" >
 
             <div class="city-state">
               <input placeholder="Enter City" [(ngModel)]="newCity" >
@@ -99,9 +99,8 @@
               <span>Default terms (*required)</span>
               <div>
                 <select [(ngModel)]="defaultTerm" [ngClass]="{'validation-required': invalidDefaultTerm}">
-                  <option [value]="" disabled selected class="default-option">Choose the default terms</option>
-                  <option [value]="Test1" >Test1</option>
-                  <option [value]="Test2" >Test2</option>
+                  <option value="" disabled selected class="default-option">Choose the default terms</option>
+                  <option *ngFor="let term of supplierTerm" [value]="term">{{term}}</option>
                 </select>
               </div>
             </div>
@@ -116,10 +115,8 @@
               <span>Default currency (*required)</span>
               <div>
                 <select [(ngModel)]="defaultCurrency" [ngClass]="{'validation-required': invalidDefaultCurrency}">
-                  <option [value]="" disabled selected class="default-option">Choose the default currency</option>
-                  <option [value]="euro" >UERO</option>
-                  <option [value]="cad" >CAD</option>
-                  <option [value]="usd" >USD</option>
+                  <option value="" disabled selected class="default-option">Choose the default currency</option>
+                  <option *ngFor="let currency of supplierCurrencies" [value]="currency">{{currency}}</option>
                 </select>
               </div>
             </div>
@@ -144,11 +141,11 @@
             </div>
           </div>
           <div class="btn-section" >
-            <button class="cancel-btn" (click)="addSupplierModalCollapsed=true; showAddSupplierModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
-              Cancel
+            <button class="cancel-btn" (click)="tabActiveFirst=true; tabActiveSecond=false;"  >
+              Previous
             </button>
             <button class="save-btn" (click)="clickSaveSupplier()"  >
-              Save supplier
+              Finished
             </button>
           </div>
         </div>

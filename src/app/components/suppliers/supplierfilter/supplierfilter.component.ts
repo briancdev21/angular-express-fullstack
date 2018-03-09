@@ -22,13 +22,11 @@ export class SupplierFilterComponent implements OnInit {
   @Input() supplierTags;
   @Input() supplierTerm;
   @Input() supplierCurrencies;
+  @Input() allTags;
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
 
   suppliersList = [];
   contactsList = [];
-  items2: any[] = [
-    'Control4', 'Alliance', 'House', 'Logixs', 'Buy', 'Best'
-  ];
   config2: any = {'placeholder': 'Type here', 'sourceField': ''};
 
   public selectedMoment = new Date();
@@ -68,7 +66,7 @@ export class SupplierFilterComponent implements OnInit {
 
   onSelect(item: any) {
     this.selectedItem = item;
-    this.items2 = this.items2.filter(function( obj ) {
+    this.allTags = this.allTags.filter(function( obj ) {
       return obj !== item;
     });
     this.supplierTags.push(item);
@@ -80,7 +78,7 @@ export class SupplierFilterComponent implements OnInit {
 
   removeUser(i: number) {
     const item = this.supplierTags[i];
-    this.items2.push(item);
+    this.allTags.push(item);
     this.supplierTags.splice(i, 1);
   }
 

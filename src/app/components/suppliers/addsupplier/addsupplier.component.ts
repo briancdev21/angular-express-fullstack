@@ -17,6 +17,7 @@ export class AddSupplierComponent implements OnInit {
   @Input() suppliersListInfo;
   @Input() supplierTags;
   @Input() supplierTerm;
+  @Input() supplierCurrencies;
   @Output() addToSuppliersList: EventEmitter<any> = new EventEmitter;
   protected searchStr: string;
   protected captain: string;
@@ -31,37 +32,41 @@ export class AddSupplierComponent implements OnInit {
     { color: 'yellow', value: '#ff0' },
     { color: 'black', value: '#000' }
   ];
-  protected captains = ['Head Supplier', 'Accounts Receivable'];
-  protected captainsSource = ['Supplier referal'];
 
   addSupplierModalCollapsed = true;
   showAddSupplierModal = false;
-  switchIconShipping: boolean = true;
-  shippingAddress: string = '';
+  switchIconShipping = true;
   typeAccountTypeChange = false;
   keywords: any;
   supplierAssociation: any;
   businessType: any;
   tabActiveFirst = true;
   tabActiveSecond = false;
+
   invalidSupplierName = false;
   invalidContactName = false;
-  invalidBusinessName = false;
-  invalidAccountType = false;
+  invalidSupplierPhone = false;
+  invalidContactEmail = false;
+  invalidAddress = false;
+  invalidDefaultTerm = false;
+  invalidAccountNumber = false;
+  invalidDefaultCurrency = false;
+
   supplierName = '';
   contactName = '';
-  businessName = '';
+  supplierPhone = '';
+  contactEmail = '';
+  contactPhone = '';
+  accountNumber = '';
   defaultTerm = '';
   defaultCurrency = '';
-  defaultPricing = '';
-  primaryNumber = '';
-  invalidDefaultTerm = false;
-  invalidDefaultCurrency = false;
-  invalidDefaultPricing = false;
-  invalidPrimaryNumber = false;
   sourceValue = true;
   newEmail = '';
   newAddress = '';
+  newCountry = '';
+  newState = '';
+  newCity = '';
+  newZipcode = '';
   selectTag = '';
 
   constructor(private completerService: CompleterService) {
@@ -73,148 +78,78 @@ export class AddSupplierComponent implements OnInit {
   ngOnInit() {
   }
 
-  onAccountTypeChange(event) {
-    this.invalidSupplierName = false;
-    this.invalidContactName = false;
-    this.invalidBusinessName = false;
-    this.invalidAccountType = false;
-    this.invalidPrimaryNumber = false;
-    if (event === 'individual') {
-      this.typeAccountTypeChange = false;
-    } else if (event === 'business') {
-      this.typeAccountTypeChange = true;
-    }
-  }
-
-  clickIconShipping() {
-    this.switchIconShipping = !this.switchIconShipping;
-    this.shippingAddress = (this.switchIconShipping) ? 'test' : '';
-  }
-
   onEnter() {
-  }
-
-  checkSource(event) {
-    if (this.captainSource === 'Supplier referal') {
-      this.sourceValue = false;
-    } else {
-      this.sourceValue = true;
-    }
   }
 
   clickNext() {
     this.invalidSupplierName = false;
     this.invalidContactName = false;
-    this.invalidBusinessName = false;
-    this.invalidAccountType = false;
-    this.invalidPrimaryNumber = false;
-    if (this.businessType === 'individual') {
-      if (this.supplierName && this.contactName && this.primaryNumber) {
-        this.tabActiveFirst = false;
-        this.tabActiveSecond = true;
-      } else {
-        if (!this.supplierName) {
-          this.invalidSupplierName = true;
-        }
-        if (!this.contactName) {
-          this.invalidContactName = true;
-        }
-        if (!this.primaryNumber) {
-          this.invalidPrimaryNumber = true;
-        }
-      }
-    } else if (this.businessType === 'business') {
-      if (this.businessName) {
-        this.tabActiveFirst = false;
-        this.tabActiveSecond = true;
-      } else {
-        if (!this.businessName) {
-          this.invalidBusinessName = true;
-        }
-        if (!this.primaryNumber) {
-          this.invalidPrimaryNumber = true;
-        }
-      }
+    this.invalidSupplierPhone = false;
+    this.invalidContactEmail = false;
+    this.invalidAddress = false;
+
+    if (this.supplierName && this.contactName && this.supplierPhone && this.contactEmail && this.newAddress) {
+
+      this.tabActiveFirst = false;
+      this.tabActiveSecond = true;
     } else {
-      this.invalidAccountType = true;
       if (!this.supplierName) {
         this.invalidSupplierName = true;
       }
       if (!this.contactName) {
         this.invalidContactName = true;
       }
-      if (!this.primaryNumber) {
-        this.invalidPrimaryNumber = true;
+      if (!this.supplierPhone) {
+        this.invalidSupplierPhone = true;
+      }
+      if (!this.contactEmail) {
+        this.invalidContactEmail = true;
+      }
+      if (!this.newAddress) {
+        this.invalidAddress = true;
       }
     }
   }
 
   tabChange(event) {
     switch (event.tabTitle) {
-      case 'BASIC INFORMATION': {
+      case 'CONTACT DETAILS': {
         this.tabActiveFirst = true;
         this.tabActiveSecond = false;
         break;
       }
-      case 'ADVANCED INFORMATION': {
+      case 'SUPPLIER DETAILS': {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
         this.invalidSupplierName = false;
         this.invalidContactName = false;
-        this.invalidBusinessName = false;
-        this.invalidAccountType = false;
-        this.invalidPrimaryNumber = false;
+        this.invalidSupplierPhone = false;
+        this.invalidContactEmail = false;
+        this.invalidAddress = false;
 
-        if (this.businessType === 'individual') {
-          if (this.supplierName && this.contactName && this.primaryNumber) {
-            this.tabActiveFirst = false;
-            this.tabActiveSecond = true;
-            break;
-          } else {
-            setTimeout(() => {
-              this.tabActiveFirst = true;
-              this.tabActiveSecond = false;
-            });
-            if (!this.supplierName) {
-              this.invalidSupplierName = true;
-            }
-            if (!this.contactName) {
-              this.invalidContactName = true;
-            }
-            if (!this.primaryNumber) {
-              this.invalidPrimaryNumber = true;
-            }
-          }
-        } else if (this.businessType === 'business') {
-          if (this.businessName) {
-            this.tabActiveFirst = false;
-            this.tabActiveSecond = true;
-          } else {
-            setTimeout(() => {
-              this.tabActiveFirst = true;
-              this.tabActiveSecond = false;
-            });
-            if (!this.businessName) {
-              this.invalidBusinessName = true;
-            }
-            if (!this.primaryNumber) {
-              this.invalidPrimaryNumber = true;
-            }
-          }
+        if (this.supplierName && this.contactName && this.supplierPhone && this.contactEmail && this.newAddress) {
+          this.tabActiveFirst = false;
+          this.tabActiveSecond = true;
+          break;
         } else {
           setTimeout(() => {
             this.tabActiveFirst = true;
             this.tabActiveSecond = false;
           });
-          this.invalidAccountType = true;
           if (!this.supplierName) {
             this.invalidSupplierName = true;
           }
           if (!this.contactName) {
             this.invalidContactName = true;
           }
-          if (!this.primaryNumber) {
-            this.invalidPrimaryNumber = true;
+          if (!this.supplierPhone) {
+            this.invalidSupplierPhone = true;
+          }
+          if (!this.contactEmail) {
+            this.invalidContactEmail = true;
+          }
+          if (!this.newAddress) {
+            this.invalidAddress = true;
           }
         }
         break;
@@ -222,28 +157,27 @@ export class AddSupplierComponent implements OnInit {
     }
   }
   clickSaveSupplier() {
-
     const newSupplier = {
       id: this.suppliersListInfo.length,
-      name: this.supplierName + ' ' + this.contactName,
-      phone: this.primaryNumber,
-      email: this.newEmail,
-      createDate: new Date(),
-      updateDate: new Date(),
-      lastSupplieredDate: new Date(),
-      rating: '0',
+      supplierName: this.supplierName,
+      contactName: this.contactName,
+      supplierPhone: this.supplierPhone,
+      supplierEmail: this.contactEmail,
+      contactPhone: this.contactPhone,
+      contactEmail: this.contactEmail,
       address: this.newAddress,
-      tag: this.selectTag,
-      account: '0',
-      association: '0',
-      totalDeals: '0',
-      accountType: this.businessType,
+      term: this.defaultTerm,
+      accountNumber: this.accountNumber,
+      currency: this.defaultCurrency,
+      country: this.newCountry,
+      state: this.newState,
+      tag: this.keywords,
     };
 
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
-    this.invalidDefaultPricing = false;
-    if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
+    this.invalidAccountNumber = false;
+    if (this.defaultTerm && this.defaultCurrency && this.accountNumber) {
       this.addSupplierModalCollapsed = true;
       this.showAddSupplierModal = false;
       this.tabActiveFirst = true;
@@ -256,8 +190,8 @@ export class AddSupplierComponent implements OnInit {
       if (!this.defaultTerm) {
         this.invalidDefaultTerm = true;
       }
-      if (!this.defaultPricing) {
-        this.invalidDefaultPricing = true;
+      if (!this.accountNumber) {
+        this.invalidAccountNumber = true;
       }
     }
   }

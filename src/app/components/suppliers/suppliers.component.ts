@@ -40,6 +40,10 @@ export class SuppliersComponent implements OnInit {
     'Control4',
   ];
 
+  public allTags: Array<Object> = [
+    'Alliance', 'House', 'Logixs', 'Buy', 'Best'
+  ];
+
   public suppliersListInfo: Array<Object> = [
     {
       id: 0,
@@ -122,6 +126,7 @@ export class SuppliersComponent implements OnInit {
 
   addNewSupplier(event) {
     this.suppliersListInfo.push(event.data);
+    this.allTags = this.allTags.concat(event.data.tag);
   }
 
   toggleMenubar(data: boolean) {

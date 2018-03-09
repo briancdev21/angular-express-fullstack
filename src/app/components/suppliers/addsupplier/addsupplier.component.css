@@ -207,17 +207,18 @@ input::placeholder {
 	justify-content: flex-end;
 }
 
-.keywords, .supplier-associations {
+.keywords {
    	border: 1px solid #F5F5F5;
 	padding-left: 5px;
-    height: 35px;
+    min-height: 35px;
     margin-top: 5px;
     display: flex;
-    align-items: center;
+	align-items: center;
+	margin-bottom: 20px;
 }
 
 
-.keywords span, .supplier-associations span {
+.keywords span {
     background-color: #F7F7F7;
 	padding: 4px 7px;
 	margin-right: 5px;
@@ -239,7 +240,6 @@ input::placeholder {
     font-size: 13px;
     resize: vertical;
     min-height: 90px;
-    margin-bottom: 20px;
 	padding: 7px;
 }
 

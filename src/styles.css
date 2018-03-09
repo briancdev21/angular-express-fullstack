@@ -48,6 +48,7 @@
 .content>tabs .tabs__tab {
   width: 20%;
   text-align: center;
+  color: #95989A;
 }
 
 .add-lead-modal .content>tabs .tabs__tab {
