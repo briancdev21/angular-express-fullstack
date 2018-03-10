@@ -29,20 +29,22 @@ export class ProductsComponent implements OnInit {
     this.filterAvaliableTo = 'everyone';
   }
 
+
   public filters  = {
-    // scoreFrom : 0,
-    // scoreTo : 100,
-    createdDateFrom: '',
-    createdDateTo: '',
-    updatedDateFrom: '',
-    updatedDateTo: '',
-    selectOwner: '',
-    location: '',
+    createdFrom: '',
+    createdTo: '',
+    updatedFrom: '',
+    updatedTo: '',
+    selectTag: '',
     selectStatus: '',
   };
 
-  public productOwners: Array<Object> = [
-    'John Smith',
+  public productTags: Array<Object> = [
+    'Home'
+  ];
+
+  public productStatus: Array<string> = [
+    'Place order', 'Below re-order point', 'No stock!', 'Active'
   ];
 
   public productsListInfo: Array<Object> = [
@@ -133,9 +135,9 @@ export class ProductsComponent implements OnInit {
       modelNumber: 'Service',
       brand: 'No Automations',
       sku: 88020000,
-      stock: undefined,
-      variant: undefined,
-      reorderPoint: undefined,
+      stock: 0,
+      variant: 0,
+      reorderPoint: 0,
       status: '',
       supplier: 'Diana Ilic',
       createDate: 'Januanry 19, 2018',
@@ -150,9 +152,9 @@ export class ProductsComponent implements OnInit {
       modelNumber: 'Service',
       brand: 'No Automations',
       sku: 88020001,
-      stock: undefined,
-      variant: undefined,
-      reorderPoint: undefined,
+      stock: 0,
+      variant: 0,
+      reorderPoint: 0,
       status: '',
       supplier: 'John Smith',
       createDate: 'Januanry 19, 2018',
@@ -160,10 +162,6 @@ export class ProductsComponent implements OnInit {
       tag: ['Service'],
       type: 'Non-Stockable'
     }
-  ];
-
-  public productStatus = [
-    'Project', 'Invoice', 'Project and Invoice'
   ];
 
   public productTypes = ['Individual', 'Business'];
@@ -193,14 +191,11 @@ export class ProductsComponent implements OnInit {
 
   cancelFilter() {
     this.filters = {
-      // scoreFrom : 0,
-      // scoreTo : 100,
-      createdDateFrom: '',
-      createdDateTo: '',
-      updatedDateFrom: '',
-      updatedDateTo: '',
-      selectOwner: '',
-      location: '',
+      createdFrom: '',
+      createdTo: '',
+      updatedFrom: '',
+      updatedTo: '',
+      selectTag: '',
       selectStatus: '',
     };
     this.filterClicked = false;

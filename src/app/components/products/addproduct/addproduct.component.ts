@@ -15,7 +15,7 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 export class AddProductComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
   @Input() productsListInfo;
-  @Input() productOwners;
+  @Input() productTags;
   @Input() productStatus;
   @Output() addToProductsList: EventEmitter<any> = new EventEmitter;
   protected searchStr: string;
@@ -62,7 +62,7 @@ export class AddProductComponent implements OnInit {
   sourceValue = true;
   newEmail = '';
   newAddress = '';
-  selectOwner = '';
+  selectTag = '';
 
   constructor(private completerService: CompleterService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
@@ -233,7 +233,7 @@ export class AddProductComponent implements OnInit {
       lastProductedDate: new Date(),
       rating: '0',
       address: this.newAddress,
-      owner: this.selectOwner,
+      tag: this.selectTag,
       account: '0',
       association: '0',
       totalDeals: '0',

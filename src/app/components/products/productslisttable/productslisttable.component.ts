@@ -76,7 +76,7 @@ export class ProductsListTableComponent implements OnInit {
       return 'Active';
     } else {
       if (stock < 0) {
-        return 'No Stock!';
+        return 'No stock!';
       } else if (stock < reorderPoint) {
         return 'Below re-order point';
       } else if (stock < reorderPoint + 3) {

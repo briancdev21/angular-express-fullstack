@@ -2,6 +2,7 @@ import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { FilterService } from '../filter.service';
+import { Ng2CompleterComponent } from '../../common/ng2completer/ng2completer.component';
 
 
 @Component({
@@ -18,14 +19,14 @@ export class ProductFilterComponent implements OnInit {
 
   @Input() productsListInfo;
   @Input() filters;
-  @Input() productOwners;
+  @Input() productTags;
   @Input() productStatus;
   @Input() productTypes;
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
 
-
+  suppliersList = ['John Smith', 'Rob Harding', 'Diana Ilic'];
   items2: any[] = [
-    'John Smith', 'John Moss', 'Diana Ilic'
+    'Home', 'Controller', 'Adaptive', 'Dimmer', 'Keypad', 'TV', 'Samsung', 'Service'
   ];
   config2: any = {'placeholder': 'Type here', 'sourceField': ''};
 
@@ -43,10 +44,8 @@ export class ProductFilterComponent implements OnInit {
   createdDateTo: Date;
   updatedDateFrom: Date;
   updatedDateTo: Date;
-  lastDateTo: Date;
-  lastDateFrom: Date;
-  selectOwner: string;
-  location: string;
+  selectTag: string;
+  productName: string;
   selectStatus: string;
   filteredProductsList: any;
   applyClicked = false;
@@ -56,6 +55,7 @@ export class ProductFilterComponent implements OnInit {
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
+  selectSupplier =  '';
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -72,12 +72,17 @@ export class ProductFilterComponent implements OnInit {
     // this.scoreTo = this.filters.scoreTo;
   }
 
+  onSelectedSupplier(val) {
+    this.filters.selectSupplier = val;
+    this.selectSupplier = val;
+  }
+
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
       return obj !== item;
     });
-    this.productOwners.push(item);
+    this.productTags.push(item);
   }
 
   onInputChangedEvent(val: string) {
@@ -85,15 +90,10 @@ export class ProductFilterComponent implements OnInit {
   }
 
   removeUser(i: number) {
-    const item = this.productOwners[i];
+    const item = this.productTags[i];
     this.items2.push(item);
-    this.productOwners.splice(i, 1);
+    this.productTags.splice(i, 1);
   }
-
-  // rangeSliderChange(event) {
-  //   this.scoreFrom = event.from;
-  //   this.scoreTo = event.to;
-  // }
 
   selectCreatedFrom(event) {
     this.createdDateFrom = event.value;
@@ -103,16 +103,6 @@ export class ProductFilterComponent implements OnInit {
   selectCreatedTo(event) {
     this.createdDateTo = event.value;
     this.createdMax = this.createdDateTo;
-  }
-
-  selectLastFrom(event) {
-    this.lastDateFrom = event.value;
-    this.lastMin = this.lastDateFrom;
-  }
-
-  selectLastTo(event) {
-    this.lastDateTo = event.value;
-    this.lastMax = this.lastDateTo;
   }
 
   selectUpdatedFrom(event) {
@@ -134,62 +124,45 @@ export class ProductFilterComponent implements OnInit {
   }
 
   resetFilter() {
-    // this.scoreFrom = 0;
-    // this.scoreTo = 100;
+    this.selectSupplier = '';
     this.filters = {
-      // scoreFrom : 0,
-      // scoreTo : 100,
-      createdDateFrom: '',
-      createdDateTo: '',
-      updatedDateFrom: '',
-      updatedDateTo: '',
-      lastDateFrom: '',
-      lastDateTo: '',
-      selectOwner: '',
-      location: '',
+      createdFrom: '',
+      createdTo: '',
+      updatedFrom: '',
+      updatedTo: '',
+      selectSupplier: '',
+      productTags: '',
+      productName: '',
       selectStatus: '',
     };
     this.ref.detectChanges();
   }
 
   applyFilter() {
-    // this.filters.scoreFrom = this.scoreFrom;
-    // this.filters.scoreTo = this.scoreTo;
     this.applyClicked = true;
     this.filteredProducts = this.backUpProducts;
 
-    if (this.productOwners[0]) {
-      let ownerFiltered = [];
-      let ownerFilteredList = [];
-      for ( let i = 0; i <= this.productOwners.length - 1; i ++) {
-        ownerFiltered = this.filterTxt(this.productsListInfo, this.productOwners[i]);
-        ownerFilteredList = ownerFilteredList.concat(ownerFiltered);
+    if (this.productTags[0]) {
+      let tagFiltered = [];
+      let tagFilteredList = [];
+      for ( let i = 0; i <= this.productTags.length - 1; i ++) {
+        tagFiltered = this.filterTxt(this.productsListInfo, this.productTags[i]);
+        tagFilteredList = tagFilteredList.concat(tagFiltered);
       }
-      this.filteredProducts = ownerFilteredList;
+      this.filteredProducts = tagFilteredList;
+    }
+    if (this.filters.productName) {
+      this.filteredProducts = this.filterTxt(this.productsListInfo, this.filters.productName);
     }
 
-    if (this.filters.location) {
-      this.filteredProducts = this.filterTxt(this.productsListInfo, this.filters.location);
+    if (this.filters.selectSupplier) {
+      this.filteredProducts = this.filteredProducts.filter(supplier => supplier.supplier === this.filters.selectSupplier);
     }
-
-    // this.filteredProducts = this.filteredProducts.filter(
-    //   product => product.score >= this.filters.scoreFrom && product.score <= this.filters.scoreTo
-    // );
 
     if (this.filters.selectStatus) {
-      if (this.filters.selectStatus == 'Project') {
-        this.filteredProducts = this.filteredProducts.filter(product => product.account > 0);
-      } else if (this.filters.selectStatus == 'Invoice') {
-        this.filteredProducts = this.filteredProducts.filter(product => product.association > 0);
-      } else {
-        this.filteredProducts = this.filteredProducts.filter(product => product.association > 0 && product.account > 0);
-      }
+      this.filteredProducts = this.filteredProducts.filter(product => product.status === this.filters.selectStatus);
     }
-
-    if (this.filters.selectType) {
-      this.filteredProducts = this.filteredProducts.filter(product => product.accountType == this.filters.selectType);
-    }
-
+    
     if (this.filters.createdFrom) {
       this.filteredProducts = this.filteredProducts.filter(
         product => Date.parse(product.createDate) >= Number(this.filters.createdFrom)
@@ -212,17 +185,8 @@ export class ProductFilterComponent implements OnInit {
       );
     }
 
-    if (this.filters.lastFrom) {
-      this.filteredProducts = this.filteredProducts.filter(
-        product => Date.parse(product.lastProductedDate) >= Number(this.filters.lastFrom)
-      );
-    }
-
-    if (this.filters.lastTo) {
-      this.filteredProducts = this.filteredProducts.filter(
-        product => Date.parse(product.lastProductedDate) <= Number(this.filters.lastTo)
-      );
-    }
+    // remove duplicates from array
+    this.filteredProducts = Array.from(new Set(this.filteredProducts));
 
     this.filterParent.emit({filtered: this.filteredProducts, clicked: this.applyClicked});
   }

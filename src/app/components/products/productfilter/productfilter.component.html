@@ -7,46 +7,16 @@
 </div>
 
 <div class="filter-content">
-  <!-- <div class="score-range-filter">
-    <span>Product Score</span>
-    <ion-range-slider #sliderElement
-          type="double"
-          min="0"
-          max="100"
-          [from]="filters.scoreFrom"
-          [to]="filters.scoreTo"
-          postfix="%"
-          (onChange)="rangeSliderChange($event)"></ion-range-slider>
-  </div> -->
 
-  <div class="owner">
-    <span>Collaborators</span>
-    <!-- <select [(ngModel)]="filters.selectOwner">
-      <option default>Choose owner</option>
-      <option *ngFor="let owner of productOwners" [value]="owner" #productOwner>{{owner}}</option>
-    </select> -->
-    <div class="owners" (click)='editable=true;$event.stopPropagation();'> 
-      <div class="follower" *ngFor="let user of productOwners; let i = index" >
-        <span class="product-owner">{{user}}</span>
-      </div> 
-      <div class="follower add-owner" (click)="editable=true;$event.stopPropagation()">
-        <a (click)="editable=true;$event.stopPropagation()" ></a>
-      </div> 
-      <div class="edit-owners" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
-        <ul>
-          <li *ngFor="let user of productOwners; let i = index">{{user}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
-          <li style="background: none; width: 100%; margin: 0;">
-              <input autocomplete [config]="config2" [items]="items2"
-              (inputChangedEvent)="onInputChangedEvent($event)"
-              (selectEvent)="onSelect($event)">
-          </li>
-        </ul>
-      </div>
-    </div>
+  
+  <div class="product-name">
+    <span>Product name</span>
+    <input [(ngModel)]="filters.productName" >
   </div>
-  <div class="location">
-    <span>Location</span>
-    <input [(ngModel)]="filters.location" >
+
+  <div class="supplier-selection">
+    <span>Supplier</span>
+    <app-ng2completer [itemsList]="suppliersList" (selectedItem)="onSelectedSupplier($event)" [searchStr]="selectSupplier" ></app-ng2completer>
   </div>
 
   <div class="product-status">
@@ -57,16 +27,8 @@
     </select>
   </div>
 
-  <div class="product-type">
-    <span>Type</span>
-    <select [(ngModel)]="filters.selectType">
-      <option value="choose" default>Choose status</option>
-      <option *ngFor="let type of productTypes" [value]="type">{{type}}</option>
-    </select>
-  </div>
-
   <div class="product-created-date">
-    <span>Created at Range</span>
+    <span>Created at</span>
     <div>
       <div class="created-from">
         <input [owlDateTimeTrigger]="createdFrom" [owlDateTime]="createdFrom" placeholder="From" (dateTimeChange)="selectCreatedFrom($event)" [max]="createdMax" [(ngModel)]="filters.createdFrom" >
@@ -79,7 +41,7 @@
     </div>
   </div>
   <div class="product-updated-date">
-    <span>Updated at Range</span>
+    <span>Updated at</span>
     <div>
       <div class="updated-from">
         <input [owlDateTimeTrigger]="updatedFrom" [owlDateTime]="updatedFrom" placeholder="From" (dateTimeChange)="selectUpdatedFrom($event)" [max]="updatedMax" [(ngModel)]="filters.updatedFrom"  >
@@ -92,16 +54,24 @@
     </div>
   </div>
 
-  <div class="product-last-date">
-    <span>Last Producted Range</span>
-    <div>
-      <div class="last-from">
-        <input [owlDateTimeTrigger]="lastFrom" [owlDateTime]="lastFrom" placeholder="From" (dateTimeChange)="selectLastFrom($event)" [max]="lastMax" [(ngModel)]="filters.lastFrom"  >
-        <owl-date-time [pickerType]="'calendar'" #lastFrom ></owl-date-time>
-      </div>
-      <div class="last-to">
-        <input [owlDateTime]="lastTo" [owlDateTimeTrigger]="lastTo" placeholder="To" (dateTimeChange)="selectLastTo($event)" [min]="lastMin" [(ngModel)]="filters.lastTo">
-        <owl-date-time [pickerType]="'calendar'" #lastTo></owl-date-time>
+  <div class="tag">
+    <span>Tags</span>
+    <div class="tags" (click)='editable=true;$event.stopPropagation();'> 
+      <div class="follower" *ngFor="let user of productTags; let i = index" >
+        <span class="product-tag">{{user}}</span>
+      </div> 
+      <div class="follower add-tag" (click)="editable=true;$event.stopPropagation()">
+        <a (click)="editable=true;$event.stopPropagation()" ></a>
+      </div> 
+      <div class="edit-tags" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+        <ul>
+          <li *ngFor="let user of productTags; let i = index">{{user}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li style="background: none; width: 100%; margin: 0;">
+              <input autocomplete [config]="config2" [items]="items2"
+              (inputChangedEvent)="onInputChangedEvent($event)"
+              (selectEvent)="onSelect($event)">
+          </li>
+        </ul>
       </div>
     </div>
   </div>
