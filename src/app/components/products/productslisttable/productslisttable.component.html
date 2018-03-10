@@ -1,238 +1,29 @@
 <div class="content">
   <table>
     <tr>
-      <th (click)="sortArray('name')">PRODUCT NAME</th>
-      <th (click)="sortRatingArray('rating')">ACCOUNT RATING</th>
-      <th (click)="sortDealsArray('totalDeals')">TOTAL DEALS</th>
-      <th>STATUS</th> 
-      <th>TYPE <img src="assets/images/Edit.png"></th>
+      <th></th>
+      <th (click)="sortArray('productName')">PRODUCT NAME</th>
+      <th (click)="sortArray('modelNumber')">MODEL NUMBER</th>
+      <th (click)="sortArray('brand')">BRAND</th>
+      <th (click)="sortArray('sku')">SKU</th> 
+      <th (click)="sortArray('stock')">AVAILABLE</th>
+      <th (click)="sortArray('status')">STATUS</th>
     </tr>
     <tr *ngFor="let product of productsListInfo; let i = index" (click)="redirectTo(product.id)">
-      <td>{{product.name}}</td>
-      <td [ngClass]="{'green': product.rating > 80}">{{product.rating}}%</td>
-      <td [ngClass]="{'green': product.totalDeals > 0}">{{product.totalDeals}}</td> 
-      <td >
-        <span *ngIf="product.association != 0">{{product.association}} Invoice </span>
-        <span *ngIf="(product.association != 0) && (product.account != 0)">,</span>
-        <span *ngIf="(product.association == 0) || (product.account != 0)">{{product.account}} Project</span>
+      <td><img src="{{product.imgUrl}}"></td>
+      <td>{{product.productName}}</td>
+      <td>{{product.modelNumber}}</td>
+      <td>{{product.brand}}</td>
+      <td>{{product.sku}}</td>
+      <td>
+        <span *ngIf="product.type" class="green">{{product.type}}</span>
+        <span *ngIf="!product.type" ><span [ngClass]="getStockColor(product.stock, product.reorderPoint)">{{product.stock}} stock </span> and {{product.variant}} variant</span>
       </td>
       <td>
-        <span >{{product.accountType}}</span> 
-        <img src="assets/images/three-dots.png" (click)="openProductModal(i); $event.stopPropagation();" style="cursor: pointer;">
-        <div 
-          class="product-expand-modal-wrapper" 
-          *ngIf="productModalInfoCollapsed[i]" 
-          (click)="clickOutsideInfo(i);
-          $event.stopPropagation();">
-        </div>
-        <!-- Start Small Dialog when clicking three dot icom -->
-        <div 
-          class="product-expand-modal"  
-          [ngClass]="{'show-product-modal': productModalInfoCollapsed[i], 'hide-product-modal': !productModalInfoCollapsed[i] }">
-          <div class="info-modal-top">
-            <div class="mini-info">
-              <img src="assets/images/ringing.png" (click)="phoneClick(product); $event.stopPropagation();">
-              <a href="tel: +.${{product.phone}}" *ngIf="phoneClicked">{{ formatedPhone }}</a>
-              <img src="assets/images/envelope.png" (click)="emailClick(); $event.stopPropagation();">
-              <a href="mailto:.${{product.email}}" *ngIf="emailClicked">{{product.email}}</a>
-              <!-- <a ><img src="assets/images/info.png"></a> -->
-              <a href="http://maps.google.com/maps?q={{product.address}}" target="_blank">
-                <img src="assets/images/info.png">
-              </a>
-            </div>
-            <div class="dots-icon"><img src="assets/images/three-dots.png"  (click)="expandProductModal(i); $event.stopPropagation();"></div>
-          </div>
-          
-          <div class="expanded-info-modal" *ngIf="expandedInfoModal">
-            <div>
-              <div (click)="addLogModalCollapsed=false; 
-                        showAddLogModal=true; 
-                        productModalInfoCollapsed[i]=false; 
-                        showProductModalInfo=false; 
-                        $event.stopPropagation();">
-                        <img src="assets/images/phone log.png">
-                        <span>Add a log</span>
-              </div>
-            </div>
-            <div>
-              <div (click)="cloneRow(product, i); $event.stopPropagation();"><img src="assets/images/Delete.png"><span>Clone</span></div>
-              <div (click)="deleteRow(i); $event.stopPropagation();"><img src="assets/images/Convert.png"><span>Delete</span></div>
-            </div>
-            <div (click)="showModal=true; productModalInfoCollapsed[i]=false; showProductModalInfo=false; $event.stopPropagation();"><img src="assets/images/calendar with Edit.png"><span>Appointment</span></div>
-          </div>
-         </div>
-        <!-- End Small Dialog when clicking three dot icom -->
+        <span [ngClass]="getStockColor(product.stock, product.reorderPoint)">{{product.status}}</span> 
+        
       </td> 
     </tr>
   </table>
 </div>
 
-<!--Start Add Log Modal-->
-
-<div class="add-log-modal-wrapper" *ngIf="showAddLogModal" (click)="addLogModalCollapsed=true; showAddLogModal=false"></div>
-<div class="add-log-modal"  [ngClass]="{'show-modal': !addLogModalCollapsed, 'hide-modal': addLogModalCollapsed }" >
-  <div class="header">
-    <span>ADD A LOG</span>
-    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addLogModalCollapsed=true; showAddLogModal=false" />
-  </div>
-  <div class="content-modal">
-    <div class="editor" >
-      <tabs >
-        <tab tabTitle="Notes"  >
-          <textarea placeholder="Start tying..." #textarea1 (input)="activity.content=textarea1.value" (keyup.enter)="addNewTimelineItem(); textarea1.value=''" ></textarea>
-        </tab>
-        <tab tabTitle="Email" class="tab-email" >
-          <div>
-            <input placeholder="Subject" #emailsubject (input)="activity.subject=emailsubject.value"  />
-            <select #emailproducts (change)="activity.product=emailproducts.value">
-              <option value="firstProduct" >
-                Choose Product Associated
-              </option>
-            </select>
-          </div>
-          <textarea  #textarea2 (input)="activity.content=textarea2.value" (keyup.enter)="addNewTimelineItem(); textarea2.value=''; emailsubject.value='' " ></textarea>
-        </tab>
-        <tab tabTitle="Call" class="tab-call" >
-          <select #callproducts (change)="activity.product=callproducts.selectedValue" >
-            <option value="first product">
-                Choose product associated
-            </option>
-          </select>
-          <textarea #textarea3 (input)="activity.content=textarea3.value" (keyup.enter)="addNewTimelineItem(); textarea3.value=''"></textarea>
-        </tab>
-      </tabs>
-    </div>
-  </div>
-  <div class="btn-section" >
-    <button class="save-btn" (click)="addLogModalCollapsed=true; showAddLogModal=false"  >
-      Done
-    </button>
-  </div>
-</div>
-
-<!--End Add Log Modal-->
-<!--Start Appointment right sidebar-->
-
-<div class="modal-wrapper" *ngIf="showModal" (click)="showModal=false;" ></div>
-<div [ngClass]="{'modal-box': showModal, 'modal-box-hide': !showModal }">
-  <div class="date">
-		<h4>{{upcomingModal.week}}</h4>
-		<h4>{{upcomingModal.date}}</h4>
-		<span>{{upcomingModal.start}} to {{upcomingModal.end}}</span>
-	</div>
-	<div class="title">
-		<div class="circle"></div>
-		<input placeholder="Title">
-	</div>
-	<div class="switch">
-		<img src="assets/images/time.png">
-		<div class="full-width">
-			<span>All Day</span>
-			<img src="assets/images/switch.png" *ngIf="switchIcon" (click)="switchIcon=!switchIcon">
-			<img src="assets/images/switch-off.png" *ngIf="!switchIcon" (click)="switchIcon=!switchIcon">
-		</div>
-	</div>
-	<div class="duration" *ngIf="!switchIcon">
-		<span>Duration is {{upcomingModal.duration}}</span>
-	</div>
-
-	<div class="">
-		<img src="assets/images/man.png">
-		<div class="full-width">
-			<span>People</span>
-			<img class="arrow-right" src="assets/images/arrow-right.png">
-		</div>
-	</div>
-
-	<div class="">
-		<img src="assets/images/placeholder.png">
-		<div class="full-width">
-			<span>Location</span>
-			<img class="arrow-right" src="assets/images/arrow-right.png">
-		</div>
-	</div>
-
-	<div class="description">
-		<img src="assets/images/attachment.png">
-		<textarea class="full-width" placeholder="Description"></textarea>
-	</div>
-	
-	<div class="repeat">
-		<img src="assets/images/repeat.png">
-		<div class="full-width">
-			<span>Repeat</span>
-			<div>
-				<span>None</span>
-				<img class="arrow-right" src="assets/images/arrow-right.png">
-			</div>
-		</div>
-	</div>
-
-	<div class="">
-		<img src="assets/images/alarm.png">
-		<div class="full-width">
-			<span>Alert</span>
-			<div>
-				<span>30 Minutes before</span>
-				<img class="arrow-right" src="assets/images/arrow-right.png">
-			</div>
-		</div>
-	</div>
-
-	<div class="showAs">
-		<img src="assets/images/smartphone.png">
-		<div class="full-width">
-			<span>Show As</span>
-			<div>
-				<span>Busy</span>
-				<img class="arrow-right" src="assets/images/arrow-right.png">
-			</div>
-		</div>
-	</div>
-</div>  
-
-<!--End Appointment right sidebar-->
-
-<!-- Confirm Clone Alert Box -->
-<div class="confirm-clone-modal-wrapper" *ngIf="showCloneConfirmModal" ></div>
-<div [ngClass]="{'confirm-modal': showCloneConfirmModal, 'confirm-modal-hide': !showCloneConfirmModal }">
-  <div class="header">
-    <span>Confirm Clone</span>
-    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showCloneConfirmModal=false" />
-  </div>
-  <div class="content" >
-    <div class="confirm-que">
-      Do you really want to clone?
-    </div>
-    <div class="center-btn-section" >
-      <button class="confirm-btn" (click)="confirmClone();showCloneConfirmModal=false" >
-        Confirm
-      </button>
-      <button class="cancel-btn" (click)="showCloneConfirmModal=false" >
-        Cancel
-      </button>
-    </div>
-  </div>
-</div> 
-
-<!-- Confirm Delete Alert Box -->
-<div class="confirm-delete-modal-wrapper" *ngIf="showDeleteConfirmModal" ></div>
-<div [ngClass]="{'confirm-modal': showDeleteConfirmModal, 'confirm-modal-hide': !showDeleteConfirmModal }">
-  <div class="header">
-    <span>Confirm Delete</span>
-    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showDeleteConfirmModal=false" />
-  </div>
-  <div class="content" >
-    <div class="confirm-que">
-      Do you really want to delete?
-    </div>
-    <div class="center-btn-section" >
-      <button class="confirm-btn" (click)="confirmDelete();showDeleteConfirmModal=false" >
-        Confirm
-      </button>
-      <button class="cancel-btn" (click)="showDeleteConfirmModal=false" >
-        Cancel
-      </button>
-    </div>
-  </div>
-</div> 
