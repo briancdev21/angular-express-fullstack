@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../common/common.component';
 import { FilterService } from './filter.service';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-leads',
   templateUrl: './leads.component.html',
@@ -25,7 +27,7 @@ export class LeadsComponent implements OnInit {
   filterAvaliableTo: any;
   filterName = '';
 
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private router: Router  ) {
     this.filterAvaliableTo = 'everyone';
   }
 
@@ -43,6 +45,7 @@ export class LeadsComponent implements OnInit {
 
   public leadsListInfo: Array<Object> = [
     {
+      id: 0,
       name: 'Diana Ilic',
       phone: '4039696480',
       email: 'diana.ilic@outlook.com',
@@ -54,6 +57,7 @@ export class LeadsComponent implements OnInit {
       owner: 'Diana Ilic'
     },
     {
+      id: 1,
       name: 'Greg Johnson',
       phone: '4038504081',
       email: 'greg.johnson@mcjohnsonandsons.com',
@@ -65,6 +69,7 @@ export class LeadsComponent implements OnInit {
       owner: 'Greg Johnson'
     },
     {
+      id: 2,
       name: 'John Smith',
       phone: '4038502930',
       email: 'johnsm@gmail.com',
@@ -76,6 +81,7 @@ export class LeadsComponent implements OnInit {
       owner: 'John Smith'
     },
     {
+      id: 3,
       name: 'Tyler Petak',
       phone: '4038904510',
       email: 'tylerpetak@gmail.com',
@@ -87,6 +93,7 @@ export class LeadsComponent implements OnInit {
       owner: 'Diana Ilic'
     },
     {
+      id: 4,
       name: 'Tyler Petak',
       phone: '4038904510',
       email: 'tylerpetak@gmail.com',

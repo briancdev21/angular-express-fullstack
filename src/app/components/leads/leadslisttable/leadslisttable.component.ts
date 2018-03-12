@@ -46,7 +46,7 @@ export class LeadsListTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private router: Router ) {
   }
 
   ngOnInit() {
@@ -175,6 +175,10 @@ export class LeadsListTableComponent implements OnInit {
 
   confirmDelete() {
     this.leadsListInfo.splice(this.deletedRowIndex, 1);
+  }
+
+  redirectTo(id) {
+    this.router.navigate(['../lead/' + id]);
   }
 }
 

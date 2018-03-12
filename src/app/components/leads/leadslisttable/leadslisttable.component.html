@@ -8,7 +8,7 @@
       <th (click)="SortLeadStatus()">LEAD STATUS</th> 
       <th (click)="sortArray('score')">LEAD SCORE <img src="assets/images/Edit.png"></th>
     </tr>
-    <tr *ngFor="let lead of leadsListInfo; let i = index">
+    <tr *ngFor="let lead of leadsListInfo; let i = index" (click)="redirectTo(lead.id)">
       <td>{{lead.name}}</td>
       <td>{{lead.phone}}</td>
       <td>{{lead.email}}</td> 
