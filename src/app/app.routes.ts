@@ -8,6 +8,7 @@ import { DealsPipelineComponent } from './components/dealspipeline/dealspipeline
 import { ContactsComponent } from './components/contacts/contacts.component';
 import { SuppliersComponent } from './components/suppliers/suppliers.component';
 import { ProductsComponent } from './components/products/products.component';
+import { InvoicesComponent } from './components/invoices/invoices.component';
 
 
 import { CommonComponent } from './components/common/common.component';
@@ -20,7 +21,7 @@ export const routes: Routes = [
   { path: 'inventory', component: SuppliersComponent },
   { path: 'orderprofile', component: OrderProfileComponent },
   { path: 'servicing', component: ProductsComponent },
-  { path: 'reports', component: TestComponent },
+  { path: 'reports', component: InvoicesComponent },
   { path: '**', component: TestComponent },
 ];
 
