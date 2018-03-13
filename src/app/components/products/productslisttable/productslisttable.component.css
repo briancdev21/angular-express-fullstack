@@ -54,7 +54,7 @@ th {
   border-bottom: 0;
 }
 
-th:first-child {
+th:first-child, th:last-child {
   border-right: none;
 }
 

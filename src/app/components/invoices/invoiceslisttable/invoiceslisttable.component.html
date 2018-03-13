@@ -2,25 +2,25 @@
   <table>
     <tr>
       <th></th>
-      <th (click)="sortArray('productName')">PRODUCT NAME</th>
+      <th (click)="sortArray('invoiceName')">INVOICE NAME</th>
       <th (click)="sortArray('modelNumber')">MODEL NUMBER</th>
       <th (click)="sortArray('brand')">BRAND</th>
       <th (click)="sortArray('sku')">SKU</th> 
       <th (click)="sortArray('stock')">AVAILABLE</th>
       <th (click)="sortArray('status')">STATUS</th>
     </tr>
-    <tr *ngFor="let product of productsListInfo; let i = index" (click)="redirectTo(product.id)">
-      <td><img src="{{product.imgUrl}}"></td>
-      <td>{{product.productName}}</td>
-      <td>{{product.modelNumber}}</td>
-      <td>{{product.brand}}</td>
-      <td>{{product.sku}}</td>
+    <tr *ngFor="let invoice of invoicesListInfo; let i = index" (click)="redirectTo(invoice.id)">
+      <td><img src="{{invoice.imgUrl}}"></td>
+      <td>{{invoice.invoiceName}}</td>
+      <td>{{invoice.modelNumber}}</td>
+      <td>{{invoice.brand}}</td>
+      <td>{{invoice.sku}}</td>
       <td>
-        <span *ngIf="product.type" class="green">{{product.type}}</span>
-        <span *ngIf="!product.type" ><span [ngClass]="getStockColor(product.stock, product.reorderPoint)">{{product.stock}} stock </span> and {{product.variant}} variant</span>
+        <span *ngIf="invoice.type" class="green">{{invoice.type}}</span>
+        <span *ngIf="!invoice.type" ><span [ngClass]="getStockColor(invoice.stock, invoice.reorderPoint)">{{invoice.stock}} stock </span> and {{invoice.variant}} variant</span>
       </td>
       <td>
-        <span [ngClass]="getStockColor(product.stock, product.reorderPoint)">{{product.status}}</span> 
+        <span [ngClass]="getStockColor(invoice.stock, invoice.reorderPoint)">{{invoice.status}}</span> 
         
       </td> 
     </tr>

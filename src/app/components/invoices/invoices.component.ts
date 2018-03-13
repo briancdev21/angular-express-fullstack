@@ -18,7 +18,7 @@ export class InvoicesComponent implements OnInit {
   saveFilterModalCollapsed = true;
   showSaveFilterModal = false;
   filterClicked = false;
-  backUpProducts: any;
+  backUpInvoices: any;
   openSavedFiltersList = false;
   savedFiltersListCollapsed = true;
   savedFiltersArr = [];
@@ -39,19 +39,19 @@ export class InvoicesComponent implements OnInit {
     selectStatus: '',
   };
 
-  public productTags: Array<Object> = [
+  public invoiceTags: Array<Object> = [
     'Home'
   ];
 
-  public productStatus: Array<string> = [
+  public invoiceStatus: Array<string> = [
     'Place order', 'Below re-order point', 'No stock!', 'Active'
   ];
 
-  public productsListInfo: Array<Object> = [
+  public invoicesListInfo: Array<Object> = [
     {
       id: 0,
       imgUrl: 'assets/images/tie.png',
-      productName: 'Home Controller 800',
+      invoiceName: 'Home Controller 800',
       modelNumber: 'Control4',
       brand: 'Control4',
       sku: 88021111,
@@ -67,7 +67,7 @@ export class InvoicesComponent implements OnInit {
     {
       id: 1,
       imgUrl: 'assets/images/tie.png',
-      productName: 'Home Controller 250',
+      invoiceName: 'Home Controller 250',
       modelNumber: 'Control4',
       brand: 'Control4',
       sku: 88021112,
@@ -83,7 +83,7 @@ export class InvoicesComponent implements OnInit {
     {
       id: 2,
       imgUrl: 'assets/images/tie.png',
-      productName: 'Adaptive Phase Dimmer',
+      invoiceName: 'Adaptive Phase Dimmer',
       modelNumber: 'Control4',
       brand: 'Control4',
       sku: 88021113,
@@ -99,7 +99,7 @@ export class InvoicesComponent implements OnInit {
     {
       id: 3,
       imgUrl: 'assets/images/tie.png',
-      productName: 'Low-Voltage Wired Keypad',
+      invoiceName: 'Low-Voltage Wired Keypad',
       modelNumber: 'Control4',
       brand: 'Control4',
       sku: 88021115,
@@ -115,7 +115,7 @@ export class InvoicesComponent implements OnInit {
     {
       id: 4,
       imgUrl: 'assets/images/tie.png',
-      productName: '55" Smart LED TV',
+      invoiceName: '55" Smart LED TV',
       modelNumber: 'Best Buy',
       brand: 'Samsung',
       sku: 88021117,
@@ -131,7 +131,7 @@ export class InvoicesComponent implements OnInit {
     {
       id: 5,
       imgUrl: 'assets/images/tie.png',
-      productName: 'SPA Team Installation',
+      invoiceName: 'SPA Team Installation',
       modelNumber: 'Service',
       brand: 'No Automations',
       sku: 88020000,
@@ -148,7 +148,7 @@ export class InvoicesComponent implements OnInit {
     {
       id: 6,
       imgUrl: 'assets/images/tie.png',
-      productName: '2 Year Warranty',
+      invoiceName: '2 Year Warranty',
       modelNumber: 'Service',
       brand: 'No Automations',
       sku: 88020001,
@@ -164,18 +164,18 @@ export class InvoicesComponent implements OnInit {
     }
   ];
 
-  public productTypes = ['Individual', 'Business'];
+  public invoiceTypes = ['Individual', 'Business'];
   ngOnInit() {
-    this.backUpProducts = this.productsListInfo;
+    this.backUpInvoices = this.invoicesListInfo;
   }
 
   getFilter(event) {
-    this.productsListInfo = event.filtered;
+    this.invoicesListInfo = event.filtered;
     this.filterClicked = event.clicked;
   }
 
-  addNewProduct(event) {
-    this.productsListInfo.push(event.data);
+  addNewInvoice(event) {
+    this.invoicesListInfo.push(event.data);
   }
 
   toggleMenubar(data: boolean) {
@@ -186,7 +186,7 @@ export class InvoicesComponent implements OnInit {
     this.saveFilterModalCollapsed = true;
     this.showSaveFilterModal = false;
     this.filterClicked = false;
-    this.productsListInfo = this.backUpProducts;
+    this.invoicesListInfo = this.backUpInvoices;
   }
 
   cancelFilter() {
@@ -199,7 +199,7 @@ export class InvoicesComponent implements OnInit {
       selectStatus: '',
     };
     this.filterClicked = false;
-    this.productsListInfo = this.backUpProducts;
+    this.invoicesListInfo = this.backUpInvoices;
   }
 
   clickSavedFilters() {
@@ -212,28 +212,28 @@ export class InvoicesComponent implements OnInit {
   }
 
   saveFilter() {
-    // const savingFilterData = this.productsListInfo;
+    // const savingFilterData = this.invoicesListInfo;
     // const savingFilterName = this.filterName;
     // const savingAvailability = this.filterAvaliableTo;
     this.savedFiltersArr.push({
-                          savedFilter: this.productsListInfo,
+                          savedFilter: this.invoicesListInfo,
                           savedFilterName: this.filterName,
                           savedAvailabilty: this.filterAvaliableTo
                         });
     this.saveFilterModalCollapsed = true;
     this.showSaveFilterModal = false;
     this.filterClicked = false;
-    this.productsListInfo = this.backUpProducts;
+    this.invoicesListInfo = this.backUpInvoices;
   }
 
   applySavedFilter(selectedFilter) {
-    this.productsListInfo = selectedFilter.savedFilter;
+    this.invoicesListInfo = selectedFilter.savedFilter;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
   }
 
   removeFilter() {
-    this.productsListInfo = this.backUpProducts;
+    this.invoicesListInfo = this.backUpInvoices;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
   }

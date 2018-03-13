@@ -9,9 +9,9 @@
 <div class="filter-content">
 
   
-  <div class="product-name">
-    <span>Product name</span>
-    <input [(ngModel)]="filters.productName" >
+  <div class="invoice-name">
+    <span>Invoice name</span>
+    <input [(ngModel)]="filters.invoiceName" >
   </div>
 
   <div class="supplier-selection">
@@ -19,15 +19,15 @@
     <app-ng2completer [itemsList]="suppliersList" (selectedItem)="onSelectedSupplier($event)" [searchStr]="selectSupplier" ></app-ng2completer>
   </div>
 
-  <div class="product-status">
-    <span>Product status</span>
+  <div class="invoice-status">
+    <span>Invoice status</span>
     <select [(ngModel)]="filters.selectStatus">
       <option value="choose" default>Choose status</option>
-      <option *ngFor="let status of productStatus" [value]="status">{{status}}</option>
+      <option *ngFor="let status of invoiceStatus" [value]="status">{{status}}</option>
     </select>
   </div>
 
-  <div class="product-created-date">
+  <div class="invoice-created-date">
     <span>Created at</span>
     <div>
       <div class="created-from">
@@ -40,7 +40,7 @@
       </div>
     </div>
   </div>
-  <div class="product-updated-date">
+  <div class="invoice-updated-date">
     <span>Updated at</span>
     <div>
       <div class="updated-from">
@@ -57,15 +57,15 @@
   <div class="tag">
     <span>Tags</span>
     <div class="tags" (click)='editable=true;$event.stopPropagation();'> 
-      <div class="follower" *ngFor="let user of productTags; let i = index" >
-        <span class="product-tag">{{user}}</span>
+      <div class="follower" *ngFor="let user of invoiceTags; let i = index" >
+        <span class="invoice-tag">{{user}}</span>
       </div> 
       <div class="follower add-tag" (click)="editable=true;$event.stopPropagation()">
         <a (click)="editable=true;$event.stopPropagation()" ></a>
       </div> 
       <div class="edit-tags" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
         <ul>
-          <li *ngFor="let user of productTags; let i = index">{{user}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li *ngFor="let user of invoiceTags; let i = index">{{user}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;">
               <input autocomplete [config]="config2" [items]="items2"
               (inputChangedEvent)="onInputChangedEvent($event)"

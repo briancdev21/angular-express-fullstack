@@ -54,7 +54,7 @@ th {
   border-bottom: 0;
 }
 
-th:first-child {
+th:first-child, th:last-child {
   border-right: none;
 }
 
@@ -87,7 +87,7 @@ table i {
 
 /* Modal CSS */
 
-.product-expand-modal-wrapper {
+.invoice-expand-modal-wrapper {
 	width:100%;
 	height: 100%;
 	z-index: 9992;
@@ -97,7 +97,7 @@ table i {
 	background: transparent
 }
 
-.product-expand-modal {
+.invoice-expand-modal {
 	position: absolute;
 	top: 23px;
 	margin: 0;
@@ -111,27 +111,27 @@ table i {
   color: #95989A;
 }
 
-.product-expand-modal a {
+.invoice-expand-modal a {
   color: #95989A;
 }
 
-.hide-product-modal {
+.hide-invoice-modal {
   height: 1px;
 	visibility: hidden;
 }
 
-.show-product-modal {
+.show-invoice-modal {
   height: auto;
 	visibility: visible;
 }
 
-.product-expand-modal img {
+.invoice-expand-modal img {
   width: 15px;
   height: 15px;
   margin: 4px 10px;
 }
 
-.product-expand-modal .dots-icon {
+.invoice-expand-modal .dots-icon {
   width: 100%;
   border-bottom: 0;
   height: 25px;
@@ -144,17 +144,17 @@ table i {
   margin: -4px 10px;
 }
 
-.product-expand-modal>div>div {
+.invoice-expand-modal>div>div {
   border-bottom: 1px solid #F5F5F5;
   padding: 5px 0;
 }
 
-.product-expand-modal>div>div:last-child {
+.invoice-expand-modal>div>div:last-child {
   border: none;
   cursor: pointer;
 }
 
-.product-expand-modal>div>div>div {
+.invoice-expand-modal>div>div>div {
   display: flex;
   align-items: center;
   cursor: pointer;

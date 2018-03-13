@@ -13,8 +13,8 @@
           </button>
         </div>
         <div class="col-sm-4 btn-sub-nav">
-          <button class="btn " [routerLinkActive]="['active']" [routerLink]="['/inventory/products']">
-            PRODUCTS
+          <button class="btn " [routerLinkActive]="['active']" [routerLink]="['/inventory/invoices']">
+            INVOICES
           </button>
         </div>
         <div class="col-sm-4 btn-sub-nav">
@@ -29,7 +29,7 @@
 
   <div class="top-nav-bar">
     <div class="breadcrumb-bar">
-      <span>Products</span>
+      <span>Invoices</span>
       <i class="fa fa-angle-right"></i>
       <span *ngIf="!filterClicked">Categorize</span>      
       <div class="saved-filters">
@@ -47,27 +47,27 @@
       <img *ngIf="filterClicked" src="assets/images/Checkmark Green.png" (click)="saveFilterModalCollapsed = false; showSaveFilterModal = true;">
     </div>
 
-    <div class="products-btn-group">
-      <div class="products-add-btn">
-        <app-addproduct [productsListInfo]="productsListInfo" [productTags]="productTags" [productStatus]="productStatus " (addToProductsList)="addNewProduct($event)"></app-addproduct>
+    <div class="invoices-btn-group">
+      <div class="invoices-add-btn">
+        
       </div>
-      <div class="products-import-btn">Import products</div>
+      <div class="invoices-import-btn">Import invoices</div>
     </div>
   </div>
 
   <div class="main-content-box">
-    <div class="products-table">
-      <app-productslisttable [(productsListInfo)]="productsListInfo"></app-productslisttable>
+    <div class="invoices-table">
+      <app-invoiceslisttable [(invoicesListInfo)]="invoicesListInfo"></app-invoiceslisttable>
     </div>
-    <div class="products-filter">
-      <app-productfilter 
-        [(productsListInfo)]="productsListInfo" 
+    <div class="invoices-filter">
+      <app-invoicefilter 
+        [(invoicesListInfo)]="invoicesListInfo" 
         [(filters)]="filters" 
-        [productTags]="productTags" 
-        [productStatus]="productStatus" 
+        [invoiceTags]="invoiceTags" 
+        [invoiceStatus]="invoiceStatus" 
         (filterParent)="getFilter($event)"
-        [(productTypes)]="productTypes">
-      </app-productfilter>
+        [(invoiceTypes)]="invoiceTypes">
+      </app-invoicefilter>
     </div>
   </div>
 </div>

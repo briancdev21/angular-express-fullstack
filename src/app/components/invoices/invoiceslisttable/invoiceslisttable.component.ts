@@ -15,11 +15,11 @@ import * as _ from 'lodash';
 
 export class InvoicesListTableComponent implements OnInit {
 
-  @Input() productsListInfo;
+  @Input() invoicesListInfo;
   addLogModalCollapsed = true;
   showAddLogModal = false;
-  showProductModalInfo = false;
-  productModalInfoCollapsed = [];
+  showInvoiceModalInfo = false;
+  invoiceModalInfoCollapsed = [];
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
@@ -27,10 +27,10 @@ export class InvoicesListTableComponent implements OnInit {
   switchIcon: boolean = false;
   showCloneConfirmModal = false;
   showDeleteConfirmModal = false;
-  clonedRowProduct: any;
+  clonedRowInvoice: any;
   clonedRowIndex: number;
   deletedRowIndex: number;
-  sortProductStatusArr: any;
+  sortInvoiceStatusArr: any;
   clickSettingCount = 0;
   expandedInfoModal = false;
   phoneClicked = false;
@@ -41,7 +41,7 @@ export class InvoicesListTableComponent implements OnInit {
   activity: {
     title: string;
     subject: string;
-    product: string;
+    invoice: string;
     content: string;
   };
 
@@ -56,7 +56,7 @@ export class InvoicesListTableComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.productsListInfo.map(p => {
+    this.invoicesListInfo.map(p => {
       p.status = this.getStatus(p.stock, p.reorderPoint);
     });
   }
@@ -88,14 +88,14 @@ export class InvoicesListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../product/' + id]);
+    this.router.navigate(['../invoice/' + id]);
   }
 
   sortArray(field) {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.productsListInfo.sort( function(name1, name2) {
+      this.invoicesListInfo.sort( function(name1, name2) {
         if ( name1[field] < name2[field] ) {
           return -1;
         } else if ( name1[field] > name2[field]) {
@@ -105,25 +105,25 @@ export class InvoicesListTableComponent implements OnInit {
         }
       });
     } else {
-      this.productsListInfo.reverse();
+      this.invoicesListInfo.reverse();
     }
   }
 
 
-  // SortProductStatus() {
+  // SortInvoiceStatus() {
   //   const cmp = this;
   //   cmp.sortScoreClicked = ! cmp.sortScoreClicked;
   //   if (!cmp.sortScoreClicked) {
-  //     this.sortProductStatusArr = this.productsListInfo.filter(product => product.status === 'New');
-  //     this.sortProductStatusArr.push(this.productsListInfo.filter(product => product.status === 'Follow-up'));
-  //     this.sortProductStatusArr.push(this.productsListInfo.filter(product => product.status === 'Seen'));
-  //     this.sortProductStatusArr.push(this.productsListInfo.filter(product => product.status === 'Demo'));
-  //     this.sortProductStatusArr.push(this.productsListInfo.filter(product => product.status === 'Negotiation'));
-  //     this.sortProductStatusArr.push(this.productsListInfo.filter(product => product.status === 'Won'));
-  //     this.sortProductStatusArr.push(this.productsListInfo.filter(product => product.status === 'Lost'));
-  //     this.productsListInfo = _.flatten(this.sortProductStatusArr);
+  //     this.sortInvoiceStatusArr = this.invoicesListInfo.filter(invoice => invoice.status === 'New');
+  //     this.sortInvoiceStatusArr.push(this.invoicesListInfo.filter(invoice => invoice.status === 'Follow-up'));
+  //     this.sortInvoiceStatusArr.push(this.invoicesListInfo.filter(invoice => invoice.status === 'Seen'));
+  //     this.sortInvoiceStatusArr.push(this.invoicesListInfo.filter(invoice => invoice.status === 'Demo'));
+  //     this.sortInvoiceStatusArr.push(this.invoicesListInfo.filter(invoice => invoice.status === 'Negotiation'));
+  //     this.sortInvoiceStatusArr.push(this.invoicesListInfo.filter(invoice => invoice.status === 'Won'));
+  //     this.sortInvoiceStatusArr.push(this.invoicesListInfo.filter(invoice => invoice.status === 'Lost'));
+  //     this.invoicesListInfo = _.flatten(this.sortInvoiceStatusArr);
   //   } else {
-  //     this.productsListInfo.reverse();
+  //     this.invoicesListInfo.reverse();
   //   }
   // }
 
