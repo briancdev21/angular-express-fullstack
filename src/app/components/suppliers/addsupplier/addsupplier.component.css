@@ -285,3 +285,7 @@ app-multikeywordselect {
 .account-type select {
 	color: #646464;
 }
+
+.wrong-format {
+	color: red !important;
+}

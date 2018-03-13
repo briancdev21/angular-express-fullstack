@@ -48,9 +48,14 @@ export class AddSupplierComponent implements OnInit {
   invalidSupplierPhone = false;
   invalidContactEmail = false;
   invalidAddress = false;
+  invalidCity = false;
+  invalidState = false;
+  invalidCountry = false;
+  invalidZipcode = false;
   invalidDefaultTerm = false;
   invalidAccountNumber = false;
   invalidDefaultCurrency = false;
+  wrongEmailFormat = true;
 
   supplierName = '';
   contactName = '';
@@ -87,8 +92,14 @@ export class AddSupplierComponent implements OnInit {
     this.invalidSupplierPhone = false;
     this.invalidContactEmail = false;
     this.invalidAddress = false;
+    this.invalidCity = false;
+    this.invalidState = false;
+    this.invalidZipcode = false;
+    this.invalidCountry = false;
+    this.wrongEmailFormat = this.checkEmailValidation(this.contactEmail);
 
-    if (this.supplierName && this.contactName && this.supplierPhone && this.contactEmail && this.newAddress) {
+    if (this.supplierName && this.contactName && this.supplierPhone && this.contactEmail && this.newAddress
+        && this.newCountry && this.newState && this.newCity && this.newZipcode && this.wrongEmailFormat) {
 
       this.tabActiveFirst = false;
       this.tabActiveSecond = true;
@@ -108,7 +119,27 @@ export class AddSupplierComponent implements OnInit {
       if (!this.newAddress) {
         this.invalidAddress = true;
       }
+      if (!this.newCity) {
+        this.invalidCity = true;
+      }
+      if (!this.newState) {
+        this.invalidState = true;
+      }
+      if (!this.newCountry) {
+        this.invalidCountry = true;
+      }
+      if (!this.newZipcode) {
+        this.invalidZipcode = true;
+      }
+      if (!this.wrongEmailFormat) {
+        this.invalidContactEmail = true;
+      }
     }
+  }
+
+  checkEmailValidation(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
   }
 
   tabChange(event) {
@@ -126,8 +157,14 @@ export class AddSupplierComponent implements OnInit {
         this.invalidSupplierPhone = false;
         this.invalidContactEmail = false;
         this.invalidAddress = false;
+        this.invalidCity = false;
+        this.invalidState = false;
+        this.invalidZipcode = false;
+        this.invalidCountry = false;
+        this.wrongEmailFormat = this.checkEmailValidation(this.contactEmail);
 
-        if (this.supplierName && this.contactName && this.supplierPhone && this.contactEmail && this.newAddress) {
+        if (this.supplierName && this.contactName && this.supplierPhone && this.contactEmail &&
+            this.newAddress && this.newCountry && this.newState && this.newCity && this.newZipcode && this.wrongEmailFormat) {
           this.tabActiveFirst = false;
           this.tabActiveSecond = true;
           break;
@@ -150,6 +187,21 @@ export class AddSupplierComponent implements OnInit {
           }
           if (!this.newAddress) {
             this.invalidAddress = true;
+          }
+          if (!this.newCity) {
+            this.invalidCity = true;
+          }
+          if (!this.newState) {
+            this.invalidState = true;
+          }
+          if (!this.newCountry) {
+            this.invalidCountry = true;
+          }
+          if (!this.newZipcode) {
+            this.invalidZipcode = true;
+          }
+          if (!this.wrongEmailFormat) {
+            this.invalidContactEmail = true;
           }
         }
         break;
