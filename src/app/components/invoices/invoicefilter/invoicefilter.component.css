@@ -60,7 +60,7 @@ img {
   margin-bottom: 5px;
 }
 
-:host ::ng-deep .supplier-selection .completer-input {
+:host ::ng-deep .customer-selection .completer-input {
   border: 1px solid lightgray;
   height: 32px !important;
   background: url(/assets/images/down-arrow.png) no-repeat;

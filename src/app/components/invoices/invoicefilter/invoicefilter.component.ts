@@ -24,7 +24,7 @@ export class InvoiceFilterComponent implements OnInit {
   @Input() invoiceTypes;
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
 
-  suppliersList = ['John Smith', 'Rob Harding', 'Diana Ilic'];
+  customersList = ['John Smith', 'Rob Harding', 'Diana Ilic'];
   items2: any[] = [
     'Home', 'Controller', 'Adaptive', 'Dimmer', 'Keypad', 'TV', 'Samsung', 'Service'
   ];
@@ -55,7 +55,7 @@ export class InvoiceFilterComponent implements OnInit {
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
-  selectSupplier =  '';
+  selectCustomer =  '';
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -72,9 +72,9 @@ export class InvoiceFilterComponent implements OnInit {
     // this.scoreTo = this.filters.scoreTo;
   }
 
-  onSelectedSupplier(val) {
-    this.filters.selectSupplier = val;
-    this.selectSupplier = val;
+  onSelectedCustomer(val) {
+    this.filters.selectCustomer = val;
+    this.selectCustomer = val;
   }
 
   onSelect(item: any) {
@@ -124,13 +124,13 @@ export class InvoiceFilterComponent implements OnInit {
   }
 
   resetFilter() {
-    this.selectSupplier = '';
+    this.selectCustomer = '';
     this.filters = {
       createdFrom: '',
       createdTo: '',
       updatedFrom: '',
       updatedTo: '',
-      selectSupplier: '',
+      selectCustomer: '',
       invoiceTags: '',
       invoiceName: '',
       selectStatus: '',
@@ -155,8 +155,8 @@ export class InvoiceFilterComponent implements OnInit {
       this.filteredInvoices = this.filterTxt(this.invoicesListInfo, this.filters.invoiceName);
     }
 
-    if (this.filters.selectSupplier) {
-      this.filteredInvoices = this.filteredInvoices.filter(supplier => supplier.supplier === this.filters.selectSupplier);
+    if (this.filters.selectCustomer) {
+      this.filteredInvoices = this.filteredInvoices.filter(customer => customer.customer === this.filters.selectCustomer);
     }
 
     if (this.filters.selectStatus) {
