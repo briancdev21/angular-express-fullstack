@@ -16,75 +16,18 @@ import * as _ from 'lodash';
 export class InvoicesListTableComponent implements OnInit {
 
   @Input() invoicesListInfo;
-  addLogModalCollapsed = true;
-  showAddLogModal = false;
-  showInvoiceModalInfo = false;
-  invoiceModalInfoCollapsed = [];
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
-  showModal: boolean = false;
-  switchIcon: boolean = false;
-  showCloneConfirmModal = false;
-  showDeleteConfirmModal = false;
-  clonedRowInvoice: any;
-  clonedRowIndex: number;
-  deletedRowIndex: number;
-  sortInvoiceStatusArr: any;
-  clickSettingCount = 0;
-  expandedInfoModal = false;
-  phoneClicked = false;
-  emailClicked = false;
-  mapClicked = false;
-  formatedPhone = '';
 
-  activity: {
-    title: string;
-    subject: string;
-    invoice: string;
-    content: string;
-  };
-
-  upcomingModal: object = {
-    week: 'WEDNESDAY',
-    date: 'NOVEMBER 1, 2017',
-    start: '9:30 AM',
-    end: '11:00 AM',
-    duration: '1 hr, 30 min'
-  };
   constructor( private filterService: FilterService, private router: Router ) {
   }
 
   ngOnInit() {
-    this.invoicesListInfo.map(p => {
-      p.status = this.getStatus(p.stock, p.reorderPoint);
-    });
+    this.invoicesListInfo.map(i => i.overdueDays = this.calcOverDueDays(i.dueDate, i.status));
   }
 
-  getStockColor(stock, reorderPoint) {
-    if (stock < reorderPoint) {
-      return 'red';
-    } else if (stock < reorderPoint + 3) {
-      return 'orange';
-    } else {
-      return 'green';
-    }
-  }
-
-  getStatus(stock, reorderPoint) {
-    if (stock === undefined) {
-      return 'Active';
-    } else {
-      if (stock < 0) {
-        return 'No stock!';
-      } else if (stock < reorderPoint) {
-        return 'Below re-order point';
-      } else if (stock < reorderPoint + 3) {
-        return 'Place order';
-      } else {
-        return 'Active';
-      }
-    }
+  getStatus() {
   }
 
   redirectTo(id) {
@@ -109,7 +52,38 @@ export class InvoicesListTableComponent implements OnInit {
     }
   }
 
+  calcOverDueDays(due, status) {
+    const today = new Date();
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const dueDate = new Date(due);
+    const diffDays = Math.round(Math.abs((today.getTime() - dueDate.getTime()) / (oneDay)));
+    if (status === 'Paid' || status === 'Estimate') {
+      return 0;
+    }
+    if (diffDays < 0) {
+      return 0;
+    } else {
+      return diffDays;
+    }
+  }
 
+  sortCreateDateArray(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    if (!cmp.sortScoreClicked) {
+      this.invoicesListInfo.sort( function(name1, name2) {
+        if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
+          return -1;
+        } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else {
+      this.invoicesListInfo.reverse();
+    }
+  }
   // SortInvoiceStatus() {
   //   const cmp = this;
   //   cmp.sortScoreClicked = ! cmp.sortScoreClicked;

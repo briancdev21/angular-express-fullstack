@@ -80,7 +80,6 @@ app-submenu {
 .invoices-table {
   flex: 4;
 	border-right: 1px solid #F5F5F5;
-	height: 79vh;
 }
 
 .invoices-filter {
