@@ -24,7 +24,7 @@ export class InvoiceFilterComponent implements OnInit {
   @Input() invoiceTypes;
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
 
-  customersList = ['John Smith', 'Rob Harding', 'Diana Ilic'];
+  customersList = [];
   items2: any[] = [
     'Home', 'Controller', 'Adaptive', 'Dimmer', 'Keypad', 'TV', 'Samsung', 'Service'
   ];
@@ -68,6 +68,12 @@ export class InvoiceFilterComponent implements OnInit {
     this.filteredInvoices = this.invoicesListInfo;
     this.backUpInvoices = this.invoicesListInfo;
     this.originFilters = Object.assign({}, this.filters);
+
+    // Get customer list from Information list and remove duplicated names
+    const a = this.invoicesListInfo.map(i => i.customerName);
+    this.customersList = a.filter(function(item, pos) {
+      return a.indexOf(item) === pos;
+    });
     // this.scoreFrom = this.filters.scoreFrom;
     // this.scoreTo = this.filters.scoreTo;
   }

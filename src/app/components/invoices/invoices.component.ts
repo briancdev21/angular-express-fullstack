@@ -39,12 +39,8 @@ export class InvoicesComponent implements OnInit {
     selectStatus: '',
   };
 
-  public invoiceTags: Array<Object> = [
-    'Home'
-  ];
-
   public invoiceStatus: Array<string> = [
-    'Place order', 'Below re-order point', 'No stock!', 'Active'
+    'Due', 'Overdue', 'Paid', 'Net 15', 'Net 30', 'Estimate', 'Approved', 'Rejected'
   ];
 
   public invoicesListInfo: Array<Object> = [
