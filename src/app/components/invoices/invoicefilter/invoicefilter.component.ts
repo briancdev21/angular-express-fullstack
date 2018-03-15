@@ -59,6 +59,12 @@ export class InvoiceFilterComponent implements OnInit {
   maxInvoice = 0;
   maxInvoiceBalance = 0;
   maxOverdueDays = 0;
+  invoiceScoreFrom = 0;
+  invoiceScoreTo = 0;
+  invoiceBalanceScoreFrom = 0;
+  invoiceBalanceScoreTo = 0;
+  overdueDaysFrom = 0;
+  overdueDaysTo = 0;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -87,10 +93,14 @@ export class InvoiceFilterComponent implements OnInit {
     this.invoicesListInfo.map(i => i.overdueDays = this.calcOverDueDays(i.dueDate, i.status));
     this.maxOverdueDays = Math.max(...this.invoicesListInfo.map(i => i.overdueDays));
 
-    console.log('444', this.maxInvoice, this.maxInvoiceBalance, this.maxOverdueDays);
+    this.invoiceScoreFrom = this.filters.invoiceScoreFrom;
+    this.invoiceScoreTo = this.filters.invoiceScoreTo;
 
-    // this.scoreFrom = this.filters.scoreFrom;
-    // this.scoreTo = this.filters.scoreTo;
+    this.invoiceBalanceScoreFrom = this.filters.invoiceBalanceScoreFrom;
+    this.invoiceBalanceScoreTo = this.filters.invoiceBalanceScoreTo;
+
+    this.overdueDaysFrom = this.filters.overdueDaysFrom;
+    this.overdueDaysTo = this.filters.overdueDaysTo;
   }
 
   calcOverDueDays(due, status) {
@@ -106,6 +116,21 @@ export class InvoiceFilterComponent implements OnInit {
     } else {
       return diffDays;
     }
+  }
+
+  invoiceRangeSliderChange(event) {
+    this.invoiceScoreFrom = event.from;
+    this.invoiceScoreTo = event.to;
+  }
+
+  invoiceBalanceRangeSliderChange(event) {
+    this.invoiceBalanceScoreFrom = event.from;
+    this.invoiceBalanceScoreTo = event.to;
+  }
+
+  overdueDaysRangeSliderChange(event) {
+    this.overdueDaysFrom = event.from;
+    this.overdueDaysTo = event.to;
   }
 
   onSelectedCustomer(val) {
@@ -161,7 +186,20 @@ export class InvoiceFilterComponent implements OnInit {
 
   resetFilter() {
     this.selectCustomer = '';
+    this.invoiceScoreFrom = 0;
+    this.invoiceScoreTo = this.maxInvoice;
+    this.invoiceBalanceScoreFrom = 0;
+    this.invoiceBalanceScoreTo = this.maxInvoiceBalance;
+    this.overdueDaysFrom = 0;
+    this.overdueDaysTo = this.maxOverdueDays;
+
     this.filters = {
+      invoiceScoreFrom : 0,
+      invoiceScoreTo : this.maxInvoice,
+      invoiceBalanceScoreFrom : 0,
+      invoiceBalanceScoreTo : this.maxInvoiceBalance,
+      overdueDaysFrom : 0,
+      overdueDaysTo : this.maxOverdueDays,
       createdFrom: '',
       createdTo: '',
       updatedFrom: '',
@@ -176,37 +214,56 @@ export class InvoiceFilterComponent implements OnInit {
 
   applyFilter() {
 
-    console.log('111', this.filters);
+    this.filters.invoiceScoreFrom = this.invoiceScoreFrom;
+    this.filters.invoiceScoreTo = this.invoiceScoreTo;
+    this.filters.invoiceBalanceScoreFrom = this.invoiceBalanceScoreFrom;
+    this.filters.invoiceBalanceScoreTo = this.invoiceBalanceScoreTo;
+    this.filters.overdueDaysFrom = this.overdueDaysFrom;
+    this.filters.overdueDaysTo = this.overdueDaysTo;
     this.applyClicked = true;
     this.filteredInvoices = this.backUpInvoices;
+
+    if (!this.invoiceScoreFrom) { this.filters.invoiceScoreFrom = 0; }
+    if (!this.invoiceScoreTo) { this.filters.invoiceScoreTo = this.maxInvoice; }
+    if (!this.invoiceBalanceScoreFrom) { this.filters.invoiceBalanceScoreFrom = 0; }
+    if (!this.invoiceBalanceScoreTo) { this.filters.invoiceBalanceScoreTo = this.maxInvoiceBalance; }
+    if (!this.overdueDaysFrom) { this.filters.overdueDaysFrom = 0; }
+    if (!this.overdueDaysTo) { this.filters.overdueDaysTo = this.maxOverdueDays; }
+
+    this.filteredInvoices = this.filteredInvoices.filter(invoice =>
+      invoice.total >= this.filters.invoiceScoreFrom && invoice.total <= this.filters.invoiceScoreTo);
+    this.filteredInvoices = this.filteredInvoices.filter(invoice =>
+      invoice.balance >= this.filters.invoiceBalanceScoreFrom && invoice.balance <= this.filters.invoiceBalanceScoreTo);
+
+    this.filteredInvoices = this.filteredInvoices.filter(invoice =>
+      invoice.overdueDays >= this.filters.overdueDaysFrom && invoice.overdueDays <= this.filters.overdueDaysTo);
 
     if (this.filters.selectCustomer) {
       this.filteredInvoices = this.filteredInvoices.filter(customer => customer.customerName === this.filters.selectCustomer);
     }
-    console.log('222', this.filteredInvoices);
     if (this.filters.selectStatus) {
       this.filteredInvoices = this.filteredInvoices.filter(invoice => invoice.status === this.filters.selectStatus);
     }
 
     if (this.filters.createdFrom) {
       this.filteredInvoices = this.filteredInvoices.filter(
-        invoice => Date.parse(invoice.createDate) >= Number(this.filters.createdFrom)
+        invoice => Date.parse(invoice.createdDate) >= Number(this.filters.createdFrom)
       );
     }
     if (this.filters.createdTo) {
       this.filteredInvoices = this.filteredInvoices.filter(
-        invoice => Date.parse(invoice.createDate) <= Number(this.filters.createdTo)
+        invoice => Date.parse(invoice.createdDate) <= Number(this.filters.createdTo)
       );
     }
 
     if (this.filters.updatedFrom) {
       this.filteredInvoices = this.filteredInvoices.filter(
-        invoice => Date.parse(invoice.updatedDate) >= Number(this.filters.updatedFrom)
+        invoice => Date.parse(invoice.dueDate) >= Number(this.filters.updatedFrom)
       );
     }
     if (this.filters.updatedTo) {
       this.filteredInvoices = this.filteredInvoices.filter(
-        invoice => Date.parse(invoice.updatedDate) <= Number(this.filters.updatedTo)
+        invoice => Date.parse(invoice.dueDate) <= Number(this.filters.updatedTo)
       );
     }
 

@@ -22,7 +22,7 @@
   </div>
 
   <div class="invoice-created-date">
-    <span>Created at</span>
+    <span>Created date range</span>
     <div>
       <div class="created-from">
         <input [owlDateTimeTrigger]="createdFrom" [owlDateTime]="createdFrom" placeholder="From" (dateTimeChange)="selectCreatedFrom($event)" [max]="createdMax" [(ngModel)]="filters.createdFrom" >
@@ -34,8 +34,33 @@
       </div>
     </div>
   </div>
+
+  <div class="score-range-filter">
+    <span>Invoice range</span>
+    <ion-range-slider #sliderElement
+          type="double"
+          min="0"
+          [max]="maxInvoice"
+          [from]="filters.invoiceScoreFrom"
+          [to]="filters.invoiceScoreTo"
+          prefix="$"
+          (onChange)="invoiceRangeSliderChange($event)"></ion-range-slider>
+  </div>
+
+  <div class="score-range-filter">
+    <span>Invoice balance range</span>
+    <ion-range-slider #sliderElement
+          type="double"
+          min="0"
+          [max]="maxInvoiceBalance"
+          [from]="filters.invoiceBalanceScoreFrom"
+          [to]="filters.invoiceBalanceScoreTo"
+          prefix="$"
+          (onChange)="invoiceBalanceRangeSliderChange($event)"></ion-range-slider>
+  </div>
+
   <div class="invoice-updated-date">
-    <span>Updated at</span>
+    <span>Due date range</span>
     <div>
       <div class="updated-from">
         <input [owlDateTimeTrigger]="updatedFrom" [owlDateTime]="updatedFrom" placeholder="From" (dateTimeChange)="selectUpdatedFrom($event)" [max]="updatedMax" [(ngModel)]="filters.updatedFrom"  >
@@ -46,6 +71,18 @@
         <owl-date-time [pickerType]="'calendar'" #updatedTo></owl-date-time>
       </div>
     </div>
+  </div>
+
+  <div class="score-range-filter">
+    <span>Days overdue range</span>
+    <ion-range-slider #sliderElement
+          type="double"
+          min="0"
+          [max]="maxOverdueDays"
+          [from]="filters.overdueDaysFrom"
+          [to]="filters.overdueDaysTo"
+          prefix="$"
+          (onChange)="overdueDaysRangeSliderChange($event)"></ion-range-slider>
   </div>
   
   <button class="reset-filter" (click)="resetFilter()">Reset Filter</button>
