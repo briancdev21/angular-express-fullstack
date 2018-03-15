@@ -52,7 +52,7 @@ export class InvoicesComponent implements OnInit {
       createdDate: 'January 20, 2017',
       dueDate: 'March 14, 2018',
       overdueDays: 0,
-      status: '',
+      status: 'Due',
     },
     {
       transactionId: 'IN-123403',
@@ -62,7 +62,7 @@ export class InvoicesComponent implements OnInit {
       createdDate: 'January 17, 2017',
       dueDate: 'March 1, 2018',
       overdueDays: 0,
-      status: '',
+      status: 'Overdue',
     },
     {
       transactionId: 'ES-123402',
@@ -82,7 +82,7 @@ export class InvoicesComponent implements OnInit {
       createdDate: 'January 14, 2017',
       dueDate: 'March 7, 2018',
       overdueDays: 0,
-      status: '',
+      status: 'Net 30',
     },
     {
       transactionId: 'IN-123400',
@@ -112,7 +112,7 @@ export class InvoicesComponent implements OnInit {
       createdDate: 'December 19, 2016',
       dueDate: 'Februry 6, 2018',
       overdueDays: 0,
-      status: '',
+      status: 'Overdue',
     },
     {
       transactionId: 'ES-123397',
@@ -132,7 +132,7 @@ export class InvoicesComponent implements OnInit {
       createdDate: 'December 12, 2016',
       dueDate: 'March 15, 2018',
       overdueDays: 0,
-      status: 'Paid',
+      status: 'Net 15',
     },
     {
       transactionId: 'IN-123395',

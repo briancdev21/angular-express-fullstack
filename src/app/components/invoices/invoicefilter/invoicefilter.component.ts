@@ -56,6 +56,9 @@ export class InvoiceFilterComponent implements OnInit {
   selectedItem: any = '';
   inputChanged: any = '';
   selectCustomer =  '';
+  maxInvoice = 0;
+  maxInvoiceBalance = 0;
+  maxOverdueDays = 0;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -74,8 +77,35 @@ export class InvoiceFilterComponent implements OnInit {
     this.customersList = a.filter(function(item, pos) {
       return a.indexOf(item) === pos;
     });
+    // Get invoice max value in invoice info list
+    this.maxInvoice = Math.max(...this.invoicesListInfo.map(i => i.total));
+
+    // Get balance max value in invoice info list
+    this.maxInvoiceBalance = Math.max(...this.invoicesListInfo.map(i => i.balance));
+
+    // Get max duedate range in invoice info list
+    this.invoicesListInfo.map(i => i.overdueDays = this.calcOverDueDays(i.dueDate, i.status));
+    this.maxOverdueDays = Math.max(...this.invoicesListInfo.map(i => i.overdueDays));
+
+    console.log('444', this.maxInvoice, this.maxInvoiceBalance, this.maxOverdueDays);
+
     // this.scoreFrom = this.filters.scoreFrom;
     // this.scoreTo = this.filters.scoreTo;
+  }
+
+  calcOverDueDays(due, status) {
+    const today = new Date();
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const dueDate = new Date(due);
+    const diffDays = Math.round(Math.abs((today.getTime() - dueDate.getTime()) / (oneDay)));
+    if (status === 'Paid' || status === 'Estimate') {
+      return 0;
+    }
+    if (diffDays < 0) {
+      return 0;
+    } else {
+      return diffDays;
+    }
   }
 
   onSelectedCustomer(val) {
@@ -145,30 +175,19 @@ export class InvoiceFilterComponent implements OnInit {
   }
 
   applyFilter() {
+
+    console.log('111', this.filters);
     this.applyClicked = true;
     this.filteredInvoices = this.backUpInvoices;
 
-    if (this.invoiceTags[0]) {
-      let tagFiltered = [];
-      let tagFilteredList = [];
-      for ( let i = 0; i <= this.invoiceTags.length - 1; i ++) {
-        tagFiltered = this.filterTxt(this.invoicesListInfo, this.invoiceTags[i]);
-        tagFilteredList = tagFilteredList.concat(tagFiltered);
-      }
-      this.filteredInvoices = tagFilteredList;
-    }
-    if (this.filters.invoiceName) {
-      this.filteredInvoices = this.filterTxt(this.invoicesListInfo, this.filters.invoiceName);
-    }
-
     if (this.filters.selectCustomer) {
-      this.filteredInvoices = this.filteredInvoices.filter(customer => customer.customer === this.filters.selectCustomer);
+      this.filteredInvoices = this.filteredInvoices.filter(customer => customer.customerName === this.filters.selectCustomer);
     }
-
+    console.log('222', this.filteredInvoices);
     if (this.filters.selectStatus) {
       this.filteredInvoices = this.filteredInvoices.filter(invoice => invoice.status === this.filters.selectStatus);
     }
-    
+
     if (this.filters.createdFrom) {
       this.filteredInvoices = this.filteredInvoices.filter(
         invoice => Date.parse(invoice.createDate) >= Number(this.filters.createdFrom)
