@@ -5,7 +5,7 @@
       <th (click)="sortRatingArray('rating')">ACCOUNT RATING</th>
       <th (click)="sortDealsArray('totalDeals')">TOTAL DEALS</th>
       <th>STATUS</th> 
-      <th>TYPE <img src="assets/images/Edit.png"></th>
+      <th (click)="sortArray('accountType')">TYPE <img src="assets/images/Edit.png"></th>
     </tr>
     <tr *ngFor="let contact of contactsListInfo; let i = index" (click)="redirectTo(contact.id)">
       <td>{{contact.name}}</td>
