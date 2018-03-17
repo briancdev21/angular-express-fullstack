@@ -7,24 +7,8 @@
 </div>
 
 <div class="filter-content">
-  <!-- <div class="score-range-filter">
-    <span>Contact Score</span>
-    <ion-range-slider #sliderElement
-          type="double"
-          min="0"
-          max="100"
-          [from]="filters.scoreFrom"
-          [to]="filters.scoreTo"
-          postfix="%"
-          (onChange)="rangeSliderChange($event)"></ion-range-slider>
-  </div> -->
-
   <div class="owner">
     <span>Collaborators</span>
-    <!-- <select [(ngModel)]="filters.selectOwner">
-      <option default>Choose owner</option>
-      <option *ngFor="let owner of contactOwners" [value]="owner" #contactOwner>{{owner}}</option>
-    </select> -->
     <div class="owners" (click)='editable=true;$event.stopPropagation();'> 
       <div class="follower" *ngFor="let user of contactOwners; let i = index" >
         <span class="contact-owner">{{user}}</span>

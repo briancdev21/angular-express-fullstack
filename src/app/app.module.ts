@@ -16,6 +16,7 @@ import { SuppliersComponent } from './components/suppliers/suppliers.component';
 import { SubmenuComponent } from './components/submenu/submenu.component';
 import { ProductsComponent } from './components/products/products.component';
 import { InvoicesComponent } from './components/invoices/invoices.component';
+import { PendingsComponent } from './components/pendings/pendings.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
@@ -26,6 +27,7 @@ import { ContactsCmpModule } from './components/contacts/contacts.module';
 import { SuppliersCmpModule } from './components/suppliers/suppliers.module';
 import { ProductsCmpModule } from './components/products/products.module';
 import { InvoicesCmpModule } from './components/invoices/invoices.module';
+import { PendingsCmpModule } from './components/pendings/pendings.module';
 import { CommonCmpModule } from './components/common/common.module';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
@@ -53,7 +55,8 @@ import { SubnavHandlerService } from './services/subnav-handler.service';
     PhonePipe,
     SuppliersComponent,
     ProductsComponent,
-    InvoicesComponent
+    InvoicesComponent,
+    PendingsComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +78,8 @@ import { SubnavHandlerService } from './services/subnav-handler.service';
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     ProductsCmpModule,
-    InvoicesCmpModule
+    InvoicesCmpModule,
+    PendingsCmpModule
   ],
   exports: [
     SubmenuComponent,

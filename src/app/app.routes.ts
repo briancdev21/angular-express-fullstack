@@ -9,14 +9,14 @@ import { ContactsComponent } from './components/contacts/contacts.component';
 import { SuppliersComponent } from './components/suppliers/suppliers.component';
 import { ProductsComponent } from './components/products/products.component';
 import { InvoicesComponent } from './components/invoices/invoices.component';
-
+import { PendingsComponent } from './components/pendings/pendings.component';
 
 import { CommonComponent } from './components/common/common.component';
 
 export const routes: Routes = [
   { path: '', component: TestComponent },
   { path: 'crm', component: LeadsComponent },
-  { path: 'sales', component: ProposalComponent },
+  { path: 'sales', component: PendingsComponent },
   { path: 'pm', component: ContactsComponent },
   { path: 'inventory', component: SuppliersComponent },
   { path: 'orderprofile', component: OrderProfileComponent },
