@@ -1,8 +1,9 @@
 
 
 img {
-  width: 13px;
-  height: 13px;
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
   cursor: pointer;
 }
 
@@ -149,6 +150,101 @@ img {
 }
 
 .pending-tag {
+  background: #f5f5f5;
+  padding: 5px;
+  margin-right: 5px;
+  color: #646464;
+}
+
+.estimated-total>div, .project-total>div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.range-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid lightgray;
+  width: 45%;
+}
+
+.range-box input {
+  border: 0;
+  text-align: right;
+  outline: none;
+  padding: 5px;
+  padding-right: 1px;
+  width: 100%;
+}
+
+.range-box input::placeholder {
+  color: #D3D3D3 !important;
+  font-size: 11px !important;
+  
+}
+
+.range-box span {
+  margin: 0 0 0 5px;
+}
+
+/* owners section css */
+
+.owners {
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  color: #95989A;
+  position: relative;
+  justify-content: flex-start;
+  margin-top: 1px solid #D3D3D3;
+  border: 1px solid lightgray;
+  padding: 0 8px;
+}
+
+.owners .add-owner {
+  background-image: '';
+  cursor: pointer;
+  min-height: 32px;
+}
+
+.edit-owners {
+  position: absolute;
+  top: 30px;
+  border: solid 1px lightgray;
+  background: white;
+  padding: 5px;
+  z-index: 9;
+  min-width: 150px;
+  max-width: 300px;
+  left: 0;
+}
+
+.edit-owners ul {
+  margin: 0;
+  padding: 0;
+}
+
+.edit-owners li {
+  list-style: none;
+  display: inline-block;
+  padding: 3px;
+  background: lightblue;
+  border-radius: 1px;
+  margin: 2px;
+}
+
+.edit-owners input {
+  width: 100%;
+}
+
+.owners>span {
+  padding-right: 15px;
+  font-size: 13px;
+}
+
+.contact-owner {
   background: #f5f5f5;
   padding: 5px;
   margin-right: 5px;

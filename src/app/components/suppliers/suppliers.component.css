@@ -5,7 +5,8 @@
 }
 
 .main-content-small {
-  transition: 0.2s all;
+	transition: 0.2s all;
+	top: 68px;
   right: 0;
   left: 200px;
 }

@@ -39,6 +39,9 @@ export class PendingsComponent implements OnInit {
     selectStatus: '',
   };
 
+  public collaborators: Array<string> = [
+  ];
+
   public pendingStatus: Array<string> = [
     'Due', 'Overdue', 'Paid', 'Net 15', 'Net 30', 'Estimate', 'Approved', 'Rejected'
   ];

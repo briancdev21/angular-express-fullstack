@@ -9,20 +9,29 @@
 <div class="filter-content">
 
   <div class="customer-selection">
-    <span>Contact</span>
+    <span>Project Number</span>
+    <app-ng2completer [itemsList]="projectsList" (selectedItem)="onSelectedProject($event)" [searchStr]="selectProject" ></app-ng2completer>
+  </div>
+
+  <div class="customer-selection">
+    <span>Customer Name</span>
     <app-ng2completer [itemsList]="customersList" (selectedItem)="onSelectedCustomer($event)" [searchStr]="selectCustomer" ></app-ng2completer>
   </div>
 
-  <div class="pending-status">
-    <span>Pending status</span>
-    <select [(ngModel)]="filters.selectStatus">
-      <option value="choose" default>Choose status</option>
-      <option *ngFor="let status of pendingStatus" [value]="status">{{status}}</option>
-    </select>
+  <div class="score-range-filter">
+    <span>Time Passed in Days</span>
+    <ion-range-slider #sliderElement
+          type="double"
+          min="0"
+          max="120"
+          [from]="filters.overdueDaysFrom"
+          [to]="filters.overdueDaysTo"
+          prefix="$"
+          (onChange)="overdueDaysRangeSliderChange($event)"></ion-range-slider>
   </div>
 
   <div class="pending-created-date">
-    <span>Created date range</span>
+    <span>Date Signed</span>
     <div>
       <div class="created-from">
         <input [owlDateTimeTrigger]="createdFrom" [owlDateTime]="createdFrom" placeholder="From" (dateTimeChange)="selectCreatedFrom($event)" [max]="createdMax" [(ngModel)]="filters.createdFrom" >
@@ -35,55 +44,55 @@
     </div>
   </div>
 
-  <div class="score-range-filter">
-    <span>Pending range</span>
-    <ion-range-slider #sliderElement
-          type="double"
-          min="0"
-          [max]="maxPending"
-          [from]="filters.pendingScoreFrom"
-          [to]="filters.pendingScoreTo"
-          prefix="$"
-          (onChange)="pendingRangeSliderChange($event)"></ion-range-slider>
-  </div>
-
-  <div class="score-range-filter">
-    <span>Pending balance range</span>
-    <ion-range-slider #sliderElement
-          type="double"
-          min="0"
-          [max]="maxPendingBalance"
-          [from]="filters.pendingBalanceScoreFrom"
-          [to]="filters.pendingBalanceScoreTo"
-          prefix="$"
-          (onChange)="pendingBalanceRangeSliderChange($event)"></ion-range-slider>
-  </div>
-
-  <div class="pending-updated-date">
-    <span>Due date range</span>
+  <div class="project-total">
+    <span>Project Total</span>
     <div>
-      <div class="updated-from">
-        <input [owlDateTimeTrigger]="updatedFrom" [owlDateTime]="updatedFrom" placeholder="From" (dateTimeChange)="selectUpdatedFrom($event)" [max]="updatedMax" [(ngModel)]="filters.updatedFrom"  >
-        <owl-date-time [pickerType]="'calendar'" #updatedFrom ></owl-date-time>
+      <div class="total-from range-box">
+        <span>$</span>
+        <input placeholder="Low Range" [(ngModel)]="filters.totalFrom" type="number">
       </div>
-      <div class="updated-to">
-        <input [owlDateTime]="updatedTo" [owlDateTimeTrigger]="updatedTo" placeholder="To" (dateTimeChange)="selectUpdatedTo($event)" [min]="updatedMin" [(ngModel)]="filters.updatedTo">
-        <owl-date-time [pickerType]="'calendar'" #updatedTo></owl-date-time>
+      <div class="total-to range-box">
+        <span>$</span>
+        <input placeholder="High Range" [(ngModel)]="filters.totalTo" type="number">
       </div>
     </div>
   </div>
 
-  <div class="score-range-filter">
-    <span>Days overdue range</span>
-    <ion-range-slider #sliderElement
-          type="double"
-          min="0"
-          [max]="maxOverdueDays"
-          [from]="filters.overdueDaysFrom"
-          [to]="filters.overdueDaysTo"
-          prefix="$"
-          (onChange)="overdueDaysRangeSliderChange($event)"></ion-range-slider>
+  <div class="estimated-total">
+    <span>Estimated Budget Total</span>
+    <div>
+      <div class="estimated-from range-box">
+        <span>$</span>
+        <input placeholder="Low Range" [(ngModel)]="filters.estimatedFrom" type="number">
+      </div>
+      <div class="estimated-to range-box">
+        <span>$</span>
+        <input placeholder="High Range" [(ngModel)]="filters.estimatedTo" type="number">
+      </div>
+    </div>
   </div>
-  
+
+  <div class="owner">
+    <span>Collaborators</span>
+    <div class="owners" (click)='editable=true;$event.stopPropagation();'> 
+      <div class="follower" *ngFor="let user of collaborators; let i = index" >
+        <!-- <span class="contact-owner">{{user}}</span> -->
+        <img [src]="user.imageUrl">
+      </div> 
+      <div class="follower add-owner" (click)="editable=true;$event.stopPropagation()">
+        <a (click)="editable=true;$event.stopPropagation()" ></a>
+      </div> 
+      <div class="edit-owners" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+        <ul>
+          <li *ngFor="let user of collaborators; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li style="background: none; width: 100%; margin: 0;">
+              <input autocomplete [config]="config2" [items]="items2"
+              (inputChangedEvent)="onInputChangedEvent($event)"
+              (selectEvent)="onSelect($event)">
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
   <button class="reset-filter" (click)="resetFilter()">Reset Filter</button>
 </div>
