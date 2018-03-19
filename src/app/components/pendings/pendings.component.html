@@ -9,17 +9,17 @@
       <div class="col-sm-6 sub-nav-right">
         <div class="col-sm-4 btn-sub-nav">
           <button class="btn " [routerLinkActive]="['active']" [routerLink]="['/inventory/stock-control']">
-            STOCK CONTROL
+            TASKS
           </button>
         </div>
         <div class="col-sm-4 btn-sub-nav">
           <button class="btn " [routerLinkActive]="['active']" [routerLink]="['/inventory/pendings']">
-            PENDINGS
+            PROJECTS
           </button>
         </div>
         <div class="col-sm-4 btn-sub-nav">
           <button class="btn" [routerLinkActive]="['active']" [routerLink]="['/inventory/suppliers']">
-            SUPPLIERS
+            PENDING PROJECTS
           </button>
         </div>
       </div>
@@ -47,12 +47,6 @@
       <img *ngIf="filterClicked" src="assets/images/Checkmark Green.png" (click)="saveFilterModalCollapsed = false; showSaveFilterModal = true;">
     </div>
 
-    <div class="pendings-btn-group">
-      <div class="pendings-add-btn">
-        
-      </div>
-      <div class="pendings-import-btn">Import pendings</div>
-    </div>
   </div>
 
   <div class="main-content-box">
