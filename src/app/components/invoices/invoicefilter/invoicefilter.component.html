@@ -35,6 +35,20 @@
     </div>
   </div>
 
+  <div class="invoice-updated-date">
+    <span>Due date range</span>
+    <div>
+      <div class="updated-from">
+        <input [owlDateTimeTrigger]="updatedFrom" [owlDateTime]="updatedFrom" placeholder="From" (dateTimeChange)="selectUpdatedFrom($event)" [max]="updatedMax" [(ngModel)]="filters.updatedFrom"  >
+        <owl-date-time [pickerType]="'calendar'" #updatedFrom ></owl-date-time>
+      </div>
+      <div class="updated-to">
+        <input [owlDateTime]="updatedTo" [owlDateTimeTrigger]="updatedTo" placeholder="To" (dateTimeChange)="selectUpdatedTo($event)" [min]="updatedMin" [(ngModel)]="filters.updatedTo">
+        <owl-date-time [pickerType]="'calendar'" #updatedTo></owl-date-time>
+      </div>
+    </div>
+  </div>
+
   <div class="score-range-filter">
     <span>Invoice range</span>
     <ion-range-slider #sliderElement
@@ -59,20 +73,6 @@
           (onChange)="invoiceBalanceRangeSliderChange($event)"></ion-range-slider>
   </div>
 
-  <div class="invoice-updated-date">
-    <span>Due date range</span>
-    <div>
-      <div class="updated-from">
-        <input [owlDateTimeTrigger]="updatedFrom" [owlDateTime]="updatedFrom" placeholder="From" (dateTimeChange)="selectUpdatedFrom($event)" [max]="updatedMax" [(ngModel)]="filters.updatedFrom"  >
-        <owl-date-time [pickerType]="'calendar'" #updatedFrom ></owl-date-time>
-      </div>
-      <div class="updated-to">
-        <input [owlDateTime]="updatedTo" [owlDateTimeTrigger]="updatedTo" placeholder="To" (dateTimeChange)="selectUpdatedTo($event)" [min]="updatedMin" [(ngModel)]="filters.updatedTo">
-        <owl-date-time [pickerType]="'calendar'" #updatedTo></owl-date-time>
-      </div>
-    </div>
-  </div>
-
   <div class="score-range-filter">
     <span>Days overdue range</span>
     <ion-range-slider #sliderElement
@@ -81,7 +81,7 @@
           [max]="maxOverdueDays"
           [from]="filters.overdueDaysFrom"
           [to]="filters.overdueDaysTo"
-          prefix="$"
+          postfix=" days"
           (onChange)="overdueDaysRangeSliderChange($event)"></ion-range-slider>
   </div>
   
