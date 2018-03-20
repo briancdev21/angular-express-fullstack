@@ -10,11 +10,12 @@ import { SuppliersComponent } from './components/suppliers/suppliers.component';
 import { ProductsComponent } from './components/products/products.component';
 import { InvoicesComponent } from './components/invoices/invoices.component';
 import { PendingsComponent } from './components/pendings/pendings.component';
+import { WorkOrdersComponent } from './components/workorders/workorders.component';
 
 import { CommonComponent } from './components/common/common.component';
 
 export const routes: Routes = [
-  { path: '', component: TestComponent },
+  { path: '', component: WorkOrdersComponent },
   { path: 'crm', component: LeadsComponent },
   { path: 'sales', component: PendingsComponent },
   { path: 'pm', component: ContactsComponent },

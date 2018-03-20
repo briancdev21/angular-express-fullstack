@@ -1,0 +1,251 @@
+
+
+img {
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.input {
+  padding-left: 5px;
+  height: 32px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 15px;
+  font-size: 13px;
+  border-bottom: 1px solid #F5F5F5;
+  font-weight: 400;
+  align-items: center;
+}
+
+.filter-apply {
+  padding: 7px 17px;
+  background-color: #F4F4F4;
+  font-size: 10px;
+  color: darkslategray;
+  cursor: pointer;
+  border: 0;
+}
+
+.filter-content {
+  padding: 15px;
+  text-align: left;
+  color: #585858;
+  font-weight: 400;
+}
+
+.filter-content>div {
+  display: flex;
+  flex-direction: column;
+  margin: 18px 0;
+}
+
+.filter-content select {
+  background: none;
+	-webkit-appearance: none;
+	background: url(/assets/images/down-arrow.png) no-repeat;
+	background-position: right 10px center;
+	background-size: 4%;
+	height: 32px;
+	font-size: 12px;
+  border-radius: 0;
+  border: 1px solid lightgray;
+  padding-left: 5px;
+}
+
+.filter-content span {
+  margin-bottom: 5px;
+}
+
+:host ::ng-deep .customer-selection .completer-input {
+  border: 1px solid lightgray;
+  height: 32px !important;
+	background-position: right 10px center;
+	background-size: 4%;
+}
+
+.workorder-created-date>div, .workorder-updated-date>div, .workorder-last-date>div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.created-from, .created-to, .updated-from, .updated-to, .last-from, .last-to {
+  width: 45%;
+}
+
+.workorder-name input {
+  height: 32px;
+  border: 1px solid lightgray;
+  padding-left: 5px;
+}
+
+.reset-filter {
+  padding: 7px 17px;
+  background-color: #A8F2DF;
+  font-size: 10px;
+  color: darkslategray;
+  cursor: pointer;
+  border: 0;
+  width: 100%;
+}
+
+/* tags section css */
+
+.tags {
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  color: #95989A;
+  position: relative;
+  justify-content: flex-start;
+  margin-top: 1px solid #D3D3D3;
+  border: 1px solid lightgray;
+  padding: 0 8px;
+}
+
+.tags .add-tag {
+  background-image: '';
+  cursor: pointer;
+  min-height: 32px;
+}
+
+.edit-tags {
+  position: absolute;
+  top: 30px;
+  border: solid 1px lightgray;
+  background: white;
+  padding: 5px;
+  z-index: 9;
+  min-width: 150px;
+  max-width: 300px;
+  left: 0;
+}
+
+.edit-tags ul {
+  margin: 0;
+  padding: 0;
+}
+
+.edit-tags li {
+  list-style: none;
+  display: inline-block;
+  padding: 3px;
+  background: lightblue;
+  border-radius: 1px;
+  margin: 2px;
+}
+
+.edit-tags input {
+  width: 100%;
+}
+
+.tags>span {
+  padding-right: 15px;
+  font-size: 13px;
+}
+
+.workorder-tag {
+  background: #f5f5f5;
+  padding: 5px;
+  margin-right: 5px;
+  color: #646464;
+}
+
+.estimated-total>div, .project-total>div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.range-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid lightgray;
+  width: 45%;
+}
+
+.range-box input {
+  border: 0;
+  text-align: right;
+  outline: none;
+  padding: 5px;
+  padding-right: 1px;
+  width: 100%;
+}
+
+.range-box input::placeholder {
+  color: #D3D3D3 !important;
+  font-size: 11px !important;
+  
+}
+
+.range-box span {
+  margin: 0 0 0 5px;
+}
+
+/* owners section css */
+
+.owners {
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  color: #95989A;
+  position: relative;
+  justify-content: flex-start;
+  margin-top: 1px solid #D3D3D3;
+  border: 1px solid lightgray;
+  padding: 0 8px;
+}
+
+.owners .add-owner {
+  background-image: '';
+  cursor: pointer;
+  min-height: 32px;
+}
+
+.edit-owners {
+  position: absolute;
+  top: 30px;
+  border: solid 1px lightgray;
+  background: white;
+  padding: 5px;
+  z-index: 9;
+  min-width: 150px;
+  max-width: 300px;
+  left: 0;
+}
+
+.edit-owners ul {
+  margin: 0;
+  padding: 0;
+}
+
+.edit-owners li {
+  list-style: none;
+  display: inline-block;
+  padding: 3px;
+  background: lightblue;
+  border-radius: 1px;
+  margin: 2px;
+}
+
+.edit-owners input {
+  width: 100%;
+}
+
+.owners>span {
+  padding-right: 15px;
+  font-size: 13px;
+}
+
+.contact-owner {
+  background: #f5f5f5;
+  padding: 5px;
+  margin-right: 5px;
+  color: #646464;
+}

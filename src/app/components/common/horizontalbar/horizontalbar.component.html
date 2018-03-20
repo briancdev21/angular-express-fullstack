@@ -1,0 +1,6 @@
+<div class="progress" [ngStyle]="{'background': barInfo.backgroundColor}">
+  <div class="progress-bar " role="progressbar" [attr.aria-valuenow]="barInfo.completeness" aria-valuemin="0" aria-valuemax ="100" 
+    [ngStyle]="{'background-color': barInfo.filledColor}" [style.width]="(barInfo.completeness/100)*100 + '%'">
+    <span class="progress-title">{{barInfo.title}}</span>
+  </div>
+</div>
