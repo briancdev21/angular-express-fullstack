@@ -11,6 +11,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { InvoicesComponent } from './components/invoices/invoices.component';
 import { PendingsComponent } from './components/pendings/pendings.component';
 import { WorkOrdersComponent } from './components/workorders/workorders.component';
+import { ProjectsListComponent } from './components/projectslist/projectslist.component';
 
 import { CommonComponent } from './components/common/common.component';
 
@@ -19,7 +20,7 @@ export const routes: Routes = [
   { path: 'crm', component: LeadsComponent },
   { path: 'sales', component: PendingsComponent },
   { path: 'pm', component: ContactsComponent },
-  { path: 'inventory', component: SuppliersComponent },
+  { path: 'inventory', component: ProjectsListComponent },
   { path: 'orderprofile', component: OrderProfileComponent },
   { path: 'servicing', component: ProductsComponent },
   { path: 'reports', component: InvoicesComponent },

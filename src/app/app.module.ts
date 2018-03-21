@@ -18,6 +18,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { InvoicesComponent } from './components/invoices/invoices.component';
 import { PendingsComponent } from './components/pendings/pendings.component';
 import { WorkOrdersComponent } from './components/workorders/workorders.component';
+import { ProjectsListComponent } from './components/projectslist/projectslist.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
@@ -30,6 +31,7 @@ import { ProductsCmpModule } from './components/products/products.module';
 import { InvoicesCmpModule } from './components/invoices/invoices.module';
 import { PendingsCmpModule } from './components/pendings/pendings.module';
 import { WorkOrdersCmpModule } from './components/workorders/workorder.module';
+import { ProjectsListCmpModule } from './components/projectslist/projectslist.module';
 import { CommonCmpModule } from './components/common/common.module';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
@@ -59,7 +61,8 @@ import { SubnavHandlerService } from './services/subnav-handler.service';
     ProductsComponent,
     InvoicesComponent,
     PendingsComponent,
-    WorkOrdersComponent
+    WorkOrdersComponent,
+    ProjectsListComponent
   ],
   imports: [
     BrowserModule,
@@ -83,7 +86,8 @@ import { SubnavHandlerService } from './services/subnav-handler.service';
     ProductsCmpModule,
     InvoicesCmpModule,
     PendingsCmpModule,
-    WorkOrdersCmpModule
+    WorkOrdersCmpModule,
+    ProjectsListCmpModule
   ],
   exports: [
     SubmenuComponent,
