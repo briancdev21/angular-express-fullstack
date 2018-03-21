@@ -1,13 +1,13 @@
 <div class="content">
-  <table>
+  <table class="work-order-table">
     <tr>
-      <th (click)="sortArray('projectId')">WORK ORDER #</th>
-      <th (click)="sortArray('projectName')">NAME OF WORK ORDER</th>
+      <th (click)="sortArray('workOrderNumber')">WORK ORDER #</th>
+      <th (click)="sortArray('workOrderName')">NAME OF WORK ORDER</th>
       <th (click)="sortArray('customerName')">CUSTOMER NAME</th>
-      <th (click)="sortCreateDateArray('signedDate')">START DATE</th> 
-      <th (click)="sortArray('projectTotal')">SCHEDULED</th>
+      <th (click)="sortCreateDateArray('startDate')">START DATE</th> 
+      <th (click)="sortArray('scheduledStart')">SCHEDULED</th>
       <th >COLLABORATORS</th>
-      <th (click)="sortArray('timePassed')">WORK ORDER COMPLETION</th>
+      <th (click)="sortArray('completion')">WORK ORDER COMPLETION</th>
     </tr>
     <tr *ngFor="let workorder of workOrdersInfo; let i = index" (click)="redirectTo(workorder.projectNumber)">
       <td>{{workorder.workOrderNumber}}</td>

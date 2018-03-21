@@ -45,7 +45,7 @@ td:first-child, th:first-child  {
 }
 
 td:last-child {
-  min-width: 150px;
+  min-width: 280px;
 }
 
 td:nth-child(2) {
@@ -94,7 +94,20 @@ table i {
 :host ::ng-deep .work-order-completion .progress {
   height: 16px !important;
   margin: 0;
+  position: relative;
 }
+
+:host ::ng-deep .work-order-table span.progress-title {
+  font-size: 14px;
+  left: 85%;
+  color: #464646;
+  margin-top: -2px;
+}
+
+:host ::ng-deep .work-order-table .progress-bar {
+  position: static;
+}
+
 
 @media screen and (max-width: 1200px) {
 
