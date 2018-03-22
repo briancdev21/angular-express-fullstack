@@ -27,8 +27,8 @@ export class ProjectsListTableComponent implements OnInit {
 
   ngOnInit() {
     this.projectsListInfo.map(i => i.barInfo = {
-      title: i.completion + '%',
-      completeness: i.completion
+      title: i.projectHealth + '%',
+      completeness: i.projectHealth
     });
   }
 

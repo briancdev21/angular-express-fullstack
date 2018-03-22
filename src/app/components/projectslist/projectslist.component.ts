@@ -48,13 +48,12 @@ export class ProjectsListComponent implements OnInit {
 
   public projectsListInfo: Array<Object> = [
     {
-      projectsListNumber: 'WO12345',
-      projectsListName: 'Work Order Title Here',
+      projectsListNumber: 'NU8802-0159',
+      projectsListName: 'Remodel with your Nu Life',
       customerName: 'John Moss',
-      startDate: 'November 20, 2017',
-      scheduledStart: '8:00 AM',
-      scheduledEnd: '6:30 PM',
-      completion: 33,
+      deliveryDate: 'November 20, 2017',
+      projectHealth: 33,
+      total: 22323.67,
       collaborators: [
         {
           name: 'John Moss',
@@ -63,13 +62,26 @@ export class ProjectsListComponent implements OnInit {
       ]
     },
     {
-      projectsListNumber: 'WO12344',
-      projectsListName: 'Work Order Title Here',
-      customerName: 'John Moss',
-      startDate: 'November 19, 2017',
-      scheduledStart: '12:00 PM',
-      scheduledEnd: '6:30 PM',
-      completion: 64,
+      projectsListNumber: 'NU8802-0158',
+      projectsListName: 'Your Nu Life',
+      customerName: 'Steve Jobs',
+      deliveryDate: 'February 20, 2017',
+      projectHealth: 62,
+      total: 16439.03,
+      collaborators: [
+        {
+          name: 'John Moss',
+          imgUrl: 'assets/users/user1.png'
+        }
+      ]
+    },
+    {
+      projectsListNumber: 'NU8802-0157',
+      projectsListName: 'Your Nuer Life',
+      customerName: 'Bob Agile',
+      deliveryDate: 'November 15, 2017',
+      projectHealth: 89,
+      total: 112830,
       collaborators: [
         {
           name: 'John Moss',
@@ -78,36 +90,6 @@ export class ProjectsListComponent implements OnInit {
         {
           name: 'Michael',
           imgUrl: 'assets/users/user2.png'
-        }
-      ]
-    },
-    {
-      projectsListNumber: 'WO12343',
-      projectsListName: 'Work Order Title Here',
-      customerName: 'Agile Smith',
-      startDate: 'November 18, 2017',
-      scheduledStart: '8:00 AM',
-      scheduledEnd: '11:00 AM',
-      completion: 89,
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        }
-      ]
-    },
-    {
-      projectsListNumber: 'WO12343',
-      projectsListName: 'Work Order Title Here',
-      customerName: 'Agile Smith',
-      startDate: 'November 10, 2017',
-      scheduledStart: '8:00 AM',
-      scheduledEnd: '6:30 PM',
-      completion: 59,
-      collaborators: [
-        {
-          name: 'Agile Smith',
-          imgUrl: 'assets/users/user3.png'
         }
       ]
     },

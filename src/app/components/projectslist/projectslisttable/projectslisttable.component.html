@@ -1,25 +1,19 @@
 <div class="content">
   <table class="work-order-table">
     <tr>
-      <th (click)="sortArray('projectsListNumber')">WORK ORDER #</th>
-      <th (click)="sortArray('projectsListName')">NAME OF WORK ORDER</th>
+      <th (click)="sortArray('projectsListNumber')">PROJECT #</th>
+      <th (click)="sortArray('projectsListName')">NAME OF PROJECT</th>
       <th (click)="sortArray('customerName')">CUSTOMER NAME</th>
-      <th (click)="sortCreateDateArray('startDate')">START DATE</th> 
-      <th (click)="sortArray('scheduledStart')">SCHEDULED</th>
-      <th >COLLABORATORS</th>
-      <th (click)="sortArray('completion')">WORK ORDER COMPLETION</th>
+      <th (click)="sortCreateDateArray('deliveryDate')">DELIVERY DATE</th> 
+      <th (click)="sortArray('total')">PROJECT TOTAL</th>
+      <th (click)="sortArray('projectHealth')">WORK ORDER COMPLETION</th>
     </tr>
     <tr *ngFor="let projectslist of projectsListInfo; let i = index" (click)="redirectTo(projectslist.projectNumber)">
       <td>{{projectslist.projectsListNumber}}</td>
       <td>{{projectslist.projectsListName}}</td>
       <td>{{projectslist.customerName}}</td>
-      <td>{{projectslist.startDate}}</td>
-      <td>{{projectslist.scheduledStart}} - {{projectslist.scheduledEnd}}</td>
-      <td class="collaborators">
-        <div *ngFor="let col of projectslist.collaborators" >
-          <img [src]="col.imgUrl">
-        </div>
-      </td>
+      <td>{{projectslist.deliveryDate}}</td>
+      <td>$ {{projectslist.total | number: '1.2-2'}}</td>
       <td class="work-order-completion"><app-horizontalbar [barInfo]="projectslist.barInfo"></app-horizontalbar></td> 
     </tr>
   </table>
