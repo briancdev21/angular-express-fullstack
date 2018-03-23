@@ -177,9 +177,9 @@ export class ContactFilterComponent implements OnInit {
     // );
 
     if (this.filters.selectStatus) {
-      if (this.filters.selectStatus == 'Project') {
+      if (this.filters.selectStatus === 'Project') {
         this.filteredContacts = this.filteredContacts.filter(contact => contact.account > 0);
-      } else if (this.filters.selectStatus == 'Invoice') {
+      } else if (this.filters.selectStatus === 'Invoice') {
         this.filteredContacts = this.filteredContacts.filter(contact => contact.association > 0);
       } else {
         this.filteredContacts = this.filteredContacts.filter(contact => contact.association > 0 && contact.account > 0);

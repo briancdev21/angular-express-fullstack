@@ -48,8 +48,8 @@ export class ProjectsListComponent implements OnInit {
 
   public projectsListInfo: Array<Object> = [
     {
-      projectsListNumber: 'NU8802-0159',
-      projectsListName: 'Remodel with your Nu Life',
+      projectNumber: 'NU8802-0159',
+      projectName: 'Remodel with your Nu Life',
       customerName: 'John Moss',
       deliveryDate: 'November 20, 2017',
       projectHealth: 33,
@@ -62,8 +62,8 @@ export class ProjectsListComponent implements OnInit {
       ]
     },
     {
-      projectsListNumber: 'NU8802-0158',
-      projectsListName: 'Your Nu Life',
+      projectNumber: 'NU8802-0158',
+      projectName: 'Your Nu Life',
       customerName: 'Steve Jobs',
       deliveryDate: 'February 20, 2017',
       projectHealth: 62,
@@ -76,8 +76,8 @@ export class ProjectsListComponent implements OnInit {
       ]
     },
     {
-      projectsListNumber: 'NU8802-0157',
-      projectsListName: 'Your Nuer Life',
+      projectNumber: 'NU8802-0157',
+      projectName: 'Your Nuer Life',
       customerName: 'Bob Agile',
       deliveryDate: 'November 15, 2017',
       projectHealth: 89,
@@ -88,7 +88,7 @@ export class ProjectsListComponent implements OnInit {
           imgUrl: 'assets/users/user1.png'
         },
         {
-          name: 'Michael',
+          name: 'Steve Jobs',
           imgUrl: 'assets/users/user2.png'
         }
       ]

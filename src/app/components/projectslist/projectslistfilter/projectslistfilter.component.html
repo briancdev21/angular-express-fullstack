@@ -19,19 +19,31 @@
   </div>
 
   <div class="score-range-filter">
-    <span>Time Passed in Days</span>
+    <span>Project Health Range</span>
     <ion-range-slider #sliderElement
           type="double"
           min="0"
-          max="120"
-          [from]="filters.overdueDaysFrom"
-          [to]="filters.overdueDaysTo"
-          prefix="$"
-          (onChange)="overdueDaysRangeSliderChange($event)"></ion-range-slider>
+          max="100"
+          [from]="filters.projectHealthFrom"
+          [to]="filters.projectHealthTo"
+          postfix="%"
+          (onChange)="projectHealthRangeSliderChange($event)"></ion-range-slider>
+  </div>
+
+  <div class="score-range-filter">
+    <span>Project Total Range</span>
+    <ion-range-slider #sliderElement
+          type="double"
+          min="0"
+          [max]="maxProjectTotal"
+          [from]="filters.projectTotalFrom"
+          [to]="filters.projectTotalTo"
+          postfix="%"
+          (onChange)="projectTotalRangeSliderChange($event)"></ion-range-slider>
   </div>
 
   <div class="projectslist-created-date">
-    <span>Date Signed</span>
+    <span>Delivery Date Range</span>
     <div>
       <div class="created-from">
         <input [owlDateTimeTrigger]="createdFrom" [owlDateTime]="createdFrom" placeholder="From" (dateTimeChange)="selectCreatedFrom($event)" [max]="createdMax" [(ngModel)]="filters.createdFrom" >
@@ -40,20 +52,6 @@
       <div class="created-to">
         <input [owlDateTime]="createdTo" [owlDateTimeTrigger]="createdTo" placeholder="To" (dateTimeChange)="selectCreatedTo($event)" [min]="createdMin" [(ngModel)]="filters.createdTo" >
         <owl-date-time [pickerType]="'calendar'" #createdTo></owl-date-time>
-      </div>
-    </div>
-  </div>
-
-  <div class="project-total">
-    <span>Project Total</span>
-    <div>
-      <div class="total-from range-box">
-        <span>$</span>
-        <input placeholder="Low Range" [(ngModel)]="filters.totalFrom" type="number">
-      </div>
-      <div class="total-to range-box">
-        <span>$</span>
-        <input placeholder="High Range" [(ngModel)]="filters.totalTo" type="number">
       </div>
     </div>
   </div>

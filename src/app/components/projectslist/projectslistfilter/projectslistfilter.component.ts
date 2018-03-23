@@ -27,20 +27,19 @@ export class ProjectsListFilterComponent implements OnInit {
   customersList = [];
   projectsList = [];
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user3.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/man.png'}},
+    {id: 0, payload: {label: 'John Moss', imageUrl: 'assets/users/user1.png'}},
+    {id: 1, payload: {label: 'Steve Jobs', imageUrl: 'assets/users/user2.png'}},
+    {id: 2, payload: {label: 'Bob Agile', imageUrl: 'assets/users/user3.png'}},
+    {id: 3, payload: {label: 'John Moss', imageUrl: 'assets/users/man.png'}},
   ];
   config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
 
-  public selectedMoment = new Date();
   public createdMin;
   public createdMax;
   public originFilters;
-  createdDateFrom: Date;
+  deliveryDateFrom: Date;
   createdDateTo: Date;
-  projectslistName: string;
+  projectName: string;
   filteredProjectsList: any;
   applyClicked = false;
   backUpProjectsList: any;
@@ -50,9 +49,12 @@ export class ProjectsListFilterComponent implements OnInit {
   inputChanged: any = '';
   selectCustomer =  '';
   selectProject = '';
-  maxOverdueDays = 120;
-  overdueDaysFrom = 0;
-  overdueDaysTo = 120;
+  maxProjectHealth = 100;
+  projectHealthFrom = 0;
+  projectHealthTo = 100;
+  maxProjectTotal = 0;
+  projectTotalFrom = 0;
+  projectTotalTo = 0;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -72,12 +74,18 @@ export class ProjectsListFilterComponent implements OnInit {
       return a.indexOf(item) === pos;
     });
 
+    // Get total max value in projectsListInfo
+    this.maxProjectTotal = Math.max(...this.projectsListInfo.map(i => i.total));
+
     this.projectsListInfo.map(i => i.timePassed = this.calcTimePassedDays(i.signedDate, i.status));
     // Get projects list from Information list
     this. projectsList = this.projectsListInfo.map( p => p.projectNumber);
 
-    this.overdueDaysFrom = this.filters.overdueDaysFrom ? this.filters.overdueDaysFrom : 0;
-    this.overdueDaysTo = this.filters.overdueDaysTo ? this.filters.overdueDaysTo : 120;
+    this.projectHealthFrom = this.filters.projectHealthFrom ? this.filters.projectHealthFrom : 0;
+    this.projectHealthTo = this.filters.projectHealthTo ? this.filters.projectHealthTo : 100;
+
+    this.projectTotalFrom = this.filters.projectTotalFrom;
+    this.projectTotalTo = this.filters.projectTotalTo;
   }
 
   calcTimePassedDays(sign, status) {
@@ -92,9 +100,14 @@ export class ProjectsListFilterComponent implements OnInit {
     }
   }
 
-  overdueDaysRangeSliderChange(event) {
-    this.overdueDaysFrom = event.from;
-    this.overdueDaysTo = event.to;
+  projectHealthRangeSliderChange(event) {
+    this.projectHealthFrom = event.from;
+    this.projectHealthTo = event.to;
+  }
+
+  projectTotalRangeSliderChange(event) {
+    this.projectTotalFrom = event.from;
+    this.projectTotalTo = event.to;
   }
 
   onSelectedCustomer(val) {
@@ -126,8 +139,8 @@ export class ProjectsListFilterComponent implements OnInit {
   }
 
   selectCreatedFrom(event) {
-    this.createdDateFrom = event.value;
-    this.createdMin = this.createdDateFrom;
+    this.deliveryDateFrom = event.value;
+    this.createdMin = this.deliveryDateFrom;
   }
 
   selectCreatedTo(event) {
@@ -146,75 +159,74 @@ export class ProjectsListFilterComponent implements OnInit {
   resetFilter() {
     this.selectCustomer = '';
     this.selectProject = '';
-    this.overdueDaysFrom = 0;
-    this.overdueDaysTo = this.maxOverdueDays;
+    this.projectHealthFrom = 0;
+    this.projectHealthTo = this.maxProjectHealth;
+    this.projectTotalFrom = 0;
+    this.projectTotalTo = this.maxProjectTotal;
 
     this.filters = {
-      overdueDaysFrom : 0,
-      overdueDaysTo : this.maxOverdueDays,
+      projectHealthFrom : 0,
+      projectHealthTo : this.maxProjectHealth,
+      projectTotalFrom : 0,
+      projectTotalTo : this.maxProjectTotal,
       createdFrom: '',
       createdTo: '',
       selectCustomer: '',
       selectProject: '',
       collaborators: '',
-      projectslistName: '',
-      totalFrom: 0,
-      totalTo: 0,
-      estimatedFrom: 0,
-      estimatedTo: 0,
+      projectName: '',
     };
     this.ref.detectChanges();
   }
 
   applyFilter() {
 
-    this.filters.overdueDaysFrom = this.overdueDaysFrom;
-    this.filters.overdueDaysTo = this.overdueDaysTo;
+    this.filters.projectHealthFrom = this.projectHealthFrom;
+    this.filters.projectHealthTo = this.projectHealthTo;
+
+    this.filters.projectTotalFrom = this.projectTotalFrom;
+    this.filters.projectTotalTo = this.projectTotalTo;
+
     this.applyClicked = true;
     this.filteredProjectsList = this.backUpProjectsList;
 
-    if (!this.overdueDaysFrom) { this.filters.overdueDaysFrom = 0; }
-    if (!this.overdueDaysTo) { this.filters.overdueDaysTo = this.maxOverdueDays; }
-
-    if (this.filters.totalFrom) {
-      this.filteredProjectsList = this.filteredProjectsList.filter(projectslist => projectslist.projectTotal >= this.filters.totalFrom);
+    if (this.collaborators[0]) {
+      let ownerFiltered = [];
+      let ownerFilteredList = [];
+      for ( let i = 0; i <= this.collaborators.length - 1; i ++) {
+        ownerFiltered = this.filterTxt(this.filteredProjectsList, this.collaborators[i].name);
+        ownerFilteredList = ownerFilteredList.concat(ownerFiltered);
+      }
+      this.filteredProjectsList = ownerFilteredList;
     }
 
-    if (this.filters.totalTo) {
-      this.filteredProjectsList = this.filteredProjectsList.filter(projectslist => projectslist.projectTotal <= this.filters.totalTo);
-    }
+    if (!this.projectHealthFrom) { this.filters.projectHealthFrom = 0; }
+    if (!this.projectHealthTo) { this.filters.projectHealthTo = this.maxProjectHealth; }
 
-    if (this.filters.estimatedFrom) {
-      this.filteredProjectsList = this.filteredProjectsList.filter(projectslist => projectslist.estimatedBudget >= this.filters.estimatedFrom);
-    }
+    if (!this.projectTotalFrom) { this.filters.projectTotalFrom = 0; }
+    if (!this.projectTotalTo) { this.filters.projectTotalTo = this.maxProjectTotal; }
 
-    if (this.filters.estimatedTo) {
-      this.filteredProjectsList = this.filteredProjectsList.filter(projectslist => projectslist.estimatedBudget <= this.filters.estimatedTo);
-    }
+    // Filter function
 
-    // if user does not set maximum overdue days, max value should be infinite
-    if (this.filters.overdueDaysTo < 120) {
-      this.filteredProjectsList = this.filteredProjectsList.filter(projectslist =>
-        projectslist.timePassed >= this.filters.overdueDaysFrom && projectslist.timePassed <= this.filters.overdueDaysTo);
-    } else if (this.filters.overdueDaysTo === 120) {
-      this.filteredProjectsList = this.filteredProjectsList.filter(projectslist =>
-        projectslist.timePassed >= this.filters.overdueDaysFrom);
-    }
+    this.filteredProjectsList = this.filteredProjectsList.filter(projectslist =>
+      projectslist.projectHealth >= this.filters.projectHealthFrom && projectslist.projectHealth <= this.filters.projectHealthTo);
+
+    this.filteredProjectsList = this.filteredProjectsList.filter(projectslist =>
+      projectslist.total >= this.filters.projectTotalFrom && projectslist.total <= this.filters.projectTotalTo);
     if (this.filters.selectCustomer) {
       this.filteredProjectsList = this.filteredProjectsList.filter(customer => customer.customerName === this.filters.selectCustomer);
     }
     if (this.filters.selectProject) {
       this.filteredProjectsList = this.filteredProjectsList.filter(project => project.projectNumber === this.filters.selectProject);
     }
-
     if (this.filters.createdFrom) {
       this.filteredProjectsList = this.filteredProjectsList.filter(
-        projectslist => Date.parse(projectslist.createdDate) >= Number(this.filters.createdFrom)
+        projectslist => Date.parse(projectslist.deliveryDate) >= Number(this.filters.createdFrom)
       );
     }
     if (this.filters.createdTo) {
       this.filteredProjectsList = this.filteredProjectsList.filter(
-        projectslist => Date.parse(projectslist.createdDate) <= Number(this.filters.createdTo)
+        projectslist => Date.parse(projectslist.deliveryDate) <= Number(this.filters.createdTo)
       );
     }
     // remove duplicates from array
