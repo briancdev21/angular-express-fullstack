@@ -87,14 +87,17 @@ app-submenu {
   flex: 1
 }
 
-.proposallist-import-btn {
-  font-size: 10px;
-  padding: 5px 20px;
-  letter-spacing: 0;
-  border-radius: 5px;
-  background-color: #F5F5F5;
-  cursor: pointer;
-  color: #868686;
+
+.add-proposal-btn {
+	font-size: 10px;
+	letter-spacing: 0;
+	padding: 5px 23px;
+	background-color: #A8F2DF;
+	border-radius: 5px;
+	margin-right: 10px;
+	cursor: pointer;
+	color: #868686;
+	user-select: none;
 }
 
 .proposallist-btn-group {
