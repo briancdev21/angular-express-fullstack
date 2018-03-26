@@ -19,16 +19,17 @@ export class ProposalListFilterComponent implements OnInit {
 
   @Input() proposalListInfo;
   @Input() filters;
-  @Input() collaborators;
+  @Input() owners;
   @Input() proposallistStatus;
   @Input() proposallistTypes;
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
 
   customersList = [];
   projectsList = [];
+  statusList = [];
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
+    {id: 0, payload: {label: 'John Moss', imageUrl: 'assets/users/user1.png'}},
+    {id: 1, payload: {label: 'Steve Jobs', imageUrl: 'assets/users/user2.png'}},
     {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user3.png'}},
     {id: 3, payload: {label: 'John', imageUrl: 'assets/users/man.png'}},
   ];
@@ -37,9 +38,18 @@ export class ProposalListFilterComponent implements OnInit {
   public selectedMoment = new Date();
   public createdMin;
   public createdMax;
+  public updatedMin;
+  public updatedMax;
+  public completedMin;
+  public completedMax;
   public originFilters;
+  selectStatus: string;
   createdDateFrom: Date;
   createdDateTo: Date;
+  updatedDateFrom: Date;
+  updatedDateTo: Date;
+  completedDateFrom: Date;
+  completedDateTo: Date;
   proposallistName: string;
   filteredProposalList: any;
   applyClicked = false;
@@ -50,9 +60,6 @@ export class ProposalListFilterComponent implements OnInit {
   inputChanged: any = '';
   selectCustomer =  '';
   selectProject = '';
-  maxOverdueDays = 120;
-  overdueDaysFrom = 0;
-  overdueDaysTo = 120;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -67,17 +74,21 @@ export class ProposalListFilterComponent implements OnInit {
     this.originFilters = Object.assign({}, this.filters);
 
     // Get customer list from Information list and remove duplicated names
-    const a = this.proposalListInfo.map(i => i.customerName);
+    const a = this.proposalListInfo.map(i => i.contactName);
     this.customersList = a.filter(function(item, pos) {
       return a.indexOf(item) === pos;
+    });
+
+    // Get status list from Information list and remove duplicated status
+    const b = this.proposalListInfo.map(i => i.dealStatus);
+    this.statusList = b.filter(function(item, pos) {
+      return b.indexOf(item) === pos;
     });
 
     this.proposalListInfo.map(i => i.timePassed = this.calcTimePassedDays(i.signedDate, i.status));
     // Get projects list from Information list
     this. projectsList = this.proposalListInfo.map( p => p.projectNumber);
 
-    this.overdueDaysFrom = this.filters.overdueDaysFrom ? this.filters.overdueDaysFrom : 0;
-    this.overdueDaysTo = this.filters.overdueDaysTo ? this.filters.overdueDaysTo : 120;
   }
 
   calcTimePassedDays(sign, status) {
@@ -90,11 +101,6 @@ export class ProposalListFilterComponent implements OnInit {
     } else {
       return diffDays;
     }
-  }
-
-  overdueDaysRangeSliderChange(event) {
-    this.overdueDaysFrom = event.from;
-    this.overdueDaysTo = event.to;
   }
 
   onSelectedCustomer(val) {
@@ -112,7 +118,7 @@ export class ProposalListFilterComponent implements OnInit {
     this.items2 = this.items2.filter(function( obj ) {
       return obj.payload.label !== item.payload.label;
     });
-    this.collaborators.push({name: item.payload.label, imageUrl: item.payload.imageUrl});
+    this.owners.push({name: item.payload.label, imageUrl: item.payload.imageUrl});
   }
 
   onInputChangedEvent(val: string) {
@@ -120,9 +126,9 @@ export class ProposalListFilterComponent implements OnInit {
   }
 
   removeUser(i: number) {
-    const item = this.collaborators[i];
+    const item = this.owners[i];
     this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
-    this.collaborators.splice(i, 1);
+    this.owners.splice(i, 1);
   }
 
   selectCreatedFrom(event) {
@@ -133,6 +139,26 @@ export class ProposalListFilterComponent implements OnInit {
   selectCreatedTo(event) {
     this.createdDateTo = event.value;
     this.createdMax = this.createdDateTo;
+  }
+
+  selectUpdatedFrom(event) {
+    this.updatedDateFrom = event.value;
+    this.updatedMin = this.updatedDateFrom;
+  }
+
+  selectUpdatedTo(event) {
+    this.updatedDateTo = event.value;
+    this.updatedMax = this.updatedDateTo;
+  }
+
+  selectCompletedFrom(event) {
+    this.completedDateFrom = event.value;
+    this.completedMin = this.completedDateFrom;
+  }
+
+  selectCompletedTo(event) {
+    this.completedDateTo = event.value;
+    this.completedMax = this.completedDateTo;
   }
 
   filterTxt (arr, searchKey) {
@@ -146,65 +172,54 @@ export class ProposalListFilterComponent implements OnInit {
   resetFilter() {
     this.selectCustomer = '';
     this.selectProject = '';
-    this.overdueDaysFrom = 0;
-    this.overdueDaysTo = this.maxOverdueDays;
 
     this.filters = {
-      overdueDaysFrom : 0,
-      overdueDaysTo : this.maxOverdueDays,
       createdFrom: '',
       createdTo: '',
+      updatedFrom: '',
+      updatedTo: '',
+      completedFrom: '',
+      completedTo: '',
       selectCustomer: '',
-      selectProject: '',
-      collaborators: '',
+      selectStatus: '',
+      owners: '',
       proposallistName: '',
       totalFrom: 0,
       totalTo: 0,
-      estimatedFrom: 0,
-      estimatedTo: 0,
     };
     this.ref.detectChanges();
   }
 
   applyFilter() {
-
-    this.filters.overdueDaysFrom = this.overdueDaysFrom;
-    this.filters.overdueDaysTo = this.overdueDaysTo;
     this.applyClicked = true;
     this.filteredProposalList = this.backUpProposalList;
 
-    if (!this.overdueDaysFrom) { this.filters.overdueDaysFrom = 0; }
-    if (!this.overdueDaysTo) { this.filters.overdueDaysTo = this.maxOverdueDays; }
+    if (this.owners[0]) {
+      let ownerFiltered = [];
+      let ownerFilteredList = [];
+      this.filteredProposalList.forEach(element => {
+        for ( let i = 0; i <= this.owners.length - 1; i ++) {
+          ownerFiltered = this.filterTxt(element.owners, this.owners[i].name);
+          if (ownerFiltered.length > 0) {
+            ownerFilteredList = ownerFilteredList.concat(element);
+          }
+        }
+      });
+      this.filteredProposalList = ownerFilteredList;
+    }
 
     if (this.filters.totalFrom) {
-      this.filteredProposalList = this.filteredProposalList.filter(proposallist => proposallist.projectTotal >= this.filters.totalFrom);
+      this.filteredProposalList = this.filteredProposalList.filter(proposallist => proposallist.proposalAmount >= this.filters.totalFrom);
     }
 
     if (this.filters.totalTo) {
-      this.filteredProposalList = this.filteredProposalList.filter(proposallist => proposallist.projectTotal <= this.filters.totalTo);
-    }
-
-    if (this.filters.estimatedFrom) {
-      this.filteredProposalList = this.filteredProposalList.filter(proposallist => proposallist.estimatedBudget >= this.filters.estimatedFrom);
-    }
-
-    if (this.filters.estimatedTo) {
-      this.filteredProposalList = this.filteredProposalList.filter(proposallist => proposallist.estimatedBudget <= this.filters.estimatedTo);
-    }
-
-    // if user does not set maximum overdue days, max value should be infinite
-    if (this.filters.overdueDaysTo < 120) {
-      this.filteredProposalList = this.filteredProposalList.filter(proposallist =>
-        proposallist.timePassed >= this.filters.overdueDaysFrom && proposallist.timePassed <= this.filters.overdueDaysTo);
-    } else if (this.filters.overdueDaysTo === 120) {
-      this.filteredProposalList = this.filteredProposalList.filter(proposallist =>
-        proposallist.timePassed >= this.filters.overdueDaysFrom);
+      this.filteredProposalList = this.filteredProposalList.filter(proposallist => proposallist.proposalAmount <= this.filters.totalTo);
     }
     if (this.filters.selectCustomer) {
-      this.filteredProposalList = this.filteredProposalList.filter(customer => customer.customerName === this.filters.selectCustomer);
+      this.filteredProposalList = this.filteredProposalList.filter(customer => customer.contactName === this.filters.selectCustomer);
     }
-    if (this.filters.selectProject) {
-      this.filteredProposalList = this.filteredProposalList.filter(project => project.projectNumber === this.filters.selectProject);
+    if (this.filters.selectStatus) {
+      this.filteredProposalList = this.filteredProposalList.filter(project => project.dealStatus === this.filters.selectStatus);
     }
 
     if (this.filters.createdFrom) {
@@ -215,6 +230,28 @@ export class ProposalListFilterComponent implements OnInit {
     if (this.filters.createdTo) {
       this.filteredProposalList = this.filteredProposalList.filter(
         proposallist => Date.parse(proposallist.createdDate) <= Number(this.filters.createdTo)
+      );
+    }
+
+    if (this.filters.updatedFrom) {
+      this.filteredProposalList = this.filteredProposalList.filter(
+        proposallist => Date.parse(proposallist.updatedDate) >= Number(this.filters.updatedFrom)
+      );
+    }
+    if (this.filters.updatedTo) {
+      this.filteredProposalList = this.filteredProposalList.filter(
+        proposallist => Date.parse(proposallist.updatedDate) <= Number(this.filters.updatedTo)
+      );
+    }
+
+    if (this.filters.completedFrom) {
+      this.filteredProposalList = this.filteredProposalList.filter(
+        proposallist => Date.parse(proposallist.completionDate) >= Number(this.filters.completedFrom)
+      );
+    }
+    if (this.filters.completedTo) {
+      this.filteredProposalList = this.filteredProposalList.filter(
+        proposallist => Date.parse(proposallist.completionDate) <= Number(this.filters.completedTo)
       );
     }
     // remove duplicates from array

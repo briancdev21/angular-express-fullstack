@@ -39,7 +39,7 @@ export class ProposalListComponent implements OnInit {
     selectStatus: '',
   };
 
-  public collaborators: Array<string> = [
+  public owners: Array<string> = [
   ];
 
   public proposallistStatus: Array<string> = [

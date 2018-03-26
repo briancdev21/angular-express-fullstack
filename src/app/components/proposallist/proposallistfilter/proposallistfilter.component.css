@@ -68,7 +68,7 @@ img {
 	background-size: 4%;
 }
 
-.proposallist-created-date>div, .proposallist-updated-date>div, .proposallist-last-date>div {
+.proposallist-created-date>div, .proposallist-updated-date>div, .proposallist-completion-date>div {
   display: flex;
   justify-content: space-between;
 }
