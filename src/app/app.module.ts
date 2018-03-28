@@ -34,6 +34,7 @@ import { PendingsCmpModule } from './components/pendings/pendings.module';
 import { WorkOrdersCmpModule } from './components/workorders/workorder.module';
 import { ProjectsListCmpModule } from './components/projectslist/projectslist.module';
 import { ProposalListCmpModule } from './components/proposallist/proposallist.module';
+import { ProjectManagementCmpModule } from './components/projectmanagement/projectmanagement.module';
 import { CommonCmpModule } from './components/common/common.module';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
@@ -45,6 +46,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { PhonePipe } from './pipes/phone.pipe';
 
 import { SubnavHandlerService } from './services/subnav-handler.service';
+import { ProjectManagementComponent } from './components/projectmanagement/projectmanagement.component';
 
 
 @NgModule({
@@ -65,7 +67,8 @@ import { SubnavHandlerService } from './services/subnav-handler.service';
     PendingsComponent,
     WorkOrdersComponent,
     ProjectsListComponent,
-    ProposalListComponent
+    ProposalListComponent,
+    ProjectManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -91,7 +94,8 @@ import { SubnavHandlerService } from './services/subnav-handler.service';
     PendingsCmpModule,
     WorkOrdersCmpModule,
     ProjectsListCmpModule,
-    ProposalListCmpModule
+    ProposalListCmpModule,
+    ProjectManagementCmpModule
   ],
   exports: [
     SubmenuComponent,

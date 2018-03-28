@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
 
 
 export class BreadcrumbComponent {
-  // @Input() data;
-  data = ['Contacts', 'John Moss'];
+  @Input() data;
+  // this.data = ['Contacts', 'John Moss'];
 
 }
 

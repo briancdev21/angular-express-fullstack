@@ -13,6 +13,12 @@ import { PendingsComponent } from './components/pendings/pendings.component';
 import { WorkOrdersComponent } from './components/workorders/workorders.component';
 import { ProjectsListComponent } from './components/projectslist/projectslist.component';
 import { ProposalListComponent } from './components/proposallist/proposallist.component';
+import { ProjectManagementComponent } from './components/projectmanagement/projectmanagement.component';
+import { PmBoardComponent } from './components/projectmanagement/pmboard/pmboard.component';
+import { PmScheduleComponent } from './components/projectmanagement/pmschedule/pmschedule.component';
+import { PmFinancialsComponent } from './components/projectmanagement/pmfinancials/pmfinancials.component';
+import { PmProgressComponent } from './components/projectmanagement/pmprogress/pmprogress.component';
+import { PmFilesComponent } from './components/projectmanagement/pmfiles/pmfiles.component';
 
 import { CommonComponent } from './components/common/common.component';
 
@@ -20,7 +26,16 @@ export const routes: Routes = [
   { path: '', component: WorkOrdersComponent },
   { path: 'crm', component: ProposalListComponent },
   { path: 'sales', component: PendingsComponent },
-  { path: 'pm', component: ContactsComponent },
+  { path: 'pm', component: ProjectManagementComponent,
+    children: [
+      { path: '', redirectTo: 'pm-board', pathMatch: 'full' },
+      { path: 'pm-board', component: PmBoardComponent },
+      { path: 'pm-schedule', component: PmScheduleComponent },
+      { path: 'pm-financials', component: PmFinancialsComponent },
+      { path: 'pm-progress', component: PmProgressComponent },
+      { path: 'pm-files', component: PmFilesComponent },
+    ]
+  },
   { path: 'inventory', component: ProjectsListComponent },
   { path: 'orderprofile', component: OrderProfileComponent },
   { path: 'servicing', component: ProductsComponent },

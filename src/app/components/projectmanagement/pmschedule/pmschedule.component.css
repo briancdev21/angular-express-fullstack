@@ -1,0 +1,28 @@
+:host ::ng-deep .pm-schedule.content>tabs .tabs__tab-bar {
+  font-size: 18px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  font-weight: 400;
+  padding-bottom: 10px;
+  line-height: 2.5rem;
+  border-bottom: solid 1px #95989A;
+}
+
+:host ::ng-deep .pm-schedule .editor tabs .tabs__tab.active, :host ::ng-deep .pm-schedule.content>tabs .tabs__tab.active {
+  border-bottom: 0 !important;
+  color: #87d6c7 !important;
+}
+
+:host ::ng-deep .pm-schedule.content>tabs .tabs__tab:last-child {
+  border-right: 0;
+  border-left: solid 1px #95989A;
+  width: 16%;
+}
+
+:host ::ng-deep .pm-schedule.content>tabs .tabs__tab:first-child {
+  width: 13%;
+  margin-left: 33%;
+}

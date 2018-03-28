@@ -1,0 +1,24 @@
+.main-content {
+  position: absolute;  
+  text-align: center;
+}
+
+.main-content-small {
+  transition: 0.2s all;
+  right: 0;
+  left: 200px;
+}
+
+.main-content-large {
+  right: 0;
+  left: 68px;
+  transition: 0.2s all;
+}
+
+
+@media screen and (max-width: 1250px) {
+	.profile-info {
+    padding: 30px 10px;
+  }
+
+}
