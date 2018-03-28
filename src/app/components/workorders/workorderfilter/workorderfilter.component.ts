@@ -25,21 +25,21 @@ export class WorkOrderFilterComponent implements OnInit {
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
 
   customersList = [];
-  projectsList = [];
+  workOrdersList = [];
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user3.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/man.png'}},
+    {id: 0, payload: {label: 'John Moss', imageUrl: 'assets/users/user1.png'}},
+    {id: 1, payload: {label: 'Michael', imageUrl: 'assets/users/user2.png'}},
+    {id: 2, payload: {label: 'Agile Smith', imageUrl: 'assets/users/user3.png'}},
+    {id: 3, payload: {label: 'Joseph', imageUrl: 'assets/users/man.png'}},
   ];
   config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
 
   public selectedMoment = new Date();
-  public createdMin;
-  public createdMax;
+  public startedMin;
+  public startedMax;
   public originFilters;
-  createdDateFrom: Date;
-  createdDateTo: Date;
+  startedDateFrom: Date;
+  startedDateTo: Date;
   workorderName: string;
   filteredWorkOrders: any;
   applyClicked = false;
@@ -50,9 +50,9 @@ export class WorkOrderFilterComponent implements OnInit {
   inputChanged: any = '';
   selectCustomer =  '';
   selectProject = '';
-  maxOverdueDays = 120;
-  overdueDaysFrom = 0;
-  overdueDaysTo = 120;
+  maxCompletion = 120;
+  completionFrom = 0;
+  completionTo = 120;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -73,11 +73,11 @@ export class WorkOrderFilterComponent implements OnInit {
     });
 
     this.workOrdersInfo.map(i => i.timePassed = this.calcTimePassedDays(i.signedDate, i.status));
-    // Get projects list from Information list
-    this. projectsList = this.workOrdersInfo.map( p => p.projectNumber);
+    // Get work order list from Information list
+    this. workOrdersList = this.workOrdersInfo.map( p => p.workOrderNumber);
 
-    this.overdueDaysFrom = this.filters.overdueDaysFrom ? this.filters.overdueDaysFrom : 0;
-    this.overdueDaysTo = this.filters.overdueDaysTo ? this.filters.overdueDaysTo : 120;
+    this.completionFrom = this.filters.completionFrom ? this.filters.completionFrom : 0;
+    this.completionTo = this.filters.completionTo ? this.filters.completionTo : 120;
   }
 
   calcTimePassedDays(sign, status) {
@@ -92,9 +92,9 @@ export class WorkOrderFilterComponent implements OnInit {
     }
   }
 
-  overdueDaysRangeSliderChange(event) {
-    this.overdueDaysFrom = event.from;
-    this.overdueDaysTo = event.to;
+  completionRangeSliderChange(event) {
+    this.completionFrom = event.from;
+    this.completionTo = event.to;
   }
 
   onSelectedCustomer(val) {
@@ -102,7 +102,7 @@ export class WorkOrderFilterComponent implements OnInit {
     this.selectCustomer = val;
   }
 
-  onSelectedProject(val) {
+  onSelectedOrder(val) {
     this.filters.selectProject = val;
     this.selectProject = val;
   }
@@ -125,14 +125,14 @@ export class WorkOrderFilterComponent implements OnInit {
     this.collaborators.splice(i, 1);
   }
 
-  selectCreatedFrom(event) {
-    this.createdDateFrom = event.value;
-    this.createdMin = this.createdDateFrom;
+  selectStartedFrom(event) {
+    this.startedDateFrom = event.value;
+    this.startedMin = this.startedDateFrom;
   }
 
-  selectCreatedTo(event) {
-    this.createdDateTo = event.value;
-    this.createdMax = this.createdDateTo;
+  selectStartedTo(event) {
+    this.startedDateTo = event.value;
+    this.startedMax = this.startedDateTo;
   }
 
   filterTxt (arr, searchKey) {
@@ -146,75 +146,78 @@ export class WorkOrderFilterComponent implements OnInit {
   resetFilter() {
     this.selectCustomer = '';
     this.selectProject = '';
-    this.overdueDaysFrom = 0;
-    this.overdueDaysTo = this.maxOverdueDays;
+    this.completionFrom = 0;
+    this.completionTo = 100;
 
     this.filters = {
-      overdueDaysFrom : 0,
-      overdueDaysTo : this.maxOverdueDays,
-      createdFrom: '',
-      createdTo: '',
+      completionFrom : 0,
+      completionTo : 100,
+      startedFrom: '',
+      startedTo: '',
       selectCustomer: '',
       selectProject: '',
       collaborators: '',
       workorderName: '',
-      totalFrom: 0,
-      totalTo: 0,
-      estimatedFrom: 0,
-      estimatedTo: 0,
+      startTimeFrom: 0,
+      startTimeTo: 0,
     };
     this.ref.detectChanges();
   }
 
   applyFilter() {
 
-    this.filters.overdueDaysFrom = this.overdueDaysFrom;
-    this.filters.overdueDaysTo = this.overdueDaysTo;
+    this.filters.completionFrom = this.completionFrom;
+    this.filters.completionTo = this.completionTo;
     this.applyClicked = true;
     this.filteredWorkOrders = this.backUpWorkOrders;
 
-    if (!this.overdueDaysFrom) { this.filters.overdueDaysFrom = 0; }
-    if (!this.overdueDaysTo) { this.filters.overdueDaysTo = this.maxOverdueDays; }
+    console.log('filter: ', this.filters);
 
-    if (this.filters.totalFrom) {
-      this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder => workorder.projectTotal >= this.filters.totalFrom);
+    if (this.collaborators[0]) {
+      let collaboratorFiltered = [];
+      let collaboratorFilteredList = [];
+      this.filteredWorkOrders.forEach(element => {
+        for ( let i = 0; i <= this.collaborators.length - 1; i ++) {
+          collaboratorFiltered = this.filterTxt(element.collaborators, this.collaborators[i].name);
+          if (collaboratorFiltered.length > 0) {
+            collaboratorFilteredList = collaboratorFilteredList.concat(element);
+          }
+        }
+      });
+      this.filteredWorkOrders = collaboratorFilteredList;
+    }
+    console.log('000: ', this.filteredWorkOrders);
+    if (!this.completionFrom) { this.filters.completionFrom = 0; }
+    if (!this.completionTo) { this.filters.completionTo = 100; }
+
+    if (this.filters.startTimeFrom) {
+      this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder => workorder.scheduledStart >= this.filters.startTimeFrom);
+    }
+    console.log('111: ', this.filteredWorkOrders);
+    if (this.filters.startTimeTo) {
+      this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder => workorder.scheduledStart <= this.filters.startTimeTo);
     }
 
-    if (this.filters.totalTo) {
-      this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder => workorder.projectTotal <= this.filters.totalTo);
-    }
-
-    if (this.filters.estimatedFrom) {
-      this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder => workorder.estimatedBudget >= this.filters.estimatedFrom);
-    }
-
-    if (this.filters.estimatedTo) {
-      this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder => workorder.estimatedBudget <= this.filters.estimatedTo);
-    }
-
-    // if user does not set maximum overdue days, max value should be infinite
-    if (this.filters.overdueDaysTo < 120) {
-      this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder =>
-        workorder.timePassed >= this.filters.overdueDaysFrom && workorder.timePassed <= this.filters.overdueDaysTo);
-    } else if (this.filters.overdueDaysTo === 120) {
-      this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder =>
-        workorder.timePassed >= this.filters.overdueDaysFrom);
-    }
+    this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder =>
+      workorder.completion >= this.filters.completionFrom && workorder.completion <= this.filters.completionTo);
+      console.log('22: ', this.filteredWorkOrders);
     if (this.filters.selectCustomer) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(customer => customer.customerName === this.filters.selectCustomer);
     }
-    if (this.filters.selectProject) {
-      this.filteredWorkOrders = this.filteredWorkOrders.filter(project => project.projectNumber === this.filters.selectProject);
-    }
 
-    if (this.filters.createdFrom) {
+    if (this.filters.selectProject) {
+      this.filteredWorkOrders = this.filteredWorkOrders.filter(project => project.workOrderNumber === this.filters.selectProject);
+    }
+    console.log('33: ', this.filteredWorkOrders);
+    if (this.filters.startedFrom) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(
-        workorder => Date.parse(workorder.createdDate) >= Number(this.filters.createdFrom)
+        workorder => Date.parse(workorder.startedDate) >= Number(this.filters.startedFrom)
       );
     }
-    if (this.filters.createdTo) {
+    console.log('44: ', this.filteredWorkOrders);
+    if (this.filters.startedTo) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(
-        workorder => Date.parse(workorder.createdDate) <= Number(this.filters.createdTo)
+        workorder => Date.parse(workorder.startedDate) <= Number(this.filters.startedTo)
       );
     }
     // remove duplicates from array

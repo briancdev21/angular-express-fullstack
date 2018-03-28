@@ -68,12 +68,12 @@ img {
 	background-size: 4%;
 }
 
-.workorder-created-date>div, .workorder-updated-date>div, .workorder-last-date>div {
+.workorder-started-date>div, .workorder-updated-date>div, .workorder-last-date>div {
   display: flex;
   justify-content: space-between;
 }
 
-.created-from, .created-to, .updated-from, .updated-to, .last-from, .last-to {
+.started-from, .started-to, .updated-from, .updated-to, .last-from, .last-to {
   width: 45%;
 }
 
@@ -176,6 +176,7 @@ img {
   padding: 5px;
   padding-right: 1px;
   width: 100%;
+  text-align: left;
 }
 
 .range-box input::placeholder {

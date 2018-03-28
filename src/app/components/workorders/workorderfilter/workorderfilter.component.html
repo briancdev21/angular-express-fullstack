@@ -9,8 +9,8 @@
 <div class="filter-content">
 
   <div class="customer-selection">
-    <span>Project Number</span>
-    <app-ng2completer [itemsList]="projectsList" (selectedItem)="onSelectedProject($event)" [searchStr]="selectProject" ></app-ng2completer>
+    <span>Work Order Number</span>
+    <app-ng2completer [itemsList]="workOrdersList" (selectedItem)="onSelectedOrder($event)" [searchStr]="selectProject" ></app-ng2completer>
   </div>
 
   <div class="customer-selection">
@@ -19,57 +19,49 @@
   </div>
 
   <div class="score-range-filter">
-    <span>Time Passed in Days</span>
+    <span>Work Order Completion Range</span>
     <ion-range-slider #sliderElement
           type="double"
           min="0"
-          max="120"
-          [from]="filters.overdueDaysFrom"
-          [to]="filters.overdueDaysTo"
-          prefix="$"
-          (onChange)="overdueDaysRangeSliderChange($event)"></ion-range-slider>
+          max="100"
+          [from]="filters.completionFrom"
+          [to]="filters.completionTo"
+          postfix="%"
+          (onChange)="completionRangeSliderChange($event)"></ion-range-slider>
   </div>
 
-  <div class="workorder-created-date">
-    <span>Date Signed</span>
+  <div class="workorder-started-date">
+    <span>Start Date Range</span>
     <div>
-      <div class="created-from">
-        <input [owlDateTimeTrigger]="createdFrom" [owlDateTime]="createdFrom" placeholder="From" (dateTimeChange)="selectCreatedFrom($event)" [max]="createdMax" [(ngModel)]="filters.createdFrom" >
-        <owl-date-time [pickerType]="'calendar'" #createdFrom ></owl-date-time>
+      <div class="started-from">
+        <input [owlDateTimeTrigger]="startedFrom" [owlDateTime]="startedFrom" placeholder="From" (dateTimeChange)="selectStartedFrom($event)" [max]="startedMax" [(ngModel)]="filters.startedFrom" >
+        <owl-date-time [pickerType]="'calendar'" #startedFrom ></owl-date-time>
       </div>
-      <div class="created-to">
-        <input [owlDateTime]="createdTo" [owlDateTimeTrigger]="createdTo" placeholder="To" (dateTimeChange)="selectCreatedTo($event)" [min]="createdMin" [(ngModel)]="filters.createdTo" >
-        <owl-date-time [pickerType]="'calendar'" #createdTo></owl-date-time>
+      <div class="started-to">
+        <input [owlDateTime]="startedTo" [owlDateTimeTrigger]="startedTo" placeholder="To" (dateTimeChange)="selectStartedTo($event)" [min]="startedMin" [(ngModel)]="filters.startedTo" >
+        <owl-date-time [pickerType]="'calendar'" #startedTo></owl-date-time>
       </div>
     </div>
   </div>
 
   <div class="project-total">
-    <span>Project Total</span>
+    <span>Start Time Range</span>
     <div>
       <div class="total-from range-box">
-        <span>$</span>
-        <input placeholder="Low Range" [(ngModel)]="filters.totalFrom" type="number">
+        <input placeholder="00:00" [(ngModel)]="filters.startTimeFrom" type="time">
       </div>
       <div class="total-to range-box">
-        <span>$</span>
-        <input placeholder="High Range" [(ngModel)]="filters.totalTo" type="number">
+        <input placeholder="00:00" [(ngModel)]="filters.startTimeTo" type="time">
       </div>
     </div>
   </div>
 
-  <div class="estimated-total">
-    <span>Estimated Budget Total</span>
-    <div>
-      <div class="estimated-from range-box">
-        <span>$</span>
-        <input placeholder="Low Range" [(ngModel)]="filters.estimatedFrom" type="number">
-      </div>
-      <div class="estimated-to range-box">
-        <span>$</span>
-        <input placeholder="High Range" [(ngModel)]="filters.estimatedTo" type="number">
-      </div>
-    </div>
+  <div class="workorder-status">
+    <span>Work Order Status</span>
+    <select [(ngModel)]="filters.selectStatus">
+      <option value="choose" default>Choose status</option>
+      <option *ngFor="let status of statusList" [value]="status">{{status}}</option>
+    </select>
   </div>
 
   <div class="owner">

@@ -69,7 +69,7 @@ export class WorkOrdersTableComponent implements OnInit {
     }
   }
 
-  sortCreateDateArray(field) {
+  sortStarteDateArray(field) {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {

@@ -8,18 +8,18 @@
       </div>
       <div class="col-sm-6 sub-nav-right">
         <div class="col-sm-4 btn-sub-nav">
-          <button class="btn " [routerLinkActive]="['active']" [routerLink]="['/inventory/stock-control']">
-            TASKS
+          <button class="btn " [routerLinkActive]="['']" [routerLink]="['../collboration/personal-schedule']">
+            PERSONAL SCHEDULE
           </button>
         </div>
         <div class="col-sm-4 btn-sub-nav">
-          <button class="btn " [routerLinkActive]="['active']" [routerLink]="['/inventory/workorders']">
-            PROJECTS
+          <button class="btn " [routerLinkActive]="['']" [routerLink]="['../collboration/team-schedule']">
+            TEAM SCHEDULE
           </button>
         </div>
         <div class="col-sm-4 btn-sub-nav">
-          <button class="btn" [routerLinkActive]="['active']" [routerLink]="['/inventory/suppliers']">
-            PENDING PROJECTS
+          <button class="btn" [routerLinkActive]="['active']" [routerLink]="['../collboration/work-order']">
+            WORK ORDERS
           </button>
         </div>
       </div>
@@ -29,9 +29,9 @@
 
   <div class="top-nav-bar">
     <div class="breadcrumb-bar">
-      <span>Project Initiation</span>
+      <span>Work Orders</span>
       <i class="fa fa-angle-right"></i>
-      <span *ngIf="!filterClicked">All Projects</span>      
+      <span *ngIf="!filterClicked">All Work Orders</span>      
       <div class="saved-filters">
         <i *ngIf="!filterClicked" class="fa fa-angle-down" (click)="clickSavedFilters()"></i>
         <div class="saved-filters-list-wrapper" *ngIf="openSavedFiltersList" (click)="savedFiltersListCollapsed=true; openSavedFiltersList=false"></div>

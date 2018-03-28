@@ -31,8 +31,8 @@ export class WorkOrdersComponent implements OnInit {
 
 
   public filters  = {
-    createdFrom: '',
-    createdTo: '',
+    startedFrom: '',
+    startedTo: '',
     updatedFrom: '',
     updatedTo: '',
     selectTag: '',
@@ -97,7 +97,7 @@ export class WorkOrdersComponent implements OnInit {
       ]
     },
     {
-      workOrderNumber: 'WO12343',
+      workOrderNumber: 'WO12342',
       workOrderName: 'Work Order Title Here',
       customerName: 'Agile Smith',
       startDate: 'November 10, 2017',
@@ -139,8 +139,8 @@ export class WorkOrdersComponent implements OnInit {
 
   cancelFilter() {
     this.filters = {
-      createdFrom: '',
-      createdTo: '',
+      startedFrom: '',
+      startedTo: '',
       updatedFrom: '',
       updatedTo: '',
       selectTag: '',
