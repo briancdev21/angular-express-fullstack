@@ -1,0 +1,90 @@
+<div class="top">
+  <div class="title">
+    <span>FILTER</span>
+    <img src="assets/images/add-button.png" *ngIf="filterClicked">
+  </div>
+  <button class="filter-apply" (click)="applyFilter()">Apply</button>
+</div>
+
+<div class="filter-content">
+
+  <div class="customer-selection">
+    <span>Work Order Number</span>
+    <app-ng2completer [itemsList]="purchaseOrdersList" (selectedItem)="onSelectedOrder($event)" [searchStr]="selectProject" ></app-ng2completer>
+  </div>
+
+  <div class="customer-selection">
+    <span>Customer Name</span>
+    <app-ng2completer [itemsList]="customersList" (selectedItem)="onSelectedCustomer($event)" [searchStr]="selectCustomer" ></app-ng2completer>
+  </div>
+
+  <div class="score-range-filter">
+    <span>Work Order Completion Range</span>
+    <ion-range-slider #sliderElement
+          type="double"
+          min="0"
+          max="100"
+          [from]="filters.completionFrom"
+          [to]="filters.completionTo"
+          postfix="%"
+          (onChange)="completionRangeSliderChange($event)"></ion-range-slider>
+  </div>
+
+  <div class="purchaseorder-started-date">
+    <span>Start Date Range</span>
+    <div>
+      <div class="started-from">
+        <input [owlDateTimeTrigger]="startedFrom" [owlDateTime]="startedFrom" placeholder="From" (dateTimeChange)="selectStartedFrom($event)" [max]="startedMax" [(ngModel)]="filters.startedFrom" >
+        <owl-date-time [pickerType]="'calendar'" #startedFrom ></owl-date-time>
+      </div>
+      <div class="started-to">
+        <input [owlDateTime]="startedTo" [owlDateTimeTrigger]="startedTo" placeholder="To" (dateTimeChange)="selectStartedTo($event)" [min]="startedMin" [(ngModel)]="filters.startedTo" >
+        <owl-date-time [pickerType]="'calendar'" #startedTo></owl-date-time>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-total">
+    <span>Start Time Range</span>
+    <div>
+      <div class="total-from range-box">
+        <input placeholder="00:00" [(ngModel)]="filters.startTimeFrom" type="time">
+      </div>
+      <div class="total-to range-box">
+        <input placeholder="00:00" [(ngModel)]="filters.startTimeTo" type="time">
+      </div>
+    </div>
+  </div>
+
+  <div class="purchaseorder-status">
+    <span>Work Order Status</span>
+    <select [(ngModel)]="filters.selectStatus">
+      <option value="choose" default>Choose status</option>
+      <option *ngFor="let status of purchaseorderStatus" [value]="status">{{status}}</option>
+    </select>
+  </div>
+
+  <div class="owner">
+    <span>Collaborators</span>
+    <div class="owners" (click)='editable=true;$event.stopPropagation();'> 
+      <div class="follower" *ngFor="let user of collaborators; let i = index" >
+        <!-- <span class="contact-owner">{{user}}</span> -->
+        <img [src]="user.imageUrl">
+      </div> 
+      <div class="follower add-owner" (click)="editable=true;$event.stopPropagation()">
+        <a (click)="editable=true;$event.stopPropagation()" ></a>
+      </div> 
+      <div class="edit-owners" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+        <ul>
+          <li *ngFor="let user of collaborators; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li style="background: none; width: 100%; margin: 0;">
+              <input autocomplete [config]="config2" [items]="items2"
+              (inputChangedEvent)="onInputChangedEvent($event)"
+              (selectEvent)="onSelect($event)">
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <button class="reset-filter" (click)="resetFilter()">Reset Filter</button>
+</div>

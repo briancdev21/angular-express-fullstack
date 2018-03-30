@@ -1,0 +1,27 @@
+<div class="content">
+  <table class="purchase-order-table">
+    <tr>
+      <th (click)="sortArray('purchaseOrderNumber')">WORK ORDER #</th>
+      <th (click)="sortArray('purchaseOrderName')">NAME OF WORK ORDER</th>
+      <th (click)="sortArray('customerName')">CUSTOMER NAME</th>
+      <th (click)="sortStarteDateArray('startDate')">START DATE</th> 
+      <th (click)="sortArray('scheduledStart')">SCHEDULED</th>
+      <th >COLLABORATORS</th>
+      <th (click)="sortArray('completion')">WORK ORDER COMPLETION</th>
+    </tr>
+    <tr *ngFor="let purchaseorder of purchaseOrdersInfo; let i = index" (click)="redirectTo(purchaseorder.projectNumber)">
+      <td>{{purchaseorder.purchaseOrderNumber}}</td>
+      <td>{{purchaseorder.purchaseOrderName}}</td>
+      <td>{{purchaseorder.customerName}}</td>
+      <td>{{purchaseorder.startDate}}</td>
+      <td>{{purchaseorder.scheduledStart}} - {{purchaseorder.scheduledEnd}}</td>
+      <td class="collaborators">
+        <div *ngFor="let col of purchaseorder.collaborators" >
+          <img [src]="col.imgUrl">
+        </div>
+      </td>
+      <td class="purchase-order-completion"><app-horizontalbar [barInfo]="purchaseorder.barInfo"></app-horizontalbar></td>
+    </tr>
+  </table>
+</div>
+

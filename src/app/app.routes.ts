@@ -19,6 +19,7 @@ import { PmScheduleComponent } from './components/projectmanagement/pmschedule/p
 import { PmFinancialsComponent } from './components/projectmanagement/pmfinancials/pmfinancials.component';
 import { PmProgressComponent } from './components/projectmanagement/pmprogress/pmprogress.component';
 import { PmFilesComponent } from './components/projectmanagement/pmfiles/pmfiles.component';
+import { PuchaseOrderListComponent } from './components/puchaseorderlist/puchaseorderlist.component';
 
 import { CommonComponent } from './components/common/common.component';
 
@@ -37,7 +38,7 @@ export const routes: Routes = [
     ]
   },
   { path: 'inventory', component: ProjectsListComponent },
-  { path: 'orderprofile', component: OrderProfileComponent },
+  { path: 'orderprofile', component: PuchaseOrderListComponent },
   { path: 'servicing', component: ProductsComponent },
   { path: 'reports', component: InvoicesComponent },
   { path: '**', component: TestComponent },

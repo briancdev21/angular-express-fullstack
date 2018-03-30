@@ -20,6 +20,7 @@ import { PendingsComponent } from './components/pendings/pendings.component';
 import { WorkOrdersComponent } from './components/workorders/workorders.component';
 import { ProjectsListComponent } from './components/projectslist/projectslist.component';
 import { ProposalListComponent } from './components/proposallist/proposallist.component';
+import { PuchaseOrderListComponent } from './components/puchaseorderlist/puchaseorderlist.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
@@ -35,6 +36,7 @@ import { WorkOrdersCmpModule } from './components/workorders/workorder.module';
 import { ProjectsListCmpModule } from './components/projectslist/projectslist.module';
 import { ProposalListCmpModule } from './components/proposallist/proposallist.module';
 import { ProjectManagementCmpModule } from './components/projectmanagement/projectmanagement.module';
+import { PuchaseOrderListCmpModule } from './components/puchaseorderlist/puchaseorderlist.module';
 import { CommonCmpModule } from './components/common/common.module';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
@@ -68,7 +70,8 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     WorkOrdersComponent,
     ProjectsListComponent,
     ProposalListComponent,
-    ProjectManagementComponent
+    ProjectManagementComponent,
+    PuchaseOrderListComponent
   ],
   imports: [
     BrowserModule,
@@ -95,7 +98,8 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     WorkOrdersCmpModule,
     ProjectsListCmpModule,
     ProposalListCmpModule,
-    ProjectManagementCmpModule
+    ProjectManagementCmpModule,
+    PuchaseOrderListCmpModule
   ],
   exports: [
     SubmenuComponent,
