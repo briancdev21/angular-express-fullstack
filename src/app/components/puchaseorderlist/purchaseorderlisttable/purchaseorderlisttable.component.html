@@ -1,26 +1,26 @@
 <div class="content">
   <table class="purchase-order-table">
     <tr>
-      <th (click)="sortArray('purchaseOrderNumber')">WORK ORDER #</th>
-      <th (click)="sortArray('purchaseOrderName')">NAME OF WORK ORDER</th>
-      <th (click)="sortArray('customerName')">CUSTOMER NAME</th>
-      <th (click)="sortStarteDateArray('startDate')">START DATE</th> 
-      <th (click)="sortArray('scheduledStart')">SCHEDULED</th>
-      <th >COLLABORATORS</th>
-      <th (click)="sortArray('completion')">WORK ORDER COMPLETION</th>
+      <th (click)="sortArray('purchaseOrderNumber')">ORDER #</th>
+      <th (click)="sortArray('source')">SOURCE</th>
+      <th (click)="sortArray('type')">TYPE</th>
+      <th (click)="sortArray('status')">STATUS</th>
+      <th (click)="sortArray('quantity')">QUANTITY</th>
+      <th (click)="sortArray('received')">RECEIVED</th> 
+      <th (click)="sortArray('totalCost')">TOTAL COST</th>
+      <th (click)="sortDateArray('dueDate')">DUE DATE</th>
+      <th (click)="sortDateArray('lastUpdated')">LAST UPDATED</th>
     </tr>
-    <tr *ngFor="let purchaseorder of purchaseOrdersInfo; let i = index" (click)="redirectTo(purchaseorder.projectNumber)">
+    <tr *ngFor="let purchaseorder of purchaseOrdersInfo" (click)="redirectTo(purchaseorder.projectNumber)">
       <td>{{purchaseorder.purchaseOrderNumber}}</td>
-      <td>{{purchaseorder.purchaseOrderName}}</td>
-      <td>{{purchaseorder.customerName}}</td>
-      <td>{{purchaseorder.startDate}}</td>
-      <td>{{purchaseorder.scheduledStart}} - {{purchaseorder.scheduledEnd}}</td>
-      <td class="collaborators">
-        <div *ngFor="let col of purchaseorder.collaborators" >
-          <img [src]="col.imgUrl">
-        </div>
-      </td>
-      <td class="purchase-order-completion"><app-horizontalbar [barInfo]="purchaseorder.barInfo"></app-horizontalbar></td>
+      <td>{{purchaseorder.source}}</td>
+      <td>{{purchaseorder.type}}</td>
+      <td>{{purchaseorder.status}}</td>
+      <td>{{purchaseorder.quantity}}</td>
+      <td>{{purchaseorder.received}}</td>
+      <td>$ {{purchaseorder.totalCost | number: '1.2-2'}}</td>
+      <td [ngClass]="getDateColor(purchaseorder)">{{purchaseorder.dueDate}}</td>
+      <td>{{purchaseorder.lastUpdated}}</td>
     </tr>
   </table>
 </div>

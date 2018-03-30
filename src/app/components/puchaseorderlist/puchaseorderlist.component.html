@@ -8,18 +8,18 @@
       </div>
       <div class="col-sm-6 sub-nav-right">
         <div class="col-sm-4 btn-sub-nav">
-          <button class="btn " [routerLinkActive]="['']" [routerLink]="['../collboration/personal-schedule']">
-            PERSONAL SCHEDULE
+          <button class="btn " [routerLinkActive]="['active']" [routerLink]="['../invetory/stock-control']">
+            STOCK CONTROL
           </button>
         </div>
         <div class="col-sm-4 btn-sub-nav">
-          <button class="btn " [routerLinkActive]="['']" [routerLink]="['../collboration/team-schedule']">
-            TEAM SCHEDULE
+          <button class="btn " [routerLinkActive]="['']" [routerLink]="['../invetory/products']">
+            PRODUCTS
           </button>
         </div>
         <div class="col-sm-4 btn-sub-nav">
-          <button class="btn" [routerLinkActive]="['active']" [routerLink]="['../collboration/purchase-order']">
-            WORK ORDERS
+          <button class="btn" [routerLinkActive]="['']" [routerLink]="['../invetory/suppliers']">
+            SUPPLIERS
           </button>
         </div>
       </div>
@@ -29,9 +29,9 @@
 
   <div class="top-nav-bar">
     <div class="breadcrumb-bar">
-      <span>Work Orders</span>
+      <span>Stock Control</span>
       <i class="fa fa-angle-right"></i>
-      <span *ngIf="!filterClicked">All Work Orders</span>      
+      <span *ngIf="!filterClicked">All stock</span>      
       <div class="saved-filters">
         <i *ngIf="!filterClicked" class="fa fa-angle-down" (click)="clickSavedFilters()"></i>
         <div class="saved-filters-list-wrapper" *ngIf="openSavedFiltersList" (click)="savedFiltersListCollapsed=true; openSavedFiltersList=false"></div>
@@ -46,7 +46,12 @@
       <img *ngIf="filterClicked" src="assets/images/X sign Red.png" (click)="cancelFilter()">   
       <img *ngIf="filterClicked" src="assets/images/Checkmark Green.png" (click)="saveFilterModalCollapsed = false; showSaveFilterModal = true;">
     </div>
-
+    <div class="contacts-btn-group">
+      <div class="contacts-import-btn">Receive Inventory</div>
+      <div class="contacts-import-btn">Add Purchase Order</div>
+      <div class="contacts-import-btn">Add Transfer</div>
+      <div class="contacts-import-btn">Add Adjustment</div>
+    </div>
   </div>
 
   <div class="main-content-box">

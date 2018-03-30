@@ -21,7 +21,8 @@ export class PurchaseOrderListTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
-
+  dateNow = new Date();
+  aweekLater = new Date();
   constructor( private filterService: FilterService, private router: Router ) {
   }
 
@@ -30,6 +31,8 @@ export class PurchaseOrderListTableComponent implements OnInit {
       title: i.completion + '%',
       completeness: i.completion
     });
+    // get a week later date
+    this.aweekLater.setDate(this.aweekLater.getDate() + 7);
   }
 
   getStatus() {
@@ -57,19 +60,7 @@ export class PurchaseOrderListTableComponent implements OnInit {
     }
   }
 
-  calcTimePassedDays(sign, status) {
-    const today = new Date();
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-    const signDate = new Date(sign);
-    const diffDays = Math.round((today.getTime() - signDate.getTime()) / (oneDay));
-    if (diffDays < 0) {
-      return 0;
-    } else {
-      return diffDays;
-    }
-  }
-
-  sortStarteDateArray(field) {
+  sortDateArray(field) {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
@@ -87,9 +78,18 @@ export class PurchaseOrderListTableComponent implements OnInit {
     }
   }
 
-  getDateColor(days) {
-    return days <= 6 ? 'green' : days <= 14 ? 'orange' : 'red';
+  getDateColor(order) {
+    if (order.dueDate !== '') {
+      if (order.status === 'Delivered' && (this.dateNow < new Date(order.dueDate))) {
+        return 'green';
+      } else if (new Date(order.dueDate) > new Date(this.aweekLater)) {
+        return 'black';
+      } else if (new Date(order.dueDate) > this.dateNow) {
+        return 'orange';
+      } else if (order.status !== 'Fulfilled' && (new Date(order.dueDate) < this.dateNow)) {
+        return 'red';
+      }
+    }
   }
-
 }
 

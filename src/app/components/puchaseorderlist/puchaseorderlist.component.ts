@@ -45,73 +45,71 @@ export class PuchaseOrderListComponent implements OnInit {
 
   public purchaseOrdersInfo: Array<Object> = [
     {
-      purchaseOrderNumber: 'WO12345',
-      purchaseOrderName: 'Work Order Title Here',
-      customerName: 'John Moss',
-      startDate: 'November 20, 2017',
-      scheduledStart: '8:00 AM',
-      scheduledEnd: '6:30 PM',
-      completion: 33,
-      status: 'Not started',
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        }
-      ]
+      purchaseOrderNumber: 'PO88031237',
+      source: 'Alliance Video Audio Distribution',
+      type: 'Purchase Order',
+      status: 'Partial Fulfilment',
+      quantity: 43,
+      received: 13,
+      totalCost: 23230.75,
+      dueDate: 'March 20, 2017',
+      lastUpdated: 'January 20, 2017'
     },
     {
-      purchaseOrderNumber: 'WO12344',
-      purchaseOrderName: 'Work Order Title Here',
-      customerName: 'John Moss',
-      startDate: 'November 19, 2017',
-      scheduledStart: '12:00 PM',
-      scheduledEnd: '6:30 PM',
-      completion: 64,
+      purchaseOrderNumber: 'PO88031236',
+      source: 'Alliance Video Audio Distribution',
+      type: 'Purchase Order',
+      status: 'Partial Fulfilment',
+      quantity: 5,
+      received: 3,
+      totalCost: 3230.75,
+      dueDate: 'January 28, 2017',
+      lastUpdated: 'January 20, 2017'
+    },
+    {
+      purchaseOrderNumber: 'PO88031233',
+      source: 'John Moss',
+      type: 'Purchase Order',
+      status: 'Partial Fulfilment',
+      quantity: 34,
+      received: 33,
+      totalCost: 7086.79,
+      dueDate: 'April 4, 2018',
+      lastUpdated: 'December 15, 2016'
+    },
+    {
+      purchaseOrderNumber: 'TR88020002',
+      source: '',
+      type: 'Stock Control',
+      status: 'Transfered',
+      quantity: 10,
+      received: 10,
+      totalCost: 3232.23,
+      dueDate: '',
+      lastUpdated: 'December 13, 2016'
+    },
+    {
+      purchaseOrderNumber: 'AD88020001',
+      source: '',
+      type: 'Stock Control',
+      status: 'Adjustment',
+      quantity: 5,
+      received: 5,
+      totalCost: 1322.23,
+      dueDate: '',
+      lastUpdated: 'December 13, 2016'
+    },
+    {
+      purchaseOrderNumber: 'PO88031230',
+      source: 'Rob Harding',
+      type: 'Purchase Order',
       status: 'Delivered',
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        },
-        {
-          name: 'Michael',
-          imgUrl: 'assets/users/user2.png'
-        }
-      ]
-    },
-    {
-      purchaseOrderNumber: 'WO12343',
-      purchaseOrderName: 'Work Order Title Here',
-      customerName: 'Agile Smith',
-      startDate: 'November 18, 2017',
-      scheduledStart: '8:00 AM',
-      scheduledEnd: '11:00 AM',
-      completion: 89,
-      status: 'Complete',
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        }
-      ]
-    },
-    {
-      purchaseOrderNumber: 'WO12342',
-      purchaseOrderName: 'Work Order Title Here',
-      customerName: 'Agile Smith',
-      startDate: 'November 10, 2017',
-      scheduledStart: '8:00 AM',
-      scheduledEnd: '6:30 PM',
-      completion: 59,
-      status: 'In progress',
-      collaborators: [
-        {
-          name: 'Agile Smith',
-          imgUrl: 'assets/users/user3.png'
-        }
-      ]
-    },
+      quantity: 34,
+      received: 34,
+      totalCost: 23322.23,
+      dueDate: 'December 16, 2018',
+      lastUpdated: 'December 12, 2017'
+    }
   ];
 
   ngOnInit() {
