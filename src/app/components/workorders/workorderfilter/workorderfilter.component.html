@@ -60,7 +60,7 @@
     <span>Work Order Status</span>
     <select [(ngModel)]="filters.selectStatus">
       <option value="choose" default>Choose status</option>
-      <option *ngFor="let status of statusList" [value]="status">{{status}}</option>
+      <option *ngFor="let status of workorderStatus" [value]="status">{{status}}</option>
     </select>
   </div>
 

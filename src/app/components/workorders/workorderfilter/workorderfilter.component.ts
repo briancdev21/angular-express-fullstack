@@ -53,6 +53,7 @@ export class WorkOrderFilterComponent implements OnInit {
   maxCompletion = 120;
   completionFrom = 0;
   completionTo = 120;
+  selectStatus: string;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -160,6 +161,7 @@ export class WorkOrderFilterComponent implements OnInit {
       workorderName: '',
       startTimeFrom: 0,
       startTimeTo: 0,
+      selectStatus: ''
     };
     this.ref.detectChanges();
   }
@@ -170,8 +172,6 @@ export class WorkOrderFilterComponent implements OnInit {
     this.filters.completionTo = this.completionTo;
     this.applyClicked = true;
     this.filteredWorkOrders = this.backUpWorkOrders;
-
-    console.log('filter: ', this.filters);
 
     if (this.collaborators[0]) {
       let collaboratorFiltered = [];
@@ -186,21 +186,18 @@ export class WorkOrderFilterComponent implements OnInit {
       });
       this.filteredWorkOrders = collaboratorFilteredList;
     }
-    console.log('000: ', this.filteredWorkOrders);
     if (!this.completionFrom) { this.filters.completionFrom = 0; }
     if (!this.completionTo) { this.filters.completionTo = 100; }
 
     if (this.filters.startTimeFrom) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder => workorder.scheduledStart >= this.filters.startTimeFrom);
     }
-    console.log('111: ', this.filteredWorkOrders);
     if (this.filters.startTimeTo) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder => workorder.scheduledStart <= this.filters.startTimeTo);
     }
 
     this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder =>
       workorder.completion >= this.filters.completionFrom && workorder.completion <= this.filters.completionTo);
-      console.log('22: ', this.filteredWorkOrders);
     if (this.filters.selectCustomer) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(customer => customer.customerName === this.filters.selectCustomer);
     }
@@ -208,13 +205,16 @@ export class WorkOrderFilterComponent implements OnInit {
     if (this.filters.selectProject) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(project => project.workOrderNumber === this.filters.selectProject);
     }
-    console.log('33: ', this.filteredWorkOrders);
+
+    if (this.filters.selectStatus) {
+      this.filteredWorkOrders = this.filteredWorkOrders.filter(project => project.status === this.filters.selectStatus);
+    }
+
     if (this.filters.startedFrom) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(
         workorder => Date.parse(workorder.startedDate) >= Number(this.filters.startedFrom)
       );
     }
-    console.log('44: ', this.filteredWorkOrders);
     if (this.filters.startedTo) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(
         workorder => Date.parse(workorder.startedDate) <= Number(this.filters.startedTo)

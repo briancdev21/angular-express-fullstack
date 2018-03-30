@@ -29,6 +29,7 @@ export class WorkOrdersComponent implements OnInit {
     this.filterAvaliableTo = 'everyone';
   }
 
+  public workorderStatus = ['Not started', 'Not complete', 'Delivered', 'In progress', 'Complete'];
 
   public filters  = {
     startedFrom: '',
@@ -42,10 +43,6 @@ export class WorkOrdersComponent implements OnInit {
   public collaborators: Array<string> = [
   ];
 
-  public workorderStatus: Array<string> = [
-    'Due', 'Overdue', 'Paid', 'Net 15', 'Net 30', 'Estimate', 'Approved', 'Rejected'
-  ];
-
   public workOrdersInfo: Array<Object> = [
     {
       workOrderNumber: 'WO12345',
@@ -55,6 +52,7 @@ export class WorkOrdersComponent implements OnInit {
       scheduledStart: '8:00 AM',
       scheduledEnd: '6:30 PM',
       completion: 33,
+      status: 'Not started',
       collaborators: [
         {
           name: 'John Moss',
@@ -70,6 +68,7 @@ export class WorkOrdersComponent implements OnInit {
       scheduledStart: '12:00 PM',
       scheduledEnd: '6:30 PM',
       completion: 64,
+      status: 'Delivered',
       collaborators: [
         {
           name: 'John Moss',
@@ -89,6 +88,7 @@ export class WorkOrdersComponent implements OnInit {
       scheduledStart: '8:00 AM',
       scheduledEnd: '11:00 AM',
       completion: 89,
+      status: 'Complete',
       collaborators: [
         {
           name: 'John Moss',
@@ -104,6 +104,7 @@ export class WorkOrdersComponent implements OnInit {
       scheduledStart: '8:00 AM',
       scheduledEnd: '6:30 PM',
       completion: 59,
+      status: 'In progress',
       collaborators: [
         {
           name: 'Agile Smith',
