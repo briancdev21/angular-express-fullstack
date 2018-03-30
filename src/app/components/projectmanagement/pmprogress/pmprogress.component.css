@@ -1,3 +1,7 @@
+:host ::ng-deep .pm-progress.content>tabs {
+  padding: 10px 0 0 0 !important;
+}
+
 :host ::ng-deep .pm-progress.content>tabs .tabs__tab-bar {
   font-size: 18px;
   display: -webkit-box;
@@ -29,4 +33,44 @@
 
 :host ::ng-deep .pm-progress.content>tabs .tabs__tab {
   width: 12% !important;
+}
+
+.pm-progress h1 {
+  font-weight: 400;
+  color: #95989A;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.info>div {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 25px;
+}
+
+.add-btn {
+  font-size: 10px;
+  letter-spacing: 0;
+  padding: 4px 10px;
+  background-color: #A8F2DF;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #868686;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 25px
+}
+
+.change-log {
+  color: #6eb1dd;
+  font-size: 20px;
+}
+
+.info .info-down {
+  padding-bottom: 15px;
 }

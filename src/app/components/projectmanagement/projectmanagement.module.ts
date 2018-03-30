@@ -9,6 +9,7 @@ import { PmScheduleComponent } from './pmschedule/pmschedule.component';
 import { PmFinancialsComponent } from './pmfinancials/pmfinancials.component';
 import { PmProgressComponent } from './pmprogress/pmprogress.component';
 import { PmFilesComponent } from './pmfiles/pmfiles.component';
+import { ChangeLogListTableComponent } from './pmprogress/changeloglisttable/changeloglisttable.component';
 import { CommonCmpModule } from '../../components/common/common.module';
 import { BreadcrumbModule } from '../../components/breadcrumb/breadcrumb.module';
 
@@ -24,7 +25,8 @@ import { PmService } from './pm.service';
     PmScheduleComponent,
     PmFinancialsComponent,
     PmProgressComponent,
-    PmFilesComponent
+    PmFilesComponent,
+    ChangeLogListTableComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,8 @@ import { PmService } from './pm.service';
     PmScheduleComponent,
     PmFinancialsComponent,
     PmProgressComponent,
-    PmFilesComponent
+    PmFilesComponent,
+    ChangeLogListTableComponent
   ],
   providers: [PmService]
 })
