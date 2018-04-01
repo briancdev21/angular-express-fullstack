@@ -19,28 +19,33 @@ export class PurchaseOrderListFilterComponent implements OnInit {
 
   @Input() purchaseOrdersInfo;
   @Input() filters;
-  @Input() collaborators;
   @Input() purchaseorderStatus;
-  @Input() purchaseorderTypes;
+  @Input() purchaseOrderTypes;
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
 
   customersList = [];
   purchaseOrdersList = [];
   items2: any[] = [
-    {id: 0, payload: {label: 'John Moss', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Michael', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Agile Smith', imageUrl: 'assets/users/user3.png'}},
-    {id: 3, payload: {label: 'Joseph', imageUrl: 'assets/users/man.png'}},
+    {id: 0, payload: {label: 'Partial Fulfilment'}},
+    {id: 1, payload: {label: 'Open'}},
+    {id: 2, payload: {label: 'Transfered'}},
+    {id: 3, payload: {label: 'Adjustment'}},
+    {id: 3, payload: {label: 'Fulfilled'}},
+    {id: 3, payload: {label: 'Partially Delivered'}},
+    {id: 3, payload: {label: 'Delivered'}},
   ];
   config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
 
   public selectedMoment = new Date();
   public startedMin;
   public startedMax;
+  public updatedMin;
+  public updatedMax;
   public originFilters;
   startedDateFrom: Date;
   startedDateTo: Date;
-  purchaseorderName: string;
+  updatedDateFrom: Date;
+  updatedDateTo: Date;
   filteredPurchaseOrders: any;
   applyClicked = false;
   backUpPurchaseOrders: any;
@@ -49,12 +54,10 @@ export class PurchaseOrderListFilterComponent implements OnInit {
   selectedItem: any = '';
   inputChanged: any = '';
   selectCustomer =  '';
-  selectProject = '';
-  maxCompletion = 120;
-  completionFrom = 0;
-  completionTo = 120;
-  selectStatus: string;
-
+  selectOrder = '';
+  maxTotal = 0;
+  totalFrom = 0;
+  totalTo = 0;
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
     document.addEventListener('click', function() {
@@ -67,45 +70,32 @@ export class PurchaseOrderListFilterComponent implements OnInit {
     this.backUpPurchaseOrders = this.purchaseOrdersInfo;
     this.originFilters = Object.assign({}, this.filters);
 
-    // Get customer list from Information list and remove duplicated names
-    const a = this.purchaseOrdersInfo.map(i => i.customerName);
-    this.customersList = a.filter(function(item, pos) {
-      return a.indexOf(item) === pos;
+    // Get work order list from Information list and remove empty and duplicates
+    this.purchaseOrdersList = this.purchaseOrdersInfo.map( p => p.source);
+    const m = this.purchaseOrdersList.filter(p => p !== '');
+    this.purchaseOrdersList = m.filter(function(item, pos) {
+      return m.indexOf(item) === pos;
     });
+    // const a = this.pendingsListInfo.map(i => i.customerName);
+    // this.customersList = a.filter(function(item, pos) {
+    //   return a.indexOf(item) === pos;
+    // });
 
-    this.purchaseOrdersInfo.map(i => i.timePassed = this.calcTimePassedDays(i.signedDate, i.status));
-    // Get work order list from Information list
-    this. purchaseOrdersList = this.purchaseOrdersInfo.map( p => p.purchaseOrderNumber);
+    // Get total max value in projectsListInfo
+    this.maxTotal = Math.max(...this.purchaseOrdersInfo.map(i => i.totalCost));
 
-    this.completionFrom = this.filters.completionFrom ? this.filters.completionFrom : 0;
-    this.completionTo = this.filters.completionTo ? this.filters.completionTo : 120;
+    this.totalFrom = this.filters.totalFrom ? this.filters.totalFrom : 0;
+    this.totalTo = this.filters.totalTo ? this.filters.totalTo : this.maxTotal;
   }
 
-  calcTimePassedDays(sign, status) {
-    const today = new Date();
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-    const signDate = new Date(sign);
-    const diffDays = Math.round((today.getTime() - signDate.getTime()) / (oneDay));
-    if (diffDays < 0) {
-      return 0;
-    } else {
-      return diffDays;
-    }
-  }
-
-  completionRangeSliderChange(event) {
-    this.completionFrom = event.from;
-    this.completionTo = event.to;
-  }
-
-  onSelectedCustomer(val) {
-    this.filters.selectCustomer = val;
-    this.selectCustomer = val;
+  totalRangeSliderChange(event) {
+    this.totalFrom = event.from;
+    this.totalTo = event.to;
   }
 
   onSelectedOrder(val) {
-    this.filters.selectProject = val;
-    this.selectProject = val;
+    this.filters.selectOrder = val;
+    this.selectOrder = val;
   }
 
   onSelect(item: any) {
@@ -113,17 +103,17 @@ export class PurchaseOrderListFilterComponent implements OnInit {
     this.items2 = this.items2.filter(function( obj ) {
       return obj.payload.label !== item.payload.label;
     });
-    this.collaborators.push({name: item.payload.label, imageUrl: item.payload.imageUrl});
+    this.purchaseorderStatus.push(item.payload.label);
   }
 
   onInputChangedEvent(val: string) {
     this.inputChanged = val;
   }
 
-  removeUser(i: number) {
-    const item = this.collaborators[i];
+  removeStatus(i: number) {
+    const item = this.purchaseorderStatus[i];
     this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
-    this.collaborators.splice(i, 1);
+    this.purchaseorderStatus.splice(i, 1);
   }
 
   selectStartedFrom(event) {
@@ -136,6 +126,16 @@ export class PurchaseOrderListFilterComponent implements OnInit {
     this.startedMax = this.startedDateTo;
   }
 
+  selectUpdatedFrom(event) {
+    this.updatedDateFrom = event.value;
+    this.updatedMin = this.updatedDateFrom;
+  }
+
+  selectUpdatedTo(event) {
+    this.updatedDateTo = event.value;
+    this.updatedMax = this.updatedDateTo;
+  }
+
   filterTxt (arr, searchKey) {
     return arr.filter(function(obj){
       return Object.keys(obj).some(function(key) {
@@ -146,78 +146,74 @@ export class PurchaseOrderListFilterComponent implements OnInit {
 
   resetFilter() {
     this.selectCustomer = '';
-    this.selectProject = '';
-    this.completionFrom = 0;
-    this.completionTo = 100;
+    this.selectOrder = '';
+    this.totalFrom = 0;
+    this.totalTo = this.maxTotal;
 
     this.filters = {
-      completionFrom : 0,
-      completionTo : 100,
+      totalFrom : 0,
+      totalTo : this.maxTotal,
       startedFrom: '',
       startedTo: '',
-      selectCustomer: '',
-      selectProject: '',
-      collaborators: '',
-      purchaseorderName: '',
-      startTimeFrom: 0,
-      startTimeTo: 0,
-      selectStatus: ''
+      updatedFrom: '',
+      updatedTo: '',
+      selectOrder: '',
+      purchaseorderStatus: [],
+      type: ''
     };
     this.ref.detectChanges();
   }
 
   applyFilter() {
 
-    this.filters.completionFrom = this.completionFrom;
-    this.filters.completionTo = this.completionTo;
+    this.filters.totalFrom = this.totalFrom;
+    this.filters.totalTo = this.totalTo;
     this.applyClicked = true;
     this.filteredPurchaseOrders = this.backUpPurchaseOrders;
-
-    if (this.collaborators[0]) {
-      let collaboratorFiltered = [];
-      let collaboratorFilteredList = [];
-      this.filteredPurchaseOrders.forEach(element => {
-        for ( let i = 0; i <= this.collaborators.length - 1; i ++) {
-          collaboratorFiltered = this.filterTxt(element.collaborators, this.collaborators[i].name);
-          if (collaboratorFiltered.length > 0) {
-            collaboratorFilteredList = collaboratorFilteredList.concat(element);
+    if (this.purchaseorderStatus[0]) {
+      const statusFiltered = [];
+      let statusFilteredList = [];
+      for (let j = 0; j <= this.filteredPurchaseOrders.length - 1; j ++) {
+        for ( let i = 0; i <= this.purchaseorderStatus.length - 1; i ++) {
+          if (this.filteredPurchaseOrders[j].status === this.purchaseorderStatus[i]) {
+            statusFilteredList = statusFilteredList.concat(this.filteredPurchaseOrders[j]);
           }
         }
-      });
-      this.filteredPurchaseOrders = collaboratorFilteredList;
+      }
+      this.filteredPurchaseOrders = statusFilteredList;
     }
-    if (!this.completionFrom) { this.filters.completionFrom = 0; }
-    if (!this.completionTo) { this.filters.completionTo = 100; }
-
-    if (this.filters.startTimeFrom) {
-      this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(purchaseorder => purchaseorder.scheduledStart >= this.filters.startTimeFrom);
-    }
-    if (this.filters.startTimeTo) {
-      this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(purchaseorder => purchaseorder.scheduledStart <= this.filters.startTimeTo);
-    }
+    if (!this.totalFrom) { this.filters.totalFrom = 0; }
+    if (!this.totalTo) { this.filters.totalTo = this.maxTotal; }
 
     this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(purchaseorder =>
-      purchaseorder.completion >= this.filters.completionFrom && purchaseorder.completion <= this.filters.completionTo);
-    if (this.filters.selectCustomer) {
-      this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(customer => customer.customerName === this.filters.selectCustomer);
+      purchaseorder.totalCost >= this.filters.totalFrom && purchaseorder.totalCost <= this.filters.totalTo);
+    if (this.filters.selectOrder) {
+      this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(
+        project => project.source === this.filters.selectOrder
+      );
     }
-
-    if (this.filters.selectProject) {
-      this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(project => project.purchaseOrderNumber === this.filters.selectProject);
-    }
-
-    if (this.filters.selectStatus) {
-      this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(project => project.status === this.filters.selectStatus);
+    if (this.filters.type) {
+      this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(project => project.type === this.filters.type);
     }
 
     if (this.filters.startedFrom) {
       this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(
-        purchaseorder => Date.parse(purchaseorder.startedDate) >= Number(this.filters.startedFrom)
+        purchaseorder => Date.parse(purchaseorder.dueDate) >= Number(this.filters.startedFrom)
       );
     }
     if (this.filters.startedTo) {
       this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(
-        purchaseorder => Date.parse(purchaseorder.startedDate) <= Number(this.filters.startedTo)
+        purchaseorder => Date.parse(purchaseorder.dueDate) <= Number(this.filters.startedTo)
+      );
+    }
+    if (this.filters.updatedFrom) {
+      this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(
+        purchaseorder => Date.parse(purchaseorder.lastUpdated) >= Number(this.filters.updatedFrom)
+      );
+    }
+    if (this.filters.updatedTo) {
+      this.filteredPurchaseOrders = this.filteredPurchaseOrders.filter(
+        purchaseorder => Date.parse(purchaseorder.lastUpdated) <= Number(this.filters.updatedTo)
       );
     }
     // remove duplicates from array

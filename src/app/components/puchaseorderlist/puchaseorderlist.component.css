@@ -87,14 +87,16 @@ app-submenu {
   flex: 1
 }
 
-.purchaseorderlist-import-btn {
+.purchaseorderlist-btn {
+	width: 120px;
   font-size: 10px;
-  padding: 5px 20px;
+  padding: 5px 10px;
   letter-spacing: 0;
   border-radius: 5px;
-  background-color: #F5F5F5;
+  background-color: #94EED6;
   cursor: pointer;
-  color: #868686;
+	color: #868686;
+	margin-left: 10px;
 }
 
 .purchaseorderlist-btn-group {

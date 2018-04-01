@@ -46,11 +46,11 @@
       <img *ngIf="filterClicked" src="assets/images/X sign Red.png" (click)="cancelFilter()">   
       <img *ngIf="filterClicked" src="assets/images/Checkmark Green.png" (click)="saveFilterModalCollapsed = false; showSaveFilterModal = true;">
     </div>
-    <div class="contacts-btn-group">
-      <div class="contacts-import-btn">Receive Inventory</div>
-      <div class="contacts-import-btn">Add Purchase Order</div>
-      <div class="contacts-import-btn">Add Transfer</div>
-      <div class="contacts-import-btn">Add Adjustment</div>
+    <div class="purchaseorderlist-btn-group">
+      <div class="purchaseorderlist-btn">Receive Inventory</div>
+      <div class="purchaseorderlist-btn">Add Purchase Order</div>
+      <div class="purchaseorderlist-btn">Add Transfer</div>
+      <div class="purchaseorderlist-btn">Add Adjustment</div>
     </div>
   </div>
 
@@ -61,11 +61,10 @@
     <div class="purchaseorderlist-filter">
       <app-purchaseorderlistfilter 
         [(purchaseOrdersInfo)]="purchaseOrdersInfo" 
-        [(filters)]="filters" 
-        [collaborators]="collaborators" 
+        [(filters)]="filters"
         [purchaseorderStatus]="purchaseorderStatus" 
         (filterParent)="getFilter($event)"
-        [(purchaseorderTypes)]="purchaseorderTypes">
+        [(purchaseOrderTypes)]="purchaseOrderTypes">
       </app-purchaseorderlistfilter>
     </div>
   </div>

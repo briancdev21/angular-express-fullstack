@@ -29,7 +29,8 @@ export class PuchaseOrderListComponent implements OnInit {
     this.filterAvaliableTo = 'everyone';
   }
 
-  public purchaseorderStatus = ['Not started', 'Not complete', 'Delivered', 'In progress', 'Complete'];
+  public purchaseorderStatus = [];
+  public purchaseOrderTypes = ['Purchase Order', 'Stock Control'];
 
   public filters  = {
     startedFrom: '',
@@ -39,9 +40,6 @@ export class PuchaseOrderListComponent implements OnInit {
     selectTag: '',
     selectStatus: '',
   };
-
-  public collaborators: Array<string> = [
-  ];
 
   public purchaseOrdersInfo: Array<Object> = [
     {

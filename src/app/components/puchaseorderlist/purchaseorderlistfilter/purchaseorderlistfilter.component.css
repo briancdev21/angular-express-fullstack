@@ -189,9 +189,9 @@ img {
   margin: 0 0 0 5px;
 }
 
-/* owners section css */
+/* statuses section css */
 
-.owners {
+.statuses {
   display: flex;
   align-items: center;
   font-size: 0.8em;
@@ -203,13 +203,13 @@ img {
   padding: 0 8px;
 }
 
-.owners .add-owner {
+.statuses .add-status {
   background-image: '';
   cursor: pointer;
   min-height: 32px;
 }
 
-.edit-owners {
+.edit-statuses {
   position: absolute;
   top: 30px;
   border: solid 1px lightgray;
@@ -221,12 +221,12 @@ img {
   left: 0;
 }
 
-.edit-owners ul {
+.edit-statuses ul {
   margin: 0;
   padding: 0;
 }
 
-.edit-owners li {
+.edit-statuses li {
   list-style: none;
   display: inline-block;
   padding: 3px;
@@ -235,16 +235,16 @@ img {
   margin: 2px;
 }
 
-.edit-owners input {
+.edit-statuses input {
   width: 100%;
 }
 
-.owners>span {
+.statuses>span {
   padding-right: 15px;
   font-size: 13px;
 }
 
-.contact-owner {
+.order-status {
   background: #f5f5f5;
   padding: 5px;
   margin-right: 5px;
