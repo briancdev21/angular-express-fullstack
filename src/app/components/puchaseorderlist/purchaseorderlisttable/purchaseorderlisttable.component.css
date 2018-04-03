@@ -44,10 +44,6 @@ td:first-child, th:first-child  {
   padding-left: 30px !important;
 }
 
-td:last-child {
-  min-width: 280px;
-}
-
 td:nth-child(2) {
   min-width: 250px;
 }

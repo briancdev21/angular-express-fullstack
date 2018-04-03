@@ -65,9 +65,10 @@ export class PurchaseOrderListTableComponent implements OnInit {
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
       this.purchaseOrdersInfo.sort( function(name1, name2) {
+        console.log('999', name1[field], name2[field]);
         if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
           return -1;
-        } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
+        } else if ( Date.parse(name1[field]) > Date.parse(name2[field]) || name2[field] === '') {
           return 1;
         } else {
           return 0;
