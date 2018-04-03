@@ -210,12 +210,12 @@ export class PendingFilterComponent implements OnInit {
 
     if (this.filters.createdFrom) {
       this.filteredPendings = this.filteredPendings.filter(
-        pending => Date.parse(pending.createdDate) >= Number(this.filters.createdFrom)
+        pending => Date.parse(pending.signedDate) >= Number(this.filters.createdFrom)
       );
     }
     if (this.filters.createdTo) {
       this.filteredPendings = this.filteredPendings.filter(
-        pending => Date.parse(pending.createdDate) <= Number(this.filters.createdTo)
+        pending => Date.parse(pending.signedDate) <= Number(this.filters.createdTo)
       );
     }
     // remove duplicates from array

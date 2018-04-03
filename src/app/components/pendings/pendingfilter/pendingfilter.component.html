@@ -26,7 +26,7 @@
           max="120"
           [from]="filters.overdueDaysFrom"
           [to]="filters.overdueDaysTo"
-          prefix="$"
+          prefix=""
           (onChange)="overdueDaysRangeSliderChange($event)"></ion-range-slider>
   </div>
 
@@ -49,11 +49,13 @@
     <div>
       <div class="total-from range-box">
         <span>$</span>
-        <input placeholder="Low Range" [(ngModel)]="filters.totalFrom" type="number">
+        <input placeholder="Low Range" [(ngModel)]="filters.totalFrom" type="number" (blur)="clickedTotalFrom=false" *ngIf="clickedTotalFrom">
+        <div *ngIf="!clickedTotalFrom" (click)="clickedTotalFrom=true" class="hidden-span">{{filters.totalFrom | number: '1.2-2'}}</div>
       </div>
       <div class="total-to range-box">
         <span>$</span>
-        <input placeholder="High Range" [(ngModel)]="filters.totalTo" type="number">
+        <input placeholder="High Range" [(ngModel)]="filters.totalTo" type="number" (blur)="clickedTotalTo=false" *ngIf="clickedTotalTo">
+        <div *ngIf="!clickedTotalTo" (click)="clickedTotalTo=true" class="hidden-span">{{filters.totalTo | number: '1.2-2'}}</div>
       </div>
     </div>
   </div>
@@ -63,11 +65,13 @@
     <div>
       <div class="estimated-from range-box">
         <span>$</span>
-        <input placeholder="Low Range" [(ngModel)]="filters.estimatedFrom" type="number">
+        <input placeholder="Low Range" [(ngModel)]="filters.estimatedFrom" type="number" (blur)="clickedEstimatedFrom=false" *ngIf="clickedEstimatedFrom">
+        <div *ngIf="!clickedEstimatedFrom" (click)="clickedEstimatedFrom=true" class="hidden-span">{{filters.estimatedFrom | number: '1.2-2'}}</div>
       </div>
       <div class="estimated-to range-box">
         <span>$</span>
-        <input placeholder="High Range" [(ngModel)]="filters.estimatedTo" type="number">
+        <input placeholder="High Range" [(ngModel)]="filters.estimatedTo" type="number" (blur)="clickedEstimatedTo=false; " *ngIf="clickedEstimatedTo">
+        <div *ngIf="!clickedEstimatedTo" (click)="clickedEstimatedTo=true" class="hidden-span">{{filters.estimatedTo | number: '1.2-2'}}</div>
       </div>
     </div>
   </div>
