@@ -45,11 +45,11 @@ td:first-child, th:first-child  {
 }
 
 td:last-child {
-  min-width: 280px;
+  min-width: 180px;
 }
 
-td:nth-child(2) {
-  min-width: 250px;
+td:nth-child(3) {
+  min-width: 230px;
 }
 
 th {
