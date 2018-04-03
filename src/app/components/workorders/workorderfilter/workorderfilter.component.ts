@@ -188,12 +188,15 @@ export class WorkOrderFilterComponent implements OnInit {
     }
     if (!this.completionFrom) { this.filters.completionFrom = 0; }
     if (!this.completionTo) { this.filters.completionTo = 100; }
-
     if (this.filters.startTimeFrom) {
-      this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder => workorder.scheduledStart >= this.filters.startTimeFrom);
+      this.filteredWorkOrders = this.filteredWorkOrders.filter(
+        workorder => this.compareStartTime(workorder.scheduledStart, this.filters.startTimeFrom)
+      );
     }
     if (this.filters.startTimeTo) {
-      this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder => workorder.scheduledStart <= this.filters.startTimeTo);
+      this.filteredWorkOrders = this.filteredWorkOrders.filter(
+        workorder => this.compareEndTime(workorder.scheduledEnd, this.filters.startTimeTo)
+      );
     }
 
     this.filteredWorkOrders = this.filteredWorkOrders.filter(workorder =>
@@ -212,17 +215,59 @@ export class WorkOrderFilterComponent implements OnInit {
 
     if (this.filters.startedFrom) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(
-        workorder => Date.parse(workorder.startedDate) >= Number(this.filters.startedFrom)
+        workorder => Date.parse(workorder.startDate) >= Number(this.filters.startedFrom)
       );
     }
     if (this.filters.startedTo) {
       this.filteredWorkOrders = this.filteredWorkOrders.filter(
-        workorder => Date.parse(workorder.startedDate) <= Number(this.filters.startedTo)
+        workorder => Date.parse(workorder.startDate) <= Number(this.filters.startedTo)
       );
     }
     // remove duplicates from array
     this.filteredWorkOrders = Array.from(new Set(this.filteredWorkOrders));
 
     this.filterParent.emit({filtered: this.filteredWorkOrders, clicked: this.applyClicked});
+  }
+
+  compareStartTime (time1, time2) {
+    let midHour1 = Number(time1.split(':')[0]);
+    const midHour2 = Number(time2.split(':')[0]);
+    if (time1.split(':')[1].split(' ')[1] === 'PM') {
+      midHour1 = 12 + midHour1;
+    }
+    const midMin1 = Number(time1.split(':')[1].slice(0, -2));
+    const midMin2 = Number(time2.split(':')[1]);
+    if (midHour2 > midHour1) {
+      return false;
+    } else if (midHour1 === midHour2) {
+      if (midMin2 > midMin1) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  compareEndTime (time1, time2) {
+    let midHour1 = Number(time1.split(':')[0]);
+    const midHour2 = Number(time2.split(':')[0]);
+    if (time1.split(':')[1].split(' ')[1] === 'PM') {
+      midHour1 = 12 + midHour1;
+    }
+    const midMin1 = Number(time1.split(':')[1].slice(0, -2));
+    const midMin2 = Number(time2.split(':')[1]);
+    if (midHour2 > midHour1) {
+      return true;
+    } else if (midHour1 === midHour2) {
+      if (midMin2 >= midMin1) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 }
