@@ -37,9 +37,9 @@ export class ChangeLogListTableComponent implements OnInit {
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
       this.changelogListInfo.sort( function(name1, name2) {
-        if ( name1[field] < name2[field] ) {
+        if ( Math.abs(name1[field]) < Math.abs(name2[field])) {
           return -1;
-        } else if ( name1[field] > name2[field]) {
+        } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
           return 1;
         } else {
           return 0;

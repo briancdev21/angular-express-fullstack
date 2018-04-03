@@ -32,8 +32,8 @@ export class PmProgressComponent implements OnInit {
       budgetImpact: -2000,
       scheduleImpact: 2,
       dateCreated: 'December 15, 2016',
-      lastUpdated: 'January 20, 2017',
-      dateApproved: 'January 20, 2017',
+      lastUpdated: 'March 20, 2017',
+      dateApproved: 'April 20, 2017',
     },
     {
       logId: 'CL0159-03',
@@ -43,8 +43,8 @@ export class PmProgressComponent implements OnInit {
       budgetImpact: 3500,
       scheduleImpact: 4,
       dateCreated: 'January 20, 2016',
-      lastUpdated: 'January 20, 2017',
-      dateApproved: 'January 20, 2017',
+      lastUpdated: 'June 20, 2017',
+      dateApproved: 'June 20, 2017',
     },
   ];
 
