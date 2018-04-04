@@ -86,15 +86,19 @@ app-submenu {
   flex: 1
 }
 
-.add-btn {
+.add-btn, .import-btn {
   font-size: 10px;
   padding: 5px 20px;
   letter-spacing: 0;
   border-radius: 5px;
-  background-color: #99f3db;
+  background-color: #a9f2df;
   cursor: pointer;
 	color: #868686;
 	margin-left: 10px;
+}
+
+.import-btn {
+	background-color: #F5F5F5;
 }
 
 .invoices-btn-group {
