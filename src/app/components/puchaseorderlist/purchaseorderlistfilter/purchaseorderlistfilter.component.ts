@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter, Output } from '@angular/core';
+import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { FilterService } from '../filter.service';
@@ -22,6 +22,8 @@ export class PurchaseOrderListFilterComponent implements OnInit {
   @Input() purchaseorderStatus;
   @Input() purchaseOrderTypes;
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
+  @ViewChild('autofocus')
+  private elementRef: ElementRef;
 
   customersList = [];
   purchaseOrdersList = [];
@@ -49,7 +51,6 @@ export class PurchaseOrderListFilterComponent implements OnInit {
   filteredPurchaseOrders: any;
   applyClicked = false;
   backUpPurchaseOrders: any;
-  editable: boolean;
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
@@ -58,6 +59,7 @@ export class PurchaseOrderListFilterComponent implements OnInit {
   maxTotal = 0;
   totalFrom = 0;
   totalTo = 0;
+  editable = false;
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
     document.addEventListener('click', function() {
@@ -86,6 +88,11 @@ export class PurchaseOrderListFilterComponent implements OnInit {
 
     this.totalFrom = this.filters.totalFrom ? this.filters.totalFrom : 0;
     this.totalTo = this.filters.totalTo ? this.filters.totalTo : this.maxTotal;
+  }
+
+  editStatus() {
+    this.editable = true;
+    setTimeout(() => this.elementRef.nativeElement.focus());
   }
 
   totalRangeSliderChange(event) {

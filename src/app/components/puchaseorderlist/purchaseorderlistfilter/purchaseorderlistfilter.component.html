@@ -23,20 +23,24 @@
 
   <div class="status">
     <span>Status</span>
-    <div class="statuses" (click)='editable=true;$event.stopPropagation();'> 
-      <div class="follower" *ngFor="let status of purchaseorderStatus; let i = index" >
-        <span class="order-status">{{status}}</span>
-      </div> 
-      <div class="follower add-status" (click)="editable=true;$event.stopPropagation()">
+    <div class="statuses" (click)='editStatus(); $event.stopPropagation()'> 
+      <div class="follower" *ngIf="!editable" >
+        <span class="order-status" *ngFor="let status of purchaseorderStatus; let i = index">{{status}}</span>
+      </div>
+      <!-- <div class="follower add-status" (click)="editable=true;$event.stopPropagation()">
         <a (click)="editable=true;$event.stopPropagation()" ></a>
-      </div> 
+      </div>  -->
       <div class="edit-statuses" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
         <ul>
-          <li *ngFor="let status of purchaseorderStatus; let i = index">{{status}}<span (click)="removeStatus(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
-          <li style="background: none; width: 100%; margin: 0;">
-            <input autocomplete [config]="config2" [items]="items2"
-            (inputChangedEvent)="onInputChangedEvent($event)"
-            (selectEvent)="onSelect($event)">
+          <li *ngFor="let status of purchaseorderStatus; let i = index">{{status}}<span (click)="removeStatus(i)" class="close-btn">&nbsp;&nbsp;x</span></li><br/>
+          <li style="background: none; width: 100%; margin: 0;" class="items-drop-down">
+            <input autocomplete 
+              [config]="config2" 
+              [items]="items2"
+              (inputChangedEvent)="onInputChangedEvent($event)"
+              (selectEvent)="onSelect($event)"
+              #autofocus
+              name="autofocus">
           </li>
         </ul>
       </div>

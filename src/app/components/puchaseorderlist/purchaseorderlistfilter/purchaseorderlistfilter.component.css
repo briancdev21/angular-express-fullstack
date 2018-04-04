@@ -201,6 +201,7 @@ img {
   margin-top: 1px solid #D3D3D3;
   border: 1px solid lightgray;
   padding: 0 8px;
+  min-height: 32px;
 }
 
 .statuses .add-status {
@@ -210,14 +211,11 @@ img {
 }
 
 .edit-statuses {
-  position: absolute;
-  top: 30px;
-  border: solid 1px lightgray;
+  position: relative;
   background: white;
   padding: 5px;
   z-index: 9;
-  min-width: 150px;
-  max-width: 300px;
+  width: 100%;
   left: 0;
 }
 
@@ -230,13 +228,14 @@ img {
   list-style: none;
   display: inline-block;
   padding: 3px;
-  background: lightblue;
+  background: lightgray;
   border-radius: 1px;
   margin: 2px;
 }
 
 .edit-statuses input {
   width: 100%;
+  border: none;
 }
 
 .statuses>span {
@@ -249,4 +248,31 @@ img {
   padding: 5px;
   margin-right: 5px;
   color: #646464;
+}
+
+.items-drop-down {
+  margin-top: 10px;
+}
+
+:host ::ng-deep .edit-statuses .autocomplete input {
+  width: 100%;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid lightgray;
+}
+
+:host ::ng-deep .edit-statuses .items-drop-down>div {
+  width: 100%;
+}
+
+:host ::ng-deep .edit-statuses .items-drop-down>div>input {
+  border-bottom: 1px solid lightgray;
+}
+
+:host ::ng-deep .edit-statuses .autocomplete ul {
+  padding-left: 10px;
+}
+
+.close-btn {
+  cursor: pointer;
 }
