@@ -1,0 +1,137 @@
+.background {
+	width: 100%;
+	height: 100vh;
+	position: relative;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	color: white;
+}
+
+.weather-sec {
+	position: absolute;
+	right: 40px;
+	top: 40px;
+	color: white;
+	font-size: 18px;
+	font-weight: 300;
+	display: flex;
+	flex-direction: column;
+}
+
+.weather-sec>span {
+	margin-top: -5px;
+	margin-left: 5px;
+}
+
+.temperature {
+	display: flex;
+}
+
+.temperature>span {
+	margin-top: 35px;
+	margin-left: 5px;
+}
+
+.weather-sec img {
+	width: 50px;
+	height: 50px;
+}
+
+.timer-sec {
+	margin-top: 35vh;
+	font-size: 150px;
+}
+
+.time-convention {
+	font-size: 50px;
+	margin-left: -10px;
+}
+
+.login-sec {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.login-form {
+	display: flex;
+	flex-direction: column;
+	width: 30%;
+}
+
+.login-form input {
+	text-align: center;
+	font-size: 38px;
+	color: white;
+	font-weight: 400;
+}
+
+.login-btn {
+	width: 50%;
+	min-height: 50px;
+	background-color: #b5d24a !important;
+	color: white !important;
+	font-size: 20px;
+	font-weight: 300;
+	margin-left: 25%;
+	margin-top: 10px;
+}
+
+:host ::ng-deep .login-form .mat-form-field-underline{
+	height: 5px;
+	background: white;
+}
+
+/deep/ .login-form .mat-input-placeholder {
+	color: #fff;
+	font-size: 34px;
+	text-align: center;
+	margin-top: -30px;
+	font-weight: 300;
+}
+
+/deep/ .mat-input-ripple.mat-focused {
+	background-color: #fff;
+}
+
+/deep/ .login-sec .mat-checkbox-inner-container {
+	background: white !important
+}
+
+/deep/ .login-sec .mat-checkbox-frame {
+	border-radius: 0;
+	border-width: 0;
+}
+
+/deep/ .login-sec .mat-checkbox-label {
+	font-weight: 400;
+}
+
+.remember-check {
+	margin-top: 15px;
+	font-size: 17px;
+	font-weight: 100 !important;
+}
+
+.quote {
+	font-size: 24px;
+	font-weight: 300;
+	margin-top: 30px;
+}
+
+.forgot-password {
+	position: absolute;
+	left: 20px;
+	bottom: 20px;
+	font-size: 13px;
+}
+
+.forgot-password:hover {
+	border-bottom: 1px solid lightblue;
+	color: lightblue;
+}

@@ -3,10 +3,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { TabModule } from 'angular-tabs-component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonRangeSliderModule } from 'ng2-ion-range-slider';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatInputModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModule } from '@angular/material';
 
 import { ProfileCmpModule } from '../profile/profile.module';
 import { CommonCmpModule } from '../common/common.module';
@@ -37,9 +38,18 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutocompleteModule
+    AutocompleteModule,
+    MatInputModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    ReactiveFormsModule,
+    MatCheckboxModule,
   ],
   exports: [
+    MatInputModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
   ],
   providers: [AuthService]
 })
