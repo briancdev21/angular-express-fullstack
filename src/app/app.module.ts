@@ -43,6 +43,7 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { DragulaModule } from 'ng2-dragula';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { AuthCmpModule } from './components/auth/auth.module';
 
 import { Pipe, PipeTransform } from '@angular/core';
 import { PhonePipe } from './pipes/phone.pipe';
@@ -99,7 +100,8 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     ProjectsListCmpModule,
     ProposalListCmpModule,
     ProjectManagementCmpModule,
-    PuchaseOrderListCmpModule
+    PuchaseOrderListCmpModule,
+    AuthCmpModule
   ],
   exports: [
     SubmenuComponent,

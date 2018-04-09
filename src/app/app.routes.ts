@@ -20,11 +20,14 @@ import { PmFinancialsComponent } from './components/projectmanagement/pmfinancia
 import { PmProgressComponent } from './components/projectmanagement/pmprogress/pmprogress.component';
 import { PmFilesComponent } from './components/projectmanagement/pmfiles/pmfiles.component';
 import { PuchaseOrderListComponent } from './components/puchaseorderlist/puchaseorderlist.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { AuthComponent } from './components/auth/auth.component';
 
 import { CommonComponent } from './components/common/common.component';
 
 export const routes: Routes = [
-  { path: '', component: WorkOrdersComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
   { path: 'crm', component: ProposalListComponent },
   { path: 'sales', component: PendingsComponent },
   { path: 'pm', component: ProjectManagementComponent,
