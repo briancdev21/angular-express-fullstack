@@ -7,7 +7,8 @@
 .main-content-small {
   transition: 0.2s all;
   right: 0;
-  left: 200px;
+	left: 200px;
+	top: 68px;
 }
 
 .main-content-large {

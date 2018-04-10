@@ -23,6 +23,7 @@ import { PuchaseOrderListComponent } from './components/puchaseorderlist/puchase
 import { LoginComponent } from './components/auth/login/login.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { HomeComponent } from './components/home/home.component';
+import { CrmComponent } from './components/crm/crm.component';
 
 import { CommonComponent } from './components/common/common.component';
 
@@ -30,7 +31,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
   { path: 'login', component: LoginComponent },
-  { path: 'crm', component: ProposalListComponent },
+  { path: 'crm', component: CrmComponent },
   { path: 'sales', component: PendingsComponent },
   { path: 'pm', component: ProjectManagementComponent,
     children: [

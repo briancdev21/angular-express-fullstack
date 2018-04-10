@@ -22,6 +22,7 @@ import { ProjectsListComponent } from './components/projectslist/projectslist.co
 import { ProposalListComponent } from './components/proposallist/proposallist.component';
 import { PuchaseOrderListComponent } from './components/puchaseorderlist/puchaseorderlist.component';
 import { HomeComponent } from './components/home/home.component';
+import { CrmComponent } from './components/crm/crm.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
@@ -45,6 +46,7 @@ import { ClickOutsideModule } from 'ng4-click-outside';
 import { DragulaModule } from 'ng2-dragula';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { AuthCmpModule } from './components/auth/auth.module';
+import { CrmCmpModule } from './components/crm/crm.module';
 
 import { Pipe, PipeTransform } from '@angular/core';
 import { PhonePipe } from './pipes/phone.pipe';
@@ -74,7 +76,8 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     ProposalListComponent,
     ProjectManagementComponent,
     PuchaseOrderListComponent,
-    HomeComponent
+    HomeComponent,
+    CrmComponent
   ],
   imports: [
     BrowserModule,
@@ -103,7 +106,8 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     ProposalListCmpModule,
     ProjectManagementCmpModule,
     PuchaseOrderListCmpModule,
-    AuthCmpModule
+    AuthCmpModule,
+    CrmCmpModule
   ],
   exports: [
     SubmenuComponent,
