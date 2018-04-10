@@ -8,20 +8,20 @@ import { IonRangeSliderModule } from 'ng2-ion-range-slider';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ProfileCmpModule } from '../profile/profile.module';
-import { CommonCmpModule } from '../common/common.module';
+import { ProfileCmpModule } from '../../profile/profile.module';
+import { CommonCmpModule } from '../../common/common.module';
 
 import { FilterService } from './filter.service';
-import { InvoicesListTableComponent } from './invoiceslisttable/invoiceslisttable.component';
-import { InvoiceFilterComponent } from './invoicefilter/invoicefilter.component';
+import { ProposalListTableComponent } from './proposallisttable/proposallisttable.component';
+import { ProposalListFilterComponent } from './proposallistfilter/proposallistfilter.component';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
 
 
 @NgModule({
   declarations: [
-    InvoicesListTableComponent,
-    InvoiceFilterComponent,
+    ProposalListTableComponent,
+    ProposalListFilterComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,9 +38,9 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     AutocompleteModule
   ],
   exports: [
-    InvoicesListTableComponent,
-    InvoiceFilterComponent,
+    ProposalListTableComponent,
+    ProposalListFilterComponent,
   ],
   providers: [FilterService]
 })
-export class InvoicesCmpModule { }
+export class ProposalListCmpModule { }

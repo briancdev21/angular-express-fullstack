@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonComponent } from '../common/common.component';
+import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
 import { DragulaService } from 'ng2-dragula';
 @Component({
@@ -7,7 +7,7 @@ import { DragulaService } from 'ng2-dragula';
   templateUrl: './dealspipeline.component.html',
   styleUrls: [
     './dealspipeline.component.css',
-    '../../../../node_modules/dragula/dist/dragula.css'
+    '../../../../../node_modules/dragula/dist/dragula.css'
   ],
   entryComponents: [
     CommonComponent

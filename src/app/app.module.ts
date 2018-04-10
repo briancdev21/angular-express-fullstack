@@ -9,15 +9,13 @@ import { TestComponent } from './components/test/test.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProposalComponent } from './components/proposal/proposal.component';
 import { OrderProfileComponent } from './components/orderprofile/orderprofile.component';
-import { DealsPipelineComponent } from './components/dealspipeline/dealspipeline.component';
+import { SalesComponent } from './components/sales/sales.component';
 import { SuppliersComponent } from './components/suppliers/suppliers.component';
 import { SubmenuComponent } from './components/submenu/submenu.component';
 import { ProductsComponent } from './components/products/products.component';
-import { InvoicesComponent } from './components/invoices/invoices.component';
 import { PendingsComponent } from './components/pendings/pendings.component';
 import { WorkOrdersComponent } from './components/workorders/workorders.component';
 import { ProjectsListComponent } from './components/projectslist/projectslist.component';
-import { ProposalListComponent } from './components/proposallist/proposallist.component';
 import { PuchaseOrderListComponent } from './components/puchaseorderlist/puchaseorderlist.component';
 import { HomeComponent } from './components/home/home.component';
 import { CrmComponent } from './components/crm/crm.component';
@@ -25,14 +23,12 @@ import { CrmComponent } from './components/crm/crm.component';
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
 import { OrderProfileCmpModule } from './components/orderprofile/orderprofile.module';
-import { DealspipelineCmpModule } from './components/dealspipeline/dealspipeline.module';
+import { SalesCmpModule } from './components/sales/sales.module';
 import { SuppliersCmpModule } from './components/suppliers/suppliers.module';
 import { ProductsCmpModule } from './components/products/products.module';
-import { InvoicesCmpModule } from './components/invoices/invoices.module';
 import { PendingsCmpModule } from './components/pendings/pendings.module';
 import { WorkOrdersCmpModule } from './components/workorders/workorder.module';
 import { ProjectsListCmpModule } from './components/projectslist/projectslist.module';
-import { ProposalListCmpModule } from './components/proposallist/proposallist.module';
 import { ProjectManagementCmpModule } from './components/projectmanagement/projectmanagement.module';
 import { PuchaseOrderListCmpModule } from './components/puchaseorderlist/puchaseorderlist.module';
 import { CommonCmpModule } from './components/common/common.module';
@@ -57,17 +53,15 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     TestComponent,
     ProposalComponent,
     OrderProfileComponent,
-    DealsPipelineComponent,
+    SalesComponent,
     SubmenuComponent,
     StopEventPropagationDirective,
     PhonePipe,
     SuppliersComponent,
     ProductsComponent,
-    InvoicesComponent,
     PendingsComponent,
     WorkOrdersComponent,
     ProjectsListComponent,
-    ProposalListComponent,
     ProjectManagementComponent,
     PuchaseOrderListComponent,
     HomeComponent,
@@ -81,7 +75,7 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     ProposalCmpModule,
     OrderProfileCmpModule,
     SuppliersCmpModule,
-    DealspipelineCmpModule,
+    SalesCmpModule,
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     FormsModule,
@@ -91,11 +85,9 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     ProductsCmpModule,
-    InvoicesCmpModule,
     PendingsCmpModule,
     WorkOrdersCmpModule,
     ProjectsListCmpModule,
-    ProposalListCmpModule,
     ProjectManagementCmpModule,
     PuchaseOrderListCmpModule,
     AuthCmpModule,

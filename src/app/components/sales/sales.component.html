@@ -1,0 +1,28 @@
+<app-common (expandSidebar)="toggleMenubar($event)"></app-common>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
+	<div class="top-bar sub-nav" [ngClass]="{'top-bar-large': mRotateMenu, 'top-bar-small': !mRotateMenu }">
+		<div class="sub-nav-container clearfix">
+			<div class="col-sm-6 sub-nav-left">
+				<app-submenu (mOutputData)='Submit_Inventory_Data($event)'></app-submenu>
+			</div>
+			<div class="col-sm-6 sub-nav-right">
+				<div class="col-sm-4 btn-sub-nav">
+				<button class="btn " [routerLinkActive]="'active'" [routerLink]="['./deals']">
+					DEALS
+				</button>
+				</div>
+				<div class="col-sm-4 btn-sub-nav">
+				<button class="btn " [routerLinkActive]="'active'" [routerLink]="['./invoices']">
+					INVOICES
+				</button>
+				</div>
+				<div class="col-sm-4 btn-sub-nav">
+				<button class="btn" [routerLinkActive]="'active'" [routerLink]="['./proposals']">
+					PROPOSALS
+				</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<router-outlet></router-outlet>
+</div>
