@@ -22,11 +22,13 @@ import { PmFilesComponent } from './components/projectmanagement/pmfiles/pmfiles
 import { PuchaseOrderListComponent } from './components/puchaseorderlist/puchaseorderlist.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { AuthComponent } from './components/auth/auth.component';
+import { HomeComponent } from './components/home/home.component';
 
 import { CommonComponent } from './components/common/common.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent},
   { path: 'login', component: LoginComponent },
   { path: 'crm', component: ProposalListComponent },
   { path: 'sales', component: PendingsComponent },

@@ -21,6 +21,7 @@ import { WorkOrdersComponent } from './components/workorders/workorders.componen
 import { ProjectsListComponent } from './components/projectslist/projectslist.component';
 import { ProposalListComponent } from './components/proposallist/proposallist.component';
 import { PuchaseOrderListComponent } from './components/puchaseorderlist/puchaseorderlist.component';
+import { HomeComponent } from './components/home/home.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
@@ -72,7 +73,8 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     ProjectsListComponent,
     ProposalListComponent,
     ProjectManagementComponent,
-    PuchaseOrderListComponent
+    PuchaseOrderListComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
