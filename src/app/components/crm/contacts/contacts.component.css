@@ -11,9 +11,8 @@
 }
 
 .main-content-large {
-	top: 68px;
   right: 0;
-  left: 68px;
+  left: 0;
   transition: 0.2s all;
 }
 

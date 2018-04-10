@@ -2,10 +2,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { TestComponent } from './components/test/test.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProposalComponent } from './components/proposal/proposal.component';
-import { LeadsComponent } from './components/leads/leads.component';
+import { LeadsComponent } from './components/crm/leads/leads.component';
 import { OrderProfileComponent } from './components/orderprofile/orderprofile.component';
 import { DealsPipelineComponent } from './components/dealspipeline/dealspipeline.component';
-import { ContactsComponent } from './components/contacts/contacts.component';
+import { ContactsComponent } from './components/crm/contacts/contacts.component';
 import { SuppliersComponent } from './components/suppliers/suppliers.component';
 import { ProductsComponent } from './components/products/products.component';
 import { InvoicesComponent } from './components/invoices/invoices.component';
@@ -24,12 +24,23 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { HomeComponent } from './components/home/home.component';
 import { CrmComponent } from './components/crm/crm.component';
+import { AccountsComponent } from './components/crm/accounts/accounts.component';
+import { CrmDashboardComponent } from './components/crm/crmdashboard/crmdashboard.component';
 
 import { CommonComponent } from './components/common/common.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'home', component: HomeComponent},
+  { path: 'crm', component: CrmComponent,
+    children: [
+      { path: '', redirectTo: 'crm-dashboard', pathMatch: 'full' },
+      { path: 'crm-dashboard', component: CrmDashboardComponent },
+      { path: 'leads', component: LeadsComponent },
+      { path: 'contacts', component: ContactsComponent },
+      { path: 'accounts', component: AccountsComponent },
+    ]
+  },
   { path: 'login', component: LoginComponent },
   { path: 'crm', component: CrmComponent },
   { path: 'sales', component: PendingsComponent },

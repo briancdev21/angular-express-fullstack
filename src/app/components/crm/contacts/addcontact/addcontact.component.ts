@@ -1,22 +1,23 @@
-import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, } from '@angular/core';
+import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { MultiKeywordSelectComponent } from '../../profile/multikeywordselect/multikeywordselect.component';
+import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
 import { CompleterService, CompleterData } from 'ng2-completer';
 
 @Component({
-  selector: 'app-addlead',
-  templateUrl: './addlead.component.html',
+  selector: 'app-addcontact',
+  templateUrl: './addcontact.component.html',
   styleUrls: [
-    './addlead.component.css',
+    './addcontact.component.css',
   ]
 })
 
 
-export class AddLeadComponent implements OnInit {
+export class AddContactComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
-  @Input() leadsListInfo;
-  @Input() leadOwners;
-  @Input() leadStatus;
+  @Input() contactsListInfo;
+  @Input() contactOwners;
+  @Input() contactStatus;
+  @Output() addToContactsList: EventEmitter<any> = new EventEmitter;
   protected searchStr: string;
   protected captain: string;
   protected captainSource: string;
@@ -32,9 +33,9 @@ export class AddLeadComponent implements OnInit {
   ];
   protected captains = ['Head Contact', 'Accounts Receivable'];
   protected captainsSource = ['Contact referal'];
- 
-  addLeadModalCollapsed = true;
-  showAddLeadModal = false;
+
+  addContactModalCollapsed = true;
+  showAddContactModal = false;
   switchIconShipping: boolean = true;
   shippingAddress: string = '';
   typeAccountTypeChange = false;
@@ -59,6 +60,9 @@ export class AddLeadComponent implements OnInit {
   invalidDefaultPricing = false;
   invalidPrimaryNumber = false;
   sourceValue = true;
+  newEmail = '';
+  newAddress = '';
+  selectOwner = '';
 
   constructor(private completerService: CompleterService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
@@ -217,15 +221,34 @@ export class AddLeadComponent implements OnInit {
       }
     }
   }
-  clickSaveLead() {
+  clickSaveContact() {
+
+    const newContact = {
+      id: this.contactsListInfo.length,
+      name: this.firstName + ' ' + this.lastName,
+      phone: this.primaryNumber,
+      email: this.newEmail,
+      createDate: new Date(),
+      updateDate: new Date(),
+      lastContactedDate: new Date(),
+      rating: '0',
+      address: this.newAddress,
+      owner: this.selectOwner,
+      account: '0',
+      association: '0',
+      totalDeals: '0',
+      accountType: this.businessType,
+    };
+
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
     this.invalidDefaultPricing = false;
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
-      this.addLeadModalCollapsed = true;
-      this.showAddLeadModal = false;
+      this.addContactModalCollapsed = true;
+      this.showAddContactModal = false;
       this.tabActiveFirst = true;
       this.tabActiveSecond = false;
+      this.addToContactsList.emit({data: newContact});
     } else {
       if (!this.defaultCurrency) {
         this.invalidDefaultCurrency = true;

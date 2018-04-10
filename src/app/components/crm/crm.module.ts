@@ -11,6 +11,12 @@ import { MatInputModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModu
 
 import { ProfileCmpModule } from '../profile/profile.module';
 import { CommonCmpModule } from '../common/common.module';
+import { LeadsComponent } from './leads/leads.component';
+import { ContactsComponent } from './contacts/contacts.component';
+import { AccountsComponent } from './accounts/accounts.component';
+import { CrmDashboardComponent } from './crmdashboard/crmdashboard.component';
+import { LeadsCmpModule } from './leads/leads.module';
+import { ContactsCmpModule } from './contacts/contacts.module';
 
 import { CrmService } from './crm.service';
 import { Ng2CompleterModule } from 'ng2-completer';
@@ -19,7 +25,10 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
 
 @NgModule({
   declarations: [
-
+    LeadsComponent,
+    ContactsComponent,
+    AccountsComponent,
+    CrmDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +48,8 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     MatButtonToggleModule,
     ReactiveFormsModule,
     MatCheckboxModule,
+    LeadsCmpModule,
+    ContactsCmpModule
   ],
   exports: [
     MatInputModule,

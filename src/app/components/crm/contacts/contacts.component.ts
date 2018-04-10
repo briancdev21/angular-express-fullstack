@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonComponent } from '../common/common.component';
+import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
 @Component({
   selector: 'app-contacts',

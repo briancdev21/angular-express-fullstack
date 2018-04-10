@@ -8,10 +8,8 @@ import { routing } from './app.routes';
 import { TestComponent } from './components/test/test.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProposalComponent } from './components/proposal/proposal.component';
-import { LeadsComponent } from './components/leads/leads.component';
 import { OrderProfileComponent } from './components/orderprofile/orderprofile.component';
 import { DealsPipelineComponent } from './components/dealspipeline/dealspipeline.component';
-import { ContactsComponent } from './components/contacts/contacts.component';
 import { SuppliersComponent } from './components/suppliers/suppliers.component';
 import { SubmenuComponent } from './components/submenu/submenu.component';
 import { ProductsComponent } from './components/products/products.component';
@@ -26,10 +24,8 @@ import { CrmComponent } from './components/crm/crm.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
-import { LeadsCmpModule } from './components/leads/leads.module';
 import { OrderProfileCmpModule } from './components/orderprofile/orderprofile.module';
 import { DealspipelineCmpModule } from './components/dealspipeline/dealspipeline.module';
-import { ContactsCmpModule } from './components/contacts/contacts.module';
 import { SuppliersCmpModule } from './components/suppliers/suppliers.module';
 import { ProductsCmpModule } from './components/products/products.module';
 import { InvoicesCmpModule } from './components/invoices/invoices.module';
@@ -60,10 +56,8 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     AppComponent,
     TestComponent,
     ProposalComponent,
-    LeadsComponent,
     OrderProfileComponent,
     DealsPipelineComponent,
-    ContactsComponent,
     SubmenuComponent,
     StopEventPropagationDirective,
     PhonePipe,
@@ -83,11 +77,9 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     BrowserModule,
     routing,
     ProfileCmpModule,
-    LeadsCmpModule,
     CommonCmpModule,
     ProposalCmpModule,
     OrderProfileCmpModule,
-    ContactsCmpModule,
     SuppliersCmpModule,
     DealspipelineCmpModule,
     FroalaEditorModule.forRoot(),

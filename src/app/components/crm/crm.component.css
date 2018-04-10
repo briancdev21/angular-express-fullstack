@@ -21,6 +21,12 @@
 app-submenu {
 }
 
+.active {
+	background: #a8f2df !important;
+	color: #464646 !important;
+	outline: none !important;
+}
+
 .sub-nav-container {
 	margin: 0 30px;
 	border-bottom: 3px solid #70eaca;
@@ -46,9 +52,10 @@ app-submenu {
 	font-size: 19px;
 }
 
-.btn-sub-nav .btn:active, .btn-sub-nav .btn:hover {
+.btn-sub-nav .btn:active, .btn-sub-nav .btn:hover, .btn-sub-nav .btn:focus {
 	background: #a8f2df;
 	color: #464646;
+	outline: none;
 }
 
 
