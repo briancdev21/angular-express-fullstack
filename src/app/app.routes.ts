@@ -37,6 +37,8 @@ import { CollaborationDashboardComponent } from './components/collaboration/coll
 import { TeamScheduleComponent } from './components/collaboration/teamschedule/teamschedule.component';
 import { PersonalScheduleComponent } from './components/collaboration/personalschedule/personalschedule.component';
 import { WorkOrdersComponent } from './components/collaboration/workorders/workorders.component';
+import { ServicingComponent } from './components/servicing/servicing.component';
+import { ServicingDashboardComponent } from './components/servicing/servicingdashboard/servicingdashboard.component';
 
 
 import { CommonComponent } from './components/common/common.component';
@@ -90,8 +92,16 @@ export const routes: Routes = [
         { path: 'work-order', component: WorkOrdersComponent },
       ]
   },
-  { path: 'servicing', component: ProductsComponent },
-  { path: 'reports', component: InvoicesComponent },
+  { path: 'servicing', component: ServicingComponent,
+    children: [
+      { path: '', redirectTo: 'servicing-dashboard', pathMatch: 'full' },
+      { path: 'servicing-dashboard', component: ServicingDashboardComponent },
+      // { path: 'tickets', component: TestComponent },
+      // { path: 'work-order-issues', component: TestComponent },
+      // { path: 'solutions', component: TestComponent },
+    ]
+  },
+  { path: 'reports', component: TestComponent },
   { path: 'pm-details', component: ProjectManagementComponent,
     children: [
       { path: '', redirectTo: 'pm-board', pathMatch: 'full' },

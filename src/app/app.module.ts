@@ -16,6 +16,7 @@ import { HomeComponent } from './components/home/home.component';
 import { CrmComponent } from './components/crm/crm.component';
 import { PmComponent } from './components/pm/pm.component';
 import { InventoryComponent } from './components/inventory/inventory.component';
+import { ServicingComponent } from './components/servicing/servicing.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
@@ -33,6 +34,7 @@ import { AuthCmpModule } from './components/auth/auth.module';
 import { CrmCmpModule } from './components/crm/crm.module';
 import { PmCmpModule } from './components/pm/pm.module';
 import { InventoryCmpModule } from './components/inventory/inventory.module';
+import { ServicingCmpModule } from './components/servicing/servicing.module';
 
 import { Pipe, PipeTransform } from '@angular/core';
 import { PhonePipe } from './pipes/phone.pipe';
@@ -56,7 +58,8 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     ProjectManagementComponent,
     HomeComponent,
     CrmComponent,
-    CollaborationComponent
+    CollaborationComponent,
+    ServicingComponent
   ],
   imports: [
     BrowserModule,
@@ -79,7 +82,8 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     AuthCmpModule,
     CrmCmpModule,
     PmCmpModule,
-    CollaborationCmpModule
+    CollaborationCmpModule,
+    ServicingCmpModule
   ],
   exports: [
     SubmenuComponent,
