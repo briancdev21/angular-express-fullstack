@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, HostListener, EventEmitter, Output, ViewChild, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { AuthService } from '../auth.service';
@@ -17,7 +17,7 @@ import { FormControl, Validators, NgForm, FormGroup, FormBuilder } from '@angula
 })
 
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginform: FormGroup;
 
   temperature = 23;
@@ -28,6 +28,9 @@ export class LoginComponent implements OnInit {
   loginBackground = '';
   timeConvention = '';
   remembered = false;
+  currentHour = '';
+  currentMin = '';
+  interval: any;
   backgroundImages = [
     'assets/Landscapes/Mountains.jpg',
     'assets/Landscapes/asia-750x500.jpg',
@@ -40,11 +43,17 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    const newDate = new Date();
-    this.currentTime = moment(newDate).format('hh:mm A').slice(0, -2);
-    this.timeConvention = moment(newDate).format('hh:mm A').slice(-2);
-    this.loginBackground = 'url(' + this.backgroundImages[0] + ')';
-
+    let backgroundIndex = 0;
+    this.loginBackground = 'url(' + this.backgroundImages[backgroundIndex] + ')';
+    this.interval = setInterval(() => {
+      const newDate = new Date();
+      this.currentHour = moment(newDate).format('hh:mm A').slice(0, 2);
+      this.currentMin = moment(newDate).format('hh:mm A').slice(3, 5);
+      this.timeConvention = moment(newDate).format('hh:mm A').slice(-2);
+      if (this.currentHour === '00' && this.currentMin === '00' && this.timeConvention === 'AM') {
+        backgroundIndex ++;
+      }
+    }, 1000);
     this.loginform = this.formBuilder.group({
       password: [null, Validators.required],
       userName: [null, Validators.required]
@@ -53,6 +62,10 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     this.router.navigate(['../home/']);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.interval);
   }
 
 }
