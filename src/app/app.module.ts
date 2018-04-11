@@ -11,7 +11,7 @@ import { ProposalComponent } from './components/proposal/proposal.component';
 import { OrderProfileComponent } from './components/orderprofile/orderprofile.component';
 import { SalesComponent } from './components/sales/sales.component';
 import { SubmenuComponent } from './components/submenu/submenu.component';
-import { WorkOrdersComponent } from './components/workorders/workorders.component';
+import { CollaborationComponent } from './components/collaboration/collaboration.component';
 import { HomeComponent } from './components/home/home.component';
 import { CrmComponent } from './components/crm/crm.component';
 import { PmComponent } from './components/pm/pm.component';
@@ -21,7 +21,7 @@ import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
 import { OrderProfileCmpModule } from './components/orderprofile/orderprofile.module';
 import { SalesCmpModule } from './components/sales/sales.module';
-import { WorkOrdersCmpModule } from './components/workorders/workorder.module';
+import { CollaborationCmpModule } from './components/collaboration/collaboration.module';
 import { ProjectManagementCmpModule } from './components/projectmanagement/projectmanagement.module';
 import { CommonCmpModule } from './components/common/common.module';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
@@ -53,10 +53,10 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     PhonePipe,
     InventoryComponent,
     PmComponent,
-    WorkOrdersComponent,
     ProjectManagementComponent,
     HomeComponent,
-    CrmComponent
+    CrmComponent,
+    CollaborationComponent
   ],
   imports: [
     BrowserModule,
@@ -75,11 +75,11 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     DragulaModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    WorkOrdersCmpModule,
     ProjectManagementCmpModule,
     AuthCmpModule,
     CrmCmpModule,
-    PmCmpModule
+    PmCmpModule,
+    CollaborationCmpModule
   ],
   exports: [
     SubmenuComponent,

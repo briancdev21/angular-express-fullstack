@@ -2,7 +2,7 @@ import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { FilterService } from '../filter.service';
-import { Ng2CompleterComponent } from '../../common/ng2completer/ng2completer.component';
+import { Ng2CompleterComponent } from '../../../common/ng2completer/ng2completer.component';
 
 
 @Component({

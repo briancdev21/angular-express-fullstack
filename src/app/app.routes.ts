@@ -10,7 +10,7 @@ import { SuppliersComponent } from './components/inventory/suppliers/suppliers.c
 import { ProductsComponent } from './components/inventory/products/products.component';
 import { InvoicesComponent } from './components/sales/invoices/invoices.component';
 import { PendingsComponent } from './components/pm/pendings/pendings.component';
-import { WorkOrdersComponent } from './components/workorders/workorders.component';
+import { CollaborationComponent } from './components/collaboration/collaboration.component';
 import { ProjectsListComponent } from './components/pm/projectslist/projectslist.component';
 import { ProposalListComponent } from './components/sales/proposallist/proposallist.component';
 import { ProjectManagementComponent } from './components/projectmanagement/projectmanagement.component';
@@ -33,6 +33,11 @@ import { PmDashboardComponent } from './components/pm/pmdashboard/pmdashboard.co
 import { TasksComponent } from './components/pm/tasks/tasks.component';
 import { InventoryComponent } from './components/inventory/inventory.component';
 import { InventoryDashboardComponent } from './components/inventory/inventorydashboard/inventorydashboard.component';
+import { CollaborationDashboardComponent } from './components/collaboration/collaborationdashboard/collaborationdashboard.component';
+import { TeamScheduleComponent } from './components/collaboration/teamschedule/teamschedule.component';
+import { PersonalScheduleComponent } from './components/collaboration/personalschedule/personalschedule.component';
+import { WorkOrdersComponent } from './components/collaboration/workorders/workorders.component';
+
 
 import { CommonComponent } from './components/common/common.component';
 
@@ -76,7 +81,15 @@ export const routes: Routes = [
       { path: 'suppliers', component: SuppliersComponent },
     ]
   },
-  { path: 'orderprofile', component: PurchaseOrderListComponent },
+  { path: 'collaboration', component: CollaborationComponent,
+      children: [
+        { path: '', redirectTo: 'collaboration-dashboard', pathMatch: 'full' },
+        { path: 'collaboration-dashboard', component: CollaborationDashboardComponent },
+        { path: 'personal-schedule', component: PersonalScheduleComponent },
+        { path: 'team-schedule', component: TeamScheduleComponent },
+        { path: 'work-order', component: WorkOrdersComponent },
+      ]
+  },
   { path: 'servicing', component: ProductsComponent },
   { path: 'reports', component: InvoicesComponent },
   { path: 'pm-details', component: ProjectManagementComponent,

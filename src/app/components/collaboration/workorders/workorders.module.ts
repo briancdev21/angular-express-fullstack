@@ -8,8 +8,8 @@ import { IonRangeSliderModule } from 'ng2-ion-range-slider';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ProfileCmpModule } from '../profile/profile.module';
-import { CommonCmpModule } from '../common/common.module';
+import { ProfileCmpModule } from '../../profile/profile.module';
+import { CommonCmpModule } from '../../common/common.module';
 
 import { FilterService } from './filter.service';
 import { WorkOrdersTableComponent } from './workorderstable/workorderstable.component';
