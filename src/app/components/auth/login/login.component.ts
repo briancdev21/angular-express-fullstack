@@ -68,4 +68,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     clearInterval(this.interval);
   }
 
+  toForgotPassword() {
+    this.router.navigate(['../sign-up/']);
+  }
+
 }

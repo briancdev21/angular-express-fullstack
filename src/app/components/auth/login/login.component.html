@@ -22,5 +22,5 @@
 		</form>
 		<mat-checkbox [(ngModel)]="remembered" class="remember-check">Remember my login</mat-checkbox>
 	</div>
-	<span class="forgot-password">Forgot username or password</span>
+	<span class="forgot-password" (click)="toForgotPassword()">Forgot username or password</span>
 </div>
