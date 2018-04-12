@@ -45,8 +45,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit() {
     let backgroundIndex = 0;
     this.loginBackground = 'url(' + this.backgroundImages[backgroundIndex] + ')';
+    let newDate = new Date();
+    this.currentHour = moment(newDate).format('hh:mm A').slice(0, 2);
+    this.currentMin = moment(newDate).format('hh:mm A').slice(3, 5);
+    this.timeConvention = moment(newDate).format('hh:mm A').slice(-2);
     this.interval = setInterval(() => {
-      const newDate = new Date();
+      newDate = new Date();
       this.currentHour = moment(newDate).format('hh:mm A').slice(0, 2);
       this.currentMin = moment(newDate).format('hh:mm A').slice(3, 5);
       this.timeConvention = moment(newDate).format('hh:mm A').slice(-2);
@@ -69,7 +73,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   toForgotPassword() {
-    this.router.navigate(['../sign-up/']);
+    this.router.navigate(['../forgot-password/']);
   }
 
 }

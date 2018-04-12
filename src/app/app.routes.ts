@@ -22,6 +22,7 @@ import { PmFilesComponent } from './components/projectmanagement/pmfiles/pmfiles
 import { PurchaseOrderListComponent } from './components/inventory/purchaseorderlist/purchaseorderlist.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
+import { ForgotPasswordComponent } from './components/auth/forgotpassword/forgotpassword.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { HomeComponent } from './components/home/home.component';
 import { CrmComponent } from './components/crm/crm.component';
@@ -45,9 +46,10 @@ import { ServicingDashboardComponent } from './components/servicing/servicingdas
 import { CommonComponent } from './components/common/common.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'sign-up', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'sign-up', component: SignupComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'home', component: HomeComponent},
   { path: 'crm', component: CrmComponent,
     children: [

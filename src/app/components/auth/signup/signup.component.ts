@@ -6,8 +6,6 @@ import { Ng2CompleterComponent } from '../../common/ng2completer/ng2completer.co
 import * as moment from 'moment';
 import { FormControl, Validators, NgForm, FormGroup, FormBuilder, AbstractControl } from '@angular/forms';
 
-
-
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
