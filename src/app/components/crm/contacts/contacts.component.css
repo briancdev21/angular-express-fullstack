@@ -31,8 +31,12 @@ app-submenu {
 }
 
 .sub-nav-right .btn-sub-nav {
-	padding-right: 5px;
-	padding-left: 5px;
+	padding-right: 0px;
+	padding-left: 10px;
+}
+
+.sub-nav-right {
+	padding-right: 0;
 }
 
 .btn-sub-nav .btn {
