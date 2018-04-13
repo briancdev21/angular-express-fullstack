@@ -1,8 +1,12 @@
 <div  class="left-nav" [ngClass]="{'nav-close': mRotateMenu, 'nav-open': !mRotateMenu }">
   <div class="logo">
     <a href="javascript:void(0)">
-      <span class="logo-open" [ngClass]="{'hidden': mRotateMenu, 'visible': !mRotateMenu }">Logo Horizontal</span>
-      <span class="logo-collapsed" [ngClass]="{'visible': mRotateMenu, 'hidden': !mRotateMenu }">Logo</span>
+      <span class="logo-open" [ngClass]="{'hidden': mRotateMenu, 'visible': !mRotateMenu }">
+        <img class="logo-horizontal" src="assets/images/logo_horizontal.svg">
+      </span>
+      <span class="logo-collapsed" [ngClass]="{'visible': mRotateMenu, 'hidden': !mRotateMenu }">
+        <img class="logo-img" src="assets/images/logo.svg">
+      </span>
     </a>
   </div>
   <ul class="clearfix" [ngClass]="{'nav-collapsed': mRotateMenu}">
