@@ -1,0 +1,20 @@
+<div class="top-bar sub-nav" [ngClass]="{'top-bar-large': mRotateMenu, 'top-bar-small': !mRotateMenu }">
+  <span class="title">REPORTS</span>
+  <span class="current-date">{{currentDate}}</span>
+  <div class="sub-nav-container clearfix"></div>
+</div>
+<div class="report-type">
+  <div class="individual-card" (click)="toReports('financial-reports')">
+    <img src="assets/images/presentation (2).svg">
+    <span>FINANCIAL REPORTS</span>
+  </div>
+  <div class="individual-card" (click)="toReports('performance-reports')">
+    <img src="assets/images/presentation (1).svg">
+    <span>PERFORMANCE REPORTS</span>
+  </div>
+  <div class="individual-card" (click)="toReports('project-reports')">
+    <img src="assets/images/presentation.svg">
+    <span>PROJECT REPORTS</span>
+  </div>
+
+</div>

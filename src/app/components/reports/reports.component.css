@@ -1,0 +1,32 @@
+.main-content {
+	position: absolute;  
+	text-align: center;
+	color: #464646;
+}
+
+.main-content-small {
+	transition: 0.2s all;
+	right: 0;
+	left: 200px;
+	top: 68px;
+}
+
+.main-content-large {
+	top: 68px;
+	right: 0;
+	left: 68px;
+	transition: 0.2s all;
+}
+
+app-submenu {
+}
+
+.sub-nav-container {
+	margin: 0 30px;
+	border-bottom: 3px solid #70eaca;
+	display: flex;
+	align-items: center;
+}
+
+@media screen and (max-width: 1600px) {
+}

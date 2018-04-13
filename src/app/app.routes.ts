@@ -44,6 +44,11 @@ import { ServicingDashboardComponent } from './components/servicing/servicingdas
 import { TicketsComponent } from './components/servicing/tickets/tickets.component';
 import { WorkOrderIssuesComponent } from './components/servicing/workorderissues/workorderissues.component';
 import { SolutionsComponent } from './components/servicing/solutions/solutions.component';
+import { ReportsComponent } from './components/reports/reports.component';
+import { ReportsDashboardComponent } from './components/reports/reportsdashboard/reportsdashboard.component';
+import { FinancialReportsComponent } from './components/reports/financialreports/financialreports.component';
+import { PerformanceReportsComponent } from './components/reports/performancereports/performancereports.component';
+import { ProjectReportsComponent } from './components/reports/projectreports/projectreports.component';
 
 
 import { CommonComponent } from './components/common/common.component';
@@ -108,7 +113,15 @@ export const routes: Routes = [
       { path: 'solutions', component: SolutionsComponent },
     ]
   },
-  { path: 'reports', component: TestComponent },
+  { path: 'reports', component: ReportsComponent,
+    children: [
+      { path: '', redirectTo: 'reports-dashboard', pathMatch: 'full' },
+      { path: 'reports-dashboard', component: ReportsDashboardComponent },
+      { path: 'financial-reports', component: FinancialReportsComponent },
+      { path: 'performance-reports', component: PerformanceReportsComponent },
+      { path: 'project-reports', component: ProjectReportsComponent },
+    ]
+  },
   { path: 'pm-details', component: ProjectManagementComponent,
     children: [
       { path: '', redirectTo: 'pm-board', pathMatch: 'full' },
