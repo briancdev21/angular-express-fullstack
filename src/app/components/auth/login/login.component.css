@@ -11,6 +11,32 @@
 	color: white;
 }
 
+.get-started-sec {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	position: absolute;
+	top: 40px;
+	left: 40px;
+}
+
+.get-started-sec span {
+	font-size: 18px;
+	color: white;
+	font-weight: 300;
+	padding-bottom: 15px;
+}
+
+.get-started-sec button {
+	width: 120px;
+	border-radius: 40px;
+	background: #F5F5F5;
+	color: #95989a;
+	font-size: 11px;
+	height: 28px;
+}
+
 .weather-sec {
 	position: absolute;
 	right: 40px;
@@ -72,14 +98,15 @@
 }
 
 .login-btn {
-	width: 50%;
-	min-height: 50px;
-	background-color: #b5d24a !important;
+	width: 40%;
+	min-height: 54px;
+	background-color: #70eaca !important;
 	color: white !important;
 	font-size: 20px;
 	font-weight: 300;
-	margin-left: 25%;
+	margin-left: 30%;
 	margin-top: 10px;
+	border-radius: 50px;
 }
 
 :host ::ng-deep .login-form .mat-form-field-underline{

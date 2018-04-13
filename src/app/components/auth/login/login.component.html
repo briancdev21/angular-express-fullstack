@@ -6,6 +6,12 @@
 		</div>
 		<span>{{weatherLocation}}</span>
 	</div>
+	<div class="get-started-sec">
+		<span>
+			Don't have an account?
+		</span>
+		<button (click)="moveToSignup()">GET STARTED</button>
+	</div>
 	<div class="timer-sec">
 		<span>{{currentHour}}</span><span class="blink">:</span><span>{{currentMin}}</span>
 		<span class="time-convention">{{timeConvention}}</span>
@@ -13,10 +19,10 @@
 	<div class="login-sec">
 		<form class="login-form" (ngSubmit)="onLogin()" [formGroup]="loginform">
 			<mat-form-field>
-				<input matInput placeholder="USERNAME" formControlName="userName" required>
+				<input matInput placeholder="USERNAME" formControlName="userName" >
 			</mat-form-field>
 			<mat-form-field>
-				<input matInput placeholder="PASSWORD" formControlName="password" required type="password">
+				<input matInput placeholder="PASSWORD" formControlName="password" type="password">
 			</mat-form-field>
 			<button mat-raised-button  type="submit" class="login-btn" [disabled]="!loginform.valid">LOGIN</button>
 		</form>

@@ -46,7 +46,7 @@ import { ServicingDashboardComponent } from './components/servicing/servicingdas
 import { CommonComponent } from './components/common/common.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'sign-up', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'sign-up', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
