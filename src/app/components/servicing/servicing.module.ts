@@ -12,6 +12,9 @@ import { MatInputModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModu
 import { ProfileCmpModule } from '../profile/profile.module';
 import { CommonCmpModule } from '../common/common.module';
 import { ServicingDashboardComponent } from './servicingdashboard/servicingdashboard.component';
+import { TicketsComponent } from './tickets/tickets.component';
+import { WorkOrderIssuesComponent } from './workorderissues/workorderissues.component';
+import { SolutionsComponent } from './solutions/solutions.component';
 
 import { ServicingService } from './servicing.service';
 import { Ng2CompleterModule } from 'ng2-completer';
@@ -20,7 +23,10 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
 
 @NgModule({
   declarations: [
-    ServicingDashboardComponent
+    ServicingDashboardComponent,
+    TicketsComponent,
+    WorkOrderIssuesComponent,
+    SolutionsComponent
   ],
   imports: [
     BrowserModule,

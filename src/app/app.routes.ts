@@ -41,6 +41,9 @@ import { PersonalScheduleComponent } from './components/collaboration/personalsc
 import { WorkOrdersComponent } from './components/collaboration/workorders/workorders.component';
 import { ServicingComponent } from './components/servicing/servicing.component';
 import { ServicingDashboardComponent } from './components/servicing/servicingdashboard/servicingdashboard.component';
+import { TicketsComponent } from './components/servicing/tickets/tickets.component';
+import { WorkOrderIssuesComponent } from './components/servicing/workorderissues/workorderissues.component';
+import { SolutionsComponent } from './components/servicing/solutions/solutions.component';
 
 
 import { CommonComponent } from './components/common/common.component';
@@ -100,9 +103,9 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'servicing-dashboard', pathMatch: 'full' },
       { path: 'servicing-dashboard', component: ServicingDashboardComponent },
-      // { path: 'tickets', component: TestComponent },
-      // { path: 'work-order-issues', component: TestComponent },
-      // { path: 'solutions', component: TestComponent },
+      { path: 'tickets', component: TicketsComponent },
+      { path: 'work-order-issues', component: WorkOrderIssuesComponent },
+      { path: 'solutions', component: SolutionsComponent },
     ]
   },
   { path: 'reports', component: TestComponent },
