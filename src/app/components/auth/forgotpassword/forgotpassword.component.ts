@@ -56,10 +56,7 @@ export class ForgotPasswordComponent implements OnInit {
       }
     }, 1000);
     this.registerForm = this.formBuilder.group({
-        name           : ['', Validators.required],
         email          : ['', [Validators.required, Validators.email]],
-        password       : ['', Validators.required],
-        passwordConfirm: ['', [Validators.required, confirmPassword]]
     });
 
     this.registerForm.valueChanges.subscribe(() => {
@@ -89,32 +86,4 @@ export class ForgotPasswordComponent implements OnInit {
       }
   }
 
-}
-
-function confirmPassword(control: AbstractControl)
-{
-    if ( !control.parent || !control )
-    {
-        return;
-    }
-
-    const password = control.parent.get('password');
-    const passwordConfirm = control.parent.get('passwordConfirm');
-
-    if ( !password || !passwordConfirm )
-    {
-        return;
-    }
-
-    if ( passwordConfirm.value === '' )
-    {
-        return;
-    }
-
-    if ( password.value !== passwordConfirm.value )
-    {
-        return {
-            passwordsNotMatch: true
-        };
-    }
 }
