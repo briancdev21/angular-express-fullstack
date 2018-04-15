@@ -109,6 +109,9 @@ table i {
 }
 
 
-@media screen and (max-width: 1200px) {
-
+@media screen and (max-width: 1650px) {
+  td, th {
+    font-size: 10px !important;
+    padding: 27px 10px !important;
+  }
 }

@@ -78,15 +78,6 @@
   border-top: 1px solid lightgray;
 }
 
-
-
-@media screen and (max-width: 1200px) {
-	.tabs__tab-bar>li {
-    font-size: 10px;
-    font-weight: 500;
-	}
-}
-
 /* Add a Log Modal CSS in leads page */
 
 .add-log-modal tabs__tab {
@@ -220,4 +211,14 @@
 
 .calendar-view .fc-right .fc-state-active {
   background-color: #5DCDB6;
+}
+
+/* table responsive */
+
+
+@media screen and (max-width: 1200px) {
+	.tabs__tab-bar>li {
+    font-size: 10px;
+    font-weight: 500;
+	}
 }
