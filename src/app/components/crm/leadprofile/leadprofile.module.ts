@@ -6,6 +6,8 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
 import { LeadProfileComponent } from './leadprofile.component';
 import { CommonCmpModule } from '../../../components/common/common.module';
 import { BreadcrumbModule } from '../../../components/breadcrumb/breadcrumb.module';
+import { LeadProfileCardsComponent } from './leadprofilecards/leadprofilecards.component';
+import { LeadScoreComponent } from './leadprofilecards/leadscore/leadscore.component';
 
 import { TabModule } from 'angular-tabs-component';
 import { Ng2TimelineComponent } from '../../profile/ng2-timeline/ng2timeline.component';
@@ -18,7 +20,9 @@ import { ProfileCmpModule } from '../../profile/profile.module';
 
 @NgModule({
   declarations: [
-    LeadProfileComponent
+    LeadProfileComponent,
+    LeadProfileCardsComponent,
+    LeadScoreComponent
   ],
   imports: [
     BrowserModule,

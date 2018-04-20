@@ -66,7 +66,13 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     ContactAssociationComponent,
     CustomDonutChartComponent,
     Ng2TimelineComponent,
-    CardsComponent
+    CardsComponent,
+    LifeTimeStatusComponent,
+    UpcomingAppointmentsComponent,
+    TasksComponent,
+    CollaboratorsComponent,
+    DocumentsComponent,
+    CustomerDealsComponent
   ]
 })
 export class ProfileCmpModule { }
