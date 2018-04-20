@@ -28,11 +28,11 @@
 }
 .chartset {
   padding: 20px;
-  border-bottom: solid 1px gray;
+  border-bottom: solid 1px #D3D3D3;
 }
 
 .recent-activities {
-  border-bottom: solid 1px gray;
+  border-bottom: solid 1px #D3D3D3;
   padding: 10px 20px 5px;
   color: black;
   font-weight: 500;
@@ -40,7 +40,7 @@
 }
 
 .editor {
-  border-bottom: solid 1px gray;
+  border-bottom: solid 1px #D3D3D3;
   font-size: 0.9em;
 }
 
@@ -56,7 +56,7 @@
 .right-sidebar {
   flex: 1;
   padding: 20px; 
-  border-left: solid 1px gray;
+  border-left: solid 1px #D3D3D3;
 }
 
 .chartset {

@@ -32,10 +32,10 @@ export class LeadProfileComponent implements OnInit {
 
   }
   userInfo = {
-    name: 'John Moss',
-    role: 'Vice President / Sales Department',
-    profileLink: 'assets/users/John Moss.jpg',
-    email: 'john.moss@gmail.com',
+    name: 'Diana Ilic',
+    // role: 'Vice President / Sales Department',
+    profileLink: 'assets/users/Random.jpg',
+    email: 'apple.bee@gmail.com',
     primaryphone: '4038935433',
     mobilephone: '4037101212',
     shippingaddress: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
@@ -45,11 +45,6 @@ export class LeadProfileComponent implements OnInit {
       'theatre',
       'renovation'
     ],
-    contactUser: 'Hayati Homes',
-    subAssoUsers: [
-      'Danny Shibley',
-      'John Stephen'
-    ],
     followers: [{
       imageUrl: 'assets/users/user1.png',
       profileLink: 'crm/contacts/michael',
@@ -57,7 +52,7 @@ export class LeadProfileComponent implements OnInit {
     },
     {
       imageUrl: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/joseph',
+      profileLink: 'crm/contacts/Joseph',
       name: 'Joseph'
     }]
   };
@@ -87,7 +82,8 @@ export class LeadProfileComponent implements OnInit {
     {
       title: 'Meeting',
       icon: 'fa-home',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products. Below please find the currnet status of the sale',
+      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
+       Below please find the currnet status of the sale',
       timelineBtnColor: 'green-btn',
       buttontitle: 'More Info',
       date: '2018-1-9',
@@ -96,7 +92,8 @@ export class LeadProfileComponent implements OnInit {
     {
       title: 'Send Document to Mike',
       icon: 'fa-file-text-o',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products. Below please find the currnet status of the sale',
+      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
+       Below please find the currnet status of the sale',
       timelineBtnColor: 'lime-btn',
       buttontitle: 'Download document',
       date: '2018-1-9',
@@ -105,7 +102,8 @@ export class LeadProfileComponent implements OnInit {
     {
       title: 'Coffee Break',
       icon: 'fa-coffee',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products. Below please find the currnet status of the sale',
+      content: 'Conference on the sales for the previous year. Monica please examine sales\
+       trends in marketing and products. Below please find the currnet status of the sale',
       timelineBtnColor: 'blue-btn',
       buttontitle: 'Read more',
       date: '2018-1-8',
@@ -123,8 +121,7 @@ export class LeadProfileComponent implements OnInit {
   ];
   public cards =
     {
-      statusRevenue: '$25,434.00',
-      statusPoints: '5,078',
+      leadScore: 12,
       dealsPrice: '$12,552.37',
       dealsDate: 'January 19, 2017',
       appointmentsDate: 'January 26, 2017',
@@ -275,14 +272,6 @@ export class LeadProfileComponent implements OnInit {
     {
       documentName: 'Nu Life Proposal',
       documentDate: 'January 2, 2017'
-    },
-    {
-      documentName: 'Nu Life Contract',
-      documentDate: 'January 5, 2017'
-    },
-    {
-      documentName: 'Nu Life Project Brief',
-      documentDate: 'January 7, 2017'
     }
   ];
   public upcomingModal: object = {

@@ -167,6 +167,7 @@ li:nth-child(even) .timeline-badge {
 .timeline-heading h4 {
   font-size: 1em;
   font-weight: 500;
+  color: #737677;
 }
 
 .timeline-body {
@@ -305,4 +306,5 @@ h4.timeline-title {
 
 .timeline-body p {
   margin: 0 0 5px;
+  color: #7d7f81;
 }

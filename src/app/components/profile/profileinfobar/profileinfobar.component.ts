@@ -24,6 +24,7 @@ export class ProfileInfoBarComponent implements OnInit {
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
+  // croppedImage = this.userInfo.profileLink;
 
   fileChangeEvent(event: any): void {
       this.imageChangedEvent = event;

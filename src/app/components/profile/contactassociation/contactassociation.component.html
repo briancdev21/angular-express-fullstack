@@ -1,6 +1,6 @@
 <h4 (click)="showContactAssoDialog=true" >Contact Association</h4>
 <div>
-  <ul class="tree-view" >
+  <ul class="tree-view" *ngIf="contactUser">
     <li><img src="assets/users/man.png" />{{contactUser}}</li>
     <li *ngFor="let asso_user of subAssoUsers; let i = index" [ngClass]="i === 0 ? 'first-sub-tree' : 'sub-tree'" ><span></span><img src="assets/users/man.png" />{{asso_user}}</li>
 
