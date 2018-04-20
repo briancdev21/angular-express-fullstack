@@ -1,6 +1,7 @@
 <div class="card">
 	<div class="card-heading">
 		<h4>Tasks</h4>
+		<img (click)="showCollaboratorsDialog=true" src="assets/images/Add-Button.svg" (click)="showAddTaskDialog=true;"/>
 	</div>
 	<div class="card-content">
 
@@ -15,4 +16,35 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+
+<div class="add-task-dialog-wrapper" *ngIf="showAddTaskDialog" ></div>
+<div  [ngClass]="{'add-task-dialog': showAddTaskDialog, 'add-task-dialog-hide': !showAddTaskDialog }">
+  <div class="header">
+    <span>Adding task</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showAddTaskDialog=false" />
+  </div>
+  <div class="content">
+    <div class="client-name">
+			<span>Client Name</span>
+			<select>
+				<option>John Moss</option>
+			</select>
+		</div>
+		<div class="add-task">
+			<div class="add-task-content">
+				<input placeholder="Add a task here...">
+				<img src="assets/images/add-user.png">
+				<img src="assets/images/calendar-with-add.png">
+				<img src="assets/images/star-empty.png">
+			</div>
+		</div>
+
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="showAddTaskDialog=false" >
+        Done!
+      </button>
+    </div>
+  </div>
 </div>

@@ -1,19 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonComponent } from '../../components/common/common.component';
-import { BreadcrumbBarComponent } from './breadcrumbbar/breadcrumbbar.component';
+import { CommonComponent } from '../../../components/common/common.component';
+import { BreadcrumbBarComponent } from '../../profile/breadcrumbbar/breadcrumbbar.component';
+import { ProfileInfoBarComponent } from '../../profile/profileInfobar/profileinfobar.component';
+import { MultiKeywordSelectComponent } from '../../profile/multikeywordselect/multikeywordselect.component';
+import { ContactAssociationComponent } from '../../profile/contactassociation/contactassociation.component';
+import { CustomDonutChartComponent } from '../../profile/customdonutchart/customdonutchart.component';
+import { CardsComponent } from '../../profile/cards/cards.component';
+import { LifeTimeStatusComponent } from '../../profile/cards/lifetimestatus/lifetimestatus.component';
+import { CustomerDealsComponent } from '../../profile/cards/customerdeals/customerdeals.component';
+import { UpcomingAppointmentsComponent } from '../../profile/cards/upcomingappointments/upcomingappointments.component';
+import { TasksComponent } from '../../profile/cards/tasks/tasks.component';
+import { DocumentsComponent } from '../../profile/cards/documents/documents.component';
+import { CollaboratorsComponent } from '../../profile/cards/collaborators/collaborators.component';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
+  selector: 'app-leadprofile',
+  templateUrl: './leadprofile.component.html',
   styleUrls: [
-    './profile.component.css'
+    './leadprofile.component.css'
   ],
   entryComponents: [
     BreadcrumbBarComponent,
     CommonComponent
   ]
 })
-export class ProfileComponent implements OnInit {
+export class LeadProfileComponent implements OnInit {
 
   menuCollapsed = true;
 

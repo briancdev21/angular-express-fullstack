@@ -15,7 +15,7 @@ export class BreadcrumbBarComponent {
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
-
+  public data = ['contact', 'John Moss'];
   items2: any[] = [
     {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
     {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
@@ -28,24 +28,20 @@ export class BreadcrumbBarComponent {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
-   });
+    });
   }
 
   ngOnInit() {
     this.editable = false;
-    console.log('userinfo:', this.userInfo.followers);
     this.userInfo.followers.forEach(element => {
-      console.log('element:', element);
       this.items2 = this.items2.filter(function( obj ) {
         return obj.payload.label !== element.name;
       });
-      console.log('items2:', this.items2);
     });
   }
 
   onSelect(item: any) {
     this.selectedItem = item;
-    console.log('item:', item);
     this.items2 = this.items2.filter(function( obj ) {
       return obj.payload.label !== item.payload.label;
     });

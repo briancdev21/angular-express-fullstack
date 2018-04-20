@@ -1,5 +1,6 @@
-import { Component, Input, ViewChild, ElementRef, AfterViewInit, Renderer } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit, Renderer, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-multikeywordselect',
@@ -9,9 +10,11 @@ import { Router } from '@angular/router';
   ]
 })
 
-export class MultiKeywordSelectComponent implements AfterViewInit {
+export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
   @Input() keywords;
   @ViewChild('box') input: ElementRef;
+  @Input() placeholder;
+  @Output() sendKeywords: EventEmitter<any> = new EventEmitter;
   editable: boolean;
   newKeyword: string;
 
@@ -28,6 +31,12 @@ export class MultiKeywordSelectComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.input.nativeElement.focus();
+  }
+
+  addNewKeyword(data) {
+    this.keywords.push(data);
+    this.newKeyword = '';
+    this.sendKeywords.emit(this.keywords);
   }
 
 }

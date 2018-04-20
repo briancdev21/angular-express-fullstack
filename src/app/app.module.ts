@@ -36,6 +36,7 @@ import { PmCmpModule } from './components/pm/pm.module';
 import { InventoryCmpModule } from './components/inventory/inventory.module';
 import { ServicingCmpModule } from './components/servicing/servicing.module';
 import { ReportsCmpModule } from './components/reports/reports.module';
+import { LeadProfileCmpModule } from './components/crm/leadprofile/leadprofile.module';
 
 import { Pipe, PipeTransform } from '@angular/core';
 import { PhonePipe } from './pipes/phone.pipe';
@@ -85,7 +86,8 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     PmCmpModule,
     CollaborationCmpModule,
     ServicingCmpModule,
-    ReportsCmpModule
+    ReportsCmpModule,
+    LeadProfileCmpModule
   ],
   exports: [
     SubmenuComponent,

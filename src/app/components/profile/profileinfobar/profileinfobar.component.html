@@ -5,7 +5,10 @@
   <textarea value="{{userInfo.role}}" id="role" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" > </textarea>
 </div>
 <div class="logo">
+    
   <img [src]='userInfo.profileLink' />
+  <!-- <img [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight"> -->
+  <img src="assets/images/Cloud.png" class="img-settings" (click)="changeImage()"/>
 </div>
 <div class="email editable">
   <img src="assets/images/envelope.png" />
@@ -71,5 +74,41 @@
         Cancel
       </button>
     </div>
+  </div>
+</div>  
+
+
+<!-- Image Edit Modal -->
+
+<div class="edit-image-modal-wrapper" *ngIf="showEditImageModal" ></div>
+<div [ngClass]="{'confirm-modal': showEditImageModal, 'confirm-modal-hide': !showEditImageModal }">
+  <div class="header">
+    <span>Change Image</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="cancelCrop();showEditImageModal=false" />
+  </div>
+  <div class="edit-modal-content">
+    <input type="file" (change)="fileChangeEvent($event)" />
+    <div class="image-content">
+      <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="1"
+          [resizeToWidth]="300"
+          format="png"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded()"
+          (loadImageFailed)="loadImageFailed()"
+      ></image-cropper>
+      
+      <img [src]="croppedImage" />
+    </div>
+  </div>
+  <div class="center-btn-section" >
+    <button class="cancel-btn" (click)="cancelCrop()">
+      Cancel
+    </button>
+    <button class="done-btn" (click)="saveCrop()">
+      Confirm
+    </button>
   </div>
 </div>  

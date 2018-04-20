@@ -178,7 +178,8 @@ export class LeadsListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../lead/' + id]);
+    // this.router.navigate(['../lead/' + id]);
+    this.router.navigate(['./crm/lead-profile/']);
   }
 }
 

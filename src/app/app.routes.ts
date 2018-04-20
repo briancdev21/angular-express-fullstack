@@ -49,6 +49,7 @@ import { ReportsDashboardComponent } from './components/reports/reportsdashboard
 import { FinancialReportsComponent } from './components/reports/financialreports/financialreports.component';
 import { PerformanceReportsComponent } from './components/reports/performancereports/performancereports.component';
 import { ProjectReportsComponent } from './components/reports/projectreports/projectreports.component';
+import { LeadProfileComponent } from './components/crm/leadprofile/leadprofile.component';
 
 
 import { CommonComponent } from './components/common/common.component';
@@ -66,6 +67,8 @@ export const routes: Routes = [
       { path: 'leads', component: LeadsComponent },
       { path: 'contacts', component: ContactsComponent },
       { path: 'accounts', component: AccountsComponent },
+      { path: 'lead-profile', component: LeadProfileComponent },
+      { path: 'contact-profile', component: ProfileComponent }
     ]
   },
   { path: 'sales', component: SalesComponent,

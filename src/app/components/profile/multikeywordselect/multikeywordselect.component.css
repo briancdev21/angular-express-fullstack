@@ -62,3 +62,8 @@ ul {
   outline: none;  
 }
 
+.placeholder {
+  padding: 5px 0 0 10px;
+  color: #d3d3d3;
+  position: absolute;
+}

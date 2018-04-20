@@ -59,7 +59,7 @@ export class ContactsListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../profile/' + id]);
+    this.router.navigate(['./crm/contact-profile/']);
   }
 
   selectedFilterEventHandler(filteredList) {

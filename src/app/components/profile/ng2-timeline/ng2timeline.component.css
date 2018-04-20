@@ -234,10 +234,13 @@ li:nth-child(odd) .btn-container {
 .orange-btn {
   background: #FFAC58;
 }
+.orangered-btn {
+  background: orangered;
+}
 
 
 .lime-btn {
-  background: #01c9ca;
+  background: #82ebc8;
 }
 
 /* One-Side timeline CSS */

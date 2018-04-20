@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onLogin() {
-    // this.router.navigate(['../home/']);
+    this.router.navigate(['../home/']);
     // this.authService.login();
   }
 
