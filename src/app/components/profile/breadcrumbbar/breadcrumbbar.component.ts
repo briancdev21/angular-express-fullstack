@@ -15,7 +15,7 @@ export class BreadcrumbBarComponent {
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
-  public data = ['contact', 'John Moss'];
+  public data = ['contact', ''];
   items2: any[] = [
     {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
     {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
@@ -38,6 +38,9 @@ export class BreadcrumbBarComponent {
         return obj.payload.label !== element.name;
       });
     });
+
+    // input breadcrumb bar info
+    this.data = ['contact', this.userInfo.name];
   }
 
   onSelect(item: any) {

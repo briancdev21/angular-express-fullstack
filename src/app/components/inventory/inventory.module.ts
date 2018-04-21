@@ -19,6 +19,7 @@ import { InventoryDashboardComponent } from './inventorydashboard/inventorydashb
 import { ProductsCmpModule } from './products/products.module';
 import { PurchaseOrderListCmpModule } from './purchaseorderlist/purchaseorderlist.module';
 import { SuppliersCmpModule } from './suppliers/suppliers.module';
+import { SupplierProfileCmpModule } from './supplierprofile/supplierprofile.module';
 
 import { InventoryService } from './inventory.service';
 import { Ng2CompleterModule } from 'ng2-completer';
@@ -53,7 +54,8 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     ProductsCmpModule,
     PurchaseOrderListCmpModule,
     SuppliersCmpModule,
-    DragulaModule
+    DragulaModule,
+    SupplierProfileCmpModule
   ],
   exports: [
     MatInputModule,

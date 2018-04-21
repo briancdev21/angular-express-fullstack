@@ -50,6 +50,7 @@ import { FinancialReportsComponent } from './components/reports/financialreports
 import { PerformanceReportsComponent } from './components/reports/performancereports/performancereports.component';
 import { ProjectReportsComponent } from './components/reports/projectreports/projectreports.component';
 import { LeadProfileComponent } from './components/crm/leadprofile/leadprofile.component';
+import { SupplierProfileComponent } from './components/inventory/supplierprofile/supplierprofile.component';
 
 
 import { CommonComponent } from './components/common/common.component';
@@ -96,6 +97,7 @@ export const routes: Routes = [
       { path: 'stock-control', component: PurchaseOrderListComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'suppliers', component: SuppliersComponent },
+      { path: 'supplier-profile', component: SupplierProfileComponent }
     ]
   },
   { path: 'collaboration', component: CollaborationComponent,
