@@ -32,18 +32,13 @@ export class SupplierProfileComponent implements OnInit {
 
   }
   userInfo = {
-    name: '123',
-    // role: 'Vice President / Sales Department',
-    profileLink: 'assets/users/Random.jpg',
-    email: 'apple.bee@gmail.com',
-    primaryphone: '4038935433',
-    mobilephone: '4037101212',
-    shippingaddress: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-    billingaddress: '2893 Crescent Hill Dr SW Calgary, AB T3C 0J4',
+    name: 'Alliance Video Audio Distribution',
+    contactName: 'Jeff Neilson',
+    email: 'Jeff.neilson@AVAD.com',
+    primaryphone: '5873337937',
+    shippingaddress: '#12, 2420 34th Ave SW Calgary, AB T2T 2CB',
+    billingaddress: '#12, 2420 34th Ave SW Calgary, AB T2T 2CB',
     keywords: [
-      'control4',
-      'theatre',
-      'renovation'
     ],
     followers: [{
       imageUrl: 'assets/users/user1.png',

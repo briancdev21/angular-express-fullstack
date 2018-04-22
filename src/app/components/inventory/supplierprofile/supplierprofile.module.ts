@@ -8,6 +8,7 @@ import { CommonCmpModule } from '../../../components/common/common.module';
 import { BreadcrumbModule } from '../../../components/breadcrumb/breadcrumb.module';
 import { SupplierProfileCardsComponent } from './supplierprofilecards/supplierprofilecards.component';
 import { LeadScoreComponent } from './supplierprofilecards/leadscore/leadscore.component';
+import { SupplierProfileInfoBarComponent } from './supplierprofileinfobar/supplierprofileinfobar.component';
 
 import { TabModule } from 'angular-tabs-component';
 import { Ng2TimelineComponent } from '../../profile/ng2-timeline/ng2timeline.component';
@@ -22,7 +23,8 @@ import { ProfileCmpModule } from '../../profile/profile.module';
   declarations: [
     SupplierProfileComponent,
     SupplierProfileCardsComponent,
-    LeadScoreComponent
+    LeadScoreComponent,
+    SupplierProfileInfoBarComponent
   ],
   imports: [
     BrowserModule,
