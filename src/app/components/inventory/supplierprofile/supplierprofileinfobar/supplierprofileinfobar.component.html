@@ -10,7 +10,7 @@
 </div> -->
 <div class="email editable">
   <img src="assets/images/envelope.png" />
-  <textarea value="{{userInfo.email}}" id="email" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)"></textarea>
+  <a href="mailto: {{userInfo.email}}"><textarea value="{{userInfo.email}}" id="email" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea></a>
 </div>
 <div class="phone editable">
   <img src="assets/images/ringing.png" />
