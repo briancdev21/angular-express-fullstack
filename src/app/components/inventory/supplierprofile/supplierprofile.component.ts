@@ -53,19 +53,19 @@ export class SupplierProfileComponent implements OnInit {
   };
   public chartSetData: Array<Object> = [
     {
-      title: 'Account Rating',
+      title: 'Supplier Rating',
       percentage: '120%',
     },
     {
-      title: 'Loyalty Rating',
+      title: 'Sensitivity Rating',
       percentage: '90%',
     },
     {
-      title: 'Deals Ratio',
+      title: 'PO Ratio',
       percentage: '70%',
     },
     {
-      title: 'Service Ratio',
+      title: 'Efficiency Ratio',
       percentage: '50%',
     }
   ];
