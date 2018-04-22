@@ -11,22 +11,27 @@
 
 .lead-score {
 	display: flex;
-	align-items: center;
+	align-items: left;
 	justify-content: space-between;
-	flex-direction: row;
+	flex-direction: column;
 }
 
 h2 {
-	font-size: 34px;
+	font-size: 20px;
 	color: #95989a;
 	margin: 0;
 	font-weight: 400;
 }
 
 h1 {
-	font-size: 50px;
+	font-size: 34px;
 	font-weight: 400;
-	margin: 18px;
+	margin-top: 24px;
+	margin-bottom: 5px;
+}
+
+span {
+	color: #95989a;
 }
 
 .green {

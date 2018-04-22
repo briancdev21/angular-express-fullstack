@@ -116,12 +116,39 @@ export class SupplierProfileComponent implements OnInit {
   ];
   public cards =
     {
-      leadScore: 12,
-      dealsPrice: '$12,552.37',
-      dealsDate: 'January 19, 2017',
-      appointmentsDate: 'January 26, 2017',
-      appointmentsAddress: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      appointmentsTime: '9:00 AM - 5:00 PM',
+      lifeTimeStatus: 41566.24,
+      orderList: [
+        {
+          orderNumber: 'PO 88031234',
+          orderAmount: 12552.37,
+          orderType: 'Partial Fulfillment',
+          orderDate: '2017-01-15'
+        },
+        {
+          orderNumber: 'PO 88031235',
+          orderAmount: 2552.37,
+          orderType: 'Open',
+          orderDate: '2017-01-18'
+        },
+        {
+          orderNumber: 'PO 88031236',
+          orderAmount: 3230.75,
+          orderType: 'Partial Fulfillment',
+          orderDate: '2017-01-12'
+        },
+        {
+          orderNumber: 'PO 88031237',
+          orderAmount: 23230.75,
+          orderType: 'Partial Fulfillment',
+          orderDate: '2017-01-23'
+        },
+        {
+          orderNumber: 'PO 88031238',
+          orderAmount: 12552.37,
+          orderType: 'Partial Fulfillment',
+          orderDate: '2017-01-25'
+        }
+      ]
     };
 
   public deals: Array<Object> = [
@@ -178,69 +205,7 @@ export class SupplierProfileComponent implements OnInit {
       total: '26,379.381'
     }
   ];
-  public wonDeals: Array<Object> = [
-    {
-      collaborators: [{
-        imageUrl: 'assets/users/user1.png',
-        profileLink: 'crm/contacts/michael',
-        name: 'Michael'
-      },
-      {
-        imageUrl: 'assets/users/user2.png',
-        profileLink: 'crm/contacts/joseph',
-        name: 'Joseph'
-      }],
-      projectName: 'Control System Upgrade',
-      id: '123457',
-      dateCreated: 'December 23, 2017',
-      dateModified: 'January 2, 2017',
-      cycleTime: '10 days',
-      status: 'Complete',
-      total: '3110.33'
-    },
-    {
-      collaborators: [{
-        imageUrl: 'assets/users/user1.png',
-        profileLink: 'crm/contacts/michael',
-        name: 'Michael'
-      }],
-      projectName: 'Remodel with a Nu life',
-      id: '123456',
-      dateCreated: 'December 15, 2017',
-      dateModified: 'December 20, 2017',
-      cycleTime: '5 days',
-      status: 'In progress',
-      total: '22,323.67'
-    },
-  ];
 
-  public tasks: Array<Object> = [
-    {
-      name: 'Edit Proposal for John',
-      favorite: false,
-      checkStatus: false,
-      pm: [{
-          imageUrl: 'assets/users/user1.png',
-          profileLink: 'crm/contacts/michael',
-          name: 'Michael'
-        }]
-    },
-    {
-      name: 'Sales walkthrough with PM',
-      favorite: false,
-      checkStatus: false,
-      pm: [{
-          imageUrl: 'assets/users/user1.png',
-          profileLink: 'crm/contacts/michael',
-          name: 'Michael'
-        },
-        {
-          imageUrl: 'assets/users/user2.png',
-          profileLink: 'crm/contacts/joseph',
-          name: 'Joseph'
-        }]
-    }
-  ];
   public collaborators = {
     projectManager: ['Michael Yue'],
     teamMembers: ['Sepher Shoarinejad', 'Tyler Labonte'],

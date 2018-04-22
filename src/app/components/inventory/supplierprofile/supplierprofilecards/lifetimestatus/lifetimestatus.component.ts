@@ -2,14 +2,14 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-leadscore',
-  templateUrl: './leadscore.component.html',
+  selector: 'app-supplierlifetimestatus',
+  templateUrl: './lifetimestatus.component.html',
   styleUrls: [
-    './leadscore.component.css'
+    './lifetimestatus.component.css'
   ]
 })
 
-export class LeadScoreComponent {
+export class SupplierLifeTimeStatusComponent {
 
   @Input() cards;
 
