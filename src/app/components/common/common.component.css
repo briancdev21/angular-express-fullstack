@@ -208,6 +208,7 @@ html,body {
   display: block;
   transition: all 0.5s;
   overflow: hidden;
+  z-index: 1;
 }
 
 .notifications-opened {
@@ -220,6 +221,7 @@ html,body {
   display: block;
   overflow: hidden;
   transition: all 0.5s;
+  z-index: 1;
 }
 
 .profile-opened {
@@ -232,6 +234,7 @@ html,body {
   display: block;
   transition: all 0.5s;
   overflow: hidden;
+  z-index: 1;
 }
 
 .profile-active {
