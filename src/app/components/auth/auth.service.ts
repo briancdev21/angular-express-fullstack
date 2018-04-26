@@ -15,7 +15,8 @@ export class AuthService {
     responseType: 'token id_token',
     grant_type: 'implicit',
     audience: 'https://localhost:8080/',
-    redirectUri: 'http://localhost:8080/api/v1/authentication/callback',
+    // redirectUri: 'http://localhost:8080/api/v1/authentication/callback',
+    redirectUri: 'http://localhost:4200/home',
     scope: 'openid admin'
   });
 
@@ -24,6 +25,7 @@ export class AuthService {
 
 
   public login(): void {
+    this.handleAuthentication();
     this.auth0.authorize();
     // this.handleAuthentication();
   }
@@ -34,6 +36,7 @@ export class AuthService {
         window.location.hash = '';
         this.setSession(authResult);
         this.router.navigate(['../home']);
+        console.log('without error: ', authResult);
       } else if (err) {
         this.router.navigate(['../home']);
         console.log(err);

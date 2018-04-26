@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
 import { AppComponent } from './app.component';
 import { CommonComponent } from './components/common/common.component';
 import { StopEventPropagationDirective } from './stop-event-propagation.directive';
@@ -42,9 +45,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { PhonePipe } from './pipes/phone.pipe';
 
 import { SubnavHandlerService } from './services/subnav-handler.service';
+import { CrmService } from './services/crm.service';
 import { ProjectManagementComponent } from './components/projectmanagement/projectmanagement.component';
 
-
+import { TokenInterceptor } from './services/token.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,6 +70,7 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
   imports: [
     BrowserModule,
     routing,
+    HttpClientModule,
     ProfileCmpModule,
     CommonCmpModule,
     ProposalCmpModule,
@@ -93,7 +98,15 @@ import { ProjectManagementComponent } from './components/projectmanagement/proje
     SubmenuComponent,
     PhonePipe
   ],
-  providers: [SubnavHandlerService],
+  providers: [
+    SubnavHandlerService,
+    CrmService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

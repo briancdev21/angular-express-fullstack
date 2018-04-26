@@ -18,7 +18,6 @@ import { CrmDashboardComponent } from './crmdashboard/crmdashboard.component';
 import { LeadsCmpModule } from './leads/leads.module';
 import { ContactsCmpModule } from './contacts/contacts.module';
 
-import { CrmService } from './crm.service';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
 
@@ -57,6 +56,5 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     MatButtonToggleModule,
     MatCheckboxModule,
   ],
-  providers: [CrmService]
 })
 export class CrmCmpModule { }

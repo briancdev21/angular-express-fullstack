@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../common/common.component';
-import { CrmService } from './crm.service';
+import { CrmService } from '../../services/crm.service';
 @Component({
   selector: 'app-crm',
   templateUrl: './crm.component.html',
@@ -9,15 +9,16 @@ import { CrmService } from './crm.service';
   ],
   entryComponents: [
     CommonComponent
-  ],
-  providers: [CrmService]
+  ]
 })
 export class CrmComponent implements OnInit {
   menuCollapsed = true;
-  constructor() {
+  constructor(private crmService: CrmService) {
   }
 
   ngOnInit() {
+    this.crmService.getLeadsList().subscribe(data => {
+    });
   }
 
   toggleMenubar(data: boolean) {
