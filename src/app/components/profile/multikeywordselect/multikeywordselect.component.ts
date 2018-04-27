@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild, ElementRef, AfterViewInit, Renderer, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
   selector: 'app-multikeywordselect',
@@ -18,7 +19,7 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
   editable: boolean;
   newKeyword: string;
 
-  constructor(private renderer: Renderer) {
+  constructor(private renderer: Renderer, private sharedService: SharedService) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
@@ -27,6 +28,9 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.editable = false;
+    this.sharedService.getKeywords().subscribe(data => {
+      console.log('keywords: ', data);
+    });
   }
 
   ngAfterViewInit() {
@@ -37,6 +41,13 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
     this.keywords.push(data);
     this.newKeyword = '';
     this.sendKeywords.emit(this.keywords);
+    this.sharedService.createKeyword({'name': data})
+    .subscribe((res) => console.log('post data: ', res));
+  }
+
+  deleteKeyword(data) {
+    this.sharedService.deleteKeyword({'name': data})
+    .subscribe((res) => console.log('post data: ', res));
   }
 
 }

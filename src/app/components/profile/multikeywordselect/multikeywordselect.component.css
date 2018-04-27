@@ -14,6 +14,7 @@ ul {
 
 .content-box {
   font-size: 0.7em;
+  min-height: 25px
 }
 
 .content-box .editable {

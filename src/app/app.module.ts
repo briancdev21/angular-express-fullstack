@@ -46,6 +46,7 @@ import { PhonePipe } from './pipes/phone.pipe';
 
 import { SubnavHandlerService } from './services/subnav-handler.service';
 import { CrmService } from './services/crm.service';
+import { SharedService } from './services/shared.service';
 import { ProjectManagementComponent } from './components/projectmanagement/projectmanagement.component';
 
 import { TokenInterceptor } from './services/token.interceptor';
@@ -101,6 +102,7 @@ import { TokenInterceptor } from './services/token.interceptor';
   providers: [
     SubnavHandlerService,
     CrmService,
+    SharedService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

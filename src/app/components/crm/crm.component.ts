@@ -18,6 +18,7 @@ export class CrmComponent implements OnInit {
 
   ngOnInit() {
     this.crmService.getLeadsList().subscribe(data => {
+      console.log('crm service leads list: ', data);
     });
   }
 
