@@ -12,11 +12,18 @@ import { InvoicesService } from '../../../../services/invoices.service';
 
 export class AddEstimateComponent implements OnInit {
 
+  menuCollapsed = true;
+
   constructor( private invoicesService: InvoicesService ) {
   }
 
   ngOnInit() {
 
   }
+
+  toggleMenubar(data: boolean) {
+    this.menuCollapsed  = data;
+  }
+
 
 }

@@ -4,6 +4,22 @@
   left: 0;
 }
 
+.main-content-small {
+  transition: 0.2s all;
+  right: 0;
+	left: 200px;
+  top: 68px;
+  width: calc(100% - 200px);
+}
+
+.main-content-large {
+  right: 0;
+  left: 68px;
+  transition: 0.2s all;
+  width: calc(100% - 68px);
+}
+
+
 @media screen and (max-width: 1250px) {
 
 }

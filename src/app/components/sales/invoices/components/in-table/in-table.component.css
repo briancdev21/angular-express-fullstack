@@ -294,3 +294,10 @@ td.handle-bar {
 .service-date {
   width: 100px;
 }
+
+@media screen and (max-width: 1650px) {
+  .price-table th, .price-table td {
+    font-size: 1em;
+    padding: 10px 5px;
+  }
+}
