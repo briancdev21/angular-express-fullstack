@@ -1,0 +1,24 @@
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status {
+  color: #C5D92D;
+  font-size: 1.8em;
+  font-weight: 200;
+}
+
+.inventory-header {
+  height: 60px;
+  color: #95989A;
+  padding-left: 2em;
+  padding-right: 5em;
+  border-bottom: solid 1px #d3d3d3;
+}
+
+.title {
+  font-size: 1.8em;
+  font-weight: 300;
+}

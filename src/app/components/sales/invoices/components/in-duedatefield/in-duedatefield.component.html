@@ -1,0 +1,7 @@
+<div class="flex" >
+    <div class="orderinfo-label" >{{title}}</div>
+    <div class="orderinfo-input" >
+      <input [owlDateTimeTrigger]="owlduedate" [owlDateTime]="owlduedate" (dateTimeChange)="selectCreatedFrom($event)" [(ngModel)]="dueDate" [min]="yesterday" >
+      <owl-date-time [pickerType]="'calendar'" #owlduedate ></owl-date-time>
+    </div>
+  </div>

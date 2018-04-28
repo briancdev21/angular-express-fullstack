@@ -1,0 +1,333 @@
+.btn-section {
+	display: flex;
+	justify-content: flex-end;
+  position: absolute;
+  right: 7px;
+  top: 7px;
+}
+
+.save-btn {
+	background-color: #a9f2df;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 80px;
+	outline: none;
+	box-shadow: inset #99f3db 0 0 1px 1px;
+	margin: 5px;
+	color: gray;
+}
+
+.cancel-btn {
+	background-color: lightgray;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 80px;
+	outline: none;
+	margin: 5px;
+	color: gray;
+}
+
+.work-order-settings {
+  position: fixed;
+  height: 55px;
+  border-top: 1px solid #95989A;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  padding: 7px;
+  background: white;
+  align-items: center;
+	justify-content: center;
+	z-index: 99;
+}
+
+.work-order-settings>span {
+  font-size: 15px;
+  color: #95989A;
+	width: 100%;
+	line-height: 3;
+	cursor: pointer;
+}
+
+.work-order-settings-expanded {
+	display: flex;
+	flex-direction: column;
+	border-top: 1px solid #D3D3D3;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	margin-left: 68px;
+	background: white;
+  transition: all ease-in .3s;
+	color: #95989a;
+	z-index: 99;
+}
+
+.work-order-settings-collapsed {
+	bottom: -80% !important;
+	visibility: hidden;
+}
+
+.work-order-settings-origin-collapsed {
+	display: none !important;
+	visibility: hidden;
+}
+
+.settings-header {
+	display: flex;
+	justify-content: space-between;
+	padding: 20px 20px 20px 40px;
+	border-bottom: 1px solid #D3D3D3;
+	font-size: 23px;
+	font-weight: 300;
+	align-items: center;
+}
+
+.settings-header img {
+	width: 24px;
+	height: 24px;
+	margin-right: 90px;
+}
+
+.settings-content img{
+	width: 75px;
+	height: 75px;
+}
+
+.overlay {
+	margin-right: 40px;
+	position: relative;
+}
+
+.overlay-gray {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 100%;
+	background: rgba(39,62,84,0.62);
+}
+
+.reminder-update, .print-billable {
+	display: flex;
+	margin-bottom: 35px;
+}
+
+.settings-feature {
+	flex: 1;
+	position: relative;
+}
+
+.settings-feature>div {
+	display: flex;
+	align-items: center;
+}
+
+.settings-content {
+	padding: 35px 55px 0 55px;
+}
+
+.settings-desc {
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+	width: 63%;
+}
+
+.settings-desc>span:first-child {
+	font-size: 19px;
+  margin-bottom: 6px;
+}
+
+.switch {
+	position: absolute;
+	top: 0px;
+	right: 100px;
+}
+
+.switch>img {
+	width: 50px;
+	height: 50px;
+}
+
+.switch .flex input {
+  width: 80px;
+  margin-left: 10px;
+  margin-right: 30px;
+  text-align: right;
+  height: 32px;
+  border: 1px solid #d3d3d3;
+  color: #95989a;
+}
+
+.switch .flex select {
+  width: 60px;
+  height: 32px;
+  padding: 8px;
+  border: 1px solid #d3d3d3;
+  color: #95989a;
+  background-size: 23%;
+}
+
+/*  Reminder Modal CSS */
+
+.reminder-modal, .availability-modal {
+  position: fixed;
+  top: 5px;
+  width: 50%;
+  margin: 0 25%;
+  left: 0;
+  background: white;
+  z-index: 9999;
+  border-radius: 5px;
+  transition: all 0.5s;
+	color: #646464
+}
+
+.reminder-modal-hide {
+  position: fixed;
+  top: -300px;
+  width: 35%;
+  margin: 0 35%;
+  left: 0;
+  z-index: 9999;
+  transition: all 0.5s;
+	visibility: hidden;
+}
+
+.reminder-modal .content {
+  padding: 25px;
+  font-size: 0.8em;
+}
+
+
+.reminder-modal .header, .availability-modal .header {
+  padding: 20px 25px;
+  font-size: 1.9rem;
+  border-bottom: solid 1px #F5F5F5;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.reminder-modal .done-btn:focus {
+  background: #8decd4;
+}
+
+.reminder-modal  .close-btn {
+  cursor: pointer;
+  font-size: 1.5em;
+  width: 22px;
+  height: 22px;
+}
+
+.reminder-modal-wrapper {
+  background: rgba(156,152,152,0.5);
+  width:100%;
+  height: 100%;
+  z-index: 9990;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.reminder-modal .content {
+	position: relative;
+	padding: 30px 20px 20px 20px;
+}
+
+select {
+	background: none;
+	-webkit-appearance: none;
+	background: url(/assets/images/down-arrow.png) no-repeat;
+	background-position: right 10px center;
+	background-size: 3%;
+	height: 35px;
+	font-size: 12px;
+	color: #D3D3D3;
+	border-radius: 0;
+	border: 1px solid #F5F5F5;
+}
+
+input {
+	border: 1px solid #F5F5F5;
+}
+.reminder-content span {
+	font-size: 13px;
+	float: left;
+	font-weight: 300;
+}
+
+.reminder-content select {
+	width: 60%;
+	padding: 3px;
+	height: 34px;
+	color: #95989A;
+}
+
+.reminder-content input {
+	width: 60%;
+	height: 34px;
+	border: 1px solid #F5F5F5;
+	color: #95989A;
+	text-align: right;
+	padding: 3px;
+	text-align: left;
+}
+
+.reminder-content input::placeholder {
+	color: #D3D3D3;
+}
+
+.reminder-modal {
+	color: #95989A;
+}
+
+.reminder-content>div{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.settings-feature {
+	cursor: pointer;
+}
+
+.reminder-modal .save-btn, .reminder-modal .cancel-btn {
+	width: 100px;
+}
+
+.modal-btn-section {
+	text-align: right;
+}
+
+.reminder-content {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	width: 70%;
+	margin-bottom: 20px;
+	margin-left: 10%;
+}
+
+.reminder-content .desc {
+	font-size: 18px;
+	text-align: left;
+}
+
+.reminder-content .reminder-frequency {
+	width: 80%;
+}

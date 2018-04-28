@@ -1,0 +1,19 @@
+<div class="text-align-left" >
+  <div class="selector-label" >
+    <span class="mr-40" >Shipping address</span>
+    <app-in-switcher label="Use customer address" (switchChanged)="onSwitchChanged($event)" class="in-switch" ></app-in-switcher>
+  </div>
+  <div>
+    <div>
+      <input type="text" placeholder="Enter shipping address" [(ngModel)]="shippingAddress.address" />
+    </div>
+    <div class="flex" >
+      <input type="text" class="mr-15" placeholder="Enter city" [(ngModel)]="shippingAddress.street" />
+      <input type="text" class="ml-15" placeholder="Enter State" [(ngModel)]="shippingAddress.city" />
+    </div>
+    <div class="flex" >
+      <input type="text" class="mr-15" placeholder="Enter country" [(ngModel)]="shippingAddress.country" />
+      <input type="text" class="ml-15" placeholder="Enter zipcode" [(ngModel)]="shippingAddress.postcode" />
+    </div>
+  </div>
+</div>

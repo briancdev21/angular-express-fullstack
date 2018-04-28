@@ -20,6 +20,7 @@ import { CrmComponent } from './components/crm/crm.component';
 import { PmComponent } from './components/pm/pm.component';
 import { InventoryComponent } from './components/inventory/inventory.component';
 import { ServicingComponent } from './components/servicing/servicing.component';
+import { ProjectManagementComponent } from './components/projectmanagement/projectmanagement.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/proposal/proposal.module';
@@ -47,8 +48,7 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { SubnavHandlerService } from './services/subnav-handler.service';
 import { CrmService } from './services/crm.service';
 import { SharedService } from './services/shared.service';
-import { ProjectManagementComponent } from './components/projectmanagement/projectmanagement.component';
-
+import { InvoicesService } from './services/invoices.service'; 
 import { TokenInterceptor } from './services/token.interceptor';
 @NgModule({
   declarations: [
@@ -102,6 +102,7 @@ import { TokenInterceptor } from './services/token.interceptor';
   providers: [
     SubnavHandlerService,
     CrmService,
+    InvoicesService,
     SharedService,
     {
       provide: HTTP_INTERCEPTORS,

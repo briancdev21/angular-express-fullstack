@@ -1,0 +1,6 @@
+<div class="flex" >
+  <div class="deposits-label" >Deposits/Credits</div>
+  <div class="flex" >
+    <input type="number" step="0.01" placeholder="0.00" [(ngModel)]="depositsAmount" (ngModelChange)="onDepositsChange()" (input)="checkValue($event)">
+  </div>
+</div>

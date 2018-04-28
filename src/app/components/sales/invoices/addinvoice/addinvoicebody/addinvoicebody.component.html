@@ -1,0 +1,63 @@
+<div>
+  <div class="main-content" >
+    <div class="main__info flex" >
+      <div class="left-sidebar">
+        <div class="flex aligntop" >
+          <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser()" [searchStr]="selectItem" ></app-in-customer-name>
+          <div class="email-address">
+            <span>Email address</span>
+            <app-multiemailselect [keywords]="emailAddresses"></app-multiemailselect>
+          </div>
+        </div>
+        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" ></app-shippingaddress>
+        <div class="project-log">
+          <app-in-project-selector class="flex1 mr-15" [projects]="projects" ></app-in-project-selector>
+          <div class="log-number">
+            <select >
+              <option selected disabled>Enter the change log number here</option>
+              <option *ngFor="let logNumber of changeLogNumbers" [value]="logNumber">{{logNumber}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="right-sidebar">
+        <app-in-orderidfield [in_id]="in_id" [title]="invoiceNumberTitle"></app-in-orderidfield>
+        <app-in-createddatefield [(createdDate)]="createdDate" ></app-in-createddatefield>
+        <app-in-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" ></app-in-termsfield>
+        <app-in-duedatefield [(dueDate)]="dueDate" [title]="dueDateTitle"></app-in-duedatefield>
+        <app-in-class  [classList]="classList" (selectedClass)="onSelectClass()" ></app-in-class>
+        <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory()" ></app-in-category>
+      </div>
+    </div>
+    <div class="product__table">
+      <app-in-table [(productDetails)]="productDetails" (priceChange)="onPriceChanged()" ></app-in-table>
+    </div>
+    <div class="sub__info">
+      <div class="notes-activity">
+        <div class="flex" >
+          <div class="internal-memo">
+            <app-in-internalmemo [(internalMemo)]="internalMemo" ></app-in-internalmemo>
+          </div>
+          <div class="notetosupplier">
+              <app-in-notetosupplier [(noteToSupplier)]="noteToSupplier" ></app-in-notetosupplier>
+          </div>
+          <div class="term-of-invoice">
+              <app-in-terms-of-invoice [(termsOfInvoice)]="termsOfInvoice" [(title)]="title"></app-in-terms-of-invoice>
+          </div>
+        </div>
+        <div class="timeline-activity">
+          <app-ng2timeline [timelineData]="timelineData" [oneSide]="true"></app-ng2timeline>
+        </div>
+      </div>
+      <div class="bill-count" >
+          <app-in-subtotalproducts [subtotalproducts]="subtotalproducts" ></app-in-subtotalproducts>
+          <app-in-subtotalservices [subtotalservices]="subtotalServices" ></app-in-subtotalservices>
+          <app-in-discount [discounttype]="discountType" [discountamount]="discountAmount" (discountChange)="onTotalPriceChange($event)" ></app-in-discount>
+          <app-in-taxes [taxes]="taxes" ></app-in-taxes>
+          <app-in-deposits-credits [depositsAmount]="depositsAmount" (depositsChange)="onTotalPriceChange($event)" ></app-in-deposits-credits>
+          <app-in-totalamountdue [totalamountdue]="totalamountdue" ></app-in-totalamountdue>
+      </div>
+    </div>
+    
+  </div>
+</div>

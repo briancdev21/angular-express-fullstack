@@ -1,0 +1,19 @@
+.switch-img {
+  height: 30px;
+  cursor: pointer;
+}
+
+.switch-label {
+  color: #95989a;
+  font-size: 11px;
+  display: inline-block;
+  padding: 0px 8px;
+  color: #95989A;
+  cursor: pointer;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}

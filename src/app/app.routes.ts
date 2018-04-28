@@ -9,6 +9,8 @@ import { ContactsComponent } from './components/crm/contacts/contacts.component'
 import { SuppliersComponent } from './components/inventory/suppliers/suppliers.component';
 import { ProductsComponent } from './components/inventory/products/products.component';
 import { InvoicesComponent } from './components/sales/invoices/invoices.component';
+import { AddInvoiceComponent } from './components/sales/invoices/addinvoice/addinvoice.component';
+import { AddEstimateComponent } from './components/sales/invoices/addestimate/addestimate.component';
 import { PendingsComponent } from './components/pm/pendings/pendings.component';
 import { CollaborationComponent } from './components/collaboration/collaboration.component';
 import { ProjectsListComponent } from './components/pm/projectslist/projectslist.component';
@@ -65,6 +67,8 @@ export const routes: Routes = [
   { path: 'sign-up', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'home', component: HomeComponent},
+  { path: 'add-invoice', component: AddInvoiceComponent },
+  { path: 'add-estimate', component: AddEstimateComponent },
   { path: 'crm', component: CrmComponent,
     children: [
       { path: '', redirectTo: 'crm-dashboard', pathMatch: 'full' },

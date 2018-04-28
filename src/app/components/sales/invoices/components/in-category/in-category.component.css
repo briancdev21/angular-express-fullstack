@@ -1,0 +1,37 @@
+.text-align-left {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  margin-top: 7px;
+}
+
+.completer-label {
+  color: #95989A;
+  padding: 0;
+  font-size: 12px;
+  margin: 3px 0;
+  display: inline-block;
+  width: 100px;
+}
+
+ng2-completer.ng2completer .completer-input {
+  padding: 0.4em 1em;
+  border: solid;
+  border: solid 1px #f5f5f5;
+  font-weight: 400;
+  height: 32px;
+  width: 100%;
+  font-size: 12px;
+  color: #646464
+}
+
+.completer-dropdown-holder {
+  margin-top: 10px;
+  padding: 0;
+  width: 100%;
+  max-width: 300px;
+}
+
+.input-box {
+  width: 200px;
+}

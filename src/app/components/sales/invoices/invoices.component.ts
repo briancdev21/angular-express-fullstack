@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.component.html',
@@ -25,7 +26,7 @@ export class InvoicesComponent implements OnInit {
   filterAvaliableTo: any;
   filterName = '';
 
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private router: Router ) {
     this.filterAvaliableTo = 'everyone';
   }
 
@@ -217,5 +218,13 @@ export class InvoicesComponent implements OnInit {
     this.invoicesListInfo = this.backUpInvoices;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
+  }
+
+  toAddInvoice() {
+    this.router.navigate(['./add-invoice']);
+  }
+
+  toAddEstimate() {
+    this.router.navigate(['./add-estimate']);
   }
 }

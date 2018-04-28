@@ -8,4 +8,6 @@ export class ProductDetailInfo {
   discount: number = undefined;
   total: number = undefined;
   taxrate = 'GST';
+  type = 'product';
+  serviceDate: Date;
 }

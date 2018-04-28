@@ -1,0 +1,17 @@
+<div class="content-box" (click)="editable=true;$event.stopPropagation()">
+  <div [ngClass]="{ 'editable': editable, 'non-editable': !editable, 'hidden': editable}">
+    <span *ngIf="keywords[0] == undefined" class="placeholder">{{placeholder}}</span>
+    <ul>
+      <li *ngFor="let keyword of keywords; let i = index" >{{keyword}}</li>
+      <li class="add-keyword"><img src="assets/images/Add-Button.svg" (click)="editable=true;$event.stopPropagation()" /></li>
+    </ul>
+  </div>
+  <div [ngClass]="{ 'editable': editable, 'hidden': !editable }" (click)="editable=true;$event.stopPropagation()" >
+    <ul>
+      <li *ngFor="let keyword of keywords; let i = index" >{{keyword}}<span (click)="keywords.splice(i,1)">&nbsp;&nbsp;x</span></li><br/>
+      <li style="background: none; width: 100%; margin: 0;" >
+        <input placeholder="Type Here..." #box class="add-keyword-input" type="text" [(ngModel)]="addedItem" (keyup.enter)="addNew(addedItem)" [ngClass]="{'wrong-email': invalid}" />
+      </li>
+    </ul>
+  </div>
+</div>
