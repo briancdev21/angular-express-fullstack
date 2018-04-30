@@ -221,7 +221,9 @@ export class InvoicesComponent implements OnInit {
   }
 
   toAddInvoice() {
-    this.router.navigate(['./add-invoice']);
+    this.router.navigate(['./add-invoice', {
+      title: 'NEW'
+    }]);
   }
 
   toAddEstimate() {

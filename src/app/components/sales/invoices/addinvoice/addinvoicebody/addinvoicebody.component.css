@@ -152,11 +152,13 @@ input::placeholder {
 :host ::ng-deep .timeline-activity .one-side-timeline-badge {
   width: 30px;
   height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 :host ::ng-deep .timeline-activity .fa {
   font-size: 16px;
-  margin-top: 7px;
 }
 
 :host ::ng-deep .timeline-activity .one-side-timeline-panel {

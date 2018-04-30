@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { InvoicesService } from '../../../../services/invoices.service';
 
 @Component({
@@ -13,12 +13,14 @@ import { InvoicesService } from '../../../../services/invoices.service';
 export class AddInvoiceComponent implements OnInit {
 
   menuCollapsed = true;
+  status = '';
 
-  constructor( private invoicesService: InvoicesService ) {
+  constructor( private invoicesService: InvoicesService, private router: Router, private route: ActivatedRoute ) {
   }
 
   ngOnInit() {
-
+    this.status = this.route.snapshot.paramMap.get('title');
+    console.log('status: ', this.status);
   }
 
   toggleMenubar(data: boolean) {

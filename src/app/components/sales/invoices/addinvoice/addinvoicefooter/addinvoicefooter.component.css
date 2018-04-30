@@ -49,9 +49,10 @@
 .work-order-settings>span {
   font-size: 15px;
   color: #95989A;
-	width: 100%;
+	width: calc(100% - 68px);
 	line-height: 3;
 	cursor: pointer;
+	text-align: center;
 }
 
 .work-order-settings-expanded {
