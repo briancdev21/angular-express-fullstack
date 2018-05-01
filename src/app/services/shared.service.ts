@@ -35,4 +35,24 @@ export class SharedService {
     return this.http.delete<any>(url, body);
   }
 
+  getUsers (): Observable<any> {
+    const url = `${apiUrl}users/`;
+    return this.http.get(url).map(data => data['results']);
+  }
+
+  createUser (body): Observable<any> {
+    const url = `${apiUrl}users/`;
+    return this.http.post<any>(url, body);
+  }
+
+  deleteUser (body): Observable<any> {
+    const url = `${apiUrl}users/`;
+    return this.http.delete<any>(url, body);
+  }
+
+  updateUser (body): Observable<any> {
+    const url = `${apiUrl}users/`;
+    return this.http.put<any>(url, body);
+  }
+
 }

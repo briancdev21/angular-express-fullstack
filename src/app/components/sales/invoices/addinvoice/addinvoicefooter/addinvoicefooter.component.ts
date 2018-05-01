@@ -45,4 +45,12 @@ export default class AddInvoiceFooterComponent {
       this.showEndAfter = true;
     }
   }
+
+  clickSaveInvoice() {
+
+  }
+
+  clickCancelInvoice() {
+
+  }
 }

@@ -2,14 +2,15 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ProductDetailInfo } from '../../../../../models/ProductDetailInfo.model';
 import { Ng2TimelineComponent } from '../../../../profile/ng2-timeline/ng2timeline.component';
 import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordselect/multikeywordselect.component';
+import { SharedService } from '../../../../../services/shared.service';
 
 @Component({
   selector: 'app-addinvoicebody',
   templateUrl: './addinvoicebody.component.html',
   styleUrls: ['./addinvoicebody.component.css']
 })
-export default class AddInvoiceBodyComponent {
-  userList = ['John', 'Smith', 'jackie'];
+export default class AddInvoiceBodyComponent implements OnInit {
+  userList = [];
   classList = ['class1', 'class2', 'class3'];
   categoryList = ['category1', 'category2', 'category3'];
   projects = ['task1', 'task2', 'task3'];
@@ -102,11 +103,20 @@ export default class AddInvoiceBodyComponent {
     }
   ];
 
-  constructor() {
+  constructor(private sharedService: SharedService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
-
+    this.sharedService.getUsers()
+    .subscribe(data => {
+      this.userList = data.map(user => user.username);
+      console.log('userlist: ', this.userList);
+    });
   }
+
+  ngOnInit() {
+    console.log('userlist: ', this.userList);
+  }
+
   onCustomerSelected(user) {
     console.log(user);
   }
