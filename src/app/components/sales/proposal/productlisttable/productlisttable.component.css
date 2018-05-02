@@ -187,7 +187,6 @@ td select {
 	background-color: #f6f6f6;
 }
 
-
 @media screen and (max-width: 1200px) {
 	td:first-child {
     min-width: 86px;

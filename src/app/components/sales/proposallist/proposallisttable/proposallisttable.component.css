@@ -108,6 +108,12 @@ table i {
   position: static;
 }
 
+@media screen and (max-width: 1600px) {
+	th {
+		padding: 25px 7px;
+		font-size: 12px;
+	}
+}
 
 @media screen and (max-width: 1200px) {
 
