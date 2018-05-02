@@ -1,0 +1,418 @@
+.btn-add-proposal {
+	font-size: 10px;
+	letter-spacing: 0;
+	padding: 5px 23px;
+	background-color: #A8F2DF;
+	border-radius: 5px;
+	margin-right: 10px;
+	cursor: pointer;
+	color: #868686;
+}
+
+.add-proposal-modal-wrapper {
+	width:100%;
+	height: 100%;
+	z-index: 9992;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: rgba(156,152,152,0.5);
+}
+
+.add-proposal-modal {
+	position: fixed;
+	top: 10px;
+	margin: 0;
+	right: 20%;
+	width: 60%;
+	background: white;
+	z-index: 9993;
+	background-color: white;
+	transition: all 0.5s ease-in;
+	border-radius: 5px;
+}
+
+.validation-required {
+	border: 1px solid red !important;
+}
+
+:host ::ng-deep .name-col .validation-required-name ng2-completer.ng2completer .completer-input {
+	border: 1px solid red !important;
+}
+
+.hide-modal {
+	top: -100%;
+	visibility: hidden;
+}
+
+.show-modal {
+	visibility: visible;
+}
+
+.add-proposal-modal .header {
+	padding: 20px 25px;
+	border-bottom: solid 1px #F5F5F5;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: space-between;
+}
+
+.add-proposal-modal span {
+	color: #95989A;
+	font-weight: inherit;
+}
+
+.add-proposal-modal .header span {
+	font-size: 1.1em;
+}
+
+.save-btn {
+	background-color: #a9f2df;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 80px;
+	outline: none;
+	box-shadow: inset #99f3db 0 0 1px 1px;
+	margin: 5px;
+	color: gray;
+}
+
+.cancel-btn {
+	background-color: lightgray;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 80px;
+	outline: none;
+	margin: 5px;
+	color: gray;
+}
+
+.done-btn:focus {
+	background: #8decd4;
+}
+
+.close-btn {
+	cursor: pointer;
+	font-size: 1.5em;
+	width: 22px;
+	height: 22px;
+}
+
+tabs {
+	padding: 0;
+	min-height: 0;
+	height: 100%;
+}
+
+/* Tab Client Details CSS */
+
+.tab-one, .tab-two, .tab-three {
+	padding: 25px;
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+}
+
+tab img {
+	width: 28px;
+	height: 28px;
+}
+
+.tab-row {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+	margin-bottom: 15px;
+}
+
+.tab-row:first-child {
+	margin-bottom: 5px;
+}
+
+.tab-row>div {
+	width: 48%;
+}
+
+tab span {
+	color: #95989A;
+	font-size: 13px;
+	font-weight: 300;
+}
+
+tab input, tab select {
+	width: 100%;
+	border: 1px solid #f7f7f7;
+	padding-left: 7px;
+	border-radius: 0 !important;
+	color: #95989A;
+	height: 34px;
+	margin-top: 4px;
+	color: #646464;
+	font-weight: 300;
+}
+
+tab select {
+  background: none;
+  -webkit-appearance: none;
+  background: url(/assets/images/down-arrow.png) no-repeat;
+  background-position: right 10px center;
+	background-size: 3%;
+	height: 34px;
+	font-size: 13px;
+	color: #646464
+}
+
+.tab-one .desc, .tab-two .desc {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 20px;
+}
+
+input::placeholder {
+	font-size: 13px;
+	color: #95989a;
+}
+
+.city-state, .country-zip {
+	display: flex;
+	justify-content: space-between
+}
+
+.city-state input, .country-zip input {
+	width: 48%;
+	margin-bottom: 15px;
+}
+
+.address {
+	margin-bottom: 15px;
+}
+
+.collaborators>div {
+	width: 100%;
+	border: 1px solid #f7f7f7;
+	margin-top: 4px;
+}
+
+.collaborators img {
+	border-radius: 100%;
+	margin: 1px 5px;
+}
+
+.btn-section {
+	display: flex;
+	justify-content: flex-end;
+}
+
+:host ::ng-deep ng2-completer.ng2completer .completer-input {
+	margin-top: 4px;
+	height: 36px;
+}
+
+:host ::ng-deep .completer-label {
+	display: none !important;
+}
+
+:host ::ng-deep .edit-followers .autocomplete input {
+	width: 100%
+}
+/* Tab Project Details CSS */
+
+:host ::ng-deep .tab-two .category-box .content-box, :host ::ng-deep .tab-two .subcategory-box .content-box {
+	min-height: 84px;
+}
+
+.discount>div {
+	display: flex;
+}
+
+.discount select {
+	width: 50px;
+	background-size: 25%;
+	margin-right: 15px;
+}
+
+.discount input {
+	width: 100%;
+}
+
+.category-box, .subcategory-box {
+	min-height: 100px;
+	border: 1px solid #f5f5f5;
+	padding: 7px;
+	margin-top: 5px;
+}
+
+.category-box span, .subcategory-box span, .milestones span {
+	background-color: #eee;
+	padding: 1px 4px;
+	margin-right: 4px;
+	display: inline-block;
+	margin: 2px;
+}
+
+.completion {
+	display: flex;
+	flex-direction: column;
+}
+
+app-in-createddatefield {
+	width: 100%;
+}
+
+:host ::ng-deep .completion .created-label {
+	display: none;
+}
+
+:host ::ng-deep .completion .created-input, :host ::ng-deep .completion .flex {
+	width: 100% !important;
+}
+
+:host ::ng-deep .completion .created-input input {
+	height: 34px !important;
+}
+
+:host ::ng-deep .tab-two .milestones .content-box {
+	min-height: 30px;
+}
+
+.milestones {
+	border: 1px solid #f7f7f7;
+	padding-left: 5px;
+	min-height: 34px;
+	align-items: center;
+	display: flex;
+	margin-top: 3px;
+}
+
+.schedule-title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.member-container {
+	border: 1px solid #f7f7f7;
+	margin-top: 4px
+}
+
+.member-container img {
+	margin: 2px 5px;
+}
+
+/* Tab scope of work css */
+.tab-three {
+	height: 82vh;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+.tab-three>span {
+	font-size: 14px;
+	margin-bottom: 5px;
+}
+
+.tab-three .btn-section {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+app-schedulemultikeyword {
+	width: 100%;
+	font-size: 18px;
+	color: #656565;
+}
+
+.added-tasks {
+	border: 1px solid #f5f5f5;
+	width: 100%;
+	height: 80px;
+}
+
+.editor-title {
+	margin-top: 15px;
+}
+
+/* Collaborators CSS */
+
+.followers {
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  color: #95989A;
+  position: relative;
+	justify-content: flex-start;
+	height: 34px;
+}
+
+.followers img {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: darkcyan;
+	margin: 3px;
+	margin-left: 7px
+}
+
+.followers .add-follower {
+  background-image: '';
+  cursor: pointer;
+  
+}
+.edit-followers {
+  position: absolute;
+  top: 45px;
+  border: solid 1px lightgray;
+  background: white;
+  padding: 5px;
+  z-index: 9;
+}
+
+.edit-followers ul {
+  margin: 0;
+  padding: 0;
+}
+
+.edit-followers li {
+  list-style: none;
+  display: inline-block;
+  padding: 3px;
+  background: lightblue;
+  border-radius: 1px;
+  margin: 2px;
+}
+.edit-followers input {
+	width: 100%;
+	height: 18px;
+}
+
+.editbtn {
+  background-color: #a8f2df;
+  padding: 4px;
+  width: 100px;
+  font-size: 0.7em;
+  border-radius: 3px;
+  border: none;
+  color: black;
+  outline: none;
+}
+.editbtn:focus {
+  outline: none;
+}
+
+.closebtn {
+  cursor: pointer;
+}
+
+.type-here {
+	font-size: 11px !important;
+}

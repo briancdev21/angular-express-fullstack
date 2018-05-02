@@ -10,7 +10,7 @@ import { StopEventPropagationDirective } from './stop-event-propagation.directiv
 import { routing } from './app.routes';
 import { TestComponent } from './components/test/test.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { ProposalComponent } from './components/proposal/proposal.component';
+import { ProposalComponent } from './components/sales/proposal/proposal.component';
 import { OrderProfileComponent } from './components/orderprofile/orderprofile.component';
 import { SalesComponent } from './components/sales/sales.component';
 import { SubmenuComponent } from './components/submenu/submenu.component';
@@ -23,7 +23,7 @@ import { ServicingComponent } from './components/servicing/servicing.component';
 import { ProjectManagementComponent } from './components/projectmanagement/projectmanagement.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
-import { ProposalCmpModule } from './components/proposal/proposal.module';
+import { ProposalCmpModule } from './components/sales/proposal/proposal.module';
 import { OrderProfileCmpModule } from './components/orderprofile/orderprofile.module';
 import { SalesCmpModule } from './components/sales/sales.module';
 import { CollaborationCmpModule } from './components/collaboration/collaboration.module';
@@ -48,7 +48,7 @@ import { PhonePipe } from './pipes/phone.pipe';
 import { SubnavHandlerService } from './services/subnav-handler.service';
 import { CrmService } from './services/crm.service';
 import { SharedService } from './services/shared.service';
-import { InvoicesService } from './services/invoices.service'; 
+import { InvoicesService } from './services/invoices.service';
 import { TokenInterceptor } from './services/token.interceptor';
 @NgModule({
   declarations: [

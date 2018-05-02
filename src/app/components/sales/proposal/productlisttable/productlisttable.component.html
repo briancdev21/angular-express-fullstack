@@ -1,0 +1,116 @@
+<div class="content">
+  <table (clickOutside)="onClickedOutside($event)">
+    <tr>
+      <th>SKU</th>
+      <th>BRAND</th> 
+      <th>MODEL</th>
+      <th>PRODUCT NAME</th>
+      <th>PRODUCT TYPE</th> 
+      <th>QYT</th>
+      <th>UNIT PRICE</th>
+      <th>DISCOUNT %</th> 
+      <th>TOTAL</th>
+      <th>TAX RATE</th>
+      <th>CATEGORY</th> 
+      <th>SUBCATEGORY</th>
+    </tr>
+    <tbody
+      *ngFor="let parentProduct of parents; let parentI = index; "
+      [ngStyle]="{'background-color': selectedRows.includes(parentProduct.id) ? '#dcdbdb':'white'}"
+      (click)="onParentRowSelect(parentProduct)"
+    >
+      <tr >
+        <td>
+          <img src="assets/images/right-arrow.png" *ngIf="!parentProduct.expanded" (click)="checkExpand(parentProduct)">
+          <img src="assets/images/arrow-down.png" *ngIf="parentProduct.expanded" (click)="checkExpand(parentProduct)">
+          {{parentProduct.sku}}
+        </td>
+        <td>{{parentProduct.brand}}</td> 
+        <td>{{parentProduct.model}}</td>
+        <td>{{parentProduct.productName}}</td>
+        <td>{{parentProduct.productType}}</td> 
+        <td><input [(ngModel)]="parentProduct.qty" (input)="getParentTotalPrice(parentProduct)" (blur)="onBlur()" (focus)="onFocus()"></td>
+        <td>
+          $ <input [(ngModel)]="parentProduct.unitPrice" *ngIf="unitPriceEditable" (blur)="unitPriceEditable = false; onBlur();" (input)="getParentTotalPrice(parentProduct)"  (focus)="onFocus()">
+          <span *ngIf="!unitPriceEditable" (click)="unitPriceEditable = true;">{{parentProduct.unitPrice | number: '1.2-2'}}</span>
+        </td>
+        <td><input [(ngModel)]="parentProduct.discount" (blur)="onBlur()" (focus)="onFocus()"></td> 
+        <td>$ {{parentProduct.proposalTotal | number:'2.2-2'}}</td>
+        <td>
+          <select [(ngModel)]="parentProduct.taxRate">
+            <option value="GST" selected>GST</option>
+            <option value="PST">PST</option>
+          </select>
+        </td>
+        <td>
+          <select [(ngModel)]="parentProduct.category">
+            <option *ngFor="let category of proposalCategoryList" [ngValue]="category" >{{category}}</option>
+          </select>
+        </td>
+        <td>
+          <select [(ngModel)]="parentProduct.subcategory">
+            <option *ngFor="let subcategory of proposalSubCategoryList" [ngValue]="subcategory" >{{subcategory}}</option>
+          </select>
+        </td>
+      </tr>
+      <ng-container *ngIf = "parentProduct.expanded">
+        <tr
+          [ngClass]="{'selected-row': selectedRows.includes(childProduct.id), 'unselected-child-row': !selectedRows.includes(childProduct.id), 'no-image-row': !getIconImgResource(childProduct)}"
+          *ngFor="let childProduct of childNodesForParents[parentI]; let i = index;"
+          (click)="onChildRowSelect(childProduct, $event);"
+          >
+          <td ><img [hidden]="!getIconImgResource(childProduct)" [src]="getIconImgResource(childProduct)" (click)="changeProductOption(childProduct, parentProduct)"><span [ngClass]="{'no-image-cell': !getIconImgResource(childProduct)}">{{childProduct.sku}}</span></td>
+          <td>{{childProduct.brand}}</td> 
+          <td>{{childProduct.model}}</td>
+          <td>{{childProduct.productName}}</td>
+          <td>{{childProduct.productType}}</td> 
+          <td><input [(ngModel)]="childProduct.qty" (input)="getParentTotalPrice(parentProduct)" (blur)="onBlur()" (focus)="onFocus()"></td>
+          <td>
+            $ <input [(ngModel)]="childProduct.unitPrice" *ngIf="unitPriceEditable" (blur)="unitPriceEditable = false; onBlur();" (input)="getParentTotalPrice(parentProduct)" (focus)="onFocus()">
+            <span *ngIf="!unitPriceEditable" (click)="unitPriceEditable = true;">{{childProduct.unitPrice | number: '1.2-2'}}</span>
+          </td>
+          <td><input [(ngModel)]="childProduct.discount" (blur)="onBlur()" (focus)="onFocus()"></td> 
+          <td>$ {{childProduct.unitPrice * childProduct.qty * (100 - childProduct.discount)/100 | number:'2.2-2'}}</td>
+          <td>
+            <select [(ngModel)]="childProduct.taxRate">
+              <option value="GST" selected>GST</option>
+              <option value="PST">PST</option>
+            </select>
+          </td>
+          <td>
+            <select [(ngModel)]="childProduct.category">
+              <option *ngFor="let category of proposalCategoryList" [ngValue]="category" >{{category}}</option>
+            </select>
+          </td>
+          <td>
+            <select [(ngModel)]="childProduct.subcategory">
+              <option *ngFor="let subcategory of proposalSubCategoryList" [ngValue]="subcategory" >{{subcategory}}</option>
+            </select>
+          </td>
+        </tr>
+      </ng-container>
+  </tbody>
+  </table>
+</div>
+
+<!-- Edit Discount Modal -->
+
+<div class="modal-wrapper" *ngIf="!deleteModalCollapsed"></div>
+<div class="delete-modal common"  [ngClass]="{'show-modal': !deleteModalCollapsed, 'hide-modal': deleteModalCollapsed }">
+  <div class="header">
+    <span>Do you really want to delete?</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="deleteModalCollapsed=true; deleteModalCollapsed=false" />
+  </div>
+
+  <div class="main-content" >
+    
+    <div class="btn-section" >
+      <button class="cancel-btn" (click)="cancelDelete()"  >
+        Cancel
+      </button>
+      <button class="save-btn" (click)="deleteProduct()"  >
+        Delete
+      </button>
+    </div>
+  </div>
+</div>

@@ -2,7 +2,7 @@
 	display: flex;
 	justify-content: space-between;
 	font-size: 11px;
-	padding: 25px;
+	padding: 25px 15px 10px 15px;
 }
 
 .button {
@@ -11,6 +11,16 @@
 	margin: 3px;
 	color: #95989a;
 	cursor: pointer;
+	border-radius: 4px;
+}
+
+.expand-send {
+	display: flex;
+}
+
+.send-proposal.button {
+	background: #a8f2df;
+	margin-left: 15px;
 }
 
 .edit-btns {
@@ -40,8 +50,8 @@
 	position: fixed;
 	top: 10px;
 	margin: 0;
-	right: 20%;
-	width: 45%;
+	right: 29%;
+	width: 44%;
 	background: white;
 	z-index: 9993;
 	background-color: white;
@@ -52,7 +62,7 @@
 }
 
 .hide-modal {
-	top: -30% !important;
+	top: -70% !important;
 	visibility: hidden;
 }
 
@@ -250,12 +260,12 @@ select {
 
 /* Discount Edit Modal CSS */
 
-.discount-modal {
+.discount-modal, .category-modal, .sub-category-modal {
 	position: fixed;
 	top: 10px;
 	margin: 0;
-	right: 20%;
-	width: 45%;
+	right: 29%;
+	width: 44%;
 	background: white;
 	z-index: 9993;
 	background-color: white;
@@ -265,16 +275,49 @@ select {
 	letter-spacing: 0.5px;
 }
 
+.discount-rule {
+	margin: 15px auto 55px;
+}
+
+/* Discount Edit Modal CSS */
+
+.category-rule, .sub-category-rule {
+	margin: 25px 13% 55px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.category-rule span, .sub-category-rule span {
+	flex: 4;
+}
+
+.category-rule select, .sub-category-rule select {
+	background-size: 5%;
+	flex: 5;
+}
+
+.category-rule img, .sub-category-rule img {
+	width: 16px;
+	height: 16px;
+	margin-left: 10px;
+}
+
 @media screen and (max-width: 1450px) {
-	.price-modal, .discount-modal {
+	.price-modal, .discount-modal, .category-modal, .sub-category-modal {
 		width: 65%;
 		right: 15%;
 	}
 
-	.pricing-rule, .discount-rule {
+	.pricing-rule, {
 		width: 80%;
 		display: flex;
 		flex-direction: column;
+		margin: 30px auto;
+	}
+
+	.discount-rule, .category-rule, .sub-category-rule {
+		width: 80%;
 		margin: 30px auto;
 	}
 }

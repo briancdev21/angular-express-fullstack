@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../common/common.component';
 import { SalesService } from './sales.service';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import 'rxjs/add/operator/filter';
+
 @Component({
   selector: 'app-sales',
   templateUrl: './sales.component.html',
@@ -14,7 +17,19 @@ import { SalesService } from './sales.service';
 })
 export class SalesComponent implements OnInit {
   menuCollapsed = true;
-  constructor() {
+  notProposalDetails = true;
+
+  constructor( private router: Router) {
+    router.events
+      .filter(event => event instanceof NavigationEnd)
+      .subscribe((val) => {
+        console.log('router: ', val);
+        if (val['url'] === '/sales/proposal-details') {
+          this.notProposalDetails = false;
+        } else {
+          this.notProposalDetails = true;
+        }
+      });
   }
 
   ngOnInit() {

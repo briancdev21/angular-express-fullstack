@@ -36,7 +36,7 @@ export class ProposalListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../proposallist/' + id]);
+    this.router.navigate(['../sales/proposal-details/']);
   }
 
   sortArray(field) {

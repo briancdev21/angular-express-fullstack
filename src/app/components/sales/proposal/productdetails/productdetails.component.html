@@ -1,0 +1,173 @@
+<div class="product-details rotated" (click)="sidebarCollapsed=false; showDialog=true; onSelect('all')">
+  <span>PRODUCT DETAILS</span>
+  <i class="fa fa-angle-left"></i>
+</div>
+
+<div class="product-details-dialog-wrapper" *ngIf="showDialog" (click)="sidebarCollapsed=true; showDialog=false"></div>
+<div class="product-details-dialog"  [ngClass]="{'show-sidebar': !sidebarCollapsed, 'hide-sidebar': sidebarCollapsed }">
+  <div class="header">
+    <span>Product Details</span>
+  </div>
+  <div class="search-products">
+    <input type="text" [(ngModel)]="queryString" id="search" placeholder="Search products here..." (input)="searchSelectedData(queryString)">
+    <img src="assets/images/add-button.png" (click)="openAddProductModal();">
+  </div>
+  <div class="product-type-select">
+    <span>Product type: </span>
+    <select [(ngModel)]="selected" (ngModelChange)="onSelect(selected)">
+      <option value='all'>All product types</option>
+      <option *ngFor="let type of productType" [value]="type">{{type}}</option>
+    </select>
+  </div>
+  <div class="products-table">
+    <table (clickOutside)="onClickedOutside($event)">
+      <tr>
+        <th>MODEL</th>
+        <th>NAME</th>
+        <th>SKU</th>
+        <th>QTY</th>
+        <th>PRICE</th>
+      </tr>
+      <tr 
+        *ngFor="let productInfo of selectedData | sort:'productName'; let i = index;"
+        [ngStyle]="{'background-color': selectedRows.includes(productInfo.sku) ? '#dcdbdb':'#f5f5f5'}"
+        (click)="onParentRowSelect(productInfo, i)"
+        (dblclick)="sendIndividualProduct(productInfo)"
+      >
+        <td>{{productInfo.model}}</td>
+        <td>{{productInfo.productName}}</td>
+        <td>{{productInfo.sku}}</td>
+        <td><input [(ngModel)]="productInfo.qty"></td>
+        <td>$ <input [(ngModel)]="productInfo.unitPrice"></td>
+      </tr>
+    </table>
+  </div>
+  <div class="btn-insert-project" (click)="sendProducts()">
+    INSERT INTO PROJECT
+  </div>
+</div>
+
+<div class="add-product-modal-wrapper" *ngIf="showAddProductModal"></div>
+<div class="add-product-modal"  [ngClass]="{'show-add-product-modal': !addProductModalCollapsed, 'hide-add-product-modal': addProductModalCollapsed }">
+  <app-addproductmodal [showAddProductModal]="showAddProductModal" [addProductModalCollapsed]="addProductModalCollapsed" [productsInfoAll]="productsInfoAll"></app-addproductmodal>
+</div>
+
+
+<div class="attachment-modal-wrapper" *ngIf="!addAttachmentModalCollapsed"></div>
+<div class="attachment-modal"  [ngClass]="{'show-attachment-modal': !addAttachmentModalCollapsed, 'hide-attachment-modal': addAttachmentModalCollapsed }">
+  <div class="header">
+    <span>ATTACHMENTS</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="closeModal()" />
+  </div>
+  <div class="accessories-alternatives edit-variant">
+    <div class="accessories">
+      <span>Accessories</span>
+      <input [(ngModel)]="accQueryString" placeholder="Search for a product" (input)="startSearch()">
+      <table class="acc-table">
+        <tr>
+          <th>SKU</th>
+          <th>PRODUCT NAME</th>
+          <th>MODEL</th>
+          <th>BRAND</th>
+          <th>QTY</th>
+          <th>PRICE</th>
+          <th>OPTIONS</th>
+        </tr>
+        <tr *ngFor="let acc of addedAccList; let i = index;">
+          <td>
+            <div class="accessory-sku" >
+              <div class="check-box" [ngClass]="getSkuCheckColor(acc)"></div>
+              <span>{{acc.skuNumber}}</span>
+            </div>
+          </td>
+          <td>{{acc.productName}}</td>
+          <td>{{acc.modelNumber}}</td>
+          <td>{{acc.brand}}</td>
+          <td><input [(ngModel)]="acc.qty" ></td>
+          <td class="calcedPrice">
+            $ <input value="{{acc.friendPrice * acc.qty}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
+            <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.friendPrice * acc.qty | number: '1.2-2'}}</span>
+          
+          </td>
+          <td>
+            <div class="td-option">
+              <span>{{acc.optionType}}</span>
+              <img src="assets/images/garbage.png" (click)="removeAcc(i, acc)">
+            </div>
+          </td>
+        </tr>
+      </table>
+      <!-- Select product to add accessory from productsInfoAll -->
+      <div class="search-modal" [ngClass]="{'show-modal': !searchModalCollapsed, 'hide-modal': searchModalCollapsed}" (clickOutside)="removeSearchModal();">
+        <div class="search-modal-content">
+          <table>
+            <tr *ngFor="let product of productsInfoAll | SearchPipe: accQueryString : searchableList; let i = index;" (click)="addToAccessories(product)">
+              <td><img src="{{product.imgUrl}}" alt=""></td>
+              <td>{{product.productName}}</td>
+              <td>{{product.sku}}</td>
+              <td>{{product.model}}</td>
+              <td>{{product.productType}}</td>
+              <td>$ {{product.total | number: '1.2-2'}}</td>
+            </tr>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="alternatives">
+      <span>Alternatives</span>
+      <input [(ngModel)]="alterQueryString" placeholder="Search for a product" (input)="startAlterSearch()">
+      <table class="alter-table">
+        <tr>
+          <th>SKU</th>
+          <th>PRODUCT NAME</th>
+          <th>MODEL</th>
+          <th>BRAND</th>
+          <th>QTY</th>
+          <th>PRICE</th>
+        </tr>
+        <tr *ngFor="let alter of addedAlterList; let i = index;">
+          <td>{{alter.skuNumber}}</td>
+          <td>{{alter.productName}}</td>
+          <td>{{alter.modelNumber}}</td>
+          <td>{{alter.brand}}</td>
+          <td><input [(ngModel)]="alter.qty" ></td>
+          <td >
+            <div class="calcedPrice">
+              <div>
+                $ <input value="{{alter.friendPrice * alter.qty}}" name="inputField" type="number" *ngIf="alterPriceEditable" (blur)="alterPriceEditable=false">
+                <span *ngIf="!alterPriceEditable" (click)="alterPriceEditable=true">{{ alter.friendPrice * alter.qty | number: '1.2-2'}}</span>
+                
+              </div>
+              <img src="assets/images/garbage.png" (click)="removeAlter(i, alter)">
+            </div>
+          </td>
+        </tr>
+      </table>
+      <div class="search-modal" [ngClass]="{'show-modal': !searchAlterModalCollapsed, 'hide-modal': searchAlterModalCollapsed}" (clickOutside)="removeSearchModal();">
+        <div class="search-modal-content">
+          <table>
+            <tr *ngFor="let product of productsInfoAll | SearchPipe: alterQueryString : searchableList; let i = index;" (click)="addToAlternatives(product)">
+              <td><img src="{{product.imgUrl}}" alt=""></td>
+              <td>{{product.productName}}</td>
+              <td>{{product.sku}}</td>
+              <td>{{product.model}}</td>
+              <td>{{product.productType}}</td>
+              <td>$ {{product.total | number: '1.2-2'}}</td>
+            </tr>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+    <div class="btn-section" >
+      <button class="cancel-btn" (click)="closeModal()">
+        Cancel
+      </button>
+      <button class="save-btn" (click)="saveAttachmentModal()">
+        Save
+      </button>
+    </div>
+  </div>
+</div>

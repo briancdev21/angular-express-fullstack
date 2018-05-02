@@ -1,0 +1,173 @@
+<div class="content">
+  <div class="expand-send">
+    <div class="button" (click)="expandAll()">Expand</div>
+    <div class="send-proposal button">Send Proposal</div>
+  </div>
+  
+  <div class="edit-btns">
+    <span>Mass edit: </span>
+    <div class="button" (click)="editPrice()">Edit Price</div>
+    <div class="button" (click)="editDiscount()">Edit Discount</div>
+    <div class="button" (click)="editCategory()">Edit Category</div>
+    <div class="button" (click)="editSubCategory()">Edit Subcategory</div>
+  </div>
+</div>
+
+<!-- Price Edit Modal -->
+
+<div class="modal-wrapper" *ngIf="showPriceModal" (click)="priceModalCollapsed=true; showPriceModal=false"></div>
+<div class="price-modal common"  [ngClass]="{'show-modal': !priceModalCollapsed, 'hide-modal': priceModalCollapsed }">
+  <div class="header">
+    <span>Price Edit</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="priceModalCollapsed=true; showPriceModal=false" />
+  </div>
+
+  <div class="main-content" >
+    <span>Set a mass pricing rule</span>
+    <div class="pricing-rule">
+      <div class="effected-category">
+        <span>Pricing Category</span>
+        <select>
+          <option value="">Choose pricing category</option>
+        </select>
+      </div>
+      <div class="effect-type">
+        <div>
+          <input name="radio-price" type="radio" [checked]="true" value="amountPrice" #amountPrice (click)="onPriceSelectionChange(amountPrice.value)">
+          <label>Amount</label>
+        </div>
+        <div>
+          <input name="radio-price" type="radio" value="percentPrice" #percentPrice (click)="onPriceSelectionChange(percentPrice.value)">
+          <label>Percentage</label>
+        </div>
+      </div>
+      <div class="total-adjust">
+        <span>Total Adjustment</span>
+        <select [(ngModel)]="priceAdjustSelected">
+          <option value="increase" selected >Increase by</option>
+          <option value="decrease">decrease by</option>
+        </select>
+        <div class="amount">
+          <span *ngIf="showPriceChangeSign">$</span>
+          <span *ngIf="!showPriceChangeSign">%</span>
+          <input [(ngModel)]="queryString" placeholder="0" type="number">
+        </div>
+      </div>
+    </div>
+    <div class="btn-section" >
+      <button class="cancel-btn" (click)="cancelPriceChange()"  >
+        Cancel
+      </button>
+      <button class="save-btn" (click)="savePriceChange()" >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Discount Modal -->
+
+<div class="modal-wrapper" *ngIf="showDiscountModal" (click)="discountModalCollapsed=true; showDiscountModal=false"></div>
+<div class="discount-modal common"  [ngClass]="{'show-modal': !discountModalCollapsed, 'hide-modal': discountModalCollapsed }">
+  <div class="header">
+    <span>Price Edit</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="discountModalCollapsed=true; showDiscountModal=false" />
+  </div>
+
+  <div class="main-content" >
+    <span>Set a mass discount</span>
+    <div class="discount-rule">
+      
+      <div class="effect-type">
+        <div>
+          <input name="radio-discount" type="radio" [checked]="true" value="amountDiscount" #amountDiscount (click)="onDiscountSelectionChange(amountDiscount.value)">
+          <label>Amount</label>
+        </div>
+        <div>
+          <input name="radio-discount" type="radio" value="percentDiscount" #percentDiscount (click)="onDiscountSelectionChange(percentDiscount.value)">
+          <label>Percentage</label>
+        </div>
+      </div>
+      <div class="total-adjust">
+        <span>Total Adjustment</span>
+        <select [(ngModel)]="discountAdjustSelected">
+          <option value="increase" selected >Increase by</option>
+          <option value="decrease">decrease by</option>
+        </select>
+        <div class="amount">
+          <span *ngIf="showDiscountChangeSign">$</span>
+          <span *ngIf="!showDiscountChangeSign">%</span>
+          <input [(ngModel)]="discountAmount" placeholder="0" type="number">
+        </div>
+      </div>
+    </div>
+    <div class="btn-section" >
+      <button class="cancel-btn" (click)="cancelDiscountChange()"  >
+        Cancel
+      </button>
+      <button class="save-btn" (click)="saveDiscountChange()"  >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Category Modal -->
+
+<div class="modal-wrapper" *ngIf="showCategoryModal" (click)="categoryModalCollapsed=true; showCategoryModal=false"></div>
+<div class="category-modal common"  [ngClass]="{'show-modal': !categoryModalCollapsed, 'hide-modal': categoryModalCollapsed }">
+  <div class="header">
+    <span>Price Edit</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="categoryModalCollapsed=true; showCategoryModal=false" />
+  </div>
+
+  <div class="main-content" >
+    <span>Set a mass category</span>
+    <div class="category-rule">
+      <span>Change category to</span>
+      <select [(ngModel)]="changeCategorySelect">
+        <option value="" default disabled>Choose Category</option>
+        <option *ngFor="let category of proposalCategoryList" [value]="category">{{category}}</option>
+      </select>
+      <img src="assets/images/add-button.png">
+    </div>
+    <div class="btn-section" >
+      <button class="cancel-btn" (click)="cancelCategoryChange()"  >
+        Cancel
+      </button>
+      <button class="save-btn" (click)="saveCategoryChange()"  >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit SubCategory Modal -->
+
+<div class="modal-wrapper" *ngIf="showSubCategoryModal" (click)="subCategoryModalCollapsed=true; showSubCategoryModal=false"></div>
+<div class="sub-category-modal common"  [ngClass]="{'show-modal': !subCategoryModalCollapsed, 'hide-modal': subCategoryModalCollapsed }">
+  <div class="header">
+    <span>Price Edit</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="subCategoryModalCollapsed=true; showSubCategoryModal=false" />
+  </div>
+
+  <div class="main-content" >
+    <span>Set a mass subcategory</span>
+    <div class="sub-category-rule">
+      <span>Change category to</span>
+      <select  [(ngModel)]="changeSubCategorySelect">
+        <option value="" default disabled>Choose Subcategory</option>
+        <option *ngFor="let subCategory of proposalSubCategoryList" [value]="subCategory">{{subCategory}}</option>
+      </select>
+      <img src="assets/images/add-button.png">
+    </div>
+    <div class="btn-section" >
+      <button class="cancel-btn" (click)="cancelSubCategoryChange()"  >
+        Cancel
+      </button>
+      <button class="save-btn" (click)="saveSubCategoryChange()"  >
+        Save
+      </button>
+    </div>
+  </div>
+</div>

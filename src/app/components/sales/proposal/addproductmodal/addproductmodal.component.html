@@ -1,0 +1,548 @@
+<div class="header">
+  <span>ADDING PRODUCT</span>
+  <img class="close-btn" src="assets/images/x-sign-red.png" (click)="closeModal()" />
+</div>
+
+<div class="content add-product-modal" >
+  <tabs (currentTabChange)="tabChange($event)">
+    <tab tabTitle="PRODUCT DETAILS" [active]="tabActiveFirst">
+      <div class="tab-one">
+        <div class="modal-tab-content">
+          <div class="number-type-drag">
+            <div class="content-left">
+              <div>
+                <span>Model Number</span>
+                <input placeholder="Enter the product model number" [ngClass]="{'validation-required': invalidModelNumber}"  [(ngModel)]="addedProduct.modelNumber" [value]="addedProduct.modelNumber">
+              </div>
+              <div>
+                <span>Product Type</span>
+                <ng2-completer [(ngModel)]="addedProduct.type" [ngClass]="{'completer-validation-required': invalidProductType}" placeholder="Add or search for product type" [datasource]="types" [minSearchLength]="0" class="auto-comp"></ng2-completer>
+              </div>
+            </div>
+            <div class="content-right">
+              <image-upload
+                [max]="6"
+                [buttonCaption]="''"
+                [dropBoxMessage]="'Drage and Drop images here!'"
+                [extensions]="['jpg','png','gif']"
+                [class]="customClass"
+                (removed)="onRemoved($event)"
+                (uploadFinished)="onUploadFinished($event)"
+                (uploadStateChanged)="onUploadStateChanged($event)">
+              </image-upload>
+            </div>
+          </div>
+          <div class="supplier-brand">
+            <div>
+              <span>Supplier</span>
+              <ng2-completer [(ngModel)]="supplier" [ngClass]="{'completer-validation-required': invalidSupplier}" placeholder="Add or search for a supplier" [datasource]="suppliers" [minSearchLength]="0" class="auto-comp"></ng2-completer>
+            </div>
+            <div>
+              <span>Manufacturer</span>
+              <ng2-completer [(ngModel)]="brand" [ngClass]="{'completer-validation-required': invalidManufacturer}" placeholder="Add or search for manufacturer" [datasource]="brands" [minSearchLength]="0" class="auto-comp"></ng2-completer>
+            </div>
+          </div>
+          <div class="product-name">
+            <span>Product Name</span>
+            <input placeholder="Enter the product title" [ngClass]="{'validation-required': invalidProductName}" maxlength="100" [(ngModel)]="addedProduct.name" [value]="addedProduct.productName">
+          </div>
+          <div class="product-desc">
+            <span>Product Description</span>
+            <textarea placeholder="Enter product description" [ngClass]="{'validation-required': invalidProductDescription}" [(ngModel)]="addedProduct.productDesc" [value]="addedProduct.productDesc"></textarea>
+          </div>
+          <div class="tags" *ngIf="showAddProductModal">
+            <app-multikeywordselect [keywords]="productTags" placeholder="Enter tags for the product"></app-multikeywordselect>
+          </div>
+        </div>
+        
+        <div class="btn-section" >
+          <button class="cancel-btn" (click)="closeModal()"  >
+            Cancel
+          </button>
+          <button class="save-btn" (click)="clickNext('tab-one')"  >
+            Next
+          </button>
+        </div>
+      </div>
+    </tab>
+    <tab tabTitle="PRODUCT VALUES" class="tab-won" [active]="tabActiveSecond">
+      <div class="tab-two">
+        <div class="modal-tab-content">
+          <div class="type-measure-exp">
+            <div class="inventory-type">
+              <span>Inventory Type</span>
+              <select [(ngModel)]="addedProduct.inventoryType" (ngModelChange)="changeType(addedProduct.inventoryType)">
+                <option value="stockable">Stockable</option>
+                <option value="non-stockable">Non-Stockable</option>
+                <option value="service">Service</option>
+              </select>
+            </div>
+            <div class="measure-exp">
+              <div class="measure">
+                <span>Unit of Measure</span>
+                <div>
+                  <select [(ngModel)]="measure" >
+                    <option [value]="perUnit" selected>Per Unit</option>
+                    <option value="perGroup">Per Group</option>
+                    <option value="perBox">Per Box</option>
+                  </select>
+                  <input [(ngModel)]="addedProduct.measureCount" [value]="addedProduct.measureCount" type="number">
+                </div>
+              </div>
+              <div class="expiration">
+                <span>Expiration</span>
+                <div>
+                  <select [(ngModel)]="expirationType">
+                    <option [value]="none" selected>None</option>
+                    <option value="hours">Hours</option>
+                    <option value="days">Days</option>
+                    <option value="weeks">Weeks</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                  </select>
+                  <input [(ngModel)]="addedProduct.expiration" [value]="addedProduct.expiration" type="number">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stock-reorder-cost-lead">
+            <div class="stock-reorder">
+              <div class="stock-level">
+                <span>Initial Stock Level</span>
+                <div class="greyed-input">
+                  <input [ngClass]="{'greyed-layer': greyedNonStock}"  placeholder="Enter current stock of product" [(ngModel)]="addedProduct.initialStockLevel" [value]="addedProduct.initialStockLevel" type="number">
+                </div>
+              </div>
+              <div class="reorder-point">
+                <span>Re-Order Point</span>
+                <div class="greyed-input">
+                  <input [ngClass]="{'greyed-layer': greyedNonStock}" placeholder="Enter the re-order point" [(ngModel)]="addedProduct.reorderPoint" [value]="addedProduct.reorderPoint" type="number">
+                </div>
+               </div>
+            </div>
+            <div class="cost-lead">
+              <div class="unit-cost">
+                <span>Unit Cost</span>
+                <div>
+                  <div class="price-box">
+                    <span>$</span>
+                    <input 
+                      placeholder="00.00" 
+                      [(ngModel)]="addedProduct.unitCost" 
+                      [value]="addedProduct.unitCost" 
+                      type="number"
+                      (input)="changeCost()">
+                  </div>
+                  <select [(ngModel)]="addedProduct.currency" >
+                    <option [value]="cad" selected>CAD</option>
+                    <option value="usd">USD</option>
+                    <option value="euro">EURO</option>
+                  </select>
+                </div>
+              </div>
+              <div class="lead-time">
+                <span>Lead Time</span>
+                <div>
+                  <div class="greyed-select">
+                    <select [(ngModel)]="addedProduct.leadTime"  [ngClass]="{'greyed-layer': greyedService}">
+                      <option value="days" selected >Days</option>
+                      <option value="weeks">Weeks</option>
+                      <option value="months">Months</option>
+                      <option value="years">Years</option>
+                    </select>
+                  </div>
+                  <div class="greyed-input">
+                    <input [(ngModel)]="addedProduct.leadTimeCount" [value]="addedProduct.leadTimeCount" type="number"  [ngClass]="{'greyed-layer': greyedService}">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sku-supplier-upc">
+            <div class="sku-supplier">
+              <div class="sku">
+                <div>
+                  <span>SKU Number</span>
+                  <div class="auto">
+                    <img src="assets/images/switch.png" *ngIf="switch" (click)="autoGenerate()">
+                    <img src="assets/images/switch-off.png" *ngIf="!switch" (click)="autoGenerate()">
+                    <span>Auto-Generate</span>
+                  </div>
+                </div>
+                <input placeholder="Enter the sku number" [(ngModel)]="addedProduct.skuNumber" [value]="addedProduct.skuNumber" type="number">
+              </div>
+              <div class="supplier">
+                <span>Supplier Code</span>
+                <input placeholder="Enter the supplier code" [(ngModel)]="addedProduct.supplierCode" [value]="addedProduct.supplierCode">
+              </div>
+            </div>
+            <div class="upc">
+              <span>UPC Number</span>
+              <div class="greyed-input">
+                <input [ngClass]="{'greyed-layer': greyedService}" placeholder="Type in or scan for the UPC number" [(ngModel)]="addedProduct.upc" [value]="addedProduct.upc" type="number">
+              </div>
+            </div>
+          </div>
+          <div class="page-divider"></div>
+          <div class="friend-royalty-retail">
+            <div class="friend">
+              <span>{{pricingType[0]}}</span>
+              <div class="price-margin">
+                <div class="price-box">
+                  <span>$</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.friendPrice" 
+                    [value]="addedProduct.friendPrice" 
+                    (input)="calcFriend('price')" 
+                    type="number">
+                </div>
+                <div class="margin-box">
+                  <span>%</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.friendMargin" 
+                    [value]="addedProduct.friendMargin" 
+                    (input)="calcFriend('margin')" 
+                    type="number">
+                </div>
+              </div>
+            </div>
+            <div class="royalty">
+              <span>{{pricingType[1]}}</span>
+              <div class="price-margin">
+                <div class="price-box">
+                  <span>$</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.royaltyPrice" 
+                    [value]="addedProduct.royaltyPrice"
+                    (input)="calcRoyalty('price')" 
+                    type="number">
+                </div>
+                <div class="margin-box">
+                  <span>%</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.royaltyMargin" 
+                    [value]="addedProduct.royaltyMargin"
+                    (input)="calcRoyalty('margin')" 
+                    type="number">
+                </div>
+              </div>
+            </div>
+            <div class="retail">
+              <span>{{pricingType[2]}}</span>
+              <div class="price-margin">
+                <div class="price-box">
+                  <span>$</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.retailPrice" 
+                    [value]="retailPrice"
+                    (input)="calcRetail('price')" 
+                    type="number">
+                </div>
+                <div class="margin-box">
+                  <span>%</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.retailMargin" 
+                    [value]="retailMargin"
+                    (input)="calcRetail('margin')" 
+                    type="number">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="builders-wholesale-cost">
+            <div class="builders">
+              <span>{{pricingType[3]}}</span>
+              <div class="price-margin">
+                <div class="price-box">
+                  <span>$</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.buildersPrice"
+                    (input)="calcBuilders('price')" 
+                    type="number">
+                </div>
+                <div class="margin-box">
+                  <span>%</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.buildersMargin"
+                    (input)="calcBuilders('margin')" 
+                    type="number">
+                </div>
+              </div>
+            </div>
+            <div class="wholesale">
+              <span>{{pricingType[4]}}</span>
+              <div class="price-margin">
+                <div class="price-box">
+                  <span>$</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.wholesalePrice" 
+                    [value]="addedProduct.wholesalePrice"
+                    (input)="calcWholesale('price')" 
+                    type="number">
+                </div>
+                <div class="margin-box">
+                  <span>%</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.wholesaleMargin" 
+                    [value]="addedProduct.wholesaleMargin"
+                    (input)="calcWholesale('margin')" 
+                    type="number">
+                </div>
+              </div>
+            </div>
+            <div class="cost">
+              <span>{{pricingType[5]}}</span>
+              <div class="price-margin">
+                <div class="price-box">
+                  <span>$</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.costPrice" 
+                    [value]="addedProduct.costPrice"
+                    (input)="calcCost('price')" 
+                    type="number">
+                </div>
+                <div class="margin-box">
+                  <span>%</span>
+                  <input 
+                    placeholder="0.00" 
+                    [(ngModel)]="addedProduct.costMargin" 
+                    [value]="addedProduct.costMargin"
+                    (input)="calcCost('margin')" 
+                    type="number">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="btn-section" >
+          <button class="cancel-btn" (click)="clickBack('tab-two')"  >
+            Back
+          </button>
+          <button class="save-btn" (click)="clickNext('tab-two')">
+            Next
+          </button>
+        </div>
+      </div>
+    </tab>
+    <tab tabTitle="PRODUCT VARIANCE" class="tab-won" [active]="tabActiveThird" >
+      <div class="tab-three">
+        <div class="confirm-content" *ngIf="addVariantConfirm">
+          <span>Would you like to add variants to this product?</span>
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="moveToFourthTab()" >
+              No
+            </button>
+            <button class="save-btn" (click)="moveAddVariant()" [ngClass]="getBtnBackgoundColor()">
+              Yes
+            </button>
+          </div>
+          <span>What is a variant</span>
+          <span>Variants are for products that have the same fundemental information and <br />
+            images but have nuance differences, such as colour variation, size variation,<br />
+            and so on. If your product has these options, then it is beneficial to create <br />
+            variants which will help you quickly create variants without inputting<br />
+            information more than once.</span>
+        </div>
+        <div class="add-variant-content" *ngIf="addVariantContent">
+          <span>ADD VARIANT</span>
+          <div class="variant-value-content">
+            <div class="variant-options-section" *ngFor="let variant of addedProduct.variantValue; let i = index">
+              <span>Variant Values</span>
+              <div class="value-editable">
+                <div class="values-section">
+                  <app-multikeywordselect [(keywords)]="variant.data" ></app-multikeywordselect>
+                </div>
+                <img src="assets/images/garbage.png" (click)="removeVariantList(i);" class="remove-variants" [ngClass]="getVisibility(i)">
+              </div>
+            </div>
+            <div class="add-values-section" (click)="addNewVariants()">
+              <img src="assets/images/Add-Button.svg" >
+            </div>
+          </div>
+        </div>
+        <div class="edit-variant" *ngIf="editVariant">
+          <span>Edit Variant</span>
+          <table>
+            <tr>
+              <th>VARIANT NAME</th>
+              <th>SKU</th>
+              <th>COST</th>
+              <th>SUPPLIER CODE</th>
+              <th>PRICE ADJUST</th>
+              <th>UPC NUMBER</th>
+            </tr>
+            <tr *ngFor="let variant of addedProduct.variantProducts; let i = index">
+              <td>{{variant.name}}</td>
+              <td><input placeholder="" [(ngModel)]="variant.sku" ></td>
+              <td>
+                <div class="td-input">
+                  <span style="margin-right: 5px">$</span>
+                  <input placeholder="0.00" [(ngModel)]="variant.cost" type="number" *ngIf="variableCostEditable" (blur)="variableCostEditable=false">
+                  <span *ngIf="!variableCostEditable" (click)="variableCostEditable=true">{{variant.cost | number: '1.2-2'}}</span>
+                </div>  
+              </td>
+              <td><input placeholder="Supplier code here" [(ngModel)]="variant.supplierCode" ></td>
+              <td>
+                <div class="td-input">
+                  <span style="margin-right: 5px">$</span>
+                  <input placeholder="0.00" [(ngModel)]="variant.priceAdjust" type="number" *ngIf="variablePriceEditable" (blur)="variablePriceEditable=false">
+                  <span *ngIf="!variablePriceEditable" (click)="variablePriceEditable=true">{{variant.priceAdjust | number: '1.2-2'}}</span>
+                </div>
+              </td>
+              <td><input placeholder="UPC number here" [(ngModel)]="variant.upcNumber" ></td>
+            </tr>
+          </table>
+        </div>
+        <div class="btn-section" *ngIf="!addVariantContent">
+          <button class="cancel-btn rewwer" (click)="moveAddVariant()"  >
+            Back
+          </button>
+          <button class="save-btn" (click)="clickNext('tab-three')">
+            Next
+          </button>
+        </div>
+        <div class="btn-section" *ngIf="addVariantContent">
+          <button class="cancel-btn" (click)="moveToConfirm()"  >
+            Back
+          </button>
+          <button class="save-btn" (click)="moveToEdit()">
+            Next
+          </button>
+        </div>
+      </div>
+    </tab>
+    <tab tabTitle="ACCESSORIES & ALTERNATIVES" class="tab-won" [active]="tabActiveFour">
+      <div class="tab-four">
+        <div class="accessories-alternatives edit-variant">
+          <div class="accessories">
+            <span>Accessories</span>
+            <input [(ngModel)]="accQueryString" placeholder="Search for a product" (input)="startSearch()">
+            <table class="acc-table">
+              <tr>
+                <th>SKU</th>
+                <th>PRODUCT NAME</th>
+                <th>MODEL</th>
+                <th>BRAND</th>
+                <th>QTY</th>
+                <th>PRICE</th>
+                <th>OPTIONS</th>
+              </tr>
+              <tr *ngFor="let acc of addedAccList; let i = index;">
+                <td>
+                  <div class="accessory-sku" >
+                    <div class="check-box" [ngClass]="getSkuCheckColor(acc)"></div>
+                    <span>{{acc.skuNumber}}</span>
+                  </div>
+                </td>
+                <td>{{acc.productName}}</td>
+                <td>{{acc.modelNumber}}</td>
+                <td>{{acc.brand}}</td>
+                <td><input [(ngModel)]="acc.qty" ></td>
+                <td>
+                  <div class="acc-td-price">
+                    $ <input decimal value="{{acc.friendPrice * acc.qty}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
+                    <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.friendPrice * acc.qty | number: '1.2-2'}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="td-option">
+                    <select [(ngModel)]="acc.option">
+                      <option value="optional">Optional</option>
+                      <option value="auto">Automatically</option>
+                    </select>
+                    <img src="assets/images/garbage.png" (click)="removeAcc(i, acc)">
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <div class="search-modal" [ngClass]="{'show-modal': !searchModalCollapsed, 'hide-modal': searchModalCollapsed}" (clickOutside)="removeSearchModal();">
+              <div class="search-modal-content">
+                <table>
+                  <tr *ngFor="let product of productsInfoAll | SearchPipe: accQueryString : searchableList; let i = index;" (click)="addToAccessories(product)">
+                    <td><img src="{{product.imgUrl}}" alt=""></td>
+                    <td>{{product.productName}}</td>
+                    <td>{{product.sku}}</td>
+                    <td>{{product.model}}</td>
+                    <td>{{product.productType}}</td>
+                    <td>$ {{product.total | number: '2.2-2'}}</td>
+                  </tr>
+                </table>
+                
+              </div>
+            </div>
+          </div>
+
+          <div class="alternatives">
+            <span>Alternatives</span>
+            <input [(ngModel)]="queryString" placeholder="Search for a product" (input)="startAlterSearch()">
+            <table class="alter-table">
+              <tr>
+                <th>SKU</th>
+                <th>PRODUCT NAME</th>
+                <th>MODEL</th>
+                <th>BRAND</th>
+                <th>QTY</th>
+                <th>PRICE</th>
+              </tr>
+              <tr *ngFor="let alter of addedAlterList; let i = index;">
+                <td>{{alter.skuNumber}}</td>
+                <td>{{alter.productName}}</td>
+                <td>{{alter.modelNumber}}</td>
+                <td>{{alter.brand}}</td>
+                <td><input [(ngModel)]="alter.qty" ></td>
+                <td >
+                  <div class="calcedPrice">
+                    <div>
+                      $ <input value="{{alter.friendPrice * alter.qty}}" name="inputField" type="number" *ngIf="alterPriceEditable" (blur)="alterPriceEditable=false">
+                      <span *ngIf="!alterPriceEditable" (click)="alterPriceEditable=true">{{ alter.friendPrice * alter.qty | number: '1.2-2'}}</span>
+                      
+                    </div>
+                    <img src="assets/images/garbage.png" (click)="removeAlter(i, alter)">
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <div class="search-modal" [ngClass]="{'show-modal': !searchAlterModalCollapsed, 'hide-modal': searchAlterModalCollapsed}" (clickOutside)="removeSearchModal();">
+              <div class="search-modal-content">
+                <table>
+                  <tr *ngFor="let product of productsInfoAll | SearchPipe: queryString : searchableList; let i = index;" (click)="addToAlternatives(product)">
+                    <td><img src="{{product.imgUrl}}" alt=""></td>
+                    <td>{{product.productName}}</td>
+                    <td>{{product.sku}}</td>
+                    <td>{{product.model}}</td>
+                    <td>{{product.productType}}</td>
+                    <td>$ {{product.total | number: '2.2-2'}}</td>
+                  </tr>
+                </table>
+                
+              </div>
+            </div>
+          </div>
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="clickBack('tab-four')">
+              Back
+            </button>
+            <button class="save-btn" (click)="closeModal()">
+              Finish
+            </button>
+          </div>
+        </div>
+        
+        
+      </div>
+    </tab>
+  </tabs>
+</div>
+
+  

@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { TestComponent } from './components/test/test.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { ProposalComponent } from './components/proposal/proposal.component';
+import { ProposalComponent } from './components/sales/proposal/proposal.component';
 import { LeadsComponent } from './components/crm/leads/leads.component';
 import { OrderProfileComponent } from './components/orderprofile/orderprofile.component';
 import { DealsPipelineComponent } from './components/sales/dealspipeline/dealspipeline.component';
@@ -87,6 +87,7 @@ export const routes: Routes = [
       { path: 'deals', component: DealsPipelineComponent },
       { path: 'invoices', component: InvoicesComponent },
       { path: 'proposals', component: ProposalListComponent },
+      { path: 'proposal-details', component: ProposalComponent }
     ]
   },
   { path: 'pm', component: PmComponent,

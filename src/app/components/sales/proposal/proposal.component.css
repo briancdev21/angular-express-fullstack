@@ -2,7 +2,7 @@
   position: absolute;
   text-align: center;
   right: 0;
-  top: 69px;
+  top: 0;
   overflow: hidden;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .main-content-large {
-  left: 68px;
+  left: 0;
   transition: 0.2s all;
 }
 
@@ -27,6 +27,10 @@
   align-items: center;
 }
 
+.proposalInfo-top>* {
+  flex: 1;
+}
+
 .root {
   color: #72b3de;
   font-size: 1.8rem;
@@ -39,11 +43,12 @@
 }
 
 .contactName {
-  margin-left: -100px;
+  margin-left: -10px;
 }
 
 .proposalInfo-top>span:last-child {
-  color: #74ebcb;
+  color: #C5D92D;
+  text-align: right;
 }
 
 .proposalInfo-top>div:first-child {
@@ -80,10 +85,40 @@
 .proposalInfo-down>div {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
-app-addproposaltask, app-searchproject {
+app-submenu, .search-project-content {
   width: 30%;
+  margin-left: 15px;
+}
+
+:host ::ng-deep .proposal-content .form-horizontal {
+  padding-bottom: 0 !important;
+}
+
+.search-project-content {
+  border-bottom: 1px solid #95989a;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 10px;
+}
+
+.search-project-content input {
+	line-height: 25px;
+  border: none;
+	width: 100%;
+	padding-left: 10px;
+}
+
+.search-project-content input:focus {
+	outline: none;
+}
+
+.search-project-content input::-webkit-input-placeholder {
+	color: lightgray;
+	font-size: 1.6rem;
+	font-weight: 300;
 }
 
 .proposalInfo-down>div>span:first-child {
@@ -92,7 +127,13 @@ app-addproposaltask, app-searchproject {
 }
 
 .proposalInfo-down>div>span:last-child {
-  font-size: 1.7rem;
+  font-size: 1.9rem;
   color: #74ebcb;
 }
 
+
+@media screen and (max-width: 1650px) {
+  .proposalInfo-down>div>span:last-child {
+    font-size: 1.6rem;
+  }
+}

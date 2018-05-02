@@ -1,0 +1,291 @@
+<div class="btn-add-proposal" (click)="openAddProposalModal()">Add Proposal</div>
+
+<!-- ADD PROPOSAL MODAL VIEW -->
+
+<div class="add-proposal-modal-wrapper" *ngIf="showAddProposalModal" ></div>
+<div class="add-proposal-modal"  [ngClass]="{'show-modal': !addProposalModalCollapsed, 'hide-modal': addProposalModalCollapsed }">
+  <div class="header">
+    <span>ADD PROPOSAL</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addProposalModalCollapsed=true; showAddProposalModal=false" />
+  </div>
+
+  <div class="content" >
+    <tabs (currentTabChange)="tabChange($event)" >
+      <tab tabTitle="CLIENT DETAILS" [(active)]="tabActiveFirst">
+        <div class="tab-one">
+          <div class="name-col tab-row">
+            <div>
+              <span>Customer Name (*required)</span>
+              <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectCustomer($event)" [ngClass]="{'validation-required-name': invalidCustomerName}" [searchStr]="selectName"></app-in-customer-name>
+            </div>
+            <div class="collaborators">
+              <span>Collaborators (*required)</span>
+              <div>
+                <div class="followers"  (click)="editable=true;$event.stopPropagation()" *ngIf="proposalDetails.collaborators" [ngClass]="{'validation-required': invalidCollaborators}"> 
+                  <div class="follower" *ngFor="let user of proposalDetails.collaborators; let i = index" >
+                    <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editable=true;$event.stopPropagation()"/></a>
+                  </div> 
+                  <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+                    <ul>
+                      <span *ngIf="!proposalDetails.collaborators.length" class="type-here">Type collaborator's name</span>
+                      <li *ngFor="let user of proposalDetails.collaborators; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li style="background: none; width: 100%; margin: 0;">
+                        <input autocomplete [config]="config2" [items]="items2"
+                          (inputChangedEvent)="onInputChangedEvent($event)"
+                          (selectEvent)="onSelect($event)">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-acc tab-row">
+            <div>
+              <div class="desc">
+                <span>Project Management</span>
+                <div>
+                  <img src="assets/images/switch.png" *ngIf="switchIconManagement" (click)="clickIconManagement()">
+                  <img src="assets/images/switch-off.png" *ngIf="!switchIconManagement" (click)="clickIconManagement()">
+                  <span>Same as customer</span>
+                </div>
+              </div>
+              <app-in-customer-name [userList]="projectManagerList" (selectedUser)="onSelectProjectManagementContact($event)" [searchStr]="selectProject"></app-in-customer-name>
+            </div>
+
+            <div>
+              <div class="desc">
+                <span>Account Receivable</span>
+                <div>
+                  <img src="assets/images/switch.png" *ngIf="switchIconReceivable" (click)="clickIconReceivable()">
+                  <img src="assets/images/switch-off.png" *ngIf="!switchIconReceivable" (click)="clickIconReceivable()">
+                  <span>Same as customer</span>
+                </div>
+              </div>
+              <app-in-customer-name [userList]="accountReceivableList" (selectedUser)="onSelectAccountReceivable($event)" [searchStr]="selectReceivable"></app-in-customer-name>
+            </div>
+          </div>
+
+          <div class="other-pri tab-row">
+            <div>
+              <span>Other Associations</span>
+              <app-in-customer-name [userList]="associationList" (selectedUser)="onSelectAssociation($event)" [searchStr]="selectAssociation"></app-in-customer-name>
+            </div>
+            <div>
+              <span>Proposal Pricing (*required)</span>
+              <div>
+                <select [(ngModel)]="proposalDetails.pricing" [ngClass]="{'validation-required': invalidPricing}">
+                  <option value="" disabled>Choose proposal pricing</option>
+                  <option *ngFor="let price of proposalPricingList" [value]="price">{{price}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="name-type tab-row">
+            <div>
+              <span>Project Name (*required)</span>
+              <input placeholder="Enter Project Name" [(ngModel)]="proposalDetails.projectName" [ngClass]="{'validation-required': invalidProjectName}">
+            </div>
+            <div>
+              <span>Project Type</span>
+              <div>
+                <app-in-customer-name [userList]="projectTypeList" (selectedUser)="onSelectProjectType($event)" [searchStr]="selectType"></app-in-customer-name>
+              </div>
+            </div>
+          </div>
+
+          <div class="shipping-address ">
+            <div class="desc">
+              <span>Shipping Address (*required)</span>
+              <div>
+                <img src="assets/images/switch.png" *ngIf="switchIconShipping" (click)="clickIconShipping()">
+                <img src="assets/images/switch-off.png" *ngIf="!switchIconShipping" (click)="clickIconShipping()">
+                <span>Same as the customer profile</span>
+              </div>
+            </div>
+            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="proposalDetails.shippingAddress" [ngClass]="{'validation-required': invalidAddress}" >
+
+            <div class="city-state">
+              <input placeholder="Enter City" [(ngModel)]="proposalDetails.city" [ngClass]="{'validation-required': invalidCity}">
+              <input placeholder="Enter State" [(ngModel)]="proposalDetails.state" [ngClass]="{'validation-required': invalidState}">
+            </div>
+            <div class="country-zip">
+              <input placeholder="Enter Country" [(ngModel)]="proposalDetails.country" [ngClass]="{'validation-required': invalidCountry}">
+              <input placeholder="Enter Zipcode" [(ngModel)]="proposalDetails.zipcode" [ngClass]="{'validation-required': invalidZipcode}">
+            </div>
+          </div>
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="clickBack('tab-one')"  >
+              Cancel
+            </button>
+            <button class="save-btn" (click)="clickNext('tab-one')"  >
+              Next
+            </button>
+          </div>
+        </div>
+      </tab>
+      <tab tabTitle="PROJECT DETAILS" class="tab-won" [(active)]="tabActiveSecond">
+        <div class="tab-two">
+          <div class="dis-id tab-row">
+            <div class="discount">
+              <span>Discount</span>
+              <div>
+                <select [(ngModel)]="proposalDetails.discount.type">
+                  <option *ngFor="let type of ['$', '%']">{{type}}</option>
+                </select>
+                <input [(ngModel)]="proposalDetails.discount.amount" type="number">
+              </div>
+            </div>
+            <div>
+              <div class="desc">
+                <span>Project ID (*required)</span>
+                <div>
+                  <img src="assets/images/switch.png" *ngIf="switchIconAutoId" (click)="clickIconAutoId()">
+                  <img src="assets/images/switch-off.png" *ngIf="!switchIconAutoId" (click)="clickIconAutoId()">
+                  <span>Auto-generate project ID</span>
+                </div>
+              </div>
+              <input [(ngModel)]="proposalDetails.projectId" [ngClass]="{'validation-required': invalidProjectId}">
+            </div>
+          </div>
+
+          <div class="cate-subcate tab-row">
+            <div>
+              <span>Project Categories</span>
+              <div class="category-box">
+                <app-multikeywordselect [keywords]="proposalDetails.projectCategoriesAll" ></app-multikeywordselect>
+              </div>
+            </div>
+            <div>
+              <span>Project Subcategories</span>
+              <div class="subcategory-box">
+                <app-multikeywordselect [keywords]="proposalDetails.projectSubCategoriesAll" ></app-multikeywordselect>
+              </div>
+            </div>
+          </div>
+
+          <div class="comp-sche tab-row">
+            <div class="completion">
+              <span>Completion Date</span>
+              <app-in-createddatefield [(createdDate)]="proposalDetails.completionDate"></app-in-createddatefield>
+            </div>
+            <div class="schedule">
+              <div class="schedule-title">
+                <span>Payment Schedule (*required)</span>
+                <span>{{scheduleRemain}}%</span>
+              </div>
+              <div class="milestones" [ngClass]="{'validation-required': invalidSchedule}">
+                <app-schedulemultikeyword [(keywords)]="proposalDetails.paymentSchedule" (scheduleRemain)="getSchduleRemain($event)"></app-schedulemultikeyword>
+              </div>
+            </div>
+          </div>
+
+          <div class="account-project tab-row">
+            <div>
+              <span>Account Manager (*required)</span>
+              <div class="member-container">
+                <div class="followers" (click)="accountEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidAccountManager}"> 
+                  <div class="follower" *ngFor="let user of proposalDetails.accountManager; let i = index">
+                    <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="accountEditable=true;$event.stopPropagation()"/></a>
+                  </div> 
+                  <div class="edit-followers" *ngIf="accountEditable" (click)="accountEditable=true;$event.stopPropagation()" >
+                    <ul>
+                      <span *ngIf="!proposalDetails.accountManager.length" class="type-here">Type User's name</span>
+                      <li *ngFor="let user of proposalDetails.accountManager; let i = index">{{user.name}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li style="background: none; width: 100%; margin: 0;">
+                        <input autocomplete [config]="config2" [items]="items3"
+                          (inputChangedEvent)="onInputChangedEvent($event)"
+                          (selectEvent)="onSelectAccountManager($event)">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <span>Project Manager (*required)</span>
+              <div class="member-container">
+                <div class="followers" (click)="projectEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidProjectManager}"> 
+                  <div class="follower" *ngFor="let user of proposalDetails.projectManager; let i = index">
+                    <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="projectEditable=true;$event.stopPropagation()"/></a>
+                  </div> 
+                  <div class="edit-followers" *ngIf="projectEditable" (click)="projectEditable=true;$event.stopPropagation()" >
+                    <ul>
+                      <span *ngIf="!proposalDetails.projectManager.length" class="type-here">Type User's name</span>
+                      <li *ngFor="let user of proposalDetails.projectManager; let i = index">{{user.name}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li style="background: none; width: 100%; margin: 0;">
+                        <input autocomplete [config]="config2" [items]="items4"
+                          (inputChangedEvent)="onInputChangedEvent($event)"
+                          (selectEvent)="onSelectProjectManager($event)">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="design-custom tab-row">
+            <div>
+              <span>Designer</span>
+              <div class="member-container" (click)="designerEditable=true;$event.stopPropagation()">
+                <div class="followers" > 
+                  <div class="follower" *ngFor="let user of proposalDetails.designer; let i = index">
+                    <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="designerEditable=true;$event.stopPropagation()"/></a>
+                  </div> 
+                  <div class="edit-followers" *ngIf="designerEditable" (click)="designerEditable=true;$event.stopPropagation()" >
+                    <ul>
+                      <span *ngIf="!proposalDetails.designer.length" class="type-here">Type User's name</span>
+                      <li *ngFor="let user of proposalDetails.designer; let i = index">{{user.name}}<span (click)="removeDesigner(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li style="background: none; width: 100%; margin: 0;">
+                        <input autocomplete [config]="config2" [items]="items5"
+                          (inputChangedEvent)="onInputChangedEvent($event)"
+                          (selectEvent)="onSelectDesigner($event)">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <!-- for right empty space -->
+            </div>
+          </div>
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="clickBack('tab-two')"  >
+              Back
+            </button>
+            <button class="save-btn" (click)="clickNext('tab-two')" >
+              Next
+            </button>
+          </div>
+        </div>
+      </tab>
+      <tab tabTitle="PROJECT SCOPE" class="tab-won" [(active)]="tabActiveThird">
+        <div class="tab-three">
+          <!-- <app-submenu (mOutputData)="Submit_Inventory_Data($event)"></app-submenu>
+          <div class="added-tasks"></div> -->
+          <span class="editor-title">Scope of work (*required)</span>
+          <div [froalaEditor] class="form-editor" [ngClass]="{'validation-required': invalidScopeEditorContent}" [(ngModel)]="scopeEditorContent"></div>
+          <span class="editor-title">Client notes</span>
+          <div [froalaEditor] class="form-editor">Hello, Froala!</div>
+          <span class="editor-title">Internal notes</span>
+          <div [froalaEditor] class="form-editor">Hello, Froala!</div>
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="clickBack('tab-three')"  >
+              Back
+            </button>
+            <button class="save-btn" (click)="finishAddProposal()"  >
+              Finished
+            </button>
+          </div>
+        </div>
+      </tab>
+      
+    </tabs>
+  </div>
+
+  
+</div>

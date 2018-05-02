@@ -16,12 +16,12 @@
     </div>
     <div class="project-category">
       <span>Category</span>
-      <app-multikeywordselect [keywords]="projectCategory" ></app-multikeywordselect>
+      <app-multikeywordselect [keywords]="projectCategory" (sendKeywords)="getCategories($event)"></app-multikeywordselect>
     </div>
 
     <div class="subproject-category">
       <span>Subcategory</span>
-      <app-multikeywordselect [keywords]="projectSubCategory" ></app-multikeywordselect>
+      <app-multikeywordselect [keywords]="projectSubCategory" (sendKeywords)="getSubCategories($event)" ></app-multikeywordselect>
     </div>
 
     <div class="client-notes">
@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<div class="proposal-info-wrapper" *ngIf="showProposalInfo" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"></div>
+<div class="proposal-info-wrapper" *ngIf="showProposalInfo"></div>
 <div class="proposal-info"  [ngClass]="{'show-proposal-info': !ProposalInfoModalCollapsed, 'hide-proposal-info': ProposalInfoModalCollapsed }">
   <div class="header">
     <span>Proposal Infomation</span>
@@ -57,12 +57,26 @@
           <div class="name-col tab-row">
             <div>
               <span>Customer Name</span>
-              <input placeholder="Enter Customer Name" [value]="proposalInfo.contactName">
+              <input placeholder="Enter Customer Name" [(ngModel)]="projectDetails.customerName" [ngClass]="{'validation-required': invalidCustomerName}">
             </div>
             <div class="collaborators">
               <span>Collaborators</span>
               <div>
-                <img src="{{proposalInfo.owner.imageUrl}}" alt="">
+                <div class="followers" (click)="editable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidCollaborators}"> 
+                  <div class="follower" *ngFor="let user of projectDetails.collaborators; let i = index">
+                    <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editable=true;$event.stopPropagation()"/></a>
+                  </div> 
+                  <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+                    <ul>
+                      <li *ngFor="let user of projectDetails.collaborators; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li style="background: none; width: 100%; margin: 0;">
+                        <input autocomplete [config]="config2" [items]="items2"
+                          (inputChangedEvent)="onInputChangedEvent($event)"
+                          (selectEvent)="onSelect($event)">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -111,12 +125,12 @@
           <div class="name-type tab-row">
             <div>
               <span>Project Name</span>
-              <input placeholder="Enter Project Name" [value]="proposalInfo.projectName">
+              <input placeholder="Enter Project Name" [(ngModel)]="projectDetails.projectName" [ngClass]="{'validation-required': invalidProjectName}">
             </div>
             <div>
               <span>Project Type</span>
               <div>
-                <input placeholder="Enter Project Type" [value]="proposalInfo.projectType">
+                <input placeholder="Enter Project Type" [(ngModel)]="proposalInfo.projectType">
               </div>
             </div>
           </div>
@@ -130,22 +144,22 @@
                 <span>Same as the customer profile</span>
               </div>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [value]="shippingAddress">
+            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="projectDetails.shippingAddress" [ngClass]="{'validation-required': invalidAddress}" >
 
             <div class="city-state">
-              <input placeholder="Enter City">
-              <input placeholder="Enter State">
+              <input placeholder="Enter City" [(ngModel)]="projectDetails.city" [ngClass]="{'validation-required': invalidCity}">
+              <input placeholder="Enter State" [(ngModel)]="projectDetails.state" [ngClass]="{'validation-required': invalidState}">
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country">
-              <input placeholder="Enter Zipcode">
+              <input placeholder="Enter Country" [(ngModel)]="projectDetails.country" [ngClass]="{'validation-required': invalidCountry}">
+              <input placeholder="Enter Zipcode" [(ngModel)]="projectDetails.zipcode" [ngClass]="{'validation-required': invalidZipcode}">
             </div>
           </div>
           <div class="btn-section" >
             <button class="cancel-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
               Cancel
             </button>
-            <button class="save-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
+            <button class="save-btn" (click)="saveClientDetails()" >
               Save
             </button>
           </div>
@@ -157,15 +171,15 @@
             <div class="discount">
               <span>Discount</span>
               <div>
-                <select>
-                  <option *ngFor="let type of projectDetails.discount.type">{{type}}</option>
+                <select [(ngModel)]="projectDetails.discount.type">
+                  <option *ngFor="let type of ['$', '%']">{{type}}</option>
                 </select>
-                <input value="0">
+                <input [(ngModel)]="projectDetails.discount.amount">
               </div>
             </div>
             <div>
               <span>Project ID</span>
-              <input value="{{projectDetails.projectId}}">
+              <input [(ngModel)]="projectDetails.projectId" [ngClass]="{'validation-required': invalidProjectId}">
             </div>
           </div>
 
@@ -173,13 +187,13 @@
             <div>
               <span>Project Categories</span>
               <div class="category-box">
-                <span *ngFor="let category of projectDetails.projectCategoriesAll">{{category}}</span>
+                <app-multikeywordselect [keywords]="projectDetails.projectCategoriesAll"></app-multikeywordselect>
               </div>
             </div>
             <div>
               <span>Project Subcategories</span>
               <div class="subcategory-box">
-                <span *ngFor="let subCategory of projectDetails.projectSubCategoriesAll">{{subCategory}}</span>
+                <app-multikeywordselect [keywords]="projectDetails.projectSubCategoriesAll"></app-multikeywordselect>
               </div>
             </div>
           </div>
@@ -193,12 +207,12 @@
               </div>
             </div>
             <div class="schedule">
-              <div>
-                <span>Payment Schedule</span>
-                <span>0%</span>
+              <div class="schedule-title">
+                <span>Payment Schedule (*required)</span>
+                <span>{{scheduleRemain}}%</span>
               </div>
-              <div class="milestones">
-                <span *ngFor="let schedule of projectDetails.paymentSchedule">{{schedule}}%</span>
+              <div class="milestones" [ngClass]="{'validation-required': invalidSchedule}">
+                <app-schedulemultikeyword [(keywords)]="projectDetails.paymentSchedule" (scheduleRemain)="getSchduleRemain($event)"></app-schedulemultikeyword>
               </div>
             </div>
           </div>
@@ -207,13 +221,41 @@
             <div>
               <span>Account Manager</span>
               <div class="member-container">
-                <img src="{{proposalInfo.owner.imageUrl}}" alt="">
+                <div class="followers" (click)="accountEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidAccountManager}"> 
+                  <div class="follower" *ngFor="let user of projectDetails.accountManager; let i = index">
+                    <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="accountEditable=true;$event.stopPropagation()"/></a>
+                  </div> 
+                  <div class="edit-followers" *ngIf="accountEditable" (click)="accountEditable=true;$event.stopPropagation()" >
+                    <ul>
+                      <li *ngFor="let user of projectDetails.accountManager; let i = index">{{user.name}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li style="background: none; width: 100%; margin: 0;">
+                        <input autocomplete [config]="config2" [items]="items3"
+                          (inputChangedEvent)="onInputChangedEvent($event)"
+                          (selectEvent)="onSelectAccountManager($event)">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
             <div>
               <span>Project Manager</span>
               <div class="member-container">
-                <img src="{{projectDetails.projectManager.imageUrl}}" alt="">
+                <div class="followers" (click)="projectEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidProjectManager}"> 
+                  <div class="follower" *ngFor="let user of projectDetails.projectManager; let i = index">
+                    <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="projectEditable=true;$event.stopPropagation()"/></a>
+                  </div> 
+                  <div class="edit-followers" *ngIf="projectEditable" (click)="projectEditable=true;$event.stopPropagation()" >
+                    <ul>
+                      <li *ngFor="let user of projectDetails.projectManager; let i = index">{{user.name}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li style="background: none; width: 100%; margin: 0;">
+                        <input autocomplete [config]="config2" [items]="items4"
+                          (inputChangedEvent)="onInputChangedEvent($event)"
+                          (selectEvent)="onSelectProjectManager($event)">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -222,7 +264,21 @@
             <div>
               <span>Designer</span>
               <div class="member-container">
-                <img src="{{projectDetails.designer.imageUrl}}" alt="">
+                <div class="followers" > 
+                  <div class="follower" *ngFor="let user of projectDetails.designer; let i = index">
+                    <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="designerEditable=true;$event.stopPropagation()"/></a>
+                  </div> 
+                  <div class="edit-followers" *ngIf="designerEditable" (click)="designerEditable=true;$event.stopPropagation()" >
+                    <ul>
+                      <li *ngFor="let user of projectDetails.designer; let i = index">{{user.name}}<span (click)="removeDesigner(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li style="background: none; width: 100%; margin: 0;">
+                        <input autocomplete [config]="config2" [items]="items5"
+                          (inputChangedEvent)="onInputChangedEvent($event)"
+                          (selectEvent)="onSelectDesigner($event)">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
             <div>
@@ -234,7 +290,7 @@
             <button class="cancel-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
               Cancel
             </button>
-            <button class="save-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
+            <button class="save-btn" (click)="saveProjectDetails()"  >
               Save
             </button>
           </div>
