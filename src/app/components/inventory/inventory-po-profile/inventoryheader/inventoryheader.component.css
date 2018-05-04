@@ -1,0 +1,36 @@
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.days-to-duedate {
+  color: #C5D92D;
+  font-size: 1.5em;
+  font-weight: 200;
+}
+
+.inventory-header {
+  height: 60px;
+  color: #95989A;
+  padding-left: 2em;
+  padding-right: 5em;
+  border-bottom: solid 1px #d3d3d3;
+}
+
+.title {
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+}
+
+.button, .button:active {
+  background: #b2f4e3;
+  color: #95989A;
+  border-radius: 3px;
+  padding: 0.3em 1em;
+  font-size: 10px;
+  margin-left: 2em;
+  text-decoration: none;
+  cursor: pointer;
+}

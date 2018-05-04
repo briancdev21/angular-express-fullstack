@@ -1,0 +1,19 @@
+<div class="text-align-left" >
+  <div class="selector-label" >
+    <span class="mr-40" >Shipping address</span>
+    <app-po-switcher label="Use customer address" (switchChanged)="onSwitchChanged($event)" class="po-switch" ></app-po-switcher>
+  </div>
+  <div>
+    <div>
+      <input type="text" placeholder="address" [(ngModel)]="shippingAddress.address" />
+    </div>
+    <div class="flex" >
+        <input type="text" class="mr-15" placeholder="Calgary" [(ngModel)]="shippingAddress.street" />
+        <input type="text" class="ml-15" placeholder="Alberta" [(ngModel)]="shippingAddress.city" />
+    </div>
+    <div class="flex" >
+        <input type="text" class="mr-15" placeholder="Country" [(ngModel)]="shippingAddress.country" />
+        <input type="text" class="ml-15" placeholder="Post code" [(ngModel)]="shippingAddress.postcode" />
+    </div>
+  </div>
+</div>

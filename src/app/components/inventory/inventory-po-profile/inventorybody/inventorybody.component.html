@@ -1,0 +1,40 @@
+<div>
+  <div class="main-content" >
+    <div class="main__info flex" >
+      <div class="left-sidebar">
+        <div class="flex aligntop" >
+          <app-po-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser()" ></app-po-customer-name>
+          <app-po-project-selector class="flex1 ml-15" [projects]="projects" ></app-po-project-selector>
+        </div>
+        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" ></app-shippingaddress>
+      </div>
+      <div class="right-sidebar">
+        <app-po-orderidfield [po_id]="po_id" ></app-po-orderidfield>
+        <app-po-createddatefield [(createdDate)]="createdDate" ></app-po-createddatefield>
+        <app-po-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" ></app-po-termsfield>
+        <app-po-duedatefield [(dueDate)]="dueDate" ></app-po-duedatefield>
+        <app-po-locationsfield [locations]="locations" [(selectedLocation)]="selectedLocation" ></app-po-locationsfield>
+      </div>
+    </div>
+    <div class="product__table">
+      <app-po-table [(productDetails)]="productDetails" (priceChange)="onPriceChanged()" ></app-po-table>
+    </div>
+    <div class="sub__info">
+      <div class="flex" >
+        <div class="internal-memo">
+          <app-po-internalmemo [(internalMemo)]="internalMemo" ></app-po-internalmemo>
+        </div>
+        <div class="notetosupplier">
+            <app-po-notetosupplier [(noteToSupplier)]="noteToSupplier" ></app-po-notetosupplier>
+        </div>
+      </div>
+      <div class="bill-count" >
+          <app-po-subtotalproducts [subtotalproducts]="subtotalproducts" ></app-po-subtotalproducts>
+          <app-po-discount [discounttype]="discountType" [discountamount]="discountAmount" (discountChange)="onTotalPriceChange($event)" ></app-po-discount>
+          <app-po-freightcosts [(freightcosts)]="freightcosts" (freightcostsChange)="onTotalPriceChange($event)" ></app-po-freightcosts>
+          <app-po-taxes [taxes]="taxes" ></app-po-taxes>
+          <app-po-totalamountdue [totalamountdue]="totalamountdue" ></app-po-totalamountdue>
+      </div>
+    </div>
+  </div>
+</div>
