@@ -1,9 +1,10 @@
-#header {
+::ng-deep #header {
   position: fixed;
   bottom: 0;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  right: 0;
+  left: 68px;
   border: solid 1px lightgray;
   padding: 0.8em;
   text-align: center;
@@ -36,7 +37,7 @@
 }
 
 /* #main of Footer */
-#main {
+::ng-deep #main {
   position: fixed;
   bottom: 0;
   right: 0;
