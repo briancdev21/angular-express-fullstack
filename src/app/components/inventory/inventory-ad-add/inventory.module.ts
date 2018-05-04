@@ -1,0 +1,50 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import {NgxDnDModule} from '@swimlane/ngx-dnd';
+
+import InventoryHeaderComponent from './inventoryheader/inventoryheader.component';
+import InventoryComponent from './inventory.component';
+import InventoryBodyComponent from './inventorybody/inventorybody.component';
+import { Ng2CompleterModule } from 'ng2-completer';
+import { TRDateTransferFieldComponent } from './components/tr-datetransferfield/tr-datetransferfield.component';
+
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+
+import { POTableComponent } from './components/po-table/po-table.component';
+import InventoryFooterComponent from './inventoryfooter/inventoryfooter.component';
+import { TRInternalMemoComponent } from './components/tr-internalmemo/tr-internalmemo.component';
+import { ADAdjustmentIdFieldComponent } from './components/ad-adjustmentid/ad-adjustmentid.component';
+@NgModule({
+  declarations: [
+    InventoryHeaderComponent,
+    InventoryComponent,
+    InventoryBodyComponent,
+    POTableComponent,
+    InventoryFooterComponent,
+    ADAdjustmentIdFieldComponent,
+    TRDateTransferFieldComponent,
+    TRInternalMemoComponent
+    ],
+    imports: [
+    CommonModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    Ng2CompleterModule,
+    FormsModule,
+    NgxDnDModule
+  ],
+    exports: [
+    InventoryComponent,
+    InventoryHeaderComponent,
+    InventoryBodyComponent,   
+    POTableComponent,  
+    InventoryFooterComponent,
+    ADAdjustmentIdFieldComponent,
+    TRDateTransferFieldComponent,
+    TRInternalMemoComponent
+  ],
+  providers: []
+})
+export class InventoryADModule { }

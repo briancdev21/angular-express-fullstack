@@ -1,0 +1,25 @@
+<div>
+  <div class="main-content" >
+    <div class="main__info flex" >
+      <div class="left-sidebar">
+        <div class="flex aligntop" >
+          ADJUST YOUR PRODUCTS
+        </div>
+      </div>
+      <div class="right-sidebar">
+        <app-ad-adjustmentid [ad_id]="ad_id" ></app-ad-adjustmentid>
+        <app-tr-datetransferfield [(transferdate)]="transferdate" ></app-tr-datetransferfield>
+      </div>
+    </div>
+    <div class="product__table">
+      <app-po-table [(productDetails)]="productDetails" ></app-po-table>
+    </div>
+    <div class="sub__info">
+      <div class="flex" >
+        <div class="internal-memo">
+          <app-tr-internalmemo [(internalMemo)]="internalMemo" ></app-tr-internalmemo>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
