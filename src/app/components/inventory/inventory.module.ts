@@ -24,7 +24,10 @@ import { SupplierProfileCmpModule } from './supplierprofile/supplierprofile.modu
 import { InventoryService } from './inventory.service';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
-
+import { InventoryADModule } from './inventory-ad-add/inventory.module';
+import { InventoryModule } from './inventory-po-profile/inventory.module';
+import { InventoryTRAddModule } from './inventory-tr-add/inventory.module';
+import { InventoryPOAddModule } from './inventory-po-add/inventory.module';
 
 @NgModule({
   declarations: [
@@ -55,7 +58,11 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     PurchaseOrderListCmpModule,
     SuppliersCmpModule,
     DragulaModule,
-    SupplierProfileCmpModule
+    SupplierProfileCmpModule,
+    InventoryADModule,
+    InventoryModule,
+    InventoryTRAddModule,
+    InventoryPOAddModule
   ],
   exports: [
     MatInputModule,

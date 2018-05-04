@@ -54,6 +54,10 @@ import { SupplierProfileComponent } from './components/inventory/supplierprofile
 
 
 import { CommonComponent } from './components/common/common.component';
+import InventoryPoAddComponent from './components/inventory/inventory-po-add/inventory.component';
+import InventoryTrAddComponent from './components/inventory/inventory-tr-add/inventory.component';
+import InventoryAdAddComponent from './components/inventory/inventory-ad-add/inventory.component';
+import InventoryPoProfileComponent from './components/inventory/inventory-po-profile/inventory.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -95,6 +99,10 @@ export const routes: Routes = [
       { path: '', redirectTo: 'inventory-dashboard', pathMatch: 'full' },
       { path: 'inventory-dashboard', component: InventoryDashboardComponent },
       { path: 'stock-control', component: PurchaseOrderListComponent },
+      { path: 'stock-control/add-purchase-order', component: InventoryPoAddComponent },
+      { path: 'stock-control/add-transfer', component: InventoryTrAddComponent },
+      { path: 'stock-control/add-adjustment', component: InventoryAdAddComponent },
+      { path: 'stock-control/purchaseorder/:id', component: InventoryPoProfileComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'suppliers', component: SuppliersComponent },
       { path: 'supplier-profile', component: SupplierProfileComponent }

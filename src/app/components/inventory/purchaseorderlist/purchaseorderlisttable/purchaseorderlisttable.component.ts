@@ -39,7 +39,7 @@ export class PurchaseOrderListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../purchaseorder/' + id]);
+    this.router.navigate(['/inventory/stock-control/purchaseorder/' + id]);
   }
 
   sortArray(field) {
