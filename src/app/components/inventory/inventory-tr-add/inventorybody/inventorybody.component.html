@@ -1,0 +1,30 @@
+<div>
+  <div class="main-content" >
+    <div class="main__info flex" >
+      <div class="left-sidebar">
+        <div class="flex aligntop" >
+          CHOOSE YOUR PRODUCTS
+        </div>
+      </div>
+      <div class="right-sidebar">
+        <app-ad-transferid [tr_id]="tr_id" ></app-ad-transferid>
+        <app-tr-datetransferfield [(transferdate)]="transferdate" ></app-tr-datetransferfield>
+      </div>
+    </div>
+    <div class="product__table">
+      <app-po-table [(productDetails)]="productDetails" ></app-po-table>
+    </div>
+    <div class="sub__info">
+      <div>
+        <app-tr-locationtofrom
+          [locations]="locations"
+          [(selectedFromLocation)]="selectedFromLocation"
+          [(selectedToLocation)]="selectedToLocation" >
+        </app-tr-locationtofrom>
+        <div class="internal-memo">
+          <app-tr-internalmemo [(internalMemo)]="internalMemo" ></app-tr-internalmemo>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

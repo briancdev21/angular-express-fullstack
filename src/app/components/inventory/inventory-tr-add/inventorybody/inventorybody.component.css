@@ -1,0 +1,84 @@
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.main__info, .sub__info {
+  padding-left: 2em;
+  padding-right: 5em;
+  font-size: 0.8em;
+}
+
+.left-sidebar {
+  width: 60%;
+  color: #95989a;
+  font-size: 2em;
+}
+
+.right-sidebar {
+  margin-top: 20px;
+  width: 40%;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+}
+
+.internal-memo {
+  text-align: left;
+  min-height: 300px;
+  margin: 5px; 
+}
+
+.notetosupplier {
+  text-align: left;
+  min-height: 300px;
+  margin: 15px; 
+}
+
+.flex1 {
+  flex: 1;
+  margin-top: 5px;
+}
+
+.ml-15 {
+  margin-left: 15px;
+}
+
+.mr-15 {
+  margin-right: 15px;
+}
+
+.aligntop {
+  align-items: flex-start;
+}
+
+app-shippingaddress {
+  margin-top: 5px;
+}
+
+.product__table {
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.sub__info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.bill-count {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  margin-top: 10px;
+}
+
+.main__info {
+  align-items: flex-end;
+}
+
+app-po-discount {
+  width: 100%;
+}
