@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-addinvoicefooter',
@@ -25,12 +26,16 @@ export default class AddInvoiceFooterComponent {
   startDate: any;
   endDate: any;
 
-  onCancel() {
+  constructor(private router: Router) {
 
   }
 
-  onSave() {
+  cancelInvoice() {
+    this.router.navigate(['./sales/invoices']);
+  }
 
+  saveInvoice() {
+    this.router.navigate(['./sales/invoices']);
   }
   onSwitchChanged(val) {
 
@@ -44,13 +49,5 @@ export default class AddInvoiceFooterComponent {
       this.showEndBy = false;
       this.showEndAfter = true;
     }
-  }
-
-  clickSaveInvoice() {
-
-  }
-
-  clickCancelInvoice() {
-
   }
 }

@@ -121,7 +121,7 @@ export default class AddInvoiceBodyComponent implements OnInit {
     console.log(user);
   }
 
-  onSelectUser(val: string) {
+  onSelectUser(val) {
     console.log('val', val);
   }
 

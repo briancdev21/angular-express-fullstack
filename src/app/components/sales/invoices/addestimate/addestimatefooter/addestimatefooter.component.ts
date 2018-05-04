@@ -1,4 +1,5 @@
 import { Component, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-addestimatefooter',
@@ -21,12 +22,16 @@ export default class AddEstimateFooterComponent {
    totalprice: false
   };
 
-  onCancel() {
+  constructor(private router: Router) {
 
   }
 
-  onSave() {
+  cancelInvoice() {
+    this.router.navigate(['./sales/invoices']);
+  }
 
+  saveInvoice() {
+    this.router.navigate(['./sales/invoices']);
   }
   onSwitchChanged(val) {
 

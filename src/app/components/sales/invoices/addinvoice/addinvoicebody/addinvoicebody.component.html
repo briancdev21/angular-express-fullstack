@@ -3,7 +3,7 @@
     <div class="main__info flex" >
       <div class="left-sidebar">
         <div class="flex aligntop" >
-          <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser()" [searchStr]="selectItem" ></app-in-customer-name>
+          <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" [searchStr]="selectItem" ></app-in-customer-name>
           <div class="email-address">
             <span>Email address</span>
             <app-multiemailselect [keywords]="emailAddresses"></app-multiemailselect>
