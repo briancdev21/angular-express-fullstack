@@ -100,7 +100,7 @@ export class AddLeadComponent implements OnInit {
   invalidContactEmail = false;
   wrongEmailFormat = false;
 
-  constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService, 
+  constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
     private filterService: FilterService ) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.keywords = [];
