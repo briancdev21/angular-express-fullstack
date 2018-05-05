@@ -210,14 +210,11 @@ export class AddLeadComponent implements OnInit {
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
-    this.invalidAddress = false;
     this.invalidCity = false;
     this.invalidProvince = false;
     this.invalidCountry = false;
     this.invalidPostalCode = false;
     if (event === 'PERSON') {
-      this.typeAccountTypeChange = false;
-    } else if (event === 'BUSINESS') {
       this.typeAccountTypeChange = true;
     }
   }
