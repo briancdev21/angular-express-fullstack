@@ -2,6 +2,7 @@ import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, } from '
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-addlead',
@@ -67,14 +68,18 @@ export class AddLeadComponent implements OnInit {
   usd: any;
   Test1: any;
   Test2: any;
-
-  constructor(private completerService: CompleterService) {
+  currencyList = [];
+  constructor(private completerService: CompleterService, private sharedService: SharedService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.keywords = ['control4', 'theatre', 'renovation'];
     this.contactAssociation = ['Danny Shibley', 'John Stephen'];
   }
 
   ngOnInit() {
+    this.sharedService.getCurrencies().subscribe(data => {
+      this.currencyList = data.results;
+      console.log('currency List: ', data.results);
+    });
   }
 
   onAccountTypeChange(event) {
@@ -83,9 +88,9 @@ export class AddLeadComponent implements OnInit {
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
-    if (event === 'individual') {
+    if (event === 'PERSON') {
       this.typeAccountTypeChange = false;
-    } else if (event === 'business') {
+    } else if (event === 'BUSINESS') {
       this.typeAccountTypeChange = true;
     }
   }
@@ -112,7 +117,7 @@ export class AddLeadComponent implements OnInit {
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
-    if (this.businessType === 'individual') {
+    if (this.businessType === 'PERSON') {
       if (this.firstName && this.lastName && this.primaryNumber) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
@@ -127,7 +132,7 @@ export class AddLeadComponent implements OnInit {
           this.invalidPrimaryNumber = true;
         }
       }
-    } else if (this.businessType === 'business') {
+    } else if (this.businessType === 'BUSINESS') {
       if (this.businessName) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
@@ -169,7 +174,7 @@ export class AddLeadComponent implements OnInit {
         this.invalidAccountType = false;
         this.invalidPrimaryNumber = false;
 
-        if (this.businessType === 'individual') {
+        if (this.businessType === 'PERSON') {
           if (this.firstName && this.lastName && this.primaryNumber) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
@@ -189,7 +194,7 @@ export class AddLeadComponent implements OnInit {
               this.invalidPrimaryNumber = true;
             }
           }
-        } else if (this.businessType === 'business') {
+        } else if (this.businessType === 'BUSINESS') {
           if (this.businessName) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
@@ -234,6 +239,14 @@ export class AddLeadComponent implements OnInit {
       this.showAddLeadModal = false;
       this.tabActiveFirst = true;
       this.tabActiveSecond = false;
+      const newLead = {
+        currencyId: 1,
+        termId: 1,
+        sourceId: 1,
+        pricingCategoryId: 1,
+        keywords: this.keywords,
+        
+      };
     } else {
       if (!this.defaultCurrency) {
         this.invalidDefaultCurrency = true;

@@ -27,7 +27,7 @@ getLeadsList (limit: number = 50, offset: number = 0): Observable<any> {
   return this.http.get(url);
 }
 
-CreateLead (body) {
+CreateLead (body): Observable<any> {
   const url = `${apiUrl}crm/leads/`;
   console.log('body: ', body);
   return this.http.post<any>(url, body)

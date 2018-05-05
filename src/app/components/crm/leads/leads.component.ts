@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
 import { Router } from '@angular/router';
+import { CrmService } from '../../../services/crm.service';
 
 @Component({
   selector: 'app-leads',
@@ -27,7 +28,7 @@ export class LeadsComponent implements OnInit {
   filterAvaliableTo: any;
   filterName = '';
 
-  constructor( private filterService: FilterService, private router: Router  ) {
+  constructor( private filterService: FilterService, private router: Router, private crmService: CrmService  ) {
     this.filterAvaliableTo = 'everyone';
   }
 
@@ -115,6 +116,10 @@ export class LeadsComponent implements OnInit {
   ];
   ngOnInit() {
     this.backUpLeads = this.leadsListInfo;
+    this.crmService.getLeadsList().subscribe(data => {
+      console.log('333', data);
+      // this.leadsListInfo = data.results;
+    });
   }
 
   getFilter(event) {
