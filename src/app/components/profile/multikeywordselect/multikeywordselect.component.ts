@@ -28,9 +28,9 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.editable = false;
-    // this.sharedService.getKeywords().subscribe(data => {
-    //   console.log('keywords: ', data);
-    // });
+    this.sharedService.getKeywords().subscribe(data => {
+      this.keywords = data.results;
+    });
   }
 
   ngAfterViewInit() {
@@ -38,16 +38,23 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
   }
 
   addNewKeyword(data) {
-    this.keywords.push(data);
     this.newKeyword = '';
     this.sendKeywords.emit(this.keywords);
     this.sharedService.createKeyword({'name': data})
-    .subscribe((res) => console.log('post data: ', res));
+    .subscribe((res) => {
+      this.sharedService.getKeywords().subscribe(keywords => {
+        this.keywords = keywords.results;
+      });
+    });
   }
 
-  deleteKeyword(data) {
-    this.sharedService.deleteKeyword({'name': data})
-    .subscribe((res) => console.log('post data: ', res));
+  deleteKeyword(id) {
+    this.sharedService.deleteKeyword(id)
+    .subscribe(res => {
+      this.sharedService.getKeywords().subscribe(data => {
+        this.keywords = data.results;
+      });
+    });
   }
 
 }
