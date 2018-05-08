@@ -180,6 +180,17 @@ html, body {
   margin-right: 10px;
 }
 
+@media all and (max-width: 1500px) {
+	.breadcrumb a {
+		padding-left: 40px;
+  }
+  .breadcrumb__inner {
+    margin-left: 36px;
+  }
+  .breadcrumb a:after {
+    width: 80px;
+  }
+}
 
 @media all and (max-width: 1000px) {
 	.breadcrumb {
