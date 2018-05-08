@@ -18,6 +18,8 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
   @Output() sendKeywords: EventEmitter<any> = new EventEmitter;
   editable: boolean;
   newKeyword: string;
+  keywordsNameList = [];
+  keywordsList = [];
 
   constructor(private renderer: Renderer, private sharedService: SharedService) {
     const comp = this;
@@ -29,7 +31,9 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     this.editable = false;
     this.sharedService.getKeywords().subscribe(data => {
-      this.keywords = data.results;
+      this.keywordsList = data.results;
+      this.keywordsNameList = data.results.map(k => k.name);
+      console.log('123', this.keywordsList);
     });
   }
 
@@ -39,13 +43,17 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
 
   addNewKeyword(data) {
     this.newKeyword = '';
-    this.sendKeywords.emit(this.keywords);
-    this.sharedService.createKeyword({'name': data})
-    .subscribe((res) => {
-      this.sharedService.getKeywords().subscribe(keywords => {
-        this.keywords = keywords.results;
+    if (!this.keywordsNameList.includes(data)) {
+      this.sharedService.createKeyword({'name': data})
+      .subscribe((res) => {
+        this.keywords.push(res.data);
+        this.sendKeywords.emit(this.keywords);
       });
-    });
+    } else {
+      const pos = this.keywordsNameList.indexOf(data);
+      this.keywords.push(this.keywordsList[pos]);
+      this.sendKeywords.emit(this.keywords);
+    }
   }
 
   deleteKeyword(id) {
