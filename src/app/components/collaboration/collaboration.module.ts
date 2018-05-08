@@ -16,11 +16,14 @@ import { PersonalScheduleComponent } from './personalschedule/personalschedule.c
 import { TeamScheduleComponent } from './teamschedule/teamschedule.component';
 import { WorkOrdersComponent } from './workorders/workorders.component';
 import { CollaborationDashboardComponent } from './collaborationdashboard/collaborationdashboard.component';
+import { PersonalUpcomingEventsComponent } from './personalschedule/personalupcomingevents/personalupcomingevents.component';
 import { WorkOrdersCmpModule } from './workorders/workorders.module';
 
 import { CollaborationService } from './collaboration.service';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 
 
 @NgModule({
@@ -28,7 +31,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     PersonalScheduleComponent,
     TeamScheduleComponent,
     WorkOrdersComponent,
-    CollaborationDashboardComponent
+    CollaborationDashboardComponent,
+    PersonalUpcomingEventsComponent
   ],
   imports: [
     BrowserModule,
@@ -49,13 +53,15 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ReactiveFormsModule,
     MatCheckboxModule,
     WorkOrdersCmpModule,
-    DragulaModule
+    DragulaModule,
+    Ng4GeoautocompleteModule
   ],
   exports: [
     MatInputModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCheckboxModule,
+    PersonalUpcomingEventsComponent
   ],
   providers: [CollaborationService]
 })

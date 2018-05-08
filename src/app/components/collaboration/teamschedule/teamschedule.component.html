@@ -1,1 +1,40 @@
-<h1 style="margin-top: 0; padding-top: 100px;"> Team Schedule page</h1>
+<div class="schedule-content" [ngClass]="{'cal-small': showSidebar}">
+  <div class="resources-available">
+    <span>Your Team</span>
+    <div class="resources-list">
+      <div *ngFor="let resource of yourTeam; let i = index;" class="resource-style">
+        <div class="item" (click)="selectUser(resource)"> 
+          <img [src]="resource.imageUrl">
+          <!-- <input [(ngModel)]="resource.name" (focus)="editingTitle()"> -->
+          <span>{{resource.name}}</span>
+          <div [ngStyle]="{'background-color': resource.themeColor}" class="heading-img" ></div>
+        </div>
+        <div class="colors-panel" *ngIf="changingColor">
+          <div [ngStyle]="{'background-color': color}" *ngFor="let color of eventColors" (click)="selectColor(color)"></div>
+        </div>
+      </div>
+    </div>
+    <span>Your Third Party Team</span>
+    <div class="resources-list">
+      <div *ngFor="let resource of thirdPartyTeam; let j = index;" class="resource-style">
+        <div class="item"  (click)="selectUser(resource)"> 
+          <img [src]="resource.imageUrl">
+          <!-- <input [(ngModel)]="resource.name" (focus)="editingTitle()"> -->
+          <span>{{resource.name}}</span>
+          <div [ngStyle]="{'background-color': resource.themeColor}" class="heading-img" ></div>
+        </div>
+        <div class="colors-panel" *ngIf="changingColor">
+          <div [ngStyle]="{'background-color': color}" *ngFor="let color of eventColors" (click)="selectColor(color)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="calendar-view">
+    <div class="angular2-fullcalendar"></div>
+  </div>
+</div>
+<div class="sidebar-wrapper" *ngIf="showSidebar" (click)="closeDetailedSidebar(); $event.stopPropagation();"></div>
+<div class="event-sidebar" [hidden]="!showSidebar">
+  <app-personalupcomingevents [upcomingModalInfo]="upcomingModalInfo" (updatedEvent)="getUpdatedEvent($event)"></app-personalupcomingevents>
+</div>
