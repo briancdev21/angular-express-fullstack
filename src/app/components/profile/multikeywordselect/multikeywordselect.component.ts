@@ -67,13 +67,6 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
       this.keywords.push(this.keywordsList[pos]);
       this.sendKeywords.emit(this.keywords);
     }
-    this.sendKeywords.emit(this.keywords);
-    this.sharedService.createKeyword({'name': data})
-    .subscribe((res) => {
-      this.sharedService.getKeywords().subscribe(keywords => {
-        this.keywords = keywords.results;
-      });
-    });
   }
 
   deleteKeyword(id) {
