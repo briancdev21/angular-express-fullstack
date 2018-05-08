@@ -1,0 +1,112 @@
+<div class="modal-box">
+  <div class="date">
+		<h4 [owlDateTimeTrigger]="eventDate">{{upcomingModalInfo.week}}</h4>
+		<h4 [owlDateTimeTrigger]="eventDate">{{upcomingModalInfo.date}}</h4>
+		<div class="event-time-sec">
+			<span>{{upcomingModalInfo.start}} to </span><span *ngIf="!timeClicked" (click)="timeClicked=true">{{upcomingModalInfo.end}}</span>
+			<input *ngIf="timeClicked" type="time" [(ngModel)]="upcomingModalInfo.end" (blur)="changeTimeFormat(upcomingModalInfo.end)">
+		</div>
+	</div>
+	<div class="time-picker-sec">
+		<input [owlDateTime]="eventDate" (dateTimeChange)="changeEventDate($event)" [(ngModel)]="upcomingModalInfo.start" class="change-event-date">
+		<owl-date-time [pickerType]="'calendar'" #eventDate></owl-date-time>
+	</div>
+	<div class="title">
+		<div class="circle"></div>
+		<input placeholder="Title" [(ngModel)]="upcomingModalInfo.title" (click)="showInfo()">
+	</div>
+	<div class="switch">
+		<img src="assets/images/time.png">
+		<div class="full-width">
+			<span>All Day</span>
+			<img src="assets/images/switch.png" *ngIf="switchIcon" (click)="switchIcon=!switchIcon">
+			<img src="assets/images/switch-off.png" *ngIf="!switchIcon" (click)="switchIcon=!switchIcon">
+		</div>
+	</div>
+	<div class="duration" *ngIf="!switchIcon">
+		<span>Duration is</span> <input [(ngModel)]="upcomingModalInfo.duration" class="change-duration"> <span>hr</span><span *ngIf="upcomingModalInfo.duration > 1">s</span>
+	</div>
+	
+	<div *ngFor="let user of upcomingModalInfo.users" class="selected-users">
+		<img *ngIf="user" [src]="user.imageUrl">
+		<span>{{user.name}}</span>
+	</div>
+	<div class="users-sec">
+		<img src="assets/images/man.png">
+		<div class="full-width">
+			<ng2-completer [(ngModel)]="selectedUser" placeholder="People" [datasource]="availableUserList" [minSearchLength]="0" class="auto-comp" (selected)="onSelectUser($event)"></ng2-completer>
+			<img class="arrow-right" src="assets/images/arrow-right.png">
+		</div>
+	</div>
+
+	<div class="">
+		<img src="assets/images/placeholder.png">
+		<div class="full-width">
+			<div class="geo-auto">
+				<ng4geo-autocomplete (componentCallback)="autoCompleteCallback($event)" [userSettings]="geoSettings"></ng4geo-autocomplete>
+			</div>
+			<a href="https://maps.google.com/maps?q={{selectedLocation}}" target="_blank">
+				<img class="arrow-right" src="assets/images/arrow-right.png">
+			</a>
+		</div>
+	</div>
+
+	<div class="description">
+		<img src="assets/images/attachment.png">
+		<textarea class="full-width" placeholder="Description"></textarea>
+	</div>
+	
+	<div class="repeat">
+		<img src="assets/images/repeat.png">
+		<div class="full-width">
+			<span>Repeat</span>
+			<div class="select-sec">
+				<select [(ngModel)]="upcomingModalInfo.repeat" class="select-style">
+					<option value="None" default selected>None</option>
+					<option value="Every Day" >Every Day</option>
+					<option value="Every Week">Every Week</option>
+					<option value="Every Month">Every Month</option>
+					<option value="Every Year">Every Year</option>
+				</select>
+				<img class="arrow-right" src="assets/images/arrow-right.png">
+			</div>
+		</div>
+	</div>
+
+	<div class="alert-sec">
+		<img src="assets/images/alarm.png">
+		<div class="full-width">
+			<span>Alert</span>
+			<div class="select-sec">
+				<select [(ngModel)]="upcomingModalInfo.alert" class="select-style">
+					<option value="30 minutes before" default selected>30 minutes before</option>
+					<option value="None">None</option>
+					<option value="At time of event">At time of event</option>
+					<option value="5 minutes before">'5 minutes before'</option>
+					<option value="10 minutes before">10 minutes before</option>
+					<option value="15 minutes before">15 minutes before</option>
+					<option value="30 minutes before">30 minutes before</option>
+					<option value="1 hour before">1 hour before</option>
+					<option value="2 hours before">2 hours before</option>
+					<option value="1 day before">1 day before</option>
+					<option value="2 days before">2 days before</option>
+				</select>
+				<img class="arrow-right" src="assets/images/arrow-right.png">
+			</div>
+		</div>
+	</div>
+
+	<div class="showAs">
+		<img src="assets/images/smartphone.png">
+		<div class="full-width">
+			<span>Show As</span>
+			<div class="select-sec">
+				<select [(ngModel)]="upcomingModalInfo.showAs" class="select-style">
+					<option value="Free" >Free</option>
+					<option value="Busy" default selected>Busy</option>
+				</select>
+				<img class="arrow-right" src="assets/images/arrow-right.png">
+			</div>
+		</div>
+	</div>
+</div>  
