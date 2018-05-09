@@ -1,4 +1,14 @@
 <div class="content">
+  <div class="info">
+    <div class="info-top">
+      <h1>John Moss</h1>
+      <h1>NU8802-0159</h1>
+    </div>
+    <div class="info-down">
+      <span class="change-log">Change Logs</span>
+      <div class="add-btn">Add Change Log</div>
+    </div>
+  </div>
   <table>
     <tr>
       <th (click)="sortArray('logId')">CHANGE LOG ID</th>
@@ -11,7 +21,7 @@
       <th (click)="sortCreateDateArray('lastUpdated')">LAST UPDATED</th>
       <th (click)="sortCreateDateArray('dateApproved')">DATE APPROVED</th>
     </tr>
-    <tr *ngFor="let log of changelogListInfo; let i = index" (click)="redirectTo(pending.projectNumber)">
+    <tr *ngFor="let log of changelogListInfo; let i = index" (click)="redirectTo()">
       <td>{{log.logId}}</td>
       <td>{{log.logName}}</td>
       <td>Level {{log.priority}}</td>
