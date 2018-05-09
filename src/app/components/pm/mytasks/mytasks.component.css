@@ -1,0 +1,499 @@
+.yellow {
+  background: #F0D7BD;
+}
+
+.green {
+  background: #DFE5B0;
+}
+
+.red {
+  background: #F0C9C9;
+}
+
+.blue {
+  background: #CBE0ED;
+}
+
+/* Customize the label (the container) */
+.custom-checkbox {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin: 0;
+  height: 20px;
+}
+
+/* Hide the browser's default checkbox */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 2px solid lightgray;
+}
+
+/* On mouse-over, add a grey background color */
+.custom-checkbox:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.custom-checkbox .checkmark:after {
+  left: 5px;
+  top: 3px;
+  width: 7px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.main-content {
+  position: absolute;  
+  text-align: center;
+  color: #464646;
+}
+
+.main-content-small {
+  transition: 0.2s all;
+  right: 0;
+  left: 200px;
+}
+
+.main-content-large {
+  right: 0;
+  left: 0;
+  transition: 0.2s all;
+}
+
+.panel-table span {
+  color: #95989A
+}
+
+.panel-table {
+  width: 100%;
+  background: white;
+  padding: 20px;
+  display: flex;
+  overflow: auto;
+}
+
+.panel-row {
+  display: flex;
+  width: 100%;
+  overflow: auto;
+  flex-flow: row nowrap;
+  height: 88vh;
+  align-items: flex-start;
+}
+
+.draggable-column {
+  min-width: 25%;
+  border-radius: 2px;
+  border: 1px solid #D3D3d3;
+  margin: 10px;
+  background: #F3F3F3;
+  box-shadow: 0 0 15px #B3B3B3;
+  overflow: auto;
+  max-height: calc(100% - 20px);
+  position: relative;
+}
+
+.panel-title {
+  width: 100%;
+  height: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+}
+
+.panel-content {
+  margin-top: 60px;
+  max-height: calc(100vh - 275px);
+  overflow: auto;
+  margin-bottom: 60px;
+}
+
+.panel-title span {
+  pointer-events: none; /* no event for this element */
+}
+
+.draggable-task img {
+  width: 20px;
+  height: 20px;
+}
+
+.draggable-task  input {
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.draggable-task {
+  margin: 7px;
+  box-shadow: 1px 3px 7px #D3D3d3;
+  background: white;
+  cursor: pointer;
+}
+
+.draggable-task .task-content {
+  display: flex;
+  flex-direction: column;
+  padding: 7px 15px;
+}
+
+.draggable-task .task-title {
+  display: flex;
+  font-size: 18px;
+  align-items: center;
+}
+
+.draggable-task .task-title input {
+  color: #95989A;
+  width: 100%;
+}
+
+.draggable-task .task-title input::placeholder {
+  color: #D3D3D3;
+}
+
+.draggable-task .task-title input:focus {
+  border-bottom: 1px solid #D3D3D3;
+}
+
+.draggable-task .task-owner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 3px 0 5px 0;
+  position: relative;
+}
+
+.task-owner input {
+  text-align: right;
+}
+
+.task-path {
+  font-size: 11px;
+}
+
+.draggable-task  input::-webkit-outer-spin-button,
+.draggable-task  input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.draggable-task .task-bottom {
+  border-top: 1px solid #D3D3D3;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding-top: 7px;
+  align-items: center;
+}
+
+.duration {
+  display: flex;
+  align-items: center;
+  margin-left: -50px;
+}
+
+.duration input {
+  width: 25px;
+  text-align: right;
+  margin-right: 3px;
+}
+
+.dueDate {
+  width: 100px;
+}
+
+.task-actions {
+  position: relative;
+}
+
+.add-task {
+  width: 100%;
+  height: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  cursor: pointer;
+  background: #D3D3d3;
+  padding-left: 32px;
+  justify-content: flex-start;
+  box-shadow: 0 4px 10px #95989A;
+  position: absolute;
+  bottom: 0;
+  margin: 0;
+}
+
+.add-task img {
+  width: 20px;
+  height: 20px;
+  margin-right: 20px;
+}
+
+.add-task span {
+  color: #656565;
+}
+
+.due-date{
+  display: flex;
+}
+
+/* Only shows the span */
+.due-date input {
+  width: 1px;
+  height: 17px;
+  padding-left: 5px;
+  font-size: 12px;
+  background: white;
+  background-position: left 6px center;
+  background-size: 22%;
+  color: #95989A;
+  visibility: hidden;
+}
+
+.due-date span {
+  width: 110px;
+  text-align: left;
+}
+
+.task-bottom .due-date-empty {
+  background-image: url(/assets/images/calendar-plain.png);
+  background-repeat: no-repeat;
+  cursor: pointer;
+  background-size: 19%;
+}
+
+.blured {
+  opacity: 0.2;
+}
+
+.new-panel {
+  min-width: 26%;
+  height: 58px;
+  background: #F0C9C9;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px #95989A;
+  margin-bottom: 5px;
+  padding: 10px;
+}
+
+.new-panel img {
+  width: 20px;
+  height: 20px;
+  margin-right: 20px;
+}
+
+.new-title-input {
+  width: 100%;
+  height: 100%;
+}
+
+.new-title-input input {
+  width: 100%;
+  height: 100%;
+  opacity: .9;
+  padding: 10px
+}
+
+.show-modal {
+  height: auto;
+	visibility: visible;
+}
+
+.hide-modal {
+  height: 1px;
+	visibility: hidden;
+}
+
+/* Owner Modal CSS */
+
+.owner-modal {
+  position: absolute;
+	top: 20px;
+	margin: 0;
+	left: 3%;
+	z-index: 9993;
+	background-color: white;
+	border-radius: 5px;
+  box-shadow: 0px 0px 22px 3px lightgrey;
+  color: #95989A;
+  padding: 3px;
+}
+
+/* Dependency Modal CSS */
+
+.dependency-modal {
+  position: absolute;
+	top: 24px;
+	margin: 0;
+	right: 60%;
+	z-index: 9993;
+	background-color: white;
+	border-radius: 5px;
+  box-shadow: 0px 0px 22px 3px lightgrey;
+  color: #95989A;
+}
+
+.dependency-numbers {
+  position: absolute;
+  top: 4px;
+  left: -12px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 42px;
+  font-size: 9px;
+}
+
+/* followers section css */
+
+.followers {
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  color: #95989A;
+  position: relative;
+  justify-content: flex-start;
+  margin-top: 1px solid #D3D3D3;
+}
+
+.followers img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: darkcyan;
+  margin: 3px;
+}
+
+.followers .add-follower {
+  background-image: '';
+  cursor: pointer;
+  height: 0px;
+}
+
+.edit-followers {
+  position: absolute;
+  top: -3px;
+  border: solid 1px lightgray;
+  background: white;
+  padding: 5px;
+  z-index: 9;
+  min-width: 120px;
+  right: 0;
+}
+
+.edit-followers ul {
+  margin: 0;
+  padding: 0;
+}
+
+.edit-followers li {
+  list-style: none;
+  display: inline-block;
+  padding: 3px;
+  background: lightblue;
+  border-radius: 1px;
+  margin: 2px;
+}
+
+.edit-followers input {
+  width: 100%;
+}
+
+.followers>span {
+  padding-right: 15px;
+  font-size: 13px;
+}
+
+:host ::ng-deep .followers .autocomplete input {
+  width: 100%;
+  border: 1px solid lightgray;
+}
+
+:host ::ng-deep .followers .autocomplete ul {
+  max-height: 100px;
+  overflow: auto;
+}
+
+:host ::ng-deep .followers .autocomplete ul li {
+  font-size: 11px;
+  line-height: 11px;
+  color: #646464;
+}
+
+.edit-followers input {
+  border: 1px solid lightgray;
+  background: white;
+  height: 20px;
+}
+
+.task-title textarea {
+  width: 100%;
+  resize: vertical;
+  border: none;
+  color: #95989A;
+  outline: none;
+}
+
+.task-title textarea:placeholder {
+  color: #D3D3D3;
+} 
+
+.task-title textarea:focus {
+  border-bottom: 1px solid #D3D3D3;
+}
+
+.task-title-show {
+  width: 90%;
+  word-wrap: break-word;
+  text-align: left;
+  color: #95989a;
+}

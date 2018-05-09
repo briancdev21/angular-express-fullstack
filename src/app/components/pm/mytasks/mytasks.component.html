@@ -1,0 +1,131 @@
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
+  <div class="panel-table">
+    <div class="panel-row" [dragula]="'dragPanel'" [dragulaModel]='panels'>
+      <div *ngFor="let panel of panels; let i = index;"  class="draggable-column">
+        <div class="panel-title" [ngStyle]="{'background': panel.color}" style="opacity: .7;">
+          <span>{{panel.title | uppercase }}</span>
+        </div>
+        <div class="panel-content" [dragula]="'dragTask'" [dragulaModel]='tasks'>
+          <div *ngFor="let task of panel.tasks; let j = index;" class="draggable-task">
+            <div class="task-content">
+              <img *ngIf="task.attachmentImg" src="attachmentImg">
+              <div class="task-title">
+                <label class="custom-checkbox"  (click)="completeTask(i, j)" *ngIf="i != 2">
+                  <input type="checkbox" [(ngModel)]="task.complete">
+                  <span class="checkmark"></span>
+                </label>
+               
+                <span *ngIf="i == 2">
+                  <!--{{getTaskId(i, j)}}.-->
+                  {{task.id}}.
+                </span>
+                <textarea 
+                  *ngIf="task.inputShow"
+                  placeholder="Enter task here" 
+                  [(ngModel)]="task.taskTitle" 
+                  (input)="checkInput(i, j, $event, task.taskTitle)" 
+                  autosize 
+                  [minHeight]="30" 
+                  [maxHeight]="task.maxHeight"
+                  (keydown.enter)="task.inputShow=false; false" 
+                  (clickOutside)="task.inputShow=false;">
+                </textarea>
+                <div (click)="task.inputShow=true; $event.stopPropagation();" *ngIf="!task.inputShow" class="task-title-show">
+                  {{task.taskTitle}}
+                </div>
+              </div>
+              <div class="task-owner">
+                <img src="{{task.profile.imgUrl}}" *ngIf="task.profile.imgUrl && i == 1" (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                <img *ngIf="!task.profile.imgUrl && i == 1" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                <span *ngIf="i == 2" class="task-path">{{task.taskPath}}</span>
+                <div class="sub-tasks">
+
+                </div>
+                <span *ngIf="i == 2"><input [(ngModel)]="task.progress" max="100" type="number" maxlength="3" min="0">%</span>
+                <!-- Task owner selection modal-->
+                <div
+                  class="owner-modal"
+                  [ngClass]="{'show-modal': ownerModalCollapsed[i][j], 'hide-modal': !ownerModalCollapsed[i][j] }"
+                  (clickOutside)="closeOwnerModal(i, j)"
+                  *ngIf="ownerModalCollapsed[i][j]"
+                >
+                  <div class="owner-mdl-content">
+                    <select [(ngModel)]="selectedOwner" (ngModelChange)="onOwnerSelect($event, i, j)" >
+                      <option [value]="0">Select Task Owner</option>
+                      <option *ngFor="let owner of taskOwners;" [value]="owner.userId">{{owner.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="task-bottom">
+                <div class="due-date" > 
+                  <input 
+                    [owlDateTime]="dueDate" 
+                    [owlDateTimeTrigger]="dueDate" 
+                    (dateTimeChange)="selectDueDate($event, i, j)" 
+                    [(ngModel)]="task.dueDate" 
+                  >
+                  <owl-date-time [pickerType]="'calendar'" #dueDate></owl-date-time>
+                  <span [owlDateTimeTrigger]="dueDate" [ngClass]="{'due-date-empty': !task.dueDate}">{{task.dueDate}}</span>
+                </div>
+                <span class="duration" *ngIf="i == 2"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0"> Days</span>
+                <div class="task-actions">
+                  <img *ngIf="i == 2" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
+                  <img *ngIf="i != 2 && task.starred == true" src="assets/images/star.png"  (click)="task.starred = !task.starred">
+                  <img *ngIf="i != 2 && task.starred == false" src="assets/images/star-empty.png" (click)="task.starred = !task.starred">
+                  <img *ngIf="i == 2 || i == 1" src="assets/images/alarm.png" [ngClass]="{'blured': !task.like}" (click)="task.like = !task.like">
+                  <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
+                  <!--Dependency numbers-->
+                  <div *ngIf="i == 2" class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">
+                    <span *ngFor="let dependency of panels[i].tasks[j].dependency; let l = index" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
+                      <span *ngIf="l != 0">,</span>
+                      {{dependency}}
+                    </span>
+                  </div>
+                  <!-- dependecy selection modal-->
+                  <div
+                    class="dependency-modal"
+                    (clickOutside)="closeDependencyModal(i, j)"
+                    *ngIf="dependencyModalCollapsed[i][j]"
+                  >
+                    <div class="dependency-mdl-content">
+                      <div class="followers">
+                        <div class="follower add-follower" >
+                          <a (click)="editable=true;$event.stopPropagation()" ></a>
+                        </div> 
+                        <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+                          <ul>
+                            <li *ngFor="let task of panels[i].tasks[j].dependency; let k = index">{{task}}<span (click)="removeDependency(i, j, k)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                            <li style="background: none; width: 100%; margin: 0;">
+                                <input autocomplete [config]="config2" [items]="allTasks"
+                                (inputChangedEvent)="onInputChangedEvent($event)"
+                                (selectEvent)="onSelect(i, j, $event)">
+                            </li>
+                          </ul>
+                        </div>
+                      </div>  
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="add-task" (click)="addTask(panel)">
+          <img src="assets/images/add.png">
+          <span>Add a task here</span>
+        </div>
+      </div>
+      <div class="new-panel" (clickOutside)="clickOutside()" (click)="addNewPanel()" >
+        <div *ngIf="!addPanelClicked" (click)="addNewPanel(); $event.stopPropagation();" >  
+          <img src="assets/images/add.png">
+          <span>ADD NEW LIST</span>
+        </div>
+        <div *ngIf="addPanelClicked" class="new-title-input">
+          <input placeholder="Enter title here..." [(ngModel)]="newPanelTitle" (keydown)="handleKeyDown($event)" >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

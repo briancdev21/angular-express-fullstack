@@ -17,10 +17,13 @@ import { PendingsComponent } from './pendings/pendings.component';
 import { PmDashboardComponent } from './pmdashboard/pmdashboard.component';
 import { ProjectsListCmpModule } from './projectslist/projectslist.module';
 import { PendingsCmpModule } from './pendings/pendings.module';
+import { MyTasksComponent } from './mytasks/mytasks.component';
+import { DragulaModule } from 'ng2-dragula';
 
 import { PmService } from './pm.service';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { Autosize } from 'ng-autosize/src/autosize.directive';
 
 
 @NgModule({
@@ -28,7 +31,9 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     ProjectsListComponent,
     TasksComponent,
     PendingsComponent,
-    PmDashboardComponent
+    PmDashboardComponent,
+    MyTasksComponent,
+    Autosize
   ],
   imports: [
     BrowserModule,
@@ -49,13 +54,15 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     ReactiveFormsModule,
     MatCheckboxModule,
     ProjectsListCmpModule,
-    PendingsCmpModule
+    PendingsCmpModule,
+    DragulaModule,
   ],
   exports: [
     MatInputModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCheckboxModule,
+    MyTasksComponent
   ],
   providers: [PmService]
 })

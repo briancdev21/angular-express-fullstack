@@ -34,7 +34,7 @@ import { SalesComponent } from './components/sales/sales.component';
 import { SalesDashboardComponent } from './components/sales/salesdashboard/salesdashboard.component';
 import { PmComponent } from './components/pm/pm.component';
 import { PmDashboardComponent } from './components/pm/pmdashboard/pmdashboard.component';
-import { TasksComponent } from './components/pm/tasks/tasks.component';
+import { MyTasksComponent } from './components/pm/mytasks/mytasks.component';
 import { InventoryComponent } from './components/inventory/inventory.component';
 import { InventoryDashboardComponent } from './components/inventory/inventorydashboard/inventorydashboard.component';
 import { CollaborationDashboardComponent } from './components/collaboration/collaborationdashboard/collaborationdashboard.component';
@@ -94,7 +94,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'pm-dashboard', pathMatch: 'full' },
       { path: 'pm-dashboard', component: PmDashboardComponent },
-      { path: 'tasks', component: TasksComponent },
+      { path: 'tasks', component: MyTasksComponent },
       { path: 'projects', component: ProjectsListComponent },
       { path: 'pending-projects', component: PendingsComponent },
     ]
