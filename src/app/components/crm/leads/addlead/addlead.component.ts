@@ -140,6 +140,21 @@ export class AddLeadComponent implements OnInit {
     this.sharedService.getPricingCategories().subscribe (res => {
       this.pricingCategoriesList = res.results;
     });
+
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res.results;
+      console.log('contacts: ', res);
+    });
+
+    this.sharedService.getUsers().subscribe(res => {
+      this.usersList = res.results;
+      console.log('users: ', res);
+    });
+
+    this.sharedService.getSources().subscribe(res => {
+      this.sourcesList = res.results;
+      console.log('sources: ', res.results);
+    });
   }
 
   onAccountTypeChange(event) {
@@ -173,11 +188,6 @@ export class AddLeadComponent implements OnInit {
   }
 
   getKeywords(event) {
-    this.keywordsIdList = event.map(k => k.id);
-  }
-
-  getKeywords(event) {
-    console.log('keywords: ', event);
     this.keywordsIdList = event.map(k => k.id);
   }
 
