@@ -110,23 +110,18 @@ export class SharedService {
 
   // Currency
   getCurrencies(): Observable<any> {
-    const url = `${apiUrl}currencies/`;
+    const url = `${apiUrl}organization/currencies/`;
     return this.http.get(url);
   }
 
   createCurrency (body): Observable<any> {
-    const url = `${apiUrl}currencies/`;
+    const url = `${apiUrl}organization/currencies/`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualCurrency(id): Observable<any>  {
-    const url = `${apiUrl}currencies/${id}`;
+    const url = `${apiUrl}organization/currencies/${id}`;
     return this.http.get(url);
-  }
-
-  deleteCurrency (id): Observable<any> {
-    const url = `${apiUrl}currencies/${id}`;
-    return this.http.delete<any>(url);
   }
 
 
@@ -175,6 +170,48 @@ export class SharedService {
   updateContact (body): Observable<any> {
     const url = `${apiUrl}users/`;
     return this.http.put<any>(url, body);
+  }
+
+  // Terms
+  getTerms(): Observable<any> {
+    const url = `${apiUrl}organization/terms`;
+    return this.http.get(url);
+  }
+
+  createTerm (body): Observable<any> {
+    const url = `${apiUrl}organization/terms`;
+    return this.http.post<any>(url, body);
+  }
+
+  getIndividualTerm(id): Observable<any>  {
+    const url = `${apiUrl}organization/terms/${id}`;
+    return this.http.get(url);
+  }
+
+  deleteTerm (id): Observable<any> {
+    const url = `${apiUrl}organization/terms/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+  // Pricing Category
+  getPricingCategories(): Observable<any> {
+    const url = `${apiUrl}organization/pricing-categories`;
+    return this.http.get(url);
+  }
+
+  createPricingCategory (body): Observable<any> {
+    const url = `${apiUrl}organization/pricing-categories`;
+    return this.http.post<any>(url, body);
+  }
+
+  getIndividualPricingCategory(id): Observable<any>  {
+    const url = `${apiUrl}organization/pricing-categories/${id}`;
+    return this.http.get(url);
+  }
+
+  updateIndividualPricingCategory(id, body): Observable<any>  {
+    const url = `${apiUrl}organization/pricing-categories/${id}`;
+    return this.http.put(url, body);
   }
 
 }

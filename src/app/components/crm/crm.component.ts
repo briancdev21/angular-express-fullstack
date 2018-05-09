@@ -18,9 +18,9 @@ export class CrmComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.crmService.getLeadsList().subscribe(data => {
-    //   console.log('crm service leads list: ', data);
-    // });
+    this.crmService.getLeadsList().subscribe(data => {
+      console.log('leads list: ', data);
+    });
   }
 
   toggleMenubar(data: boolean) {

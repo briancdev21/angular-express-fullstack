@@ -1,7 +1,7 @@
 import { Injectable, Output, EventEmitter, Input } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 // helpers
 import { apiHeaders, apiUrl } from '../config';
@@ -27,13 +27,21 @@ getLeadsList (limit: number = 50, offset: number = 0): Observable<any> {
   return this.http.get(url);
 }
 
-CreateLead (body): Observable<any> {
+createLead (body): Observable<any> {
+  // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
   const url = `${apiUrl}crm/leads/`;
-  console.log('body: ', body);
-  return this.http.post<any>(url, body)
-    .pipe(tap(data => {
-      console.log('return post data: ', data);
-    }));
+  // console.log('body: ', body);
+  // return this.http.post(url, body, options);
+  
+  let options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
+  return this.http.post(url, body, options)
+    .map((res) => res);
+  
+  // return this.http.post<any>(url, body);
+    // .pipe(tap(data => {
+    //   console.log('return post data: ', data);
+    // }));
+
 }
 
 }
