@@ -1,0 +1,49 @@
+<span class="title">PROJECT FINANCES</span>
+<div class="budget-section">
+  <div class="card">
+    <span class="card-title">PROJECT BUDGET</span>
+    <span class="card-value">$ {{projectInfo.projectBudget | number: '1.2-2'}}</span>
+  </div>
+  <div class="card">
+    <span class="card-title">BUDGET USED</span>
+    <span class="card-value green">$ {{projectInfo.budgetUsed | number: '1.2-2'}}</span>
+  </div>
+  <div class="card">
+    <span class="card-title">BUDGET VS USED</span>
+    <span class="card-value green">{{100 * projectInfo.budgetUsed / projectInfo.projectBudget | number: '1.1-1'}} %</span>
+  </div>
+  <div class="card">
+    <span class="card-title">REVENUE</span>
+    <span class="card-value">$ {{projectInfo.revenue | number: '1.2-2'}}</span>
+  </div>
+  <div class="card">
+    <span class="card-title">LABOR</span>
+    <span class="card-value">$ {{projectInfo.labor | number: '1.2-2'}}</span>
+  </div>
+</div>
+<div class="finances-table">
+  <table>
+    <tr>
+      <th>TYPE</th>
+      <th>TYPE #</th>
+      <th>TOTAL</th>
+      <th>STATUS</th>
+      <th>DATE CREATED</th>
+      <th>DATE UPLOADED</th>
+      <th>COLLABORATOR</th>
+    </tr>
+    <tr *ngFor="let t of financialTableData">
+      <td>{{t.type}}</td>
+      <td>{{t.typeNumber}}</td>
+      <td [ngClass]="getTotalColor(t.status)">$ {{t.total | number: '1.2-2'}}</td>
+      <td [ngClass]="getStatusColor(t.status)">{{t.status}}</td>
+      <td>{{t.dateCreated}}</td>
+      <td>{{t.dateUpdated}}</td>
+      <td class="collaborators">
+        <div *ngFor="let col of t.collaborators">
+          <img [src]="col.imgUrl">
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>

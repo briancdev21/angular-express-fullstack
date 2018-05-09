@@ -1,0 +1,196 @@
+
+.red {
+  color: #FF7E7E;
+}
+
+.orange {
+  color: #FFAC58;
+}
+
+.green {
+  color: #C5D92D;
+}
+
+span {
+  color: #95989A;
+}
+
+.table-content {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.slide-right-btn {
+  width: 40px;
+  height: 107%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-left: 1px solid #F5F5F5;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+.slide-left-btn {
+  width: 40px;
+  height: 107%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-right: 1px solid #F5F5F5;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+.slide-right-btn i {
+  width: 100%;
+  font-size: 80px;
+  font-weight: 300;
+  color: #B1B1B1;
+}
+
+.slide-left-btn i {
+  width: 100%;
+  font-size: 80px;
+  font-weight: 300;
+  color: #B1B1B1;
+}
+
+.main-table-content {
+  display: flex;
+  width: fit-content;
+  flex-flow: row nowrap;
+  padding: 30px 47px;
+}
+
+.table-column {
+  min-width: 400px;
+  margin-right: 25px;
+}
+
+.title {
+  padding: 18px;
+  border-radius: 3px;
+  font-size: 18px;
+  color: #95989A;
+}
+
+.add-btn {
+  font-size: 60px;
+  background: #F5F5F5;
+  padding: 0px;
+  border-radius: 3px;
+  box-shadow: 1px 3px 5px 1px lightgrey;
+  color: #59B778;
+  font-weight: 100;
+  line-height: 46px;
+  margin: 20px 0;
+  padding-top: 0px;
+  padding-bottom: 8px;
+  cursor: pointer;
+}
+
+.personal-card {
+  width: 100%;
+  background: #F5F5F5;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.personal-card img {
+  width: 30px;
+  height: 30px;
+  margin-right: 13px;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.card-top .tasks-completion {
+  color: #CBDC44;
+}
+
+.card-mid {
+  display: flex;
+  font-size: 11px;
+  justify-content: space-between;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.tasks-details {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+}
+
+.tasks-details span:first-child {
+  border-bottom: 1px solid lightgray;
+}
+
+.tasks-details span:last-child {
+  font-size: 21px;
+  margin-top: 5px;
+}
+
+/* Details tasks modal CSS */
+
+.detailed-task-modal-wrapper {
+  background: rgba(156,152,152,0.5);
+  width:100%;
+  height: 100%;
+  z-index: 9990;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.detailed-task-modal-wrapper {
+  z-index: 9 !important;
+}
+
+.add-detailed-task-modal {
+  position: fixed;
+  top: 5px;
+  width: 60%;
+  margin: 0 20%;
+  left: 0;
+  background: white;
+  z-index: 9999;
+  border-radius: 5px;
+  transition: all 0.2s;
+	color: #646464
+}
+
+.add-detailed-task-modal {
+  max-height: 98vh;
+  overflow: auto;
+}
+
+.detailed-task-modal-hide {
+  position: fixed;
+  top: -300px;
+  width: 60%;
+  margin: 0 20%;
+  left: 0;
+  z-index: 9999;
+  transition: all 0.2s;
+	visibility: hidden;
+}
+
+.end-reached {
+  color: #E4E4E4 !important;
+}

@@ -99,10 +99,6 @@
   padding: 17px 10px 0 10px;
 }
 
-.pm-routers a.active-link {
-  border-bottom: 5px solid #70eaca;
-}
-
 .pm-routers a:hover {
   text-decoration: none;
 }
@@ -114,9 +110,8 @@
 }
 
 @media screen and (max-width: 1550px) {
-	.pm-routers a {
+  .pm-routers a {
     font-size: 17px;
-    margin-right: 26px;
+    margin-right: 30px;
   }
-
 }

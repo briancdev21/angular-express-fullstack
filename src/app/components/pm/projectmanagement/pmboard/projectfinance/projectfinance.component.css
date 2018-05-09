@@ -1,0 +1,104 @@
+span {
+  color: #95989A;
+}
+
+.red {
+  color: #FF7E7E !important;
+}
+
+.green {
+  color: #C5D92D !important;
+}
+
+.orange {
+  color: #FFAC58 !important;
+}
+
+.title {
+  width: 100%;
+  font-size: 21px;
+  margin-top: 32px;
+  margin-left: 30px;
+  display: flex;
+}
+
+.budget-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 15%;
+  margin: 25px;
+  font-weight: 300;
+  
+}
+
+.card-title {
+  width: 100%;
+  border-bottom: 1px solid #C5D92D;
+  font-size: 20px;
+  padding: 0 10px 7px;
+  font-weight: 300;
+}
+
+.card-value {
+  font-size: 18px;
+  padding: 15px;
+}
+
+table {
+  width: 100%;
+  border: 1px solid #F5F5F5;
+  border-left: none;
+  border-right: none;
+  margin-bottom: 40px;
+}
+
+table img {
+  width: 30px;
+  height: 30px;
+  margin-right: 7px;
+}
+
+table .collaborators {
+  display: flex;
+}
+
+tr {
+  border-bottom: 1px solid #F5F5F5;
+  border-collapse: collapse;
+}
+
+td, th {
+  padding: 10px 20px;
+  text-align: left;
+  font-weight: 300;
+  color: #464646;
+}
+
+th {
+  border-right: 1px solid #F5F5F5;
+}
+
+td:last-child {
+  padding: 5px 20px;
+}
+
+th:last-child {
+  border-right: none;
+}
+
+@media screen and (max-width: 1700px) {
+  .card-title {
+    font-size: 17px;
+  }
+}
+
+@media screen and (max-width: 1550px) {
+  .card-title {
+    padding: 0 0 7px;
+  }
+}

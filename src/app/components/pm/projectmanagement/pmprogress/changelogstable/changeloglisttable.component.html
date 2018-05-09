@@ -1,0 +1,27 @@
+<div class="content">
+  <table>
+    <tr>
+      <th (click)="sortArray('logId')">CHANGE LOG ID</th>
+      <th (click)="sortArray('logName')">CHANGE LOG NAME</th>
+      <th (click)="sortArray('priority')">PRIORITY</th>
+      <th (click)="sortArray('requestedBy')">REQUESTED BY</th>
+      <th (click)="sortArray('budgetImpact')">BUDGET IMPACT</th>
+      <th (click)="sortArray('scheduleImpact')">SCHEDULE IMPACT</th>
+      <th (click)="sortCreateDateArray('dateCreated')">DATE CREATED</th>
+      <th (click)="sortCreateDateArray('lastUpdated')">LAST UPDATED</th>
+      <th (click)="sortCreateDateArray('dateApproved')">DATE APPROVED</th>
+    </tr>
+    <tr *ngFor="let log of changelogListInfo; let i = index" (click)="redirectTo(pending.projectNumber)">
+      <td>{{log.logId}}</td>
+      <td>{{log.logName}}</td>
+      <td>Level {{log.priority}}</td>
+      <td>{{log.requestedBy}}</td>
+      <td [ngClass]="getBudgetColor(log.budgetImpact)">$ {{getAbs(log.budgetImpact) | number: '1.2-2'}}</td>
+      <td [ngClass]="getDateColor(log.scheduleImpact)">{{getAbs(log.scheduleImpact)}} Day<span *ngIf="log.scheduleImpact > 1">s</span></td>
+      <td>{{log.dateCreated}}</td>
+      <td>{{log.lastUpdated}}</td>
+      <td>{{log.dateApproved}}</td>
+    </tr>
+  </table>
+</div>
+

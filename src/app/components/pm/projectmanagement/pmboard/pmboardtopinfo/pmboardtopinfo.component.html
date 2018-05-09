@@ -1,0 +1,55 @@
+<div class="owner-id">
+  <span>{{projectInfo.projectOwner.name}}</span>
+  <span>{{projectInfo.projectId}}</span>
+</div>
+
+<div class="card-section">
+  <div class="start-date card">
+    <div class="title">START DATE</div>
+    <div class="card-content">{{projectInfo.startDate}}</div>
+  </div>
+  <div class="target-date card">
+    <div class="title">TARGET DATE</div>
+    <div class="no-height">
+      <input 
+        [owlDateTime]="targetDate" 
+        [owlDateTimeTrigger]="targetDate" 
+        (dateTimeChange)="selectTargetDate($event)" 
+        [(ngModel)]="tDate" 
+        class="hidden-calander-input">
+      <owl-date-time [pickerType]="'calendar'" #targetDate class="calander-view"></owl-date-time>
+    </div>
+    <div class="card-content">
+      <span class="date-placeholder" *ngIf="!tDate" [owlDateTimeTrigger]="targetDate">Click Here</span>
+      <span *ngIf="tDate" [owlDateTimeTrigger]="targetDate" class="show-date" >{{projectInfo.targetDate}}</span>
+    </div>
+  </div>
+  <div class="next-payment-date card">
+    <div class="title">NEXT PAYMENT DATE</div>
+    <div class="no-height">
+      <input 
+        [owlDateTime]="nextPaymentDate" 
+        [owlDateTimeTrigger]="nextPaymentDate" 
+        (dateTimeChange)="selectNextPaymentDate($event)" 
+        [(ngModel)]="nDate" 
+        class="hidden-calander-input">
+      <owl-date-time [pickerType]="'calendar'" #nextPaymentDate class="calander-view"></owl-date-time>
+    </div>
+    <div class="card-content">
+      <span class="date-placeholder" *ngIf="!nDate" [owlDateTimeTrigger]="nextPaymentDate">Click Here</span>
+      <span *ngIf="nDate" [owlDateTimeTrigger]="targetDate" class="show-date" >{{projectInfo.nextPaymentDate}}</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="title">BUDGET PERFORMANCE</div>
+    <div class="card-content" [ngClass]="getPerformanceColor(projectInfo.budgetPerformance)">{{projectInfo.budgetPerformance}}%</div>
+  </div>
+  <div class="card">
+    <div class="title">SCHEDULE PERFORMANCE</div>
+    <div class="card-content" [ngClass]="getPerformanceColor(projectInfo.schedulePerformance)">{{projectInfo.schedulePerformance}}%</div>
+  </div>
+  <div class="card">
+    <div class="title">ROI PERFORMANCE</div>
+    <div class="card-content" [ngClass]="getPerformanceColor(projectInfo.roiPerformance)">{{projectInfo.roiPerformance}}%</div>
+  </div>
+</div>

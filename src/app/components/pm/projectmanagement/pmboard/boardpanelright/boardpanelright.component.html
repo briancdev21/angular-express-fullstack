@@ -1,0 +1,65 @@
+<div class="details-panel">
+  <div class="project-tasks">
+    <span class="title">PROJECT TASKS</span>
+    <div class="task-content">
+      <div>
+        <span class="card-title">Total Tasks</span>
+        <span class="card-value">{{totalTasksCount}}</span>
+      </div>
+      <div>
+        <span class="card-title">Overdue</span>
+        <span class="card-value red">{{totalOverdueTasksCount}}</span>
+      </div>
+      <div>
+        <span class="card-title">Completed</span>
+        <span class="card-value green">{{totalCompletedTasksCount}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="project-progress">
+    <span class="title">PROJECT PROGRESS</span>
+    <div class="progress-content">
+      <div>
+        <span class="card-title">Quality Performance</span>
+        <span class="card-value" [ngClass]="getPerformanceColor(projectInfo.projectProgress.qualityPerformance)">{{projectInfo.projectProgress.qualityPerformance}}%</span>
+      </div>
+      <div>
+        <span class="card-title">Scope Performance</span>
+        <span class="card-value" [ngClass]="getPerformanceColor(projectInfo.projectProgress.scopePerformance)">{{projectInfo.projectProgress.scopePerformance}}%</span>
+      </div>
+    </div>
+    <div class="progress-content">
+      <div>
+        <span class="card-title">Scope Change</span>
+        <span class="card-value orange">{{projectInfo.projectProgress.scopeChange}}</span>
+      </div>
+      <div>
+        <span class="card-title">Scope Performance</span>
+        <span class="card-value orange" >{{projectInfo.projectProgress.mitigation}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="inventory-health">
+    <span class="title">INVENTORY HEALTH</span>
+    <div class="health-content">
+      <div>
+        <span class="card-title">Not Processed</span>
+        <span class="card-value" >{{projectInfo.inventoryHealth.notProcessed}}</span>
+      </div>
+      <div>
+        <span class="card-title">On Order</span>
+        <span class="card-value green">{{projectInfo.inventoryHealth.onOrder}}</span>
+      </div>
+    </div>
+    <div class="health-content">
+      <div>
+        <span class="card-title">Checked In</span>
+        <span class="card-value green">{{projectInfo.inventoryHealth.checkedIn}}</span>
+      </div>
+      <div>
+        <span class="card-title">Delivered</span>
+        <span class="card-value" >{{projectInfo.inventoryHealth.delivered}}</span>
+      </div>
+    </div>
+  </div>
+</div>

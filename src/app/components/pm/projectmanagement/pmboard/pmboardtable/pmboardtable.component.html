@@ -1,0 +1,49 @@
+<div class="table-content"   #panel >
+  <div class="slide-left-btn" (click)="onPreviousSearchPosition()"><i class="fa fa-angle-left" [ngClass]="{'end-reached': leftReached}"></i></div>
+  <div class="slide-right-btn" (click)="onNextSearchPosition()"><i class="fa fa-angle-right" [ngClass]="{'end-reached': rightReached}"></i></div>
+  <div>
+    <div class="main-table-content">
+      <div *ngFor="let project of pmBoardTableData; let i = index;" class="table-column">
+        <div class="title" [ngStyle]="{'background': project.color}">
+          {{project.title}}
+        </div>
+        <div class="add-btn" (click)="showDetailedTaskModal=true; temp=i">+</div>
+        <div class="personal-project-cards">
+          <div *ngFor="let owner of taskOwners" >
+            <div class="personal-card" *ngIf="getTasksCount(owner, project) > 0">
+              <div class="card-top">
+                <div>
+                  <img [src]="owner.imgUrl">
+                  <span>{{owner.name}}</span>
+                </div>
+                <span class="tasks-completion" >{{getTasksCompletion(owner, project) | number: '1.0-0'}}%</span>
+              </div>
+              <div class="card-mid">
+                <span>{{getDuration(owner, project)}}</span>
+                <span>{{getDependenciesCount(owner, project)}}</span>
+              </div>
+              <div class="card-bottom">
+                <div class="tasks-details">
+                  <span>TASKS</span>
+                  <span>{{getTasksCount(owner, project)}}</span>
+                </div>
+                <div class="tasks-details">
+                  <span>DUE</span>
+                  <span [ngClass]="{'red':getOverDueTasksCount(owner, project), 'green': !getOverDueTasksCount(owner, project)}">{{getOverDueTasksCount(owner, project)}}</span>
+                </div>
+                <div class="tasks-details">
+                  <span>COMPLETE</span>
+                  <span class="green">{{getCompletedTasksCount(owner, project)}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+<div class="detailed-task-modal-wrapper" *ngIf="showDetailedTaskModal" (click)="showDetailedTaskModal=false;"></div>
+<div [ngClass]="{'add-detailed-task-modal': showDetailedTaskModal, 'detailed-task-modal-hide': !showDetailedTaskModal }">
+  <app-adddetailedtask [(showDetailedTaskModal)]="showDetailedTaskModal" (addNewTaskToTable)="getNewTask($event)"></app-adddetailedtask>
+</div> 

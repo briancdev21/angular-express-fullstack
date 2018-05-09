@@ -1,0 +1,226 @@
+.title-sec {
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  font-size: 22px;
+  color: #95989a;
+  font-weight: 400;
+  padding: 0 10px 0 30px;
+}
+
+.title-sec select {
+  color: #70eaca;
+  border: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  outline: none;
+  text-align: right;
+}
+
+.btn-sec {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-btns {
+  width: 300px;
+  height: 50px;
+  background: #DCFAF2;
+  font-size: 19px;
+  color: #646464;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin: 0 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.log-list {
+  margin-bottom: 60px;
+}
+
+.log-list div {
+  margin: 30px 0 20px 75px;
+  font-size: 18px;
+  color: #95989A;
+  text-align: left;
+}
+
+.scope-description-change, .scope-details-change {
+  background: #F5F5F5;
+  margin: 40px 50px;
+  padding-top: 3px;
+}
+
+.editor-title {
+  margin: 0 10px;
+  background: white;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  color: #95989A;
+  padding-left: 15px;
+}
+
+
+/* Text Editor CSS */
+
+/deep/ .text-editor-sec .ql-toolbar.ql-snow {
+  border: 0 !important;
+  text-align: left;
+  margin-left: 15px;
+  background: transparent;
+  padding-top: 20px;
+}
+
+/deep/ .text-editor-sec .ql-snow.ql-toolbar button, /deep/ .text-editor-sec .ql-snow .ql-toolbar button {
+  background: white;
+  border: 1px solid lightgray;
+}
+
+/deep/ .text-editor-sec .ql-snow .ql-picker {
+  background: white;
+  border: 1px solid lightgray;
+}
+
+/deep/ .text-editor-sec .ql-container.ql-snow {
+  border: 0;
+}
+
+/deep/ .text-editor-sec .ql-editor {
+  border: 10px solid #F5F5F5;
+  min-height: 300px;
+  background: white;
+}
+
+/deep/ .text-editor-sec .ql-editor.ql-blank::before {
+  left: 25px;
+}
+
+/deep/ .text-editor-sec .ql-snow.ql-toolbar button, /deep/ .text-editor-sec .ql-snow .ql-toolbar button {
+  height: 27px;
+  width: 32px;
+}
+
+
+
+
+
+
+
+
+
+/* Confirm Modal */
+
+
+.confirm-modal {
+  position: fixed;
+  top: 5px;
+  width: 60%;
+  margin: 0 20%;
+  left: 0;
+  background: white;
+  z-index: 9999;
+  border-radius: 5px;
+  transition: all 0.5s;
+	color: #646464
+}
+
+.confirm-modal-hide {
+  position: fixed;
+  top: -200px;
+  width: 60%;
+  margin: 0 20%;
+  left: 0;
+  z-index: 9999;
+  transition: all 0.5s
+}
+
+.confirm-modal .content {
+  padding: 25px;
+  font-size: 0.8em;
+}
+
+
+.confirm-modal .header {
+  padding: 20px 25px;
+  font-size: 1.7rem;
+  border-bottom: solid 1px #F5F5F5;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.confirm-clone-modal-wrapper .header span {
+  font-size: 16px;
+}
+
+.confirm-que {
+  font-size: 18px;
+}
+
+.center-btn-section {
+  text-align: center;
+  padding: 30px 0 10px;
+}
+
+.confirm-modal .confirm-btn {
+  background-color:#a9f2df; 
+  border-radius: 5px;
+  height: 2.5em;
+  font-size: 12px;
+  border: 0;
+  width: 100px;
+  outline: none;
+  box-shadow: inset #99f3db 0 0 1px 1px;
+	color: gray;
+}
+
+.confirm-modal  .cancel-btn {
+  border-radius: 5px;
+  height: 2.5em;
+  font-size: 12px;
+  border: 0;
+  width: 100px;
+  outline: none;
+	background: lightgray;
+	color: gray;
+  margin-right: 10px;
+}
+
+.confirm-modal .done-btn:focus {
+  background: #8decd4;
+}
+
+.confirm-modal  .close-btn {
+  cursor: pointer;
+  font-size: 1.5em;
+  width: 22px;
+  height: 22px;
+}
+
+.confirm-delete-modal-wrapper {
+  background: rgba(156,152,152,0.5);
+  width:100%;
+  height: 100%;
+  z-index: 9990;
+  position: fixed;
+  top: 0;
+  left: 0;
+}

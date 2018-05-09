@@ -1,0 +1,43 @@
+<div class="work-order-settings" [ngClass]="{'work-order-settings-origin-collapsed': !settingsCollapsed}">
+  <span (click)="settingsCollapsed = !settingsCollapsed">Settings</span>
+  <div class="btn-section" >
+    <button class="cancel-btn" >
+      Cancel
+    </button>
+    <button class="save-btn">
+      Save
+    </button>
+  </div>
+</div>
+<div class="work-order-settings-expanded" [ngClass]="{'work-order-settings-collapsed': settingsCollapsed}">
+  <div class="settings-header">
+    <span>CHANGE LOG SETTINGS</span>
+    <img src="assets/images/x-sign-red.png" (click)="settingsCollapsed = !settingsCollapsed">
+  </div>
+  <div class="settings-content">  
+    <div class="print-billable">
+      <div class="settings-feature">
+        <div class="print">
+          <img src="assets/images/printer.png">
+          <div class="settings-desc">
+            <span>PRINT</span>
+            <span>Print important documents such as the invoice, receipt, and pick lists</span>
+          </div>
+        </div>
+      </div>
+      <div class="settings-feature">
+        <div class="billable">
+          <img src="assets/users/man.png">
+          <div class="settings-desc">
+            <span>SENT TO CUSTOMER</span>
+            <span>Request for approval from the customer for this change log</span>
+          </div>
+        </div>
+        <div class="switch">
+          <img src="assets/images/switch.png" *ngIf="switchOn" (click)="switchOn = !switchOn">
+          <img src="assets/images/switch-off.png" *ngIf="!switchOn" (click)="switchOn = !switchOn">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

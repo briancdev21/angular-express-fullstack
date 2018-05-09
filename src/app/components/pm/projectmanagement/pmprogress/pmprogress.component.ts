@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PmService } from '../pm.service';
-import { ChangeLogListTableComponent } from './changeloglisttable/changeloglisttable.component';
 
 @Component({
   selector: 'app-pmprogress',
@@ -12,42 +11,62 @@ import { ChangeLogListTableComponent } from './changeloglisttable/changeloglistt
 })
 
 export class PmProgressComponent implements OnInit {
-  public changelogListInfo: Array<Object> = [
-    {
-      logId: 'CL0159-01',
-      logName: 'Changing of the TV location in Living Room',
-      priority: 1,
-      requestedBy: 'Sepehr Shoarinejad',
-      budgetImpact: 2000,
-      scheduleImpact: -14,
-      dateCreated: 'November 20, 2016',
-      lastUpdated: 'January 20, 2017',
-      dateApproved: 'January 20, 2017',
+  public changeLogInfo = {
+    customerName: 'John Moss',
+    projectName: 'Remodel with a Nu Life',
+    projectAddress: {
+      street: '301, 1615 10th Ave SW',
+      city: 'Calgary',
+      state: 'Alberta',
+      country: 'Canada',
+      zipcode: 'T3C 0J7',
     },
-    {
-      logId: 'CL0159-02',
-      logName: 'Customer constantly changing his mind',
-      priority: 1,
-      requestedBy: 'Sepehr Shoarinejad',
-      budgetImpact: -2000,
-      scheduleImpact: 2,
-      dateCreated: 'December 15, 2016',
-      lastUpdated: 'March 20, 2017',
-      dateApproved: 'April 20, 2017',
-    },
-    {
-      logId: 'CL0159-03',
-      logName: 'I don\'t know what to do anymore',
-      priority: 1,
-      requestedBy: 'Tyler Labonte',
-      budgetImpact: 3500,
-      scheduleImpact: 4,
-      dateCreated: 'January 20, 2016',
-      lastUpdated: 'June 20, 2017',
-      dateApproved: 'June 20, 2017',
-    },
-  ];
+    changeLogId: '',
+    requestedBy: 'Sepehr Shoarinejad',
+    ccContact: 'Danny Shibley',
+    createdOn: '2017-11-20',
+    lastUpdated: '2018-01-20',
+    scopeDescriptionChange: '',
+    scopeDetailsChange: '',
+    updatePm: false,
+    count: 0
+  };
 
+  public changeLogList = [
+    {
+      id: 'ES 882302',
+      typeName: 'Change of the TV location in Living Room',
+      type: 'estimate',
+      createdBy: 'Sepehr Shoarinejad',
+      budgetImpact: 2000,
+      scheduleImpact: 0,
+      dateCreated: '2016-11-20',
+      lastUpdated: '2017-01-20',
+      dateApproved: '2017-01-20'
+    },
+    {
+      id: 'WO 032321',
+      typeName: 'Customer constantly changing his mind',
+      type: 'workOrder',
+      createdBy: 'Sepehr Shoarinejad',
+      budgetImpact: 0,
+      scheduleImpact: -1,
+      dateCreated: '2016-12-15',
+      lastUpdated: '2017-01-20',
+      dateApproved: '2017-01-20'
+    },
+    {
+      id: 'WO 023902',
+      typeName: 'I don\'t know what to do anymore',
+      type: 'workOrder',
+      createdBy: 'Tyler Labonte',
+      budgetImpact: 0,
+      scheduleImpact: -4,
+      dateCreated: '2016-01-20',
+      lastUpdated: '2017-01-20',
+      dateApproved: '2017-01-20'
+    }
+  ];
 
   constructor( private pmService: PmService ) {
   }

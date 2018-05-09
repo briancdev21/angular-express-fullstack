@@ -1,0 +1,77 @@
+
+<div class="chart">
+  <div class="time-line">
+    <div *ngFor="let month of displayMonthes; let in = index" class="months">
+
+      <table>
+        <tbody>
+          <tr>
+            <td [attr.colspan]="dayCountArr[in].dateSubArr.length" class="month-sec-tr" >
+              <div class="month-sec">
+                <span>{{month.month}}</span>
+                <span>{{month.year}}</span>
+              </div>
+            </td>
+          </tr>
+          <tr class="days-sec">
+            <td *ngFor="let day of dayCountArr[in].dateSubArr"><span>{{day}}</span></td>
+          </tr>
+        </tbody>
+
+        <tbody class="tasks-sec" *ngFor="let task of tasks; let i = index">
+          <tr>
+            <td *ngFor="let date of dayCountArr[in].dateSubArr; let j = index" 
+              [ngClass]="{
+                'whitebg': !dayCountArr[in].isWeekendArr[i][j], 
+                'graybg': dayCountArr[in].isWeekendArr[i][j],
+                'today-line': dayCountArr[in].getTodayLineArr[i][j]}">
+              <div class="today-cell">
+                <span *ngIf="getTodayTitle(month.year, month.month, date, i)">TODAY</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td *ngFor="let date of dayCountArr[in].dateSubArr; let k = index;" 
+              [ngClass]="{'graybg': dayCountArr[in].isWeekendArr[i][k],
+                          'leftRadialCorner': dayCountArr[in].isFirstArr[i][k],
+                          'rightRadialCorner': dayCountArr[in].isLastArr[i][k],
+                          'today-line': dayCountArr[in].getTodayLineArr[i][k]
+                          }"
+              [ngStyle]="{
+                background: dayCountArr[in].isLastActiveArr[i][k] ? dayCountArr[in].getBgColorArr[i][k+1] : dayCountArr[in].getBgColorArr[i][k],
+                borderRightWidth: '1px',
+                borderRightStyle: 'solid',
+                borderRightColor: dayCountArr[in].isLastActiveArr[i][k] ? dayCountArr[in].getBgColorArr[i][k+1] : dayCountArr[in].getBgColorArr[i][k]}"
+              class="table-cell"
+              >
+              <div 
+                [ngClass]="{
+                    'rightActiveRadialCorner': dayCountArr[in].isLastActiveArr[i][k]      
+                  }"
+                [ngStyle]="{
+                  background: dayCountArr[in].isLastActiveArr[i][k] ? dayCountArr[in].getBgColorArr[i][k] : 'none',
+                  borderRightWidth: '1px',
+                  borderRightStyle: 'solid',
+                  height: '27px',
+                  margin: '-2px 0 -2px -2px',
+                  borderRightColor: dayCountArr[in].isLastActiveArr[i][k] ? dayCountArr[in].getBgColorArr[i][k] : 'transparent'}"
+              >
+                <span *ngIf="checkTaskMid(month.year, month.month, date, task, i)" class="project-title">{{task.title}}</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td 
+              *ngFor="let date of dayCountArr[in].dateSubArr; let j = index" 
+              [ngClass]="{
+                'whitebg': !dayCountArr[in].isWeekendArr[i][j], 
+                'graybg': dayCountArr[in].isWeekendArr[i][j],
+                'today-line': dayCountArr[in].getTodayLineArr[i][j]}">
+              <div></div>
+            </td>
+          </tr>
+        </tbody> 
+      </table>      
+    </div>
+  </div>
+</div>

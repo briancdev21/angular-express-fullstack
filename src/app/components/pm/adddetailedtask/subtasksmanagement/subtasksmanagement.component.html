@@ -1,0 +1,40 @@
+<div class="main-task">
+	<label class="custom-checkbox"  (click)="completeTask()">
+		<input type="checkbox" [(ngModel)]="mainTaskComplete" (click)="completeAllTasks()">
+		<span class="checkmark"></span>
+	</label>
+	<div>
+		<div class="main-task-title">
+			<input placeholder="TASK EXAMPLE HERE" [(ngModel)]="taskTitle" (ngModelChange)="taskContentChange($event)">
+			<span (click)="showEditable=true" *ngIf="!showEditable">{{taskComplete}} %</span>
+			<input *ngIf="showEditable" [(ngModel)]="taskComplete" (ngModelChange)="taskContentChange($event)" class="task-complete" (blur)="showEditable=false"> <span *ngIf="showEditable">%</span>
+		</div>
+		<textarea [(ngModel)]="mainTaskContent" (ngModelChange)="taskContentChange($event)" placeholder="Enter description here...">{{mainTaskContent}}</textarea>
+	</div>
+</div>
+<div class="sub-task">
+	<table (clickOutSide)="outSideClicked()">
+		<tr 
+			*ngFor="let task of subTasks; let i = index"
+			[ngStyle]="{'background-color': selectedSubTasks.includes(task.id)? '#DCDBDB': 'white'}"
+			(click)="subTaskSelect(task, i)">
+			<td>
+				<label class="custom-checkbox"  (click)="completeTask()">
+					<input type="checkbox" [(ngModel)]="task.complete" (click)="completeSubTask(task, i)">
+					<span class="checkmark"></span>
+				</label>
+				<div class="sub-task-content">
+					<input 
+						class="sub-task-title" 
+						placeholder="Subtask title here" 
+						(input)="titleUpdate(i)" 
+						[(ngModel)]="task.title" 
+						*ngIf="task.editable" 
+						(blur)="onBlueSubtask(task, i)">
+					<span *ngIf="!task.editable " (dblclick)="dblClickSubtask(task, i)">{{task.title}}</span>
+					<img src="assets/images/x-sign-red.png" (click)="removeSubtask(i)">
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>

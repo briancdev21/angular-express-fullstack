@@ -1,0 +1,162 @@
+
+.red {
+  color: #FF7E7E;
+}
+
+.orange {
+  color: #FFAC58;
+}
+
+.green {
+  color: #C5D92D;
+}
+
+span {
+  color: #95989A;
+}
+
+/* :host ::ng-deep .chart .weekend {
+  background: #F5F5F5 !important;
+}
+
+:host ::ng-deep .chart .gantt_task_cell {
+  border: 0;
+}
+
+:host ::ng-deep .gantt_scale_line .weekend {
+  background: transparent !important;
+  color: #A6A6A6 !important;
+}
+
+:host ::ng-deep .chart .gantt_task_row {
+  border-bottom: none;
+  height: 85px !important;
+}
+
+:host ::ng-deep .chart .gantt_task_line {
+  top: 30px !important;
+}
+
+:host ::ng-deep .gantt_bars_area .gantt_task_line:nth-child(1) {
+  background-color: #FFAC58;
+}
+
+:host ::ng-deep .gantt_bars_area .gantt_task_line:nth-child(2) {
+  background-color: #C5D92D;
+} */
+
+.time-line {
+  overflow: auto;
+  display: inline-flex;
+}
+
+.months {
+  width: 33vw;
+  margin-left: -1px;
+}
+
+.months .month-sec {
+  font-size: 20px;
+  padding: 5px;
+  font-weight: 300;
+}
+
+.month-sec span {
+  color: #646464;
+}
+
+.days-sec {
+}
+
+.days-sec td {
+  border-right: solid 1px #D3D3D3;
+  border-top: 1px solid #D3D3D3;
+  border-bottom: 1px solid #D3D3D3;
+}
+
+.days-sec span {
+  font-size: 9px;
+  padding: 2px;
+}
+
+.whitebg {
+  background: white;
+}
+
+.graybg {
+  background: #f5f5f5;
+  border-right: solid 1px #f5f5f5;
+}
+
+.tasks-sec .whitebg, .tasks-sec .graybg {
+  font-size: 11px;
+  padding: 2px;
+  height: 27px;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.month-sec-tr {
+  border-right: solid 1px #d3d3d3;
+}
+
+.tasks-sec .past {
+  background: orangered;
+  border-right-width: 0;
+}
+
+.tasks-sec .left {
+  background: orange;
+  opacity: 0.5;
+  border-right-width: 0;
+}
+
+.months table {
+  border-collapse: unset;
+}
+
+.leftRadialCorner {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.rightRadialCorner {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.rightActiveRadialCorner {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px; 
+}
+
+.table-cell {
+  position: relative;
+}
+
+.project-title {
+  position: absolute;
+  z-index: 1;
+  top: 5px;
+  left: -30px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.today-line {
+  border-right: 1px solid #D3D3D3 !important;
+}
+
+.today-cell {
+  position: relative;
+}
+
+.today-cell>span {
+  color: #A3A6A7;
+  font-size: 10px;
+  position: absolute;
+  left: -25px;
+}

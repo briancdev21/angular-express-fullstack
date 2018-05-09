@@ -1,0 +1,64 @@
+<div class="title-sec">
+  <span class="title">Changing of the TV location in Living Room</span>
+  <select [(ngModel)]="changeLogStatus">
+    <option value="new">NEW</option>
+    <option value="inProgress">IN PROGRESS</option>
+    <option value="notApproved">NOT APPROVED</option>
+    <option value="approved">APPROVED</option>
+  </select>
+</div>
+<div class="detailed-profile-info">
+  <app-changelogdetails [changeLogList]="changeLogList" [changeLogInfo]="changeLogInfo"></app-changelogdetails>
+</div>
+<div class="btn-sec">
+  <div class="create-btns" (click)="showConfirmModal=true">CREATE ESTIMATE</div>
+  <div class="create-btns">CREATE WORK ORDER</div>
+  <div class="create-btns">ADD TASKS</div>
+</div>
+
+<div class="text-editor-sec">
+  
+  <div class="scope-description-change">
+    <div class="editor-title">CHANGE OF SCOPE DESCRIPTIONS</div>
+    <quill-editor [(ngModel)]="descriptionChange">
+    </quill-editor>
+  </div>
+  <div class="scope-details-change">
+    <div class="editor-title">CHANGE OF SCOPE DETAILS</div>
+    <quill-editor [(ngModel)]="detailsChange">
+    </quill-editor>
+  </div>
+</div>
+
+<div class="log-list">
+  <div>CHANGE LOG LIST</div>
+  <app-changeloglisttable [changeLogList]="changeLogList"></app-changeloglisttable>
+</div>
+
+<div>
+  <app-changelogsettings></app-changelogsettings>
+</div>
+
+
+<!-- Confirm Delete Alert Box -->
+<div class="confirm-delete-modal-wrapper" *ngIf="showConfirmModal" ></div>
+<div [ngClass]="{'confirm-modal': showConfirmModal, 'confirm-modal-hide': !showConfirmModal }">
+  <div class="header">
+    <span>Confirm Delete</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showConfirmModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      Are you sure you want to add an estimate? 
+      If you add an estimate to a change log it will effect the project financials
+    </div>
+    <div class="center-btn-section" >
+			<button class="cancel-btn" (click)="showConfirmModal=false" >
+        No
+      </button>
+      <button class="confirm-btn" (click)="confirm();" >
+        Yes
+      </button>
+    </div>
+  </div>
+</div> 

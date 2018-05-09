@@ -1,0 +1,159 @@
+<div class="header">
+  <div class="task-owner">
+    <img src="{{currentTaskOwner.imageUrl}}" *ngIf="currentTaskOwner.imageUrl" (click)="openOwnerModal(); $event.stopPropagation();">
+    <img *ngIf="!currentTaskOwner.imageUrl" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(); $event.stopPropagation();">
+    <!-- Task owner selection modal-->
+    <div
+      class="owner-modal"
+      [ngClass]="{'show-modal': ownerModalCollapsed, 'hide-modal': !ownerModalCollapsed }"
+      (clickOutside)="closeOwnerModal()"
+      *ngIf="ownerModalCollapsed"
+    >
+      <div class="owner-mdl-content">
+        <select [(ngModel)]="selectedOwner" (ngModelChange)="onOwnerSelect($event)" >
+          <option [value]="undefined">Select Task Owner</option>
+          <option *ngFor="let owner of taskOwners; let i = index" [value]="i">{{owner.name}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="due-date">
+    <span class="d-date" [ngClass]="getDateColor(dDate)">{{dDate}}</span>
+    <input [owlDateTime]="dueDate" placeholder="Due Date" (dateTimeChange)="selectDueDate($event)"   [(ngModel)]="dateDue" class="hidden-input">
+    <span class="trigger" [owlDateTimeTrigger]="dueDate">
+      <img src="assets/images/calendar.png">
+    </span>
+    <owl-date-time [pickerType]="'calendar'" #dueDate ></owl-date-time>
+    <div class="duration">
+      <input [(ngModel)]="duration">
+      <span *ngIf="duration>1">days</span>
+      <span *ngIf="duration==1 || duration==0">day</span>
+    </div>
+  </div>
+  <div class="settings-section">
+    <img src="assets/images/link.png" (click)='dependencyEditableTop=true;$event.stopPropagation();'>
+    <img src="assets/images/attachment.png" (click)="openAlert()">
+    <img src="assets/images/menu(1).png" (click)='showSettingsModal=true;$event.stopPropagation();'>
+    <img src="assets/images/x-sign-red.png" (click)='closeModal()'>
+    <!--dependency selection modal-->
+    <div class="dependency-section">
+      <div class="dependencies" (click)='dependencyEditableTop=true;$event.stopPropagation();'>
+        <div class="edit-dependencies" *ngIf="dependencyEditableTop" (click)="dependencyEditableTop=true;$event.stopPropagation()" (clickOutside)="dependencyEditableTop=false">
+          <ul>
+            <li *ngFor="let task of selectedDependencies; let i = index">{{task}}<span (click)="removeTask(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+            <li style="background: none; width: 100%; margin: 0;">
+                <input autocomplete [config]="dependencyConfig" [items]="dependencyData"
+                (inputChangedEvent)="onInputChangedEvent($event)"
+                (selectEvent)="onDependencySelect($event)">
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!--settings modal-->
+    <div [ngClass]="{'settings-modal': showSettingsModal, 'settings-modal-hide': !showSettingsModal }" (clickOutside)="closeSettingsModal();">
+      <div (click)="showDeleteConfirmModal = true;">Delete Task</div>
+      <div (click)="deleteSelectedSubTasks()">Delete Selected Subtasks</div>
+      <div (click)="copySelectedSubTasks()">Copy Task</div>
+      <div>Mark as Waiting On</div>
+      <div>Print</div>
+    </div>
+  </div>
+</div>  
+<div class="body">
+  <span class="project-name">{{projectName}}</span>
+  <div class="sub-tasks">
+    <app-subtasksmanagement 
+      (subTasksToParent)="getSubTasks($event)" 
+      (selectedSubTasksToParent)="getSelectedSubTasks($event)"
+      (completenessToParent)="getTaskCompleteness($event)"
+      (changedMainTask)="getMainTask($event)"
+      [subTasks]="subTasks"
+      [selectedSubTasks]="selectedSubTasks">
+    </app-subtasksmanagement>
+  </div>
+  <div class="attachment">
+    <img src="assets/images/attachment.png" (click)="openAlert()">
+  </div>
+  <div class="tags">
+    <img src="assets/images/tag.png">
+    <div class="project-tags">
+      <app-multikeywordselect [keywords]="projectTags" ></app-multikeywordselect>
+    </div>
+  </div>
+  <div class="dependency" (click)='dependencyEditable=true;$event.stopPropagation();'>
+    <img src="assets/images/link.png">
+    <span *ngFor="let task of selectedDependencies; let i = index" class="selected-dependency" >
+      {{task}}
+      <!-- <input [(ngModel)]="task.id" (input)="changeDependency(task.id, selectedDependencies, i)" disabled> -->
+    </span>
+    <div class="dependency-section">
+      <div class="dependencies" (click)='dependencyEditable=true;$event.stopPropagation();'>
+        <div class="edit-dependencies dp-down" *ngIf="dependencyEditable" (click)="dependencyEditable=true;$event.stopPropagation()" (clickOutside)="dependencyEditable=false">
+          <ul>
+            <li *ngFor="let task of selectedDependencies; let i = index">{{task}}<span (click)="removeTask(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+            <li style="background: none; width: 100%; margin: 0;">
+                <input autocomplete [config]="dependencyConfig" [items]="dependencyData"
+                (inputChangedEvent)="onInputChangedEvent($event)"
+                (selectEvent)="onDependencySelect($event)">
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="internal-notes">
+    <span>INTERNAL NOTES</span>
+    <textarea placeholder="Enter internal notes here..." [(ngModel)]="internalNotes"></textarea>
+  </div>
+  <div class="followers-section">
+    <div class="followers"> 
+      <span>Followers</span>
+      <div class="follower" *ngFor="let user of followers; let i = index" (click)='editable=true;$event.stopPropagation();'>
+        <a [title]='user.name' ><img [src]='user.imageUrl'/></a>
+      </div> 
+      <div class="follower add-follower" >
+        <a title='user.name' (click)="editable=true;$event.stopPropagation()" ><img src='assets/images/Add-Button.svg'/></a>
+      </div> 
+      <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+        <ul>
+          <li *ngFor="let user of followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li style="background: none; width: 100%; margin: 0;">
+              <input autocomplete [config]="config2" [items]="items2"
+              (inputChangedEvent)="onInputChangedEvent($event)"
+              (selectEvent)="onSelect($event)">
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="following">
+      <img src="assets/images/alarm.png" [ngStyle]="{'opacity': following ? 0.5 : 1}" (click)="following = !following">
+      <span>Following</span>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-delete-modal-wrapper" *ngIf="showDeleteConfirmModal" ></div>
+<div [ngClass]="{'confirm-modal': showDeleteConfirmModal, 'confirm-modal-hide': !showDeleteConfirmModal }">
+  <div class="header">
+    <span>Confirm Delete</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showDeleteConfirmModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      Do you really want to delete?
+    </div>
+    <div class="center-btn-section" >
+      <button class="confirm-btn" (click)="confirmDeleteMainTask()" >
+        Confirm
+      </button>
+      <button class="cancel-btn" (click)="showDeleteConfirmModal=false" >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div> 
