@@ -99,10 +99,6 @@
   padding: 17px 10px 0 10px;
 }
 
-.pm-routers a.active-link {
-  border-bottom: 5px solid #70eaca;
-}
-
 .pm-routers a:hover {
   text-decoration: none;
 }

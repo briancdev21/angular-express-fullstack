@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
+import { PmService } from '../../pm.service';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-changeloglisttable',
@@ -8,89 +10,88 @@ import * as _ from 'lodash';
   styleUrls: [
     './changeloglisttable.component.css',
   ],
+  providers: [PmService],
 })
 
 
 export class ChangeLogListTableComponent implements OnInit {
 
-  @Input() changelogListInfo;
+  @Input() changeLogList;
+  public barInfo: any;
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
-
-  constructor( private router: Router ) {
+  dateNow = new Date();
+  aweekLater = new Date();
+  constructor( private pmService: PmService, private router: Router ) {
   }
 
   ngOnInit() {
-    this.changelogListInfo.map(i => i.timePassed = this.calcTimePassedDays(i.signedDate, i.status));
+    // get a week later date
+    this.aweekLater.setDate(this.aweekLater.getDate() + 7);
+
+    // Change date format
+    this.changeLogList.map( l => {
+      l.dateCreated = moment(l.dateCreated).format('MMMM DD, YYYY');
+      l.lastUpdated = moment(l.lastUpdated).format('MMMM DD, YYYY');
+      l.dateApproved = moment(l.dateApproved).format('MMMM DD, YYYY');
+    });
   }
 
   getStatus() {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../logs/' + id]);
+    this.router.navigate(['../changelog/' + id]);
   }
 
   sortArray(field) {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.changelogListInfo.sort( function(name1, name2) {
-        if ( Math.abs(name1[field]) < Math.abs(name2[field])) {
+      this.changeLogList.sort( function(name1, name2) {
+        if ( name1[field] < name2[field] ) {
           return -1;
-        } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
+        } else if ( name1[field] > name2[field]) {
           return 1;
         } else {
           return 0;
         }
       });
     } else {
-      this.changelogListInfo.reverse();
+      this.changeLogList.reverse();
     }
   }
 
-  calcTimePassedDays(sign, status) {
-    const today = new Date();
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-    const signDate = new Date(sign);
-    const diffDays = Math.round((today.getTime() - signDate.getTime()) / (oneDay));
-    if (diffDays < 0) {
-      return 0;
-    } else {
-      return diffDays;
-    }
-  }
-
-  sortCreateDateArray(field) {
+  sortDateArray(field) {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.changelogListInfo.sort( function(name1, name2) {
+      this.changeLogList.sort( function(name1, name2) {
+        console.log('999', name1[field], name2[field]);
         if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
           return -1;
-        } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
+        } else if ( Date.parse(name1[field]) > Date.parse(name2[field]) || name2[field] === '') {
           return 1;
         } else {
           return 0;
         }
       });
     } else {
-      this.changelogListInfo.reverse();
+      this.changeLogList.reverse();
     }
   }
 
-  getDateColor(days) {
-    return days >= 0 ? 'green' : 'red';
+  getColor(value) {
+    if (value >= 0) {
+      return 'green';
+    } else {
+      return 'red';
+    }
   }
 
-  getAbs(value) {
+  changeToAbs(value) {
     return Math.abs(value);
   }
-
-  getBudgetColor(budget) {
-    return budget >= 0 ? 'green' : 'red';
-  }
-
 }
 

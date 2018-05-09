@@ -1,10 +1,17 @@
 <div class="content pm-schedule" >
   <tabs>
     <tab tabTitle="Project Tasks" [(active)]="tabActiveFirst">
-      <h1>PM Project Tasks Content Here</h1>
+      <div class="gantt-chart">
+        <app-ganttchart [tasks]="tasks"></app-ganttchart>
+      </div>
+      <app-pmtaskstable [milestones]="pmBoardTableData"></app-pmtaskstable>
     </tab>
     <tab tabTitle="Project Work Orders" [(active)]="tabActiveFirst">
       <h1>PM Project Work Orders Content Here</h1>
     </tab>
   </tabs>
+</div>
+<div class="detailed-task-modal-wrapper" *ngIf="showDetailedTaskModal" (click)="showDetailedTaskModal=false;"></div>
+<div [ngClass]="{'add-detailed-task-modal': showDetailedTaskModal, 'detailed-task-modal-hide': !showDetailedTaskModal }">
+  <app-adddetailedtask [(showDetailedTaskModal)]="showDetailedTaskModal" (addNewTaskToTable)="getUpdatedTask($event)"></app-adddetailedtask>
 </div>

@@ -1,0 +1,70 @@
+<div class="cmp-content">
+	<div class="content-left" >
+		<div class="customer-project">
+			<div class="customer-name">
+				<span>Customer name</span>
+				<input [(ngModel)]="changeLogInfo.customerName" disabled>
+			</div>
+			<div class="project">
+				<span>Project</span>
+				<input [(ngModel)]="changeLogInfo.projectName" disabled>
+			</div>
+		</div>
+		<div class="shipping-address">
+			<div class="desc">
+				<span>Project Address</span>
+				<div class="switching-icon">
+					<img src="assets/images/switch.png" *ngIf="switchIconAddress" (click)="clickIconShipping()">
+					<img src="assets/images/switch-off.png" *ngIf="!switchIconAddress" (click)="clickIconShipping()">
+					<span>Use customer address</span>
+				</div>
+			</div>
+			<input placeholder="Enter Project Address" class="address" [(ngModel)]="street">
+			<div class="city-state">
+				<input placeholder="Enter City" [(ngModel)]="city">
+				<input placeholder="Enter State" [(ngModel)]="state">
+			</div>
+			<div class="country-zip">
+				<input placeholder="Enter Country" [(ngModel)]="country">
+				<input placeholder="Enter Zipcode" [(ngModel)]="zipcode">
+			</div>
+		</div>
+	</div>
+	<div class="content-right" >
+		<div>
+			<span>Change Log ID</span>
+			<input placeholder="Enter Change Log ID" [(ngModel)]="changeLogInfo.changeLogId">
+		</div>
+		<div>
+			<span>Requested By</span>
+			<input placeholder="Requested By" [(ngModel)]="changeLogInfo.requestedBy">
+		</div>
+		<div>
+			<span>CC Contact</span>
+			<select [(ngModel)]="changeLogInfo.ccContact">
+				<option value="Danny Shibley">Danny Shibley</option>
+				<option value="Steve Jobs">Steve Jobs</option>
+				<option value="Michael">Michael</option>
+			</select>
+		</div>
+		<div class="start-date">
+			<span>Created on</span>
+			<div>
+				<input [owlDateTimeTrigger]="startDate" [owlDateTime]="startDate"  (dateTimeChange)="onCreatedDate($event)" [(ngModel)]="changeLogInfo.createdOn" dateA11yLabel>
+				<owl-date-time [pickerType]="'calendar'" #startDate ></owl-date-time>
+			</div>
+		</div>
+		<div class="end-date">
+			<span>Last Updated</span>
+			<div>
+				<input [owlDateTimeTrigger]="endDate" [owlDateTime]="endDate" (dateTimeChange)="onUpdatedDate($event)" [(ngModel)]="changeLogInfo.lastUpdated" >
+				<owl-date-time [pickerType]="'calendar'" #endDate ></owl-date-time>
+			</div>
+		</div>
+		<div class="switching-icon">
+			<img src="assets/images/switch.png" *ngIf="switchIconPm" (click)="changeLogInfo.updatePm=false; switchIconPm=false">
+			<img src="assets/images/switch-off.png" *ngIf="!switchIconPm" (click)="changeLogInfo.updatePm=true; switchIconPm=true">
+			<span class="update-pm">Update Customer's Project Manager Once it is approved</span>
+		</div>
+	</div>
+</div>

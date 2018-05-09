@@ -1,26 +1,30 @@
 <div class="content">
-  <table>
+  <table class="change-log-table">
     <tr>
-      <th (click)="sortArray('logId')">CHANGE LOG ID</th>
-      <th (click)="sortArray('logName')">CHANGE LOG NAME</th>
-      <th (click)="sortArray('priority')">PRIORITY</th>
-      <th (click)="sortArray('requestedBy')">REQUESTED BY</th>
+      <th (click)="sortArray('id')">ID</th>
+      <th (click)="sortArray('typeName')">TYPE NAME</th>
+      <th (click)="sortArray('type')">TYPE</th>
+      <th (click)="sortArray('createdBy')">CREATED BY</th>
       <th (click)="sortArray('budgetImpact')">BUDGET IMPACT</th>
-      <th (click)="sortArray('scheduleImpact')">SCHEDULE IMPACT</th>
-      <th (click)="sortCreateDateArray('dateCreated')">DATE CREATED</th>
-      <th (click)="sortCreateDateArray('lastUpdated')">LAST UPDATED</th>
-      <th (click)="sortCreateDateArray('dateApproved')">DATE APPROVED</th>
+      <th (click)="sortArray('scheduleImpact')">SCHEDULE IMPACT</th> 
+      <th (click)="sortDateArray('dateCreated')">DATE CREATED</th>
+      <th (click)="sortDateArray('lastUpdated')">LAST UPDATED</th>
+      <th (click)="sortDateArray('dateApproved')">DATE APPROVED</th>
     </tr>
-    <tr *ngFor="let log of changelogListInfo; let i = index" (click)="redirectTo(pending.projectNumber)">
-      <td>{{log.logId}}</td>
-      <td>{{log.logName}}</td>
-      <td>Level {{log.priority}}</td>
-      <td>{{log.requestedBy}}</td>
-      <td [ngClass]="getBudgetColor(log.budgetImpact)">$ {{getAbs(log.budgetImpact) | number: '1.2-2'}}</td>
-      <td [ngClass]="getDateColor(log.scheduleImpact)">{{getAbs(log.scheduleImpact)}} Day<span *ngIf="log.scheduleImpact > 1">s</span></td>
-      <td>{{log.dateCreated}}</td>
-      <td>{{log.lastUpdated}}</td>
-      <td>{{log.dateApproved}}</td>
+    <tr *ngFor="let changeLog of changeLogList" (click)="redirectTo(changeLog.id)">
+      <td>{{changeLog.id}}</td>
+      <td>{{changeLog.typeName}}</td>
+      <td>{{changeLog.type}}</td>
+      <td>{{changeLog.createdBy}}</td>
+      <td [ngClass]="getColor(changeLog.budgetImpact)"> $ {{changeToAbs(changeLog.budgetImpact) | number: '1.2-2'}}</td>
+      <td [ngClass]="getColor(changeLog.scheduleImpact)">
+        {{changeToAbs(changeLog.scheduleImpact)}} 
+        <span *ngIf="changeToAbs(changeLog.scheduleImpact)>1">Days</span>
+        <span *ngIf="changeToAbs(changeLog.scheduleImpact)===1">Day</span>
+      </td>
+      <td>{{changeLog.dateCreated}}</td>
+      <td>{{changeLog.lastUpdated}}</td>
+      <td>{{changeLog.dateApproved}}</td>
     </tr>
   </table>
 </div>
