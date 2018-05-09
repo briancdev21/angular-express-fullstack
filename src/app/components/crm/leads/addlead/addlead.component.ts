@@ -88,6 +88,10 @@ export class AddLeadComponent implements OnInit {
   secondaryNumber = '';
   termsList = [];
   pricingCategoriesList = [];
+  contactsList = [];
+  usersList = [];
+  sourcesList = [];
+  sourcesNameList = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
@@ -107,6 +111,21 @@ export class AddLeadComponent implements OnInit {
 
     this.sharedService.getPricingCategories().subscribe (res => {
       this.pricingCategoriesList = res.results;
+    });
+
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res.results;
+      console.log('contacts: ', res);
+    });
+
+    this.sharedService.getUsers().subscribe(res => {
+      this.usersList = res.results;
+      console.log('users: ', res);
+    });
+
+    this.sharedService.getSources().subscribe(res => {
+      this.sourcesList = res.results;
+      console.log('sources: ', res.results);
     });
   }
 
@@ -268,148 +287,113 @@ export class AddLeadComponent implements OnInit {
     this.invalidDefaultCurrency = false;
     this.invalidDefaultPricing = false;
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
-      
-      // const newLead = {
-      //   currencyId: this.defaultCurrency,
-      //   termId: this.defaultTerm,
-      //   sourceId: 1,
-      //   pricingCategoryId: this.defaultPricing,
-      //   keywordIds: this.keywordsIdList,
-      //   type: this.businessType,
-      //   person: {
-      //     firstName: this.firstName,
-      //     lastName: this.lastName,
-      //     jobTitle: this.jobTitle,
-      //     department: this.captain,
-      //   },
-      //   business: {
-      //     name: this.businessName,
-      //     headContact: 1,
-      //     accountReceivable: 1,
-      //     personAssociation: 1,
-      //   },
-      //   shippingAddress: {
-      //     address: this.shippingAddress,
-      //     city: this.shippingCity,
-      //     province: this.shippingProvince,
-      //     postalCode: this.shippingPostalCode,
-      //     country: this.shippingCountry
-      //   },
-      //   email:c
-      //   phoneNumbers: {
-      //     primary: this.primaryNumber,
-      //     secondary: this.secondaryNumber
-      //   },
-      //   note: this.notes
-      // };
-
       const newLead = {
-        // "currencyId": parseInt(this.defaultCurrency, 10),
-        // "termId": parseInt(this.defaultTerm, 10),
-        // "sourceId": 1,
-        // "pricingCategoryId": parseInt(this.defaultPricing, 10),
-        // "keywordIds": this.keywordsIdList,
-        // "owner": "string",
-        // "followers": [
-        //   "string"
-        // ],
-        // "type": this.businessType,
-        // "person": {
-        //   "firstName": this.firstName,
-        //   "lastName": this.lastName,
-        //   "jobTitle": this.jobTitle,
-        //   "department": this.captain,
-        //   "businessAssociation": 0
-        // },
-        // "business": {
-        //   "name": this.businessName,
-        //   "headContact": 0,
-        //   "accountReceivable": 0,
-        //   "personAssociations": [
-        //     0
-        //   ]
-        // },
-        // "shippingAddress": {
-        //   "address": this.address,
-        //   "city": this.city,
-        //   "province": this.province,
-        //   "postalCode": this.postalCode,
-        //   "country": this.country
-        // },
-        // "billingAddress": {
-        //   "address": this.billingAddress,
-        //   "city": this.billingCity,
-        //   "province": this.billingProvince,
-        //   "postalCode": this.billingPostalCode,
-        //   "country": this.billingCountry
-        // },
-        // "email":  this.email,
-        // "socialMediaUrl": {
-        //   "linkedIn": "string",
-        //   "facebook": "string",
-        //   "twitter": "string"
-        // },
-        // "phoneNumbers": {
-        //   "primary": this.primaryNumber,
-        //   "secondary": this.secondaryNumber,
-        // },
-        // "timezone": 0,
-        // "note": this.notes,
-        // "lastContacted": moment().format('YYYY-MM-DD')
-          "currencyId": 1,
-          "termId": 1,
-          "sourceId": 1,
-          "pricingCategoryId": 1,
-          "keywordIds": [
-            1, 5
-          ],
-          "owner": "string",
-          "followers": [
-            "string"
-          ],
-          "type": "PERSON",
-          "person": {
-            "firstName": "string",
-            "lastName": "string",
-            "jobTitle": "string",
-            "department": "string",
-            "businessAssociation": 1
-          },
-          "business": {
-            "name": "string",
-            "headContact": 1,
-            "accountReceivable": 1,
-            "personAssociations": [
-              1
-            ]
-          },
-          "shippingAddress": {
-            "address": "string",
-            "city": "string",
-            "province": "string",
-            "postalCode": "string",
-            "country": "string"
-          },
-          "billingAddress": {
-            "address": "string",
-            "city": "string",
-            "province": "string",
-            "postalCode": "string",
-            "country": "string"
-          },
-          "email": "string",
-          "socialMediaUrl": {
-            "linkedIn": "string",
-            "facebook": "string",
-            "twitter": "string"
-          },
-          "phoneNumbers": {
-            "primary": "43223423",
-            "secondary": "423423432"
-          },
-          "timezone": 1,
-          "note": "string",
-          "lastContacted": "2018-05-08"
+        'currencyId': parseInt(this.defaultCurrency, 10),
+        'termId': parseInt(this.defaultTerm, 10),
+        'sourceId': 1,
+        'pricingCategoryId': parseInt(this.defaultPricing, 10),
+        'keywordIds': this.keywordsIdList,
+        'owner': 'string',
+        'followers': [
+          'string'
+        ],
+        'type': this.businessType,
+        'person': {
+          'firstName': this.firstName,
+          'lastName': this.lastName,
+          'jobTitle': this.jobTitle,
+          'department': this.captain,
+          'businessAssociation': 1
+        },
+        'business': {
+          'name': this.businessName,
+          'headContact': 1,
+          'accountReceivable': 1,
+          'personAssociations': [
+            0
+          ]
+        },
+        'shippingAddress': {
+          'address': this.address,
+          'city': this.city,
+          'province': this.province,
+          'postalCode': this.postalCode,
+          'country': this.country
+        },
+        'billingAddress': {
+          'address': this.billingAddress,
+          'city': this.billingCity,
+          'province': this.billingProvince,
+          'postalCode': this.billingPostalCode,
+          'country': this.billingCountry
+        },
+        'email':  this.email,
+        'socialMediaUrl': {
+          'linkedIn': 'string',
+          'facebook': 'string',
+          'twitter': 'string'
+        },
+        'phoneNumbers': {
+          'primary': this.primaryNumber,
+          'secondary': this.secondaryNumber,
+        },
+        'timezone': 1,
+        'note': this.notes,
+        'lastContacted': moment().format('YYYY-MM-DD')
+          // "currencyId": 1,
+          // "termId": 1,
+          // "sourceId": 1,
+          // "pricingCategoryId": 1,
+          // "keywordIds": [
+          //   1, 5
+          // ],
+          // "owner": "string",
+          // "followers": [
+          //   "string"
+          // ],
+          // "type": "PERSON",
+          // "person": {
+          //   "firstName": "string",
+          //   "lastName": "string",
+          //   "jobTitle": "string",
+          //   "department": "string",
+          //   "businessAssociation": 1
+          // },
+          // "business": {
+          //   "name": "string",
+          //   "headContact": 1,
+          //   "accountReceivable": 1,
+          //   "personAssociations": [
+          //     1
+          //   ]
+          // },
+          // "shippingAddress": {
+          //   "address": "string",
+          //   "city": "string",
+          //   "province": "string",
+          //   "postalCode": "string",
+          //   "country": "string"
+          // },
+          // "billingAddress": {
+          //   "address": "string",
+          //   "city": "string",
+          //   "province": "string",
+          //   "postalCode": "string",
+          //   "country": "string"
+          // },
+          // "email": "string",
+          // "socialMediaUrl": {
+          //   "linkedIn": "string",
+          //   "facebook": "string",
+          //   "twitter": "string"
+          // },
+          // "phoneNumbers": {
+          //   "primary": "43223423",
+          //   "secondary": "423423432"
+          // },
+          // "timezone": 1,
+          // "note": "string",
+          // "lastContacted": "2018-05-08"
       };
       this.crmService.createLead(JSON.stringify(newLead)).subscribe(data => {
         console.log('data: ', data);

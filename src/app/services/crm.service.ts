@@ -17,46 +17,29 @@ import 'rxjs/add/operator/do';
 
 export class CrmService {
 
-constructor( private http: HttpClient) {
+  options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
+
+  constructor( private http: HttpClient) {
+  }
+
+  getLeadsList (limit: number = 50, offset: number = 0): Observable<any> {
+    const url = `${apiUrl}crm/leads/?limit=${limit}&offset=${offset}`;
+    // const url = `${apiUrl}crm/leads/`;
+    console.log('id_token', apiHeaders());
+    return this.http.get(url);
+  }
+
+  createLead (body): Observable<any> {
+    // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
+    const url = `${apiUrl}crm/leads/`;
+    return this.http.post(url, body, this.options)
+      .map((res) => res);
+
+    // return this.http.post<any>(url, body);
+      // .pipe(tap(data => {
+      //   console.log('return post data: ', data);
+      // }));
+
+  }
 }
 
-getLeadsList (limit: number = 50, offset: number = 0): Observable<any> {
-  const url = `${apiUrl}crm/leads/?limit=${limit}&offset=${offset}`;
-  // const url = `${apiUrl}crm/leads/`;
-  console.log('id_token', apiHeaders());
-  return this.http.get(url);
-}
-
-createLead (body): Observable<any> {
-  // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
-  const url = `${apiUrl}crm/leads/`;
-  // console.log('body: ', body);
-  // return this.http.post(url, body, options);
-  
-  let options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
-  return this.http.post(url, body, options)
-    .map((res) => res);
-  
-  // return this.http.post<any>(url, body);
-    // .pipe(tap(data => {
-    //   console.log('return post data: ', data);
-    // }));
-
-}
-
-}
-
-// @Injectable()
-// export class CrmService {
-//     private url = 'http://ec2-35-183-72-80.ca-central-1.compute.amazonaws.com:8080/api/v1/crm/leads?limit=50&offset=0';
-//     constructor(private _http: HttpClient) { }
-//     getLeadsList(): Observable<any> {
-//         return this._http.get<any>(this.url)
-//             .do(data => console.log('111111', JSON.stringify(data)))
-//             .catch(this.handleError);
-//     }
-//     private handleError(err: HttpErrorResponse) {
-//         console.log('22222', err.message);
-//         return Observable.throw(err.message);
-//     }
-// }
