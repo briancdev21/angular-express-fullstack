@@ -1,16 +1,24 @@
 <div class="content pm-progress" >
-  <tabs (currentTabChange)="tabChange($event)">
+  <tabs>
     <tab tabTitle="Overview" [(active)]="tabActiveFirst">
-      <app-progressoverview></app-progressoverview>
+      <h1>PM Progress Overview Content Here</h1>
     </tab>
-    <tab tabTitle="Project Brief" [(active)]="tabActiveSecond">
-      <app-progressprojectbrief></app-progressprojectbrief>
+    <tab tabTitle="Project Brief" [(active)]="tabActiveFirst">
+      <h1>PM Progress Brief Content Here</h1>
     </tab>
-    <tab tabTitle="Project Log" [(active)]="tabActiveThird">
-      <app-progressproductlog></app-progressproductlog>
-    </tab>
-    <tab tabTitle="Change Log" [(active)]="tabActiveFourth">
-      <router-outlet></router-outlet>
+    <tab tabTitle="Change Log" [(active)]="tabActiveFirst">
+      <div class="info">
+        <div class="info-top">
+          <h1>John Moss</h1>
+          <h1>NU8802-0159</h1>
+        </div>
+        <div class="info-down">
+          <span class="change-log">Change Logs</span>
+          <div class="add-btn">Add Change Log</div>
+        </div>
+      </div>
+      
+      <app-changeloglisttable [(changelogListInfo)]="changelogListInfo"></app-changeloglisttable>
     </tab>
   </tabs>
 </div>
