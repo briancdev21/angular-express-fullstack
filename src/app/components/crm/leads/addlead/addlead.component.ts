@@ -158,6 +158,14 @@ export class AddLeadComponent implements OnInit {
       this.sourcesList = res.results;
       this.sourcesNameList = res.results.map(n => n.source);
     });
+
+    this.sharedService.getTerms().subscribe(res => {
+      this.termsList = res.results;
+    });
+
+    this.sharedService.getPricingCategories().subscribe (res => {
+      this.pricingCategoriesList = res.results;
+    });
   }
 
   onAccountTypeChange(event) {
