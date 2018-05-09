@@ -235,22 +235,22 @@ export class SharedService {
 
   //  Category
   getCategories(): Observable<any> {
-    const url = `${apiUrl}organization/categories`;
+    const url = `${environment.apiUrl}/organization/categories`;
     return this.http.get(url);
   }
 
   createCategory (body): Observable<any> {
-    const url = `${apiUrl}organization/categories`;
+    const url = `${environment.apiUrl}/organization/categories`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualCategory(id): Observable<any>  {
-    const url = `${apiUrl}organization/categories/${id}`;
+    const url = `${environment.apiUrl}/organization/categories/${id}`;
     return this.http.get(url);
   }
 
   updateIndividualCategory(id, body): Observable<any>  {
-    const url = `${apiUrl}organization/categories/${id}`;
+    const url = `${environment.apiUrl}/organization/categories/${id}`;
     return this.http.put(url, body);
   }
 
