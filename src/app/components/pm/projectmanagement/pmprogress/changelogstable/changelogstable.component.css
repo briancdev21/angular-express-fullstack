@@ -85,6 +85,47 @@ table i {
   cursor: pointer;
 }
 
+
+h1 {
+  font-weight: 400;
+  color: #95989A;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.info>div {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 25px;
+}
+
+.add-btn {
+  font-size: 10px;
+  letter-spacing: 0;
+  padding: 4px 10px;
+  background-color: #A8F2DF;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #868686;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 25px
+}
+
+.change-log {
+  color: #6eb1dd;
+  font-size: 20px;
+}
+
+.info .info-down {
+  padding-bottom: 15px;
+}
+
 @media screen and (max-width: 1200px) {
 
 }

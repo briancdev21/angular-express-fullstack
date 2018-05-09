@@ -3,17 +3,51 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-changeloglisttable',
-  templateUrl: './changeloglisttable.component.html',
+  selector: 'app-changelogstable',
+  templateUrl: './changelogstable.component.html',
   styleUrls: [
-    './changeloglisttable.component.css',
+    './changelogstable.component.css',
   ],
 })
 
 
-export class ChangeLogListTableComponent implements OnInit {
+export class ChangeLogsTableComponent implements OnInit {
 
-  @Input() changelogListInfo;
+  changelogListInfo: Array<Object> = [
+    {
+      logId: 'CL0159-01',
+      logName: 'Changing of the TV location in Living Room',
+      priority: 1,
+      requestedBy: 'Sepehr Shoarinejad',
+      budgetImpact: 2000,
+      scheduleImpact: -14,
+      dateCreated: 'November 20, 2016',
+      lastUpdated: 'January 20, 2017',
+      dateApproved: 'January 20, 2017',
+    },
+    {
+      logId: 'CL0159-02',
+      logName: 'Customer constantly changing his mind',
+      priority: 1,
+      requestedBy: 'Sepehr Shoarinejad',
+      budgetImpact: -2000,
+      scheduleImpact: 2,
+      dateCreated: 'December 15, 2016',
+      lastUpdated: 'March 20, 2017',
+      dateApproved: 'April 20, 2017',
+    },
+    {
+      logId: 'CL0159-03',
+      logName: 'I don\'t know what to do anymore',
+      priority: 1,
+      requestedBy: 'Tyler Labonte',
+      budgetImpact: 3500,
+      scheduleImpact: 4,
+      dateCreated: 'January 20, 2016',
+      lastUpdated: 'June 20, 2017',
+      dateApproved: 'June 20, 2017',
+    },
+  ];
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
@@ -22,14 +56,14 @@ export class ChangeLogListTableComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.changelogListInfo.map(i => i.timePassed = this.calcTimePassedDays(i.signedDate, i.status));
+    // this.changelogListInfo.map(i => i.timePassed = this.calcTimePassedDays(i.signedDate, i.status));
   }
 
   getStatus() {
   }
 
-  redirectTo(id) {
-    this.router.navigate(['../logs/' + id]);
+  redirectTo() {
+    this.router.navigate(['./pm/pm-details/pm-progress/pm-log-details/']);
   }
 
   sortArray(field) {

@@ -21,6 +21,7 @@ import { ChangeLogProfileComponent } from './pmprogress/changelogprofile/changel
 import { ChangeLogDetailsComponent } from './pmprogress/changelogdetails/changelogdetails.component';
 import { ChangeLogListTableComponent } from './pmprogress/changeloglisttable/changeloglisttable.component';
 import { ChangeLogSettingsComponent } from './pmprogress/changelogsettings/changelogsettings.component';
+import { ChangeLogsTableComponent } from './pmprogress/changelogstable/changelogstable.component';
 
 import { CommonCmpModule } from '../../../components/common/common.module';
 import { ProfileCmpModule } from '../../profile/profile.module';
@@ -63,7 +64,8 @@ export const MY_NATIVE_FORMATS = {
     ChangeLogProfileComponent,
     ChangeLogDetailsComponent,
     ChangeLogListTableComponent,
-    ChangeLogSettingsComponent
+    ChangeLogSettingsComponent,
+    ChangeLogsTableComponent
   ],
   imports: [
     BrowserModule,
