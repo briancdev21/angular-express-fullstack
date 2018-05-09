@@ -36,7 +36,7 @@ export class ProjectsListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../projectslist/' + id]);
+    this.router.navigate(['./pm/pm-details/']);
   }
 
   sortArray(field) {

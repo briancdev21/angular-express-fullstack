@@ -20,14 +20,14 @@ import { CrmComponent } from './components/crm/crm.component';
 import { PmComponent } from './components/pm/pm.component';
 import { InventoryComponent } from './components/inventory/inventory.component';
 import { ServicingComponent } from './components/servicing/servicing.component';
-import { ProjectManagementComponent } from './components/projectmanagement/projectmanagement.component';
+import { ProjectManagementComponent } from './components/pm/projectmanagement/projectmanagement.component';
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/sales/proposal/proposal.module';
 import { OrderProfileCmpModule } from './components/orderprofile/orderprofile.module';
 import { SalesCmpModule } from './components/sales/sales.module';
 import { CollaborationCmpModule } from './components/collaboration/collaboration.module';
-import { ProjectManagementCmpModule } from './components/projectmanagement/projectmanagement.module';
+import { ProjectManagementCmpModule } from './components/pm/projectmanagement/projectmanagement.module';
 import { CommonCmpModule } from './components/common/common.module';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { AutocompleteModule } from 'ng2-input-autocomplete';

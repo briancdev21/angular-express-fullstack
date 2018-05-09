@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../common/common.component';
 import { PmService } from './pm.service';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import 'rxjs/add/operator/filter';
+
 @Component({
   selector: 'app-pm',
   templateUrl: './pm.component.html',
@@ -14,7 +17,19 @@ import { PmService } from './pm.service';
 })
 export class PmComponent implements OnInit {
   menuCollapsed = true;
-  constructor() {
+  notPmDetails = true;
+
+  constructor( private router: Router) {
+    router.events
+      .filter(event => event instanceof NavigationEnd)
+      .subscribe((val) => {
+        console.log('router: ', val);
+        if (val['url'].includes('/pm/pm-details')) {
+          this.notPmDetails = false;
+        } else {
+          this.notPmDetails = true;
+        }
+      });
   }
 
   ngOnInit() {

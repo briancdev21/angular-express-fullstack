@@ -10,8 +10,8 @@ import { PmFinancialsComponent } from './pmfinancials/pmfinancials.component';
 import { PmProgressComponent } from './pmprogress/pmprogress.component';
 import { PmFilesComponent } from './pmfiles/pmfiles.component';
 import { ChangeLogListTableComponent } from './pmprogress/changeloglisttable/changeloglisttable.component';
-import { CommonCmpModule } from '../../components/common/common.module';
-import { BreadcrumbModule } from '../../components/breadcrumb/breadcrumb.module';
+import { CommonCmpModule } from '../../../components/common/common.module';
+import { BreadcrumbModule } from '../../../components/breadcrumb/breadcrumb.module';
 
 import { TabModule } from 'angular-tabs-component';
 import { FormsModule } from '@angular/forms';

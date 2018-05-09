@@ -1,6 +1,0 @@
-<app-common (expandSidebar)="toggleMenubar($event)"></app-common>
-<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
-  <div style="height:68px; margin: 0 20px;" class="sub-nav-bar" ></div>
-  <app-pmbreadcrumbbar [userInfo]='userInfo' ></app-pmbreadcrumbbar>
-  <router-outlet></router-outlet>
-</div>

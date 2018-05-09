@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonComponent } from '../../components/common/common.component';
+import { CommonComponent } from '../../../components/common/common.component';
 import { PmBreadcrumbBarComponent } from './pmbreadcrumbbar/pmbreadcrumbbar.component';
 import { PmService } from './pm.service';
 

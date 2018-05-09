@@ -1,6 +1,6 @@
 <app-common (expandSidebar)="toggleMenubar($event)"></app-common>
 <div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
-	<div class="top-bar sub-nav" [ngClass]="{'top-bar-large': mRotateMenu, 'top-bar-small': !mRotateMenu }">
+	<div *ngIf="notPmDetails" class="top-bar sub-nav" [ngClass]="{'top-bar-large': mRotateMenu, 'top-bar-small': !mRotateMenu }">
 		<div class="sub-nav-container clearfix">
 			<div class="col-sm-6 sub-nav-left">
 				<app-submenu (mOutputData)='Submit_Inventory_Data($event)'></app-submenu>

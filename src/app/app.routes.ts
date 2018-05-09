@@ -15,12 +15,12 @@ import { PendingsComponent } from './components/pm/pendings/pendings.component';
 import { CollaborationComponent } from './components/collaboration/collaboration.component';
 import { ProjectsListComponent } from './components/pm/projectslist/projectslist.component';
 import { ProposalListComponent } from './components/sales/proposallist/proposallist.component';
-import { ProjectManagementComponent } from './components/projectmanagement/projectmanagement.component';
-import { PmBoardComponent } from './components/projectmanagement/pmboard/pmboard.component';
-import { PmScheduleComponent } from './components/projectmanagement/pmschedule/pmschedule.component';
-import { PmFinancialsComponent } from './components/projectmanagement/pmfinancials/pmfinancials.component';
-import { PmProgressComponent } from './components/projectmanagement/pmprogress/pmprogress.component';
-import { PmFilesComponent } from './components/projectmanagement/pmfiles/pmfiles.component';
+import { ProjectManagementComponent } from './components/pm/projectmanagement/projectmanagement.component';
+import { PmBoardComponent } from './components/pm/projectmanagement/pmboard/pmboard.component';
+import { PmScheduleComponent } from './components/pm/projectmanagement/pmschedule/pmschedule.component';
+import { PmFinancialsComponent } from './components/pm/projectmanagement/pmfinancials/pmfinancials.component';
+import { PmProgressComponent } from './components/pm/projectmanagement/pmprogress/pmprogress.component';
+import { PmFilesComponent } from './components/pm/projectmanagement/pmfiles/pmfiles.component';
 import { PurchaseOrderListComponent } from './components/inventory/purchaseorderlist/purchaseorderlist.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
@@ -97,6 +97,16 @@ export const routes: Routes = [
       { path: 'tasks', component: MyTasksComponent },
       { path: 'projects', component: ProjectsListComponent },
       { path: 'pending-projects', component: PendingsComponent },
+      { path: 'pm-details', component: ProjectManagementComponent,
+        children: [
+          { path: '', redirectTo: 'pm-board', pathMatch: 'full' },
+          { path: 'pm-board', component: PmBoardComponent },
+          { path: 'pm-schedule', component: PmScheduleComponent },
+          { path: 'pm-financials', component: PmFinancialsComponent },
+          { path: 'pm-progress', component: PmProgressComponent },
+          { path: 'pm-files', component: PmFilesComponent },
+        ]
+      },
     ]
   },
   { path: 'inventory', component: InventoryComponent,
@@ -138,16 +148,6 @@ export const routes: Routes = [
       { path: 'financial-reports', component: FinancialReportsComponent },
       { path: 'performance-reports', component: PerformanceReportsComponent },
       { path: 'project-reports', component: ProjectReportsComponent },
-    ]
-  },
-  { path: 'pm-details', component: ProjectManagementComponent,
-    children: [
-      { path: '', redirectTo: 'pm-board', pathMatch: 'full' },
-      { path: 'pm-board', component: PmBoardComponent },
-      { path: 'pm-schedule', component: PmScheduleComponent },
-      { path: 'pm-financials', component: PmFinancialsComponent },
-      { path: 'pm-progress', component: PmProgressComponent },
-      { path: 'pm-files', component: PmFilesComponent },
     ]
   },
   { path: '**', component: TestComponent },
