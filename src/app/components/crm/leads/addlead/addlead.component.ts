@@ -132,6 +132,14 @@ export class AddLeadComponent implements OnInit {
       this.sourcesList = res.results;
       this.sourcesNameList = res.results.map(n => n.source);
     });
+
+    this.sharedService.getTerms().subscribe(res => {
+      this.termsList = res.results;
+    });
+
+    this.sharedService.getPricingCategories().subscribe (res => {
+      this.pricingCategoriesList = res.results;
+    });
   }
 
   onAccountTypeChange(event) {
@@ -165,6 +173,11 @@ export class AddLeadComponent implements OnInit {
   }
 
   getKeywords(event) {
+    this.keywordsIdList = event.map(k => k.id);
+  }
+
+  getKeywords(event) {
+    console.log('keywords: ', event);
     this.keywordsIdList = event.map(k => k.id);
   }
 
