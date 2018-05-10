@@ -68,6 +68,8 @@ export const MY_NATIVE_FORMATS = {
   ],
   providers: [
     OrderService,
+    SearchPipe,
+    ArraySortPipe,
     {provide: OWL_DATE_TIME_FORMATS, useValue: MY_NATIVE_FORMATS},
   ]
 })

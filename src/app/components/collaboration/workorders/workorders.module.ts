@@ -8,20 +8,25 @@ import { IonRangeSliderModule } from 'ng2-ion-range-slider';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ProfileCmpModule } from '../../profile/profile.module';
-import { CommonCmpModule } from '../../common/common.module';
-
 import { FilterService } from './filter.service';
 import { WorkOrdersTableComponent } from './workorderstable/workorderstable.component';
 import { WorkOrderFilterComponent } from './workorderfilter/workorderfilter.component';
+import { AddWorkOrderComponent } from './addworkorder/addworkorder.component';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { DragulaModule } from 'ng2-dragula';
+import { ClickOutsideModule } from 'ng4-click-outside';
 
+import { ProfileCmpModule } from '../../profile/profile.module';
+import { CommonCmpModule } from '../../common/common.module';
+import { OrderProfileCmpModule } from '../../orderprofile/orderprofile.module';
+import { SharedPipesModule } from '../../../pipes/sharedpipes.module';
 
 @NgModule({
   declarations: [
     WorkOrdersTableComponent,
     WorkOrderFilterComponent,
+    AddWorkOrderComponent
   ],
   imports: [
     BrowserModule,
@@ -35,11 +40,16 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutocompleteModule
+    AutocompleteModule,
+    OrderProfileCmpModule,
+    DragulaModule,
+    ClickOutsideModule,
+    SharedPipesModule
   ],
   exports: [
     WorkOrdersTableComponent,
     WorkOrderFilterComponent,
+    AddWorkOrderComponent
   ],
   providers: [FilterService]
 })

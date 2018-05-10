@@ -43,7 +43,6 @@ import { ReportsCmpModule } from './components/reports/reports.module';
 import { LeadProfileCmpModule } from './components/crm/leadprofile/leadprofile.module';
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { PhonePipe } from './pipes/phone.pipe';
 
 import { SubnavHandlerService } from './services/subnav-handler.service';
 import { CrmService } from './services/crm.service';
@@ -59,7 +58,6 @@ import { TokenInterceptor } from './services/token.interceptor';
     SalesComponent,
     SubmenuComponent,
     StopEventPropagationDirective,
-    PhonePipe,
     InventoryComponent,
     PmComponent,
     ProjectManagementComponent,
@@ -97,7 +95,6 @@ import { TokenInterceptor } from './services/token.interceptor';
   ],
   exports: [
     SubmenuComponent,
-    PhonePipe
   ],
   providers: [
     SubnavHandlerService,
