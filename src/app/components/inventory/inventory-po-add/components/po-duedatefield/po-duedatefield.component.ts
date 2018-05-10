@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-po-duedatefield',
@@ -9,6 +9,9 @@ export class PODueDateFieldComponent implements OnInit {
   @Input() dueDate;
   yesterday: Date;
 
+  @Output() dueDateChanged: EventEmitter<any> = new EventEmitter();
+
+
   ngOnInit() {
     const date = new Date();
     date.setDate(date.getDate() - 1);
@@ -17,5 +20,6 @@ export class PODueDateFieldComponent implements OnInit {
 
   selectCreatedFrom(event) {
     this.dueDate = event.value;
+    this.dueDateChanged.emit(event.value.toJSON().slice(0, 10));
   }
 }

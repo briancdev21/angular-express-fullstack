@@ -283,4 +283,25 @@ export class SharedService {
     return this.http.delete<any>(url);
   }
 
+  // Purchase Order
+  createPurchaseOrder (body): Observable<any> {
+    const url = `${apiUrl}inventory/purchase-orders`;
+    return this.http.post<any>(url, body);
+  }
+
+  getPurchaseOrder (id): Observable<any> {
+    const url = `${apiUrl}inventory/purchase-orders/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updatePurchaseOrder (id, body): Observable<any> {
+    const url = `${apiUrl}inventory/purchase-orders/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deletePurchaseOrder (id): Observable<any> {
+    const url = `${apiUrl}inventory/purchase-orders/${id}`;
+    return this.http.delete<any>(url);
+  }
+
 }

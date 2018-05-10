@@ -3,6 +3,9 @@ import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
 import _ from 'lodash';
 import { SharedService } from '../../../../services/shared.service';
 import { ContactUserModel } from '../../../../models/contactuser.model';
+import { PurchaseOrderModel } from '../../../../models/purchaseorder.model';
+import { PurchaseOrderCreateModel } from '../../../../models/purchaseordercreate.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inventorybody',
@@ -11,7 +14,27 @@ import { ContactUserModel } from '../../../../models/contactuser.model';
   providers: [SharedService]
 })
 export default class InventoryBodyComponent {
+  
+  @Input() set poData(_podata) {
+    this.po_mock = _podata;
+    if (_podata) {
+      this.po_id = `PO-${this.po_mock.id}`;
+    }
+  };
+
+  // Footer 
+  showButtons = false;
+  showPrintOptions = false;
+  printOptions = {
+   brand: false,
+   qty: false,
+   supplier: false,
+   totalprice: false 
+  };
+
+  // Main Section
   contactList: ContactUserModel[];
+  contactId = undefined;
   userList = [];
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
@@ -28,12 +51,13 @@ export default class InventoryBodyComponent {
   freightcosts = undefined;
   taxes = undefined;
   totalamountdue = undefined;
-  po_id = 'PO-8802131';
+  po_id = '';
   createdDate: any;
   origin_taxes = 0;
   taxrate = 0;
   noteToSupplier: any;
 
+  po_mock: PurchaseOrderModel;
   shippingAddress = {
     address: undefined,
     province: undefined,
@@ -43,14 +67,15 @@ export default class InventoryBodyComponent {
   };
   customerAddress: any = {};
 
-  constructor(private sharedService: SharedService) {
-    this.createdDate = new Date().toJSON().slice(0, 10);
-    this.dueDate = new Date().toJSON().slice(0, 10);
-    // Get contacts
-    this.sharedService.getContacts().subscribe(res => {
-      console.log('result:', res);
-      this.contactList = res;
-      this.userList = this.contactList.map((contactUser) => contactUser.owner);
+  constructor(private sharedService: SharedService, private router: Router) {
+    this.createdDate = new Date().toISOString();
+    this.dueDate = new Date().toISOString();
+      // Get contacts
+      this.sharedService.getContacts().subscribe(res => {
+        console.log('result:', res);
+        this.contactList = res;
+        this.userList = this.contactList.map((contactUser) => contactUser.owner);
+      });
       this.sharedService.getLocations().subscribe(locationRes => {
         this.locations = locationRes.results;
       });
@@ -58,7 +83,6 @@ export default class InventoryBodyComponent {
         this.terms = termRes.results;
         console.log(this.terms);
       });
-    });
   }
 
   onSwitchChanged(status: boolean) {
@@ -69,24 +93,26 @@ export default class InventoryBodyComponent {
     console.log(user);
   }
 
-  onSelectUser(selectedIndex: number) {
+  onSelectUser(selectedIndex: string) {
     console.log('selectedContactIndex:', selectedIndex);
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
     console.log('this selected location:', this.selectedLocation);
+    this.contactId = this.contactList[selectedIndex].id;
+    this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id);
   }
 
-  onSelectLocation(selectedLocation: number) {
+  onSelectLocation(selectedLocation: string) {
     console.log('selectedLocationIndex:', selectedLocation);
-    this.selectedLocation = selectedLocation;
+    this.po_mock.location = parseInt(selectedLocation);
   }
 
-  onSelectTerm(selectedTerm: number) {
+  onSelectTerm(selectedTerm: string) {
     console.log('selectedTermIndex:', selectedTerm);
-    this.selectedTerm = selectedTerm;
+    this.po_mock.term = parseInt(selectedTerm);
   }
 
   onPriceChanged() {
-    this.subtotalproducts = 0;
+    this.subtotalproducts = 0;  
     this.taxes = 0;
     this.taxrate = 0;
     this.productDetails.forEach( product => {
@@ -145,5 +171,28 @@ export default class InventoryBodyComponent {
       }
       this.totalamountdue =  Math.round(this.totalamountdue * 100) / 100;
     }
+  }
+
+  onCancel() {
+    this.sharedService.deletePurchaseOrder(this.po_mock.id).subscribe(() => {
+      this.router.navigate(['./inventory/stock-control']);
+    });
+  }
+
+  onSave() {
+    if (this.po_mock.term != undefined && this.contactId != undefined && this.po_mock.location != undefined) {
+      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe(() => {
+        this.router.navigate(['./inventory/stock-control']);
+      });
+    }
+  }
+
+  onSupplierSentSwitchChanged(val) {
+
+  }
+
+  onDueDateChanged(event) {
+    console.log('duedate:', event);
+    this.po_mock.dueDate = event;
   }
 }
