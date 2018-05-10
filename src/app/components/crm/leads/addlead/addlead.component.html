@@ -31,9 +31,9 @@
 						</div>  
             <div>
 							<span>Head contact</span>
-							<div>
+							<div *ngIf="contactsList">
                 <select [(ngModel)]="headContact">
-                  <option value="test">Choose head contact</option>
+                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.person.firstName}} {{contact.person.lastName}}</option>
                 </select>
               </div>
 						</div> 
@@ -116,11 +116,9 @@
             </div>
             <div *ngIf="!typeAccountTypeChange">
               <span>Business association</span>
-              <div>
-                <select>
-                  <option value="business" class="default-option" disabled selected>Choose a business account</option>
-                  <option value="business">Choose a  account</option>
-                  <option value="business">Choose a business </option>
+              <div *ngIf="contactsList">
+                <select [(ngModel)]="businessAssociation">
+                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.person.firstName}} {{contact.person.lastName}}</option>
                 </select>
               </div>
             </div>
@@ -175,9 +173,9 @@
             </div>
             <div>
               <span>Owner</span>
-              <div>
+              <div *ngIf="usersList">
                 <select [(ngModel)]="owner">
-                  <option value="test">Sepehr Shoarinejad</option>
+                  <option *ngFor="let user of usersList" [value]="user.username">{{user.username}}</option>
                 </select>
               </div>
             </div>
@@ -185,17 +183,15 @@
 					<div class=" tab-row">
             <div>
               <span>Source</span>
-              <div>
-                <ng2-completer [(ngModel)]="captainSource" [datasource]="captainsSource" [minSearchLength]="0" (keyup.enter)="onEnter()" (selected)="checkSource($event)"></ng2-completer>
+              <div *ngIf="sourcesNameList">
+                <ng2-completer [(ngModel)]="captainSource" [datasource]="sourcesNameList" [minSearchLength]="0" (keyup.enter)="onEnter()" (selected)="checkSource($event)"></ng2-completer>
               </div>
             </div>
             <div>
               <span>Contact name</span>
-              <div>
-                <select [disabled]="sourceValue">
-                  <option value="" class="default-option">Choose contact</option>
-                  <option value="test" class="default-option">Contact 1</option>
-                  <option value="test" class="default-option">Contact 2</option>
+              <div *ngIf="contactsList">
+                <select [(ngModel)]="contactName">
+                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.person.firstName}} {{contact.person.lastName}}</option>
                 </select>
               </div>
             </div>
