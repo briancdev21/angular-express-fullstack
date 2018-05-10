@@ -189,18 +189,16 @@ export class AddLeadComponent implements OnInit {
     });
 
     this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res.results;
-      console.log('contacts: ', res);
+      this.contactsList = res;
     });
 
     this.sharedService.getUsers().subscribe(res => {
-      this.usersList = res.results;
-      console.log('users: ', res);
+      this.usersList = res;
     });
 
     this.sharedService.getSources().subscribe(res => {
       this.sourcesList = res.results;
-      console.log('sources: ', res.results);
+      this.sourcesNameList = res.results.map(n => n.source);
     });
 
     this.sharedService.getTerms().subscribe(res => {
