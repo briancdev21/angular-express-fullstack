@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../../../services/shared.service';
 
@@ -58,12 +58,14 @@ export class BreadcrumbBarComponent implements AfterViewInit {
       console.log('userInfo:', this._userInfo);
       this._userInfo.followers.forEach(element => {
         this.items2 = this.items2.filter(function( obj ) {
-          return obj.label !== element.name;
+          return obj.payload.label !== element.name;
         });
       });
-      console.log('followers:', this.items2);
-      // input breadcrumb bar info
-      this.data = ['contact', this._userInfo.name];
+
+    // input breadcrumb bar info
+    if (this.userInfo.name) {
+      this.data = ['contact', this.userInfo.name];
+    }
   }
 
   onSelect(item: any) {
