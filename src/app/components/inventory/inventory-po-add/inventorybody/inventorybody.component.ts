@@ -45,7 +45,6 @@ export class InventoryBodyComponent {
 
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
-
   terms = [];
   selectedTerm = undefined;
   dueDate: any;
