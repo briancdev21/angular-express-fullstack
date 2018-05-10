@@ -49,7 +49,6 @@ export class LeadsListTableComponent implements OnInit {
     duration: '1 hr, 30 min'
   };
   constructor( private filterService: FilterService, private router: Router, private crmService: CrmService ) {
-
   }
 
   ngOnInit() {
