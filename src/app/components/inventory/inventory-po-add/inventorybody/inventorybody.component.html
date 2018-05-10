@@ -13,7 +13,7 @@
         <app-po-createddatefield [(createdDate)]="createdDate" ></app-po-createddatefield>
         <app-po-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" ></app-po-termsfield>
         <app-po-duedatefield [(dueDate)]="dueDate" ></app-po-duedatefield>
-        <app-po-locationsfield [locations]="locations" [(selectedLocation)]="selectedLocation" ></app-po-locationsfield>
+        <app-po-locationsfield [locations]="locations" (selectedLocation)="onSelectLocation($event)" ></app-po-locationsfield>
       </div>
     </div>
     <div class="product__table">

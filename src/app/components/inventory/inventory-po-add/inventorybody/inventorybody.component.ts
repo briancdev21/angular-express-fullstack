@@ -18,8 +18,8 @@ export default class InventoryBodyComponent {
   terms = ['term1', 'term2', 'term3'];
   selectedTerm = '';
   dueDate: any;
-  locations = ['locations1', 'locations2', 'locations3'];
-  selectedLocation = '';
+  locations = [];
+  selectedLocation = undefined;
   productDetails = [];
   internalMemo = undefined;
   subtotalproducts = undefined;
@@ -51,6 +51,9 @@ export default class InventoryBodyComponent {
       console.log('result:', res);
       this.contactList = res;
       this.userList = this.contactList.map((contactUser) => contactUser.owner);
+      this.sharedService.getLocations().subscribe(locationRes => {
+        this.locations = locationRes.results;
+      });
     });
   }
 
@@ -65,6 +68,12 @@ export default class InventoryBodyComponent {
   onSelectUser(selectedIndex: number) {
     console.log('selectedContactIndex:', selectedIndex);
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
+    console.log('this selected location:', this.selectedLocation);
+  }
+
+  onSelectLocation(selectedLocation: number) {
+    console.log('selectedLocationIndex:', selectedLocation);
+    this.selectedLocation = selectedLocation;
   }
 
   onPriceChanged() {
