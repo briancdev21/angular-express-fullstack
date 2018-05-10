@@ -58,7 +58,7 @@ export class BreadcrumbBarComponent implements AfterViewInit {
       console.log('userInfo:', this._userInfo);
       this._userInfo.followers.forEach(element => {
         this.items2 = this.items2.filter(function( obj ) {
-          return obj.label !== element.name;
+          return obj.payload.label !== element.name;
         });
       });
 
