@@ -243,11 +243,6 @@ export class AddLeadComponent implements OnInit {
     this.keywordsIdList = event.map(k => k.id);
   }
 
-  getKeywords(event) {
-    console.log('keywords: ', event);
-    this.keywordsIdList = event.map(k => k.id);
-  }
-
   clickNext() {
     this.invalidFirstname = false;
     this.invalidLastname = false;
