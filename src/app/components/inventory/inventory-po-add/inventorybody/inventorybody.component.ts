@@ -170,9 +170,6 @@ export class InventoryBodyComponent {
   }
 
 
-  onCancel() {
-    this.showCancelPOModal = true;
-  }
 
   deletePO() {
     this.sharedService.deletePurchaseOrder(this.po_mock.id).subscribe(() => {
@@ -180,13 +177,6 @@ export class InventoryBodyComponent {
     });
   }
 
-  onSave() {
-    this.showErrors = true;
-    if (this.po_mock.term !== undefined
-      && this.po_mock.location !== undefined) {
-      this.showSendPOModal = true;
-    }
-  }
 
   savePO() {
     this.po_mock.status = 'SENT';
@@ -229,30 +219,15 @@ export class InventoryBodyComponent {
     });
   }
 
+  onSupplierSentSwitchChanged(val) {
+
+  }
+
   onSave() {
     if (this.po_mock.term != undefined && this.contactId != undefined && this.po_mock.location != undefined) {
       this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe(() => {
         this.router.navigate(['./inventory/stock-control']);
       });
     }
-  }
-
-  onSupplierSentSwitchChanged(val) {
-
-  }
-
-  onDueDateChanged(event) {
-    this.po_mock.dueDate = event;
-  }
-  onNoteChanged(event) {
-    this.po_mock.supplierNote = event;
-  }
-
-  onMemoChanged(event) {
-    this.po_mock.internalMemo = event;
-  }
-
-  onShippingAddressChanged(event) {
-    this.po_mock.shippingAddress = event;
   }
 }
