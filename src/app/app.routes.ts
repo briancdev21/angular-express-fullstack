@@ -159,6 +159,7 @@ export const routes: Routes = [
         { path: 'personal-schedule', component: PersonalScheduleComponent },
         { path: 'team-schedule', component: TeamScheduleComponent },
         { path: 'work-order', component: WorkOrdersComponent },
+        { path: 'order-profile', component: OrderProfileComponent }
       ]
   },
   { path: 'servicing', component: ServicingComponent,

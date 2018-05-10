@@ -36,7 +36,7 @@ export class WorkOrdersTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../workorder/' + id]);
+    this.router.navigate(['../collaboration/order-profile']);
   }
 
   sortArray(field) {
