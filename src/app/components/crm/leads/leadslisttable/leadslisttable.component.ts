@@ -262,6 +262,5 @@ export class LeadsListTableComponent implements OnInit {
     const date = moment(dt).format('MMMM DD, YYYY');
     return date;
   }
-
 }
 
