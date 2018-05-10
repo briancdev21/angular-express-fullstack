@@ -1,14 +1,18 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
 import _ from 'lodash';
+import { SharedService } from '../../../../services/shared.service';
+import { ContactUserModel } from '../../../../models/contactuser.model';
 
 @Component({
   selector: 'app-inventorybody',
   templateUrl: './inventorybody.component.html',
-  styleUrls: ['./inventorybody.component.css']
+  styleUrls: ['./inventorybody.component.css'],
+  providers: [SharedService]
 })
-export class InventoryBodyComponent {
-  userList = ['John', 'Smith', 'jackie'];
+export default class InventoryBodyComponent {
+  contactList: ContactUserModel[];
+  userList = [];
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
   terms = ['term1', 'term2', 'term3'];
@@ -31,23 +35,23 @@ export class InventoryBodyComponent {
   noteToSupplier: any;
 
   shippingAddress = {
-    address: '',
-    street: '',
-    city: '',
-    country: '',
-    postcode: ''
+    address: undefined,
+    province: undefined,
+    city: undefined,
+    country: undefined,
+    postalCode: undefined
   };
-  customerAddress =  {
-    address: '301,1615 10th Ave SW',
-    street: 'Calgary',
-    city: 'Alberta',
-    country: 'Canada',
-    postcode: 'T3C 0J7'
-  };
+  customerAddress: any = {};
 
-  constructor() {
+  constructor(private sharedService: SharedService) {
     this.createdDate = new Date().toJSON().slice(0, 10);
     this.dueDate = new Date().toJSON().slice(0, 10);
+    // Get contacts
+    this.sharedService.getContacts().subscribe(res => {
+      console.log('result:', res);
+      this.contactList = res;
+      this.userList = this.contactList.map((contactUser) => contactUser.owner);
+    });
   }
 
   onSwitchChanged(status: boolean) {
@@ -58,8 +62,9 @@ export class InventoryBodyComponent {
     console.log(user);
   }
 
-  onSelectUser(val: string) {
-    console.log('val', val);
+  onSelectUser(selectedIndex: number) {
+    console.log('selectedContactIndex:', selectedIndex);
+    this.customerAddress = this.contactList[selectedIndex].shippingAddress;
   }
 
   onPriceChanged() {

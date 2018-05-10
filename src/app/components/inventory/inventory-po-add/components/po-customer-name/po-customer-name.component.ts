@@ -9,7 +9,12 @@ import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
 })
 
 export class POCustomerNameComponent implements OnInit {
-  @Input() userList;
+  @Input() set userList(_users: any[]) {
+    _users.forEach((user, index) => {
+        this.users.push({'name': user, 'value': index});
+      });
+  };
+
   @Output() selectedUser: EventEmitter<any> = new EventEmitter();
   users = [];
 
@@ -22,15 +27,13 @@ export class POCustomerNameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userList
-      .forEach((user, index) => {
-        this.users.push({'name': user});
-      });
+
   }
 
   onSelected(item: CompleterItem) {
     if (item) {
-      this.selectedUser.emit(item.title);
+      console.log('value:', item.originalObject.value);
+      this.selectedUser.emit(item.originalObject.value);
     }
   }
 }
