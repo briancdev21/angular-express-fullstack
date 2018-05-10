@@ -128,4 +128,64 @@
       </div>
     </div>
   </div>
+  <footer>
+    <section id="header" *ngIf="!showButtons" >
+      <div (click)="showButtons=true" >
+        Setting
+      </div>
+      <div class="btn-group" >
+        <div class="btn cancel" (click)="onCancel()" >Cancel</div>
+        <div class="btn save_and_close" (click)="onSave()" >Save</div>
+      </div>
+    </section>
+    <section id="main" *ngIf="showButtons"  >
+      <div class="header" >
+        <div>
+          PURCHASE ORDER SETTINGS
+        </div>
+        <div class="red_close" (click)="showButtons=false" ><img src="/assets/images/X sign Red.png" /></div>
+      </div>
+      <div class="flex main">
+        <div class="flex" >
+          <div class="print" (click)="showPrintOptions=true" ><img src="/assets/images/printer.png" /></div>
+          <div>
+            <div class="title" >PRINT</div>
+            <div class="subtitle" >Print important documents such as the invocie, receipt and pick lists</div>
+          </div>
+        </div>
+        <div class="flex" >
+          <div class="currency"><img src="/assets/images/User Icon.svg" /></div>
+          <div class="flex1" >
+            <div class="title" >SEND TO SUPPLIER(S)</div>
+            <div class="subtitle" >Will send this PO to all the associated Suppliers</div>
+          </div>
+          <app-po-switcher label=" " (switchChanged)="onSupplierSentSwitchChanged($event)" class="po-switch" ></app-po-switcher>
+        </div>
+      </div>
+    </section>
+  </footer>
+  <div class="printoptions-modal" *ngIf="showPrintOptions" >
+    <div class="wrapper" (click)="showPrintOptions=false;" >
+      <div class="content" (click)="$event.stopPropagation();" >
+        <div class="header" >
+          <div>
+            Printing Option
+          </div>
+          <div class="red_close" (click)="showPrintOptions=false" ><img src="/assets/images/X sign Red.png" /></div>
+        </div>
+        <div class="main">
+          <div class="desc" >Select the sheets to print:</div>
+          <div class="flex" >
+            <div [ngClass]="{'checkbox-group': true, 'active': printOptions.brand }" (click)="printOptions.brand = !printOptions.brand " >PO by brand</div>  
+            <div [ngClass]="{'checkbox-group': true, 'active': printOptions.supplier }" (click)="printOptions.supplier = !printOptions.supplier" >PO by supplier</div>
+            <div [ngClass]="{'checkbox-group': true, 'active': printOptions.totalprice }" (click)="printOptions.totalprice = !printOptions.totalprice" >PO by total price</div> <div [ngClass]="{'checkbox-group': true, 'active': printOptions.qty }" (click)="printOptions.qty= !printOptions.qty" >PO by qty</div>     
+          </div>
+          <div class="createpdf" >
+            <div class="button cancel" >Cancel</div>
+            <div class="button ok" >Create PDF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

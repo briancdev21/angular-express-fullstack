@@ -223,4 +223,27 @@ export class InventoryBodyComponent {
       console.log('mock_data term', data.data);
     });
   }
+
+  onCancel() {
+    this.sharedService.deletePurchaseOrder(this.po_mock.id).subscribe(() => {
+      this.router.navigate(['./inventory/stock-control']);
+    });
+  }
+
+  onSave() {
+    if (this.po_mock.term != undefined && this.contactId != undefined && this.po_mock.location != undefined) {
+      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe(() => {
+        this.router.navigate(['./inventory/stock-control']);
+      });
+    }
+  }
+
+  onSupplierSentSwitchChanged(val) {
+
+  }
+
+  onDueDateChanged(event) {
+    console.log('duedate:', event);
+    this.po_mock.dueDate = event;
+  }
 }
