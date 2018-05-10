@@ -204,6 +204,7 @@ export class LeadsListTableComponent implements OnInit {
       'facebook': 'string',
       'twitter': 'string'
     };
+    
     // Remove empty/null field from object.
     Object.keys(lead).forEach((key) => (lead[key] == null) && delete lead[key]);
     Object.keys(lead.person).forEach((key) => (lead.person[key] == null) && delete lead.person[key]);
@@ -261,5 +262,6 @@ export class LeadsListTableComponent implements OnInit {
     const date = moment(dt).format('MMMM DD, YYYY');
     return date;
   }
+
 }
 
