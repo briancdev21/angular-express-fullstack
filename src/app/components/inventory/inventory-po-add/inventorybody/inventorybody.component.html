@@ -11,7 +11,7 @@
       <div class="right-sidebar">
         <app-po-orderidfield [po_id]="po_id" ></app-po-orderidfield>
         <app-po-createddatefield [(createdDate)]="createdDate" ></app-po-createddatefield>
-        <app-po-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" ></app-po-termsfield>
+        <app-po-termsfield [terms]="terms" (selectedTerm)="onSelectTerm($event)" ></app-po-termsfield>
         <app-po-duedatefield [(dueDate)]="dueDate" ></app-po-duedatefield>
         <app-po-locationsfield [locations]="locations" (selectedLocation)="onSelectLocation($event)" ></app-po-locationsfield>
       </div>

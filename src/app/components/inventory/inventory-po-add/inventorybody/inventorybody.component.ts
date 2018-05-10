@@ -15,8 +15,8 @@ export default class InventoryBodyComponent {
   userList = [];
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
-  terms = ['term1', 'term2', 'term3'];
-  selectedTerm = '';
+  terms = [];
+  selectedTerm = undefined;
   dueDate: any;
   locations = [];
   selectedLocation = undefined;
@@ -54,6 +54,10 @@ export default class InventoryBodyComponent {
       this.sharedService.getLocations().subscribe(locationRes => {
         this.locations = locationRes.results;
       });
+      this.sharedService.getTerms().subscribe(termRes => {
+        this.terms = termRes.results;
+        console.log(this.terms);
+      });
     });
   }
 
@@ -74,6 +78,11 @@ export default class InventoryBodyComponent {
   onSelectLocation(selectedLocation: number) {
     console.log('selectedLocationIndex:', selectedLocation);
     this.selectedLocation = selectedLocation;
+  }
+
+  onSelectTerm(selectedTerm: number) {
+    console.log('selectedTermIndex:', selectedTerm);
+    this.selectedTerm = selectedTerm;
   }
 
   onPriceChanged() {
