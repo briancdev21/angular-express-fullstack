@@ -72,3 +72,22 @@ input::placeholder {
   margin: 15px 0;
   width: 100%;
 }
+
+:host ::ng-deep .calendar-view .fc-event {
+  font-size: 1em;
+  padding: 3px 10px;
+  border-radius: 7px;
+}
+
+
+@media screen and (max-width: 1700px) {
+	.resources-list span {
+		font-size: 12px !important;
+	}
+}
+
+@media screen and (max-width: 1550px) {
+	.resources-list span {
+		font-size: 11px !important;
+	}
+}
