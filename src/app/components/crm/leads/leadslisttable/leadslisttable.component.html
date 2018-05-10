@@ -1,5 +1,5 @@
 <div class="content">
-  <table>
+  <table *ngIf="leadsListInfo">
     <tr>
       <th (click)="sortArray('name')">LEAD NAME</th>
       <th>PHONE NUMBER</th> 
@@ -9,14 +9,14 @@
       <th (click)="sortArray('score')">LEAD SCORE <img src="assets/images/Edit.png"></th>
     </tr>
     <tr *ngFor="let lead of leadsListInfo; let i = index" (click)="redirectTo(lead.id)">
-      <td>{{lead.name}}</td>
-      <td>{{lead.phone}}</td>
+      <td *ngIf="lead.type === 'PERSON'">{{lead.person.firstName}} {{lead.person.firstName}}</td> <td *ngIf="lead.type === 'BUSINESS'">{{lead.business.name}} {{lead.person.firstName}}</td>
+      <td>{{formatPhoneNumber(lead.phoneNumbers.primary)}}</td>
       <td>{{lead.email}}</td> 
-      <td [ngClass]="getDateColor(lead.status)">{{lead.createDate}}</td>
+      <td [ngClass]="getDateColor(lead.status)">{{changeDateFormat(lead.createdAt)}}</td>
       <td>{{lead.status}}</td>
       <td>
         <span [ngClass]="getScoreColor(lead.score)">{{lead.score}}</span> 
-        <img src="assets/images/three-dots.png" (click)="openLeadModal(i)" style="cursor: pointer;">
+        <img src="assets/images/three-dots.png" (click)="openLeadModal(i); $event.stopPropagation()" style="cursor: pointer;">
         <div 
           class="lead-expand-modal-wrapper" 
           *ngIf="leadModalInfoCollapsed[i]" 
@@ -32,16 +32,17 @@
             <div (click)="addLogModalCollapsed=false; 
                       showAddLogModal=true; 
                       leadModalInfoCollapsed[i]=false; 
-                      showLeadModalInfo=false">
+                      showLeadModalInfo=false;
+                      $event.stopPropagation()">
                       <img src="assets/images/phone log.png">
                       <span>Add a log</span>
             </div>
           </div>
           <div>
-            <div (click)="cloneRow(lead, i)"><img src="assets/images/Delete.png"><span>Clone</span></div>
-            <div (click)="deleteRow(i)"><img src="assets/images/Convert.png"><span>Delete</span></div>
+            <div (click)="cloneRow(lead, i); $event.stopPropagation()"><img src="assets/images/Delete.png"><span>Clone</span></div>
+            <div (click)="deleteRow(i); $event.stopPropagation()"><img src="assets/images/Convert.png"><span>Delete</span></div>
           </div>
-          <div (click)="showModal=true; leadModalInfoCollapsed[i]=false; showLeadModalInfo=false"><img src="assets/images/calendar with Edit.png"><span>Appointment</span></div>
+          <div (click)="showModal=true; leadModalInfoCollapsed[i]=false; showLeadModalInfo=false; $event.stopPropagation()"><img src="assets/images/calendar with Edit.png"><span>Appointment</span></div>
         </div>
         <!-- End Small Dialog when clicking three dot icom -->
       </td> 

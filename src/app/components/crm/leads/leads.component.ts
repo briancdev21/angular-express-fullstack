@@ -45,66 +45,6 @@ export class LeadsComponent implements OnInit {
   };
 
   public leadsListInfo: Array<Object> = [
-    {
-      id: 0,
-      name: 'Diana Ilic',
-      phone: '4039696480',
-      email: 'diana.ilic@outlook.com',
-      createDate: 'Januanry 19, 2018',
-      status: 'New',
-      score: '12',
-      updateDate: 'Januanry 25, 2018',
-      address: '',
-      owner: 'Diana Ilic'
-    },
-    {
-      id: 1,
-      name: 'Greg Johnson',
-      phone: '4038504081',
-      email: 'greg.johnson@mcjohnsonandsons.com',
-      createDate: 'Januanry 19, 2018',
-      status: 'Seen',
-      score: '38',
-      updateDate: 'Januanry 25, 2018',
-      address: '',
-      owner: 'Greg Johnson'
-    },
-    {
-      id: 2,
-      name: 'John Smith',
-      phone: '4038502930',
-      email: 'johnsm@gmail.com',
-      createDate: 'March 19, 2018',
-      status: 'Follow-up',
-      score: '24',
-      updateDate: 'March 26, 2018',
-      address: '',
-      owner: 'John Smith'
-    },
-    {
-      id: 3,
-      name: 'Tyler Petak',
-      phone: '4038904510',
-      email: 'tylerpetak@gmail.com',
-      createDate: 'June 11, 2018',
-      status: 'Demo',
-      score: '68',
-      updateDate: 'June 25, 2018',
-      address: '',
-      owner: 'Diana Ilic'
-    },
-    {
-      id: 4,
-      name: 'Tyler Petak',
-      phone: '4038904510',
-      email: 'tylerpetak@gmail.com',
-      createDate: 'June 11, 2018',
-      status: 'Demo',
-      score: '68',
-      updateDate: 'June 25, 2018',
-      address: '',
-      owner: 'Diana Ilic'
-    },
   ];
 
   public leadOwners = [
@@ -117,8 +57,8 @@ export class LeadsComponent implements OnInit {
   ngOnInit() {
     this.backUpLeads = this.leadsListInfo;
     this.crmService.getLeadsList().subscribe(data => {
-      console.log('333', data);
-      // this.leadsListInfo = data.results;
+      console.log('333', data.results);
+      this.leadsListInfo = data.results;
     });
   }
 

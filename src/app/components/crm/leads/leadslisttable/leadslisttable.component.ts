@@ -2,6 +2,8 @@ import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import * as _ from 'lodash';
+import { CrmService } from '../../../../services/crm.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-leadslisttable',
@@ -46,10 +48,11 @@ export class LeadsListTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
-  constructor( private filterService: FilterService, private router: Router ) {
+  constructor( private filterService: FilterService, private router: Router, private crmService: CrmService ) {
   }
 
   ngOnInit() {
+
   }
 
   selectedFilterEventHandler(filteredList) {
@@ -156,6 +159,14 @@ export class LeadsListTableComponent implements OnInit {
 
   cloneRow(lead, index) {
     this.clonedRowIndex = index;
+    lead.lastContacted = moment(lead.lastContacted).format('YYYY-MM-DD');
+    lead.socialMediaUrl =  {
+      'linkedIn': 'string',
+      'facebook': 'string',
+      'twitter': 'string'
+    };
+    Object.keys(lead).forEach((key) => (lead[key] == null) && delete lead[key]);
+    Object.keys(lead.person).forEach((key) => (lead.person[key] == null) && delete lead.person[key]);
     this.clonedRowLead = lead;
     this.leadModalInfoCollapsed[index] = false;
     this.showLeadModalInfo = false;
@@ -170,7 +181,13 @@ export class LeadsListTableComponent implements OnInit {
   }
 
   confirmClone() {
-    this.leadsListInfo.splice(this.clonedRowIndex, 0, this.clonedRowLead);
+    // this.leadsListInfo.splice(this.clonedRowIndex, 0, this.clonedRowLead);
+    this.crmService.createLead(JSON.stringify(this.clonedRowLead)).subscribe(res => {
+      console.log('res: ', res);
+      this.crmService.getLeadsList().subscribe(data => {
+        this.leadsListInfo = data.results;
+      });
+    });
   }
 
   confirmDelete() {
@@ -180,6 +197,17 @@ export class LeadsListTableComponent implements OnInit {
   redirectTo(id) {
     // this.router.navigate(['../lead/' + id]);
     this.router.navigate(['./crm/lead-profile/']);
+  }
+
+  formatPhoneNumber(s) {
+    const s2 = ('' + s).replace(/\D/g, '');
+    const m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
+    return (!m) ? null : '(' + m[1] + ') ' + m[2] + '-' + m[3];
+  }
+
+  changeDateFormat(dt) {
+    const date = moment(dt).format('MMMM DD, YYYY');
+    return date;
   }
 }
 
