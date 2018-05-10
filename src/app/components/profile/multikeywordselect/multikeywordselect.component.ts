@@ -29,16 +29,26 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
+    const arr = [];
     this.editable = false;
     this.sharedService.getKeywords().subscribe(data => {
       this.keywordsList = data.results;
       this.keywordsNameList = data.results.map(k => k.name);
       console.log('123', this.keywordsList);
+      // Change keywords ids to objects
+      this.keywords.forEach(element => {
+        for (let i = 0; i < this.keywordsList.length; i ++) {
+          if (element === this.keywordsList[i].id) {
+            arr.push(this.keywordsList[i]);
+          }
+        }
+      });
+      this.keywords = arr;
     });
   }
 
   ngAfterViewInit() {
-    this.input.nativeElement.focus();
+    // this.input.nativeElement.focus();
   }
 
   addNewKeyword(data) {

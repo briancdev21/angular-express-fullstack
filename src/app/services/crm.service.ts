@@ -41,5 +41,10 @@ export class CrmService {
       // }));
 
   }
+
+  getIndividualLead(id): Observable<any>  {
+    const url = `${apiUrl}crm/leads/${id}`;
+    return this.http.get(url);
+  }
 }
 

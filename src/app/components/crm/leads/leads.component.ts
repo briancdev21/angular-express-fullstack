@@ -57,7 +57,6 @@ export class LeadsComponent implements OnInit {
   ngOnInit() {
     this.backUpLeads = this.leadsListInfo;
     this.crmService.getLeadsList().subscribe(data => {
-      console.log('333', data.results);
       this.leadsListInfo = data.results;
     });
   }

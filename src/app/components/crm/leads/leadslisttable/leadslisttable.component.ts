@@ -165,6 +165,7 @@ export class LeadsListTableComponent implements OnInit {
       'facebook': 'string',
       'twitter': 'string'
     };
+    // Remove empty/null field from object.
     Object.keys(lead).forEach((key) => (lead[key] == null) && delete lead[key]);
     Object.keys(lead.person).forEach((key) => (lead.person[key] == null) && delete lead.person[key]);
     this.clonedRowLead = lead;
@@ -183,7 +184,6 @@ export class LeadsListTableComponent implements OnInit {
   confirmClone() {
     // this.leadsListInfo.splice(this.clonedRowIndex, 0, this.clonedRowLead);
     this.crmService.createLead(JSON.stringify(this.clonedRowLead)).subscribe(res => {
-      console.log('res: ', res);
       this.crmService.getLeadsList().subscribe(data => {
         this.leadsListInfo = data.results;
       });
@@ -196,7 +196,7 @@ export class LeadsListTableComponent implements OnInit {
 
   redirectTo(id) {
     // this.router.navigate(['../lead/' + id]);
-    this.router.navigate(['./crm/lead-profile/']);
+    this.router.navigate(['./crm/lead-profile', {id: id}]);
   }
 
   formatPhoneNumber(s) {

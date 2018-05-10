@@ -12,6 +12,8 @@ import { UpcomingAppointmentsComponent } from '../../profile/cards/upcomingappoi
 import { TasksComponent } from '../../profile/cards/tasks/tasks.component';
 import { DocumentsComponent } from '../../profile/cards/documents/documents.component';
 import { CollaboratorsComponent } from '../../profile/cards/collaborators/collaborators.component';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CrmService } from '../../../services/crm.service';
 
 @Component({
   selector: 'app-leadprofile',
@@ -27,34 +29,9 @@ import { CollaboratorsComponent } from '../../profile/cards/collaborators/collab
 export class LeadProfileComponent implements OnInit {
 
   menuCollapsed = true;
+  leadInfoIndex: any;
 
-  constructor() {
-
-  }
   userInfo = {
-    name: 'Diana Ilic',
-    // role: 'Vice President / Sales Department',
-    profileLink: 'assets/users/Random.jpg',
-    email: 'apple.bee@gmail.com',
-    primaryphone: '4038935433',
-    mobilephone: '4037101212',
-    shippingaddress: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-    billingaddress: '2893 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-    keywords: [
-      'control4',
-      'theatre',
-      'renovation'
-    ],
-    followers: [{
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Michael'
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/Joseph',
-      name: 'Joseph'
-    }]
   };
   public chartSetData: Array<Object> = [
     {
@@ -289,6 +266,32 @@ export class LeadProfileComponent implements OnInit {
     content: string;
   };
 
+  constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService) {
+    this.leadInfoIndex = this.route.snapshot.paramMap.get('id');
+    this.crmService.getIndividualLead(this.leadInfoIndex).subscribe(res => {
+      console.log('leadData: ', res.data);
+      // Update userInfo
+      this.userInfo = {
+        name: res.data.person.firstName + ' ' + res.data.person.lastName,
+        profileLink: 'assets/users/Random.jpg',
+        email: res.data.email,
+        primaryphone: res.data.phoneNumbers.primary,
+        mobilephone: res.data.phoneNumbers.secondary,
+        shippingaddress: res.data.shippingAddress.address + ' ' +
+                          res.data.shippingAddress.city + ',' +
+                          res.data.shippingAddress.province + ' ' +
+                          res.data.shippingAddress.postalCode,
+        billingaddress: res.data.billingAddress.address + ' ' +
+                        res.data.billingAddress.city + ',' +
+                        res.data.billingAddress.province + ' ' +
+                        res.data.billingAddress.postalCode,
+        keywords: res.data.keywordIds ? res.data.keywordIds : [],
+        followers: res.data.followers ? res.data.followers : []
+      };
+      // Update cards info
+      this.cards.leadScore = res.data.score;
+    });
+  }
 
   ngOnInit() {
     this.activity = {
