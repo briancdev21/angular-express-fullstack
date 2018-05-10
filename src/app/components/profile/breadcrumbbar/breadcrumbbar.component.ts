@@ -11,10 +11,7 @@ import { SharedService } from '../../../services/shared.service';
 })
 export class BreadcrumbBarComponent implements AfterViewInit {
   @Input() set userInfo(val) {
-    console.log('val:', val.followers);
-    
     if (val.followers !== undefined) {
-    console.log('val:', val);
       this._userInfo = val;
       this.init();
     }
