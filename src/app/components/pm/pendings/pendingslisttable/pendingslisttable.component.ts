@@ -31,7 +31,7 @@ export class PendingsListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../pending/' + id]);
+    this.router.navigate(['./pm/pending-project']);
   }
 
   sortArray(field) {

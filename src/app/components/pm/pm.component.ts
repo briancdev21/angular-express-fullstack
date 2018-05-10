@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../common/common.component';
 import { PmService } from './pm.service';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { Router, NavigationStart, NavigationEnd, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/filter';
 
 @Component({
@@ -19,12 +19,13 @@ export class PmComponent implements OnInit {
   menuCollapsed = true;
   notPmDetails = true;
 
-  constructor( private router: Router) {
+  constructor( private router: Router, private activatedRoute: ActivatedRoute) {
     router.events
       .filter(event => event instanceof NavigationEnd)
-      .subscribe((val) => {
+    // activatedRoute.url
+      .subscribe(val => {
         console.log('router: ', val);
-        if (val['url'].includes('/pm/pm-details')) {
+        if (val['urlAfterRedirects'].includes('/pm/pm-details') || val['urlAfterRedirects'].includes('/pm/pending-project/')) {
           this.notPmDetails = false;
         } else {
           this.notPmDetails = true;

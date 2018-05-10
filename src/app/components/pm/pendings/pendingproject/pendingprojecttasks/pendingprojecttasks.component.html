@@ -1,0 +1,147 @@
+<div class="content pending-project-tasks" >
+  <tabs>
+    <tab tabTitle="Project Tasks" [(active)]="tabActiveFirst">
+      <div class="tab-one-content">
+        <div class="content-top">
+          <span>PROJECT TASKS</span>
+          <div class="btn-sec">
+            <div class="btn-style">Add Document</div>
+            <div class="btn-style" (click)="addDocumentModalCollapsed=false">Create Work Orders</div>
+            <div class="btn-style" (click)="addTemplateModalCollapsed=false">Import Task Template</div>
+          </div>
+        </div>
+        <app-pmschedule></app-pmschedule>
+        <div class="bottom-btns">
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="toProjectScope()">
+              Back
+            </button>
+            <button class="next-btn" (click)="toProjectFinancials()">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </tab>
+    <tab tabTitle="Project Work Orders" [(active)]="tabActiveFirst">
+      <div class="content-top">
+        <span>PROJECT WORK ORDERS</span>
+        <div class="btn-sec">
+          <div class="btn-style">Add Document</div>
+          <div class="btn-style" (click)="addDocumentModalCollapsed=false">Create Work Orders</div>
+          <div class="btn-style" (click)="addTemplateModalCollapsed=false">Import Task Template</div>
+        </div>
+      </div>
+      <app-pendingworkorderslisttable></app-pendingworkorderslisttable>
+      <div class="bottom-btns">
+        <div class="btn-section" >
+          <button class="cancel-btn" (click)="toProjectScope()">
+            Back
+          </button>
+          <button class="next-btn" (click)="toProjectFinancials()">
+            Next
+          </button>
+        </div>
+      </div>
+    </tab>
+  </tabs>
+</div>
+
+
+
+<!-- Create Work Orders Modal -->
+
+<div *ngIf="!addDocumentModalCollapsed" class="add-document-modal-wrapper"></div>
+<div class="add-document-modal"  [ngClass]="{'show-modal': !addDocumentModalCollapsed, 'hide-modal': addDocumentModalCollapsed }">
+  <div class="header">
+    <span>ADD DOCUMENT TO PROJECT</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addDocumentModalCollapsed=true;" />
+  </div>
+
+  <div class="modal-main-content" >
+    <div>
+      <span>Document Name</span>
+      <input [(ngModel)]="addDocument.documentName" placeholder="Type document name here" [ngClass]="{'validation-required': invalidDocumentName}" >
+    </div>
+    <div>
+      <span>Last Updated</span>
+      <input 
+        [owlDateTimeTrigger]="lastUpdated" 
+        [owlDateTime]="lastUpdated" 
+        placeholder="mm/dd/yyyy" 
+        (dateTimeChange)="selectLastUpdated($event)" 
+        [(ngModel)]="addDocument.lastUpdated" >
+      <owl-date-time [pickerType]="'calendar'" #lastUpdated></owl-date-time>
+    </div>
+    <div>
+      <span>Approved Date</span>
+      <input 
+        [owlDateTimeTrigger]="approvedDate" 
+        [owlDateTime]="approvedDate" 
+        placeholder="mm/dd/yyyy" 
+        (dateTimeChange)="selectApprovedDate($event)" 
+        [(ngModel)]="addDocument.approvedDate" >
+      <owl-date-time [pickerType]="'calendar'" #approvedDate></owl-date-time>
+    </div>
+    <div>
+      <span>Collaborator</span>
+      <app-ng2completer 
+        [itemsList]="collaboratorList" 
+        (selectedItem)="onSelectcollaborator($event)" 
+        class="contact-content-info"
+        [searchStr]="selectcollaborator">
+      </app-ng2completer>
+    </div>
+  </div>
+  <div class="btn-section" >
+    <button class="cancel-btn" (click)="cancelAddDocument()">
+      Cancel
+    </button>
+    <button class="save-btn" (click)="saveAddDocument()">
+      Save
+    </button>
+  </div>
+</div>
+
+<!-- Import Task Template Modal -->
+
+<div *ngIf="!addTemplateModalCollapsed" class="add-document-modal-wrapper"></div>
+<div class="add-document-modal"  [ngClass]="{'show-modal': !addTemplateModalCollapsed, 'hide-modal': addTemplateModalCollapsed }">
+  <div class="header">
+    <span>ADD DOCUMENT TO PROJECT</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addTemplateModalCollapsed=true;" />
+  </div>
+
+  <div class="modal-main-content" >
+    <div>
+      <span>Task Template</span>
+      <app-ng2completer 
+        [itemsList]="templateList" 
+        (selectedItem)="onSelectTemplate($event)" 
+        class="contact-content-info"
+        [searchStr]="addTemplate.templateName"
+        [ngClass]="{'validation-required-template': invalidTemplate}">
+      </app-ng2completer>
+    </div>
+    <div>
+      <span>Start Date</span>
+      <input 
+        [owlDateTimeTrigger]="startDate" 
+        [owlDateTime]="startDate" 
+        placeholder="mm/dd/yyyy" 
+        (dateTimeChange)="selectStartDate($event)" 
+        [(ngModel)]="addTemplate.startDate"
+        [ngClass]="{'validation-required': invalidStartDate}" >
+      <owl-date-time [pickerType]="'calendar'" #startDate></owl-date-time>
+    </div>
+    
+  </div>
+  <div class="btn-section" >
+    <button class="cancel-btn" (click)="cancelAddTemplate()">
+      Cancel
+    </button>
+    <button class="save-btn" (click)="saveAddTemplate()">
+      Save
+    </button>
+  </div>
+</div>

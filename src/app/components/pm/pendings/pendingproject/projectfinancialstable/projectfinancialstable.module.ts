@@ -8,21 +8,24 @@ import { IonRangeSliderModule } from 'ng2-ion-range-slider';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ProfileCmpModule } from '../../profile/profile.module';
-import { CommonCmpModule } from '../../common/common.module';
-import { PendingProjectCmpModule } from './pendingproject/pendingproject.module';
+import { ProfileCmpModule } from '../../../../profile/profile.module';
+import { CommonCmpModule } from '../../../../common/common.module';
 
 import { FilterService } from './filter.service';
-import { PendingsListTableComponent } from './pendingslisttable/pendingslisttable.component';
-import { PendingFilterComponent } from './pendingfilter/pendingfilter.component';
+import { ProjectFinancialsTableComponent } from './projectfinancialstable.component';
+import { PfProductsListTableComponent } from './pfproductslisttable/pfproductslisttable.component';
+import { PfTableFilterComponent } from './pftablefilter/pftablefilter.component';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { ClickOutsideModule } from 'ng4-click-outside';
+
 
 
 @NgModule({
   declarations: [
-    PendingsListTableComponent,
-    PendingFilterComponent,
+    PfProductsListTableComponent,
+    PfTableFilterComponent,
+    ProjectFinancialsTableComponent
   ],
   imports: [
     BrowserModule,
@@ -34,15 +37,14 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     OwlNativeDateTimeModule,
     BrowserAnimationsModule,
     ProfileCmpModule,
-    CommonCmpModule,
     Ng2CompleterModule,
+    CommonCmpModule,
     AutocompleteModule,
-    PendingProjectCmpModule
+    ClickOutsideModule
   ],
   exports: [
-    PendingsListTableComponent,
-    PendingFilterComponent,
+    ProjectFinancialsTableComponent
   ],
   providers: [FilterService]
 })
-export class PendingsCmpModule { }
+export class ProjectFinancialsTableCmpModule { }

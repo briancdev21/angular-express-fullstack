@@ -55,6 +55,17 @@ import { PerformanceReportsComponent } from './components/reports/performancerep
 import { ProjectReportsComponent } from './components/reports/projectreports/projectreports.component';
 import { LeadProfileComponent } from './components/crm/leadprofile/leadprofile.component';
 import { SupplierProfileComponent } from './components/inventory/supplierprofile/supplierprofile.component';
+import { ProjectInformationComponent } from './components/pm/pendings/pendingproject/projectinformation/projectinformation.component';
+import { PendingProjectScopeComponent } from './components/pm/pendings/pendingproject/pendingprojectscope/pendingprojectscope.component';
+import { PendingProjectTasksComponent } from './components/pm/pendings/pendingproject/pendingprojecttasks/pendingprojecttasks.component';
+import {
+  PendingProjectFinancialsComponent
+} from './components/pm/pendings/pendingproject/pendingprojectfinancials/pendingprojectfinancials.component';
+import { PendingProjectComponent } from './components/pm/pendings/pendingproject/pendingproject.component';
+import {
+  PendingWorkOrdersListTableComponent
+} from './components/pm/pendings/pendingproject/pendingworkorderslisttable/pendingworkorderslisttable.component';
+
 
 
 import { CommonComponent } from './components/common/common.component';
@@ -115,6 +126,15 @@ export const routes: Routes = [
           { path: 'pm-files', component: PmFilesComponent },
           { path: 'pm-log-details', component: ChangeLogProfileComponent },
         ]
+      },
+      { path: 'pending-project', component: PendingProjectComponent,
+          children: [
+            { path: '', redirectTo: 'pending-information', pathMatch: 'full' },
+            { path: 'pending-information', component: ProjectInformationComponent },
+            { path: 'pending-scope', component: PendingProjectScopeComponent },
+            { path: 'pending-tasks', component: PendingProjectTasksComponent },
+            { path: 'pending-financials', component: PendingProjectFinancialsComponent },
+          ]
       },
     ]
   },

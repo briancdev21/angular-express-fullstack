@@ -1,0 +1,337 @@
+.project-information {
+  padding: 22px 45px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #95989a;
+}
+
+span.title {
+  font-size: 14px;
+  color: #95989a;
+  text-align: left;
+  line-height: 10px;
+  font-weight: 300;
+}
+
+.content-info {
+  font-size: 14px;
+  color: #646464;
+  border: 1px solid #D3D3d3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 35px;
+  margin-top: 15px;
+  padding-left: 7px;
+  font-weight: 300;
+}
+
+.info-left {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-right {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  margin-right: 5%;
+}
+
+.info-left>div {
+  margin-top: 30px;
+}
+
+.customer-project-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.customer-project-name>div {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+}
+
+.shipping-address, .billing-address {
+  display: flex;
+  flex-direction: column;
+}
+
+.shipping-address>div, .billing-address>div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.shipping-address>div>div, .billing-address>div>div {
+  width: 48%;
+} 
+
+.info-title {
+  font-size: 19px;
+  text-align: left;
+}
+
+/* css for right side */
+
+.info-right>div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.info-right .content-info {
+  width: 60%;
+  margin-top: 0;
+}
+
+
+.start-sec, .end-sec {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.start-sec>div, .end-sec>div {
+	width: 47%;
+}
+
+.formated-date {
+	width: 100%;
+	height: 34px;
+  padding-left: 7px;
+  padding-right: 7px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.formated-date img {
+	width: 20px;
+	height: 20px;
+}
+
+.start-date {
+  height: 36px;
+  padding: 0;
+}
+
+.start-date>input {
+	width: 0px;
+	height: 0px;
+	visibility: hidden;
+	margin: 0;
+	padding: 0;
+	border: 0px;
+}
+
+/* followers css */
+
+.followers {
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  font-size: 0.8em;
+  color: #95989A;
+  position: relative;
+	justify-content: flex-start;
+	height: 34px;
+}
+
+.followers img {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: darkcyan;
+	margin: 3px;
+	margin-left: 7px
+}
+
+.followers .add-follower {
+  background-image: '';
+  cursor: pointer;
+  
+}
+.edit-followers {
+  position: absolute;
+  top: 45px;
+  border: solid 1px lightgray;
+  background: white;
+  padding: 5px;
+  z-index: 9;
+}
+
+.edit-followers ul {
+  margin: 0;
+  padding: 0;
+}
+
+.edit-followers li {
+  list-style: none;
+  display: inline-block;
+  padding: 3px;
+  background: lightblue;
+  border-radius: 1px;
+  margin: 2px;
+}
+.edit-followers input {
+	width: 100%;
+	height: 18px;
+}
+
+.editbtn {
+  background-color: #a8f2df;
+  padding: 4px;
+  width: 100px;
+  font-size: 0.7em;
+  border-radius: 3px;
+  border: none;
+  color: black;
+  outline: none;
+}
+.editbtn:focus {
+  outline: none;
+}
+
+.closebtn {
+  cursor: pointer;
+}
+
+.project-manager .content-info, .account-manager .content-info{
+  padding: 0;
+}
+
+/* Text Editor sec CSS */
+
+.scope-description-change {
+  background: #F5F5F5;
+  margin: 40px 50px;
+  padding-top: 3px;
+}
+
+.editor-title {
+  margin: 0 10px;
+  background: white;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  font-size: 19px;
+  color: #95989A;
+  padding-left: 15px;
+  font-weight: 300;
+}
+
+
+/deep/ .text-editor-sec .ql-toolbar.ql-snow {
+  border: 0 !important;
+  text-align: left;
+  margin-left: 15px;
+  background: transparent;
+  padding-top: 20px;
+}
+
+/deep/ .text-editor-sec .ql-snow.ql-toolbar button, /deep/ .text-editor-sec .ql-snow .ql-toolbar button {
+  background: white;
+  border: 1px solid lightgray;
+}
+
+/deep/ .text-editor-sec .ql-snow .ql-picker {
+  background: white;
+  border: 1px solid lightgray;
+}
+
+/deep/ .text-editor-sec .ql-container.ql-snow {
+  border: 0;
+}
+
+/deep/ .text-editor-sec .ql-editor {
+  border: 10px solid #F5F5F5;
+  min-height: 300px;
+  background: white;
+}
+
+/deep/ .text-editor-sec .ql-editor.ql-blank::before {
+  left: 25px;
+}
+
+/deep/ .text-editor-sec .ql-snow.ql-toolbar button, /deep/ .text-editor-sec .ql-snow .ql-toolbar button {
+  height: 27px;
+  width: 32px;
+}
+
+/*  bottom btns section */
+
+.bottom-btns {
+  height: 55px;
+  border-top: 1px solid #95989A;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  padding: 7px;
+  background: white;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.btn-section {
+	display: flex;
+  margin-right: 35px;
+  top: 7px;
+}
+
+.next-btn {
+	background-color: #a9f2df;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 80px;
+	outline: none;
+	box-shadow: inset #99f3db 0 0 1px 1px;
+	margin: 5px;
+	color: gray;
+}
+
+.cancel-btn {
+	background-color: lightgray;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 80px;
+	outline: none;
+	margin: 5px;
+	color: gray;
+}
+
+
+
+:host ::ng-deep .text-autocomp ng2-completer.ng2completer .completer-input {
+  font-size: 14px;
+  color: #646464;
+  border: 1px solid #D3D3d3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 35px;
+  padding-left: 7px;
+  font-weight: 300;
+}
+
+.text-autocomp {
+  width: 60%;
+}
+
+@media screen and (max-width: 1550px) {
+  .info-right {
+    width: 35%;
+    margin-right: 2%;
+  }
+}

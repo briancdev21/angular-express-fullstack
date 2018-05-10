@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { SubTasksManagementComponent } from './subtasksmanagement/subtasksmanagement.component';
-import { MultiKeywordSelectComponent } from './../profile/multikeywordselect/multikeywordselect.component';
+import { MultiKeywordSelectComponent } from './../../profile/multikeywordselect/multikeywordselect.component';
 import { PmService } from '../projectmanagement/pm.service';
 import * as moment from 'moment';
 

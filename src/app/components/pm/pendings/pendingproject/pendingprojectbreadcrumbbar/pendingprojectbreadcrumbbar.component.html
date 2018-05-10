@@ -1,0 +1,36 @@
+<div class="breadcrumb-bar" >
+  <div class="breadcrumb-section">
+    <app-breadcrumb [data]="data"></app-breadcrumb>
+  </div>
+  <div class="title-name">
+    <span>{{projectInformation.projectNumber}}</span>
+    <span>{{projectInformation.customerName}}</span>
+  </div>
+</div>
+<div class="router-followers">
+  <div class="pm-routers">
+    <a routerLink="pending-information" routerLinkActive="active-link">Project Information</a>
+    <a routerLink="pending-scope" routerLinkActive="active-link">Project Scope</a>
+    <a routerLink="pending-tasks" routerLinkActive="active-link">Project Tasks</a>
+    <a routerLink="pending-financials" routerLinkActive="active-link">Project Financials</a>
+  </div>
+
+  <div class="followers" > 
+    <div class="follower" *ngFor="let user of projectInformation.followers; let i = index">
+      <a [routerLink]='user.profileLink' [title]='user.name' ><img [src]='user.imageUrl'/></a>
+    </div> 
+    <div class="follower add-follower" >
+      <a (click)='addUser()' title='user.name' (click)="editable=true;$event.stopPropagation()" ><img src='assets/images/Add-Button.svg'/></a>
+    </div> 
+    <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+        <ul>
+          <li *ngFor="let user of projectInformation.followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li style="background: none; width: 100%; margin: 0;">
+              <input autocomplete [config]="config2" [items]="items2"
+              (inputChangedEvent)="onInputChangedEvent($event)"
+              (selectEvent)="onSelect($event)">
+          </li>
+        </ul>
+      </div>
+  </div>
+</div>

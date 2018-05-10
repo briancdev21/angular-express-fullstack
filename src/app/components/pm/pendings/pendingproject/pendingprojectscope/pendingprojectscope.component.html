@@ -1,0 +1,34 @@
+<div class="top-btns">
+  <span>PROJECT SCOPE</span>
+  <div>
+    <div class="download-btn">Download Scope & Notes</div>
+    <div class="download-btn">Download Proposal</div>
+  </div>
+</div>
+
+<div class="text-editor-sec">
+  <div class="scope-description-change">
+    <div class="editor-title">SCOPE OF WORK</div>
+    <quill-editor [(ngModel)]="projectScope.workScope">
+    </quill-editor>
+  </div>
+</div>
+
+<div class="text-editor-sec">
+  <div class="scope-description-change">
+    <div class="editor-title">INTERNAL NOTES</div>
+    <quill-editor [(ngModel)]="projectScope.internalNotes">
+    </quill-editor>
+  </div>
+</div>
+
+<div class="bottom-btns">
+  <div class="btn-section" >
+    <button class="cancel-btn" (click)="toProjectInfo()">
+      Back
+    </button>
+    <button class="next-btn" (click)="toProjectTasks()">
+      Next
+    </button>
+  </div>
+</div>

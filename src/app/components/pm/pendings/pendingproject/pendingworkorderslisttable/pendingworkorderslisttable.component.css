@@ -1,0 +1,114 @@
+.green {
+  color: #C5DA30;
+}
+
+.red {
+  color: #FF8080;
+}
+
+.orange {
+  color: #FEB66B;
+}
+
+.content {
+	
+}
+
+table {
+  width: 100%;
+  color: #585858;
+  border-top: none;
+  font-weight: 400;
+  user-select: none;
+}
+
+table img {
+  width: 30px;
+  height: 30px;
+  margin-right: 7px;
+}
+
+td {
+  padding: 25px 20px;
+  font-size: 13px;
+  text-align: left;
+  font-weight: 400;
+  border-collapse: collapse;
+  border-bottom: none;
+  align-items: center;
+  border: 0;
+  color: #464646;
+}
+
+td:first-child, th:first-child  {
+  padding-left: 30px !important;
+}
+
+td:last-child {
+  min-width: 250px;
+}
+
+td:nth-child(2) {
+  min-width: 250px;
+}
+
+th {
+  padding: 30px 20px;
+  font-size: 13px;
+  border: 1px solid #F5F5F5;
+  border-collapse: collapse;
+  font-weight: 400;
+  border-top: none;
+  cursor: pointer;
+  border-bottom: 0;
+  color: #464646;
+}
+
+th:first-child, th:last-child {
+  border-right: none;
+}
+
+tr {
+  border-bottom: 1px solid #F5F5F5;
+}
+
+/* tr:hover {
+  box-shadow: 0 1px 10px 1px #d3d3d3;
+} */
+
+tr:first-child:hover {
+  box-shadow: none;
+}
+
+table i {
+  margin-right: 10px;
+  line-height: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.collaborators {
+  display: flex;
+}
+
+:host ::ng-deep .work-order-completion .progress {
+  height: 16px !important;
+  margin: 0;
+  position: relative;
+}
+
+:host ::ng-deep .work-order-table span.progress-title {
+  font-size: 14px;
+  left: 85%;
+  color: #464646;
+  margin-top: -2px;
+}
+
+:host ::ng-deep .work-order-table .progress-bar {
+  position: static;
+}
+
+
+@media screen and (max-width: 1200px) {
+
+}
