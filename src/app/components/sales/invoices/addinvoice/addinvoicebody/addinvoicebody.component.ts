@@ -150,8 +150,14 @@ export default class AddInvoiceBodyComponent implements OnInit {
       .subscribe(data => {
         console.log('userlist: ', data);
         this.contactList = data;
-        this.userList = this.contactList;
+        this.userList = this.contactList.map((contactUser) => contactUser.owner);
       });
+
+    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      this.discountType = res.data.discount.unit;
+      this.discountAmount = res.data.discount.value;
+    });
 
     this.sharedService.getTerms().subscribe(res => {
       this.terms = res.results;
