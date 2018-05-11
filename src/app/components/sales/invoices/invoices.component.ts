@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
+import { InvoicesService } from '../../../services/invoices.service';
+
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.component.html',
@@ -27,8 +30,9 @@ export class InvoicesComponent implements OnInit {
   filterName = '';
   invoiceTags: any;
   invoiceTypes: any;
+  today = moment().format('YYYY-MM-DD');
 
-  constructor( private filterService: FilterService, private router: Router ) {
+  constructor( private filterService: FilterService, private router: Router, private invoicesService: InvoicesService ) {
     this.filterAvaliableTo = 'everyone';
   }
 
@@ -149,8 +153,55 @@ export class InvoicesComponent implements OnInit {
     },
   ];
 
+  newInvoice = {};
+
   ngOnInit() {
     this.backUpInvoices = this.invoicesListInfo;
+    this.newInvoice = {
+      'currencyId': 1,
+      'contactId': 1,
+      'pricingCategoryId': 1,
+      'classificationId': 1,
+      'categoryId': 1,
+      'termId': 1,
+      'emails': [
+        'test@test.com'
+      ],
+      'startDate': this.today,
+      'acceptOnlinePayment': true,
+      'chargeLateFee': true,
+      'lateFee': {
+        'value': 0,
+        'unit': 'AMOUNT'
+      },
+      'recurring': [
+        'RRULE:FREQ=MONTHLY;COUNT=5;DTSTART=20120201T023000Z'
+      ],
+      'reminder': [
+        'Reminder'
+      ],
+      'shippingAddress': {
+        'address': 'Enter Shipping Address',
+        'city': 'Enter City',
+        'province': 'Enter Province',
+        'postalCode': 'Enter Postal Code',
+        'country': 'Enter Country'
+      },
+      'billingAddress': {
+        'address': 'Enter Billing Address',
+        'city': 'Enter City',
+        'province': 'Enter Province',
+        'postalCode': 'Enter Postal Code',
+        'country': 'Enter Country'
+      },
+      'internalNote': 'string',
+      'customerNote': 'string',
+      'terms': 'string',
+      'discount': {
+        'value': 0,
+        'unit': 'AMOUNT'
+      }
+    };
   }
 
   getFilter(event) {
@@ -223,9 +274,10 @@ export class InvoicesComponent implements OnInit {
   }
 
   toAddInvoice() {
-    this.router.navigate(['./add-invoice', {
-      title: 'NEW'
-    }]);
+    this.invoicesService.createInvoice(this.newInvoice).subscribe (res => {
+      console.log('invoice created: ', res);
+      this.router.navigate(['./add-invoice', {title: 'NEW', id: res.data.id}]);
+    });
   }
 
   toAddEstimate() {
