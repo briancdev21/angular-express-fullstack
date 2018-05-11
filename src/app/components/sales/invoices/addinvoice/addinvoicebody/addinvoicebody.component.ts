@@ -4,6 +4,7 @@ import { Ng2TimelineComponent } from '../../../../profile/ng2-timeline/ng2timeli
 import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordselect/multikeywordselect.component';
 import { SharedService } from '../../../../../services/shared.service';
 import { InvoicesService } from '../../../../../services/invoices.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-addinvoicebody',
@@ -44,8 +45,8 @@ export class AddInvoiceBodyComponent implements OnInit {
   noteToSupplier = undefined;
   selectItem = '';
   subtotalproducts = undefined;
-  discountType = 'percent';
-  discountAmount = undefined;
+  discountType: string;
+  discountAmount: number;
   freightcosts = undefined;
   taxes = undefined;
   totalamountdue = undefined;
@@ -104,14 +105,22 @@ export class AddInvoiceBodyComponent implements OnInit {
     }
   ];
 
-  constructor(private sharedService: SharedService, private invoicesService: InvoicesService) {
+  currentInvoiceId: number;
+
+  constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private route: ActivatedRoute) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
     this.sharedService.getContacts()
-    .subscribe(data => {
-      console.log('userlist: ', data);
-      this.contactList = data;
-      this.userList = this.contactList.map((contactUser) => contactUser.owner);
+      .subscribe(data => {
+        console.log('userlist: ', data);
+        this.contactList = data;
+        this.userList = this.contactList.map((contactUser) => contactUser.owner);
+      });
+
+    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      this.discountType = res.data.discount.unit;
+      this.discountAmount = res.data.discount.value;
     });
 
     this.sharedService.getTerms().subscribe(res => {
@@ -123,7 +132,6 @@ export class AddInvoiceBodyComponent implements OnInit {
     });
 
     this.sharedService.getPricingCategories().subscribe(res => {
-      console.log('category: ', res);
       this.categoryList = res.results;
     });
 
@@ -168,7 +176,6 @@ export class AddInvoiceBodyComponent implements OnInit {
           taxrate = parseInt(product.taxrate, 10);
         }
       }
-      console.log('tax', taxrate);
       if (product.type === 'service') {
         if (product.total !== undefined) {
           this.subtotalServices += product.total;
@@ -176,7 +183,6 @@ export class AddInvoiceBodyComponent implements OnInit {
           this.subtotalServices = Math.round(this.subtotalServices * 100) / 100 ;
           this.taxes = Math.round(this.taxes * 100) / 100 ;
           this.origin_taxes = this.taxes;
-          console.log('taxes:', this.origin_taxes);
         }
       } else {
         if (product.total !== undefined) {
@@ -185,7 +191,6 @@ export class AddInvoiceBodyComponent implements OnInit {
           this.subtotalproducts = Math.round(this.subtotalproducts * 100) / 100 ;
           this.taxes = Math.round(this.taxes * 100) / 100 ;
           this.origin_taxes = this.taxes;
-          console.log('taxes:', this.origin_taxes);
         }
       }
     });
@@ -194,6 +199,7 @@ export class AddInvoiceBodyComponent implements OnInit {
   }
 
   onTotalPriceChange(data) {
+    console.log('discountChange: ', data);
     let depositsAmount;
     let discountAmount;
     this.taxes = this.origin_taxes;
