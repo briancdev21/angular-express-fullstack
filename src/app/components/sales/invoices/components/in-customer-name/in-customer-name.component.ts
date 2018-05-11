@@ -18,6 +18,7 @@ export class InCustomerNameComponent implements OnInit {
       this.users.push({'name': user});
     });
   }
+
   @Input() searchStr;
   @Output() selectedUser: EventEmitter<any> = new EventEmitter();
   users = [];
@@ -30,16 +31,13 @@ export class InCustomerNameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._userList
-      .forEach((user, index) => {
-        this.users.push({'name': user});
-      });
   }
 
   onSelected(item: CompleterItem) {
-    console.log('123', item);
     if (item) {
-      this.selectedUser.emit(item.title);
+      console.log('value:', item.originalObject.value);
+      this.selectedUser.emit(item.originalObject.value);
     }
   }
+
 }

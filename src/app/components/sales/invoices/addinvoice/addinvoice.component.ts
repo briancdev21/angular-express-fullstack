@@ -19,8 +19,7 @@ export class AddInvoiceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.status = this.route.snapshot.paramMap.get('title');
-    console.log('status: ', this.status);
+
   }
 
   toggleMenubar(data: boolean) {

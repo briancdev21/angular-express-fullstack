@@ -3,6 +3,7 @@ import { ProductDetailInfo } from '../../../../../models/ProductDetailInfo.model
 import { Ng2TimelineComponent } from '../../../../profile/ng2-timeline/ng2timeline.component';
 import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordselect/multikeywordselect.component';
 import { SharedService } from '../../../../../services/shared.service';
+import { InvoicesService } from '../../../../../services/invoices.service';
 
 @Component({
   selector: 'app-addinvoicebody',
@@ -11,8 +12,8 @@ import { SharedService } from '../../../../../services/shared.service';
 })
 export class AddInvoiceBodyComponent implements OnInit {
   userList = [];
-  classList = ['class1', 'class2', 'class3'];
-  categoryList = ['category1', 'category2', 'category3'];
+  classList = [];
+  categoryList = [];
   projects = ['task1', 'task2', 'task3'];
   changeLogNumbers = ['Number 1', 'Number 2', 'Number 3' ];
   labelText = 'Use customer address';
@@ -28,19 +29,16 @@ export class AddInvoiceBodyComponent implements OnInit {
     postcode: ''
   };
   customerAddress =  {
-    address: '301,1615 10th Ave SW',
-    street: 'Calgary',
-    city: 'Alberta',
-    country: 'Canada',
-    postcode: 'T3C 0J7'
+    address: '',
+    street: '',
+    city: '',
+    country: '',
+    postcode: ''
   };
 
-  terms = ['term1', 'term2', 'term3'];
+  terms = [];
   selectedTerm = '';
   dueDate: any;
-
-  locations = ['locations1', 'locations2', 'locations3'];
-  selectedLocation = '';
   productDetails = [];
   internalMemo = undefined;
   noteToSupplier = undefined;
@@ -57,6 +55,7 @@ export class AddInvoiceBodyComponent implements OnInit {
   depositsAmount = undefined;
   in_id = 'IN - 123405';
   createdDate: any;
+  contactList: any;
 
   emailAddresses = [];
   termsOfInvoice = 'All invoices are due upe3n their due date. Monies due for this invoice will be have a 21%\
@@ -105,33 +104,48 @@ export class AddInvoiceBodyComponent implements OnInit {
     }
   ];
 
-  constructor(private sharedService: SharedService) {
+  constructor(private sharedService: SharedService, private invoicesService: InvoicesService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
-    this.sharedService.getUsers()
+    this.sharedService.getContacts()
     .subscribe(data => {
-      this.userList = data.map(user => user.username);
-      console.log('userlist: ', this.userList);
+      console.log('userlist: ', data);
+      this.contactList = data;
+      this.userList = this.contactList.map((contactUser) => contactUser.owner);
     });
+
+    this.sharedService.getTerms().subscribe(res => {
+      this.terms = res.results.map(term => term.name);
+    });
+
+    this.sharedService.getClassifications().subscribe(res => {
+      this.classList = res.results;
+    });
+
+    this.sharedService.getPricingCategories().subscribe(res => {
+      console.log('category: ', res);
+      this.categoryList = res.results;
+    });
+
   }
 
   ngOnInit() {
-    console.log('userlist: ', this.userList);
   }
 
   onCustomerSelected(user) {
     console.log(user);
   }
 
-  onSelectUser(val) {
+  onSelectUser(selectedIndex: number) {
+    console.log('selectedContactIndex:', selectedIndex);
+    this.customerAddress = this.contactList[selectedIndex].shippingAddress;
+  }
+
+  onSelectClass(val) {
     console.log('val', val);
   }
 
-  onSelectClass(val: string) {
-    console.log('val', val);
-  }
-
-  onSelectCategory(val: string) {
+  onSelectCategory(val) {
     console.log('val', val);
   }
 
