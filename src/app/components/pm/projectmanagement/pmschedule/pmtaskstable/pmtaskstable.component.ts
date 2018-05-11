@@ -96,8 +96,8 @@ export class PmTasksTableComponent implements OnInit {
       for (let j = 0; j < this.milestones[i].tasks.length; j++) {
         this.ownerModalCollapsed[i][j] = false;
         this.dependencyModalCollapsed[i][j] = false;
-        const date = new Date (this.milestones[i].tasks[j].dueDate);
-        this.milestones[i].tasks[j].dueDate = moment(this.milestones[i].tasks[j].dueDate).format('MMMM DD, YYYY');
+        const date = new Date (this.milestones[i].tasks[j].start);
+        this.milestones[i].tasks[j].start = moment(this.milestones[i].tasks[j].start).format('MMMM DD, YYYY');
       }
     }
     this.selectedOwner = 0;
@@ -117,14 +117,14 @@ export class PmTasksTableComponent implements OnInit {
     } else {
       foreTaskCount = 0;
     }
-    return foreTaskCount + this.milestones[milestone].tasks[task].id;
+    return foreTaskCount + task + 1;
   }
 
-  selectDueDate(event, i, j) {
+  selectStartDate(event, i, j) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const dDate = new Intl.DateTimeFormat('en-US', options).format(event.value);
     // Add dDate field to panel info and update it with formatted date.
-    this.milestones[i].tasks[j].dueDate = dDate;
+    this.milestones[i].tasks[j].start = dDate;
   }
 
   private onDropModel(args) {
