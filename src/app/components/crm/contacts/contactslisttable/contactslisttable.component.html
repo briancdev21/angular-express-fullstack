@@ -8,16 +8,16 @@
       <th (click)="sortArray('accountType')">TYPE <img src="assets/images/Edit.png"></th>
     </tr>
     <tr *ngFor="let contact of contactsListInfo; let i = index" (click)="redirectTo(contact.id)">
-      <td>{{contact.name}}</td>
-      <td [ngClass]="{'green': contact.rating > 80}">{{contact.rating}}%</td>
-      <td [ngClass]="{'green': contact.totalDeals > 0}">{{contact.totalDeals}}</td> 
+      <td *ngIf="contact.type === 'PERSON'">{{contact.person.firstName}} {{contact.person.lastName}}</td> <td *ngIf="contact.type === 'BUSINESS'">{{contact.business.name}}</td>
+      <td [ngClass]="{'green': contact.rating > 80}">{{contact.accountRating}}%</td>
+      <td [ngClass]="{'green': contact.totalDeals > 0}">{{contact.totalNumberOfDeals}}</td> 
       <td >
         <span *ngIf="contact.association != 0">{{contact.association}} Invoice </span>
         <span *ngIf="(contact.association != 0) && (contact.account != 0)">,</span>
         <span *ngIf="(contact.association == 0) || (contact.account != 0)">{{contact.account}} Project</span>
       </td>
       <td>
-        <span >{{contact.accountType}}</span> 
+        <span >{{contact.type}}</span> 
         <img src="assets/images/three-dots.png" (click)="openContactModal(i); $event.stopPropagation();" style="cursor: pointer;">
         <div 
           class="contact-expand-modal-wrapper" 
@@ -40,7 +40,7 @@
                 <img src="assets/images/envelope.png" (click)="emailClick(); $event.stopPropagation();">
                 <a href="mailto:.${{contact.email}}" *ngIf="emailClicked">{{contact.email}}</a>
               </div>
-              <a href="http://maps.google.com/maps?q={{contact.address}}" target="_blank">
+              <a href="http://maps.google.com/maps?q={{contact.shippingAddress.address + ' ' + contact.shippingAddress.city + ', ' + contact.shippingAddress.province + ' ' + contact.shippingAddress.country}}" target="_blank">
                 <img src="assets/images/info.png">
               </a>
             </div>

@@ -94,7 +94,7 @@ export class LeadsListTableComponent implements OnInit {
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
       this.leadsListInfo.sort( function(name1, name2) {
-        if ( Date.parse(name1[field]) < Date.parse(name2[field]) ){
+        if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
           return -1;
         } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
           return 1;

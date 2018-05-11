@@ -2,6 +2,8 @@ import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import * as _ from 'lodash';
+import { CrmService } from '../../../../services/crm.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-contactslisttable',
@@ -52,7 +54,7 @@ export class ContactsListTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
-  constructor( private filterService: FilterService, private router: Router ) {
+  constructor( private filterService: FilterService, private router: Router,  private crmService: CrmService ) {
   }
 
   ngOnInit() {
@@ -191,6 +193,16 @@ export class ContactsListTableComponent implements OnInit {
   }
 
   cloneRow(contact, index) {
+    contact.lastContacted = moment(contact.lastContacted).format('YYYY-MM-DD');
+    contact.socialMediaUrl =  {
+      'linkedIn': 'string',
+      'facebook': 'string',
+      'twitter': 'string'
+    };
+    // Remove empty/null field from object.
+    Object.keys(contact).forEach((key) => (contact[key] == null) && delete contact[key]);
+    Object.keys(contact.person).forEach((key) => (contact.person[key] == null) && delete contact.person[key]);
+
     this.clonedRowIndex = index;
     this.clonedRowContact = contact;
     this.contactModalInfoCollapsed[index] = false;
@@ -206,7 +218,11 @@ export class ContactsListTableComponent implements OnInit {
   }
 
   confirmClone() {
-    this.contactsListInfo.splice(this.clonedRowIndex, 0, this.clonedRowContact);
+    this.crmService.createContact(JSON.stringify(this.clonedRowContact)).subscribe(res => {
+      this.crmService.getContactsList().subscribe(data => {
+        this.contactsListInfo = data.results;
+      });
+    });
   }
 
   confirmDelete() {
@@ -224,7 +240,7 @@ export class ContactsListTableComponent implements OnInit {
     this.phoneClicked = true;
     this.emailClicked = false;
     this.expandedInfoModal = false;
-    this.formatedPhone = this.formatPhoneNumber(contact.phone);
+    this.formatedPhone = this.formatPhoneNumber(contact.phoneNumbers.primary);
   }
 
   emailClick() {
