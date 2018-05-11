@@ -5,7 +5,7 @@
         <div class="milestone-title" [ngStyle]="{'background': milestone.color}" style="opacity: .7;">
           <span>{{milestone.title | uppercase }}</span>
         </div>
-        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='tasks'>
+        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks'>
           <div *ngFor="let task of milestone.tasks; let j = index;" class="draggable-task">
             <div class="task-content" (dblclick)="openDetailedModal(task, i, j)">
               <img *ngIf="task.attachmentImg" src="attachmentImg">
@@ -40,13 +40,13 @@
               <div class="task-bottom">
                 <div class="due-date">
                   <input 
-                    [owlDateTime]="dueDate" 
-                    [owlDateTimeTrigger]="dueDate" 
-                    (dateTimeChange)="selectDueDate($event, i, j)" 
-                    [(ngModel)]="task.dueDate" 
+                    [owlDateTime]="start" 
+                    [owlDateTimeTrigger]="start" 
+                    (dateTimeChange)="selectStartDate($event, i, j)" 
+                    [(ngModel)]="task.start" 
                   >
-                  <owl-date-time [pickerType]="'calendar'" #dueDate></owl-date-time>
-                  <span [owlDateTimeTrigger]="dueDate" [ngClass]="{'due-date-empty': !task.dueDate}">{{task.dueDate}}</span>
+                  <owl-date-time [pickerType]="'calendar'" #start></owl-date-time>
+                  <span [owlDateTimeTrigger]="start" [ngClass]="{'due-date-empty': !task.start}">{{task.start}}</span>
                 </div>
                 <span class="duration"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0"> Days</span>
                 <div class="task-actions">

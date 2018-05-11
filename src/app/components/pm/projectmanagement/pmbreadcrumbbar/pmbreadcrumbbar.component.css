@@ -103,7 +103,7 @@
   text-decoration: none;
 }
 
-.pm-routers a:focus, .pm-routers a:active {
+.pm-routers a:focus, .pm-routers a:active, .pm-routers .active-link {
   text-decoration: none;
   border: 0;
   border-bottom: 5px solid #70eaca;
