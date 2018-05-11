@@ -41,6 +41,7 @@ export class CustomDonutChartComponent {
   }
 
   ngOnInit() {
+    console.log('percentage: ', this.percentage);
     this.gradientTransform = "rotate(0)";
     
     this.percentageInt = parseInt(this.percentage, 10);
@@ -79,8 +80,8 @@ export class CustomDonutChartComponent {
           "M", start.x, start.y, 
           "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
       ].join(" ");
-  
-      return d;       
+
+      return d;
   }
-  
+
 }

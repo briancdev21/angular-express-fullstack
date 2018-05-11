@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../components/common/common.component';
 import { BreadcrumbBarComponent } from './breadcrumbbar/breadcrumbbar.component';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CrmService } from '../../services/crm.service';
 
 @Component({
   selector: 'app-profile',
@@ -16,56 +18,26 @@ import { BreadcrumbBarComponent } from './breadcrumbbar/breadcrumbbar.component'
 export class ProfileComponent implements OnInit {
 
   menuCollapsed = true;
+  contactInfoIndex: any;
 
-  constructor() {
-
-  }
   userInfo = {
-    name: 'John Moss',
-    role: 'Vice President / Sales Department',
-    profileLink: 'assets/users/John Moss.jpg',
-    email: 'john.moss@gmail.com',
-    primaryphone: '4038935433',
-    mobilephone: '4037101212',
-    shippingaddress: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-    billingaddress: '2893 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-    keywords: [
-      'control4',
-      'theatre',
-      'renovation'
-    ],
-    contactUser: 'Hayati Homes',
-    subAssoUsers: [
-      'Danny Shibley',
-      'John Stephen'
-    ],
-    followers: [{
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Michael'
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/joseph',
-      name: 'Joseph'
-    }]
   };
   public chartSetData: Array<Object> = [
     {
       title: 'Account Rating',
-      percentage: '120%',
+      percentage: 10,
     },
     {
       title: 'Loyalty Rating',
-      percentage: '90%',
+      percentage: 0,
     },
     {
       title: 'Deals Ratio',
-      percentage: '70%',
+      percentage: 0,
     },
     {
       title: 'Service Ratio',
-      percentage: '50%',
+      percentage: 0,
     }
   ];
    /**
@@ -76,7 +48,8 @@ export class ProfileComponent implements OnInit {
     {
       title: 'Meeting',
       icon: 'fa-home',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products. Below please find the currnet status of the sale',
+      content: 'Conference on the sales for the previous year. Monica please examine sales trends\
+       in marketing and products. Below please find the currnet status of the sale',
       timelineBtnColor: 'green-btn',
       buttontitle: 'More Info',
       date: '2018-1-9',
@@ -85,7 +58,8 @@ export class ProfileComponent implements OnInit {
     {
       title: 'Send Document to Mike',
       icon: 'fa-file-text-o',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products. Below please find the currnet status of the sale',
+      content: 'Conference on the sales for the previous year. Monica please examine sales trends\
+       in marketing and products. Below please find the currnet status of the sale',
       timelineBtnColor: 'lime-btn',
       buttontitle: 'Download document',
       date: '2018-1-9',
@@ -94,7 +68,8 @@ export class ProfileComponent implements OnInit {
     {
       title: 'Coffee Break',
       icon: 'fa-coffee',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products. Below please find the currnet status of the sale',
+      content: 'Conference on the sales for the previous year. Monica please examine sales trends\
+       in marketing and products. Below please find the currnet status of the sale',
       timelineBtnColor: 'blue-btn',
       buttontitle: 'Read more',
       date: '2018-1-8',
@@ -289,6 +264,40 @@ export class ProfileComponent implements OnInit {
     content: string;
   };
 
+  dataRetrieved = false;
+  constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService) {
+    this.contactInfoIndex = this.route.snapshot.paramMap.get('id');
+    this.crmService.getIndividualContact(this.contactInfoIndex).subscribe(res => {
+      console.log('contactData: ', res.data);
+      this.dataRetrieved = true;
+      // Update userInfo
+      this.userInfo = {
+        name: res.data.person.firstName + ' ' + res.data.person.lastName,
+        profileLink: 'assets/users/Random.jpg',
+        email: res.data.email,
+        primaryphone: res.data.phoneNumbers.primary,
+        mobilephone: res.data.phoneNumbers.secondary,
+        shippingaddress: res.data.shippingAddress.address + ' ' +
+                          res.data.shippingAddress.city + ',' +
+                          res.data.shippingAddress.province + ' ' +
+                          res.data.shippingAddress.postalCode,
+        billingaddress: res.data.billingAddress.address + ' ' +
+                        res.data.billingAddress.city + ',' +
+                        res.data.billingAddress.province + ' ' +
+                        res.data.billingAddress.postalCode,
+        keywords: res.data.keywordIds ? res.data.keywordIds : [],
+        followers: res.data.followers ? res.data.followers : []
+      };
+      // Update cards info
+      // this.cards = res.data.score;
+
+      // Update donut chart info
+      this.chartSetData[0]['percentage'] = res.data.accountRating;
+      this.chartSetData[1]['percentage'] = res.data.loyaltyRating;
+      this.chartSetData[2]['percentage'] = res.data.dealsRatio;
+      this.chartSetData[3]['percentage'] = res.data.serviceRatio;
+    });
+  }
 
   ngOnInit() {
     this.activity = {
