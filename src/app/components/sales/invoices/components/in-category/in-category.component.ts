@@ -7,28 +7,28 @@ import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
 })
 export class InCategoryComponent implements OnInit {
 
-  @Input() categoryList;
-  @Output() selectedUser: EventEmitter<any> = new EventEmitter();
-  users = [];
+  @Input() set categoryList(_categories: any[]) {
+    _categories.forEach((category, index) => {
+        this.categories.push({'name': category.name, 'value': index});
+      });
+  }
+  @Output() selectedCategory: EventEmitter<any> = new EventEmitter();
+  categories = [];
 
   private searchStr: string;
   dataService: CompleterData;
 
 
   constructor(private completerService: CompleterService) {
-    this.dataService = completerService.local(this.users, 'name', 'name');
+    this.dataService = completerService.local(this.categories, 'name', 'name');
   }
 
   ngOnInit() {
-    this.categoryList
-      .forEach((user, index) => {
-        this.users.push({'name': user});
-      });
   }
 
   onSelected(item: CompleterItem) {
     if (item) {
-      this.selectedUser.emit(item.title);
+      this.selectedCategory.emit(item.originalObject.value);
     }
   }
 
