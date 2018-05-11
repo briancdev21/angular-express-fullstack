@@ -25,5 +25,11 @@ export class AddInvoiceHeaderComponent implements OnInit {
 
   }
   ngOnInit() {
+    // this.status = this.route.snapshot.paramMap.get('title');
+    this.invoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.invoiceService.getIndividualInvoice(this.invoiceId).subscribe(res => {
+      console.log('individual: ', res);
+      this.status = res.data.status;
+    });
   }
 }
