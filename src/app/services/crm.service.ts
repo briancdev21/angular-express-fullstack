@@ -46,5 +46,22 @@ export class CrmService {
     const url = `${apiUrl}crm/leads/${id}`;
     return this.http.get(url);
   }
+
+  getContactsList (): Observable<any> {
+    const url = `${apiUrl}crm/contacts/`;
+    console.log('id_token', apiHeaders());
+    return this.http.get(url);
+  }
+
+  createContact (body): Observable<any> {
+    const url = `${apiUrl}crm/contacts/`;
+    return this.http.post(url, body, this.options)
+      .map((res) => res);
+  }
+
+  getIndividualContact(id): Observable<any>  {
+    const url = `${apiUrl}crm/contacts/${id}`;
+    return this.http.get(url);
+  }
 }
 

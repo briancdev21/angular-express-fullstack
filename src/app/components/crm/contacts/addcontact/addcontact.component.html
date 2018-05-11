@@ -27,13 +27,13 @@
           <div class="tab-row" *ngIf="typeAccountTypeChange">
 						<div>
 							<span>Business Name (*required)</span>
-							<input placeholder="Enter business name" [ngClass]="{'validation-required': invalidBusinessName}" [(ngModel)]="businessName" [value]="businessName">
+							<input placeholder="Enter business name" [ngClass]="{'validation-required': invalidBusinessName}" [(ngModel)]="businessName" >
 						</div>  
             <div>
 							<span>Head contact</span>
-							<div>
-                <select>
-                  <option value="test">Choose head contact</option>
+							<div *ngIf="contactsList">
+                <select [(ngModel)]="headContact">
+                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.person.firstName}} {{contact.person.lastName}}</option>
                 </select>
               </div>
 						</div> 
@@ -46,21 +46,21 @@
               <div class="account-type">
                 <select [(ngModel)]='businessType' #accountType (ngModelChange)="onAccountTypeChange(businessType)" [ngClass]="{'validation-required': invalidAccountType}" >
                   <option value="" selected disabled class="default-option">Choose an account type</option>
-									<option value="individual">Individual</option>
-                  <option value="business">Business</option>
+									<option value="PERSON">Individual</option>
+                  <option value="BUSINESS">Business</option>
                 </select>
               </div>
             </div>
 						<div>
               <span>Job title</span>
-              <input placeholder="Enter job title">
+              <input placeholder="Enter job title" [(ngModel)]="jobTitle">
             </div>
           </div>
 
 					<div class=" tab-row">
             <div>
               <span>Email</span>
-              <input placeholder="Enter email" [(ngModel)]="newEmail">
+              <input placeholder="Enter email" [(ngModel)]="email">
             </div>
             <div>
               <span>Department</span>
@@ -74,15 +74,15 @@
           <div class="name-type tab-row">
             <div>
               <span>Primary number (*required)</span>
-              <input placeholder="Enter primary phone number" [ngClass]="{'validation-required': invalidPrimaryNumber}" [(ngModel)]="primaryNumber" [value]="primaryNumber">
+              <input placeholder="Enter primary phone number" [ngClass]="{'validation-required': invalidPrimaryNumber}" [(ngModel)]="primaryNumber">
             </div>
             <div *ngIf="!typeAccountTypeChange">
               <span>Mobile</span>
-              <input placeholder="Enter mobile number" [(ngModel)]="mobileNumber" >
+              <input placeholder="Enter mobile number" [(ngModel)]="secondaryNumber" >
             </div>
 						<div *ngIf="typeAccountTypeChange">
               <span>Secondary number</span>
-              <input placeholder="Enter secondary number" [(ngModel)]="secondaryNumber" >
+              <input placeholder="Enter secondary number" [(ngModel)]="secondaryNumber">
             </div>
           </div>
 
@@ -95,15 +95,15 @@
                 <span>Same as the customer profile</span>
               </div>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [value]="shippingAddress" [(ngModel)]="newAddress" >
+            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="address">
 
             <div class="city-state">
-              <input placeholder="Enter City" [(ngModel)]="newCity" >
-              <input placeholder="Enter State" [(ngModel)]="newState" >
+              <input placeholder="Enter City" [(ngModel)]="city">
+              <input placeholder="Enter State" [(ngModel)]="province">
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country" [(ngModel)]="newCountry" >
-              <input placeholder="Enter Zipcode" [(ngModel)]="newZipcode" >
+              <input placeholder="Enter Country" [(ngModel)]="country">
+              <input placeholder="Enter Zipcode" [(ngModel)]="postalCode">
             </div>
           </div>
 
@@ -111,16 +111,14 @@
 						<div>
               <span>Keywords</span>
               <div class="keywords">
-                <app-multikeywordselect [keywords]="keywords" ></app-multikeywordselect>
+                <app-multikeywordselect [keywords]="keywords" (sendKeywords)="getKeywords($event)"></app-multikeywordselect>
               </div>
             </div>
             <div *ngIf="!typeAccountTypeChange">
               <span>Business association</span>
-              <div>
-                <select>
-                  <option value="business" class="default-option" disabled selected>Choose a business account</option>
-                  <option value="business">Choose a  account</option>
-                  <option value="business">Choose a business </option>
+              <div *ngIf="contactsList">
+                <select [(ngModel)]="businessAssociation">
+                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.person.firstName}} {{contact.person.lastName}}</option>
                 </select>
               </div>
             </div>
@@ -148,23 +146,18 @@
           <div class=" tab-row">
             <div>
               <span>Default pricing (*required)</span>
-              <div>
+              <div *ngIf="pricingCategoriesList">
                 <select [(ngModel)]="defaultPricing" [ngClass]="{'validation-required': invalidDefaultPricing}">
-                  <option [value]="" default disabled class="default-option">Choose the default pricing</option>
-                  <option [value]="family" >Family & Friend</option>
-                  <option [value]="royalty" >Royalty Program</option>
-                  <option [value]="retail" >Retail</option>
+                  <option *ngFor="let pricing of pricingCategoriesList" [value]="pricing.id" class="default-option">{{pricing.name}}</option>
                 </select>
               </div>
             </div>
             <div>
               <span>Default currency (*required)</span>
-              <div>
-                <select [(ngModel)]="defaultCurrency" [ngClass]="{'validation-required': invalidDefaultCurrency}">
-                  <option [value]="" disabled selected class="default-option">Choose the default currency</option>
-                  <option [value]="euro" >UERO</option>
-                  <option [value]="cad" >CAD</option>
-                  <option [value]="usd" >USD</option>
+              <div *ngIf="currencyList">
+                <select [(ngModel)]="defaultCurrency" [ngClass]="{'validation-required': invalidDefaultCurrency}" *ngIf="currencyList">
+                  <option *ngFor="let currency of currencyList; let i = index " [value]="currency.id">{{currency.currencyCode}}</option>
+
                 </select>
               </div>
             </div>
@@ -172,19 +165,17 @@
 					<div class="tab-row">
             <div>
               <span>Default terms (*required)</span>
-              <div>
+              <div *ngIf="termsList">
                 <select [(ngModel)]="defaultTerm" [ngClass]="{'validation-required': invalidDefaultTerm}">
-                  <option [value]="" disabled selected class="default-option">Choose the default terms</option>
-                  <option [value]="Test1" >Test1</option>
-                  <option [value]="Test2" >Test2</option>
+                  <option *ngFor="let term of termsList" class="default-option" [value]="term.id">{{term.name}}</option>
                 </select>
               </div>
             </div>
             <div>
               <span>Owner</span>
-              <div>
-                <select [(ngModel)]="selectOwner">
-                  <option value="Sepehr Shoarinejad">Sepehr Shoarinejad</option>
+              <div *ngIf="usersList">
+                <select [(ngModel)]="owner">
+                  <option *ngFor="let user of usersList" [value]="user.username">{{user.username}}</option>
                 </select>
               </div>
             </div>
@@ -192,39 +183,37 @@
 					<div class=" tab-row">
             <div>
               <span>Source</span>
-              <div>
-                <ng2-completer [(ngModel)]="captainSource" [datasource]="captainsSource" [minSearchLength]="0" (keyup.enter)="onEnter()" (selected)="checkSource($event)"></ng2-completer>
+              <div *ngIf="sourcesNameList">
+                <ng2-completer [(ngModel)]="captainSource" [datasource]="sourcesNameList" [minSearchLength]="0" (keyup.enter)="onEnter()" (selected)="checkSource($event)"></ng2-completer>
               </div>
             </div>
             <div>
               <span>Contact name</span>
-              <div>
-                <select [disabled]="sourceValue">
-                  <option value="" class="default-option">Choose contact</option>
-                  <option value="test" class="default-option">Contact 1</option>
-                  <option value="test" class="default-option">Contact 2</option>
+              <div *ngIf="contactsList">
+                <select [(ngModel)]="contactName">
+                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.person.firstName}} {{contact.person.lastName}}</option>
                 </select>
               </div>
             </div>
           </div>
 					<div class="shipping-address ">
             <div class="desc">
-              <span>Shipping Address</span>
+              <span>Billing Address</span>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [value]="shippingAddress">
+            <input placeholder="Enter Billing Address" class="address" [(ngModel)]="billingAddress">
 
             <div class="city-state">
-              <input placeholder="Enter City">
-              <input placeholder="Enter State">
+              <input placeholder="Enter City" [(ngModel)]="billingCity">
+              <input placeholder="Enter State" [(ngModel)]="billingProvince">
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country">
-              <input placeholder="Enter Zipcode">
+              <input placeholder="Enter Country" [(ngModel)]="billingCountry">
+              <input placeholder="Enter Zipcode" [(ngModel)]="billingPostalCode">
             </div>
           </div>
 					<div class="customer-notes">
 						<span>Notes</span>
-						<textarea placeholder="Enter customer notes here"></textarea>
+						<textarea placeholder="Enter customer notes here" [(ngModel)]="notes"></textarea>
 					</div>
           <div class="btn-section" >
             <button class="cancel-btn" (click)="addContactModalCollapsed=true; showAddContactModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
@@ -238,7 +227,5 @@
       </tab>
       
     </tabs>
-  </div>
-
-  
+  </div>  
 </div>

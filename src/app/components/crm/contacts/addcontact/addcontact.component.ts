@@ -2,6 +2,9 @@ import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, EventEmi
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { CrmService } from '../../../../services/crm.service';
+import * as moment from 'moment';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-addcontact',
@@ -37,7 +40,11 @@ export class AddContactComponent implements OnInit {
   addContactModalCollapsed = true;
   showAddContactModal = false;
   switchIconShipping: boolean = true;
-  shippingAddress: string = '';
+  address = '';
+  city = '';
+  province = '';
+  postalCode = '';
+  country: '';
   typeAccountTypeChange = false;
   keywords: any;
   contactAssociation: any;
@@ -75,14 +82,59 @@ export class AddContactComponent implements OnInit {
   usd: any;
   Test1: any;
   Test2: any;
+  currencyList = [];
+  keywordsIdList = [];
+  headContact: any;
+  jobTitle = '';
+  email = '';
+  notes = '';
+  billingAddress = '';
+  billingCity = '';
+  billingProvince = '';
+  billingCountry = '';
+  billingPostalCode = '';
+  secondaryNumber = '';
+  termsList = [];
+  pricingCategoriesList = [];
+  contactsList = [];
+  usersList = [];
+  sourcesList = [];
+  sourcesNameList = [];
+  selectedSourceId: any;
+  businessAssociation: any;
+  newContact: any;
 
-  constructor(private completerService: CompleterService) {
+  constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
-    this.keywords = ['control4', 'theatre', 'renovation'];
+    this.keywords = [];
     this.contactAssociation = ['Danny Shibley', 'John Stephen'];
   }
 
   ngOnInit() {
+    this.sharedService.getCurrencies().subscribe(data => {
+      this.currencyList = data.results;
+    });
+
+    this.sharedService.getTerms().subscribe(res => {
+      this.termsList = res.results;
+    });
+
+    this.sharedService.getPricingCategories().subscribe (res => {
+      this.pricingCategoriesList = res.results;
+    });
+
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res;
+    });
+
+    this.sharedService.getUsers().subscribe(res => {
+      this.usersList = res;
+    });
+
+    this.sharedService.getSources().subscribe(res => {
+      this.sourcesList = res.results;
+      this.sourcesNameList = res.results.map(n => n.source);
+    });
   }
 
   onAccountTypeChange(event) {
@@ -91,16 +143,16 @@ export class AddContactComponent implements OnInit {
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
-    if (event === 'individual') {
+    if (event === 'PERSON') {
       this.typeAccountTypeChange = false;
-    } else if (event === 'business') {
+    } else if (event === 'BUSINESS') {
       this.typeAccountTypeChange = true;
     }
   }
 
   clickIconShipping() {
     this.switchIconShipping = !this.switchIconShipping;
-    this.shippingAddress = (this.switchIconShipping) ? 'test' : '';
+    this.address = (this.switchIconShipping) ? 'test' : '';
   }
 
   onEnter() {
@@ -112,6 +164,12 @@ export class AddContactComponent implements OnInit {
     } else {
       this.sourceValue = true;
     }
+    const pos = this.sourcesNameList.indexOf(event.title);
+    this.selectedSourceId = this.sourcesList[pos].id;
+  }
+
+  getKeywords(event) {
+    this.keywordsIdList = event.map(k => k.id);
   }
 
   clickNext() {
@@ -120,7 +178,7 @@ export class AddContactComponent implements OnInit {
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
-    if (this.businessType === 'individual') {
+    if (this.businessType === 'PERSON') {
       if (this.firstName && this.lastName && this.primaryNumber) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
@@ -135,7 +193,7 @@ export class AddContactComponent implements OnInit {
           this.invalidPrimaryNumber = true;
         }
       }
-    } else if (this.businessType === 'business') {
+    } else if (this.businessType === 'BUSINESS') {
       if (this.businessName) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
@@ -177,7 +235,7 @@ export class AddContactComponent implements OnInit {
         this.invalidAccountType = false;
         this.invalidPrimaryNumber = false;
 
-        if (this.businessType === 'individual') {
+        if (this.businessType === 'PERSON') {
           if (this.firstName && this.lastName && this.primaryNumber) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
@@ -197,7 +255,7 @@ export class AddContactComponent implements OnInit {
               this.invalidPrimaryNumber = true;
             }
           }
-        } else if (this.businessType === 'business') {
+        } else if (this.businessType === 'BUSINESS') {
           if (this.businessName) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
@@ -234,33 +292,117 @@ export class AddContactComponent implements OnInit {
     }
   }
   clickSaveContact() {
-
-    const newContact = {
-      id: this.contactsListInfo.length,
-      name: this.firstName + ' ' + this.lastName,
-      phone: this.primaryNumber,
-      email: this.newEmail,
-      createDate: new Date(),
-      updateDate: new Date(),
-      lastContactedDate: new Date(),
-      rating: '0',
-      address: this.newAddress,
-      owner: this.selectOwner,
-      account: '0',
-      association: '0',
-      totalDeals: '0',
-      accountType: this.businessType,
-    };
-
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
     this.invalidDefaultPricing = false;
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
-      this.addContactModalCollapsed = true;
-      this.showAddContactModal = false;
-      this.tabActiveFirst = true;
-      this.tabActiveSecond = false;
-      this.addToContactsList.emit({data: newContact});
+      if (this.businessType === 'PERSON') {
+        this.newContact = {
+          'currencyId': parseInt(this.defaultCurrency, 10),
+          'termId': parseInt(this.defaultTerm, 10),
+          'sourceId': parseInt(this.selectedSourceId, 10),
+          'pricingCategoryId': parseInt(this.defaultPricing, 10),
+          'keywordIds': this.keywordsIdList,
+          'owner': 'string',
+          'followers': [
+            'string'
+          ],
+          'type': this.businessType,
+          'person': {
+            'firstName': this.firstName,
+            'lastName': this.lastName,
+            'jobTitle': this.jobTitle,
+            'department': this.captain,
+            'businessAssociation': parseInt(this.businessAssociation, 10),
+          },
+          'shippingAddress': {
+            'address': this.address,
+            'city': this.city,
+            'province': this.province,
+            'postalCode': this.postalCode,
+            'country': this.country
+          },
+          'billingAddress': {
+            'address': this.billingAddress,
+            'city': this.billingCity,
+            'province': this.billingProvince,
+            'postalCode': this.billingPostalCode,
+            'country': this.billingCountry
+          },
+          'email':  this.email,
+          'socialMediaUrl': {
+            'linkedIn': 'string',
+            'facebook': 'string',
+            'twitter': 'string'
+          },
+          'phoneNumbers': {
+            'primary': this.primaryNumber,
+            'secondary': this.secondaryNumber,
+          },
+          'timezone': 1,
+          'note': this.notes,
+          'lastContacted': moment().format('YYYY-MM-DD')
+        };
+      } else {
+        this.newContact = {
+          'currencyId': parseInt(this.defaultCurrency, 10),
+          'termId': parseInt(this.defaultTerm, 10),
+          'sourceId': parseInt(this.selectedSourceId, 10),
+          'pricingCategoryId': parseInt(this.defaultPricing, 10),
+          'keywordIds': this.keywordsIdList,
+          'owner': 'string',
+          'followers': [
+            'string'
+          ],
+          'type': this.businessType,
+          'person': {
+            'jobTitle': this.jobTitle,
+            'department': this.captain,
+            'businessAssociation': parseInt(this.businessAssociation, 10),
+          },
+          'business': {
+            'name': this.businessName,
+            'headContact': parseInt(this.headContact, 10),
+            'accountReceivable': 1,
+            'personAssociations': [
+              1
+            ]
+          },
+          'shippingAddress': {
+            'address': this.address,
+            'city': this.city,
+            'province': this.province,
+            'postalCode': this.postalCode,
+            'country': this.country
+          },
+          'billingAddress': {
+            'address': this.billingAddress,
+            'city': this.billingCity,
+            'province': this.billingProvince,
+            'postalCode': this.billingPostalCode,
+            'country': this.billingCountry
+          },
+          'email':  this.email,
+          'socialMediaUrl': {
+            'linkedIn': 'string',
+            'facebook': 'string',
+            'twitter': 'string'
+          },
+          'phoneNumbers': {
+            'primary': this.primaryNumber,
+            'secondary': this.secondaryNumber,
+          },
+          'timezone': 1,
+          'note': this.notes,
+          'lastContacted': moment().format('YYYY-MM-DD')
+        };
+      }
+      this.crmService.createContact(JSON.stringify(this.newContact)).subscribe(data => {
+        this.addContactModalCollapsed = true;
+        this.showAddContactModal = false;
+        this.tabActiveFirst = true;
+        this.tabActiveSecond = false;
+      });
     } else {
       if (!this.defaultCurrency) {
         this.invalidDefaultCurrency = true;
