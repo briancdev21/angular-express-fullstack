@@ -498,3 +498,7 @@
   text-align: left;
   color: #95989a;
 }
+
+.overDue {
+  color: red !important;
+}

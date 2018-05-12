@@ -66,7 +66,7 @@
                     [(ngModel)]="task.dueDate" 
                   >
                   <owl-date-time [pickerType]="'calendar'" #dueDate></owl-date-time>
-                  <span [owlDateTimeTrigger]="dueDate" [ngClass]="{'due-date-empty': !task.dueDate}">{{task.dueDate}}</span>
+                  <span [owlDateTimeTrigger]="dueDate" [ngClass]="{'due-date-empty': !task.dueDate, 'overDue': checkOverdue(task.dueDate)}">{{task.dueDate}}</span>
                 </div>
                 <span class="duration" *ngIf="i == 2"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0"> Days</span>
                 <div class="task-actions">
