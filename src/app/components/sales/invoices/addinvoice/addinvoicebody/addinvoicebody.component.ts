@@ -155,8 +155,12 @@ export default class AddInvoiceBodyComponent implements OnInit {
 
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      console.log('getIndividualInvoice: ', res);
       this.discountType = res.data.discount.unit;
       this.discountAmount = res.data.discount.value;
+      this.internalMemo = res.data.internalNote;
+      this.noteToSupplier = res.data.customerNote;
+      this.termsOfInvoice = res.data.terms;
     });
 
     this.sharedService.getTerms().subscribe(res => {
@@ -248,8 +252,8 @@ export default class AddInvoiceBodyComponent implements OnInit {
     console.log('changedCreatedDate: ', event);
   }
 
-  changedDueDate(event) {
-    console.log('changedDueDate: ', event);
+  onChangedTerm(event) {
+    console.log('onChangedNote: ', event);
   }
 
   onPriceChanged() {
