@@ -22,9 +22,9 @@
       </div>
       <div class="right-sidebar">
         <app-in-orderidfield [in_id]="in_id" [title]="invoiceNumberTitle"></app-in-orderidfield>
-        <app-in-createddatefield [(createdDate)]="createdDate" ></app-in-createddatefield>
+        <app-in-createddatefield [(createdDate)]="createdDate" (changedCreatedDate)="changedCreatedDate($event)"></app-in-createddatefield>
         <app-in-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" ></app-in-termsfield>
-        <app-in-duedatefield [(dueDate)]="dueDate" [title]="dueDateTitle"></app-in-duedatefield>
+        <app-in-duedatefield [(dueDate)]="dueDate" [title]="dueDateTitle" (changedDueDate)="changedDueDate($event)"></app-in-duedatefield>
         <app-in-class  [classList]="classList" (selectedClass)="onSelectClass($event)" ></app-in-class>
         <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory($event)" ></app-in-category>
       </div>

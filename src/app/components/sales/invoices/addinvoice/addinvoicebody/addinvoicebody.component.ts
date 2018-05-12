@@ -161,6 +161,14 @@ export class AddInvoiceBodyComponent implements OnInit {
     console.log('switch status:', status);
   }
 
+  changedCreatedDate(event) {
+    console.log('changedCreatedDate: ', event);
+  }
+
+  changedDueDate(event) {
+    console.log('changedDueDate: ', event);
+  }
+
   onPriceChanged() {
     this.subtotalproducts = 0;
     this.subtotalServices = 0;
