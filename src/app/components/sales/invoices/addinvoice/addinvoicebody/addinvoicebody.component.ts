@@ -244,6 +244,14 @@ export default class AddInvoiceBodyComponent implements OnInit {
     this.saveInvoiceData.deposit = parseInt(event, 10);
   }
 
+  changedCreatedDate(event) {
+    console.log('changedCreatedDate: ', event);
+  }
+
+  changedDueDate(event) {
+    console.log('changedDueDate: ', event);
+  }
+
   onPriceChanged() {
     this.subtotalproducts = 0;
     this.subtotalServices = 0;
