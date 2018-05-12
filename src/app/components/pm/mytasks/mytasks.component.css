@@ -26,6 +26,7 @@
   user-select: none;
   margin: 0;
   height: 20px;
+  overflow: hidden;
 }
 
 /* Hide the browser's default checkbox */
