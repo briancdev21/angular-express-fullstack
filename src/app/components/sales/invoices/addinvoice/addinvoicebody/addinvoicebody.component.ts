@@ -57,11 +57,10 @@ export class AddInvoiceBodyComponent implements OnInit {
   in_id = 'IN - 123405';
   createdDate: any;
   contactList: any;
+  noteToSupplier: string;
 
   emailAddresses = [];
-  termsOfInvoice = 'All invoices are due upe3n their due date. Monies due for this invoice will be have a 21%\
-  annual interest charge incured on a monthly basis.\n\n Please send cheque to:\
-  \r Nu Automations \n 301, 108 9th Ave SW\n Calgary, AB T2P 0S9 \n\n Wire transfor instructions are as following:';
+  termsOfInvoice = '';
 
   public timelineData: Array<Object> = [
     {
@@ -119,8 +118,12 @@ export class AddInvoiceBodyComponent implements OnInit {
 
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      console.log('getIndividualInvoice: ', res);
       this.discountType = res.data.discount.unit;
       this.discountAmount = res.data.discount.value;
+      this.internalMemo = res.data.internalNote;
+      this.noteToSupplier = res.data.customerNote;
+      this.termsOfInvoice = res.data.terms;
     });
 
     this.sharedService.getTerms().subscribe(res => {
@@ -167,6 +170,18 @@ export class AddInvoiceBodyComponent implements OnInit {
 
   changedDueDate(event) {
     console.log('changedDueDate: ', event);
+  }
+
+  onChangedMemo(event) {
+    console.log('onChangedMemo: ', event);
+  }
+
+  onChangedNote(event) {
+    console.log('onChangedNote: ', event);
+  }
+
+  onChangedTerm(event) {
+    console.log('onChangedNote: ', event);
   }
 
   onPriceChanged() {

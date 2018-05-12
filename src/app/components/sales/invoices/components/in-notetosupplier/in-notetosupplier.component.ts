@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-in-notetosupplier',
@@ -7,4 +7,8 @@ import { Component, Input } from '@angular/core';
 })
 export class InNoteToSupplierComponent {
   @Input() noteToSupplier;
+  @Output() changedNote: EventEmitter<any> = new EventEmitter();
+  changeNote() {
+    this.changedNote.emit(this.noteToSupplier);
+  }
 }

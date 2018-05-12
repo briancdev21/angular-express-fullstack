@@ -36,13 +36,13 @@
       <div class="notes-activity">
         <div class="flex" >
           <div class="internal-memo">
-            <app-in-internalmemo [(internalMemo)]="internalMemo" ></app-in-internalmemo>
+            <app-in-internalmemo [(internalMemo)]="internalMemo" (changedMemo)="onChangedMemo($event)"></app-in-internalmemo>
           </div>
           <div class="notetosupplier">
-              <app-in-notetosupplier [(noteToSupplier)]="noteToSupplier" ></app-in-notetosupplier>
+              <app-in-notetosupplier [(noteToSupplier)]="noteToSupplier" (changedNote)="onChangedNote($event)"></app-in-notetosupplier>
           </div>
           <div class="term-of-invoice">
-              <app-in-terms-of-invoice [(termsOfInvoice)]="termsOfInvoice" [(title)]="title"></app-in-terms-of-invoice>
+              <app-in-terms-of-invoice [(termsOfInvoice)]="termsOfInvoice" [(title)]="title" (changedTerm)="onChangedTerm($event)"></app-in-terms-of-invoice>
           </div>
         </div>
         <div class="timeline-activity">
