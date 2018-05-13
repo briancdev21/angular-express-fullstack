@@ -81,6 +81,15 @@ export class InvoicesComponent implements OnInit {
     });
   }
 
+  // constructor( private filterService: FilterService, private router: Router, private invoicesService: InvoicesService ) {
+  //   this.filterAvaliableTo = 'everyone';
+  //   this.invoicesService.getInvoices().subscribe(res => {
+  //     console.log('invoices: ', res.results);
+  //     this.invoicesListInfo = res.results;
+  //     this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
+  //   });
+  // }
+
   ngOnInit() {
     this.backUpInvoices = this.invoicesListInfo;
     this.newInvoice = {
