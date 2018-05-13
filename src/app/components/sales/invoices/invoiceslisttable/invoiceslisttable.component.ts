@@ -24,14 +24,13 @@ export class InvoicesListTableComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.invoicesListInfo.map(i => i.overdueDays = this.calcOverDueDays(i.dueDate, i.status));
   }
 
   getStatus() {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../invoice/' + id]);
+    this.router.navigate(['./add-invoice', {id: id}]);
   }
 
   sortArray(field) {
@@ -49,21 +48,6 @@ export class InvoicesListTableComponent implements OnInit {
       });
     } else {
       this.invoicesListInfo.reverse();
-    }
-  }
-
-  calcOverDueDays(due, status) {
-    const today = new Date();
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-    const dueDate = new Date(due);
-    const diffDays = Math.round(Math.abs((today.getTime() - dueDate.getTime()) / (oneDay)));
-    if (status === 'Paid' || status === 'Estimate') {
-      return 0;
-    }
-    if (diffDays < 0) {
-      return 0;
-    } else {
-      return diffDays;
     }
   }
 
