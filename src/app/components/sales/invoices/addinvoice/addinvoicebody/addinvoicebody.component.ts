@@ -150,10 +150,11 @@ export default class AddInvoiceBodyComponent implements OnInit {
       .subscribe(data => {
         console.log('userlist: ', data);
         this.contactList = data;
-        this.userList = this.contactList.map((contactUser) => contactUser.owner);
+        this.userList = this.contactList;
       });
 
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.in_id = 'IN - ' + this.currentInvoiceId;
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
       console.log('getIndividualInvoice: ', res);
       this.discountType = res.data.discount.unit;
@@ -252,9 +253,6 @@ export default class AddInvoiceBodyComponent implements OnInit {
     console.log('changedCreatedDate: ', event);
   }
 
-  onChangedTerm(event) {
-    console.log('onChangedNote: ', event);
-  }
 
   onPriceChanged() {
     this.subtotalproducts = 0;

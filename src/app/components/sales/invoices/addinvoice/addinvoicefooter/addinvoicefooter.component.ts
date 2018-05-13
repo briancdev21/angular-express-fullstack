@@ -24,7 +24,7 @@ export class AddInvoiceFooterComponent {
   showRecurringModal = false;
   template: any;
   interval: any;
-  
+
   currency = 'CAD';
   language = 'ENG';
   showButtons = false;
@@ -42,7 +42,6 @@ export class AddInvoiceFooterComponent {
 
   chargeFeeUnit: string;
   chargeFeeValue: number;
-  chargeSwitchOn: false;
 
   constructor(private router: Router, private filterService: FilterService, private invoicesService: InvoicesService) {
 
