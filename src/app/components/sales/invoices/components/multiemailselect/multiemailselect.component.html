@@ -8,7 +8,7 @@
   </div>
   <div [ngClass]="{ 'editable': editable, 'hidden': !editable }" (click)="editable=true;$event.stopPropagation()" >
     <ul>
-      <li *ngFor="let keyword of keywords; let i = index" >{{keyword}}<span (click)="keywords.splice(i,1)">&nbsp;&nbsp;x</span></li><br/>
+      <li *ngFor="let keyword of keywords; let i = index" >{{keyword}}<span (click)="removeEmail(i)">&nbsp;&nbsp;x</span></li><br/>
       <li style="background: none; width: 100%; margin: 0;" >
         <input placeholder="Type Here..." #box class="add-keyword-input" type="text" [(ngModel)]="addedItem" (keyup.enter)="addNew(addedItem)" [ngClass]="{'wrong-email': invalid}" />
       </li>
