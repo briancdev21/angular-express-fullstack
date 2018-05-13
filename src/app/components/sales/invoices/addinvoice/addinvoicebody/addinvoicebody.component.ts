@@ -214,10 +214,12 @@ export class AddInvoiceBodyComponent implements OnInit {
   }
 
   getMultiEmails(event) {
+    this.saveInvoiceData.emails = event;
     console.log('multiemail: ', event);
   }
 
   onChangeTerm(event) {
+    // this.saveInvoiceData.termId = event;
     console.log(event);
   }
 

@@ -10,7 +10,8 @@
 
   <div class="customer-selection">
     <span>Contact</span>
-    <app-ng2completer [itemsList]="customersList" (selectedItem)="onSelectedCustomer($event)" [searchStr]="selectCustomer" ></app-ng2completer>
+    <!-- <app-ng2completer [itemsList]="customersList" (selectedItem)="onSelectedCustomer($event)" [searchStr]="selectCustomer" ></app-ng2completer> -->
+    <app-in-customer-name class="flex1 mr-15" [userList]="customersList" (selectedUser)="onSelectedCustomer($event)" [searchStr]="selectItem" ></app-in-customer-name>
   </div>
 
   <div class="invoice-status">

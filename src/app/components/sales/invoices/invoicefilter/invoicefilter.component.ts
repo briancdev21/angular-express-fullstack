@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { FilterService } from '../filter.service';
 import { Ng2CompleterComponent } from '../../../common/ng2completer/ng2completer.component';
+import { SharedService } from '../../../../services/shared.service';
 
 
 @Component({
@@ -67,7 +68,7 @@ export class InvoiceFilterComponent implements OnInit {
   overdueDaysFrom = 0;
   overdueDaysTo = 0;
 
-  constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
+  constructor( private filterService: FilterService, private ref: ChangeDetectorRef, private sharedService: SharedService ) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
@@ -80,9 +81,15 @@ export class InvoiceFilterComponent implements OnInit {
     this.originFilters = Object.assign({}, this.filters);
 
     // Get customer list from Information list and remove duplicated names
-    const a = this.invoicesListInfo.map(i => i.customerName);
-    this.customersList = a.filter(function(item, pos) {
-      return a.indexOf(item) === pos;
+
+    // const a = this.invoicesListInfo.map(i => i.owner);
+    // this.customersList = a.filter(function(item, pos) {
+    //   return a.indexOf(item) === pos;
+    // });
+    this.sharedService.getContacts()
+    .subscribe(data => {
+      console.log('userlist: ', data);
+      this.customersList = data;
     });
     // Get invoice max value in invoice info list
     this.maxInvoice = Math.max(...this.invoicesListInfo.map(i => i.total));
@@ -135,6 +142,7 @@ export class InvoiceFilterComponent implements OnInit {
   }
 
   onSelectedCustomer(val) {
+    console.log('customer: ', val);
     this.filters.selectCustomer = val;
     this.selectCustomer = val;
   }

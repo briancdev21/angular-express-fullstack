@@ -32,11 +32,6 @@ export class InvoicesComponent implements OnInit {
   invoiceTypes: any;
   today = moment().format('YYYY-MM-DD');
 
-  constructor( private filterService: FilterService, private router: Router, private invoicesService: InvoicesService ) {
-    this.filterAvaliableTo = 'everyone';
-  }
-
-
   public filters  = {
     createdFrom: '',
     createdTo: '',
@@ -51,109 +46,118 @@ export class InvoicesComponent implements OnInit {
   ];
 
   public invoicesListInfo: Array<Object> = [
-    {
-      transactionId: 'IN-123404',
-      customerName: 'Monica Ilic',
-      balance: 208.95,
-      total: 208.95,
-      createdDate: 'January 20, 2017',
-      dueDate: 'March 14, 2018',
-      overdueDays: 0,
-      status: 'Due',
-    },
-    {
-      transactionId: 'IN-123403',
-      customerName: 'Rob Harding',
-      balance: 93.45,
-      total: 93.45,
-      createdDate: 'January 17, 2017',
-      dueDate: 'March 1, 2018',
-      overdueDays: 0,
-      status: 'Overdue',
-    },
-    {
-      transactionId: 'ES-123402',
-      customerName: 'Hugh Williamson',
-      balance: 0,
-      total: 93.45,
-      createdDate: 'January 20, 2017',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Paid',
-    },
-    {
-      transactionId: 'IN-123401',
-      customerName: 'Hayati Homes',
-      balance: 415.80,
-      total: 415.80,
-      createdDate: 'January 14, 2017',
-      dueDate: 'March 7, 2018',
-      overdueDays: 0,
-      status: 'Net 30',
-    },
-    {
-      transactionId: 'IN-123400',
-      customerName: 'John Moss',
-      balance: 0,
-      total: 1555.17,
-      createdDate: 'January 2, 2017',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Paid',
-    },
-    {
-      transactionId: 'IN-123399',
-      customerName: 'John Moss',
-      balance: 0,
-      total: 11161.84,
-      createdDate: 'December 20, 2016',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Paid',
-    },
-    {
-      transactionId: 'IN-123398',
-      customerName: 'Patrick Chew',
-      balance: 653.95,
-      total: 1153.95,
-      createdDate: 'December 19, 2016',
-      dueDate: 'Februry 6, 2018',
-      overdueDays: 0,
-      status: 'Overdue',
-    },
-    {
-      transactionId: 'ES-123397',
-      customerName: 'John Smith',
-      balance: 0,
-      total: 4293.45,
-      createdDate: 'December 19, 2016',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Paid',
-    },
-    {
-      transactionId: 'ES-123396',
-      customerName: 'Rockwood Homes',
-      balance: 0,
-      total: 61555.17,
-      createdDate: 'December 12, 2016',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Net 15',
-    },
-    {
-      transactionId: 'IN-123395',
-      customerName: 'Steve Conemharen',
-      balance: 93.45,
-      total: 93.45,
-      createdDate: 'December 10, 2016',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Estimate',
-    },
+    // {
+    //   transactionId: 'IN-123404',
+    //   customerName: 'Monica Ilic',
+    //   balance: 208.95,
+    //   total: 208.95,
+    //   createdDate: 'January 20, 2017',
+    //   dueDate: 'March 14, 2018',
+    //   overdueDays: 0,
+    //   status: 'Due',
+    // },
+    // {
+    //   transactionId: 'IN-123403',
+    //   customerName: 'Rob Harding',
+    //   balance: 93.45,
+    //   total: 93.45,
+    //   createdDate: 'January 17, 2017',
+    //   dueDate: 'March 1, 2018',
+    //   overdueDays: 0,
+    //   status: 'Overdue',
+    // },
+    // {
+    //   transactionId: 'ES-123402',
+    //   customerName: 'Hugh Williamson',
+    //   balance: 0,
+    //   total: 93.45,
+    //   createdDate: 'January 20, 2017',
+    //   dueDate: 'March 15, 2018',
+    //   overdueDays: 0,
+    //   status: 'Paid',
+    // },
+    // {
+    //   transactionId: 'IN-123401',
+    //   customerName: 'Hayati Homes',
+    //   balance: 415.80,
+    //   total: 415.80,
+    //   createdDate: 'January 14, 2017',
+    //   dueDate: 'March 7, 2018',
+    //   overdueDays: 0,
+    //   status: 'Net 30',
+    // },
+    // {
+    //   transactionId: 'IN-123400',
+    //   customerName: 'John Moss',
+    //   balance: 0,
+    //   total: 1555.17,
+    //   createdDate: 'January 2, 2017',
+    //   dueDate: 'March 15, 2018',
+    //   overdueDays: 0,
+    //   status: 'Paid',
+    // },
+    // {
+    //   transactionId: 'IN-123399',
+    //   customerName: 'John Moss',
+    //   balance: 0,
+    //   total: 11161.84,
+    //   createdDate: 'December 20, 2016',
+    //   dueDate: 'March 15, 2018',
+    //   overdueDays: 0,
+    //   status: 'Paid',
+    // },
+    // {
+    //   transactionId: 'IN-123398',
+    //   customerName: 'Patrick Chew',
+    //   balance: 653.95,
+    //   total: 1153.95,
+    //   createdDate: 'December 19, 2016',
+    //   dueDate: 'Februry 6, 2018',
+    //   overdueDays: 0,
+    //   status: 'Overdue',
+    // },
+    // {
+    //   transactionId: 'ES-123397',
+    //   customerName: 'John Smith',
+    //   balance: 0,
+    //   total: 4293.45,
+    //   createdDate: 'December 19, 2016',
+    //   dueDate: 'March 15, 2018',
+    //   overdueDays: 0,
+    //   status: 'Paid',
+    // },
+    // {
+    //   transactionId: 'ES-123396',
+    //   customerName: 'Rockwood Homes',
+    //   balance: 0,
+    //   total: 61555.17,
+    //   createdDate: 'December 12, 2016',
+    //   dueDate: 'March 15, 2018',
+    //   overdueDays: 0,
+    //   status: 'Net 15',
+    // },
+    // {
+    //   transactionId: 'IN-123395',
+    //   customerName: 'Steve Conemharen',
+    //   balance: 93.45,
+    //   total: 93.45,
+    //   createdDate: 'December 10, 2016',
+    //   dueDate: 'March 15, 2018',
+    //   overdueDays: 0,
+    //   status: 'Estimate',
+    // },
   ];
 
   newInvoice = {};
+
+  constructor( private filterService: FilterService, private router: Router, private invoicesService: InvoicesService ) {
+    this.filterAvaliableTo = 'everyone';
+    this.invoicesService.getInvoices().subscribe(res => {
+      console.log('invoices: ', res.results);
+      this.invoicesListInfo = res.results;
+      this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
+    });
+  }
 
   ngOnInit() {
     this.backUpInvoices = this.invoicesListInfo;
@@ -202,6 +206,22 @@ export class InvoicesComponent implements OnInit {
         'unit': 'AMOUNT'
       }
     };
+  }
+
+
+  calcOverDueDays(due, status) {
+    const today = new Date();
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const dueDate = new Date(due);
+    const diffDays = Math.round(Math.abs((today.getTime() - dueDate.getTime()) / (oneDay)));
+    if (status === 'Paid' || status === 'Estimate') {
+      return 0;
+    }
+    if (diffDays < 0) {
+      return 0;
+    } else {
+      return diffDays;
+    }
   }
 
   getFilter(event) {
