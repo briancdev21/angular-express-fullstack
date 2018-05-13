@@ -9,7 +9,7 @@ export class InCategoryComponent implements OnInit {
 
   @Input() set categoryList(_categories: any[]) {
     _categories.forEach((category, index) => {
-        this.categories.push({'name': category.name, 'value': index});
+        this.categories.push({'name': category.name, 'value': category.id});
       });
   }
   @Output() selectedCategory: EventEmitter<any> = new EventEmitter();
