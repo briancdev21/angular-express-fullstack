@@ -5,6 +5,8 @@ import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordsel
 import { SharedService } from '../../../../../services/shared.service';
 import { InvoicesService } from '../../../../../services/invoices.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { InvoiceModel } from '../../../../../models/invoice.model';
+import { FilterService } from '../../filter.service';
 
 @Component({
   selector: 'app-addinvoicebody',
@@ -54,13 +56,14 @@ export class AddInvoiceBodyComponent implements OnInit {
   origin_taxes = undefined;
   oneSide = true;
   depositsAmount = undefined;
-  in_id = 'IN - 123405';
+  in_id = '';
   createdDate: any;
   contactList: any;
   noteToSupplier: string;
 
   emailAddresses = [];
   termsOfInvoice = '';
+  emails: any;
 
   public timelineData: Array<Object> = [
     {
@@ -105,18 +108,22 @@ export class AddInvoiceBodyComponent implements OnInit {
   ];
 
   currentInvoiceId: number;
+  saveInvoiceData: InvoiceModel;
 
-  constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private route: ActivatedRoute) {
+  constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
+    private route: ActivatedRoute, private filterService: FilterService) {
+    this.saveInvoiceData = new InvoiceModel();
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
     this.sharedService.getContacts()
       .subscribe(data => {
         console.log('userlist: ', data);
         this.contactList = data;
-        this.userList = this.contactList.map((contactUser) => contactUser.owner);
+        this.userList = this.contactList;
       });
 
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.in_id = 'IN - ' + this.currentInvoiceId;
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
       console.log('getIndividualInvoice: ', res);
       this.discountType = res.data.discount.unit;
@@ -127,7 +134,7 @@ export class AddInvoiceBodyComponent implements OnInit {
     });
 
     this.sharedService.getTerms().subscribe(res => {
-      this.terms = res.results.map(term => term.name);
+      this.terms = res.results;
     });
 
     this.sharedService.getClassifications().subscribe(res => {
@@ -141,47 +148,77 @@ export class AddInvoiceBodyComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.filterService.chargeFeeData.subscribe(data => {
+      console.log('lateFee: ', data);
+      if (data.lateFee) {
+        this.saveInvoiceData.chargeLateFee = data.lateFee;
+        this.saveInvoiceData.lateFee.value = data.value;
+        this.saveInvoiceData.lateFee.unit = data.unit;
+      }
+    });
+
+    this.filterService.saveClicked.subscribe(data => {
+      if (data) {
+        this.saveInvoice();
+      }
+      console.log('save clicked: ', data);
+    });
   }
 
   onCustomerSelected(user) {
     console.log(user);
   }
 
-  onSelectUser(selectedIndex: number) {
+  onSelectUser(selectedIndex: any) {
     console.log('selectedContactIndex:', selectedIndex);
-    this.customerAddress = this.contactList[selectedIndex].shippingAddress;
+
+    const contactIdList = this.contactList.map(c => c.id);
+    const pos = contactIdList.indexOf(selectedIndex);
+    this.customerAddress = this.contactList[pos].shippingAddress;
+    this.saveInvoiceData.contactId = selectedIndex;
   }
 
   onSelectClass(val) {
     console.log('val', val);
+    this.saveInvoiceData.classificationId = val;
   }
 
   onSelectCategory(val) {
     console.log('val', val);
-  }
-
-  onSwitchChanged(status: boolean) {
-    console.log('switch status:', status);
+    this.saveInvoiceData.categoryId = val;
   }
 
   changedCreatedDate(event) {
     console.log('changedCreatedDate: ', event);
+    this.saveInvoiceData.startDate = event;
   }
 
   changedDueDate(event) {
     console.log('changedDueDate: ', event);
+    this.saveInvoiceData.startDate = event;
   }
 
   onChangedMemo(event) {
     console.log('onChangedMemo: ', event);
+    this.saveInvoiceData.internalNote = event;
   }
 
   onChangedNote(event) {
     console.log('onChangedNote: ', event);
+    this.saveInvoiceData.customerNote = event;
   }
 
-  onChangedTerm(event) {
+  onChangedTermsOfInvoice(event) {
     console.log('onChangedNote: ', event);
+    this.saveInvoiceData.terms = event;
+  }
+
+  getMultiEmails(event) {
+    console.log('multiemail: ', event);
+  }
+
+  onChangeTerm(event) {
+    console.log(event);
   }
 
   onPriceChanged() {
@@ -223,6 +260,13 @@ export class AddInvoiceBodyComponent implements OnInit {
 
   onTotalPriceChange(data) {
     console.log('discountChange: ', data);
+    if (data.type) {
+      this.saveInvoiceData.discount.unit = data.type;
+      this.saveInvoiceData.discount.value = data.amount;
+    } else {
+      this.saveInvoiceData.deposit = data.depositsAmount;
+    }
+    this.saveInvoiceData.deposit = data;
     let depositsAmount;
     let discountAmount;
     this.taxes = this.origin_taxes;
@@ -255,5 +299,12 @@ export class AddInvoiceBodyComponent implements OnInit {
       }
       this.totalamountdue =  Math.round(this.totalamountdue * 100) / 100;
     }
+  }
+
+  saveInvoice() {
+    this.saveInvoiceData.emails = this.emails;
+    this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
+      console.log('saved invoice: ', res);
+    });
   }
 }

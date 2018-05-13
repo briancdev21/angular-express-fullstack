@@ -34,12 +34,12 @@
           </div>
         </div>
         <div class="switch">
-          <div class="flex" >
-            <select  >
-              <option [ngValue]="'percent'" >%</option>
-              <option [ngValue]="'dollar'" >$</option>
+          <div class="flex" *ngIf="chargeSwitchOn">
+            <select [(ngModel)]="chargeFeeUnit" >
+              <option value="PERCENT" >%</option>
+              <option value="AMOUNT" >$</option>
             </select>
-            <input type="number" min="0.00" step="0.01" placeholder="0.00" >
+            <input type="number" min="0.00" step="0.01" placeholder="0.00" [(ngModel)]="chargeFeeValue">
           </div>
           <img src="assets/images/switch.png" *ngIf="chargeSwitchOn" (click)="chargeSwitchOn = !chargeSwitchOn">
           <img src="assets/images/switch-off.png" *ngIf="!chargeSwitchOn" (click)="chargeSwitchOn = !chargeSwitchOn">

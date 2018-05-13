@@ -6,7 +6,7 @@
           <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" [searchStr]="selectItem" ></app-in-customer-name>
           <div class="email-address">
             <span>Email address</span>
-            <app-multiemailselect [keywords]="emailAddresses"></app-multiemailselect>
+            <app-multiemailselect [keywords]="emailAddresses" (multiEmails)="getMultiEmails($event)"></app-multiemailselect>
           </div>
         </div>
         <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" ></app-shippingaddress>
@@ -23,7 +23,7 @@
       <div class="right-sidebar">
         <app-in-orderidfield [in_id]="in_id" [title]="invoiceNumberTitle"></app-in-orderidfield>
         <app-in-createddatefield [(createdDate)]="createdDate" (changedCreatedDate)="changedCreatedDate($event)"></app-in-createddatefield>
-        <app-in-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" ></app-in-termsfield>
+        <app-in-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" (changedTerm)="onChangeTerm($event)"></app-in-termsfield>
         <app-in-duedatefield [(dueDate)]="dueDate" [title]="dueDateTitle" (changedDueDate)="changedDueDate($event)"></app-in-duedatefield>
         <app-in-class  [classList]="classList" (selectedClass)="onSelectClass($event)" ></app-in-class>
         <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory($event)" ></app-in-category>
@@ -42,7 +42,7 @@
               <app-in-notetosupplier [(noteToSupplier)]="noteToSupplier" (changedNote)="onChangedNote($event)"></app-in-notetosupplier>
           </div>
           <div class="term-of-invoice">
-              <app-in-terms-of-invoice [(termsOfInvoice)]="termsOfInvoice" [(title)]="title" (changedTerm)="onChangedTerm($event)"></app-in-terms-of-invoice>
+              <app-in-terms-of-invoice [(termsOfInvoice)]="termsOfInvoice" [(title)]="title" (changedTerm)="onChangedTermsOfInvoice($event)"></app-in-terms-of-invoice>
           </div>
         </div>
         <div class="timeline-activity">

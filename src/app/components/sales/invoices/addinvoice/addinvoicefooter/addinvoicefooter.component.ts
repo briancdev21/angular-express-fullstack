@@ -1,5 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
+import { FilterService } from '../../filter.service';
 
 @Component({
   selector: 'app-addinvoicefooter',
@@ -36,7 +37,11 @@ export class AddInvoiceFooterComponent {
   startDate: any;
   endDate: any;
 
-  constructor(private router: Router) {
+  chargeFeeUnit: string;
+  chargeFeeValue: number;
+  chargeSwitchOn: false;
+
+  constructor(private router: Router, private filterService: FilterService) {
 
   }
 
@@ -45,8 +50,17 @@ export class AddInvoiceFooterComponent {
   }
 
   saveInvoice() {
+    const chargeFeeData = {
+      chargeFee: this.chargeSwitchOn,
+      unit: this.chargeFeeUnit,
+      value: this.chargeFeeValue
+    };
+
+    this.filterService.chargeFeeData.next(chargeFeeData);
+    this.filterService.saveClicked.next( true );
     this.router.navigate(['./sales/invoices']);
   }
+
   onSwitchChanged(val) {
 
   }
