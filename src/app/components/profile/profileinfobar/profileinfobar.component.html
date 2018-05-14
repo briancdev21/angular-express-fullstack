@@ -6,8 +6,7 @@
 </div>
 <div class="logo">
     
-  <img [src]='userInfo.profileLink' />
-  <!-- <img [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight"> -->
+  <img [src]='userInfo.profileLink' alt = "Add Profile Image Here"/>
   <img src="assets/images/Cloud.png" class="img-settings" (click)="changeImage()"/>
 </div>
 <div class="email editable">
@@ -42,7 +41,7 @@
 </div>
 
 <h4>Customer Keywords</h4>
-<div class="keywords">
+<div class="keywords" *ngIf="userInfo.keywords">
   <app-multikeywordselect [keywords]="userInfo.keywords" ></app-multikeywordselect>
 </div>
 

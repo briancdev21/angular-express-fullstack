@@ -33,24 +33,6 @@ export class LeadProfileComponent implements OnInit {
 
   userInfo = {
   };
-  public chartSetData: Array<Object> = [
-    {
-      title: 'Account Rating',
-      percentage: '120%',
-    },
-    {
-      title: 'Loyalty Rating',
-      percentage: '90%',
-    },
-    {
-      title: 'Deals Ratio',
-      percentage: '70%',
-    },
-    {
-      title: 'Service Ratio',
-      percentage: '50%',
-    }
-  ];
    /**
     * Each item will have title,content,complete flag and icon
     * which will be displayed on the side. Icon is in html

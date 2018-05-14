@@ -1,13 +1,10 @@
 <div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
   <app-breadcrumbbar [userInfo]='userInfo' ></app-breadcrumbbar>
   <div class="content">
-    <div class="profile-info">
+    <div class="profile-info" *ngIf="userInfo">
       <app-profileinfobar [userInfo]='userInfo'></app-profileinfobar>
     </div>
     <div style="flex: 5;border-left:solid 1px #D3D3D3; display: flex; flex-flow: column;" >
-      <!-- <div class="chartset">
-        <app-customdonutchart *ngFor="let data of chartSetData; let i = index;" [title]="data.title" [percentage]="data.percentage" [number]="i" class="chart-wrapper" ></app-customdonutchart>
-      </div> -->
       <div style="display: flex; flex: 1;" >
         <div class="left-sidebar" >
           <div class="recent-activities">

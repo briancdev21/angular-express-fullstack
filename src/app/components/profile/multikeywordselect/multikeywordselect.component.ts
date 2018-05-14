@@ -36,13 +36,16 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
       this.keywordsNameList = data.results.map(k => k.name);
       console.log('123', this.keywordsList);
       // Change keywords ids to objects
-      this.keywords.forEach(element => {
-        for (let i = 0; i < this.keywordsList.length; i ++) {
-          if (element === this.keywordsList[i].id) {
-            arr.push(this.keywordsList[i]);
+      if (this.keywords) {
+        this.keywords.forEach(element => {
+          for (let i = 0; i < this.keywordsList.length; i ++) {
+            if (element === this.keywordsList[i].id) {
+              arr.push(this.keywordsList[i]);
+            }
           }
-        }
-      });
+        });
+      }
+
       this.keywords = arr;
       console.log('123', this.keywords);
     });

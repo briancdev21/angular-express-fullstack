@@ -12,9 +12,9 @@
       <td [ngClass]="{'green': contact.rating > 80}">{{contact.accountRating}}%</td>
       <td [ngClass]="{'green': contact.totalDeals > 0}">{{contact.totalNumberOfDeals}}</td> 
       <td >
-        <span *ngIf="contact.association != 0">{{contact.association}} Invoice </span>
-        <span *ngIf="(contact.association != 0) && (contact.account != 0)">,</span>
-        <span *ngIf="(contact.association == 0) || (contact.account != 0)">{{contact.account}} Project</span>
+        <span *ngIf="contact.currentInvoices != 0">{{contact.currentInvoices}} Invoice </span>
+        <span *ngIf="(contact.currentInvoices != 0) && (contact.currentProjects != 0)">,</span>
+        <span *ngIf="(contact.currentInvoices == 0) || (contact.currentProjects != 0)">{{contact.currentProjects}} Project</span>
       </td>
       <td>
         <span >{{contact.type}}</span> 
