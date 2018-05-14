@@ -4,6 +4,8 @@ import { FilterService } from './filter.service';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { InvoicesService } from '../../../services/invoices.service';
+import { EstimatesService } from '../../../services/estimates.service';
+import { EstimateModel } from '../../../models/estimate.model';
 
 @Component({
   selector: 'app-invoices',
@@ -45,118 +47,31 @@ export class InvoicesComponent implements OnInit {
     'Due', 'Overdue', 'Paid', 'Net 15', 'Net 30', 'Estimate', 'Approved', 'Rejected'
   ];
 
-  public invoicesListInfo: Array<Object> = [
-    // {
-    //   transactionId: 'IN-123404',
-    //   customerName: 'Monica Ilic',
-    //   balance: 208.95,
-    //   total: 208.95,
-    //   createdDate: 'January 20, 2017',
-    //   dueDate: 'March 14, 2018',
-    //   overdueDays: 0,
-    //   status: 'Due',
-    // },
-    // {
-    //   transactionId: 'IN-123403',
-    //   customerName: 'Rob Harding',
-    //   balance: 93.45,
-    //   total: 93.45,
-    //   createdDate: 'January 17, 2017',
-    //   dueDate: 'March 1, 2018',
-    //   overdueDays: 0,
-    //   status: 'Overdue',
-    // },
-    // {
-    //   transactionId: 'ES-123402',
-    //   customerName: 'Hugh Williamson',
-    //   balance: 0,
-    //   total: 93.45,
-    //   createdDate: 'January 20, 2017',
-    //   dueDate: 'March 15, 2018',
-    //   overdueDays: 0,
-    //   status: 'Paid',
-    // },
-    // {
-    //   transactionId: 'IN-123401',
-    //   customerName: 'Hayati Homes',
-    //   balance: 415.80,
-    //   total: 415.80,
-    //   createdDate: 'January 14, 2017',
-    //   dueDate: 'March 7, 2018',
-    //   overdueDays: 0,
-    //   status: 'Net 30',
-    // },
-    // {
-    //   transactionId: 'IN-123400',
-    //   customerName: 'John Moss',
-    //   balance: 0,
-    //   total: 1555.17,
-    //   createdDate: 'January 2, 2017',
-    //   dueDate: 'March 15, 2018',
-    //   overdueDays: 0,
-    //   status: 'Paid',
-    // },
-    // {
-    //   transactionId: 'IN-123399',
-    //   customerName: 'John Moss',
-    //   balance: 0,
-    //   total: 11161.84,
-    //   createdDate: 'December 20, 2016',
-    //   dueDate: 'March 15, 2018',
-    //   overdueDays: 0,
-    //   status: 'Paid',
-    // },
-    // {
-    //   transactionId: 'IN-123398',
-    //   customerName: 'Patrick Chew',
-    //   balance: 653.95,
-    //   total: 1153.95,
-    //   createdDate: 'December 19, 2016',
-    //   dueDate: 'Februry 6, 2018',
-    //   overdueDays: 0,
-    //   status: 'Overdue',
-    // },
-    // {
-    //   transactionId: 'ES-123397',
-    //   customerName: 'John Smith',
-    //   balance: 0,
-    //   total: 4293.45,
-    //   createdDate: 'December 19, 2016',
-    //   dueDate: 'March 15, 2018',
-    //   overdueDays: 0,
-    //   status: 'Paid',
-    // },
-    // {
-    //   transactionId: 'ES-123396',
-    //   customerName: 'Rockwood Homes',
-    //   balance: 0,
-    //   total: 61555.17,
-    //   createdDate: 'December 12, 2016',
-    //   dueDate: 'March 15, 2018',
-    //   overdueDays: 0,
-    //   status: 'Net 15',
-    // },
-    // {
-    //   transactionId: 'IN-123395',
-    //   customerName: 'Steve Conemharen',
-    //   balance: 93.45,
-    //   total: 93.45,
-    //   createdDate: 'December 10, 2016',
-    //   dueDate: 'March 15, 2018',
-    //   overdueDays: 0,
-    //   status: 'Estimate',
-    // },
-  ];
+  public invoicesListInfo: Array<Object> = [];
+  public estimatesListInfo: Array<Object> = [];
 
   newInvoice = {};
+  newEstimate = {};
 
-  constructor( private filterService: FilterService, private router: Router, private invoicesService: InvoicesService ) {
+  constructor(
+    private filterService: FilterService,
+    private router: Router,
+    private invoicesService: InvoicesService,
+    private estimatesService: EstimatesService
+  ) {
     this.filterAvaliableTo = 'everyone';
     this.invoicesService.getInvoices().subscribe(res => {
       console.log('invoices: ', res.results);
       this.invoicesListInfo = res.results;
       this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
     });
+
+    this.estimatesService.getEstimates().subscribe(res => {
+      this.estimatesListInfo = res.results;
+      this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
+    });
+
+    this.invoicesListInfo.concat(this.estimatesListInfo);
   }
 
   ngOnInit() {
@@ -205,6 +120,47 @@ export class InvoicesComponent implements OnInit {
         'value': 0,
         'unit': 'AMOUNT'
       }
+    };
+
+    this.newEstimate = {
+      'currencyId': 1,
+      'contactId': 1,
+      'pricingCategoryId': 1,
+      'classificationId': 1,
+      'categoryId': 1,
+      'termId': 1,
+      'emails': [
+        'test@test.com'
+      ],
+      'startDate': this.today,
+      'recurring': [
+        'RRULE:FREQ=MONTHLY;COUNT=5;DTSTART=20120201T023000Z'
+      ],
+      'reminder': [
+        'Reminder'
+      ],
+      'shippingAddress': {
+        'address': 'Enter Shipping Address',
+        'city': 'Enter City',
+        'province': 'Enter Province',
+        'postalCode': 'Enter Postal Code',
+        'country': 'Enter Country'
+      },
+      'billingAddress': {
+        'address': 'Enter Billing Address',
+        'city': 'Enter City',
+        'province': 'Enter Province',
+        'postalCode': 'Enter Postal Code',
+        'country': 'Enter Country'
+      },
+      'internalNote': 'string',
+      'customerNote': 'string',
+      'terms': 'string',
+      'discount': {
+        'value': 0,
+        'unit': 'AMOUNT'
+      },
+      'expiryDate': this.today,
     };
   }
 
@@ -301,6 +257,10 @@ export class InvoicesComponent implements OnInit {
   }
 
   toAddEstimate() {
-    this.router.navigate(['./add-estimate']);
+    // this.router.navigate(['./add-estimate']);
+    this.estimatesService.createEstimate(this.newEstimate).subscribe (res => {
+      console.log('estimate created: ', res);
+      this.router.navigate(['./add-estimate', {title: 'NEW', id: res.data.id}]);
+    });
   }
 }

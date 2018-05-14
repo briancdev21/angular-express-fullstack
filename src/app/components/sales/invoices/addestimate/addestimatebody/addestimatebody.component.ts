@@ -2,16 +2,21 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ProductDetailInfo } from '../../../../../models/ProductDetailInfo.model';
 import { Ng2TimelineComponent } from '../../../../profile/ng2-timeline/ng2timeline.component';
 import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordselect/multikeywordselect.component';
+import { SharedService } from '../../../../../services/shared.service';
+import { InvoicesService } from '../../../../../services/invoices.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { EstimateModel } from '../../../../../models/estimate.model';
+import { FilterService } from '../../filter.service';
 
 @Component({
   selector: 'app-addestimatebody',
   templateUrl: './addestimatebody.component.html',
   styleUrls: ['./addestimatebody.component.css']
 })
-export class AddEstimateBodyComponent {
-  userList = ['John', 'Smith', 'jackie'];
-  classList = ['class1', 'class2', 'class3'];
-  categoryList = ['category1', 'category2', 'category3'];
+export default class AddEstimateBodyComponent implements OnInit {
+  userList = [];
+  classList = [];
+  categoryList = [];
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
   title = 'Terms of the Estimate';
@@ -24,24 +29,24 @@ export class AddEstimateBodyComponent {
     postcode: ''
   };
   customerAddress =  {
-    address: '301,1615 10th Ave SW',
-    street: 'Calgary',
-    city: 'Alberta',
-    country: 'Canada',
-    postcode: 'T3C 0J7'
+    address: '',
+    street: '',
+    city: '',
+    country: '',
+    postcode: ''
   };
 
-  terms = ['term1', 'term2', 'term3'];
+  terms = [];
   selectedTerm = '';
   dueDate: any;
 
-  locations = ['locations1', 'locations2', 'locations3'];
+  locations = [];
   selectedLocation = '';
   productDetails = [];
   internalMemo = undefined;
   subtotalproducts = undefined;
-  discountType = 'percent';
-  discountAmount = undefined;
+  discountType: string;
+  discountAmount: number;
   freightcosts = undefined;
   taxes = undefined;
   totalamountdue = undefined;
@@ -49,13 +54,16 @@ export class AddEstimateBodyComponent {
   origin_taxes = undefined;
   oneSide = true;
   depositsAmount = undefined;
-  in_id = 'ES - 123405';
+  in_id = '';
   createdDate: any;
   expiryTitle = 'Expiry date';
   estimateNumberTitle = 'Estimate #';
 
   emailAddresses = [];
-  termsOfInvoice = 'All Estimates are valid for 30 days only.';
+  termsOfInvoice = '';
+  contactList: any;
+  noteToSupplier: string;
+  emails: any;
 
   public timelineData: Array<Object> = [
     {
@@ -100,13 +108,57 @@ export class AddEstimateBodyComponent {
   ];
   selectItem: any;
   logNumber: any;
-  noteToSupplier: any;
 
-  constructor() {
+  currentInvoiceId: number;
+  saveInvoiceData: EstimateModel;
+
+  constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
+    private route: ActivatedRoute, private filterService: FilterService) {
+    this.saveInvoiceData = new EstimateModel();
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
+    this.sharedService.getContacts()
+      .subscribe(data => {
+        console.log('userlist: ', data);
+        this.contactList = data;
+        this.userList = this.contactList;
+      });
+
+    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.in_id = 'ES - ' + this.currentInvoiceId;
+    this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      console.log('getIndividualInvoice: ', res);
+      this.discountType = res.data.discount.unit;
+      this.discountAmount = res.data.discount.value;
+      this.internalMemo = res.data.internalNote;
+      this.noteToSupplier = res.data.customerNote;
+      this.termsOfInvoice = res.data.terms;
+    });
+
+    this.sharedService.getTerms().subscribe(res => {
+      this.terms = res.results;
+    });
+
+    this.sharedService.getClassifications().subscribe(res => {
+      this.classList = res.results;
+    });
+
+    this.sharedService.getPricingCategories().subscribe(res => {
+      this.categoryList = res.results;
+    });
 
   }
+
+  ngOnInit() {
+
+    this.filterService.saveClicked.subscribe(data => {
+      if (data) {
+        this.saveEstimate();
+      }
+      console.log('save clicked: ', data);
+    });
+  }
+
   onCustomerSelected(user) {
     console.log(user);
   }
@@ -200,5 +252,12 @@ export class AddEstimateBodyComponent {
       }
       this.totalamountdue =  Math.round(this.totalamountdue * 100) / 100;
     }
+  }
+
+  saveEstimate() {
+    this.saveInvoiceData.emails = this.emails;
+    this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
+      console.log('saved invoice: ', res);
+    });
   }
 }
