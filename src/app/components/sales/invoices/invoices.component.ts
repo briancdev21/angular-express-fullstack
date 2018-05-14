@@ -79,6 +79,13 @@ export class InvoicesComponent implements OnInit {
         console.log('invoices + estimates123: ', this.invoicesListInfo);
       });
     });
+
+    this.estimatesService.getEstimates().subscribe(res => {
+      this.estimatesListInfo = res.results;
+      this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
+    });
+
+    this.invoicesListInfo.concat(this.estimatesListInfo);
   }
 
   // constructor( private filterService: FilterService, private router: Router, private invoicesService: InvoicesService ) {
@@ -136,6 +143,47 @@ export class InvoicesComponent implements OnInit {
         'value': 0,
         'unit': 'AMOUNT'
       }
+    };
+
+    this.newEstimate = {
+      'currencyId': 1,
+      'contactId': 1,
+      'pricingCategoryId': 1,
+      'classificationId': 1,
+      'categoryId': 1,
+      'termId': 1,
+      'emails': [
+        'test@test.com'
+      ],
+      'startDate': this.today,
+      'recurring': [
+        'RRULE:FREQ=MONTHLY;COUNT=5;DTSTART=20120201T023000Z'
+      ],
+      'reminder': [
+        'Reminder'
+      ],
+      'shippingAddress': {
+        'address': 'Enter Shipping Address',
+        'city': 'Enter City',
+        'province': 'Enter Province',
+        'postalCode': 'Enter Postal Code',
+        'country': 'Enter Country'
+      },
+      'billingAddress': {
+        'address': 'Enter Billing Address',
+        'city': 'Enter City',
+        'province': 'Enter Province',
+        'postalCode': 'Enter Postal Code',
+        'country': 'Enter Country'
+      },
+      'internalNote': 'string',
+      'customerNote': 'string',
+      'terms': 'string',
+      'discount': {
+        'value': 0,
+        'unit': 'AMOUNT'
+      },
+      'expiryDate': this.today,
     };
   }
 
@@ -230,7 +278,10 @@ export class InvoicesComponent implements OnInit {
 
   toAddEstimate() {
     // this.router.navigate(['./add-estimate']);
-    this.router.navigate(['./add-estimate']);
+    this.estimatesService.createEstimate(this.newEstimate).subscribe (res => {
+      console.log('estimate created: ', res);
+      this.router.navigate(['./add-estimate', {title: 'NEW', id: res.data.id}]);
+    });
   }
 
   sortDateArray(field) {
