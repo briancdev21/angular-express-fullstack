@@ -6,10 +6,13 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./po-discount.component.css']
 })
 export class PODiscountComponent {
-  @Input() discounttype;
   @Input() discountamount;
-  @Output() discountChange: EventEmitter<any> = new EventEmitter();
+  @Input() set discountTypeIn(_discounttype: string) {
+    this.discounttype = _discounttype;
+  };
 
+  @Output() discountChange: EventEmitter<any> = new EventEmitter();
+  discounttype: string;
   onDiscountChange() {
     const result = {
       type: this.discounttype,
@@ -20,7 +23,7 @@ export class PODiscountComponent {
 
 
   onCheckDiscountRange(e) {
-    if (e.target.value > 100 && this.discounttype === 'percent') { e.target.value = 100; }
+    if (e.target.value > 100 && this.discounttype === 'PERCENT') { e.target.value = 100; }
     if (e.target.value < 0) { e.target.value = undefined; }
   }
   onChangeDiscountType() {

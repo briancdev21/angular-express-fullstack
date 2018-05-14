@@ -6,7 +6,7 @@
           <app-po-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" ></app-po-customer-name>
           <app-po-project-selector class="flex1 ml-15" [projects]="projects" ></app-po-project-selector>
         </div>
-        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" ></app-shippingaddress>
+        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" (shippingAddressChange)="onShippingAddressChanged($event)" ></app-shippingaddress>
       </div>
       <div class="right-sidebar">
         <app-po-orderidfield [po_id]="po_id" ></app-po-orderidfield>
@@ -17,20 +17,20 @@
       </div>
     </div>
     <div class="product__table">
-      <app-po-table [(productDetails)]="productDetails" (priceChange)="onPriceChanged()" ></app-po-table>
+      <app-po-table [(productDetails)]="productDetails" [poId]="po_id" (priceChange)="onPriceChanged()" ></app-po-table>
     </div>
     <div class="sub__info">
       <div class="flex" >
         <div class="internal-memo">
-          <app-po-internalmemo [(internalMemo)]="internalMemo" ></app-po-internalmemo>
+          <app-po-internalmemo (memoChanged)="onMemoChanged($event)"  ></app-po-internalmemo>
         </div>
         <div class="notetosupplier">
-            <app-po-notetosupplier [(noteToSupplier)]="noteToSupplier" ></app-po-notetosupplier>
+            <app-po-notetosupplier (noteChanged)="onNoteChanged($event)" ></app-po-notetosupplier>
         </div>
       </div>
       <div class="bill-count" >
           <app-po-subtotalproducts [subtotalproducts]="subtotalproducts" ></app-po-subtotalproducts>
-          <app-po-discount [discounttype]="discountType" [discountamount]="discountAmount" (discountChange)="onTotalPriceChange($event)" ></app-po-discount>
+          <app-po-discount [discountTypeIn]="discountType" [discountamount]="discountAmount" (discountChange)="onTotalPriceChange($event)" ></app-po-discount>
           <app-po-freightcosts [(freightcosts)]="freightcosts" (freightcostsChange)="onTotalPriceChange($event)" ></app-po-freightcosts>
           <app-po-taxes [taxes]="taxes" ></app-po-taxes>
           <app-po-totalamountdue [totalamountdue]="totalamountdue" ></app-po-totalamountdue>

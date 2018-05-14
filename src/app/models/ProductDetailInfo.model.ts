@@ -7,7 +7,11 @@ export class ProductDetailInfo {
   unitprice: number = undefined;
   discount: number = undefined;
   total: number = undefined;
-  taxrate = 'GST';
+  taxrate = 0;
   type = 'product';
   serviceDate: Date;
+  supplierId: number = undefined;
+  taxRateId: number = undefined;
+  purchaseOrderProductId: number;
+  readonly: boolean = false;
 }

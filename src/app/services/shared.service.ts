@@ -304,4 +304,47 @@ export class SharedService {
     return this.http.delete<any>(url);
   }
 
+
+  // Get Products 
+  getInventoryProducts (): Observable<any> {
+    const url = `${apiUrl}inventory/products`;
+    return this.http.get<any>(url);
+  }
+
+  getInventoryProduct (id): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  // Get Sku for a product
+  getInventoryProductSkus (productId): Observable<any> {
+    const url = `${apiUrl}inventory/products/${productId}/variants`;
+    return this.http.get<any>(url);
+  }
+
+  // Purchase Order Products 
+  addPurchaseOrderProduct (purchaseOrderId, body): Observable<any> {
+    const url = `${apiUrl}inventory/purchase-orders/${purchaseOrderId}/products`;
+    return this.http.post<any>(url, body);
+  }
+
+  getPurchaseOrderProducts (purchaseOrderId): Observable<any> {
+    const url = `${apiUrl}inventory/purchase-orders/${purchaseOrderId}/products`;
+    return this.http.get<any>(url);
+  }
+
+  getPurchaseOrderProduct (purchaseOrderId, id): Observable<any> {
+    const url = `${apiUrl}inventory/purchase-orders/${purchaseOrderId}/products/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updatePurchaseOrderProduct (purchaseOrderId, id, body): Observable<any> {
+    const url = `${apiUrl}inventory/purchase-orders/${purchaseOrderId}/products/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deletePurchaseOrderProduct (purchaseOrderId, id): Observable<any> {
+    const url = `${apiUrl}inventory/purchase-orders/${purchaseOrderId}/products/${id}`;
+    return this.http.delete<any>(url);
+  }
 }

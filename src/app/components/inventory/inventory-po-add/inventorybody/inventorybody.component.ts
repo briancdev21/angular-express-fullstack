@@ -19,6 +19,9 @@ export default class InventoryBodyComponent {
     this.po_mock = _podata;
     if (_podata) {
       this.po_id = `PO-${this.po_mock.id}`;
+      this.discountAmount = this.po_mock.discount.value;
+      this.discountType = this.po_mock.discount.unit;
+      this.freightcosts = this.po_mock.freightCost;
     }
   };
 
@@ -36,17 +39,22 @@ export default class InventoryBodyComponent {
   contactList: ContactUserModel[];
   contactId = undefined;
   userList = [];
+
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
+
   terms = [];
   selectedTerm = undefined;
   dueDate: any;
+
   locations = [];
   selectedLocation = undefined;
+
   productDetails = [];
+
   internalMemo = undefined;
   subtotalproducts = undefined;
-  discountType = 'dollar';
+  discountType = 'AMOUNT';
   discountAmount = undefined;
   freightcosts = undefined;
   taxes = undefined;
@@ -72,7 +80,6 @@ export default class InventoryBodyComponent {
     this.dueDate = new Date().toISOString();
       // Get contacts
       this.sharedService.getContacts().subscribe(res => {
-        console.log('result:', res);
         this.contactList = res;
         this.userList = this.contactList.map((contactUser) => contactUser.owner);
       });
@@ -81,7 +88,6 @@ export default class InventoryBodyComponent {
       });
       this.sharedService.getTerms().subscribe(termRes => {
         this.terms = termRes.results;
-        console.log(this.terms);
       });
   }
 
@@ -94,20 +100,16 @@ export default class InventoryBodyComponent {
   }
 
   onSelectUser(selectedIndex: string) {
-    console.log('selectedContactIndex:', selectedIndex);
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
-    console.log('this selected location:', this.selectedLocation);
     this.contactId = this.contactList[selectedIndex].id;
     this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id);
   }
 
   onSelectLocation(selectedLocation: string) {
-    console.log('selectedLocationIndex:', selectedLocation);
     this.po_mock.location = parseInt(selectedLocation);
   }
 
   onSelectTerm(selectedTerm: string) {
-    console.log('selectedTermIndex:', selectedTerm);
     this.po_mock.term = parseInt(selectedTerm);
   }
 
@@ -115,6 +117,8 @@ export default class InventoryBodyComponent {
     this.subtotalproducts = 0;  
     this.taxes = 0;
     this.taxrate = 0;
+    this.origin_taxes = this.taxes;
+
     this.productDetails.forEach( product => {
       let taxrate;
       switch (product.taxrate) {
@@ -125,14 +129,12 @@ export default class InventoryBodyComponent {
           taxrate = parseInt(product.taxrate, 10);
         }
       }
-      console.log('tax', taxrate);
       if (product.total !== undefined) {
         this.subtotalproducts += product.total;
         if (taxrate !== 0) { this.taxes += product.total * taxrate / 100; this.taxrate = taxrate; }
         this.subtotalproducts = Math.round(this.subtotalproducts * 100) / 100 ;
         this.taxes = Math.round(this.taxes * 100) / 100 ;
         this.origin_taxes = this.taxes;
-        console.log('taxes:', this.origin_taxes);
       }
     });
     this.onTotalPriceChange(this);
@@ -144,32 +146,34 @@ export default class InventoryBodyComponent {
     let discountAmount;
     this.taxes = this.origin_taxes;
 
-    if (data.amount !== undefined) { this.discountAmount = data.amount; }
-    if (data.discountType !== this.discountType && data.type) { this.discountType = data.type; }
-    if (data.freightcosts !== undefined) { this.freightcosts = data.freightcosts; }
+    if (data.amount !== undefined) { this.discountAmount = data.amount; this.po_mock.discount.value = data.amount; }
+    if (data.discountType !== this.discountType && data.type) { this.discountType = data.type; this.po_mock.discount.unit = data.type; }
+    if (data.freightcosts !== undefined) { this.freightcosts = data.freightcosts; this.po_mock.freightCost = data.freightcosts; }
     freightcosts = this.freightcosts;
     discountAmount = this.discountAmount;
-    if (freightcosts === undefined) { freightcosts = 0; }
-    if (discountAmount === 0) { discountAmount = 0; this.discountAmount  = undefined; }
-
+    if (freightcosts === undefined) { freightcosts = 0; this.po_mock.freightCost = freightcosts;}
+    if (discountAmount === 0) { discountAmount = 0; this.discountAmount  = undefined; this.po_mock.discount.value = discountAmount; }
     if (freightcosts !== undefined && this.subtotalproducts !== undefined) {
-      if (discountAmount === undefined) { discountAmount = 0; }
-      console.log('totla price discountAmount change', discountAmount);
+      if (discountAmount === undefined) { discountAmount = 0; this.po_mock.discount.value = discountAmount; }
 
-      switch (this.discountType) {
+      switch (this.discountType.toLowerCase()) {
         case 'percent': {
-          console.log('taxes', this.taxes);
           this.taxes = this.taxes * (1 - discountAmount / 100);
           this.totalamountdue = this.subtotalproducts * (100 - discountAmount) / 100 + freightcosts + this.taxes;
         }
         break;
-        case 'dollar': {
+        case 'amount': {
           this.taxes -= discountAmount * this.taxrate / 100;
           this.totalamountdue = this.subtotalproducts - discountAmount + freightcosts + this.taxes;
         }
         break;
       }
       this.totalamountdue =  Math.round(this.totalamountdue * 100) / 100;
+
+      // Fill freightCost, discount unit, discount value
+      this.po_mock.freightCost = freightcosts;
+      this.po_mock.discount.value = discountAmount;
+      this.po_mock.discount.unit = this.discountType.toUpperCase();
     }
   }
 
@@ -192,7 +196,17 @@ export default class InventoryBodyComponent {
   }
 
   onDueDateChanged(event) {
-    console.log('duedate:', event);
     this.po_mock.dueDate = event;
+  }
+  onNoteChanged(event) {
+    this.po_mock.supplierNote = event;
+  }
+
+  onMemoChanged(event) {
+    this.po_mock.internalMemo = event;
+  }
+
+  onShippingAddressChanged(event) {
+    this.po_mock.shippingAddress = event;
   }
 }

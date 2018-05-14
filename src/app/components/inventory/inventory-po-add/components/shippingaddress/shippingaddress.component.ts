@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-shippingaddress',
@@ -8,9 +8,11 @@ import { Component, Input } from '@angular/core';
 export class ShippingAddressComponent {
   @Input() set customerAddress(contactUserAddress: any) {
     this._customerAddress = contactUserAddress;
+    this.shippingAddress = this.originshippingaddress;
     console.log('_customerAddress', this._customerAddress);
   };
-  @Input() shippingAddress;
+  @Output() shippingAddressChange: EventEmitter<any> = new EventEmitter();
+  shippingAddress: any = {};
   _customerAddress: any = {};
 
   originshippingaddress = {
@@ -27,5 +29,11 @@ export class ShippingAddressComponent {
     } else {
       this.shippingAddress = this.originshippingaddress;
     }
+    this.shippingAddressChange.emit(this.shippingAddress);
+  }
+
+  onAddressChanged (key, event) {
+    this.shippingAddress[key] = event.target.value;
+    this.shippingAddressChange.emit(this.shippingAddress);
   }
 }
