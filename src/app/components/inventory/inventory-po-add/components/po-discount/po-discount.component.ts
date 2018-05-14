@@ -14,7 +14,6 @@ export class PODiscountComponent {
   @Output() discountChange: EventEmitter<any> = new EventEmitter();
   discounttype: string;
   isEditable = false;
-
   onDiscountChange() {
     const result = {
       type: this.discounttype,

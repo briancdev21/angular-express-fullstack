@@ -45,6 +45,7 @@ export class InventoryBodyComponent {
 
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
+
   terms = [];
   selectedTerm = undefined;
   dueDate: any;
@@ -108,8 +109,6 @@ export class InventoryBodyComponent {
   }
 
   onSelectUser(selectedIndex: string) {
-    console.log('selected user:', selectedIndex);
-
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
     this.contactId = this.contactList[selectedIndex].id;
     this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id, 10);
@@ -243,7 +242,17 @@ export class InventoryBodyComponent {
   }
 
   onDueDateChanged(event) {
-    console.log('duedate:', event);
     this.po_mock.dueDate = event;
+  }
+  onNoteChanged(event) {
+    this.po_mock.supplierNote = event;
+  }
+
+  onMemoChanged(event) {
+    this.po_mock.internalMemo = event;
+  }
+
+  onShippingAddressChanged(event) {
+    this.po_mock.shippingAddress = event;
   }
 }
