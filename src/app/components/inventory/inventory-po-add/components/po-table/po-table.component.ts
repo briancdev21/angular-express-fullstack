@@ -17,8 +17,8 @@ import { SharedService } from '../../../../../services/shared.service';
 export class POTableComponent implements OnInit {
   @Input() productDetails;
   @Input() set poId(_id: string) {
-    this.po_id = parseInt(_id.replace('PO-', ''));
-  };
+    this.po_id = parseInt(_id.replace('PO-', ''), 10);
+  }
   @Output() priceChange: EventEmitter<any> = new EventEmitter();
   private selectedSku: string;
   private skuService: CompleterData;
@@ -54,7 +54,7 @@ export class POTableComponent implements OnInit {
 
   removeProduct(index) {
     // Add sku of removing item to skus service
-    const addingItem = this.originSkus.filter(sku => sku.sku == this.productDetails[index].sku);
+    const addingItem = this.originSkus.filter(sku => sku.sku === this.productDetails[index].sku);
     this.skus = this.skus.concat(addingItem);
 
     this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
@@ -66,11 +66,9 @@ export class POTableComponent implements OnInit {
   }
 
   onSkuSelected(item: CompleterItem, index) {
-    
     this.sharedService.getInventoryProduct(item.originalObject.productId).subscribe(res => {
-
       // Remove selected Sku from SkuService (Autocomplete service for skus)
-      this.skus = this.skus.filter((sku) => sku.sku != item.originalObject.sku);
+      this.skus = this.skus.filter((sku) => sku.sku !== item.originalObject.sku);
       this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
 
 
@@ -94,9 +92,9 @@ export class POTableComponent implements OnInit {
           unit: 'PERCENT'
         },
         quantity: 1
-      }
-      this.sharedService.addPurchaseOrderProduct(this.po_id, this.poProductModel).subscribe(res => {
-        this.productDetails[index].purchaseOrderProductId = res.data.id;
+      };
+      this.sharedService.addPurchaseOrderProduct(this.po_id, this.poProductModel).subscribe(resp => {
+        this.productDetails[index].purchaseOrderProductId = resp.data.id;
       });
     });
     if (index === this.productDetails.length - 1) {
@@ -139,9 +137,12 @@ export class POTableComponent implements OnInit {
   }
 
   updatePurchaseOrderProduct(index) {
-    if (this.productDetails[index].discount == undefined) this.productDetails[index].discount = 0;
-    if (this.productDetails[index].quantity == undefined) this.productDetails[index].quantity = 0;
-    
+    if (this.productDetails[index].discount === undefined) {
+      this.productDetails[index].discount = 0;
+    }
+    if (this.productDetails[index].quantity === undefined) {
+      this.productDetails[index].quantity = 0;
+    }
     this.poProductModel = {
       sku: this.productDetails[index].sku,
       taxRateId: this.selectedTaxRateId,
@@ -152,8 +153,9 @@ export class POTableComponent implements OnInit {
       },
       recieved: 0,
       quantity: this.productDetails[index].quantity
-    }
-    this.sharedService.updatePurchaseOrderProduct(this.po_id, this.productDetails[index].purchaseOrderProductId, this.poProductModel).subscribe(res => {
+    };
+    this.sharedService.updatePurchaseOrderProduct(this.po_id, this.productDetails[index].purchaseOrderProductId, this.poProductModel)
+    .subscribe(res => {
     });
   }
 }

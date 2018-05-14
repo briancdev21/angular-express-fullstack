@@ -9,7 +9,7 @@ export class PODiscountComponent {
   @Input() discountamount;
   @Input() set discountTypeIn(_discounttype: string) {
     this.discounttype = _discounttype;
-  };
+  }
 
   @Output() discountChange: EventEmitter<any> = new EventEmitter();
   discounttype: string;

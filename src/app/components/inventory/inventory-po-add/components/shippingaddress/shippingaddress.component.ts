@@ -10,7 +10,7 @@ export class ShippingAddressComponent {
     this._customerAddress = contactUserAddress;
     this.shippingAddress = this.originshippingaddress;
     console.log('_customerAddress', this._customerAddress);
-  };
+  }
   @Output() shippingAddressChange: EventEmitter<any> = new EventEmitter();
   shippingAddress: any = {};
   _customerAddress: any = {};

@@ -14,7 +14,6 @@ import { Router } from '@angular/router';
   providers: [SharedService]
 })
 export default class InventoryBodyComponent {
-  
   @Input() set poData(_podata) {
     this.po_mock = _podata;
     if (_podata) {
@@ -23,16 +22,16 @@ export default class InventoryBodyComponent {
       this.discountType = this.po_mock.discount.unit;
       this.freightcosts = this.po_mock.freightCost;
     }
-  };
+  }
 
-  // Footer 
+  // Footer
   showButtons = false;
   showPrintOptions = false;
   printOptions = {
    brand: false,
    qty: false,
    supplier: false,
-   totalprice: false 
+   totalprice: false
   };
 
   // Main Section
@@ -102,19 +101,19 @@ export default class InventoryBodyComponent {
   onSelectUser(selectedIndex: string) {
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
     this.contactId = this.contactList[selectedIndex].id;
-    this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id);
+    this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id, 10);
   }
 
   onSelectLocation(selectedLocation: string) {
-    this.po_mock.location = parseInt(selectedLocation);
+    this.po_mock.location = parseInt(selectedLocation, 10);
   }
 
   onSelectTerm(selectedTerm: string) {
-    this.po_mock.term = parseInt(selectedTerm);
+    this.po_mock.term = parseInt(selectedTerm, 10);
   }
 
   onPriceChanged() {
-    this.subtotalproducts = 0;  
+    this.subtotalproducts = 0;
     this.taxes = 0;
     this.taxrate = 0;
     this.origin_taxes = this.taxes;
@@ -151,7 +150,7 @@ export default class InventoryBodyComponent {
     if (data.freightcosts !== undefined) { this.freightcosts = data.freightcosts; this.po_mock.freightCost = data.freightcosts; }
     freightcosts = this.freightcosts;
     discountAmount = this.discountAmount;
-    if (freightcosts === undefined) { freightcosts = 0; this.po_mock.freightCost = freightcosts;}
+    if (freightcosts === undefined) { freightcosts = 0; this.po_mock.freightCost = freightcosts; }
     if (discountAmount === 0) { discountAmount = 0; this.discountAmount  = undefined; this.po_mock.discount.value = discountAmount; }
     if (freightcosts !== undefined && this.subtotalproducts !== undefined) {
       if (discountAmount === undefined) { discountAmount = 0; this.po_mock.discount.value = discountAmount; }
@@ -184,7 +183,7 @@ export default class InventoryBodyComponent {
   }
 
   onSave() {
-    if (this.po_mock.term != undefined && this.contactId != undefined && this.po_mock.location != undefined) {
+    if (this.po_mock.term !== undefined && this.contactId !== undefined && this.po_mock.location !== undefined) {
       this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe(() => {
         this.router.navigate(['./inventory/stock-control']);
       });

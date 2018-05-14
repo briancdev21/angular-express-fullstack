@@ -12,7 +12,7 @@ export class POCustomerNameComponent implements OnInit {
     _users.forEach((user, index) => {
         this.users.push({'name': user, 'value': index});
       });
-  };
+  }
 
   @Output() selectedUser: EventEmitter<any> = new EventEmitter();
   users = [];
