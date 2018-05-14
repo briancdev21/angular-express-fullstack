@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ProductDetailInfo } from '../../../../../models/ProductDetailInfo.model';
 import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
+import { SharedService } from '../../../../../services/shared.service';
 
 @Component({
   selector: 'app-in-table',
@@ -16,20 +17,20 @@ import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
 
 export class InTableComponent implements OnInit {
   @Input() productDetails;
+  @Input() invoiceId;
   @Output() priceChange: EventEmitter<any> = new EventEmitter();
   private selectedSku: string;
   private skuService: CompleterData;
   private modelService: CompleterData;
   private nameService: CompleterData;
+  private skus = [];
+  private originSkus = [];
   public unitpriceEditable = false;
+  taxRateOptions = [];
+  selectedTaxRateId: number;
+  invoiceProductModel: any;
+
   serviceDate: any;
-  private skus = [
-    {sku: 'product1'},
-    {sku: 'product2-sv'},
-    {sku: 'product3-sv'},
-    {sku: 'product4'},
-    {sku: 'product5'}
-  ];
   private models = [
     {model: 'model1'},
     {model: 'model2'},
@@ -45,11 +46,19 @@ export class InTableComponent implements OnInit {
     {productname: 'name5'}
   ];
 
-  constructor(private completerService: CompleterService) {
-    this.skuService = completerService.local(this.skus, 'sku', 'sku');
-    this.modelService = completerService.local(this.models, 'model', 'model');
-    this.nameService = completerService.local(this.names, 'productname', 'productname');
-
+  constructor(private completerService: CompleterService, private sharedService: SharedService) {
+    this.sharedService.getTaxRates().subscribe(taxRateRes => {
+      this.taxRateOptions = taxRateRes.results;
+    });
+    this.sharedService.getInventoryProducts().subscribe(productsRes => {
+      productsRes.results.forEach(product => {
+        this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
+          this.skus = this.skus.concat(skuRes.results);
+          this.originSkus = this.skus.slice();
+          this.skuService = completerService.local(this.skus, 'sku', 'sku');
+        });
+      });
+    });
   }
   ngOnInit() {
     this.addNewProduct();
@@ -62,27 +71,51 @@ export class InTableComponent implements OnInit {
   }
 
   removeProduct(index) {
-    this.productDetails.splice(index, 1);
-    this.priceChange.emit(null);
+    // Add sku of removing item to skus service
+    const addingItem = this.originSkus.filter(sku => sku.sku == this.productDetails[index].sku);
+    this.skus = this.skus.concat(addingItem);
+
+    this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
+
+    this.sharedService.deletePurchaseOrderProduct(this.invoiceId, this.productDetails[index].purchaseOrderProductId).subscribe(res => {
+      this.productDetails.splice(index, 1);
+      this.priceChange.emit(null);
+    });
   }
 
   onSkuSelected(item: CompleterItem, index) {
-    if (this.productDetails[index].sku.indexOf('-sv') === -1) {
-      this.productDetails[index].type = 'product';
-    } else {
-      this.productDetails[index].type = 'service';
-    }
-    if (index === this.productDetails.length - 1) {
-      this.addNewProduct();
-    }
-    this.priceChange.emit(null);
-  }
-  onModelSelected(item: CompleterItem, index) {
-    if (index === this.productDetails.length - 1) {
-      this.addNewProduct();
-    }
-  }
-  onNameSelected(item: CompleterItem, index) {
+    this.sharedService.getInventoryProduct(item.originalObject.productId).subscribe(res => {
+
+      // Remove selected Sku from SkuService (Autocomplete service for skus)
+      this.skus = this.skus.filter((sku) => sku.sku != item.originalObject.sku);
+      this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
+
+
+      const product = res.data;
+      this.productDetails[index].sku = item.originalObject.sku;
+      this.productDetails[index].readonly = true;
+      this.productDetails[index].taxRateId = this.taxRateOptions[0].id;
+      this.selectedTaxRateId = this.taxRateOptions[0].id;
+      this.productDetails[index].taxrate = this.taxRateOptions[0].rate;
+      this.productDetails[index].supplierId = product.supplierId;
+      this.productDetails[index].model = product.model;
+      this.productDetails[index].unitprice = item.originalObject.cost;
+      this.productDetails[index].name = product.name;
+      this.productDetails[index].measure = product.unitOfMeasure.quantity;
+      this.invoiceProductModel = {
+        sku: item.originalObject.sku,
+        taxRateId: this.taxRateOptions[0].id,
+        supplierId: product.supplierId,
+        discount: {
+          value: 0,
+          unit: 'PERCENT'
+        },
+        quantity: 1
+      };
+      this.sharedService.addPurchaseOrderProduct(this.invoiceId, this.invoiceProductModel).subscribe(data => {
+        this.productDetails[index].purchaseOrderProductId = data.data.id;
+      });
+    });
     if (index === this.productDetails.length - 1) {
       this.addNewProduct();
     }
@@ -121,6 +154,26 @@ export class InTableComponent implements OnInit {
 
   selectCreatedFrom(event) {
     this.serviceDate = event.value;
+  }
+
+  updatePurchaseOrderProduct(index) {
+    if (this.productDetails[index].discount == undefined) this.productDetails[index].discount = 0;
+    if (this.productDetails[index].quantity == undefined) this.productDetails[index].quantity = 0;
+
+    this.invoiceProductModel = {
+      sku: this.productDetails[index].sku,
+      taxRateId: this.selectedTaxRateId,
+      supplierId: this.productDetails[index].supplierId,
+      discount: {
+        value: this.productDetails[index].discount,
+        unit: 'PERCENT'
+      },
+      recieved: 0,
+      quantity: this.productDetails[index].quantity
+    };
+    this.sharedService.updatePurchaseOrderProduct(this.invoiceId, this.productDetails[index].purchaseOrderProductId, this.invoiceProductModel).
+    subscribe(res => {
+    });
   }
 }
 

@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-      <div class="right-sidebar">
+      <div class="right-sidebar" *ngIf="in_id">
         <app-in-orderidfield [in_id]="in_id" [title]="invoiceNumberTitle"></app-in-orderidfield>
         <app-in-createddatefield [(createdDate)]="createdDate" (changedCreatedDate)="changedCreatedDate($event)"></app-in-createddatefield>
         <app-in-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" (changedTerm)="onChangeTerm($event)"></app-in-termsfield>
@@ -29,8 +29,8 @@
         <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory($event)" ></app-in-category>
       </div>
     </div>
-    <div class="product__table">
-      <app-in-table [(productDetails)]="productDetails" (priceChange)="onPriceChanged()" ></app-in-table>
+    <div class="product__table" *ngIf="currentInvoiceId">
+      <app-in-table [(productDetails)]="productDetails" (priceChange)="onPriceChanged()" [invoiceId]="currentInvoiceId"></app-in-table>
     </div>
     <div class="sub__info">
       <div class="notes-activity">

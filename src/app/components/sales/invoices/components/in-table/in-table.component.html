@@ -31,7 +31,7 @@
           <div class="flex">
             <img class="remove-btn" [ngClass]="{'hide': i == 0 && productDetails.length == 1 }" src="/assets/images/Trash Symbol.svg" (click)="removeProduct(i)"
             />
-            <ng2-completer (keyup)="keyListener($event, i)" [dataService]="skuService" placeholder="Type SKU here..." [minSearchLength]="0" (selected)="onSkuSelected($event, i)" [(ngModel)]="productDetailInfo.sku" ></ng2-completer>
+            <ng2-completer [disableInput]="productDetailInfo.readonly" (keyup)="keyListener($event, i)" [dataService]="skuService" placeholder="Type SKU here..." [minSearchLength]="0" (selected)="onSkuSelected($event, i)" [(ngModel)]="productDetailInfo.sku" ></ng2-completer>
           </div>
         </td>
         <td class="model">
@@ -41,29 +41,25 @@
             <ng2-completer (keyup)="keyListener($event, i)" [dataService]="nameService" placeholder="Type NAME here..." [minSearchLength]="0" (selected)="onNameSelected($event, i)" [(ngModel)]="productDetailInfo.name" ></ng2-completer>
         </td>
         <td class="quantity">
-          <input class="quantity" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantity" (ngModelChange)="calcualteTotalPrice(i)" />
+          <input class="quantity" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantity" (ngModelChange)="calcualteTotalPrice(i)" (change)="updatePurchaseOrderProduct(i)" (input)="checkValue($event)" />
         </td>
         <td class="unitprice">
           <div class="dollar">
-            <input *ngIf="unitpriceEditable" (blur)="unitpriceEditable = false;" type="number" class="unitprice" step="0.01" min="0.00" placeholder="0.00" [(ngModel)]="productDetailInfo.unitprice" (input)="checkValue($event)" (ngModelChange)="calcualteTotalPrice(i)" />
-            <div class="value-display" *ngIf="!unitpriceEditable" placeholder="0.00" (click)="unitpriceEditable = true;" >{{productDetailInfo.unitprice | number:'1.2-2' }}</div>
+            <input type="number" class="unitprice" step="0.01" min="0.00" placeholder="0.00" [(ngModel)]="productDetailInfo.unitprice" (input)="checkValue($event)" (ngModelChange)="calcualteTotalPrice(i)" />
           </div>
         </td>
         <td class="discount">
-          <input class="discount" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.discount"  (input)="checkDiscount($event)"  (ngModelChange)="calcualteTotalPrice(i)"/>
+          <input class="discount" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.discount"  (input)="checkDiscount($event)"  (ngModelChange)="calcualteTotalPrice(i)"  (change)="updatePurchaseOrderProduct(i)" />
         </td>
         <td class="total">
           <div class="dollar">
-            <input type="number" class="total" step="0.01" min="0.00" placeholder="0.00" [(ngModel)]="productDetailInfo.total" readonly (ngModelChange)="calcualteTotalPrice(i)" *ngIf="priceTotalEditable" (blur)="priceTotalEditable = false;"/>
-            <div class="value-display" *ngIf="!priceTotalEditable" placeholder="0.00" (click)="priceTotalEditable = true;" >{{productDetailInfo.total | number:'1.2-2' }}</div>
+            <input type="number" class="total" step="0.01" min="0.00" placeholder="0.00" [value]="productDetailInfo.total" readonly (ngModelChange)="calcualteTotalPrice(i)" />
           </div>
         </td>
         <td class="taxrate">
           <div class="editable-select" >
-            <input type="text" placeholder="Tax Rate" [(ngModel)]="productDetailInfo.taxrate"  (ngModelChange)="calcualteTotalPrice(i)" />
-            <select [(ngModel)]="productDetailInfo.taxrate" (ngModelChange)="calcualteTotalPrice(i)" >
-                <option value="GST" >GST</option>
-                <option value="PST" >PST</option>
+            <select [(ngModel)]="productDetailInfo.taxRateId" (change)="changedTaxRate(i, $event)" >
+              <option *ngFor="let taxrate of taxRateOptions" [value]="taxrate.id" >{{taxrate.name}}</option>
             </select>
           </div>
         </td>
