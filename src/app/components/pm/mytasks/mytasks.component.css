@@ -497,6 +497,7 @@
   word-wrap: break-word;
   text-align: left;
   color: #95989a;
+  height: 25px;
 }
 
 .overDue {

@@ -30,7 +30,7 @@
                   (keydown.enter)="task.inputShow=false; false" 
                   (clickOutside)="task.inputShow=false;">
                 </textarea>
-                <div (click)="task.inputShow=true; $event.stopPropagation();" *ngIf="!task.inputShow" class="task-title-show">
+                <div (click)="task.inputShow=true; task.maxHeight = 30;  $event.stopPropagation();" *ngIf="!task.inputShow" class="task-title-show">
                   {{task.taskTitle}}
                 </div>
               </div>
