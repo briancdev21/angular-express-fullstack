@@ -1,5 +1,4 @@
 <div class="text-align-left flex" >
     <div class="completer-label" >Internal Memo</div>
-      <textarea [(ngModel)]="internalMemo" placeholder="Enter Internal Memo here..."></textarea>
-    
-  </div>
+      <textarea  (change)="onMemoChange($event)" placeholder="Enter Internal Memo here..."></textarea>
+</div>

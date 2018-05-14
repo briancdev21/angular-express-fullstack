@@ -12,19 +12,29 @@
       </div>
     </div>
     <div class="product__table">
-      <app-po-table [(productDetails)]="productDetails" ></app-po-table>
+      <app-po-table [(productDetails)]="productDetails"  [trId]="tr_id" ></app-po-table>
     </div>
     <div class="sub__info">
       <div>
         <app-tr-locationtofrom
           [locations]="locations"
-          [(selectedFromLocation)]="selectedFromLocation"
-          [(selectedToLocation)]="selectedToLocation" >
+          (selectedLocation)="onSelectLocation($event)" >
         </app-tr-locationtofrom>
         <div class="internal-memo">
-          <app-tr-internalmemo [(internalMemo)]="internalMemo" ></app-tr-internalmemo>
+          <app-tr-internalmemo (memoChanged)="onMemoChanged($event)" ></app-tr-internalmemo>
         </div>
       </div>
     </div>
   </div>
+  <footer>
+    <section id="header" >
+      <div (click)="showButtons=true" >
+        &nbsp;
+      </div>
+      <div class="btn-group" >
+        <div class="btn cancel" (click)="onCancel()" >Cancel</div>
+        <div class="btn save_and_close" (click)="onSave()" >Save</div>
+      </div>
+    </section>
+  </footer>
 </div>

@@ -305,7 +305,7 @@ export class SharedService {
   }
 
 
-  // Get Products 
+  // Get Products
   getInventoryProducts (): Observable<any> {
     const url = `${apiUrl}inventory/products`;
     return this.http.get<any>(url);
@@ -322,7 +322,7 @@ export class SharedService {
     return this.http.get<any>(url);
   }
 
-  // Purchase Order Products 
+  // Purchase Order Products
   addPurchaseOrderProduct (purchaseOrderId, body): Observable<any> {
     const url = `${apiUrl}inventory/purchase-orders/${purchaseOrderId}/products`;
     return this.http.post<any>(url, body);
@@ -345,6 +345,53 @@ export class SharedService {
 
   deletePurchaseOrderProduct (purchaseOrderId, id): Observable<any> {
     const url = `${apiUrl}inventory/purchase-orders/${purchaseOrderId}/products/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+  // Stock Transfers
+  createTransfer (body): Observable<any> {
+    const url = `${apiUrl}inventory/stock-transfers`;
+    return this.http.post<any>(url, body);
+  }
+
+  getTransfer (id): Observable<any> {
+    const url = `${apiUrl}inventory/stock-transfers/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateTransfer (id, body): Observable<any> {
+    const url = `${apiUrl}inventory/stock-transfers/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deleteTransfer (id): Observable<any> {
+    const url = `${apiUrl}inventory/stock-transfers/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+  // Stock Transfer Products
+  addTransferProduct (transferId, body): Observable<any> {
+    const url = `${apiUrl}inventory/stock-transfers/${transferId}/products`;
+    return this.http.post<any>(url, body);
+  }
+
+  getTransferProducts (transferId): Observable<any> {
+    const url = `${apiUrl}inventory/stock-transfers/${transferId}/products`;
+    return this.http.get<any>(url);
+  }
+
+  getTransferProduct (transferId, id): Observable<any> {
+    const url = `${apiUrl}inventory/stock-transfers/${transferId}/products/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateTransferProduct (transferId, id, body): Observable<any> {
+    const url = `${apiUrl}inventory/stock-transfers/${transferId}/products/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deleteTransferProduct (transferId, id): Observable<any> {
+    const url = `${apiUrl}inventory/stock-transfers/${transferId}/products/${id}`;
     return this.http.delete<any>(url);
   }
 }

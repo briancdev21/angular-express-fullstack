@@ -3,51 +3,47 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ProductDetailInfo } from '../../../../../models/ProductDetailInfo.model';
 import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
+import { SharedService } from '../../../../../services/shared.service';
 
 @Component({
   selector: 'app-po-table',
   templateUrl: './po-table.component.html',
   styleUrls: [
     './po-table.component.css',
-  ],
-  encapsulation: ViewEncapsulation.None
+  ]
 })
 
 
 export class POTableComponent implements OnInit {
   @Input() productDetails;
+  @Input() set trId(_id: string) {
+    this.tr_id = parseInt(_id.replace('TR-', ''), 10);
+  }
+
   @Output() priceChange: EventEmitter<any> = new EventEmitter();
+
   private selectedSku: string;
   private skuService: CompleterData;
-  private modelService: CompleterData;
-  private nameService: CompleterData;
-  private skus = [
-    {sku: 'product1'},
-    {sku: 'product2'},
-    {sku: 'product3'},
-    {sku: 'product4'},
-    {sku: 'product5'}
-  ];
-  private models = [
-    {model: 'model1'},
-    {model: 'model2'},
-    {model: 'model3'},
-    {model: 'model4'},
-    {model: 'model5'}
-  ];
-  private names = [
-    {productname: 'name1'},
-    {productname: 'name2'},
-    {productname: 'name3'},
-    {productname: 'name4'},
-    {productname: 'name5'}
-  ];
+  private skus = [];
+  private originSkus = [];
+  tr_id: number;
+  taxRateOptions = [];
+  selectedTaxRateId: number;
+  trProductModel: any;
 
-  constructor(private completerService: CompleterService) {
-    this.skuService = completerService.local(this.skus, 'sku', 'sku');
-    this.modelService = completerService.local(this.models, 'model', 'model');
-    this.nameService = completerService.local(this.names, 'productname', 'productname');
-
+  constructor(private completerService: CompleterService, private sharedService: SharedService) {
+    this.sharedService.getTaxRates().subscribe(taxRateRes => {
+      this.taxRateOptions = taxRateRes.results;
+    });
+    this.sharedService.getInventoryProducts().subscribe(productsRes => {
+      productsRes.results.forEach(product => {
+        this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
+          this.skus = this.skus.concat(skuRes.results);
+          this.originSkus = this.skus.slice();
+          this.skuService = completerService.local(this.skus, 'sku', 'sku');
+        });
+      });
+    });
   }
   ngOnInit() {
     this.addNewProduct();
@@ -55,26 +51,48 @@ export class POTableComponent implements OnInit {
 
   addNewProduct() {
     const newProduct = new ProductDetailInfo();
-    console.log(newProduct);
     this.productDetails.push(newProduct);
   }
 
   removeProduct(index) {
-    this.productDetails.splice(index, 1);
-    this.priceChange.emit(null);
+    // Add sku of removing item to skus service
+    const addingItem = this.originSkus.filter(sku => sku.sku === this.productDetails[index].sku);
+    this.skus = this.skus.concat(addingItem);
+
+    this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
+
+    this.sharedService.deleteTransferProduct(this.tr_id,
+      this.productDetails[index].transferProductId).subscribe(res => {
+      this.productDetails.splice(index, 1);
+    });
   }
 
   onSkuSelected(item: CompleterItem, index) {
-    if (index === this.productDetails.length - 1) {
-      this.addNewProduct();
-    }
-  }
-  onModelSelected(item: CompleterItem, index) {
-    if (index === this.productDetails.length - 1) {
-      this.addNewProduct();
-    }
-  }
-  onNameSelected(item: CompleterItem, index) {
+    this.sharedService.getInventoryProduct(item.originalObject.productId).subscribe(res => {
+      // Remove selected Sku from SkuService (Autocomplete service for skus)
+      this.skus = this.skus.filter((sku) => sku.sku !== item.originalObject.sku);
+      this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
+
+      const product = res.data;
+      this.productDetails[index].sku = item.originalObject.sku;
+      this.productDetails[index].readonly = true;
+      this.productDetails[index].taxRateId = this.taxRateOptions[0].id;
+      this.selectedTaxRateId = this.taxRateOptions[0].id;
+      this.productDetails[index].taxrate = this.taxRateOptions[0].rate;
+      this.productDetails[index].supplierId = product.supplierId;
+      this.productDetails[index].model = product.model;
+      this.productDetails[index].unitprice = item.originalObject.cost;
+      this.productDetails[index].name = product.name;
+      this.productDetails[index].measure = product.unitOfMeasure.quantity;
+      this.trProductModel = {
+        sku: item.originalObject.sku,
+        taxRateId: this.taxRateOptions[0].id,
+        quantity: 1
+      };
+      this.sharedService.addTransferProduct(this.tr_id, this.trProductModel).subscribe(resp => {
+        this.productDetails[index].transferProductId = resp.data.id;
+      });
+    });
     if (index === this.productDetails.length - 1) {
       this.addNewProduct();
     }
@@ -86,18 +104,49 @@ export class POTableComponent implements OnInit {
     }
   }
 
+
   calcualteTotalPrice(index: number) {
     const product = this.productDetails[index];
+    if (product.discount < 0 )  { product.discount = 0; }
+    if (product.discount > 100 ) { product.discount = 100; }
 
+    let discount = product.discount;
+    if ( discount === undefined ) { discount = 0; }
     if ( product.unitprice !== undefined && product.quantity !== undefined ) {
-      product.total = product.unitprice * product.quantity;
-      console.log('total price', product.total);
+      product.total = product.unitprice * product.quantity * (100 - discount)  / 100;
       this.priceChange.emit(null);
     }
   }
 
+  checkDiscount(e) {
+    if (e.target.value > 100) { e.target.value = 100; }
+    if (e.target.value < 0) { e.target.value = undefined; }
+  }
+
   checkValue(e) {
     if (e.target.value < 0) { e.target.value = undefined; }
+  }
+
+  changedTaxRate(index, e) {
+    this.selectedTaxRateId =  this.taxRateOptions[e.target.selectedIndex].id;
+    this.productDetails[index].taxrate = this.taxRateOptions[e.target.selectedIndex].rate;
+    this.updatePurchaseOrderProduct(index);
+  }
+
+  updatePurchaseOrderProduct(index) {
+    if (this.productDetails[index].discount === undefined) {
+      this.productDetails[index].discount = 0;
+    }
+    if (this.productDetails[index].quantity === undefined) {
+      this.productDetails[index].quantity = 0;
+    }
+    this.trProductModel = {
+      taxRateId: this.selectedTaxRateId,
+      quantity: this.productDetails[index].quantity
+    };
+    this.sharedService.updateTransferProduct(this.tr_id,
+      this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
+    });
   }
 }
 
