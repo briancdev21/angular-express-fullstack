@@ -10,8 +10,7 @@ import { SharedService } from '../../../../../services/shared.service';
   templateUrl: './po-table.component.html',
   styleUrls: [
     './po-table.component.css',
-  ],
-  encapsulation: ViewEncapsulation.None
+  ]
 })
 
 
