@@ -15,8 +15,10 @@ import 'rxjs/add/operator/pairwise';
 })
 export class CrmComponent implements OnInit {
   menuCollapsed = true;
-  mRotateMenu = false;
-  constructor(private crmService: CrmService) {
+  constructor(private crmService: CrmService, private router: Router) {
+
+    router.events.pairwise().subscribe((event) => {
+    });
   }
 
   ngOnInit() {
