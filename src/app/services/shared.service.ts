@@ -394,4 +394,53 @@ export class SharedService {
     const url = `${apiUrl}inventory/stock-transfers/${transferId}/products/${id}`;
     return this.http.delete<any>(url);
   }
+
+  // Inventory Stock Adjustment
+  createInventoryAdjustment (body): Observable<any> {
+    const url = `${apiUrl}inventory/stock-adjustments`;
+    return this.http.post<any>(url, body);
+  }
+
+  getInventoryAdjustment (id): Observable<any> {
+    const url = `${apiUrl}inventory/stock-adjustments/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateInventoryAdjustment (id, body): Observable<any> {
+    const url = `${apiUrl}inventory/stock-adjustments/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deleteInventoryAdjustment (id): Observable<any> {
+    const url = `${apiUrl}inventory/stock-adjustments/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+  // Stock InventoryAdjustment Products
+  addInventoryAdjustmentProduct (transferId, body): Observable<any> {
+    const url = `${apiUrl}inventory/stock-adjustments/${transferId}/products`;
+    return this.http.post<any>(url, body);
+  }
+
+  getInventoryAdjustmentProducts (transferId): Observable<any> {
+    const url = `${apiUrl}inventory/stock-adjustments/${transferId}/products`;
+    return this.http.get<any>(url);
+  }
+
+  getInventoryAdjustmentProduct (transferId, id): Observable<any> {
+    const url = `${apiUrl}inventory/stock-adjustments/${transferId}/products/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateInventoryAdjustmentProduct (transferId, id, body): Observable<any> {
+    const url = `${apiUrl}inventory/stock-adjustments/${transferId}/products/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deleteInventoryAdjustmentProduct (transferId, id): Observable<any> {
+    const url = `${apiUrl}inventory/stock-adjustments/${transferId}/products/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+
 }

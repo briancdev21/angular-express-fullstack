@@ -1,5 +1,5 @@
 
-.content {
+.ad-add-table .content {
   margin-top: 10px;
   width: 100%;
   overflow-x: auto;
@@ -35,19 +35,19 @@ input {
 }
 
 
-/deep/ .po-table ng2-completer {
+.ad-add-table ::ng-deep ng2-completer {
   width: 100%;
   display: block;
   height: 30px;
 }
 
-/deep/ .po-table ng2-completer .completer-input {
+.ad-add-table ::ng-deep ng2-completer .completer-input {
   border: none;
   height: 30px;
   padding: 0 .5em;
 }
 
-/deep/ .po-table ng2-completer .completer-input:focus {
+.ad-add-table ::ng-deep ng2-completer .completer-input:focus {
   outline: auto orange;
 }
 

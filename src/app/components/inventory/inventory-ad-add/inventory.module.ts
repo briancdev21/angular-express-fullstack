@@ -16,6 +16,8 @@ import { POTableComponent } from './components/po-table/po-table.component';
 import {InventoryFooterComponent} from './inventoryfooter/inventoryfooter.component';
 import { TRInternalMemoComponent } from './components/tr-internalmemo/tr-internalmemo.component';
 import { ADAdjustmentIdFieldComponent } from './components/ad-adjustmentid/ad-adjustmentid.component';
+import { AdLocationFromToComponent } from './components/ad-locationtofrom/ad-locationtofrom.component';
+
 @NgModule({
   declarations: [
     InventoryHeaderComponent,
@@ -25,9 +27,10 @@ import { ADAdjustmentIdFieldComponent } from './components/ad-adjustmentid/ad-ad
     InventoryFooterComponent,
     ADAdjustmentIdFieldComponent,
     TRDateTransferFieldComponent,
-    TRInternalMemoComponent
-  ],
-  imports: [
+    TRInternalMemoComponent,
+    AdLocationFromToComponent
+    ],
+    imports: [
     CommonModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
@@ -43,7 +46,8 @@ import { ADAdjustmentIdFieldComponent } from './components/ad-adjustmentid/ad-ad
     InventoryFooterComponent,
     ADAdjustmentIdFieldComponent,
     TRDateTransferFieldComponent,
-    TRInternalMemoComponent
+    TRInternalMemoComponent,
+    AdLocationFromToComponent
   ],
   providers: []
 })

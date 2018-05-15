@@ -1,6 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
-
+import { SharedService } from '../../../../services/shared.service';
+import { Router } from '@angular/router';
+import { AdjustmentModel } from '../../../../models/adjustment.model';
 @Component({
   selector: 'app-inventorybody',
   templateUrl: './inventorybody.component.html',
@@ -26,41 +28,58 @@ export class InventoryBodyComponent {
     postcode: 'T3C 0J7'
   };
 
-  terms = ['term1', 'term2', 'term3'];
-  selectedTerm = '';
-  dueDate: any;
 
-  locations = ['locations1', 'locations2', 'locations3'];
-  selectedLocation = '';
+  @Input() set adData(_addata) {
+    this.ad_mock = new AdjustmentModel();
+    this.ad_mock = _addata;
+    if (_addata) {
+      this.ad_id = `AD-${this.ad_mock.id}`;
+    }
+  }
+  saveBtnClicked = false;
+  locations: string[] = [];
   productDetails = [];
   internalMemo = undefined;
-  subtotalproducts = 199.00;
-  discountType = 'percent';
-  discountAmount = undefined;
-  freightcosts = undefined;
-  taxes = undefined;
-  totalamountdue = undefined;
-  ad_id = 'AD-8802131';
-
-  po_id = 'PO-8802131';
-  createdDate: any;
+  ad_id = '';
+  ad_mock: AdjustmentModel;
   transferdate: any;
 
-  constructor() {
-    this.createdDate = new Date().toJSON().slice(0, 10);
-    this.dueDate = new Date().toJSON().slice(0, 10);
-    this.transferdate = new Date().toJSON().slice(0, 10);
+  constructor(private sharedService: SharedService, private router: Router) {
+    this.transferdate = new Date().toISOString();
+    this.sharedService.getLocations().subscribe(locationRes => {
+      this.locations = locationRes.results;
+    });
   }
 
+  ngOnDestroy() {
+    if (this.saveBtnClicked) {
+      console.log('ng destroy called');
+    }
+  }
+  onSelectLocation(event) {
+    this.ad_mock.adjustedLocation = parseInt(event, 10);
+    console.log('mock:', this.ad_mock);
+  }
 
-  onSelectUser(val: string) {
-    console.log('val', val);
-  }
-  onCustomerSelected(user) {
-    console.log(user);
+  onMemoChanged(event) {
+    this.ad_mock.internalMemo = event;
   }
 
-  onSwitchChanged(status: boolean) {
-    console.log('switch status:', status);
+  onCancel() {
+    this.sharedService.deleteInventoryAdjustment(this.ad_mock.id).subscribe(() => {
+      this.router.navigate(['./inventory/stock-control']);
+    });
   }
+
+  onSave() {
+    console.log('mock:', this.ad_mock);
+    this.saveBtnClicked = true;
+    // tslint:disable-next-line:curly
+    if (this.ad_mock.internalMemo !== null && this.ad_mock.adjustedLocation !== null) {
+      this.sharedService.updateInventoryAdjustment(this.ad_mock.id, this.ad_mock).subscribe(() => {
+        this.router.navigate(['./inventory/stock-control']);
+      });
+    }
+  }
+
 }
