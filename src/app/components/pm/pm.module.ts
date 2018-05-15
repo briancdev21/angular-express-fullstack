@@ -25,6 +25,7 @@ import { Ng2CompleterModule } from 'ng2-completer';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Autosize } from 'ng-autosize/src/autosize.directive';
 import { MapToKeysPipe } from './mytasks/map-to-keys.pipe';
+import { ClickOutsideModule } from 'ng4-click-outside';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import { MapToKeysPipe } from './mytasks/map-to-keys.pipe';
     ProjectsListCmpModule,
     PendingsCmpModule,
     DragulaModule,
+    ClickOutsideModule
   ],
   exports: [
     MatInputModule,
