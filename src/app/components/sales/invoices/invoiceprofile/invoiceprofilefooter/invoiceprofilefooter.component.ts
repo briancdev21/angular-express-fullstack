@@ -4,27 +4,17 @@ import { FilterService } from '../../filter.service';
 import { InvoicesService } from '../../../../../services/invoices.service';
 
 @Component({
-  selector: 'app-addinvoicefooter',
-  templateUrl: './addinvoicefooter.component.html',
-  styleUrls: ['./addinvoicefooter.component.css']
+  selector: 'app-invoiceprofilefooter',
+  templateUrl: './invoiceprofilefooter.component.html',
+  styleUrls: ['./invoiceprofilefooter.component.css']
 })
-export class AddInvoiceFooterComponent {
+export default class InvoiceProfileFooterComponent {
 
   @Input() createdInvoice;
 
   settingsCollapsed = true;
   showReminderModal = false;
-  chargeSwitchOn = false;
-  reminderSwitchOn = false;
-  recurringSwitchOn = false;
-  creditSwitchOn = false;
-  switchOn = false;
-  frequency: any;
-  max_frequency: any;
-  showRecurringModal = false;
-  template: any;
-  interval: any;
-  
+
   currency = 'CAD';
   language = 'ENG';
   showButtons = false;

@@ -9,11 +9,11 @@ import { InvoiceModel } from '../../../../../models/invoice.model';
 import { FilterService } from '../../filter.service';
 
 @Component({
-  selector: 'app-addinvoicebody',
-  templateUrl: './addinvoicebody.component.html',
-  styleUrls: ['./addinvoicebody.component.css']
+  selector: 'app-invoiceprofilebody',
+  templateUrl: './invoiceprofilebody.component.html',
+  styleUrls: ['./invoiceprofilebody.component.css']
 })
-export default class AddInvoiceBodyComponent implements OnInit {
+export default class InvoiceProfileBodyComponent implements OnInit {
   // @Input() createdInvoice;
 
   @Input() set createdInvoice(_createdInvoice) {
@@ -65,7 +65,6 @@ export default class AddInvoiceBodyComponent implements OnInit {
   dueDate: any;
   productDetails = [];
   internalMemo = undefined;
-  selectItem = '';
   subtotalproducts = undefined;
   discountType: string;
   discountAmount: number;
@@ -170,6 +169,12 @@ export default class AddInvoiceBodyComponent implements OnInit {
         this.termsOfInvoice = res.data.terms;
       });
     } else {
+      // this.currentInvoiceId = this.createdInvoice.id;
+      // this.discountType = this.createdInvoice.discount.unit;
+      // this.discountAmount = this.createdInvoice.discount.value;
+      // this.internalMemo = this.createdInvoice.internalNote;
+      // this.noteToSupplier = this.createdInvoice.customerNote;
+      // this.termsOfInvoice = this.createdInvoice.terms;
     }
     this.in_id = 'IN - ' + this.currentInvoiceId;
 

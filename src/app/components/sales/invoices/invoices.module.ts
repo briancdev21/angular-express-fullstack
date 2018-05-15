@@ -50,6 +50,16 @@ import {AddEstimateHeaderComponent} from './addestimate/addestimateheader/addest
 import {AddEstimateFooterComponent} from './addestimate/addestimatefooter/addestimatefooter.component';
 import {AddEstimateBodyComponent} from './addestimate/addestimatebody/addestimatebody.component';
 
+import { InvoiceProfileComponent } from './invoiceprofile/invoiceprofile.component';
+import { EstimateProfileComponent } from './estimateprofile/estimateprofile.component';
+import InvoiceProfileBodyComponent from './invoiceprofile/invoiceprofilebody/invoiceprofilebody.component';
+import InvoiceProfileHeaderComponent from './invoiceprofile/invoiceprofileheader/invoiceprofileheader.component';
+import InvoiceProfileFooterComponent from './invoiceprofile/invoiceprofilefooter/invoiceprofilefooter.component';
+
+import EstimateProfileBodyComponent from './estimateprofile/estimateprofilebody/estimateprofilebody.component';
+import EstimateProfileHeaderComponent from './estimateprofile/estimateprofileheader/estimateprofileheader.component';
+import EstimateProfileFooterComponent from './estimateprofile/estimateprofilefooter/estimateprofilefooter.component';
+
 
 @NgModule({
   declarations: [
@@ -86,6 +96,14 @@ import {AddEstimateBodyComponent} from './addestimate/addestimatebody/addestimat
     MultiEmailSelectComponent,
     AddInvoiceComponent,
     AddEstimateComponent,
+    InvoiceProfileComponent,
+    EstimateProfileComponent,
+    InvoiceProfileBodyComponent,
+    InvoiceProfileHeaderComponent,
+    InvoiceProfileFooterComponent,
+    EstimateProfileBodyComponent,
+    EstimateProfileHeaderComponent,
+    EstimateProfileFooterComponent
   ],
   imports: [
     BrowserModule,
