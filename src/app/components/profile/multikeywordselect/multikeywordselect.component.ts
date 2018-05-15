@@ -46,7 +46,6 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
       }
 
       this.keywords = arr;
-      // this.keywords = data.results;
     });
   }
 
