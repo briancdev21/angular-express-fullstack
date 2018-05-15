@@ -17,7 +17,21 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   // @Input() createdInvoice;
 
   @Input() set createdInvoice(_createdInvoice) {
+    this.invoice_mock = _createdInvoice;
+    if (_createdInvoice) {
+      // this.po_id = `PO-${this.po_mock.id}`;
+      // this.discountAmount = this.po_mock.discount.value;
+      // this.discountType = this.po_mock.discount.unit;
+      // this.freightcosts = this.po_mock.freightCost;
 
+      this.currentInvoiceId = this.invoice_mock.id;
+      this.discountType = this.invoice_mock.discount.unit;
+      this.discountAmount = this.invoice_mock.discount.value;
+      this.internalMemo = this.invoice_mock.internalNote;
+      this.noteToSupplier = this.invoice_mock.customerNote;
+      this.termsOfInvoice = this.invoice_mock.terms;
+      this.in_id = 'IN - ' + this.currentInvoiceId;
+    }
   }
 
   invoice_mock: any;
@@ -186,7 +200,25 @@ export default class InvoiceProfileBodyComponent implements OnInit {
 
   ngOnInit() {
     console.log('createdInvoice', this.createdInvoice);
-
+    // get id for new and existing lead
+    if (this.route.snapshot.paramMap.get('id')) {
+      this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+      this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+        console.log('getIndividualInvoice: ', res);
+        this.discountType = res.data.discount.unit;
+        this.discountAmount = res.data.discount.value;
+        this.internalMemo = res.data.internalNote;
+        this.noteToSupplier = res.data.customerNote;
+        this.termsOfInvoice = res.data.terms;
+      });
+    } else {
+      // this.currentInvoiceId = this.createdInvoice.id;
+      // this.discountType = this.createdInvoice.discount.unit;
+      // this.discountAmount = this.createdInvoice.discount.value;
+      // this.internalMemo = this.createdInvoice.internalNote;
+      // this.noteToSupplier = this.createdInvoice.customerNote;
+      // this.termsOfInvoice = this.createdInvoice.terms;
+    }
     this.in_id = 'IN - ' + this.currentInvoiceId;
 
     this.filterService.chargeFeeData.subscribe(data => {

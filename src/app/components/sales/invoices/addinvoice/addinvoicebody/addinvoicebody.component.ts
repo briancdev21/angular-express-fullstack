@@ -179,6 +179,21 @@ export default class AddInvoiceBodyComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('createdInvoice', this.createdInvoice);
+    // get id for new and existing lead
+    if (this.route.snapshot.paramMap.get('id')) {
+      this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+      this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+        console.log('getIndividualInvoice: ', res);
+        this.discountType = res.data.discount.unit;
+        this.discountAmount = res.data.discount.value;
+        this.internalMemo = res.data.internalNote;
+        this.noteToSupplier = res.data.customerNote;
+        this.termsOfInvoice = res.data.terms;
+      });
+    } else {
+    }
+    this.in_id = 'IN - ' + this.currentInvoiceId;
 
     this.filterService.chargeFeeData.subscribe(data => {
       if (data.lateFee) {
