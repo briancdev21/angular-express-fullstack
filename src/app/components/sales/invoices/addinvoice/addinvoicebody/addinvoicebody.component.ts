@@ -19,11 +19,8 @@ export default class AddInvoiceBodyComponent implements OnInit {
   @Input() set createdInvoice(_createdInvoice) {
     this.invoice_mock = _createdInvoice;
     if (_createdInvoice) {
-      // this.po_id = `PO-${this.po_mock.id}`;
-      // this.discountAmount = this.po_mock.discount.value;
-      // this.discountType = this.po_mock.discount.unit;
-      // this.freightcosts = this.po_mock.freightCost;
-
+      this.saveInvoiceData = _createdInvoice;
+      console.log('saved invoice: ', this.saveInvoiceData);
       this.currentInvoiceId = this.invoice_mock.id;
       this.discountType = this.invoice_mock.discount.unit;
       this.discountAmount = this.invoice_mock.discount.value;
@@ -128,11 +125,10 @@ export default class AddInvoiceBodyComponent implements OnInit {
   ];
 
   currentInvoiceId: number;
-  saveInvoiceData: InvoiceModel;
+  saveInvoiceData: any;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
     private route: ActivatedRoute, private filterService: FilterService) {
-    this.saveInvoiceData = new InvoiceModel();
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
     this.sharedService.getContacts()
@@ -150,7 +146,7 @@ export default class AddInvoiceBodyComponent implements OnInit {
       this.classList = res.results;
     });
 
-    this.sharedService.getPricingCategories().subscribe(res => {
+    this.sharedService.getCategories().subscribe(res => {
       this.categoryList = res.results;
     });
 
@@ -158,20 +154,6 @@ export default class AddInvoiceBodyComponent implements OnInit {
 
   ngOnInit() {
     console.log('createdInvoice', this.createdInvoice);
-    // get id for new and existing lead
-    if (this.route.snapshot.paramMap.get('id')) {
-      this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-      this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
-        console.log('getIndividualInvoice: ', res);
-        this.discountType = res.data.discount.unit;
-        this.discountAmount = res.data.discount.value;
-        this.internalMemo = res.data.internalNote;
-        this.noteToSupplier = res.data.customerNote;
-        this.termsOfInvoice = res.data.terms;
-      });
-    } else {
-    }
-    this.in_id = 'IN - ' + this.currentInvoiceId;
 
     this.filterService.chargeFeeData.subscribe(data => {
       console.log('lateFee: ', data);
@@ -244,8 +226,12 @@ export default class AddInvoiceBodyComponent implements OnInit {
   }
 
   onChangeTerm(event) {
-    // this.saveInvoiceData.termId = event;
+    this.saveInvoiceData['termId'] = parseInt(event, 10);
     console.log(event);
+  }
+
+  onDepositChange(event) {
+    this.saveInvoiceData.deposit = parseInt(event, 10);
   }
 
   onPriceChanged() {
@@ -329,7 +315,9 @@ export default class AddInvoiceBodyComponent implements OnInit {
   }
 
   saveInvoice() {
-    this.saveInvoiceData.emails = this.emails;
+    if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
+      this.saveInvoiceData.deposit = 0;
+    }
     this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
       console.log('saved invoice: ', res);
     });

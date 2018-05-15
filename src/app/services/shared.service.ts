@@ -235,7 +235,7 @@ export class SharedService {
 
   //  Category
   getCategories(): Observable<any> {
-    const url = `${apiUrl}organization/ategories`;
+    const url = `${apiUrl}organization/categories`;
     return this.http.get(url);
   }
 

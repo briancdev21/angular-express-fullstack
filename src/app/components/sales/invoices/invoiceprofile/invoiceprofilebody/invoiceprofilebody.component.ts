@@ -155,7 +155,11 @@ export default class InvoiceProfileBodyComponent implements OnInit {
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
       console.log('getIndividualInvoice: ', res);
+
       this.saveInvoiceData = res.data;
+      // change contact id to number
+      this.saveInvoiceData.contactId = parseInt(res.data.contactId.slice(-1), 10);
+
       this.discountType = res.data.discount.unit;
       this.discountAmount = res.data.discount.value;
       this.internalMemo = res.data.internalNote;
@@ -182,8 +186,6 @@ export default class InvoiceProfileBodyComponent implements OnInit {
       this.currentClass = this.classList[classPos].name;
       const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
       this.currentCategory = this.categoryList[categoryPos].name;
-      // change contact id to number
-      this.saveInvoiceData.contactId = parseInt(res.data.contactId.slice(-1), 10);
     });
     this.in_id = 'IN - ' + this.currentInvoiceId;
 
