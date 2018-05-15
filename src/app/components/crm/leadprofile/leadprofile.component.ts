@@ -12,8 +12,10 @@ import { UpcomingAppointmentsComponent } from '../../profile/cards/upcomingappoi
 import { TasksComponent } from '../../profile/cards/tasks/tasks.component';
 import { DocumentsComponent } from '../../profile/cards/documents/documents.component';
 import { CollaboratorsComponent } from '../../profile/cards/collaborators/collaborators.component';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart, RoutesRecognized, NavigationEnd } from '@angular/router';
 import { CrmService } from '../../../services/crm.service';
+import * as moment from 'moment';
+import 'rxjs/add/operator/pairwise';
 
 @Component({
   selector: 'app-leadprofile',
@@ -247,10 +249,13 @@ export class LeadProfileComponent implements OnInit {
     contact: string;
     content: string;
   };
+  currentLead: any;
+  savingLead: any;
 
   constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService) {
     this.leadInfoIndex = this.route.snapshot.paramMap.get('id');
     this.crmService.getIndividualLead(this.leadInfoIndex).subscribe(res => {
+      this.currentLead = res.data;
       console.log('leadData: ', res.data);
       // Update userInfo
       this.userInfo = {
@@ -259,19 +264,20 @@ export class LeadProfileComponent implements OnInit {
         email: res.data.email,
         primaryphone: res.data.phoneNumbers.primary,
         mobilephone: res.data.phoneNumbers.secondary,
-        shippingaddress: res.data.shippingAddress.address + ' ' +
-                          res.data.shippingAddress.city + ',' +
-                          res.data.shippingAddress.province + ' ' +
+        shippingaddress: res.data.shippingAddress.address + ', ' +
+                          res.data.shippingAddress.city + ', ' +
+                          res.data.shippingAddress.province + ', ' +
                           res.data.shippingAddress.postalCode,
-        billingaddress: res.data.billingAddress.address + ' ' +
-                        res.data.billingAddress.city + ',' +
-                        res.data.billingAddress.province + ' ' +
+        billingaddress: res.data.billingAddress.address + ', ' +
+                        res.data.billingAddress.city + ', ' +
+                        res.data.billingAddress.province + ', ' +
                         res.data.billingAddress.postalCode,
         keywords: res.data.keywordIds ? res.data.keywordIds : [],
         followers: res.data.followers ? res.data.followers : []
       };
       // Update cards info
       this.cards.leadScore = res.data.score;
+
     });
   }
 
@@ -330,4 +336,43 @@ export class LeadProfileComponent implements OnInit {
   toggleMenubar(data: boolean) {
     this.menuCollapsed  = data;
   }
+
+  onChangedUserInfo(event) {
+    this.savingLead = this.currentLead;
+    console.log('changed User inf:', event);
+    const userInfo = event.data;
+    const shippingArr = userInfo.shippingaddress.split(',');
+    const billingArr = userInfo.billingaddress.split(',');
+    const nameArr = userInfo.name.split(' ');
+
+    this.savingLead.shippingAddress.address = shippingArr[0];
+    this.savingLead.shippingAddress.city = shippingArr[1];
+    this.savingLead.shippingAddress.province = shippingArr[2];
+    this.savingLead.shippingAddress.postalCode = shippingArr[3];
+    this.savingLead.billingAddress.address = billingArr[0];
+    this.savingLead.billingAddress.city = billingArr[0];
+    this.savingLead.billingAddress.province = billingArr[0];
+    this.savingLead.billingAddress.postalCode = billingArr[0];
+    this.savingLead.person.firstName = nameArr[0];
+    this.savingLead.person.lastName = nameArr[1];
+    this.savingLead.person.businessAssociation = 1;
+    this.savingLead.email = userInfo.email;
+    this.savingLead.phoneNumbers.primary = userInfo.primaryphone;
+    this.savingLead.phoneNumbers.secondary = userInfo.mobilephone;
+    this.savingLead['note'] = userInfo.customerNotes;
+    this.savingLead.lastContacted = moment(this.savingLead.lastContacted).format('YYYY-MM-DD');
+    this.savingLead.socialMediaUrl = {
+      'linkedIn': 'string',
+      'facebook': 'string',
+      'twitter': 'string'
+    };
+    this.savingLead.followers = ['string'];
+    delete this.savingLead.createdAt;
+    delete this.savingLead.updatedAt;
+    this.crmService.updateIndividualLead(this.currentLead.id, this.savingLead).subscribe( res => {
+      console.log('success: ', res);
+    });
+  }
+
+
 }

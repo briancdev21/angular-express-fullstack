@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../multikeywordselect/multikeywordselect.component';
 
@@ -15,12 +15,14 @@ import { MultiKeywordSelectComponent } from '../multikeywordselect/multikeywords
 export class ProfileInfoBarComponent implements OnInit {
 
   @Input() userInfo;
+  @Output() changedUserInfo = new EventEmitter;
   showModal = false;
   eventData: any;
   primaryphone: any;
   name: string;
   data1: any;
   showEditImageModal = false;
+  customerNotes: string;
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -74,9 +76,14 @@ export class ProfileInfoBarComponent implements OnInit {
     }
   }
 
+  onKeywordsChanged(event) {
+    console.log('keywords changed: ', event);
+  }
+
   confirmChange() {
     this.userInfo[this.eventData.target.id] = this.eventData.target.value;
     this.eventData = undefined;
+    this.changedUserInfo.emit({'data': this.userInfo});
   }
 
   cancelChange() {

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../common/common.component';
 import { CrmService } from '../../services/crm.service';
+import { Router, ActivatedRoute, NavigationStart, RoutesRecognized, NavigationEnd } from '@angular/router';
+import 'rxjs/add/operator/pairwise';
 @Component({
   selector: 'app-crm',
   templateUrl: './crm.component.html',

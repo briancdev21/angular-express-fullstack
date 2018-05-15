@@ -34,7 +34,6 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
     this.sharedService.getKeywords().subscribe(data => {
       this.keywordsList = data.results;
       this.keywordsNameList = data.results.map(k => k.name);
-      console.log('123', this.keywordsList);
       // Change keywords ids to objects
       if (this.keywords) {
         this.keywords.forEach(element => {
@@ -47,7 +46,6 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
       }
 
       this.keywords = arr;
-      console.log('123', this.keywords);
     });
   }
 

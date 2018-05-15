@@ -42,7 +42,7 @@
 
 <h4>Customer Keywords</h4>
 <div class="keywords" *ngIf="userInfo.keywords">
-  <app-multikeywordselect [keywords]="userInfo.keywords" ></app-multikeywordselect>
+  <app-multikeywordselect [keywords]="userInfo.keywords" (sendKeywords)="onKeywordsChanged($event)" ></app-multikeywordselect>
 </div>
 
 <div>
@@ -51,7 +51,7 @@
 
 <h4>Customer Notes</h4>
 <div class="customer-notes">
-    <textarea></textarea>
+    <textarea  value="{{userInfo.note}}" id="customerNotes" (blur)="showConfirmModal($event)"></textarea>
 </div>
 
 <!-- Confirm Alert Box -->

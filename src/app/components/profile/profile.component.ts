@@ -3,6 +3,7 @@ import { CommonComponent } from '../../components/common/common.component';
 import { BreadcrumbBarComponent } from './breadcrumbbar/breadcrumbbar.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CrmService } from '../../services/crm.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-profile',
@@ -263,12 +264,15 @@ export class ProfileComponent implements OnInit {
     contact: string;
     content: string;
   };
+  currentContact: any;
+  savingContact: any;
 
   dataRetrieved = false;
   constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService) {
     this.contactInfoIndex = this.route.snapshot.paramMap.get('id');
     this.crmService.getIndividualContact(this.contactInfoIndex).subscribe(res => {
       console.log('contactData: ', res.data);
+      this.currentContact = res.data;
       this.dataRetrieved = true;
       // Update userInfo
       this.userInfo = {
@@ -277,13 +281,13 @@ export class ProfileComponent implements OnInit {
         email: res.data.email,
         primaryphone: res.data.phoneNumbers.primary,
         mobilephone: res.data.phoneNumbers.secondary,
-        shippingaddress: res.data.shippingAddress.address + ' ' +
-                          res.data.shippingAddress.city + ',' +
-                          res.data.shippingAddress.province + ' ' +
+        shippingaddress: res.data.shippingAddress.address + ', ' +
+                          res.data.shippingAddress.city + ', ' +
+                          res.data.shippingAddress.province + ', ' +
                           res.data.shippingAddress.postalCode,
-        billingaddress: res.data.billingAddress.address + ' ' +
-                        res.data.billingAddress.city + ',' +
-                        res.data.billingAddress.province + ' ' +
+        billingaddress: res.data.billingAddress.address + ', ' +
+                        res.data.billingAddress.city + ', ' +
+                        res.data.billingAddress.province + ', ' +
                         res.data.billingAddress.postalCode,
         keywords: res.data.keywordIds ? res.data.keywordIds : [],
         followers: res.data.followers ? res.data.followers : []
@@ -353,5 +357,42 @@ export class ProfileComponent implements OnInit {
 
   toggleMenubar(data: boolean) {
     this.menuCollapsed  = data;
+  }
+
+  onChangedUserInfo(event) {
+    this.savingContact = this.currentContact;
+    console.log('changed User inf:', event);
+    const userInfo = event.data;
+    const shippingArr = userInfo.shippingaddress.split(',');
+    const billingArr = userInfo.billingaddress.split(',');
+    const nameArr = userInfo.name.split(' ');
+
+    this.savingContact.shippingAddress.address = shippingArr[0];
+    this.savingContact.shippingAddress.city = shippingArr[1];
+    this.savingContact.shippingAddress.province = shippingArr[2];
+    this.savingContact.shippingAddress.postalCode = shippingArr[3];
+    this.savingContact.billingAddress.address = billingArr[0];
+    this.savingContact.billingAddress.city = billingArr[0];
+    this.savingContact.billingAddress.province = billingArr[0];
+    this.savingContact.billingAddress.postalCode = billingArr[0];
+    this.savingContact.person.firstName = nameArr[0];
+    this.savingContact.person.lastName = nameArr[1];
+    this.savingContact.person.businessAssociation = 1;
+    this.savingContact.email = userInfo.email;
+    this.savingContact.phoneNumbers.primary = userInfo.primaryphone;
+    this.savingContact.phoneNumbers.secondary = userInfo.mobilephone;
+    this.savingContact['note'] = userInfo.customerNotes;
+    this.savingContact.lastContacted = moment(this.savingContact.lastContacted).format('YYYY-MM-DD');
+    this.savingContact.socialMediaUrl = {
+      'linkedIn': 'string',
+      'facebook': 'string',
+      'twitter': 'string'
+    };
+    this.savingContact.followers = ['string'];
+    delete this.savingContact.createdAt;
+    delete this.savingContact.updatedAt;
+    this.crmService.updateIndividualContact(this.currentContact.id, this.savingContact).subscribe( res => {
+      console.log('success: ', res);
+    });
   }
 }
