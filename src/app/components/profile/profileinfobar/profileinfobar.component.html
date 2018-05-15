@@ -51,7 +51,7 @@
 
 <h4>Customer Notes</h4>
 <div class="customer-notes">
-    <textarea  [(ngModel)]="userInfo.note" id="customerNotes" (blur)="showConfirmModal($event)"></textarea>
+    <textarea  value="{{userInfo.note}}" id="customerNotes" (blur)="showConfirmModal($event)"></textarea>
 </div>
 
 <!-- Confirm Alert Box -->
