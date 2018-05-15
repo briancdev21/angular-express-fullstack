@@ -2,7 +2,7 @@
     <div class="orderinfo-label" >Terms</div>
     <div class="orderinfo-input" >
       <select [(ngModel)]="selectedTerm" (ngModelChange)="onChangeTerm($event)">
-          <option value="" default>Choose a term</option>
+          <option value="">Choose a term</option>
           <option *ngFor="let term of terms" [value]="term.id">{{term.name}}</option>
       </select>
     </div>

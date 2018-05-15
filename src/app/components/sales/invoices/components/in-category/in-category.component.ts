@@ -12,6 +12,7 @@ export class InCategoryComponent implements OnInit {
         this.categories.push({'name': category.name, 'value': category.id});
       });
   }
+  @Input() currentCategory;
   @Output() selectedCategory: EventEmitter<any> = new EventEmitter();
   categories = [];
 

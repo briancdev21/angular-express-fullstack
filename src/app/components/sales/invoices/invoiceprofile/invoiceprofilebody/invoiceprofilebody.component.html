@@ -3,7 +3,7 @@
     <div class="main__info flex" >
       <div class="left-sidebar">
         <div class="flex aligntop" >
-          <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" [searchStr]="selectItem" ></app-in-customer-name>
+          <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" [searchStr]="currentOwner" ></app-in-customer-name>
           <div class="email-address">
             <span>Email address</span>
             <app-multiemailselect [keywords]="emailAddresses" (multiEmails)="getMultiEmails($event)"></app-multiemailselect>
@@ -23,10 +23,10 @@
       <div class="right-sidebar" *ngIf="in_id">
         <app-in-orderidfield [in_id]="in_id" [title]="invoiceNumberTitle"></app-in-orderidfield>
         <app-in-createddatefield [(createdDate)]="createdDate" (changedCreatedDate)="changedCreatedDate($event)"></app-in-createddatefield>
-        <app-in-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" (changedTerm)="onChangeTerm($event)"></app-in-termsfield>
+        <app-in-termsfield  *ngIf="currentTerm" [terms]="terms" [selectedTerm]="currentTermId" (changedTerm)="onChangeTerm($event)"></app-in-termsfield>
         <app-in-duedatefield [(dueDate)]="dueDate" [title]="dueDateTitle" (changedDueDate)="changedDueDate($event)"></app-in-duedatefield>
-        <app-in-class  [classList]="classList" (selectedClass)="onSelectClass($event)" ></app-in-class>
-        <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory($event)" ></app-in-category>
+        <app-in-class  [classList]="classList" [currentClass]="currentClass" (selectedClass)="onSelectClass($event)" ></app-in-class>
+        <app-in-category  [categoryList]="categoryList" [currentCategory]="currentCategory" (selectedCategory)="onSelectCategory($event)" ></app-in-category>
       </div>
     </div>
     <div class="product__table" *ngIf="currentInvoiceId">

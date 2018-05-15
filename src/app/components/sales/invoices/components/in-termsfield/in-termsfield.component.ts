@@ -13,7 +13,6 @@ export class InTermSelectorComponent implements OnInit {
   terms_local = [];
 
   ngOnInit() {
-    console.log(this.terms);
     if (this.terms) {
       this.terms_local = this.terms;
     }

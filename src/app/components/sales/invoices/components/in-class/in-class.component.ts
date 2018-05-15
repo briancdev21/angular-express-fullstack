@@ -12,6 +12,7 @@ export class InClassComponent implements OnInit {
       this.classifications.push({'name': classification.name, 'value': classification.id});
     });
   }
+  @Input() currentClass;
   @Output() selectedClass: EventEmitter<any> = new EventEmitter();
   classifications = [];
 
@@ -27,7 +28,6 @@ export class InClassComponent implements OnInit {
   }
 
   onSelected(item: CompleterItem) {
-    console.log('11111', item);
     if (item) {
       this.selectedClass.emit(item.originalObject.value);
     }
