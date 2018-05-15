@@ -214,3 +214,16 @@ input::placeholder {
 app-in-termsfield, app-in-duedatefield, app-in-class {
   margin-top: 7px;
 }
+
+.products-delivered {
+  height: 28px;
+  background: #a9f2df;
+  display: flex;
+  align-items: center;
+  width: 48%;
+  justify-content: center;
+  border-radius: 5px;
+  margin-top: 5px;
+  color: #646464;
+  font-size: 12px;
+}

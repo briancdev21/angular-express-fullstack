@@ -30,7 +30,7 @@ export class InvoicesListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate(['./add-invoice', {id: id}]);
+    this.router.navigate(['./invoice-profile', {id: id}]);
   }
 
   sortArray(field) {
