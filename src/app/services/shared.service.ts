@@ -233,6 +233,27 @@ export class SharedService {
     return this.http.put(url, body);
   }
 
+  //  Category
+  getCategories(): Observable<any> {
+    const url = `${apiUrl}organization/ategories`;
+    return this.http.get(url);
+  }
+
+  createCategory (body): Observable<any> {
+    const url = `${apiUrl}organization/categories`;
+    return this.http.post<any>(url, body);
+  }
+
+  getIndividualCategory(id): Observable<any>  {
+    const url = `${apiUrl}organization/categories/${id}`;
+    return this.http.get(url);
+  }
+
+  updateIndividualCategory(id, body): Observable<any>  {
+    const url = `${apiUrl}organization/categories/${id}`;
+    return this.http.put(url, body);
+  }
+
   // Tax-rate
   getTaxRates(): Observable<any> {
     const url = `${environment.apiUrl}/organization/tax-rates`;

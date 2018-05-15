@@ -54,7 +54,7 @@
           <app-in-subtotalservices [subtotalservices]="subtotalServices" ></app-in-subtotalservices>
           <app-in-discount [discounttype]="discountType" [discountamount]="discountAmount" (discountChange)="onTotalPriceChange($event)" ></app-in-discount>
           <app-in-taxes [taxes]="taxes" ></app-in-taxes>
-          <app-in-deposits-credits [depositsAmount]="depositsAmount" (depositsChange)="onTotalPriceChange($event)" ></app-in-deposits-credits>
+          <app-in-deposits-credits [depositsAmount]="depositsAmount" (depositsChange)="onDepositChange($event)" ></app-in-deposits-credits>
           <app-in-totalamountdue [totalamountdue]="totalamountdue" ></app-in-totalamountdue>
           <div class="products-delivered">Products Delivered</div>
       </div>

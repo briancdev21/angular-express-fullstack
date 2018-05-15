@@ -124,7 +124,7 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
               private route: ActivatedRoute, private filterService: FilterService) {
 
-    this.saveInvoiceData = new InvoiceModel();
+    // this.saveInvoiceData = new InvoiceModel();
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
     this.sharedService.getContacts()
@@ -142,7 +142,7 @@ export default class InvoiceProfileBodyComponent implements OnInit {
       this.classList = res.results;
     });
 
-    this.sharedService.getPricingCategories().subscribe(res => {
+    this.sharedService.getCategories().subscribe(res => {
       this.categoryList = res.results;
     });
 
@@ -182,6 +182,8 @@ export default class InvoiceProfileBodyComponent implements OnInit {
       this.currentClass = this.classList[classPos].name;
       const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
       this.currentCategory = this.categoryList[categoryPos].name;
+      // change contact id to number
+      this.saveInvoiceData.contactId = parseInt(res.data.contactId.slice(-1), 10);
     });
     this.in_id = 'IN - ' + this.currentInvoiceId;
 
@@ -256,8 +258,12 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   }
 
   onChangeTerm(event) {
-    // this.saveInvoiceData.termId = event;
+    this.saveInvoiceData['termId'] = parseInt(event, 10);
     console.log(event);
+  }
+
+  onDepositChange(event) {
+    this.saveInvoiceData.deposit = parseInt(event, 10);
   }
 
   onPriceChanged() {
@@ -341,7 +347,9 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   }
 
   saveInvoice() {
-    this.saveInvoiceData.emails = this.emails;
+    if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
+      this.saveInvoiceData.deposit = 0;
+    }
     this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
       console.log('saved invoice: ', res);
     });
