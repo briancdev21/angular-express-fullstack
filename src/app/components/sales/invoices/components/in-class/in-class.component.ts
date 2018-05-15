@@ -28,7 +28,6 @@ export class InClassComponent implements OnInit {
   }
 
   onSelected(item: CompleterItem) {
-    console.log('11111', item);
     if (item) {
       this.selectedClass.emit(item.originalObject.value);
     }
