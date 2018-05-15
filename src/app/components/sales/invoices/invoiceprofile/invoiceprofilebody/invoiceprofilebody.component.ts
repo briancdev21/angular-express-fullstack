@@ -218,6 +218,8 @@ export default class InvoiceProfileBodyComponent implements OnInit {
       this.currentClass = this.classList[classPos].name;
       const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
       this.currentCategory = this.categoryList[categoryPos].name;
+      // change contact id to number
+      this.saveInvoiceData.contactId = parseInt(res.data.contactId.slice(-1), 10);
     });
     this.in_id = 'IN - ' + this.currentInvoiceId;
 
