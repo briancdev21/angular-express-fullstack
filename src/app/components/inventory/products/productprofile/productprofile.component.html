@@ -1,0 +1,49 @@
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
+  <app-breadcrumb [data]='productPathInfo' ></app-breadcrumb>
+  <div class="content">
+    <div class="profile-info" *ngIf="dataRetrieved">
+      <app-productinfobar [userInfo]='userInfo' (changedUserInfo)="onChangedUserInfo($event)"></app-productinfobar>
+    </div>
+    <div style="flex: 5;border-left:solid 1px #D3D3D3; display: flex; flex-flow: column;" >
+      <div class="chartset" *ngIf="dataRetrieved">
+        <app-productcustomdonutchart *ngFor="let data of chartSetData; let i = index;" [title]="data.title" [percentage]="data.percentage" [number]="i" class="chart-wrapper" ></app-productcustomdonutchart>
+      </div>
+      <div style="display: flex; flex: 1;" >
+        <div class="left-sidebar" >
+          <div class="recent-activities">
+            Recent Activities
+          </div>
+          <div class="editor" >
+            <tabs (currentTabChange)="tabChanged($event); emailsubject.value='' " >
+              <tab tabTitle="Notes"  >
+                <textarea placeholder="Start tying..." #textarea1 (input)="activity.content=textarea1.value" (keyup.enter)="addNewTimelineItem(); textarea1.value=''" ></textarea>
+              </tab>
+              <tab tabTitle="Email" class="tab-email" >
+                <div>
+                  <input placeholder="Subject" #emailsubject (input)="activity.subject=emailsubject.value"  />
+                  <select #emailcontacts (change)="activity.contact=emailcontacts.value">
+                    <option value="firstContact" >
+                      Choose Contact Associated
+                    </option>
+                  </select>
+                </div>
+                <textarea placeholder="Start tying..." #textarea2 (input)="activity.content=textarea2.value" (keyup.enter)="addNewTimelineItem(); textarea2.value=''; emailsubject.value='' " ></textarea>
+              </tab>
+              <tab tabTitle="Call" class="tab-call" >
+                <select #callcontacts (change)="activity.contact=callcontacts.selectedValue" >
+                  <option value="first contact">
+                      Choose contact associated
+                  </option>
+                </select>
+                <textarea placeholder="Start tying..." #textarea3 (input)="activity.content=textarea3.value" (keyup.enter)="addNewTimelineItem(); textarea3.value=''"></textarea>
+              </tab>
+            </tabs>
+          </div>
+        </div>  
+        <div class="right-sidebar">
+          <app-productcards [cardsInfo]="cards" ></app-productcards>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
