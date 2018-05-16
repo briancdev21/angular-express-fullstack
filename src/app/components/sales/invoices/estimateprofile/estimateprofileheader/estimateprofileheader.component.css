@@ -18,7 +18,20 @@
   border-bottom: solid 1px #d3d3d3;
 }
 
+.inventory-header div {
+  display: flex;
+  align-items: center;
+}
+
 .title {
   font-size: 1.8em;
   font-weight: 300;
+}
+
+.convert-invoice-btn {
+  font-size: 10px;
+  background: #a9f2df;
+  padding: 4px 18px;
+  border-radius: 4px;
+  margin-left: 60px;
 }

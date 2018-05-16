@@ -2,6 +2,7 @@ import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-invoiceslisttable',
@@ -21,16 +22,24 @@ export class InvoicesListTableComponent implements OnInit {
   sortScoreClicked = true;
 
   constructor( private filterService: FilterService, private router: Router ) {
+
   }
 
   ngOnInit() {
+    
   }
 
   getStatus() {
   }
 
-  redirectTo(id) {
-    this.router.navigate(['./invoice-profile', {id: id}]);
+  redirectTo(data) {
+    const contactId = data.contactId.slice(0, 7);
+    console.log('contactid..: ', contactId, data);
+    if (contactId === 'INVOICE') {
+      this.router.navigate(['./invoice-profile', {id: data.id}]);
+    } else {
+      this.router.navigate(['./estimate-profile', {id: data.id}]);
+    }
   }
 
   sortArray(field) {

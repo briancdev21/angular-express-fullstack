@@ -1,5 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { EstimatesService } from '../../../../../services/estimates.service';
 
 @Component({
   selector: 'app-addestimateheader',
@@ -11,24 +12,16 @@ export class AddEstimateHeaderComponent implements OnInit {
   @Input() dueDate: string;
   date_differ: number;
 
-  constructor (private router: Router) {
-  }
+  status = '';
+  invoiceId: Number;
+  constructor(private estimatesService: EstimatesService, private route: ActivatedRoute ) {
 
+  }
   ngOnInit() {
-    const one_day = 1000 * 60 * 60 * 24;
-    const createdDate_parts = this.createdDate.split('-');
-    const mydate1 = new Date(parseInt(createdDate_parts[0]), parseInt(createdDate_parts[1]) - 1, parseInt(createdDate_parts[2])); 
-    const date1_ms = mydate1.getTime();
-
-    const dueDate_parts = this.dueDate.split('-');
-    const mydate2 = new Date(parseInt(dueDate_parts[0]), parseInt(dueDate_parts[1]) - 1, parseInt(dueDate_parts[2])); 
-    const date2_ms = mydate2.getTime();
-    // Calculate the difference in milliseconds
-    const difference_ms = date2_ms - date1_ms;
-    this.date_differ = Math.round(difference_ms / one_day);
-  }
-
-  redirectTo() {
-    this.router.navigate(['../invoices/add-invoice']);
+    // this.status = this.route.snapshot.paramMap.get('title');
+    this.invoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.estimatesService.getIndividualEstimate(this.invoiceId).subscribe(res => {
+      this.status = res.data.status;
+    });
   }
 }

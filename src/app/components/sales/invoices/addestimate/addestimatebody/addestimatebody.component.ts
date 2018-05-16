@@ -7,6 +7,7 @@ import { InvoicesService } from '../../../../../services/invoices.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EstimateModel } from '../../../../../models/estimate.model';
 import { FilterService } from '../../filter.service';
+import { EstimatesService } from '../../../../../services/estimates.service';
 
 @Component({
   selector: 'app-addestimatebody',
@@ -14,12 +15,31 @@ import { FilterService } from '../../filter.service';
   styleUrls: ['./addestimatebody.component.css']
 })
 export default class AddEstimateBodyComponent implements OnInit {
+
+  @Input() set createdInvoice(_createdInvoice) {
+    this.invoice_mock = _createdInvoice;
+    if (_createdInvoice) {
+      this.saveInvoiceData = _createdInvoice;
+      console.log('saved invoice: ', this.saveInvoiceData);
+      this.currentInvoiceId = this.invoice_mock.id;
+      this.discountType = this.invoice_mock.discount.unit;
+      this.discountAmount = this.invoice_mock.discount.value;
+      this.internalMemo = this.invoice_mock.internalNote;
+      this.noteToSupplier = this.invoice_mock.customerNote;
+      this.termsOfInvoice = this.invoice_mock.terms;
+      this.in_id = 'ES - ' + this.currentInvoiceId;
+    }
+  }
+
+  invoice_mock: any;
   userList = [];
   classList = [];
   categoryList = [];
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
   title = 'Terms of the Estimate';
+  dueDateTitle = 'Due Date';
+  invoiceNumberTitle = 'Estimate #';
   subtotalServices = undefined;
   shippingAddress = {
     address: '',
@@ -110,11 +130,10 @@ export default class AddEstimateBodyComponent implements OnInit {
   logNumber: any;
 
   currentInvoiceId: number;
-  saveInvoiceData: EstimateModel;
+  saveInvoiceData: any;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
-    private route: ActivatedRoute, private filterService: FilterService) {
-    this.saveInvoiceData = new EstimateModel();
+    private route: ActivatedRoute, private filterService: FilterService, private estimatesService: EstimatesService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
     this.sharedService.getContacts()
@@ -123,17 +142,6 @@ export default class AddEstimateBodyComponent implements OnInit {
         this.contactList = data;
         this.userList = this.contactList;
       });
-
-    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-    this.in_id = 'ES - ' + this.currentInvoiceId;
-    this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
-      console.log('getIndividualInvoice: ', res);
-      this.discountType = res.data.discount.unit;
-      this.discountAmount = res.data.discount.value;
-      this.internalMemo = res.data.internalNote;
-      this.noteToSupplier = res.data.customerNote;
-      this.termsOfInvoice = res.data.terms;
-    });
 
     this.sharedService.getTerms().subscribe(res => {
       this.terms = res.results;
@@ -151,6 +159,17 @@ export default class AddEstimateBodyComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log('createdInvoice', this.createdInvoice);
+
+    this.filterService.chargeFeeData.subscribe(data => {
+      console.log('lateFee: ', data);
+      if (data.lateFee) {
+        this.saveInvoiceData.chargeLateFee = data.lateFee;
+        this.saveInvoiceData.lateFee.value = data.value;
+        this.saveInvoiceData.lateFee.unit = data.unit;
+      }
+    });
+
     this.filterService.saveClicked.subscribe(data => {
       if (data) {
         this.saveEstimate();
@@ -163,20 +182,62 @@ export default class AddEstimateBodyComponent implements OnInit {
     console.log(user);
   }
 
-  onSelectUser(val: string) {
-    console.log('val', val);
+  onSelectUser(selectedIndex: any) {
+    console.log('selectedContactIndex:', selectedIndex);
+
+    const contactIdList = this.contactList.map(c => c.id);
+    const pos = contactIdList.indexOf(selectedIndex);
+    this.customerAddress = this.contactList[pos].shippingAddress;
+    this.saveInvoiceData.contactId = selectedIndex;
   }
 
-  onSelectClass(val: string) {
+  onSelectClass(val) {
     console.log('val', val);
+    this.saveInvoiceData.classificationId = val;
   }
 
-  onSelectCategory(val: string) {
+  onSelectCategory(val) {
     console.log('val', val);
+    this.saveInvoiceData.categoryId = val;
   }
 
-  onSwitchChanged(status: boolean) {
-    console.log('switch status:', status);
+  changedCreatedDate(event) {
+    console.log('changedCreatedDate: ', event);
+    this.saveInvoiceData.startDate = event;
+  }
+
+  changedDueDate(event) {
+    console.log('changedDueDate: ', event);
+    this.saveInvoiceData.startDate = event;
+  }
+
+  onChangedMemo(event) {
+    console.log('onChangedMemo: ', event);
+    this.saveInvoiceData.internalNote = event;
+  }
+
+  onChangedNote(event) {
+    console.log('onChangedNote: ', event);
+    this.saveInvoiceData.customerNote = event;
+  }
+
+  onChangedTermsOfInvoice(event) {
+    console.log('onChangedNote: ', event);
+    this.saveInvoiceData.terms = event;
+  }
+
+  getMultiEmails(event) {
+    this.saveInvoiceData.emails = event;
+    console.log('multiemail: ', event);
+  }
+
+  onChangeTerm(event) {
+    this.saveInvoiceData['termId'] = parseInt(event, 10);
+    console.log(event);
+  }
+
+  onDepositChange(event) {
+    this.saveInvoiceData.deposit = parseInt(event, 10);
   }
 
   onPriceChanged() {
@@ -255,9 +316,17 @@ export default class AddEstimateBodyComponent implements OnInit {
   }
 
   saveEstimate() {
-    this.saveInvoiceData.emails = this.emails;
-    this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
-      console.log('saved invoice: ', res);
-    });
+
+    if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
+      this.saveInvoiceData.deposit = 0;
+    }
+    if (!this.saveInvoiceData.hasOwnProperty('classificationId')) {
+      this.saveInvoiceData.classificationId = 1;
+    }
+    if (typeof(this.saveInvoiceData.contactId) !== 'string') {
+      this.estimatesService.updateEstimate(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
+        console.log('saved invoice: ', res);
+      });
+    }
   }
 }

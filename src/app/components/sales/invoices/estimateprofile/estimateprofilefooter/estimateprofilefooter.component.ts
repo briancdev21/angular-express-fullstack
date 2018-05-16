@@ -1,14 +1,15 @@
-import { Component, HostListener, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FilterService } from '../../filter.service';
 import { InvoicesService } from '../../../../../services/invoices.service';
+import { EstimatesService } from '../../../../../services/estimates.service';
 
 @Component({
   selector: 'app-estimateprofilefooter',
   templateUrl: './estimateprofilefooter.component.html',
   styleUrls: ['./estimateprofilefooter.component.css']
 })
-export default class EstimateProfileFooterComponent {
+export default class EstimateProfileFooterComponent implements OnInit {
 
   @Input() createdInvoice;
 
@@ -33,9 +34,20 @@ export default class EstimateProfileFooterComponent {
   chargeFeeUnit: string;
   chargeFeeValue: number;
   chargeSwitchOn: false;
+  currentEstimateId: number;
 
-  constructor(private router: Router, private filterService: FilterService, private invoicesService: InvoicesService) {
+  constructor(
+    private router: Router,
+    private filterService: FilterService,
+    private invoicesService: InvoicesService,
+    private route: ActivatedRoute,
+    private estimatesService: EstimatesService) {
+  }
 
+  ngOnInit() {
+    console.log('created invoice: ', this.createdInvoice);
+    // this.chargeFeeUnit = this.createdInvoice.
+    this.currentEstimateId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
   }
 
   cancelInvoice() {
@@ -45,14 +57,6 @@ export default class EstimateProfileFooterComponent {
   }
 
   saveInvoice() {
-    const chargeFeeData = {
-      chargeFee: this.chargeSwitchOn,
-      unit: this.chargeFeeUnit,
-      value: this.chargeFeeValue
-    };
-
-    this.filterService.chargeFeeData.next(chargeFeeData);
-    this.filterService.saveClicked.next( true );
     this.router.navigate(['./sales/invoices']);
   }
 

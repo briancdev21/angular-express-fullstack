@@ -6,16 +6,17 @@
       <th (click)="sortArray('balance')">INVOICE BALANCE</th>
       <th (click)="sortArray('total')">INVOICE TOTAL</th> 
       <th (click)="sortArray('overdueDays')">DAYS OVERDUE</th>
-      <th (click)="sortCreateDateArray('createdDate')">CREATED DATE</th>
+      <th (click)="sortCreateDateArray('createdAt')">CREATED DATE</th>
       <th (click)="sortArray('status')">STATUS</th>
     </tr>
-    <tr *ngFor="let invoice of invoicesListInfo; let i = index" (click)="redirectTo(invoice.id)">
-      <td>IN - {{invoice.id}}</td>
+    <tr *ngFor="let invoice of invoicesListInfo; let i = index" (click)="redirectTo(invoice)">
+      <td *ngIf="invoice.contactId.slice(0, 7) === 'INVOICE'">IN - {{invoice.id}}</td>
+      <td *ngIf="invoice.contactId.slice(0, 7) !== 'INVOICE'">ES - {{invoice.id}}</td>
       <td>{{invoice.owner}}</td>
       <td>$ {{invoice.balance | number: '1.2-2'}}</td>
       <td>$ {{invoice.total | number: '1.2-2'}}</td>
       <td>{{invoice.overdueDays}}</td>
-      <td>{{invoice.startDate}}</td>
+      <td>{{invoice.createdAt}}</td>
       <td>{{invoice.status}}</td> 
     </tr>
   </table>

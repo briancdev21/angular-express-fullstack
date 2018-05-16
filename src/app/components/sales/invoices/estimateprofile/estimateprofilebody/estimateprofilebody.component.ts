@@ -7,6 +7,7 @@ import { InvoicesService } from '../../../../../services/invoices.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InvoiceModel } from '../../../../../models/invoice.model';
 import { FilterService } from '../../filter.service';
+import { EstimatesService } from '../../../../../services/estimates.service';
 
 @Component({
   selector: 'app-estimateprofilebody',
@@ -17,21 +18,6 @@ export default class EstimateProfileBodyComponent implements OnInit {
   // @Input() createdInvoice;
 
   @Input() set createdInvoice(_createdInvoice) {
-    this.invoice_mock = _createdInvoice;
-    if (_createdInvoice) {
-      // this.po_id = `PO-${this.po_mock.id}`;
-      // this.discountAmount = this.po_mock.discount.value;
-      // this.discountType = this.po_mock.discount.unit;
-      // this.freightcosts = this.po_mock.freightCost;
-
-      this.currentInvoiceId = this.invoice_mock.id;
-      this.discountType = this.invoice_mock.discount.unit;
-      this.discountAmount = this.invoice_mock.discount.value;
-      this.internalMemo = this.invoice_mock.internalNote;
-      this.noteToSupplier = this.invoice_mock.customerNote;
-      this.termsOfInvoice = this.invoice_mock.terms;
-      this.in_id = 'IN - ' + this.currentInvoiceId;
-    }
   }
 
   invoice_mock: any;
@@ -41,9 +27,9 @@ export default class EstimateProfileBodyComponent implements OnInit {
   projects = ['task1', 'task2', 'task3'];
   changeLogNumbers = ['Number 1', 'Number 2', 'Number 3' ];
   labelText = 'Use customer address';
-  title = 'Terms of the Invoice';
+  title = 'Terms of the Estimate';
   dueDateTitle = 'Due Date';
-  invoiceNumberTitle = 'Invoice #';
+  invoiceNumberTitle = 'Estimate #';
   subtotalServices = undefined;
   shippingAddress = {
     address: '',
@@ -83,6 +69,10 @@ export default class EstimateProfileBodyComponent implements OnInit {
   emailAddresses = [];
   termsOfInvoice = '';
   emails: any;
+  currentClass: string;
+  currentClassId: number;
+  currentCategory: string;
+  currentCategoryId: number;
 
   public timelineData: Array<Object> = [
     {
@@ -128,8 +118,9 @@ export default class EstimateProfileBodyComponent implements OnInit {
 
   currentInvoiceId: number;
   saveInvoiceData: InvoiceModel;
+  currentOwner: string;
 
-  constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
+  constructor(private sharedService: SharedService, private estimatesService: EstimatesService,
     private route: ActivatedRoute, private filterService: FilterService) {
     this.saveInvoiceData = new InvoiceModel();
     this.createdDate = new Date().toJSON();
@@ -143,13 +134,14 @@ export default class EstimateProfileBodyComponent implements OnInit {
 
     this.sharedService.getTerms().subscribe(res => {
       this.terms = res.results;
+      console.log('terms lsit: ', res);
     });
 
     this.sharedService.getClassifications().subscribe(res => {
       this.classList = res.results;
     });
 
-    this.sharedService.getPricingCategories().subscribe(res => {
+    this.sharedService.getCategories().subscribe(res => {
       this.categoryList = res.results;
     });
 
@@ -158,25 +150,40 @@ export default class EstimateProfileBodyComponent implements OnInit {
   ngOnInit() {
     console.log('createdInvoice', this.createdInvoice);
     // get id for new and existing lead
-    if (this.route.snapshot.paramMap.get('id')) {
-      this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-      this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
-        console.log('getIndividualInvoice: ', res);
-        this.discountType = res.data.discount.unit;
-        this.discountAmount = res.data.discount.value;
-        this.internalMemo = res.data.internalNote;
-        this.noteToSupplier = res.data.customerNote;
-        this.termsOfInvoice = res.data.terms;
-      });
-    } else {
-      // this.currentInvoiceId = this.createdInvoice.id;
-      // this.discountType = this.createdInvoice.discount.unit;
-      // this.discountAmount = this.createdInvoice.discount.value;
-      // this.internalMemo = this.createdInvoice.internalNote;
-      // this.noteToSupplier = this.createdInvoice.customerNote;
-      // this.termsOfInvoice = this.createdInvoice.terms;
-    }
-    this.in_id = 'IN - ' + this.currentInvoiceId;
+
+    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.estimatesService.getIndividualEstimate(this.currentInvoiceId).subscribe(res => {
+      console.log('getIndividualInvoice: ', res);
+
+      this.saveInvoiceData = res.data;
+      // change contact id to number
+      this.saveInvoiceData.contactId = parseInt(res.data.contactId.slice(-1), 10);
+
+      this.discountType = res.data.discount.unit;
+      this.discountAmount = res.data.discount.value;
+      this.internalMemo = res.data.internalNote;
+      this.noteToSupplier = res.data.customerNote;
+      this.termsOfInvoice = res.data.terms;
+      this.createdDate = res.data.startDate;
+      this.dueDate = res.data.dueDate;
+      this.subtotalproducts = res.data.productSubTotal;
+      this.subtotalServices = res.data.serviceSubTotal;
+      this.taxes = res.data.taxTotal;
+      this.discountType = res.data.discount.unit;
+      this.discountAmount = res.data.discount.value;
+      this.totalamountdue = res.data.total;
+      this.currentClassId = res.data.classificationId;
+      this.currentCategoryId = res.data.categoryId;
+      this.currentOwner = res.data.owner;
+      this.emailAddresses = res.data.emails;
+      this.shippingAddress = res.data.shippingAddress;
+      // retrieve current cateogry, classification
+      const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
+      this.currentClass = this.classList[classPos].name;
+      const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
+      this.currentCategory = this.categoryList[categoryPos].name;
+    });
+    this.in_id = 'ES - ' + this.currentInvoiceId;
 
     this.filterService.chargeFeeData.subscribe(data => {
       console.log('lateFee: ', data);
@@ -249,7 +256,7 @@ export default class EstimateProfileBodyComponent implements OnInit {
   }
 
   onChangeTerm(event) {
-    // this.saveInvoiceData.termId = event;
+    this.saveInvoiceData['termId'] = parseInt(event, 10);
     console.log(event);
   }
 
@@ -335,8 +342,8 @@ export default class EstimateProfileBodyComponent implements OnInit {
 
   saveInvoice() {
     this.saveInvoiceData.emails = this.emails;
-    this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
-      console.log('saved invoice: ', res);
+    this.estimatesService.updateEstimate(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
+      console.log('saved est: ', res);
     });
   }
 }

@@ -64,14 +64,21 @@ export class InvoicesComponent implements OnInit {
       console.log('invoices: ', res.results);
       this.invoicesListInfo = res.results;
       this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
+      this.estimatesService.getEstimates().subscribe(data => {
+        this.estimatesListInfo = data.results;
+        this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['expiryDate'], i['status']));
+        this.estimatesListInfo.forEach(element => {
+          element['balance'] = 0;
+        });
+        this.invoicesListInfo = this.invoicesListInfo.concat(this.estimatesListInfo);
+        this.invoicesListInfo.forEach(element => {
+          element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
+        });
+        console.log('invoices + estimates: ', this.estimatesListInfo);
+        this.invoicesListInfo = this.sortDateArray('createdAt');
+        console.log('invoices + estimates123: ', this.invoicesListInfo);
+      });
     });
-
-    this.estimatesService.getEstimates().subscribe(res => {
-      this.estimatesListInfo = res.results;
-      this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
-    });
-
-    this.invoicesListInfo.concat(this.estimatesListInfo);
   }
 
   ngOnInit() {
@@ -168,9 +175,20 @@ export class InvoicesComponent implements OnInit {
 
   toAddEstimate() {
     // this.router.navigate(['./add-estimate']);
-    this.estimatesService.createEstimate(this.newEstimate).subscribe (res => {
-      console.log('estimate created: ', res);
-      this.router.navigate(['./add-estimate', {title: 'NEW', id: res.data.id}]);
+    this.router.navigate(['./add-estimate']);
+  }
+
+  sortDateArray(field) {
+    const cmp = this;
+    this.invoicesListInfo.sort( function(name1, name2) {
+      if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
+        return -1;
+      } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
+        return 1;
+      } else {
+        return 0;
+      }
     });
+    return this.invoicesListInfo;
   }
 }
