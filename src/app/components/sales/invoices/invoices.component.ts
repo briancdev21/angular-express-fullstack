@@ -79,13 +79,6 @@ export class InvoicesComponent implements OnInit {
         console.log('invoices + estimates123: ', this.invoicesListInfo);
       });
     });
-
-    this.estimatesService.getEstimates().subscribe(res => {
-      this.estimatesListInfo = res.results;
-      this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
-    });
-
-    this.invoicesListInfo.concat(this.estimatesListInfo);
   }
 
   // constructor( private filterService: FilterService, private router: Router, private invoicesService: InvoicesService ) {
@@ -192,10 +185,21 @@ export class InvoicesComponent implements OnInit {
 
   toAddEstimate() {
     // this.router.navigate(['./add-estimate']);
-    this.estimatesService.createEstimate(this.newEstimate).subscribe (res => {
-      console.log('estimate created: ', res);
-      this.router.navigate(['./add-estimate', {title: 'NEW', id: res.data.id}]);
+    this.router.navigate(['./add-estimate']);
+  }
+
+  sortDateArray(field) {
+    const cmp = this;
+    this.invoicesListInfo.sort( function(name1, name2) {
+      if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
+        return -1;
+      } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
+        return 1;
+      } else {
+        return 0;
+      }
     });
+    return this.invoicesListInfo;
   }
 
   sortDateArray(field) {

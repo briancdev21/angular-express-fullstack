@@ -20,8 +20,13 @@ export default class AddEstimateBodyComponent implements OnInit {
     this.invoice_mock = _createdInvoice;
     if (_createdInvoice) {
       this.saveInvoiceData = _createdInvoice;
-      console.log('saved estimate: ', this.saveInvoiceData);
+      console.log('saved invoice: ', this.saveInvoiceData);
       this.currentInvoiceId = this.invoice_mock.id;
+      this.discountType = this.invoice_mock.discount.unit;
+      this.discountAmount = this.invoice_mock.discount.value;
+      this.internalMemo = this.invoice_mock.internalNote;
+      this.noteToSupplier = this.invoice_mock.customerNote;
+      this.termsOfInvoice = this.invoice_mock.terms;
       this.in_id = 'ES - ' + this.currentInvoiceId;
     }
   }
