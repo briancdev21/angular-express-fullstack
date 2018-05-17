@@ -12,7 +12,7 @@ import * as moment from 'moment';
   entryComponents: [
   ]
 })
-export class ProductComponent implements OnInit {
+export class ProductProfileComponent implements OnInit {
 
   menuCollapsed = true;
   contactInfoIndex: any;

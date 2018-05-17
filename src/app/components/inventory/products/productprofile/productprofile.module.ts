@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { AutocompleteModule } from 'ng2-input-autocomplete';
 
-import { ProductComponent } from './productprofile.component';
+import { ProductProfileComponent } from './productprofile.component';
 import { CommonCmpModule } from '../../../../components/common/common.module';
 import { ProductInfoBarComponent } from './productInfobar/productinfobar.component';
 import { ProductCustomDonutChartComponent } from './productcustomdonutchart/productcustomdonutchart.component';
@@ -18,7 +18,7 @@ import { BreadcrumbModule } from '../../../breadcrumb/breadcrumb.module';
 
 @NgModule({
   declarations: [
-    ProductComponent,
+    ProductProfileComponent,
     ProductInfoBarComponent,
     ProductCustomDonutChartComponent,
     ProductCardsComponent,

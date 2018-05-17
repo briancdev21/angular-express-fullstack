@@ -73,6 +73,7 @@ import {InventoryPoAddComponent} from './components/inventory/inventory-po-add/i
 import {InventoryTrAddComponent} from './components/inventory/inventory-tr-add/inventory.component';
 import {InventoryAdAddComponent} from './components/inventory/inventory-ad-add/inventory.component';
 import {InventoryPoProfileComponent} from './components/inventory/inventory-po-profile/inventory.component';
+import { ProductProfileComponent } from './components/inventory/products/productprofile/productprofile.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -149,7 +150,8 @@ export const routes: Routes = [
       { path: 'stock-control/purchaseorder/:id', component: InventoryPoProfileComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'suppliers', component: SuppliersComponent },
-      { path: 'supplier-profile', component: SupplierProfileComponent }
+      { path: 'supplier-profile', component: SupplierProfileComponent },
+      { path: 'product-profile', component: ProductProfileComponent }
     ]
   },
   { path: 'collaboration', component: CollaborationComponent,
