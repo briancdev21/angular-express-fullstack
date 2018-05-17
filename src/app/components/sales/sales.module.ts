@@ -18,6 +18,7 @@ import { ProposalListComponent } from './proposallist/proposallist.component';
 import { SalesDashboardComponent } from './salesdashboard/salesdashboard.component';
 import { RevenueAreaChartComponent } from './salesdashboard/revenueareachart/revenueareachart.component';
 
+import { AddProposalComponent } from './addproposal/addproposal.component';
 import { InvoicesCmpModule } from './invoices/invoices.module';
 import { DealsPipelineCmpModule } from './dealspipeline/dealspipeline.module';
 import { ProposalListCmpModule } from './proposallist/proposallist.module';
@@ -26,6 +27,8 @@ import { ProposalCmpModule } from './proposal/proposal.module';
 import { SalesService } from './sales.service';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 
 @NgModule({
@@ -34,7 +37,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     InvoicesComponent,
     ProposalListComponent,
     SalesDashboardComponent,
-    RevenueAreaChartComponent
+    RevenueAreaChartComponent,
+    AddProposalComponent
   ],
   imports: [
     BrowserModule,
@@ -58,13 +62,16 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ProposalListCmpModule,
     DealsPipelineCmpModule,
     DragulaModule,
-    ProposalCmpModule
+    ProposalCmpModule,
+    FroalaEditorModule,
+    FroalaViewModule
   ],
   exports: [
     MatInputModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCheckboxModule,
+    AddProposalComponent
   ],
   providers: [SalesService]
 })

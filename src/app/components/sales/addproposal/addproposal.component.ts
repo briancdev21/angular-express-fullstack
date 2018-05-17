@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, } from '@angular/core';
 import { Router } from '@angular/router';
-import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
+import { MultiKeywordSelectComponent } from '../../profile/multikeywordselect/multikeywordselect.component';
 import { CompleterService, CompleterData } from 'ng2-completer';
-import { ScheduleMultiKeywordComponent } from '../../proposal/schedulemultikeyword/schedulemultikeyword.component';
-import { InCreatedDateFieldComponent } from '../../invoices/components/in-createddatefield/in-createddatefield.component';
+import { ScheduleMultiKeywordComponent } from '../proposal/schedulemultikeyword/schedulemultikeyword.component';
+import { InCreatedDateFieldComponent } from '../invoices/components/in-createddatefield/in-createddatefield.component';
 
 @Component({
   selector: 'app-addproposal',
