@@ -18,7 +18,7 @@
           </tr>
         </tbody>
 
-        <tbody class="tasks-sec" *ngFor="let task of tasks; let i = index">
+        <tbody class="tasks-sec" *ngFor="let task of _tasks; let i = index">
           <tr>
             <td *ngFor="let date of dayCountArr[in].dateSubArr; let j = index" 
               [ngClass]="{

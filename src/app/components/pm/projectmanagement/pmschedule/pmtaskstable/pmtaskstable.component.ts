@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonComponent } from '../../../../common/common.component';
 import { PmService } from '../../pm.service';
 import { DragulaService } from 'ng2-dragula';
@@ -20,6 +20,7 @@ import * as moment from 'moment';
 })
 export class PmTasksTableComponent implements OnInit {
   @Input() milestones;
+  @Output() updatedGanttData = new EventEmitter;
 
   menuCollapsed = true;
   newMilestoneTitle = '';
@@ -235,5 +236,41 @@ export class PmTasksTableComponent implements OnInit {
         'openModal': true
       }
     );
+  }
+
+
+  minDate(arr) {
+    let min = arr[0];
+    arr.forEach(element => {
+      if (Date.parse(element) < Date.parse(min)) {
+        min = element;
+      }
+    });
+    return min;
+  }
+
+  maxDate(arr) {
+    let max = arr[0];
+    arr.forEach(element => {
+      if (Date.parse(element) > Date.parse(max)) {
+        max = element;
+      }
+    });
+    return max;
+  }
+
+  getMilestoneProgress(arr) {
+    let progressSum = 0;
+    arr.forEach(element => {
+      progressSum += element.progress;
+    });
+    return progressSum / (arr.length * 100);
+  }
+
+
+  changePercent(percent, panel, task) {
+    this.milestones[panel][task] = parseInt(percent, 10);
+    // send changed data to parent to update gantt chart
+    this.updatedGanttData.emit({'data': this.milestones});
   }
 }

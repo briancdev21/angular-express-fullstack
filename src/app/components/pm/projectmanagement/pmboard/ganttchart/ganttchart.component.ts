@@ -14,13 +14,17 @@ import * as _ from 'lodash';
 })
 
 export class GanttChartComponent implements OnInit {
-  @Input() tasks;
+  @Input() set tasks(_data) {
+    this._tasks = _data;
+    this.calculate();
+  }
 
+  _tasks = [];
   FebNumberOfDays: any;
-  dateNow = new Date();
-  month = this.dateNow.getMonth();
-  day = this.dateNow.getDate();
-  year = this.dateNow.getFullYear();
+  dateNow: Date;
+  day: any;
+  month: any;
+  year: any;
 
 // names of months and week days.
   monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -33,18 +37,26 @@ export class GanttChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('thistask: ', this.tasks);
-    this.pmService.ganttUpdated.subscribe(data => {
-      if (data.length > 0) {
-        this.tasks = data;
-      }
-      console.log('in gantt: ', this.tasks);
-      this.calculate();
-    });
+    console.log('thistask: ', this._tasks);
+    // using service to update gantt chart
+    // this.pmService.ganttUpdated.subscribe(data => {
+    //   if (data.length > 0) {
+    //     this.tasks = data;
+    //   }
+    //   console.log('in gantt: ', this.tasks);
+    //   this.calculate();
+    // });
     // this.calculate();
   }
 
   calculate() {
+    // refresh variables
+    this.dateNow = new Date();
+    this.month = this.dateNow.getMonth();
+    this.day = this.dateNow.getDate();
+    this.year = this.dateNow.getFullYear();
+    this.displayMonthes = [];
+    this.dayCountArr = [];
     // Determing if February (28,or 29)
     if (this.month === 1) {
       if ( (this.year % 100 !== 0) && (this.year % 4 === 0) || (this.year % 400 === 0)) {
@@ -58,7 +70,7 @@ export class GanttChartComponent implements OnInit {
     let maxDate = this.dateNow;
     let nextMonth = new Date();
     let lastMonth = new Date();
-    this.tasks.forEach(element => {
+    this._tasks.forEach(element => {
       if (new Date (element.start_date) < new Date(minDate)) {
         minDate = element.start_date;
       }
@@ -108,7 +120,7 @@ export class GanttChartComponent implements OnInit {
       };
       dayCount.dateSubArr = this.getDayCount(month.month, month.year);
 
-      for (let i = 0; i < this.tasks.length; i ++) {
+      for (let i = 0; i < this._tasks.length; i ++) {
         const isWeekendSubArr = [];
         const getTodayLineSubArr = [];
         const isFirstSubArr = [];
@@ -119,10 +131,10 @@ export class GanttChartComponent implements OnInit {
         _.forEach(dayCount.dateSubArr, date => {
           isWeekendSubArr.push(this.isWeekend(month.year, month.month, date));
           getTodayLineSubArr.push(this.getTodayLine(month.year, month.month, date));
-          isFirstSubArr.push(this.isFirst(month.year, month.month, date, this.tasks[i], i));
-          isLastSubArr.push(this.isLast(month.year, month.month, date, this.tasks[i], i));
-          isLastActiveSubArr.push(this.isLastActive(month.year, month.month, date + 1, this.tasks[i], i));
-          getBgColorSubArr.push(this.getBgColor(month.year, month.month, date, this.tasks[i], i));
+          isFirstSubArr.push(this.isFirst(month.year, month.month, date, this._tasks[i], i));
+          isLastSubArr.push(this.isLast(month.year, month.month, date, this._tasks[i], i));
+          isLastActiveSubArr.push(this.isLastActive(month.year, month.month, date + 1, this._tasks[i], i));
+          getBgColorSubArr.push(this.getBgColor(month.year, month.month, date, this._tasks[i], i));
         });
         dayCount.isWeekendArr.push(isWeekendSubArr);
         dayCount.getTodayLineArr.push(getTodayLineSubArr);

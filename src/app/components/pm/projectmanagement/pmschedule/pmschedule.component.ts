@@ -537,7 +537,6 @@ export class PmScheduleComponent implements OnInit {
     // event.dueDate = moment(event.dueDate).format('YYYY-MM-DD');
     this.pmBoardTableData[this.updatingTaskPosition[0]].tasks[this.updatingTaskPosition[1]] = event;
     this.pmBoardTableData.map( m => m.tasks.map(t => t.dueDate = moment(t.dueDate).format('YYYY-MM-DD')));
-    console.log('Updated Pm table data: ',  this.pmBoardTableData);
     this.updateTasks();
   }
 
@@ -554,6 +553,22 @@ export class PmScheduleComponent implements OnInit {
       tasks.push(midTk);
     }
     console.log('updatedTasks111111', tasks);
-    this.pmService.updateGantt(tasks);
+    this.tasks = tasks;
+    // this.pmService.updateGantt(tasks);
+  }
+
+  getUpdatedGanttData(event) {
+    const tasks = [];
+    for (let i = 0; i < event.data.length; i ++) {
+      const midTk = {
+        id: i,
+        title: event.data[i].title,
+        start_date: moment(this.minDate(event.data[i].tasks.map(t => t.start))).format('YYYY-MM-DD'),
+        end_date: this.maxDate(event.data[i].tasks.map(t => t.dueDate)),
+        progress: this.getMilestoneProgress(event.data[i].tasks)
+      };
+      tasks.push(midTk);
+    }
+    this.tasks = tasks;
   }
 }

@@ -21,7 +21,7 @@
                 <div class="sub-tasks">
 
                 </div>
-                <span><input [(ngModel)]="task.progress" max="100" type="number" maxlength="3" min="0">%</span>
+                <span><input [(ngModel)]="task.progress" max="100" type="number" maxlength="3" min="0" (ngModelChange)="changePercent(task.progress, i, j)">%</span>
                 <!-- Task owner selection modal-->
                 <div
                   class="owner-modal"
