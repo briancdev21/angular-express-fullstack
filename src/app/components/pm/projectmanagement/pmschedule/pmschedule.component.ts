@@ -546,7 +546,7 @@ export class PmScheduleComponent implements OnInit {
       const midTk = {
         id: i,
         title: this.pmBoardTableData[i].title,
-        start_date: this.minDate(this.pmBoardTableData[i].tasks.map(t => t.start)),
+        start_date: moment(this.minDate(this.pmBoardTableData[i].tasks.map(t => t.start))).format('YYYY-MM-DD'),
         end_date: this.maxDate(this.pmBoardTableData[i].tasks.map(t => t.dueDate)),
         progress: this.getMilestoneProgress(this.pmBoardTableData[i].tasks)
       };

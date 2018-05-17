@@ -117,7 +117,7 @@ export class AddDetailedTaskComponent implements OnInit {
       this.dDate = data.task.dueDate;
       // change format from 'mmmm dd, yyyy' to 'YYYY-MM-DD'
       this.dateDue = moment(data.task.dueDate).format('YYYY-MM-DD').toString();
-      this.projectTags = data.task.projectTags;
+      this.projectTags = data.task.projectTags ? data.task.projectTags : this.projectTags;
       this.duration = data.task.duration;
       this.internalNotes = data.task.internalNotes;
       this.openedModalPosition = data.milestone;
