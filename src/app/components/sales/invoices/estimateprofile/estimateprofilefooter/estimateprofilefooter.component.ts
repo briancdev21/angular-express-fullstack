@@ -57,6 +57,14 @@ export default class EstimateProfileFooterComponent implements OnInit {
   }
 
   saveInvoice() {
+    const chargeFeeData = {
+      chargeFee: undefined,
+      unit: undefined,
+      value: undefined
+    };
+
+    this.filterService.chargeFeeData.next(chargeFeeData);
+    this.filterService.saveClicked.next( true );
     this.router.navigate(['./sales/invoices']);
   }
 

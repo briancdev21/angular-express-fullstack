@@ -327,6 +327,21 @@ input {
 	width: 80%;
 }
 
+.overlay {
+	margin-right: 40px;
+	position: relative;
+}
+
+.overlay-gray {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 66%;
+	height: 100%;
+	border-radius: 100%;
+	background: rgba(39,62,84,0.62);
+}
+
 /* Custom check box css */
 
 /* Customize the label (the container) */
