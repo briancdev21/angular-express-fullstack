@@ -263,5 +263,9 @@ export class ProductProfileComponent implements OnInit {
     this.menuCollapsed  = data;
   }
 
+  onChangedUserInfo(event) {
+    console.log(event);
+  }
+
 
 }

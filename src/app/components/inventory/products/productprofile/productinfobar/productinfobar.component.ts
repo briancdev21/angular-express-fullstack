@@ -12,16 +12,23 @@ import { Router } from '@angular/router';
 })
 export class ProductInfoBarComponent implements OnInit {
 
-  @Input() userInfo;
+  @Input() productInfo;
   data1: any;
   showEditImageModal = false;
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
-  // croppedImage = this.userInfo.profileLink;
+  // croppedImage = this.productInfo.profileLink;
+
+  constructor(private router: Router) {
+    this.data1 = {};
+  }
+
+  ngOnInit() {
+  }
 
   fileChangeEvent(event: any): void {
-      this.imageChangedEvent = event;
+    this.imageChangedEvent = event;
   }
   imageCropped(image: string) {
       this.croppedImage = image;
@@ -30,9 +37,6 @@ export class ProductInfoBarComponent implements OnInit {
   imageLoaded() {
 
   }
-  constructor(private router: Router) {
-    this.data1 = {};
-  }
 
   cancelCrop() {
     this.showEditImageModal = false;
@@ -40,10 +44,11 @@ export class ProductInfoBarComponent implements OnInit {
 
   saveCrop() {
     this.showEditImageModal = false;
-    this.userInfo.profileLink = this.croppedImage;
+    this.productInfo.pictureURI = this.croppedImage;
   }
 
-  ngOnInit() {
+  changeImage() {
+    this.showEditImageModal = true;
   }
 
 }

@@ -1,0 +1,31 @@
+<div class="content">
+  <table>
+    <tr>
+      <th (click)="sortArray('name')">VARIANT NAME</th>
+      <th (click)="sortArray('sku')">SKU</th>
+      <th (click)="sortArray('supplierCode')">SUPPLIER CODE</th>
+      <th (click)="sortArray('upc')">UPC NUMBER</th>
+      <th (click)="sortArray('cost')">COST</th> 
+      <th (click)="sortArray('priceAdjustment')">PRICE ADJUST</th>
+      <th (click)="sortArray('quantity')">QTY</th>
+      <th (click)="sortArray('reOrder')">RE-ORDER</th>
+      <th (click)="sortArray('po')">PO</th>
+      <th (click)="sortArray('reserved')">RESERVED</th>
+    </tr>
+    <tr *ngFor="let product of productVariants; let i = index">
+      <td>{{product.name}}</td>
+      <td>{{product.sku}}</td>
+      <td>{{product.supplierCode}}</td>
+      <td>{{product.upc}}</td>
+      <td>$ {{product.cost | number: '1.2-2'}}</td>
+      <td>$ {{product.priceAdjustment | number: '1.2-2'}}</td>
+      <td>{{product.quantity}}</td>
+      <td>{{product.reOrder}}</td>
+      <td>{{product.po}}</td>
+      <td>
+        <span [ngClass]="getStockColor(product.stock, product.reorderPoint)">{{product.reserved}}</span> 
+      </td> 
+    </tr>
+  </table>
+</div>
+
