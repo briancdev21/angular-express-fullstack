@@ -215,6 +215,7 @@ export default class InvoiceProfileBodyComponent implements OnInit {
       this.currentOwner = res.data.owner;
       this.emailAddresses = res.data.emails;
       this.shippingAddress = res.data.shippingAddress;
+      this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
       // retrieve current cateogry, classification, term
       const termPos = this.terms.map(t => t.id).indexOf(this.currentTermId);
       this.currentTerm = this.terms[termPos].name;
