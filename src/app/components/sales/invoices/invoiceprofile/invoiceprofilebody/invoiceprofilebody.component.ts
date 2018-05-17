@@ -118,13 +118,13 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   ];
 
   currentInvoiceId: number;
-  saveInvoiceData: InvoiceModel;
+  saveInvoiceData: any;
   currentOwner: string;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
               private route: ActivatedRoute, private filterService: FilterService) {
 
-    // this.saveInvoiceData = new InvoiceModel();
+    this.saveInvoiceData = new InvoiceModel();
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
     this.sharedService.getContacts()
@@ -179,6 +179,7 @@ export default class InvoiceProfileBodyComponent implements OnInit {
       this.currentOwner = res.data.owner;
       this.emailAddresses = res.data.emails;
       this.shippingAddress = res.data.shippingAddress;
+      this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
       // retrieve current cateogry, classification, term
       const termPos = this.terms.map(t => t.id).indexOf(this.currentTermId);
       this.currentTerm = this.terms[termPos].name;
@@ -206,6 +207,12 @@ export default class InvoiceProfileBodyComponent implements OnInit {
     });
   }
 
+  getContactAddress(list, id) {
+    const idList = list.map( c => c.id);
+    const pos = idList.indexOf(id);
+    return list[id].shippingAddress;
+  }
+
   onCustomerSelected(user) {
     console.log(user);
   }
@@ -227,11 +234,6 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   onSelectCategory(val) {
     console.log('val', val);
     this.saveInvoiceData.categoryId = val;
-  }
-
-  changedCreatedDate(event) {
-    console.log('changedCreatedDate: ', event);
-    this.saveInvoiceData.startDate = event;
   }
 
   changedDueDate(event) {

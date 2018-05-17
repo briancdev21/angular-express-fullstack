@@ -23,54 +23,6 @@ export class EstimateProfileComponent implements OnInit {
   public createdEstimate;
 
   constructor( private estimatesService: EstimatesService, private router: Router, private route: ActivatedRoute ) {
-
-    this.newEstimate = {
-      'currencyId': 1,
-      'contactId': 1,
-      'pricingCategoryId': 1,
-      'classificationId': 1,
-      'categoryId': 1,
-      'termId': 1,
-      'emails': [
-        'test@test.com'
-      ],
-      'startDate': this.today,
-      'recurring': [
-        'RRULE:FREQ=MONTHLY;COUNT=5;DTSTART=20120201T023000Z'
-      ],
-      'reminder': [
-        'Reminder'
-      ],
-      'shippingAddress': {
-        'address': 'Enter Shipping Address',
-        'city': 'Enter City',
-        'province': 'Enter Province',
-        'postalCode': 'Enter Postal Code',
-        'country': 'Enter Country'
-      },
-      'billingAddress': {
-        'address': 'Enter Billing Address',
-        'city': 'Enter City',
-        'province': 'Enter Province',
-        'postalCode': 'Enter Postal Code',
-        'country': 'Enter Country'
-      },
-      'internalNote': 'string',
-      'customerNote': 'string',
-      'terms': 'string',
-      'discount': {
-        'value': 0,
-        'unit': 'AMOUNT'
-      },
-      'expiryDate': this.today,
-    };
-    if (!this.route.snapshot.paramMap.get('id')) {
-      console.log('routing to addinvoice0');
-      this.estimatesService.createEstimate(this.newEstimate).subscribe (res => {
-        console.log('routing to addinvoice', res);
-        this.createdEstimate = res.data;
-      });
-    }
   }
 
   ngOnInit() {

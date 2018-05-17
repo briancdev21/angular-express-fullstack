@@ -8,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { InvoiceModel } from '../../../../../models/invoice.model';
 import { FilterService } from '../../filter.service';
 import { EstimatesService } from '../../../../../services/estimates.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-estimateprofilebody',
@@ -28,7 +29,7 @@ export default class EstimateProfileBodyComponent implements OnInit {
   changeLogNumbers = ['Number 1', 'Number 2', 'Number 3' ];
   labelText = 'Use customer address';
   title = 'Terms of the Estimate';
-  dueDateTitle = 'Due Date';
+  dueDateTitle = 'Expiry Date';
   invoiceNumberTitle = 'Estimate #';
   subtotalServices = undefined;
   shippingAddress = {
@@ -164,8 +165,8 @@ export default class EstimateProfileBodyComponent implements OnInit {
       this.internalMemo = res.data.internalNote;
       this.noteToSupplier = res.data.customerNote;
       this.termsOfInvoice = res.data.terms;
-      this.createdDate = res.data.startDate;
-      this.dueDate = res.data.dueDate;
+      this.createdDate = moment(res.data.createdAt).format('YYYY-MM-DD');
+      this.dueDate = res.data.expiryDate;
       this.subtotalproducts = res.data.productSubTotal;
       this.subtotalServices = res.data.serviceSubTotal;
       this.taxes = res.data.taxTotal;
@@ -177,6 +178,7 @@ export default class EstimateProfileBodyComponent implements OnInit {
       this.currentOwner = res.data.owner;
       this.emailAddresses = res.data.emails;
       this.shippingAddress = res.data.shippingAddress;
+      this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
       // retrieve current cateogry, classification
       const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
       this.currentClass = this.classList[classPos].name;
@@ -200,6 +202,18 @@ export default class EstimateProfileBodyComponent implements OnInit {
       }
       console.log('save clicked: ', data);
     });
+  }
+
+  getContactName(list, id) {
+    const idList = list.map( c => c.id);
+    const pos = idList.indexOf(id);
+    return list[id].person.firstName + ' ' + list[id].person.lastName;
+  }
+
+  getContactAddress(list, id) {
+    const idList = list.map( c => c.id);
+    const pos = idList.indexOf(id);
+    return list[id].shippingAddress;
   }
 
   onCustomerSelected(user) {
@@ -341,7 +355,9 @@ export default class EstimateProfileBodyComponent implements OnInit {
   }
 
   saveInvoice() {
-    this.saveInvoiceData.emails = this.emails;
+    if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
+      this.saveInvoiceData.deposit = 0;
+    }
     this.estimatesService.updateEstimate(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
       console.log('saved est: ', res);
     });
