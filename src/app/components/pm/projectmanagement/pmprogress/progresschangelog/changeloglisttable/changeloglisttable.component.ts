@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../../pm.service';
+import { PmService } from '../../../pm.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 

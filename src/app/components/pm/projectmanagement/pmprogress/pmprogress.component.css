@@ -24,7 +24,11 @@
 
 :host ::ng-deep .pm-progress.content>tabs .tabs__tab:first-child {
   border-right: solid 1px #95989A;
-  margin-left: 25%;
+  margin-left: 24%;
+}
+
+:host ::ng-deep .pm-progress.content>tabs .tabs__tab:nth-child(2) {
+  border-right: solid 1px #95989A;
 }
 
 :host ::ng-deep .pm-progress.content>tabs .tabs__tab {

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../../pm.service';
+import { PmService } from '../../../pm.service';
 
 @Component({
   selector: 'app-changelogprofile',

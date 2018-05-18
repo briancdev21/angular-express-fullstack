@@ -21,8 +21,12 @@ import { PmScheduleComponent } from './components/pm/projectmanagement/pmschedul
 import { PmFinancialsComponent } from './components/pm/projectmanagement/pmfinancials/pmfinancials.component';
 import { PmProgressComponent } from './components/pm/projectmanagement/pmprogress/pmprogress.component';
 import { PmFilesComponent } from './components/pm/projectmanagement/pmfiles/pmfiles.component';
-import { ChangeLogProfileComponent } from './components/pm/projectmanagement/pmprogress/changelogprofile/changelogprofile.component';
-import { ChangeLogsTableComponent } from './components/pm/projectmanagement/pmprogress/changelogstable/changelogstable.component';
+import {
+    ChangeLogProfileComponent
+  } from './components/pm/projectmanagement/pmprogress/progresschangelog/changelogprofile/changelogprofile.component';
+import {
+    ChangeLogsTableComponent
+  } from './components/pm/projectmanagement/pmprogress/progresschangelog/changelogstable/changelogstable.component';
 import { PurchaseOrderListComponent } from './components/inventory/purchaseorderlist/purchaseorderlist.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { SignupComponent } from './components/auth/signup/signup.component';

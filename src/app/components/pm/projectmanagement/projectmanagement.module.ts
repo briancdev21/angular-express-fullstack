@@ -17,11 +17,11 @@ import { AddDetailedTaskComponent } from '../adddetailedtask/adddetailedtask.com
 import { SubTasksManagementComponent } from '../adddetailedtask/subtasksmanagement/subtasksmanagement.component';
 import { GanttChartComponent } from './pmboard/ganttchart/ganttchart.component';
 import { PmTasksTableComponent } from './pmschedule/pmtaskstable/pmtaskstable.component';
-import { ChangeLogProfileComponent } from './pmprogress/changelogprofile/changelogprofile.component';
-import { ChangeLogDetailsComponent } from './pmprogress/changelogdetails/changelogdetails.component';
-import { ChangeLogListTableComponent } from './pmprogress/changeloglisttable/changeloglisttable.component';
-import { ChangeLogSettingsComponent } from './pmprogress/changelogsettings/changelogsettings.component';
-import { ChangeLogsTableComponent } from './pmprogress/changelogstable/changelogstable.component';
+import { ChangeLogProfileComponent } from './pmprogress/progresschangelog/changelogprofile/changelogprofile.component';
+import { ChangeLogDetailsComponent } from './pmprogress/progresschangelog/changelogdetails/changelogdetails.component';
+import { ChangeLogListTableComponent } from './pmprogress/progresschangelog/changeloglisttable/changeloglisttable.component';
+import { ChangeLogSettingsComponent } from './pmprogress/progresschangelog/changelogsettings/changelogsettings.component';
+import { ChangeLogsTableComponent } from './pmprogress/progresschangelog/changelogstable/changelogstable.component';
 
 import { CommonCmpModule } from '../../../components/common/common.module';
 import { ProfileCmpModule } from '../../profile/profile.module';
