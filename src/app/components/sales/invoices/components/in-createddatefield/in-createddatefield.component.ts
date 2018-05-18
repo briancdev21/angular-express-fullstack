@@ -14,6 +14,7 @@ export class InCreatedDateFieldComponent implements OnInit {
     const date = new Date();
     date.setDate(date.getDate() - 1);
     this.yesterday = date;
+    this.createdDate = moment(this.createdDate).format('YYYY-MM-DD');
   }
   selectCreatedFrom(event) {
     this.createdDate = event.value;

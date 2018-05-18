@@ -130,11 +130,11 @@ tab img {
 	display: flex;
 	justify-content: space-between;
 	flex-direction: row;
-	margin-bottom: 15px;
+	margin-bottom: 0px;
 }
 
 .tab-row:first-child {
-	margin-bottom: 5px;
+	margin-bottom: 15px;
 }
 
 .tab-row>div {
