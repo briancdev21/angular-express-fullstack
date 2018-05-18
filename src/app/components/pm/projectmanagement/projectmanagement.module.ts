@@ -22,6 +22,10 @@ import { ChangeLogDetailsComponent } from './pmprogress/progresschangelog/change
 import { ChangeLogListTableComponent } from './pmprogress/progresschangelog/changeloglisttable/changeloglisttable.component';
 import { ChangeLogSettingsComponent } from './pmprogress/progresschangelog/changelogsettings/changelogsettings.component';
 import { ChangeLogsTableComponent } from './pmprogress/progresschangelog/changelogstable/changelogstable.component';
+import { ProgressOverviewComponent } from './pmprogress/progressoverview/progressoverview.component';
+import {
+    ProgressProjectInformationComponent
+  } from './pmprogress/progressoverview/progressprojectinformation/progressprojectinformation.component';
 
 import { CommonCmpModule } from '../../../components/common/common.module';
 import { ProfileCmpModule } from '../../profile/profile.module';
@@ -67,7 +71,9 @@ export const MY_NATIVE_FORMATS = {
     ChangeLogListTableComponent,
     ChangeLogSettingsComponent,
     ChangeLogsTableComponent,
-    TaskStableMapToKeysPipe
+    TaskStableMapToKeysPipe,
+    ProgressOverviewComponent,
+    ProgressProjectInformationComponent
   ],
   imports: [
     BrowserModule,
