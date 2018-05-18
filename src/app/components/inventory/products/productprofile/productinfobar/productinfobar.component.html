@@ -1,9 +1,42 @@
 
 <div class="logo">
-    
   <img [src]='productInfo.pictureURI' alt = "Add Profile Image Here"/>
   <img src="assets/images/Cloud.png" class="img-settings" (click)="changeImage()"/>
 </div>
+<div class="product-info">
+  <span>{{productInfo.name}}</span>
+  <span>{{productInfo.model}}</span>
+  <span>{{productInfo.name}}</span>
+  <span class="title">Product Description</span>
+  <textarea disabled>{{productInfo.description}}</textarea>
+  <span class="title">Primary Price</span>
+  <div class="price-value">
+    <span>$</span>
+    <span>price</span>
+  </div>
+  <span class="title">Unit of Measure</span>
+  <div class="unit-measure">
+    <div class="left-border-box">{{productInfo.unitOfMeasure.unit}}</div>
+    <div class="border-box">{{productInfo.unitOfMeasure.quantity}}</div>
+  </div>
+  <span class="title">Product Tags</span>
+  <div class="left-border-box keywords-list" *ngIf="keywordsList">
+    <div *ngFor="let tag of productInfo.keywordIds" class="keyword">{{getTagName(tag)}}</div>
+  </div>
+  <span class="title">Product Status</span>
+  <div class="status">
+    <div class="left-border-box">{{productInfo.status}}</div>
+  </div>
+  <span class="title">Inventory Type</span>
+  <div class="left-border-box">{{productInfo.inventoryType}}</div>
+  <span class="title">Expiration</span>
+  <div class="measure">
+    <div class="left-border-box">{{productInfo.expiration.unit}}</div>
+    <div class="border-box">{{productInfo.expiration.duration}}</div>
+  </div>
+</div>
+
+
 
 <!-- Image Edit Modal -->
 

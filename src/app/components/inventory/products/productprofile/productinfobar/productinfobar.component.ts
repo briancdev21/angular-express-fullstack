@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { SharedService } from '../../../../../services/shared.service';
 
 @Component({
   selector: 'app-productinfobar',
@@ -15,13 +16,18 @@ export class ProductInfoBarComponent implements OnInit {
   @Input() productInfo;
   data1: any;
   showEditImageModal = false;
+  keywordsList;
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
   // croppedImage = this.productInfo.profileLink;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private sharedService: SharedService) {
     this.data1 = {};
+    this.sharedService.getKeywords().subscribe(res => {
+      this.keywordsList = res.results;
+      console.log('keywords: ', this.keywordsList);
+    });
   }
 
   ngOnInit() {
@@ -49,6 +55,10 @@ export class ProductInfoBarComponent implements OnInit {
 
   changeImage() {
     this.showEditImageModal = true;
+  }
+
+  getTagName(id) {
+    return this.keywordsList.filter(k => k.id === id)[0].name;
   }
 
 }

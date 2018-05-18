@@ -64,7 +64,7 @@ export class ProductProfileComponent implements OnInit {
     'supplierId': 0,
     'currencyId': 0,
     'keywordIds': [
-      0
+      1
     ],
     'model': 'Control 4',
     'name': 'C4-HC800',
