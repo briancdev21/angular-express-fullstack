@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class ProductCardsComponent {
 
   @Input() cardsInfo;
+  @Input() dateSelectorList;
 
   constructor() {
 

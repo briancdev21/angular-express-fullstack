@@ -1,3 +1,82 @@
 app-lifetimestatus {
-    margin: 30px 0;
+  margin: 30px 0;
+}
+
+.cards-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.card-style {
+	background: #F7F7F7;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 3px 10px 0px lightgrey;
+	border-radius: 5px;
+	width: 100%;
+	margin-bottom: 20px;
+	padding: 15px;
+	color: #95989a;
+}
+
+.card-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.card-top span:first-child {
+	font-size: 20px;
+}
+
+.card-top  span:last-child {
+	font-size: 13px;
+	color: #ffac58;
+}
+
+.card-content {
+	display: flex;
+	margin-top: 10px;
+}
+
+.card-content>div {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.content-value {
+	font-size: 33px;
+	color: #c5d92d;
+}
+
+.content-title {
+	font-size: 14px;
+}
+
+.card-top select {
+	border: none;
+	color: #c5d92d;
+}
+
+@media screen and (max-width: 1700px) {
+	.card-top span:first-child {
+		font-size: 15px;
+	}
+	
+	.card-top  span:last-child {
+		font-size: 10px;
+	}
+
+	.content-value {
+		font-size: 30px;
+	}
+	
+	.content-title {
+		font-size: 10px;
+	}
+
+	.card-top select {
+		font-size: 11px;
+	}
 }

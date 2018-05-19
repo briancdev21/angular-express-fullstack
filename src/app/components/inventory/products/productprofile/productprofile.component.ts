@@ -16,6 +16,18 @@ export class ProductProfileComponent implements OnInit {
 
   menuCollapsed = true;
   contactInfoIndex: any;
+  dateSelectorList = [
+    'Today',
+    'Yesterday',
+    'This Week',
+    'Last Week',
+    'This Month',
+    'Last Month',
+    'This Year',
+    'Last Year',
+    'This Quarter',
+    'Last Quarter'
+  ];
 
   productPathInfo = ['Product', 'Home Controller 800'];
   public chartSetData: Array<Object> = [
@@ -41,7 +53,7 @@ export class ProductProfileComponent implements OnInit {
     * which will be displayed on the side. Icon is in html
     */
 
-  public cards =
+  public cardsInfo =
     {
       variantInventory: {
         status: 'Place Order',

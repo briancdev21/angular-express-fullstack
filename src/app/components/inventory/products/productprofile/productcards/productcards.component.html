@@ -1,0 +1,44 @@
+<div class="cards-list">
+  <div class="card-style">
+    <div class="card-top">
+      <span class="card-tltle">Variant Inventory Levels</span>
+      <span>{{cardsInfo.variantInventory.status}}</span>
+    </div>
+    <div class="card-content">
+      <div>
+        <span class="content-value">{{cardsInfo.variantInventory.underReOrder}}</span>
+        <span class="content-title">Under Re-Order</span>
+      </div>
+      <div>
+        <span class="content-value" style="color: #ffac58">{{cardsInfo.variantInventory.reOrder}}</span>
+        <span class="content-title">Re-Order</span>
+      </div>
+      <div>
+        <span class="content-value">{{cardsInfo.variantInventory.onOrder}}</span>
+        <span class="content-title">On Order</span>
+      </div>
+    </div>
+  </div>
+  <div class="card-style">
+    <div class="card-top">
+      <span class="card-tltle">Projects</span>
+      <select [(ngModel)]="cardsInfo.projects.time">
+        <option *ngFor="let time of dateSelectorList" [value]="time">{{time}}</option>
+      </select>
+    </div>
+    <div class="card-content">
+      <div>
+        <span class="content-value">{{cardsInfo.projects.reserved}}</span>
+        <span class="content-title">Reserved</span>
+      </div>
+      <div>
+        <span class="content-value">{{cardsInfo.projects.onOrder}}</span>
+        <span class="content-title">On Order</span>
+      </div>
+      <div>
+        <span class="content-value">{{cardsInfo.projects.delivered}}</span>
+        <span class="content-title">Delivered</span>
+      </div>
+    </div>
+  </div>
+</div>
