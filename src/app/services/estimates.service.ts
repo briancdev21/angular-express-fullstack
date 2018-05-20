@@ -36,6 +36,11 @@ export class EstimatesService {
     return this.http.get(url);
   }
 
+  deleteIndividualEstimate(id): Observable<any> {
+    const url = `${apiUrl}sales/estimates/${id}`;
+    return this.http.delete(url);
+  }
+
   updateEstimate (id, body): Observable<any> {
     const url = `${apiUrl}sales/estimates/${id}`;
     return this.http.put<any>(url, body);

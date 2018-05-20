@@ -20,13 +20,8 @@ export default class AddEstimateBodyComponent implements OnInit {
     this.invoice_mock = _createdInvoice;
     if (_createdInvoice) {
       this.saveInvoiceData = _createdInvoice;
-      console.log('saved invoice: ', this.saveInvoiceData);
+      console.log('saved estimate: ', this.saveInvoiceData);
       this.currentInvoiceId = this.invoice_mock.id;
-      this.discountType = this.invoice_mock.discount.unit;
-      this.discountAmount = this.invoice_mock.discount.value;
-      this.internalMemo = this.invoice_mock.internalNote;
-      this.noteToSupplier = this.invoice_mock.customerNote;
-      this.termsOfInvoice = this.invoice_mock.terms;
       this.in_id = 'ES - ' + this.currentInvoiceId;
     }
   }
@@ -36,9 +31,9 @@ export default class AddEstimateBodyComponent implements OnInit {
   classList = [];
   categoryList = [];
   projects = ['task1', 'task2', 'task3'];
-  labelText = 'Use customer address';
+  labelText = 'Same address for the billing address';
   title = 'Terms of the Estimate';
-  dueDateTitle = 'Due Date';
+  dueDateTitle = 'Expiry date';
   invoiceNumberTitle = 'Estimate #';
   subtotalServices = undefined;
   shippingAddress = {
@@ -84,6 +79,20 @@ export default class AddEstimateBodyComponent implements OnInit {
   contactList: any;
   noteToSupplier: string;
   emails: any;
+  showModal = false;
+  newEmail: any;
+  newCustomerName: any;
+  newAddress: string;
+  newCity: string;
+  newState: string;
+  newPostalCode: string;
+  newCountry: string;
+  newClass: any;
+  newCategory: any;
+  newInternalMemo: string;
+  newCustomerNote: string;
+  newTerms: string;
+  newExpiryDate: string;
 
   public timelineData: Array<Object> = [
     {
@@ -132,7 +141,7 @@ export default class AddEstimateBodyComponent implements OnInit {
   currentInvoiceId: number;
   saveInvoiceData: any;
 
-  constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
+  constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
     private route: ActivatedRoute, private filterService: FilterService, private estimatesService: EstimatesService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
@@ -159,7 +168,7 @@ export default class AddEstimateBodyComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log('createdInvoice', this.createdInvoice);
+    console.log('createdEstimate', this.createdInvoice);
 
     this.filterService.chargeFeeData.subscribe(data => {
       console.log('lateFee: ', data);
@@ -189,16 +198,19 @@ export default class AddEstimateBodyComponent implements OnInit {
     const pos = contactIdList.indexOf(selectedIndex);
     this.customerAddress = this.contactList[pos].shippingAddress;
     this.saveInvoiceData.contactId = selectedIndex;
+    this.newCustomerName = selectedIndex;
   }
 
   onSelectClass(val) {
     console.log('val', val);
     this.saveInvoiceData.classificationId = val;
+    this.newClass = val;
   }
 
   onSelectCategory(val) {
     console.log('val', val);
     this.saveInvoiceData.categoryId = val;
+    this.newCategory = val;
   }
 
   changedCreatedDate(event) {
@@ -208,32 +220,31 @@ export default class AddEstimateBodyComponent implements OnInit {
 
   changedDueDate(event) {
     console.log('changedDueDate: ', event);
-    this.saveInvoiceData.startDate = event;
+    this.saveInvoiceData.expiryDate = event;
   }
 
   onChangedMemo(event) {
     console.log('onChangedMemo: ', event);
     this.saveInvoiceData.internalNote = event;
+    this.newInternalMemo = event;
   }
 
   onChangedNote(event) {
     console.log('onChangedNote: ', event);
     this.saveInvoiceData.customerNote = event;
+    this.newCustomerNote = event;
   }
 
   onChangedTermsOfInvoice(event) {
     console.log('onChangedNote: ', event);
     this.saveInvoiceData.terms = event;
+    this.newTerms = event;
   }
 
   getMultiEmails(event) {
     this.saveInvoiceData.emails = event;
+    this.newEmail = event;
     console.log('multiemail: ', event);
-  }
-
-  onChangeTerm(event) {
-    this.saveInvoiceData['termId'] = parseInt(event, 10);
-    console.log(event);
   }
 
   onDepositChange(event) {
@@ -316,17 +327,22 @@ export default class AddEstimateBodyComponent implements OnInit {
   }
 
   saveEstimate() {
-
-    if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
-      this.saveInvoiceData.deposit = 0;
-    }
-    if (!this.saveInvoiceData.hasOwnProperty('classificationId')) {
-      this.saveInvoiceData.classificationId = 1;
-    }
-    if (typeof(this.saveInvoiceData.contactId) !== 'string') {
-      this.estimatesService.updateEstimate(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
-        console.log('saved invoice: ', res);
-      });
+    if (this.newCustomerName && this.newEmail && this.newClass && this.newCategory && this.newInternalMemo
+      && this.newCustomerNote && this.newTerms) {
+      if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
+        this.saveInvoiceData.deposit = 0;
+      }
+      if (!this.saveInvoiceData.hasOwnProperty('classificationId')) {
+        this.saveInvoiceData.classificationId = 1;
+      }
+      if (typeof(this.saveInvoiceData.contactId) !== 'string') {
+        this.estimatesService.updateEstimate(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
+          console.log('saved invoice: ', res);
+        });
+      }
+      this.router.navigate(['./sales/invoices']);
+    } else {
+      this.showModal = true;
     }
   }
 }

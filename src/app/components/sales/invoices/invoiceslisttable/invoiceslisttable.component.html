@@ -1,8 +1,8 @@
 <div class="content">
   <table *ngIf="invoicesListInfo">
     <tr>
-      <th (click)="sortArray('transactionId')">TRANSACTION #</th>
-      <th (click)="sortArray('customerName')">CUSTOMER NAME</th>
+      <th (click)="sortArray('id')">TRANSACTION #</th>
+      <th (click)="sortArray('owner')">CUSTOMER NAME</th>
       <th (click)="sortArray('balance')">INVOICE BALANCE</th>
       <th (click)="sortArray('total')">INVOICE TOTAL</th> 
       <th (click)="sortArray('overdueDays')">DAYS OVERDUE</th>

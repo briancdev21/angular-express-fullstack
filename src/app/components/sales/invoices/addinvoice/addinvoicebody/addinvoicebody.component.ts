@@ -146,7 +146,7 @@ export default class AddInvoiceBodyComponent implements OnInit {
       this.classList = res.results;
     });
 
-    this.sharedService.getCategories().subscribe(res => {
+    this.sharedService.getPricingCategories().subscribe(res => {
       this.categoryList = res.results;
     });
 
@@ -318,8 +318,13 @@ export default class AddInvoiceBodyComponent implements OnInit {
     if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
       this.saveInvoiceData.deposit = 0;
     }
-    this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
-      console.log('saved invoice: ', res);
-    });
+    if (!this.saveInvoiceData.hasOwnProperty('classificationId')) {
+      this.saveInvoiceData.classificationId = 1;
+    }
+    if (typeof(this.saveInvoiceData.contactId) !== 'string') {
+      this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
+        console.log('saved invoice: ', res);
+      });
+    }
   }
 }

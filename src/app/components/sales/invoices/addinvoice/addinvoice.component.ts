@@ -41,7 +41,7 @@ export class AddInvoiceComponent implements OnInit {
         'unit': 'AMOUNT'
       },
       'recurring': [
-        'RRULE:FREQ=MONTHLY;COUNT=5;DTSTART=20120201T023000Z'
+        'RRULE:FREQ=MONTHLY;COUNT=1;DTSTART=20180201T023000Z'
       ],
       'reminder': [
         'Reminder'

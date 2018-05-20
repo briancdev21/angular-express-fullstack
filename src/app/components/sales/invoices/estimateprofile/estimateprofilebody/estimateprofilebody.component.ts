@@ -118,48 +118,46 @@ export default class EstimateProfileBodyComponent implements OnInit {
   ];
 
   currentInvoiceId: number;
-  saveInvoiceData: InvoiceModel;
+  saveInvoiceData: any;
   currentOwner: string;
 
   constructor(private sharedService: SharedService, private estimatesService: EstimatesService,
     private route: ActivatedRoute, private filterService: FilterService) {
-    this.saveInvoiceData = new InvoiceModel();
     this.createdDate = new Date().toJSON();
-    this.dueDate = new Date().toJSON();
-    this.sharedService.getContacts()
-      .subscribe(data => {
-        console.log('userlist: ', data);
-        this.contactList = data;
-        this.userList = this.contactList;
-      });
 
-    this.sharedService.getTerms().subscribe(res => {
-      this.terms = res.results;
-      console.log('terms lsit: ', res);
-    });
-
-    this.sharedService.getClassifications().subscribe(res => {
-      this.classList = res.results;
-    });
-
-    this.sharedService.getCategories().subscribe(res => {
-      this.categoryList = res.results;
-    });
-
-  }
-
-  ngOnInit() {
-    console.log('createdInvoice', this.createdInvoice);
-    // get id for new and existing lead
-
+    //
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.estimatesService.getIndividualEstimate(this.currentInvoiceId).subscribe(res => {
       console.log('getIndividualInvoice: ', res);
 
+      this.sharedService.getContacts()
+      .subscribe(data => {
+        console.log('userlist: ', data);
+        this.contactList = data;
+        this.userList = this.contactList;
+        this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
+      });
+
+      this.sharedService.getTerms().subscribe(data => {
+        this.terms = data.results;
+        console.log('terms lsit: ', data);
+      });
+
+      this.sharedService.getClassifications().subscribe(data => {
+        this.classList = data.results;
+        const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
+        this.currentClass = this.classList[classPos].name;
+      });
+
+      this.sharedService.getCategories().subscribe(data => {
+        this.categoryList = data.results;
+        const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
+        this.currentCategory = this.categoryList[categoryPos].name;
+      });
+
       this.saveInvoiceData = res.data;
       // change contact id to number
       this.saveInvoiceData.contactId = parseInt(res.data.contactId.slice(-1), 10);
-
       this.discountType = res.data.discount.unit;
       this.discountAmount = res.data.discount.value;
       this.internalMemo = res.data.internalNote;
@@ -178,13 +176,13 @@ export default class EstimateProfileBodyComponent implements OnInit {
       this.currentOwner = res.data.owner;
       this.emailAddresses = res.data.emails;
       this.shippingAddress = res.data.shippingAddress;
-      this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
-      // retrieve current cateogry, classification
-      const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
-      this.currentClass = this.classList[classPos].name;
-      const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
-      this.currentCategory = this.categoryList[categoryPos].name;
     });
+
+  }
+
+  ngOnInit() {
+    console.log('createdInvoice', this.createdInvoice);
+
     this.in_id = 'ES - ' + this.currentInvoiceId;
 
     this.filterService.chargeFeeData.subscribe(data => {
@@ -211,9 +209,11 @@ export default class EstimateProfileBodyComponent implements OnInit {
   }
 
   getContactAddress(list, id) {
+
     const idList = list.map( c => c.id);
     const pos = idList.indexOf(id);
-    return list[id].shippingAddress;
+    console.log('***', pos, list);
+    return list[pos].shippingAddress;
   }
 
   onCustomerSelected(user) {
@@ -246,7 +246,7 @@ export default class EstimateProfileBodyComponent implements OnInit {
 
   changedDueDate(event) {
     console.log('changedDueDate: ', event);
-    this.saveInvoiceData.startDate = event;
+    this.saveInvoiceData.expiryDate = event;
   }
 
   onChangedMemo(event) {
@@ -272,6 +272,11 @@ export default class EstimateProfileBodyComponent implements OnInit {
   onChangeTerm(event) {
     this.saveInvoiceData['termId'] = parseInt(event, 10);
     console.log(event);
+  }
+
+  getUpdatedShippiingAddress(event) {
+    this.saveInvoiceData.billingAddress = event.data;
+    console.log('shippingAddress', event.data);
   }
 
   onPriceChanged() {

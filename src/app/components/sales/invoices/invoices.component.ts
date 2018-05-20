@@ -86,10 +86,11 @@ export class InvoicesComponent implements OnInit {
   }
 
   calcOverDueDays(due, status) {
+    console.log('due: ', due);
     const today = new Date();
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
     const dueDate = new Date(due);
-    const diffDays = Math.round(Math.abs((today.getTime() - dueDate.getTime()) / (oneDay)));
+    const diffDays = Math.round((today.getTime() - dueDate.getTime()) / (oneDay));
     if (status === 'Paid' || status === 'Estimate') {
       return 0;
     }

@@ -1,7 +1,7 @@
 import { Component, HostListener, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../../filter.service';
-import { InvoicesService } from '../../../../../services/invoices.service';
+import { EstimatesService } from '../../../../../services/estimates.service';
 
 @Component({
   selector: 'app-addestimatefooter',
@@ -41,15 +41,18 @@ export class AddEstimateFooterComponent {
   chargeFeeUnit: string;
   chargeFeeValue: number;
 
-  constructor(private router: Router, private filterService: FilterService, private invoicesService: InvoicesService) {
 
-  }
+    constructor(private router: Router, private filterService: FilterService, private estimatesService: EstimatesService) {
 
-  cancelInvoice() {
-    // const invoiceId = this.createdInvoice.id;
-    // this.invoicesService.deleteInvoice(invoiceId).subscribe
-    this.router.navigate(['./sales/invoices']);
-  }
+    }
+
+    cancelInvoice() {
+      const invoiceId = this.createdInvoice.id;
+      this.estimatesService.deleteIndividualEstimate(invoiceId).subscribe(res => {
+        console.log('delete success:', res);
+        this.router.navigate(['./sales/invoices']);
+      });
+    }
 
   saveInvoice() {
     const chargeFeeData = {
@@ -58,10 +61,9 @@ export class AddEstimateFooterComponent {
       value: this.chargeFeeValue
     };
 
-    this.filterService.chargeFeeData.next(chargeFeeData);
-    this.filterService.saveClicked.next( true );
-    this.router.navigate(['./sales/invoices']);
-  }
+      this.filterService.chargeFeeData.next(chargeFeeData);
+      this.filterService.saveClicked.next( true );
+    }
 
   onSwitchChanged(val) {
 

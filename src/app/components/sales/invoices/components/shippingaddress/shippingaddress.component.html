@@ -5,15 +5,15 @@
   </div>
   <div>
     <div>
-      <input type="text" placeholder="Enter shipping address" [(ngModel)]="shippingAddress.address" />
+      <input type="text" placeholder="Enter shipping address" [(ngModel)]="shippingAddress.address" (ngModelChange)="onChangeAddress($event)"/>
     </div>
     <div class="flex" >
-      <input type="text" class="mr-15" placeholder="Enter city" [(ngModel)]="shippingAddress.city" />
-      <input type="text" class="ml-15" placeholder="Enter State" [(ngModel)]="shippingAddress.province" />
+      <input type="text" class="mr-15" placeholder="Enter city" [(ngModel)]="shippingAddress.city"  (ngModelChange)="onChangeAddress($event)"/>
+      <input type="text" class="ml-15" placeholder="Enter State" [(ngModel)]="shippingAddress.province"  (ngModelChange)="onChangeAddress($event)" />
     </div>
     <div class="flex" >
-      <input type="text" class="mr-15" placeholder="Enter country" [(ngModel)]="shippingAddress.country" />
-      <input type="text" class="ml-15" placeholder="Enter zipcode" [(ngModel)]="shippingAddress.postalCode" />
+      <input type="text" class="mr-15" placeholder="Enter country" [(ngModel)]="shippingAddress.country"  (ngModelChange)="onChangeAddress($event)"/>
+      <input type="text" class="ml-15" placeholder="Enter zipcode" [(ngModel)]="shippingAddress.postalCode"  (ngModelChange)="onChangeAddress($event)" />
     </div>
   </div>
 </div>
