@@ -172,7 +172,7 @@ export default class AddInvoiceBodyComponent implements OnInit {
       this.classList = res.results;
     });
 
-    this.sharedService.getCategories().subscribe(res => {
+    this.sharedService.getPricingCategories().subscribe(res => {
       this.categoryList = res.results;
     });
 

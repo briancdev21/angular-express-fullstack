@@ -30,7 +30,7 @@ export class AddEstimateComponent implements OnInit {
       'categoryId': 1,
       'termId': 1,
       'emails': [
-        'estimate@test.com'
+        'test@gmail.com'
       ],
       'recurring': [
         'RRULE:FREQ=MONTHLY;COUNT=5;DTSTART=20120201T023000Z'

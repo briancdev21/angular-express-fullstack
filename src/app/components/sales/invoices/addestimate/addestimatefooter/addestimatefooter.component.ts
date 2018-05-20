@@ -41,7 +41,6 @@ export class AddEstimateFooterComponent {
   chargeFeeUnit: string;
   chargeFeeValue: number;
 
-
     constructor(private router: Router, private filterService: FilterService, private estimatesService: EstimatesService) {
 
     }

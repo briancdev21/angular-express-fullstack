@@ -139,6 +139,7 @@ export default class EstimateProfileBodyComponent implements OnInit {
 
       this.sharedService.getTerms().subscribe(data => {
         this.terms = data.results;
+        console.log('terms lsit: ', data);
       });
 
       this.sharedService.getClassifications().subscribe(data => {
@@ -180,41 +181,7 @@ export default class EstimateProfileBodyComponent implements OnInit {
 
   ngOnInit() {
     console.log('createdInvoice', this.createdInvoice);
-    // get id for new and existing lead
 
-    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-    this.estimatesService.getIndividualEstimate(this.currentInvoiceId).subscribe(res => {
-      console.log('getIndividualInvoice: ', res);
-
-      this.saveInvoiceData = res.data;
-      // change contact id to number
-      this.saveInvoiceData.contactId = parseInt(res.data.contactId.slice(-1), 10);
-
-      this.discountType = res.data.discount.unit;
-      this.discountAmount = res.data.discount.value;
-      this.internalMemo = res.data.internalNote;
-      this.noteToSupplier = res.data.customerNote;
-      this.termsOfInvoice = res.data.terms;
-      this.createdDate = moment(res.data.createdAt).format('YYYY-MM-DD');
-      this.dueDate = res.data.expiryDate;
-      this.subtotalproducts = res.data.productSubTotal;
-      this.subtotalServices = res.data.serviceSubTotal;
-      this.taxes = res.data.taxTotal;
-      this.discountType = res.data.discount.unit;
-      this.discountAmount = res.data.discount.value;
-      this.totalamountdue = res.data.total;
-      this.currentClassId = res.data.classificationId;
-      this.currentCategoryId = res.data.categoryId;
-      this.currentOwner = res.data.owner;
-      this.emailAddresses = res.data.emails;
-      this.shippingAddress = res.data.shippingAddress;
-      this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
-      // retrieve current cateogry, classification
-      const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
-      this.currentClass = this.classList[classPos].name;
-      const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
-      this.currentCategory = this.categoryList[categoryPos].name;
-    });
     this.in_id = 'ES - ' + this.currentInvoiceId;
 
     this.filterService.chargeFeeData.subscribe(data => {
@@ -249,18 +216,6 @@ export default class EstimateProfileBodyComponent implements OnInit {
     const idList = list.map( c => c.id);
     const pos = idList.indexOf(id);
     return list[pos].shippingAddress;
-  }
-
-  getContactName(list, id) {
-    const idList = list.map( c => c.id);
-    const pos = idList.indexOf(id);
-    return list[id].person.firstName + ' ' + list[id].person.lastName;
-  }
-
-  getContactAddress(list, id) {
-    const idList = list.map( c => c.id);
-    const pos = idList.indexOf(id);
-    return list[id].shippingAddress;
   }
 
   onCustomerSelected(user) {
