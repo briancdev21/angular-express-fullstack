@@ -61,3 +61,29 @@
     
   </div>
 </div>
+
+<!-- alert modal -->
+<div class="confirm-modal-wrapper" *ngIf="showModal" ></div>
+<div [ngClass]="{'confirm-modal': showModal, 'confirm-modal-hide': !showModal }">
+  <div class="header">
+    <span>Alert</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      <span *ngIf="!newCustomerName">Customer name, </span>
+      <span *ngIf="!newEmail">Email address, </span>
+      <span *ngIf="!newTermId">Term , </span>
+      <span *ngIf="!newClass">Class, </span>
+      <span *ngIf="!newInternalMemo">Internal Memo, </span>
+      <span *ngIf="!newCustomerNote">Customer Note, </span>
+      <span *ngIf="!newTerms">Terms of the invoice, </span>
+      <span *ngIf="!newCategory">Category, </span> etc fields are missing.
+    </div>
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="showModal=false" >
+        OK
+      </button>
+    </div>
+  </div>
+</div>  

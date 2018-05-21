@@ -81,6 +81,21 @@ export default class AddInvoiceBodyComponent implements OnInit {
   emailAddresses = [];
   termsOfInvoice = '';
   emails: any;
+  newEmail: any;
+  newCustomerName: any;
+  newAddress: string;
+  newCity: string;
+  newState: string;
+  newPostalCode: string;
+  newCountry: string;
+  newClass: any;
+  newCategory: any;
+  newInternalMemo: string;
+  newCustomerNote: string;
+  newTerms: string;
+  newExpiryDate: string;
+  newTermId: any;
+  showModal = false;
 
   public timelineData: Array<Object> = [
     {
@@ -127,7 +142,7 @@ export default class AddInvoiceBodyComponent implements OnInit {
   currentInvoiceId: number;
   saveInvoiceData: any;
 
-  constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
+  constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
     private route: ActivatedRoute, private filterService: FilterService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
@@ -153,10 +168,8 @@ export default class AddInvoiceBodyComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('createdInvoice', this.createdInvoice);
 
     this.filterService.chargeFeeData.subscribe(data => {
-      console.log('lateFee: ', data);
       if (data.lateFee) {
         this.saveInvoiceData.chargeLateFee = data.lateFee;
         this.saveInvoiceData.lateFee.value = data.value;
@@ -168,66 +181,57 @@ export default class AddInvoiceBodyComponent implements OnInit {
       if (data) {
         this.saveInvoice();
       }
-      console.log('save clicked: ', data);
     });
   }
 
   onCustomerSelected(user) {
-    console.log(user);
   }
 
   onSelectUser(selectedIndex: any) {
-    console.log('selectedContactIndex:', selectedIndex);
-
     const contactIdList = this.contactList.map(c => c.id);
     const pos = contactIdList.indexOf(selectedIndex);
     this.customerAddress = this.contactList[pos].shippingAddress;
     this.saveInvoiceData.contactId = selectedIndex;
+    this.newCustomerName = selectedIndex;
   }
 
   onSelectClass(val) {
-    console.log('val', val);
     this.saveInvoiceData.classificationId = val;
+    this.newClass = val;
   }
 
   onSelectCategory(val) {
-    console.log('val', val);
     this.saveInvoiceData.categoryId = val;
-  }
-
-  changedCreatedDate(event) {
-    console.log('changedCreatedDate: ', event);
-    this.saveInvoiceData.startDate = event;
+    this.newCategory = val;
   }
 
   changedDueDate(event) {
-    console.log('changedDueDate: ', event);
     this.saveInvoiceData.startDate = event;
   }
 
   onChangedMemo(event) {
-    console.log('onChangedMemo: ', event);
     this.saveInvoiceData.internalNote = event;
+    this.newInternalMemo = event;
   }
 
   onChangedNote(event) {
-    console.log('onChangedNote: ', event);
     this.saveInvoiceData.customerNote = event;
+    this.newCustomerNote = event;
   }
 
   onChangedTermsOfInvoice(event) {
-    console.log('onChangedNote: ', event);
     this.saveInvoiceData.terms = event;
+    this.newTerms = event;
   }
 
   getMultiEmails(event) {
     this.saveInvoiceData.emails = event;
-    console.log('multiemail: ', event);
+    this.newEmail = event;
   }
 
   onChangeTerm(event) {
     this.saveInvoiceData['termId'] = parseInt(event, 10);
-    console.log(event);
+    this.newTermId = event;
   }
 
   onDepositChange(event) {
@@ -315,16 +319,22 @@ export default class AddInvoiceBodyComponent implements OnInit {
   }
 
   saveInvoice() {
-    if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
-      this.saveInvoiceData.deposit = 0;
-    }
-    if (!this.saveInvoiceData.hasOwnProperty('classificationId')) {
-      this.saveInvoiceData.classificationId = 1;
-    }
-    if (typeof(this.saveInvoiceData.contactId) !== 'string') {
-      this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
-        console.log('saved invoice: ', res);
-      });
+    if (this.newCustomerName && this.newEmail && this.newClass && this.newCategory && this.newInternalMemo
+      && this.newCustomerNote && this.newTerms && this.newTermId) {
+      if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
+        this.saveInvoiceData.deposit = 0;
+      }
+      if (!this.saveInvoiceData.hasOwnProperty('classificationId')) {
+        this.saveInvoiceData.classificationId = 1;
+      }
+      if (typeof(this.saveInvoiceData.contactId) !== 'string') {
+        this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
+          console.log('saved invoice: ', res);
+        });
+      }
+      this.router.navigate(['./sales/invoices']);
+    } else {
+      this.showModal = true;
     }
   }
 }

@@ -49,9 +49,11 @@ export class AddInvoiceFooterComponent {
   }
 
   cancelInvoice() {
-    // const invoiceId = this.createdInvoice.id;
-    // this.invoicesService.deleteInvoice(invoiceId).subscribe
-    this.router.navigate(['./sales/invoices']);
+    const invoiceId = this.createdInvoice.id;
+    this.invoicesService.deleteIndividualInvoice(invoiceId).subscribe( res => {
+      console.log('invoice deleted');
+      this.router.navigate(['./sales/invoices']);
+    });
   }
 
   saveInvoice() {
@@ -63,7 +65,6 @@ export class AddInvoiceFooterComponent {
 
     this.filterService.chargeFeeData.next(chargeFeeData);
     this.filterService.saveClicked.next( true );
-    this.router.navigate(['./sales/invoices']);
   }
 
   onSwitchChanged(val) {

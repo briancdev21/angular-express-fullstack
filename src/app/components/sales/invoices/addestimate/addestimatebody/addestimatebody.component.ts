@@ -168,10 +168,7 @@ export default class AddEstimateBodyComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log('createdEstimate', this.createdInvoice);
-
     this.filterService.chargeFeeData.subscribe(data => {
-      console.log('lateFee: ', data);
       if (data.lateFee) {
         this.saveInvoiceData.chargeLateFee = data.lateFee;
         this.saveInvoiceData.lateFee.value = data.value;
@@ -183,17 +180,13 @@ export default class AddEstimateBodyComponent implements OnInit {
       if (data) {
         this.saveEstimate();
       }
-      console.log('save clicked: ', data);
     });
   }
 
   onCustomerSelected(user) {
-    console.log(user);
   }
 
   onSelectUser(selectedIndex: any) {
-    console.log('selectedContactIndex:', selectedIndex);
-
     const contactIdList = this.contactList.map(c => c.id);
     const pos = contactIdList.indexOf(selectedIndex);
     this.customerAddress = this.contactList[pos].shippingAddress;
@@ -202,41 +195,30 @@ export default class AddEstimateBodyComponent implements OnInit {
   }
 
   onSelectClass(val) {
-    console.log('val', val);
     this.saveInvoiceData.classificationId = val;
     this.newClass = val;
   }
 
   onSelectCategory(val) {
-    console.log('val', val);
     this.saveInvoiceData.categoryId = val;
     this.newCategory = val;
   }
 
-  changedCreatedDate(event) {
-    console.log('changedCreatedDate: ', event);
-    this.saveInvoiceData.startDate = event;
-  }
-
   changedDueDate(event) {
-    console.log('changedDueDate: ', event);
     this.saveInvoiceData.expiryDate = event;
   }
 
   onChangedMemo(event) {
-    console.log('onChangedMemo: ', event);
     this.saveInvoiceData.internalNote = event;
     this.newInternalMemo = event;
   }
 
   onChangedNote(event) {
-    console.log('onChangedNote: ', event);
     this.saveInvoiceData.customerNote = event;
     this.newCustomerNote = event;
   }
 
   onChangedTermsOfInvoice(event) {
-    console.log('onChangedNote: ', event);
     this.saveInvoiceData.terms = event;
     this.newTerms = event;
   }
@@ -244,7 +226,6 @@ export default class AddEstimateBodyComponent implements OnInit {
   getMultiEmails(event) {
     this.saveInvoiceData.emails = event;
     this.newEmail = event;
-    console.log('multiemail: ', event);
   }
 
   onDepositChange(event) {

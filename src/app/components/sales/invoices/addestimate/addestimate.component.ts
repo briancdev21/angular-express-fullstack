@@ -63,9 +63,7 @@ export class AddEstimateComponent implements OnInit {
       'deposit': 0,
     };
     if (!this.route.snapshot.paramMap.get('id')) {
-      console.log('routing to addinvoice0');
       this.estimatesService.createEstimate(this.newEstimate).subscribe (res => {
-        console.log('routing to addinvoice', res);
         this.createdEstimate = res.data;
       });
     }

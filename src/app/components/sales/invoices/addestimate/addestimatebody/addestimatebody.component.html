@@ -63,7 +63,7 @@
 <div [ngClass]="{'confirm-modal': showModal, 'confirm-modal-hide': !showModal }">
   <div class="header">
     <span>Alert</span>
-    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="cancelChange();showModal=false" />
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showModal=false" />
   </div>
   <div class="content" >
     <div class="confirm-que">
@@ -73,7 +73,7 @@
       <span *ngIf="!newInternalMemo">Internal Memo, </span>
       <span *ngIf="!newCustomerNote">Customer Note, </span>
       <span *ngIf="!newTerms">Terms of the estimate, </span>
-      <span *ngIf="!newCategory">Category</span> etc fields are missing.
+      <span *ngIf="!newCategory">Category, </span> etc fields are missing.
     </div>
     <div class="center-btn-section" >
       <button class="done-btn" (click)="showModal=false" >

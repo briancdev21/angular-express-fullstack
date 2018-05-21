@@ -124,37 +124,35 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
               private route: ActivatedRoute, private filterService: FilterService) {
 
-    this.saveInvoiceData = new InvoiceModel();
-    this.createdDate = new Date().toJSON();
-    this.dueDate = new Date().toJSON();
-    this.sharedService.getContacts()
+    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      console.log('getIndividualInvoice: ', res);
+
+      this.sharedService.getContacts()
       .subscribe(data => {
         console.log('userlist: ', data);
         this.contactList = data;
         this.userList = this.contactList;
+        this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
       });
 
-    this.sharedService.getTerms().subscribe(res => {
-      this.terms = res.results;
-    });
+      this.sharedService.getTerms().subscribe(data => {
+        this.terms = data.results;
+        const termPos = this.terms.map(t => t.id).indexOf(this.currentTermId);
+        this.currentTerm = this.terms[termPos].name;
+      });
 
-    this.sharedService.getClassifications().subscribe(res => {
-      this.classList = res.results;
-    });
+      this.sharedService.getClassifications().subscribe(data => {
+        this.classList = data.results;
+        const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
+        this.currentClass = this.classList[classPos].name;
+      });
 
-    this.sharedService.getCategories().subscribe(res => {
-      this.categoryList = res.results;
-    });
-
-  }
-
-  ngOnInit() {
-    console.log('createdInvoice', this.createdInvoice);
-    // get id for new and existing lead
-
-    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-    this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
-      console.log('getIndividualInvoice: ', res);
+      this.sharedService.getCategories().subscribe(data => {
+        this.categoryList = data.results;
+        const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
+        this.currentCategory = this.categoryList[categoryPos].name;
+      });
 
       this.saveInvoiceData = res.data;
       // change contact id to number
@@ -179,15 +177,16 @@ export default class InvoiceProfileBodyComponent implements OnInit {
       this.currentOwner = res.data.owner;
       this.emailAddresses = res.data.emails;
       this.shippingAddress = res.data.shippingAddress;
-      this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
-      // retrieve current cateogry, classification, term
-      const termPos = this.terms.map(t => t.id).indexOf(this.currentTermId);
-      this.currentTerm = this.terms[termPos].name;
-      const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
-      this.currentClass = this.classList[classPos].name;
-      const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
-      this.currentCategory = this.categoryList[categoryPos].name;
     });
+
+    this.saveInvoiceData = new InvoiceModel();
+    this.createdDate = new Date().toJSON();
+    this.dueDate = new Date().toJSON();
+  }
+
+  ngOnInit() {
+    console.log('createdInvoice', this.createdInvoice);
+
     this.in_id = 'IN - ' + this.currentInvoiceId;
 
     this.filterService.chargeFeeData.subscribe(data => {
@@ -203,14 +202,14 @@ export default class InvoiceProfileBodyComponent implements OnInit {
       if (data) {
         this.saveInvoice();
       }
-      console.log('save clicked: ', data);
     });
   }
 
   getContactAddress(list, id) {
+
     const idList = list.map( c => c.id);
     const pos = idList.indexOf(id);
-    return list[id].shippingAddress;
+    return list[pos].shippingAddress;
   }
 
   onCustomerSelected(user) {
@@ -218,8 +217,6 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   }
 
   onSelectUser(selectedIndex: any) {
-    console.log('selectedContactIndex:', selectedIndex);
-
     const contactIdList = this.contactList.map(c => c.id);
     const pos = contactIdList.indexOf(selectedIndex);
     this.customerAddress = this.contactList[pos].shippingAddress;
@@ -227,43 +224,35 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   }
 
   onSelectClass(val) {
-    console.log('val', val);
     this.saveInvoiceData.classificationId = val;
   }
 
   onSelectCategory(val) {
-    console.log('val', val);
     this.saveInvoiceData.categoryId = val;
   }
 
   changedDueDate(event) {
-    console.log('changedDueDate: ', event);
     this.saveInvoiceData.startDate = event;
   }
 
   onChangedMemo(event) {
-    console.log('onChangedMemo: ', event);
     this.saveInvoiceData.internalNote = event;
   }
 
   onChangedNote(event) {
-    console.log('onChangedNote: ', event);
     this.saveInvoiceData.customerNote = event;
   }
 
   onChangedTermsOfInvoice(event) {
-    console.log('onChangedNote: ', event);
     this.saveInvoiceData.terms = event;
   }
 
   getMultiEmails(event) {
     this.saveInvoiceData.emails = event;
-    console.log('multiemail: ', event);
   }
 
   onChangeTerm(event) {
     this.saveInvoiceData['termId'] = parseInt(event, 10);
-    console.log(event);
   }
 
   onDepositChange(event) {

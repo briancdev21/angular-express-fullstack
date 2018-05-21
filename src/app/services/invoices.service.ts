@@ -43,6 +43,11 @@ export class InvoicesService {
     return this.http.get(url);
   }
 
+  deleteIndividualInvoice(id): Observable<any>  {
+    const url = `${apiUrl}sales/invoices/${id}`;
+    return this.http.delete(url);
+  }
+
   updateInvoice (id, body): Observable<any> {
     const url = `${apiUrl}sales/invoices/${id}`;
     return this.http.put<any>(url, body);

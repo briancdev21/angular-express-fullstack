@@ -212,7 +212,6 @@ export default class EstimateProfileBodyComponent implements OnInit {
 
     const idList = list.map( c => c.id);
     const pos = idList.indexOf(id);
-    console.log('***', pos, list);
     return list[pos].shippingAddress;
   }
 
@@ -221,7 +220,6 @@ export default class EstimateProfileBodyComponent implements OnInit {
   }
 
   onSelectUser(selectedIndex: any) {
-    console.log('selectedContactIndex:', selectedIndex);
 
     const contactIdList = this.contactList.map(c => c.id);
     const pos = contactIdList.indexOf(selectedIndex);
@@ -235,48 +233,34 @@ export default class EstimateProfileBodyComponent implements OnInit {
   }
 
   onSelectCategory(val) {
-    console.log('val', val);
     this.saveInvoiceData.categoryId = val;
   }
 
-  changedCreatedDate(event) {
-    console.log('changedCreatedDate: ', event);
-    this.saveInvoiceData.startDate = event;
-  }
-
   changedDueDate(event) {
-    console.log('changedDueDate: ', event);
     this.saveInvoiceData.expiryDate = event;
   }
 
   onChangedMemo(event) {
-    console.log('onChangedMemo: ', event);
     this.saveInvoiceData.internalNote = event;
   }
 
   onChangedNote(event) {
-    console.log('onChangedNote: ', event);
     this.saveInvoiceData.customerNote = event;
   }
 
   onChangedTermsOfInvoice(event) {
-    console.log('onChangedNote: ', event);
     this.saveInvoiceData.terms = event;
   }
 
   getMultiEmails(event) {
     this.saveInvoiceData.emails = event;
-    console.log('multiemail: ', event);
   }
 
   onChangeTerm(event) {
-    this.saveInvoiceData['termId'] = parseInt(event, 10);
-    console.log(event);
   }
 
   getUpdatedShippiingAddress(event) {
     this.saveInvoiceData.billingAddress = event.data;
-    console.log('shippingAddress', event.data);
   }
 
   onPriceChanged() {

@@ -47,22 +47,22 @@ export class AddInvoiceComponent implements OnInit {
         'Reminder'
       ],
       'shippingAddress': {
-        'address': 'Enter Shipping Address',
-        'city': 'Enter City',
-        'province': 'Enter Province',
-        'postalCode': 'Enter Postal Code',
-        'country': 'Enter Country'
+        'address': '',
+        'city': '',
+        'province': '',
+        'postalCode': '',
+        'country': ''
       },
       'billingAddress': {
-        'address': 'Enter Billing Address',
-        'city': 'Enter City',
-        'province': 'Enter Province',
-        'postalCode': 'Enter Postal Code',
-        'country': 'Enter Country'
+        'address': '',
+        'city': '',
+        'province': '',
+        'postalCode': '',
+        'country': ''
       },
-      'internalNote': 'string',
-      'customerNote': 'string',
-      'terms': 'string',
+      'internalNote': '',
+      'customerNote': '',
+      'terms': '',
       'discount': {
         'value': 0,
         'unit': 'AMOUNT'
@@ -70,9 +70,7 @@ export class AddInvoiceComponent implements OnInit {
     };
 
     if (!this.route.snapshot.paramMap.get('id')) {
-      console.log('routing to addinvoice0');
       this.invoicesService.createInvoice(this.newInvoice).subscribe (res => {
-        console.log('routing to addinvoice', res);
         this.createdInvoice = res.data;
       });
     }

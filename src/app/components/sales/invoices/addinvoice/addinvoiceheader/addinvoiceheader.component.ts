@@ -12,16 +12,18 @@ export class AddInvoiceHeaderComponent implements OnInit {
   @Input() dueDate: string;
   date_differ: number;
 
+  @Input() set createdInvoice(_createdInvoice) {
+    this.invoice_mock = _createdInvoice;
+    if (_createdInvoice) {
+      this.status = this.invoice_mock.status;
+    }
+  }
   status = '';
   invoiceId: Number;
+  invoice_mock: any;
   constructor(private invoiceService: InvoicesService, private route: ActivatedRoute ) {
 
   }
   ngOnInit() {
-    // this.status = this.route.snapshot.paramMap.get('title');
-    this.invoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-    this.invoiceService.getIndividualInvoice(this.invoiceId).subscribe(res => {
-      this.status = res.data.status;
-    });
   }
 }

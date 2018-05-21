@@ -214,3 +214,120 @@ input::placeholder {
 app-in-termsfield, app-in-duedatefield, app-in-class {
   margin-top: 7px;
 }
+
+
+/* Alert Modal CSS */
+
+.confirm-modal-wrapper {
+  background: rgba(156,152,152,0.5);
+  width:100%;
+  height: 100%;
+  z-index: 9990;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.confirm-modal {
+  position: fixed;
+  top: 5px;
+  width: 60%;
+  margin: 0 20%;
+  left: 0;
+  background: white;
+  z-index: 9999;
+  border-radius: 5px;
+  transition: all 0.5s;
+  
+}
+
+.confirm-modal-hide {
+  position: fixed;
+  top: -100%;
+  width: 60%;
+  margin: 0 20%;
+  left: 0;
+  z-index: 9999;
+  transition: all 0.5s;
+  visibility: hidden;
+}
+
+.confirm-modal .content {
+  padding: 25px;
+  font-size: 0.8em;
+}
+
+
+.confirm-modal .header {
+  padding: 20px 25px;
+  font-size: 1.1em;
+  border-bottom: solid 1px lightgray;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.header span {
+  font-size: 18px;
+  color: red;
+}
+
+.confirm-que {
+  font-size: 16px;
+  color: #95989a;
+}
+
+.center-btn-section {
+  text-align: center;
+  padding: 30px 0 10px;
+}
+
+.done-btn {
+  background-color: #a9f2df;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 95px;
+	outline: none;
+	box-shadow: inset #99f3db 0 0 1px 1px;
+	margin: 5px;
+  color: gray;
+  margin-left: 10px;
+}
+
+.cancel-btn {
+  background-color: lightgray;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 95px;
+	outline: none;
+	margin: 5px;
+	color: gray;
+}
+
+.done-btn:focus {
+  background: #8decd4;
+}
+
+.close-btn {
+  cursor: pointer;
+  font-size: 1.5em;
+  width: 22px;
+  height: 22px;
+}
+
+.logo .img-settings {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+
+}
