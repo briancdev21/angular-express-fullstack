@@ -58,6 +58,10 @@ tr {
   border-bottom: 1px solid #F5F5F5;
 }
 
+tr:last-child {
+  border-bottom: 1px solid #d3d3d3;
+}
+
 table i {
   margin-right: 10px;
   line-height: 10px;

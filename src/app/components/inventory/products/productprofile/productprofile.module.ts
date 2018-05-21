@@ -10,6 +10,7 @@ import { ProductInfoBarComponent } from './productInfobar/productinfobar.compone
 import { ProductCustomDonutChartComponent } from './productcustomdonutchart/productcustomdonutchart.component';
 import { ProductCardsComponent } from './productcards/productcards.component';
 import { VariantsListTableComponent } from './variantslisttable/variantslisttable.component';
+import { ProductPricingComponent } from './productpricing/productpricing.component';
 
 import { TabModule } from 'angular-tabs-component';
 import { FormsModule } from '@angular/forms';
@@ -23,7 +24,8 @@ import { BreadcrumbModule } from '../../../breadcrumb/breadcrumb.module';
     ProductInfoBarComponent,
     ProductCustomDonutChartComponent,
     ProductCardsComponent,
-    VariantsListTableComponent
+    VariantsListTableComponent,
+    ProductPricingComponent
   ],
   imports: [
     BrowserModule,

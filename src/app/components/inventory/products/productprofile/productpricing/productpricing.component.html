@@ -1,0 +1,123 @@
+<div class="product-pricing-sec">
+  <div class="title">PRODUCT PRICING</div>
+  <div class="pricing-content">
+    <div class="friend-royalty-retail">
+      <div class="friend">
+        <span>{{pricingType[0]}}</span>
+        <div class="price-margin">
+          <div class="price-box">
+            <span>$</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.friendPrice"
+              disabled>
+          </div>
+          <div class="margin-box">
+            <span>%</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.friendMargin"
+              disabled>
+          </div>
+        </div>
+      </div>
+      <div class="royalty">
+        <span>{{pricingType[1]}}</span>
+        <div class="price-margin">
+          <div class="price-box">
+            <span>$</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.royaltyPrice"
+              disabled>
+          </div>
+          <div class="margin-box">
+            <span>%</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.royaltyMargin"
+              disabled>
+          </div>
+        </div>
+      </div>
+      <div class="retail">
+        <span>{{pricingType[2]}}</span>
+        <div class="price-margin">
+          <div class="price-box">
+            <span>$</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.retailPrice" 
+              disabled>
+          </div>
+          <div class="margin-box">
+            <span>%</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.retailMargin" 
+              disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="builders-wholesale-cost">
+      <div class="builders">
+        <span>{{pricingType[3]}}</span>
+        <div class="price-margin">
+          <div class="price-box">
+            <span>$</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.buildersPrice"
+              disabled>
+          </div>
+          <div class="margin-box">
+            <span>%</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.buildersMargin"
+              disabled>
+          </div>
+        </div>
+      </div>
+      <div class="wholesale">
+        <span>{{pricingType[4]}}</span>
+        <div class="price-margin">
+          <div class="price-box">
+            <span>$</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.wholesalePrice" 
+              disabled>
+          </div>
+          <div class="margin-box">
+            <span>%</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.wholesaleMargin" 
+              disabled>
+          </div>
+        </div>
+      </div>
+      <div class="cost">
+        <span>{{pricingType[5]}}</span>
+        <div class="price-margin">
+          <div class="price-box">
+            <span>$</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.costPrice" 
+              disabled>
+          </div>
+          <div class="margin-box">
+            <span>%</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricingData.costMargin" 
+              disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
