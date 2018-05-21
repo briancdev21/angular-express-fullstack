@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 
-export class SharedService {
+export class ProposalService {
 
   constructor() {
 

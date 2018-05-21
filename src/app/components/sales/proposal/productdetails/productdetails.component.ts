@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { SharedService } from '../shared.service';
+import { ProposalService } from '../proposal.service';
 
 @Component({
   selector: 'app-productdetails',
@@ -41,7 +41,7 @@ export class ProductDetailsComponent implements OnInit {
   selected: any;
   measure: any;
 
-  constructor( private sharedService: SharedService ) {
+  constructor( private proposalService: ProposalService ) {
     this.selectedData = this.productsInfoAll || [];
     this.searchableList = ['productName', 'model'];
     this.onSelect('all');
@@ -94,7 +94,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sharedService.onModalStatus.subscribe(
+    this.proposalService.onModalStatus.subscribe(
       data => {
         this.showAddProductModal = false;
         this.addProductModalCollapsed = true;
@@ -112,7 +112,7 @@ export class ProductDetailsComponent implements OnInit {
     } else {
       // set option field as undefined for resolving conflice when expand table
       sendData.map( s => s[0].option = undefined );
-      this.sharedService.insertToTable(sendData);
+      this.proposalService.insertToTable(sendData);
     }
   }
 
@@ -229,6 +229,6 @@ export class ProductDetailsComponent implements OnInit {
     this.alterQueryString = '';
     this.addAttachmentModalCollapsed = true;
     this.sidebarCollapsed = true;
-    this.sharedService.insertToTable([[this.selectedProduct]]);
+    this.proposalService.insertToTable([[this.selectedProduct]]);
   }
 }

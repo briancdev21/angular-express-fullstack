@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../../components/common/common.component';
 import { SubmenuComponent } from '../../submenu/submenu.component';
-import { SharedService } from './shared.service';
+import { ProposalService } from './proposal.service';
 
 @Component({
   selector: 'app-test',
@@ -12,7 +12,7 @@ import { SharedService } from './shared.service';
 })
 export class ProposalComponent implements OnInit {
 
-  constructor( private sharedService: SharedService ) {
+  constructor( private proposalService: ProposalService ) {
 
   }
   menuCollapsed = true;
@@ -480,7 +480,7 @@ export class ProposalComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.sharedService.getUpdatedProposalProductList.subscribe(
+    this.proposalService.getUpdatedProposalProductList.subscribe(
       data => {
         if (data[0]) {
           this.proposalProductList = data;
@@ -497,7 +497,7 @@ export class ProposalComponent implements OnInit {
   }
 
   expandAll(input) {
-    this.sharedService.expandAll(true);
+    this.proposalService.expandAll(true);
 
     this.proposalProductList = this.proposalProductListBackup;
     this.proposalProductList = this.filterTxt(this.proposalProductList, input);
@@ -518,7 +518,7 @@ export class ProposalComponent implements OnInit {
   getMassEditedList(data) {
     console.log('44444', data);
     this.proposalProductList = data;
-    this.sharedService.massEditedList(this.proposalProductList);
+    this.proposalService.massEditedList(this.proposalProductList);
   }
 
   filterTxt (arr, searchKey) {

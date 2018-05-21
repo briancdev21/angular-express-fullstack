@@ -18,7 +18,7 @@ import { ScheduleMultiKeywordComponent } from './schedulemultikeyword/schedulemu
 import { MassEditComponent } from './massedit/massedit.component';
 import { ProductListTableComponent } from './productlisttable/productlisttable.component';
 import { AddProductModalComponent } from './addproductmodal/addproductmodal.component';
-import { SharedService } from './shared.service';
+import { ProposalService } from './proposal.service';
 import { SubmenuComponent } from '../../submenu/submenu.component';
 import { ProfileCmpModule } from '../../profile/profile.module';
 import { ArraySortPipe } from './pipes/arraysort.pipe';
@@ -67,6 +67,6 @@ import { InvoicesCmpModule } from '../invoices/invoices.module';
     AddProposalTaskComponent,
     SearchProjectComponent
   ],
-  providers: [SharedService]
+  providers: [ProposalService]
 })
 export class ProposalCmpModule { }

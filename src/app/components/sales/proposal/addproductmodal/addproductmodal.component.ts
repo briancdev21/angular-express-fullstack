@@ -1,7 +1,9 @@
 import { Component, Input, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
-import { SharedService } from '../shared.service';
+import { ProposalService } from '../proposal.service';
+import { SuppliersService } from '../../../../services/suppliers.service';
+import { SharedService } from '../../../../services/shared.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
 
 @Component({
@@ -59,9 +61,9 @@ export class AddProductModalComponent implements OnInit {
     { color: 'yellow', value: '#ff0' },
     { color: 'black', value: '#000' }
   ];
-  types = ['Type 1', 'TestType 2', 'Type 3', 'Type 4', 'Type 5'];
-  suppliers = ['test1', 'test2', 'test3', 'test4', 'test5'];
-  brands = ['test1', 'test2', 'test3', 'test4', 'test5'];
+  protected types = ['Stockable', 'Non-Stockable', 'Service Product'];
+  private suppliers;
+  private brands;
 
   invalidModelNumber = false;
   invalidProductType = false;
@@ -80,7 +82,16 @@ export class AddProductModalComponent implements OnInit {
   queryString: any;
   onUploadStateChanged: any;
 
-  constructor(private sharedService: SharedService, private completerService: CompleterService) {
+  constructor(private proposalService: ProposalService, private completerService: CompleterService,
+     private suppliersService: SuppliersService, private sharedService: SharedService) {
+    this.suppliersService.getSuppliersList().subscribe(res => {
+      this.suppliers = res.results.map(s => s.name);
+      console.log('supplier: ', this.suppliers);
+    });
+
+    this.sharedService.getBrands().subscribe(res => {
+      this.brands = res.results.map(b => b.name);
+    });
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.addedProduct = {
       productType: this.type,
@@ -137,7 +148,7 @@ export class AddProductModalComponent implements OnInit {
       this.editVariant = false;
       return;
     }
-    this.sharedService.closeModal(true);
+    this.proposalService.closeModal(true);
     this.tabActiveFirst = true;
     this.tabActiveSecond = this.tabActiveThird = this.tabActiveFour = false;
     this.addVariantConfirm = true;
@@ -281,7 +292,8 @@ export class AddProductModalComponent implements OnInit {
     this.addedProduct.unitCost = +this.addedProduct.unitCost;
     this.addedProduct.royaltyPrice = +this.addedProduct.royaltyPrice;
     if ((this.addedProduct.royaltyPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.royaltyMargin = ((this.addedProduct.royaltyPrice - this.addedProduct.unitCost) / this.addedProduct.royaltyPrice) * 100;
+      this.addedProduct.royaltyMargin = ((this.addedProduct.royaltyPrice - this.addedProduct.unitCost) /
+                                         this.addedProduct.royaltyPrice) * 100;
       // show 2 decimal places
       this.addedProduct.royaltyMargin = parseFloat(this.addedProduct.royaltyMargin).toFixed(2);
     }
@@ -311,7 +323,8 @@ export class AddProductModalComponent implements OnInit {
     this.addedProduct.unitCost = +this.addedProduct.unitCost;
     this.addedProduct.buildersPrice = +this.addedProduct.buildersPrice;
     if ((this.addedProduct.buildersPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.buildersMargin = ((this.addedProduct.buildersPrice - this.addedProduct.unitCost) / this.addedProduct.buildersPrice) * 100;
+      this.addedProduct.buildersMargin = ((this.addedProduct.buildersPrice - this.addedProduct.unitCost) /
+                                          this.addedProduct.buildersPrice) * 100;
       // show 2 decimal places
       this.addedProduct.buildersMargin = parseFloat(this.addedProduct.buildersMargin).toFixed(2);
     }
@@ -326,7 +339,8 @@ export class AddProductModalComponent implements OnInit {
     this.addedProduct.unitCost = +this.addedProduct.unitCost;
     this.addedProduct.wholesalePrice = +this.addedProduct.wholesalePrice;
     if ((this.addedProduct.wholesalePrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.wholesaleMargin = ((this.addedProduct.wholesalePrice - this.addedProduct.unitCost) / this.addedProduct.wholesalePrice) * 100;
+      this.addedProduct.wholesaleMargin = ((this.addedProduct.wholesalePrice - this.addedProduct.unitCost) /
+                                           this.addedProduct.wholesalePrice) * 100;
       // show 2 decimal places
       this.addedProduct.wholesaleMargin = parseFloat(this.addedProduct.wholesaleMargin).toFixed(2);
     }
