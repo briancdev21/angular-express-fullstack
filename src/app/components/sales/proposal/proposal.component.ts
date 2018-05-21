@@ -20,7 +20,7 @@ export class ProposalComponent implements OnInit {
   public searchQueryString = '';
   proposalProductListBackup = [];
 
-  public proposalInfo: object = {
+  public proposalInfo: any = {
     proposalId : '123465',
     contactName : 'DIANA ILIC',
     projectName: 'Live your Nu Life',

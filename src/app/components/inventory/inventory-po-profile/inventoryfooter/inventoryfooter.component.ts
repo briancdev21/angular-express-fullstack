@@ -5,7 +5,7 @@ import { Component, HostListener } from '@angular/core';
   templateUrl: './inventoryfooter.component.html',
   styleUrls: ['./inventoryfooter.component.css']
 })
-export default class InventoryFooterComponent {
+export class InventoryFooterComponent {
   currency = 'CAD';
   language = 'ENG';
   showButtons = false;

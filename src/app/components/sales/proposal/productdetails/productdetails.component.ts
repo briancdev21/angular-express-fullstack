@@ -36,6 +36,10 @@ export class ProductDetailsComponent implements OnInit {
   selectedProduct: any;
   accQueryString = '';
   alterQueryString = '';
+  showDialog = false;
+  queryString: any;
+  selected: any;
+  measure: any;
 
   constructor( private sharedService: SharedService ) {
     this.selectedData = this.productsInfoAll || [];

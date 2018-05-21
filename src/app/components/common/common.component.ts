@@ -8,10 +8,10 @@ import {Component, EventEmitter, Input, Output, HostListener} from '@angular/cor
 
 
 export class CommonComponent {
-  private mRotateMenu: boolean = true;
-  private mProfileOpened: boolean = false;
-  private mAlertOpened: boolean = false;
-  private mNotificationOpened: boolean = false;
+  mRotateMenu = true;
+  mProfileOpened = false;
+  mAlertOpened = false;
+  mNotificationOpened = false;
 
   @Output() expandSidebar = new EventEmitter<boolean>();
   @HostListener('window:click', ['$event'])

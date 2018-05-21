@@ -91,13 +91,13 @@
   </div>
   <div class="menu-right col-sm-6 clearfix">
     <!--This Open up profile-opened section-->
-    <div appStopEventPropagation (click)="openProfile(); $event.stopPropagation()"  class="user-profile pull-right">
+    <div appStopEventPropagation (click)="openProfile($event); $event.stopPropagation()"  class="user-profile pull-right">
       <a href="javascript:void(0)">
         <img src="assets/images/sep-profile.jpg">
       </a>
     </div>
     <!--This Open up notifications-opened section-->
-    <div appStopEventPropagation (click)="openNotifications(); $event.stopPropagation()" class="new-notifications pull-right">
+    <div appStopEventPropagation (click)="openNotifications($event); $event.stopPropagation()" class="new-notifications pull-right">
       <a href="javascript:void(0)">
         <i class="glyphicon glyphicon-bell"></i>
       </a>
@@ -105,7 +105,7 @@
       </div>
     </div>
     <!---This Open up profile-opened section-->
-    <div appStopEventPropagation (click)="openAlerts(); $event.stopPropagation()" class="msg-alert pull-right">
+    <div appStopEventPropagation (click)="openAlerts($event); $event.stopPropagation()" class="msg-alert pull-right">
       <a href="javascript:void(0)"></a>
       <div class="red-top"></div>
     </div>

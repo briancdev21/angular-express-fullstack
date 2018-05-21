@@ -36,6 +36,7 @@ export class ProjectDetailsComponent implements OnInit {
   receivable: string = '';
   showProposalInfo = false;
   scheduleRemain: any;
+  showDialog = false;
 
   invalidCustomerName = false;
   invalidCollaborators = false;

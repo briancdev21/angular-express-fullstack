@@ -13,6 +13,7 @@ import * as moment from 'moment';
 export class PurchaseOrderComponent implements OnInit {
 
   @Input() cards;
+  showContactAssoDialog = false;
 
   constructor() {
   }

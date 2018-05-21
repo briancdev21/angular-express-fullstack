@@ -29,6 +29,7 @@ export class InvoiceFilterComponent implements OnInit {
     'Home', 'Controller', 'Adaptive', 'Dimmer', 'Keypad', 'TV', 'Samsung', 'Service'
   ];
   config2: any = {'placeholder': 'Type here', 'sourceField': ''};
+  filterClicked = false;
 
   public selectedMoment = new Date();
   public createdMin;

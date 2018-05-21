@@ -71,6 +71,8 @@ export class ChangeLogProfileComponent implements OnInit {
 
   changeLogStatus = 'inProgress';
   showConfirmModal = false;
+  descriptionChange: any;
+  detailsChange: any;
 
   constructor( private pmService: PmService, private router: Router ) {
   }

@@ -35,6 +35,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } fro
 import { QuillModule } from 'ngx-quill';
 
 import { PmService } from './pm.service';
+import { TaskStableMapToKeysPipe } from './pmschedule/pmtaskstable/map-to-keys.pipe';
 
 export const MY_NATIVE_FORMATS = {
   fullPickerInput: {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'},
@@ -65,7 +66,8 @@ export const MY_NATIVE_FORMATS = {
     ChangeLogDetailsComponent,
     ChangeLogListTableComponent,
     ChangeLogSettingsComponent,
-    ChangeLogsTableComponent
+    ChangeLogsTableComponent,
+    TaskStableMapToKeysPipe
   ],
   imports: [
     BrowserModule,
@@ -91,7 +93,8 @@ export const MY_NATIVE_FORMATS = {
     PmFilesComponent,
     AddDetailedTaskComponent,
     SubTasksManagementComponent,
-    GanttChartComponent
+    GanttChartComponent,
+    TaskStableMapToKeysPipe
   ],
   providers: [
     PmService,

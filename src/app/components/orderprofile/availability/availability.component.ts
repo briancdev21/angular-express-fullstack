@@ -24,6 +24,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   selectedData: any = [];
   public res: any;
   availableStaff = [];
+  queryString: any;
+
   public resourcesInfo = [
     {
       name: 'Sepehr Shoarinejad',

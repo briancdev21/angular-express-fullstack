@@ -46,6 +46,7 @@ export class SupplierFilterComponent implements OnInit {
   inputChanged: any = '';
   selectSupplier =  '';
   selectContact = '';
+  filterClicked = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;

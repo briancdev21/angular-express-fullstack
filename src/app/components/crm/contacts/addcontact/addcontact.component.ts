@@ -18,11 +18,11 @@ export class AddContactComponent implements OnInit {
   @Input() contactOwners;
   @Input() contactStatus;
   @Output() addToContactsList: EventEmitter<any> = new EventEmitter;
-  protected searchStr: string;
-  protected captain: string;
-  protected captainSource: string;
-  protected dataService: CompleterData;
-  protected searchData = [
+  searchStr: string;
+  captain: string;
+  captainSource: string;
+  dataService: CompleterData;
+  searchData = [
     { color: 'red', value: '#f00' },
     { color: 'green', value: '#0f0' },
     { color: 'blue', value: '#00f' },
@@ -31,8 +31,8 @@ export class AddContactComponent implements OnInit {
     { color: 'yellow', value: '#ff0' },
     { color: 'black', value: '#000' }
   ];
-  protected captains = ['Head Contact', 'Accounts Receivable'];
-  protected captainsSource = ['Contact referal'];
+  captains = ['Head Contact', 'Accounts Receivable'];
+  captainsSource = ['Contact referal'];
 
   addContactModalCollapsed = true;
   showAddContactModal = false;
@@ -63,6 +63,18 @@ export class AddContactComponent implements OnInit {
   newEmail = '';
   newAddress = '';
   selectOwner = '';
+  newCity: any;
+  newState: any;
+  newCountry: any;
+  newZipcode: any;
+  family: any;
+  royalty: any;
+  retail: any;
+  euro: any;
+  cad: any;
+  usd: any;
+  Test1: any;
+  Test2: any;
 
   constructor(private completerService: CompleterService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');

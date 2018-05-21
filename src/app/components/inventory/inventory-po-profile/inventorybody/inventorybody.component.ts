@@ -6,7 +6,7 @@ import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
   templateUrl: './inventorybody.component.html',
   styleUrls: ['./inventorybody.component.css']
 })
-export default class InventoryBodyComponent {
+export class InventoryBodyComponent {
   userList = ['John', 'Smith', 'jackie'];
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
@@ -44,6 +44,7 @@ export default class InventoryBodyComponent {
 
   po_id = 'PO-8802131';
   createdDate: any;
+  noteToSupplier: any;
 
   constructor() {
     this.createdDate = new Date().toJSON().slice(0, 10);

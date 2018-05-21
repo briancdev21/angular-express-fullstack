@@ -177,6 +177,9 @@ export class AddProposalComponent implements OnInit {
   ];
 
   invalidFirstname = false;
+  selectName: any;
+  selectAssociation: any;
+  selectType: any;
 
   constructor(private completerService: CompleterService) {
     const comp = this;

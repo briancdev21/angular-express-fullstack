@@ -25,8 +25,8 @@
         <app-in-createddatefield [(createdDate)]="createdDate" ></app-in-createddatefield>
         <app-in-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" ></app-in-termsfield>
         <app-in-duedatefield [(dueDate)]="dueDate" [title]="dueDateTitle"></app-in-duedatefield>
-        <app-in-class  [classList]="classList" (selectedClass)="onSelectClass()" ></app-in-class>
-        <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory()" ></app-in-category>
+        <app-in-class  [classList]="classList" (selectedClass)="onSelectClass($event)" ></app-in-class>
+        <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory($event)" ></app-in-category>
       </div>
     </div>
     <div class="product__table">

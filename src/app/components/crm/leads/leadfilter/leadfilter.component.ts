@@ -41,6 +41,7 @@ export class LeadFilterComponent implements OnInit {
   applyClicked = false;
   filteredLeads: any;
   backUpLeads: any;
+  filterClicked = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
   }

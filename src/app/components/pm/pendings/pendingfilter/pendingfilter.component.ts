@@ -54,6 +54,11 @@ export class PendingFilterComponent implements OnInit {
   maxOverdueDays = 120;
   overdueDaysFrom = 0;
   overdueDaysTo = 120;
+  filterClicked = false;
+  clickedTotalFrom = false;
+  clickedTotalTo = false;
+  clickedEstimatedFrom = false;
+  clickedEstimatedTo = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;

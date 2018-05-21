@@ -7,7 +7,7 @@ import _ from 'lodash';
   templateUrl: './inventorybody.component.html',
   styleUrls: ['./inventorybody.component.css']
 })
-export default class InventoryBodyComponent {
+export class InventoryBodyComponent {
   userList = ['John', 'Smith', 'jackie'];
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
@@ -28,6 +28,7 @@ export default class InventoryBodyComponent {
   createdDate: any;
   origin_taxes = 0;
   taxrate = 0;
+  noteToSupplier: any;
 
   shippingAddress = {
     address: '',

@@ -14,8 +14,7 @@ export class InCustomerNameComponent implements OnInit {
   @Input() set userList(val: string[]) {
     this._userList = val;
     console.log('userlist', this._userList);
-    this._userList
-    .forEach((user, index) => {
+    this._userList.forEach((user, index) => {
       this.users.push({'name': user});
     });
   }
@@ -23,7 +22,7 @@ export class InCustomerNameComponent implements OnInit {
   @Output() selectedUser: EventEmitter<any> = new EventEmitter();
   users = [];
 
-  private dataService: CompleterData;
+  dataService: CompleterData;
 
 
   constructor(private completerService: CompleterService) {

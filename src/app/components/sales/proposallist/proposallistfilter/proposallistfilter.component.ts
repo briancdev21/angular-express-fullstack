@@ -60,6 +60,7 @@ export class ProposalListFilterComponent implements OnInit {
   inputChanged: any = '';
   selectCustomer =  '';
   selectProject = '';
+  filterClicked = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;

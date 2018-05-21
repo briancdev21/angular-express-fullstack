@@ -3,7 +3,7 @@
     <div class="main__info flex" >
       <div class="left-sidebar">
         <div class="flex aligntop" >
-          <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser()" [searchStr]="selectItem"></app-in-customer-name>
+          <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" [searchStr]="selectItem"></app-in-customer-name>
           <div class="email-address">
             <span>Email address</span>
             <app-multiemailselect [keywords]="emailAddresses"></app-multiemailselect>
@@ -21,8 +21,8 @@
         <app-in-orderidfield [in_id]="in_id" [title]="estimateNumberTitle"></app-in-orderidfield>
         <app-in-createddatefield [(createdDate)]="createdDate" ></app-in-createddatefield>
         <app-in-duedatefield [(dueDate)]="dueDate" [title]="expiryTitle"></app-in-duedatefield>
-        <app-in-class  [classList]="classList" (selectedClass)="onSelectClass()" ></app-in-class>
-        <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory()" ></app-in-category>
+        <app-in-class  [classList]="classList" (selectedClass)="onSelectClass($event)" ></app-in-class>
+        <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory($event)" ></app-in-category>
       </div>
     </div>
     <div class="product__table">

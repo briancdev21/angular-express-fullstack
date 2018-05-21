@@ -6,11 +6,21 @@ import { Router } from '@angular/router';
   templateUrl: './addinvoicefooter.component.html',
   styleUrls: ['./addinvoicefooter.component.css']
 })
-export default class AddInvoiceFooterComponent {
+export class AddInvoiceFooterComponent {
 
   settingsCollapsed = true;
   showReminderModal = false;
-
+  chargeSwitchOn = false;
+  reminderSwitchOn = false;
+  recurringSwitchOn = false;
+  creditSwitchOn = false;
+  switchOn = false;
+  frequency: any;
+  max_frequency: any;
+  showRecurringModal = false;
+  template: any;
+  interval: any;
+  
   currency = 'CAD';
   language = 'ENG';
   showButtons = false;

@@ -5,7 +5,7 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
   templateUrl: './inventoryheader.component.html',
   styleUrls: ['./inventoryheader.component.css']
 })
-export default class InventoryHeaderComponent implements OnInit {
+export class InventoryHeaderComponent implements OnInit {
   @Input() createdDate: string;
   @Input() dueDate: string;
   date_differ:number; 

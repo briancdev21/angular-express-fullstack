@@ -4,9 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {NgxDnDModule} from '@swimlane/ngx-dnd';
 
-import InventoryHeaderComponent from './inventoryheader/inventoryheader.component';
-import InventoryComponent from './inventory.component';
-import InventoryBodyComponent from './inventorybody/inventorybody.component';
+import {InventoryHeaderComponent} from './inventoryheader/inventoryheader.component';
+import {InventoryPoProfileComponent} from './inventory.component';
+import {InventoryBodyComponent} from './inventorybody/inventorybody.component';
 import { POCustomerNameComponent } from './components/po-customer-name/po-customer-name.component';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { POProjectSelectorComponent } from './components/po-project-selector/po-project-selector.component';
@@ -25,7 +25,7 @@ import { PONoteToSupplierComponent } from './components/po-notetosupplier/po-not
 import { POFreightCostsComponent } from './components/po-freightcosts/po-freightcosts.component';
 
 import { POTaxesComponent } from './components/po-taxes/po-taxes.component';
-import InventoryFooterComponent from './inventoryfooter/inventoryfooter.component';
+import {InventoryFooterComponent} from './inventoryfooter/inventoryfooter.component';
 
 import { POTotalAamountDueComponent } from './components/po-totalamountdue/po-totalamountdue.component';
 
@@ -34,7 +34,7 @@ import { POSubTotalProductsComponent } from './components/po-subtotalproducts/po
 @NgModule({
   declarations: [
     InventoryHeaderComponent,
-    InventoryComponent,
+    InventoryPoProfileComponent,
     InventoryBodyComponent,
     POCustomerNameComponent,
     POProjectSelectorComponent,
@@ -64,7 +64,7 @@ import { POSubTotalProductsComponent } from './components/po-subtotalproducts/po
     NgxDnDModule
   ],
     exports: [
-    InventoryComponent,
+    InventoryPoProfileComponent,
     InventoryHeaderComponent,
     InventoryBodyComponent,
     POCustomerNameComponent,

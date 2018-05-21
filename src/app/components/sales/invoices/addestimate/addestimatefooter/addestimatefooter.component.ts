@@ -6,11 +6,20 @@ import { Router } from '@angular/router';
   templateUrl: './addestimatefooter.component.html',
   styleUrls: ['./addestimatefooter.component.css']
 })
-export default class AddEstimateFooterComponent {
+export class AddEstimateFooterComponent {
 
   settingsCollapsed = true;
   showReminderModal = false;
-
+  chargeSwitchOn = false;
+  reminderSwitchOn = false;
+  recurringSwitchOn = false;
+  creditSwitchOn = false;
+  switchOn = false;
+  frequency: any;
+  max_frequency: any;
+  selectItem: any;
+  logNumber: any;
+  noteToSupplier: any;
   currency = 'CAD';
   language = 'ENG';
   showButtons = false;

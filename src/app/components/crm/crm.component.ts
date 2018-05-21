@@ -13,6 +13,7 @@ import { CrmService } from '../../services/crm.service';
 })
 export class CrmComponent implements OnInit {
   menuCollapsed = true;
+  mRotateMenu = false;
   constructor(private crmService: CrmService) {
   }
 
@@ -25,5 +26,6 @@ export class CrmComponent implements OnInit {
   toggleMenubar(data: boolean) {
     this.menuCollapsed  = data;
   }
-
+  Submit_Inventory_Data(event) {
+  }
 }

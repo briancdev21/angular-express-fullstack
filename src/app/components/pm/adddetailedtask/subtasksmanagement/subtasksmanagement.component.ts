@@ -26,6 +26,7 @@ export class SubTasksManagementComponent implements OnInit {
   taskTitle = '';
 
   mainTaskContent = '';
+  showEditable = false;
 
   constructor( private pmService: PmService ) {
 

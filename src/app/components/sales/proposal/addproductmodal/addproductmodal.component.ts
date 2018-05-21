@@ -45,12 +45,12 @@ export class AddProductModalComponent implements OnInit {
   greyedNonStock = false;
   greyedService = false;
   pricingType = ['Friend & Family', 'Royalty Program', 'Retail', 'Builders Program', 'Wholesale', 'Cost'];
-  protected searchStr: string;
-  protected type: string;
-  protected supplier: string;
-  protected brand: string;
-  protected dataService: CompleterData;
-  protected searchData = [
+  searchStr: string;
+  type: string;
+  supplier: string;
+  brand: string;
+  dataService: CompleterData;
+  searchData = [
     { color: 'red', value: '#f00' },
     { color: 'green', value: '#0f0' },
     { color: 'blue', value: '#00f' },
@@ -59,9 +59,9 @@ export class AddProductModalComponent implements OnInit {
     { color: 'yellow', value: '#ff0' },
     { color: 'black', value: '#000' }
   ];
-  protected types = ['Type 1', 'TestType 2', 'Type 3', 'Type 4', 'Type 5'];
-  protected suppliers = ['test1', 'test2', 'test3', 'test4', 'test5'];
-  protected brands = ['test1', 'test2', 'test3', 'test4', 'test5'];
+  types = ['Type 1', 'TestType 2', 'Type 3', 'Type 4', 'Type 5'];
+  suppliers = ['test1', 'test2', 'test3', 'test4', 'test5'];
+  brands = ['test1', 'test2', 'test3', 'test4', 'test5'];
 
   invalidModelNumber = false;
   invalidProductType = false;
@@ -69,6 +69,16 @@ export class AddProductModalComponent implements OnInit {
   invalidProductName = false;
   invalidManufacturer = false;
   invalidProductDescription = false;
+  measure: any;
+  perUnit: any;
+  expirationType: any;
+  none: any;
+  cad: any;
+  retailPrice: any;
+  retailMargin: any;
+  accQueryString: any;
+  queryString: any;
+  onUploadStateChanged: any;
 
   constructor(private sharedService: SharedService, private completerService: CompleterService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');

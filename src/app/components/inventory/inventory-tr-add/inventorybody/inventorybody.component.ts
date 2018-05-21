@@ -6,7 +6,7 @@ import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
   templateUrl: './inventorybody.component.html',
   styleUrls: ['./inventorybody.component.css']
 })
-export default class InventoryBodyComponent {
+export class InventoryBodyComponent {
   userList = ['John', 'Smith', 'jackie'];
 
   projects = ['task1', 'task2', 'task3'];

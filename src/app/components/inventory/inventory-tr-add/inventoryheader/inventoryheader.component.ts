@@ -5,5 +5,5 @@ import { Component, HostListener } from '@angular/core';
   templateUrl: './inventoryheader.component.html',
   styleUrls: ['./inventoryheader.component.css']
 })
-export default class InventoryHeaderComponent {
+export class InventoryHeaderComponent {
 }

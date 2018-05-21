@@ -92,5 +92,8 @@ export class ProfileInfoBarComponent implements OnInit {
   changeImage() {
     this.showEditImageModal = true;
   }
+
+  loadImageFailed () {
+  }
 }
 

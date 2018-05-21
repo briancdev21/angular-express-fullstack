@@ -17,6 +17,8 @@ import * as moment from 'moment';
 export class ReportsDashboardComponent implements OnInit {
 
   currentDate = '';
+  mRotateMenu = false;
+
   constructor(private router: Router) {
     this.currentDate = moment(new Date()).format('MMMM DD, YYYY');
   }

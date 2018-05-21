@@ -19,6 +19,7 @@ import { SalesDashboardComponent } from './salesdashboard/salesdashboard.compone
 import { InvoicesCmpModule } from './invoices/invoices.module';
 import { DealsPipelineCmpModule } from './dealspipeline/dealspipeline.module';
 import { ProposalListCmpModule } from './proposallist/proposallist.module';
+import { ProposalCmpModule } from './proposal/proposal.module';
 
 import { SalesService } from './sales.service';
 import { Ng2CompleterModule } from 'ng2-completer';
@@ -53,7 +54,8 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     InvoicesCmpModule,
     ProposalListCmpModule,
     DealsPipelineCmpModule,
-    DragulaModule
+    DragulaModule,
+    ProposalCmpModule
   ],
   exports: [
     MatInputModule,

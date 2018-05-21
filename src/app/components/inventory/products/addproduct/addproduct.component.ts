@@ -18,11 +18,11 @@ export class AddProductComponent implements OnInit {
   @Input() productTags;
   @Input() productStatus;
   @Output() addToProductsList: EventEmitter<any> = new EventEmitter;
-  protected searchStr: string;
-  protected captain: string;
-  protected captainSource: string;
-  protected dataService: CompleterData;
-  protected searchData = [
+  searchStr: string;
+  captain: string;
+  captainSource: string;
+  dataService: CompleterData;
+  searchData = [
     { color: 'red', value: '#f00' },
     { color: 'green', value: '#0f0' },
     { color: 'blue', value: '#00f' },
@@ -31,8 +31,8 @@ export class AddProductComponent implements OnInit {
     { color: 'yellow', value: '#ff0' },
     { color: 'black', value: '#000' }
   ];
-  protected captains = ['Head Product', 'Accounts Receivable'];
-  protected captainsSource = ['Product referal'];
+  captains = ['Head Product', 'Accounts Receivable'];
+  captainsSource = ['Product referal'];
 
   addProductModalCollapsed = true;
   showAddProductModal = false;
@@ -63,6 +63,19 @@ export class AddProductComponent implements OnInit {
   newEmail = '';
   newAddress = '';
   selectTag = '';
+  newCity: any;
+  newState: any;
+  newCountry: any;
+  newZipcode: any;
+  family: any;
+  royalty: any;
+  retail: any;
+  euro: any;
+  cad: any;
+  usd: any;
+  Test1: any;
+  Test2: any;
+
 
   constructor(private completerService: CompleterService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');

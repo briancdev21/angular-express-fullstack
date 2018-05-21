@@ -24,6 +24,7 @@ import { PmService } from './pm.service';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
 import { Autosize } from 'ng-autosize/src/autosize.directive';
+import { MapToKeysPipe } from './mytasks/map-to-keys.pipe';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { Autosize } from 'ng-autosize/src/autosize.directive';
     PendingsComponent,
     PmDashboardComponent,
     MyTasksComponent,
-    Autosize
+    Autosize,
+    MapToKeysPipe
   ],
   imports: [
     BrowserModule,

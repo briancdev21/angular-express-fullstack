@@ -40,6 +40,7 @@ export class PfTableFilterComponent implements OnInit {
   filteredInventoryList = [];
   backUpInventoryList = [];
   selectedItem: any = '';
+  editable = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
   }

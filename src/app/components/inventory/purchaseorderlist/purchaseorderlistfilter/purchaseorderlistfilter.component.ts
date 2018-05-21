@@ -60,6 +60,8 @@ export class PurchaseOrderListFilterComponent implements OnInit {
   totalFrom = 0;
   totalTo = 0;
   editable = false;
+  filterClicked: any;
+
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
     document.addEventListener('click', function() {

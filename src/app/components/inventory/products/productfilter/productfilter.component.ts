@@ -56,6 +56,7 @@ export class ProductFilterComponent implements OnInit {
   selectedItem: any = '';
   inputChanged: any = '';
   selectSupplier =  '';
+  filterClicked: any;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;

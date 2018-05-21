@@ -3,7 +3,7 @@
     <div class="main__info flex" >
       <div class="left-sidebar">
         <div class="flex aligntop" >
-          <app-po-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser()" ></app-po-customer-name>
+          <app-po-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" ></app-po-customer-name>
           <app-po-project-selector class="flex1 ml-15" [projects]="projects" ></app-po-project-selector>
         </div>
         <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" ></app-shippingaddress>

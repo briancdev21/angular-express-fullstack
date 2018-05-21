@@ -18,12 +18,12 @@ export class AddDetailedTaskComponent implements OnInit {
   public subTasks = [];
   public selectedSubTasks = [];
 
-  private ownerModalCollapsed = false;
+  ownerModalCollapsed = false;
   dDate: any;
   dateDue: any;
   minDate = new Date();
   editable: boolean;
-  dependencyEditable: false;
+  dependencyEditable = false;
   selectedDependency: any = '';
   selectedItem: any = '';
   inputChanged: any = '';
@@ -37,6 +37,8 @@ export class AddDetailedTaskComponent implements OnInit {
   openedModalPosition = [];
   mainTitle = '';
   mainContent = '';
+  dependencyEditableTop = false;
+  following = false;
 
   private taskOwners = [
     {
@@ -59,7 +61,7 @@ export class AddDetailedTaskComponent implements OnInit {
       userId: 3
     }];
 
-  private followers = [
+  followers = [
     {
       imageUrl: 'assets/users/user1.png',
       name: 'John Moss',

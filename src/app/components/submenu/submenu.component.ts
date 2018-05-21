@@ -7,14 +7,16 @@ import { SubnavHandlerService } from '../../services/subnav-handler.service';
   styleUrls: ['./submenu.component.css']
 })
 export class SubmenuComponent implements OnInit {
-  mRotateMenu: boolean = false;
-  private mIconChange: boolean = false;
-  private mAssign: boolean = false;
-  private mWhichAssigned: string = 'sami';
-  private mCurrentdate = new Date();
-  private mToday = new Date(this.mCurrentdate.getFullYear(), this.mCurrentdate.getMonth(), this.mCurrentdate.getDate());
-  private mDisplaydate;
-  private mcalendarIcon: boolean = false;
+  mRotateMenu = false;
+  mIconChange= false;
+  mAssign = false;
+  mWhichAssigned = 'sami';
+  mCurrentdate = new Date();
+  mToday = new Date(this.mCurrentdate.getFullYear(), this.mCurrentdate.getMonth(), this.mCurrentdate.getDate());
+  mDisplaydate;
+  mcalendarIcon = false;
+  mAddtask: any;
+
   @Output() mOutputData = new EventEmitter();
 
   constructor(private _ser: SubnavHandlerService) { }

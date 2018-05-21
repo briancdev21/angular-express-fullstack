@@ -34,6 +34,7 @@ export class PfProductsListTableComponent implements OnInit {
   deletingRowIndex: number;
   deletingList = [];
   swappingList = [];
+  showSwapConfirmModal = false;
 
   activity: {
     title: string;

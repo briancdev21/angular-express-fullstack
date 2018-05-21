@@ -14,6 +14,8 @@ import { InventoryService } from './inventory.service';
 })
 export class InventoryComponent implements OnInit {
   menuCollapsed = true;
+  mRotateMenu = false;
+
   constructor() {
   }
 
@@ -22,6 +24,9 @@ export class InventoryComponent implements OnInit {
 
   toggleMenubar(data: boolean) {
     this.menuCollapsed  = data;
+  }
+
+  Submit_Inventory_Data(event) {
   }
 
 }

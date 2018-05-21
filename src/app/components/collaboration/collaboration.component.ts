@@ -14,6 +14,8 @@ import { CollaborationService } from './collaboration.service';
 })
 export class CollaborationComponent implements OnInit {
   menuCollapsed = true;
+  mRotateMenu = false;
+
   constructor() {
   }
 
@@ -23,5 +25,6 @@ export class CollaborationComponent implements OnInit {
   toggleMenubar(data: boolean) {
     this.menuCollapsed  = data;
   }
-
+  Submit_Inventory_Data(event) {
+  }
 }

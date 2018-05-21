@@ -56,6 +56,7 @@ export class ContactFilterComponent implements OnInit {
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
+  filterClicked = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;

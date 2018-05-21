@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 
 export class CustomerDealsComponent {
-
+  showContactAssoDialog = false;
   @Input() cards;
   @Input() deals;
   @Input() wonDeals;

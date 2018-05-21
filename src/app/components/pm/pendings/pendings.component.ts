@@ -24,6 +24,7 @@ export class PendingsComponent implements OnInit {
   savedFiltersArr = [];
   filterAvaliableTo: any;
   filterName = '';
+  pendingTypes: any;
 
   constructor( private filterService: FilterService ) {
     this.filterAvaliableTo = 'everyone';

@@ -12,5 +12,6 @@ export class OrderSettingsComponent {
 
   settingsCollapsed = true;
   showReminderModal = false;
-
+  switchOn = false;
+  reminderTime = false;
 }

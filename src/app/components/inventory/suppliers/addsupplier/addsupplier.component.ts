@@ -73,6 +73,10 @@ export class AddSupplierComponent implements OnInit {
   newCity = '';
   newZipcode = '';
   selectTag = '';
+  payableEmail: any;
+  payablePhone: any;
+  businessNumber: any;
+  productNotes: any;
 
   constructor(private completerService: CompleterService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');

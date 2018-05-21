@@ -12,7 +12,7 @@ export class InClassComponent implements OnInit {
   users = [];
 
   private searchStr: string;
-  private dataService: CompleterData;
+  dataService: CompleterData;
 
 
   constructor(private completerService: CompleterService) {

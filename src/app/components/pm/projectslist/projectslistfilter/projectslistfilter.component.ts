@@ -55,6 +55,7 @@ export class ProjectsListFilterComponent implements OnInit {
   maxProjectTotal = 0;
   projectTotalFrom = 0;
   projectTotalTo = 0;
+  filterClicked = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;

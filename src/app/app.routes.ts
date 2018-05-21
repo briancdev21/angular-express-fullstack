@@ -69,10 +69,10 @@ import {
 
 
 import { CommonComponent } from './components/common/common.component';
-import InventoryPoAddComponent from './components/inventory/inventory-po-add/inventory.component';
-import InventoryTrAddComponent from './components/inventory/inventory-tr-add/inventory.component';
-import InventoryAdAddComponent from './components/inventory/inventory-ad-add/inventory.component';
-import InventoryPoProfileComponent from './components/inventory/inventory-po-profile/inventory.component';
+import {InventoryPoAddComponent} from './components/inventory/inventory-po-add/inventory.component';
+import {InventoryTrAddComponent} from './components/inventory/inventory-tr-add/inventory.component';
+import {InventoryAdAddComponent} from './components/inventory/inventory-ad-add/inventory.component';
+import {InventoryPoProfileComponent} from './components/inventory/inventory-po-profile/inventory.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

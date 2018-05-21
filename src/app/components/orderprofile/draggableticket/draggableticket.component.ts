@@ -33,6 +33,7 @@ export class DraggableTicketComponent implements OnInit {
   selectedDependency = 'default';
   selectedPriority = 'default';
   issueTickets = [];
+  issueTicket: any;
 
   constructor(private dragulaService: DragulaService, private orderService: OrderService) {
     dragulaService.dropModel.subscribe((value) => {

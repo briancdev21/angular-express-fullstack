@@ -42,12 +42,12 @@ import { MultiEmailSelectComponent } from './components/multiemailselect/multiem
 
 import { AddInvoiceComponent } from './addinvoice/addinvoice.component';
 import { AddEstimateComponent } from './addestimate/addestimate.component';
-import AddInvoiceHeaderComponent from './addinvoice/addinvoiceheader/addinvoiceheader.component';
-import AddInvoiceBodyComponent from './addinvoice/addinvoicebody/addinvoicebody.component';
-import AddInvoiceFooterComponent from './addinvoice/addinvoicefooter/addinvoicefooter.component';
-import AddEstimateHeaderComponent from './addestimate/addestimateheader/addestimateheader.component';
-import AddEstimateFooterComponent from './addestimate/addestimatefooter/addestimatefooter.component';
-import AddEstimateBodyComponent from './addestimate/addestimatebody/addestimatebody.component';
+import {AddInvoiceHeaderComponent} from './addinvoice/addinvoiceheader/addinvoiceheader.component';
+import {AddInvoiceBodyComponent} from './addinvoice/addinvoicebody/addinvoicebody.component';
+import {AddInvoiceFooterComponent} from './addinvoice/addinvoicefooter/addinvoicefooter.component';
+import {AddEstimateHeaderComponent} from './addestimate/addestimateheader/addestimateheader.component';
+import {AddEstimateFooterComponent} from './addestimate/addestimatefooter/addestimatefooter.component';
+import {AddEstimateBodyComponent} from './addestimate/addestimatebody/addestimatebody.component';
 
 
 @NgModule({

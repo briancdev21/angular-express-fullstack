@@ -34,6 +34,8 @@ export class PendingProjectTasksComponent implements OnInit {
 
   collaboratorList = ['John Moss', 'Latif', 'Dennis'];
   templateList = ['template 1', 'template 2', 'template 3'];
+  tabActiveFirst = true;
+  selectcollaborator: any;
 
   constructor(private router: Router) {
 

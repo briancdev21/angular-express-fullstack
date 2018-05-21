@@ -24,6 +24,7 @@ export class ProjectsListComponent implements OnInit {
   savedFiltersArr = [];
   filterAvaliableTo: any;
   filterName = '';
+  projectslistTypes: any;
 
   constructor( private filterService: FilterService ) {
     this.filterAvaliableTo = 'everyone';

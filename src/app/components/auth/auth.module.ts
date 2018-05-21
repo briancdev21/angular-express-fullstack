@@ -18,13 +18,15 @@ import { SignupComponent } from './signup/signup.component';
 import { ForgotPasswordComponent } from './forgotpassword/forgotpassword.component';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AuthComponent } from './auth.component';
 
 
 @NgModule({
   declarations: [
     LoginComponent,
     SignupComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +52,7 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     MatButtonModule,
     MatButtonToggleModule,
     MatCheckboxModule,
+    AuthComponent
   ],
   providers: [AuthService]
 })

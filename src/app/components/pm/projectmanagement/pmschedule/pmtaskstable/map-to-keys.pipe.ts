@@ -1,7 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({name: 'mapToKeys'})
-export class MapToKeysPipe implements PipeTransform {
+export class TaskStableMapToKeysPipe implements PipeTransform {
     transform(value, args:string[]) : any {
         let keys = [];
         for (let key in value) {

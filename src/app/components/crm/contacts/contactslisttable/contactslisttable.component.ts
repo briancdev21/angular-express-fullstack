@@ -45,7 +45,7 @@ export class ContactsListTableComponent implements OnInit {
     content: string;
   };
 
-  upcomingModal: object = {
+  upcomingModal: any = {
     week: 'WEDNESDAY',
     date: 'NOVEMBER 1, 2017',
     start: '9:30 AM',

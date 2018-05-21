@@ -144,4 +144,13 @@ export class ProjectFinancialsTableComponent implements OnInit {
     this.purchaseOrdersList = val.filteredOrders;
     this.reservedInventoryList = val.filteredInventories;
   }
+
+  closeModal() {
+  }
+
+  onChangeAcailable(val) {
+  }
+
+  saveFilter() {
+  }
 }

@@ -19,12 +19,14 @@ import { ProductListTableComponent } from './productlisttable/productlisttable.c
 import { AddProductModalComponent } from './addproductmodal/addproductmodal.component';
 import { SharedService } from './shared.service';
 import { SubmenuComponent } from '../../submenu/submenu.component';
-
 import { ProfileCmpModule } from '../../profile/profile.module';
-
 import { ArraySortPipe } from './pipes/arraysort.pipe';
 import { SearchPipe } from './pipes/search.pipe';
 import { Pipe, PipeTransform } from '@angular/core';
+import { AddProposalComponent } from './addproposal/addproposal.component';
+import { AddProposalTaskComponent } from './addproposaltask/addproposaltask.component';
+import { SearchProjectComponent } from './searchproject/searchproject.component';
+import { InvoicesCmpModule } from '../invoices/invoices.module';
 
 
 
@@ -38,6 +40,9 @@ import { Pipe, PipeTransform } from '@angular/core';
     ScheduleMultiKeywordComponent,
     ArraySortPipe,
     SearchPipe,
+    AddProposalComponent,
+    AddProposalTaskComponent,
+    SearchProjectComponent
   ],
   imports: [
     BrowserModule,
@@ -51,6 +56,7 @@ import { Pipe, PipeTransform } from '@angular/core';
     ClickOutsideModule,
     Ng2CompleterModule,
     ImageUploadModule.forRoot(),
+    InvoicesCmpModule
   ],
   exports: [
     ProductDetailsComponent,
@@ -59,6 +65,9 @@ import { Pipe, PipeTransform } from '@angular/core';
     ProductListTableComponent,
     AddProductModalComponent,
     ScheduleMultiKeywordComponent,
+    AddProposalComponent,
+    AddProposalTaskComponent,
+    SearchProjectComponent
   ],
   providers: [SharedService]
 })

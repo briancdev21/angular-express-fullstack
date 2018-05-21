@@ -95,6 +95,11 @@ export class ProjectInformationComponent implements OnInit {
   associationList = ['John Moss', 'Latif', 'Dennis'];
   pmList = ['John Moss', 'Latif', 'Dennis'];
   accountReceivableList = ['John Moss', 'Latif', 'Dennis'];
+  invalidStartDate = false;
+  invalidEndDate = false;
+  selectAssociation: any;
+  selectPmManager: any;
+  selectAccountReceivable: any;
 
   constructor( private router: Router, private pendingProjectService: PendingProjectService ) {
   }

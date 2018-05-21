@@ -182,7 +182,8 @@ export class AddWorkOrderComponent implements OnInit {
     dependency: '',
     followers: [],
     milestone: '',
-    changeLog: ''
+    changeLog: '',
+    workorderName: ''
   };
 
   addWorkorderModalCollapsed = true;
@@ -264,6 +265,12 @@ export class AddWorkOrderComponent implements OnInit {
     new: true,
     dependency: ''
   };
+
+  selectName: any;
+  workorderName: any;
+  topTimeEstimationModal = false;
+  queryString: any;
+
 
   constructor(private completerService: CompleterService) {
     const comp = this;
@@ -535,7 +542,7 @@ export class AddWorkOrderComponent implements OnInit {
   addTicket() {
     const date = new Date();
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-    const newId = Math.max(...this.taskTicketInfo.map(t => t.id)) + 1;
+    const newId = Math.max(...this.taskTicketInfo.map(t => t['id'])) + 1;
     const newDate = new Intl.DateTimeFormat('en-US', options).format(date);
     this.newProduct = {
       id: newId,

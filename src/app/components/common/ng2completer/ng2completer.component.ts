@@ -12,7 +12,7 @@ export class Ng2CompleterComponent implements OnInit {
   @Output() selectedItem: EventEmitter<any> = new EventEmitter();
   items = [];
 
-  private dataService: CompleterData;
+  dataService: CompleterData;
 
 
   constructor(private completerService: CompleterService) {

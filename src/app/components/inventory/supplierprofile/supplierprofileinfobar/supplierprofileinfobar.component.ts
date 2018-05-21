@@ -97,6 +97,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
     console.log('keyWords: ', event);
   }
 
-
+  loadImageFailed() {
+  }
 }
 

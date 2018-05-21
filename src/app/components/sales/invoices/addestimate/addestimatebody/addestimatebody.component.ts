@@ -8,7 +8,7 @@ import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordsel
   templateUrl: './addestimatebody.component.html',
   styleUrls: ['./addestimatebody.component.css']
 })
-export default class AddEstimateBodyComponent {
+export class AddEstimateBodyComponent {
   userList = ['John', 'Smith', 'jackie'];
   classList = ['class1', 'class2', 'class3'];
   categoryList = ['category1', 'category2', 'category3'];
@@ -98,6 +98,9 @@ export default class AddEstimateBodyComponent {
       buttonClickEventHandlerName: 'downloadDoc'
     }
   ];
+  selectItem: any;
+  logNumber: any;
+  noteToSupplier: any;
 
   constructor() {
     this.createdDate = new Date().toJSON();

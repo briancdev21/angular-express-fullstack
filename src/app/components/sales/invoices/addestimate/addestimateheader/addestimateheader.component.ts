@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
   templateUrl: './addestimateheader.component.html',
   styleUrls: ['./addestimateheader.component.css']
 })
-export default class AddEstimateHeaderComponent implements OnInit {
+export class AddEstimateHeaderComponent implements OnInit {
   @Input() createdDate: string;
   @Input() dueDate: string;
   date_differ: number;

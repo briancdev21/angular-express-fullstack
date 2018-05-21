@@ -54,6 +54,7 @@ export class WorkOrderFilterComponent implements OnInit {
   completionFrom = 0;
   completionTo = 120;
   selectStatus: string;
+  filterClicked = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;

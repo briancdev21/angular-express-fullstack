@@ -25,6 +25,8 @@ export class InvoicesComponent implements OnInit {
   savedFiltersArr = [];
   filterAvaliableTo: any;
   filterName = '';
+  invoiceTags: any;
+  invoiceTypes: any;
 
   constructor( private filterService: FilterService, private router: Router ) {
     this.filterAvaliableTo = 'everyone';

@@ -9,7 +9,7 @@ import { SharedService } from '../../../../../services/shared.service';
   templateUrl: './addinvoicebody.component.html',
   styleUrls: ['./addinvoicebody.component.css']
 })
-export default class AddInvoiceBodyComponent implements OnInit {
+export class AddInvoiceBodyComponent implements OnInit {
   userList = [];
   classList = ['class1', 'class2', 'class3'];
   categoryList = ['category1', 'category2', 'category3'];
@@ -43,6 +43,8 @@ export default class AddInvoiceBodyComponent implements OnInit {
   selectedLocation = '';
   productDetails = [];
   internalMemo = undefined;
+  noteToSupplier = undefined;
+  selectItem = '';
   subtotalproducts = undefined;
   discountType = 'percent';
   discountAmount = undefined;

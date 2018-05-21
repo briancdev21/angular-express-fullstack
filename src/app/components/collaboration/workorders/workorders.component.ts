@@ -24,6 +24,7 @@ export class WorkOrdersComponent implements OnInit {
   savedFiltersArr = [];
   filterAvaliableTo: any;
   filterName = '';
+  workorderTypes: any;
 
   constructor( private filterService: FilterService ) {
     this.filterAvaliableTo = 'everyone';

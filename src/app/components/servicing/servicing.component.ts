@@ -14,6 +14,8 @@ import { ServicingService } from './servicing.service';
 })
 export class ServicingComponent implements OnInit {
   menuCollapsed = true;
+  mRotateMenu = false;
+
   constructor() {
   }
 
@@ -23,5 +25,6 @@ export class ServicingComponent implements OnInit {
   toggleMenubar(data: boolean) {
     this.menuCollapsed  = data;
   }
-
+  Submit_Inventory_Data(event) {
+  }
 }

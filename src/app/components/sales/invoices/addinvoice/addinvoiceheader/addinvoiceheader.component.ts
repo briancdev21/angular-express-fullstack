@@ -5,7 +5,7 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
   templateUrl: './addinvoiceheader.component.html',
   styleUrls: ['./addinvoiceheader.component.css']
 })
-export default class AddInvoiceHeaderComponent implements OnInit {
+export class AddInvoiceHeaderComponent implements OnInit {
   @Input() createdDate: string;
   @Input() dueDate: string;
   date_differ: number;

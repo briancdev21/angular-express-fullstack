@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 })
 
 export class TasksComponent {
+  showAddTaskDialog = false;
+  showCollaboratorsDialog = false;
 
   @Input() tasks;
 

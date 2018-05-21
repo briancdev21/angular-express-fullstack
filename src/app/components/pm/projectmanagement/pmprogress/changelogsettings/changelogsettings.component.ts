@@ -12,4 +12,5 @@ export class ChangeLogSettingsComponent {
 
   settingsCollapsed = true;
   showReminderModal = false;
+  switchOn = false;
 }
