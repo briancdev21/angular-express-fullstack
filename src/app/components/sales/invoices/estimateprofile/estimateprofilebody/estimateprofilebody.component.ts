@@ -139,7 +139,6 @@ export default class EstimateProfileBodyComponent implements OnInit {
 
       this.sharedService.getTerms().subscribe(data => {
         this.terms = data.results;
-        console.log('terms lsit: ', data);
       });
 
       this.sharedService.getClassifications().subscribe(data => {
@@ -180,7 +179,6 @@ export default class EstimateProfileBodyComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('createdInvoice', this.createdInvoice);
 
     this.in_id = 'ES - ' + this.currentInvoiceId;
 
