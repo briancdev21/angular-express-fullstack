@@ -179,7 +179,6 @@ export default class AddInvoiceBodyComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('createdInvoice', this.createdInvoice);
 
     this.filterService.chargeFeeData.subscribe(data => {
       if (data.lateFee) {
