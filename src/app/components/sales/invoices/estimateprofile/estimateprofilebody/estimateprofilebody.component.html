@@ -60,3 +60,25 @@
     
   </div>
 </div>
+
+<!-- alert modal -->
+<div class="confirm-modal-wrapper" *ngIf="showConvertConfirmModal" ></div>
+<div [ngClass]="{'confirm-modal': showConvertConfirmModal, 'confirm-modal-hide': !showConvertConfirmModal }">
+  <div class="header">
+    <span>Alert</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showConvertConfirmModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      <span >Do you want to convert current estimate to invoice?</span>
+    </div>
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="confirmConvert()" >
+        Yes
+      </button>
+      <button class="cancel-btn" (click)="showConvertConfirmModal=false" >
+        No
+      </button>
+    </div>
+  </div>
+</div>  

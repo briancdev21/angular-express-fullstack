@@ -74,6 +74,7 @@ export default class EstimateProfileBodyComponent implements OnInit {
   currentClassId: number;
   currentCategory: string;
   currentCategoryId: number;
+  showConvertConfirmModal = false;
 
   public timelineData: Array<Object> = [
     {
@@ -121,18 +122,16 @@ export default class EstimateProfileBodyComponent implements OnInit {
   saveInvoiceData: any;
   currentOwner: string;
 
-  constructor(private sharedService: SharedService, private estimatesService: EstimatesService,
-    private route: ActivatedRoute, private filterService: FilterService) {
+  constructor(private sharedService: SharedService, private estimatesService: EstimatesService, private invoicesServices: InvoicesService,
+    private route: ActivatedRoute, private filterService: FilterService, private router: Router) {
     this.createdDate = new Date().toJSON();
 
     //
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.estimatesService.getIndividualEstimate(this.currentInvoiceId).subscribe(res => {
-      console.log('getIndividualInvoice: ', res);
 
       this.sharedService.getContacts()
       .subscribe(data => {
-        console.log('userlist: ', data);
         this.contactList = data;
         this.userList = this.contactList;
         this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
@@ -140,7 +139,6 @@ export default class EstimateProfileBodyComponent implements OnInit {
 
       this.sharedService.getTerms().subscribe(data => {
         this.terms = data.results;
-        console.log('terms lsit: ', data);
       });
 
       this.sharedService.getClassifications().subscribe(data => {
@@ -181,12 +179,10 @@ export default class EstimateProfileBodyComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('createdInvoice', this.createdInvoice);
 
     this.in_id = 'ES - ' + this.currentInvoiceId;
 
     this.filterService.chargeFeeData.subscribe(data => {
-      console.log('lateFee: ', data);
       if (data.lateFee) {
         this.saveInvoiceData.chargeLateFee = data.lateFee;
         this.saveInvoiceData.lateFee.value = data.value;
@@ -198,7 +194,12 @@ export default class EstimateProfileBodyComponent implements OnInit {
       if (data) {
         this.saveInvoice();
       }
-      console.log('save clicked: ', data);
+    });
+
+    this.filterService.convertClicked.subscribe(data => {
+      if (data) {
+        this.convertInvoice();
+      }
     });
   }
 
@@ -216,7 +217,6 @@ export default class EstimateProfileBodyComponent implements OnInit {
   }
 
   onCustomerSelected(user) {
-    console.log(user);
   }
 
   onSelectUser(selectedIndex: any) {
@@ -228,7 +228,6 @@ export default class EstimateProfileBodyComponent implements OnInit {
   }
 
   onSelectClass(val) {
-    console.log('val', val);
     this.saveInvoiceData.classificationId = val;
   }
 
@@ -301,7 +300,6 @@ export default class EstimateProfileBodyComponent implements OnInit {
   }
 
   onTotalPriceChange(data) {
-    console.log('discountChange: ', data);
     if (data.type) {
       this.saveInvoiceData.discount.unit = data.type;
       this.saveInvoiceData.discount.value = data.amount;
@@ -324,11 +322,9 @@ export default class EstimateProfileBodyComponent implements OnInit {
     if (this.subtotalServices === undefined) { subtotalServices = 0; }
     if (depositsAmount !== undefined && this.subtotalproducts !== undefined) {
       if (discountAmount === undefined) { discountAmount = 0; }
-      console.log('totla price discountAmount change', discountAmount);
       const totalprice = this.subtotalproducts + subtotalServices;
       switch (this.discountType) {
         case 'percent': {
-          console.log('taxes', this.taxes);
           this.taxes = this.taxes * (1 - discountAmount / 100);
           this.totalamountdue = totalprice * (100 - discountAmount) / 100 - depositsAmount + this.taxes;
         }
@@ -348,7 +344,21 @@ export default class EstimateProfileBodyComponent implements OnInit {
       this.saveInvoiceData.deposit = 0;
     }
     this.estimatesService.updateEstimate(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
-      console.log('saved est: ', res);
+    });
+  }
+
+  convertInvoice() {
+    this.showConvertConfirmModal = true;
+    console.log('1111111111');
+  }
+
+  confirmConvert() {
+    this.showConvertConfirmModal = false;
+    this.saveInvoiceData.startDate = moment().format('YYYY-MM-DD');
+    this.saveInvoiceData.termId = 1;
+    this.invoicesServices.createInvoice(this.saveInvoiceData).subscribe(res => {
+      console.log('convert: ', res);
+      this.router.navigate(['./invoice-profile', {id: res.data.id}]);
     });
   }
 }

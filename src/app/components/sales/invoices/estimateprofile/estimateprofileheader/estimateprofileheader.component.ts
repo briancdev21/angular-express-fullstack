@@ -1,6 +1,7 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { EstimatesService } from '../../../../../services/estimates.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FilterService } from '../../filter.service';
 
 @Component({
   selector: 'app-estimateprofileheader',
@@ -11,7 +12,7 @@ export default class EstimateProfileHeaderComponent implements OnInit {
 
   status = '';
   invoiceId: Number;
-  constructor(private estimatesService: EstimatesService, private route: ActivatedRoute ) {
+  constructor(private estimatesService: EstimatesService, private route: ActivatedRoute, private filterService: FilterService ) {
 
   }
   ngOnInit() {
@@ -20,5 +21,9 @@ export default class EstimateProfileHeaderComponent implements OnInit {
     this.estimatesService.getIndividualEstimate(this.invoiceId).subscribe(res => {
       this.status = res.data.status;
     });
+  }
+
+  clickConvertButton() {
+    this.filterService.convertClicked.next(true);
   }
 }
