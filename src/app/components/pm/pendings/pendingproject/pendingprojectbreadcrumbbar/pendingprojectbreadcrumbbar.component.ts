@@ -18,12 +18,12 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
   inputChanged: any = '';
   data = ['Projects', 'Remodel with a Nu life'];
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
 
   constructor() {
     const comp = this;
@@ -36,7 +36,7 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
     this.editable = false;
     this.projectInformation.followers.forEach(element => {
       this.items2 = this.items2.filter(function( obj ) {
-        return obj.payload.label !== element.name;
+        return obj.label !== element.name;
       });
     });
   }
@@ -44,9 +44,9 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.projectInformation.followers.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.projectInformation.followers.push({name: item.label, imageUrl: item.imageUrl });
   }
 
 
@@ -64,7 +64,7 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
 
   removeUser(i: number) {
     const item = this.projectInformation.followers[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectInformation.followers.splice(i, 1);
   }
 

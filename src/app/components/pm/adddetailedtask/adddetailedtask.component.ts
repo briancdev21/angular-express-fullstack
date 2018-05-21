@@ -78,20 +78,20 @@ export class AddDetailedTaskComponent implements OnInit {
   currentTaskOwner: any;
 
   dependencyData: any[] = [
-    {id: 0, payload: {id: 0, title: 'Task 0'}},
-    {id: 1, payload: {id: 1, title: 'Task 1'}},
-    {id: 2, payload: {id: 2, title: 'Task 2'}},
-    {id: 3, payload: {id: 3, title: 'Task 3'}},
+    {id: 0, title: 'Task 0'},
+    {id: 1, title: 'Task 1'},
+    {id: 2, title: 'Task 2'},
+    {id: 3, title: 'Task 3'},
   ];
-  dependencyConfig: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'title']};
+  dependencyConfig: any = {'placeholder': 'Type here', 'sourceField': 'title'};
 
   items2: any[] = [
-    {id: 0, payload: {label: 'John Moss', imageUrl: 'assets/users/user1.png', userId: 1}},
-    {id: 1, payload: {label: 'Tyler Labonte', imageUrl: 'assets/users/user2.png', userId: 2}},
-    {id: 2, payload: {label: 'Michael Yue', imageUrl: 'assets/users/user3.png', userId: 3}},
-    {id: 3, payload: {label: 'Sepehr', imageUrl: 'assets/users/man.png', userId: 4}},
+    {id: 0, label: 'John Moss', imageUrl: 'assets/users/user1.png', userId: 1},
+    {id: 1, label: 'Tyler Labonte', imageUrl: 'assets/users/user2.png', userId: 2},
+    {id: 2, label: 'Michael Yue', imageUrl: 'assets/users/user3.png', userId: 3},
+    {id: 3, label: 'Sepehr', imageUrl: 'assets/users/man.png', userId: 4},
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   subscription: any;
   duration = 0;
   updatingInProgress = false;
@@ -169,13 +169,13 @@ export class AddDetailedTaskComponent implements OnInit {
   onDependencySelect(item: any) {
     this.selectedDependency = item;
     this.dependencyData = this.dependencyData.filter(function( obj ) {
-      return obj.payload.id !== item.payload.id;
+      return obj.id !== item.id;
     });
-    const checkAvail = this.selectedDependencies.filter( d => d.id === item.payload.id).length;
+    const checkAvail = this.selectedDependencies.filter( d => d.id === item.id).length;
     if (checkAvail) {
       return;
     } else {
-      this.selectedDependencies.push(item.payload.id);
+      this.selectedDependencies.push(item.id);
     }
   }
 
@@ -193,13 +193,13 @@ export class AddDetailedTaskComponent implements OnInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    const checkAvail = this.followers.filter( d => d.name === item.payload.label).length;
+    const checkAvail = this.followers.filter( d => d.name === item.label).length;
     if (checkAvail) {
       return;
     } else {
-      this.followers.push({name: item.payload.label, imageUrl: item.payload.imageUrl, userId: item.payload.userId });
+      this.followers.push({name: item.label, imageUrl: item.imageUrl, userId: item.userId });
     }
   }
 
@@ -322,7 +322,7 @@ export class AddDetailedTaskComponent implements OnInit {
   //   if (id) {
   //     this.selectedDependencies.splice(i, 1, {
   //       id: id.toString(),
-  //       title: this.dependencyData.filter(d => d.payload.id === id)[0].payload.title
+  //       title: this.dependencyData.filter(d => d.id === id)[0].title
   //     });
   //   }
   // }

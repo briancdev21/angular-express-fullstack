@@ -4,7 +4,7 @@
   </div>
   <div class="followers" > 
     <span style="padding:1em; ">Followers</span>
-    <div class="follower" *ngFor="let user of userInfo.followers; let i = index">
+    <div class="follower" *ngFor="let user of _userInfo.followers; let i = index">
       <a [routerLink]='user.profileLink' [title]='user.name' ><img [src]='user.imageUrl'/></a>
     </div> 
     <div class="follower add-follower" >
@@ -12,11 +12,15 @@
     </div> 
     <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
         <ul>
-          <li *ngFor="let user of userInfo.followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li *ngFor="let user of _userInfo.followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;">
-              <input autocomplete [config]="config2" [items]="items2"
-              (inputChangedEvent)="onInputChangedEvent($event)"
-              (selectEvent)="onSelect($event)">
+            <input *ngIf="autocompleterLoaded"
+              id="uni_item2"
+              [ng5-auto-complete]="items2"
+              filterName="label"
+              (valueChanged)="onSelect($event)"
+              (input)="onInputChangedEvent($event)"
+            />
           </li>
         </ul>
       </div>

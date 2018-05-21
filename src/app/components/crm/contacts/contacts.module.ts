@@ -15,7 +15,7 @@ import { ContactsListTableComponent } from './contactslisttable/contactslisttabl
 import { ContactFilterComponent } from './contactfilter/contactfilter.component';
 import { AddContactComponent } from './addcontact/addcontact.component';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 
 
 @NgModule({
@@ -35,7 +35,7 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     BrowserAnimationsModule,
     ProfileCmpModule,
     Ng2CompleterModule,
-    AutocompleteModule
+    AutoCompleteModule
   ],
   exports: [
     ContactsListTableComponent,

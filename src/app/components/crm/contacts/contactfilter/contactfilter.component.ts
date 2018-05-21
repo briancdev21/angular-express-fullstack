@@ -27,7 +27,7 @@ export class ContactFilterComponent implements OnInit {
   items2: any[] = [
     'John Smith', 'John Moss', 'Diana Ilic'
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': ''};
+  config2: any = {'placeholder': 'No Result', 'sourceField': ''};
 
   public selectedMoment = new Date();
   public createdMin;

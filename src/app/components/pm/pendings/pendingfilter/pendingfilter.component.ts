@@ -27,12 +27,12 @@ export class PendingFilterComponent implements OnInit {
   customersList = [];
   projectsList = [];
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user3.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/man.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user3.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/man.png'},
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
 
   public selectedMoment = new Date();
   public createdMin;
@@ -116,9 +116,9 @@ export class PendingFilterComponent implements OnInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.collaborators.push({name: item.payload.label, imageUrl: item.payload.imageUrl});
+    this.collaborators.push({name: item.label, imageUrl: item.imageUrl});
   }
 
   onInputChangedEvent(val: string) {
@@ -127,7 +127,7 @@ export class PendingFilterComponent implements OnInit {
 
   removeUser(i: number) {
     const item = this.collaborators[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.collaborators.splice(i, 1);
   }
 

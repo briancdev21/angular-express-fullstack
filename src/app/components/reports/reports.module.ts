@@ -19,7 +19,7 @@ import { ReportsDashboardComponent } from './reportsdashboard/reportsdashboard.c
 
 import { ReportsService } from './reports.service';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 
 
 @NgModule({
@@ -42,7 +42,7 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutocompleteModule,
+    AutoCompleteModule,
     MatInputModule,
     MatButtonModule,
     MatButtonToggleModule,

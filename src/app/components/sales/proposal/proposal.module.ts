@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 import { TabModule } from 'angular-tabs-component';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { ClickOutsideModule } from 'ng4-click-outside';
@@ -48,7 +48,7 @@ import { InvoicesCmpModule } from '../invoices/invoices.module';
     BrowserModule,
     RouterModule,
     TabModule,
-    AutocompleteModule,
+    AutoCompleteModule,
     FormsModule,
     ProfileCmpModule,
     FroalaEditorModule.forRoot(),

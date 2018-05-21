@@ -28,9 +28,9 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.editable = false;
-    this.sharedService.getKeywords().subscribe(data => {
-      console.log('keywords: ', data);
-    });
+    // this.sharedService.getKeywords().subscribe(data => {
+    //   console.log('keywords: ', data);
+    // });
   }
 
   ngAfterViewInit() {

@@ -51,9 +51,16 @@
         <ul>
           <li *ngFor="let user of supplierTags; let i = index">{{user}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;">
-              <input autocomplete [config]="config2" [items]="allTags"
+              <!-- <input autocomplete [config]="config2" [items]="allTags"
               (inputChangedEvent)="onInputChangedEvent($event)"
-              (selectEvent)="onSelect($event)">
+              (selectEvent)="onSelect($event)"> -->
+              <input 
+                [ng5-auto-complete]="allTags"
+                filterName="config2.sourceField"
+                no-record-text="config2.placeholder"
+                (valueChanged)="onSelect($event)"
+                (input)="onInputChangedEvent($event)"
+              />
           </li>
         </ul>
       </div>

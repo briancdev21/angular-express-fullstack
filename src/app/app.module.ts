@@ -30,7 +30,7 @@ import { CollaborationCmpModule } from './components/collaboration/collaboration
 import { ProjectManagementCmpModule } from './components/pm/projectmanagement/projectmanagement.module';
 import { CommonCmpModule } from './components/common/common.module';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { DragulaModule } from 'ng2-dragula';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
@@ -79,7 +79,7 @@ import { TokenInterceptor } from './services/token.interceptor';
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot(),
     FormsModule,
-    AutocompleteModule,
+    AutoCompleteModule,
     ClickOutsideModule,
     DragulaModule,
     OwlDateTimeModule,

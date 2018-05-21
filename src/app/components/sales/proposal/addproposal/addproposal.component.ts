@@ -150,30 +150,30 @@ export class AddProposalComponent implements OnInit {
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
-  config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items3: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items4: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items5: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
 
   invalidFirstname = false;
@@ -217,7 +217,7 @@ export class AddProposalComponent implements OnInit {
     this.editable = false;
     this.userInfo.followers.forEach(element => {
       this.items2 = this.items2.filter(function( obj ) {
-        return obj.payload.label !== element.name;
+        return obj.label !== element.name;
       });
     });
   }
@@ -248,33 +248,33 @@ export class AddProposalComponent implements OnInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.proposalDetails.collaborators.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.proposalDetails.collaborators.push({name: item.label, imageUrl: item.imageUrl });
   }
 
   onSelectAccountManager(item: any) {
     this.selectedItem = item;
     this.items3 = this.items3.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.proposalDetails.accountManager.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.proposalDetails.accountManager.push({name: item.label, imageUrl: item.imageUrl });
   }
 
   onSelectProjectManager(item: any) {
     this.selectedItem = item;
     this.items4 = this.items4.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.proposalDetails.projectManager.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.proposalDetails.projectManager.push({name: item.label, imageUrl: item.imageUrl });
   }
 
   onSelectDesigner(item: any) {
     this.selectedItem = item;
     this.items5 = this.items5.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.proposalDetails.designer.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.proposalDetails.designer.push({name: item.label, imageUrl: item.imageUrl });
   }
 
 
@@ -284,25 +284,25 @@ export class AddProposalComponent implements OnInit {
 
   removeUser(i: number) {
     const item = this.proposalDetails.collaborators[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.proposalDetails.collaborators.splice(i, 1);
   }
 
   removeAccountManager(i: number) {
     const item = this.proposalDetails.accountManager[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.proposalDetails.accountManager.splice(i, 1);
   }
 
   removeProjectManager (i: number) {
     const item = this.proposalDetails.projectManager[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.proposalDetails.projectManager.splice(i, 1);
   }
 
   removeDesigner (i: number) {
     const item = this.proposalDetails.designer[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.proposalDetails.designer.splice(i, 1);
   }
 

@@ -8,7 +8,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } fro
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragulaModule } from 'ng2-dragula';
 import { ClickOutsideModule } from 'ng4-click-outside';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 import {CalendarModule} from 'ap-angular2-fullcalendar';
 import {CalendarComponent} from 'ap-angular2-fullcalendar';
 
@@ -55,7 +55,7 @@ export const MY_NATIVE_FORMATS = {
     OwlNativeDateTimeModule,
     BrowserAnimationsModule,
     ProfileCmpModule,
-    AutocompleteModule,
+    AutoCompleteModule,
     ClickOutsideModule,
     CalendarModule
   ],

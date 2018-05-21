@@ -34,13 +34,22 @@
         <ul>
           <li *ngFor="let status of purchaseorderStatus; let i = index">{{status}}<span (click)="removeStatus(i)" class="close-btn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;" class="items-drop-down">
-            <input autocomplete 
+            <!-- <input autocomplete 
               [config]="config2" 
               [items]="items2"
               (inputChangedEvent)="onInputChangedEvent($event)"
               (selectEvent)="onSelect($event)"
               #autofocus
-              name="autofocus">
+              name="autofocus"> -->
+              <input 
+                #autofocus
+                name="autofocus"
+                [ng5-auto-complete]="items2"
+                filterName="config2.sourceField"
+                no-record-text="config2.placeholder"
+                (valueChanged)="onSelect($event)"
+                (input)="onInputChangedEvent($event)"
+              />
           </li>
         </ul>
       </div>

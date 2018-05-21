@@ -42,9 +42,16 @@
           <ul>
             <li *ngFor="let task of selectedDependencies; let i = index">{{task}}<span (click)="removeTask(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
             <li style="background: none; width: 100%; margin: 0;">
-                <input autocomplete [config]="dependencyConfig" [items]="dependencyData"
+                <!-- <input autocomplete [config]="dependencyConfig" [items]="dependencyData"
                 (inputChangedEvent)="onInputChangedEvent($event)"
-                (selectEvent)="onDependencySelect($event)">
+                (selectEvent)="onDependencySelect($event)"> -->
+                <input 
+                  [ng5-auto-complete]="dependencyData"
+                  filterName="dependencyConfig.sourceField"
+                  no-record-text="dependencyConfig.placeholder"
+                  (valueChanged)="onDependencySelect($event)"
+                  (input)="onInputChangedEvent($event)"
+                />
             </li>
           </ul>
         </div>
@@ -94,9 +101,16 @@
           <ul>
             <li *ngFor="let task of selectedDependencies; let i = index">{{task}}<span (click)="removeTask(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
             <li style="background: none; width: 100%; margin: 0;">
-                <input autocomplete [config]="dependencyConfig" [items]="dependencyData"
+                <!-- <input autocomplete [config]="dependencyConfig" [items]="dependencyData"
                 (inputChangedEvent)="onInputChangedEvent($event)"
-                (selectEvent)="onDependencySelect($event)">
+                (selectEvent)="onDependencySelect($event)"> -->
+                <input 
+                  [ng5-auto-complete]="dependencyData"
+                  filterName="dependencyConfig.sourceField"
+                  no-record-text="dependencyConfig.placeholder"
+                  (valueChanged)="onDependencySelect($event)"
+                  (input)="onInputChangedEvent($event)"
+                />
             </li>
           </ul>
         </div>
@@ -123,9 +137,16 @@
         <ul>
           <li *ngFor="let user of followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;">
-              <input autocomplete [config]="config2" [items]="items2"
+              <!-- <input autocomplete [config]="config2" [items]="items2"
               (inputChangedEvent)="onInputChangedEvent($event)"
-              (selectEvent)="onSelect($event)">
+              (selectEvent)="onSelect($event)"> -->
+              <input 
+                [ng5-auto-complete]="items2"
+                filterName="config2.sourceField"
+                no-record-text="config2.placeholder"
+                (valueChanged)="onSelect($event)"
+                (input)="onInputChangedEvent($event)"
+              />
           </li>
         </ul>
       </div>

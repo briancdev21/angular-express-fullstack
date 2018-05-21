@@ -29,7 +29,7 @@
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
         "../node_modules/froala-editor/js/froala_editor.pkgd.min.js",
-        "../node_modules/ion-rangeslider/js/ion.rangeSlider.min.js"
+        "../node_modules/ion-rangeslider/js/ion.rangeSlider.min.js"        
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

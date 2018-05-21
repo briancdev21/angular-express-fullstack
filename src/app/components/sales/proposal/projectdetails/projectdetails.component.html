@@ -70,9 +70,16 @@
                     <ul>
                       <li *ngFor="let user of projectDetails.collaborators; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <input autocomplete [config]="config2" [items]="items2"
+                        <!-- <input autocomplete [config]="config2" [items]="items2"
                           (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelect($event)">
+                          (selectEvent)="onSelect($event)"> -->
+                        <input 
+                          [ng5-auto-complete]="items2"
+                          filterName="config2.sourceField"
+                          no-record-text="config2.placeholder"
+                          (valueChanged)="onSelect($event)"
+                          (input)="onInputChangedEvent($event)"
+                        />  
                       </li>
                     </ul>
                   </div>
@@ -229,9 +236,16 @@
                     <ul>
                       <li *ngFor="let user of projectDetails.accountManager; let i = index">{{user.name}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <input autocomplete [config]="config2" [items]="items3"
+                        <!-- <input autocomplete [config]="config2" [items]="items3"
                           (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelectAccountManager($event)">
+                          (selectEvent)="onSelectAccountManager($event)"> -->
+                        <input 
+                          [ng5-auto-complete]="items3"
+                          filterName="config2.sourceField"
+                          no-record-text="config2.placeholder"
+                          (valueChanged)="onSelectAccountManager($event)"
+                          (input)="onInputChangedEvent($event)"
+                        />
                       </li>
                     </ul>
                   </div>
@@ -249,9 +263,16 @@
                     <ul>
                       <li *ngFor="let user of projectDetails.projectManager; let i = index">{{user.name}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <input autocomplete [config]="config2" [items]="items4"
+                        <!-- <input autocomplete [config]="config2" [items]="items4"
                           (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelectProjectManager($event)">
+                          (selectEvent)="onSelectProjectManager($event)"> -->
+                        <input 
+                          [ng5-auto-complete]="items4"
+                          filterName="config2.sourceField"
+                          no-record-text="config2.placeholder"
+                          (valueChanged)="onSelectProjectManager($event)"
+                          (input)="onInputChangedEvent($event)"
+                        />
                       </li>
                     </ul>
                   </div>
@@ -272,9 +293,16 @@
                     <ul>
                       <li *ngFor="let user of projectDetails.designer; let i = index">{{user.name}}<span (click)="removeDesigner(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <input autocomplete [config]="config2" [items]="items5"
+                        <!-- <input autocomplete [config]="config2" [items]="items5"
                           (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelectDesigner($event)">
+                          (selectEvent)="onSelectDesigner($event)"> -->
+                        <input 
+                          [ng5-auto-complete]="items5"
+                          filterName="config2.sourceField"
+                          no-record-text="config2.placeholder"
+                          (valueChanged)="onSelectDesigner($event)"
+                          (input)="onInputChangedEvent($event)"
+                        />
                       </li>
                     </ul>
                   </div>

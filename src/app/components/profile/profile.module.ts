@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 // import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
 
 import { BreadcrumbBarComponent } from './breadcrumbbar/breadcrumbbar.component';
@@ -54,7 +54,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     BreadcrumbModule,
     CommonCmpModule,
     TabModule,
-    AutocompleteModule,
+    AutoCompleteModule,
     FormsModule,
     ImageCropperModule,
   ],

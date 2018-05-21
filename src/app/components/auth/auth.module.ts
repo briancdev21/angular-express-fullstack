@@ -17,7 +17,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ForgotPasswordComponent } from './forgotpassword/forgotpassword.component';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 import { AuthComponent } from './auth.component';
 
 
@@ -40,7 +40,7 @@ import { AuthComponent } from './auth.component';
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutocompleteModule,
+    AutoCompleteModule,
     MatInputModule,
     MatButtonModule,
     MatButtonToggleModule,

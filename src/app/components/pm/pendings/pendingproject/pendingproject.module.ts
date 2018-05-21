@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 import { PendingProjectBreadcrumbBarComponent } from './pendingprojectbreadcrumbbar/pendingprojectbreadcrumbbar.component';
 
 import { AddDetailedTaskComponent } from '../../adddetailedtask/adddetailedtask.component';
@@ -56,7 +56,7 @@ export const MY_NATIVE_FORMATS = {
     CommonCmpModule,
     ProfileCmpModule,
     TabModule,
-    AutocompleteModule,
+    AutoCompleteModule,
     FormsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,

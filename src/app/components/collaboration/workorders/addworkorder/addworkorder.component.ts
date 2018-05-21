@@ -244,12 +244,12 @@ export class AddWorkOrderComponent implements OnInit {
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
-  config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  config2: any = {'placeholder': 'No Result', 'sourceField': 'label'};
   items2: any[] = [
-    {id: 0, payload: {label: 'John Moss', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Latif', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Dennis', imageUrl: 'assets/users/user3.png'}},
-    {id: 3, payload: {label: 'Sepher', imageUrl: 'assets/users/man.png'}},
+    {id: 0, label: 'John Moss', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Latif', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
+    {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
   ];
 
   searchableList = ['description'];
@@ -297,7 +297,7 @@ export class AddWorkOrderComponent implements OnInit {
 
   removeUser(i: number) {
     const item = this.workorderDetails.followers[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.workorderDetails.followers.splice(i, 1);
   }
 
@@ -467,9 +467,9 @@ export class AddWorkOrderComponent implements OnInit {
   onSelectFollowers(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.workorderDetails.followers.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.workorderDetails.followers.push({name: item.label, imageUrl: item.imageUrl });
   }
 
   getColor(task) {

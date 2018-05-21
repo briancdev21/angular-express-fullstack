@@ -22,9 +22,13 @@
           <ul>
             <li *ngFor="let user of userInfo.followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
             <li style="background: none; width: 100%; margin: 0;">
-                <input autocomplete [config]="config2" [items]="items2"
-                (inputChangedEvent)="onInputChangedEvent($event)"
-                (selectEvent)="onSelect($event)">
+              <input 
+                [ng5-auto-complete]="items2"
+                filterName="config2.sourceField"
+                no-record-text="config2.placeholder"
+                (valueChanged)="onSelect($event)"
+                (input)="onSelectAccountManager($event)"
+              />
             </li>
           </ul>
         </div>

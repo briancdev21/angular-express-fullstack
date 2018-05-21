@@ -28,15 +28,15 @@ export class PurchaseOrderListFilterComponent implements OnInit {
   customersList = [];
   purchaseOrdersList = [];
   items2: any[] = [
-    {id: 0, payload: {label: 'Partial Fulfilment'}},
-    {id: 1, payload: {label: 'Open'}},
-    {id: 2, payload: {label: 'Transfered'}},
-    {id: 3, payload: {label: 'Adjustment'}},
-    {id: 3, payload: {label: 'Fulfilled'}},
-    {id: 3, payload: {label: 'Partially Delivered'}},
-    {id: 3, payload: {label: 'Delivered'}},
+    {id: 0, label: 'Partial Fulfilment'},
+    {id: 1, label: 'Open'},
+    {id: 2, label: 'Transfered'},
+    {id: 3, label: 'Adjustment'},
+    {id: 3, label: 'Fulfilled'},
+    {id: 3, label: 'Partially Delivered'},
+    {id: 3, label: 'Delivered'},
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  config2: any = {'placeholder': 'No Result', 'sourceField': 'label'};
 
   public selectedMoment = new Date();
   public startedMin;
@@ -110,9 +110,9 @@ export class PurchaseOrderListFilterComponent implements OnInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.purchaseorderStatus.push(item.payload.label);
+    this.purchaseorderStatus.push(item.label);
   }
 
   onInputChangedEvent(val: string) {
@@ -121,7 +121,7 @@ export class PurchaseOrderListFilterComponent implements OnInit {
 
   removeStatus(i: number) {
     const item = this.purchaseorderStatus[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.purchaseorderStatus.splice(i, 1);
   }
 

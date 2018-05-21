@@ -59,29 +59,29 @@ export class ProjectDetailsComponent implements OnInit {
   selectedItem: any = '';
   inputChanged: any = '';
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   items3: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items4: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items5: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
 
   userInfo = {
@@ -206,7 +206,7 @@ export class ProjectDetailsComponent implements OnInit {
     this.editable = false;
     this.userInfo.followers.forEach(element => {
       this.items2 = this.items2.filter(function( obj ) {
-        return obj.payload.label !== element.name;
+        return obj.label !== element.name;
       });
     });
 
@@ -221,33 +221,33 @@ export class ProjectDetailsComponent implements OnInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.projectDetails.collaborators.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.projectDetails.collaborators.push({name: item.label, imageUrl: item.imageUrl });
   }
 
   onSelectAccountManager(item: any) {
     this.selectedItem = item;
     this.items3 = this.items3.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.projectDetails.accountManager.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.projectDetails.accountManager.push({name: item.label, imageUrl: item.imageUrl });
   }
 
   onSelectProjectManager(item: any) {
     this.selectedItem = item;
     this.items4 = this.items4.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.projectDetails.projectManager.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.projectDetails.projectManager.push({name: item.label, imageUrl: item.imageUrl });
   }
 
   onSelectDesigner(item: any) {
     this.selectedItem = item;
     this.items5 = this.items5.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.projectDetails.designer.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.projectDetails.designer.push({name: item.label, imageUrl: item.imageUrl });
   }
 
 
@@ -257,25 +257,25 @@ export class ProjectDetailsComponent implements OnInit {
 
   removeUser(i: number) {
     const item = this.projectDetails.collaborators[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectDetails.collaborators.splice(i, 1);
   }
 
   removeAccountManager(i: number) {
     const item = this.projectDetails.accountManager[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectDetails.accountManager.splice(i, 1);
   }
 
   removeProjectManager (i: number) {
     const item = this.projectDetails.projectManager[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectDetails.projectManager.splice(i, 1);
   }
 
   removeDesigner (i: number) {
     const item = this.projectDetails.designer[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectDetails.designer.splice(i, 1);
   }
 
@@ -286,6 +286,7 @@ export class ProjectDetailsComponent implements OnInit {
   getSubCategories(data) {
     this.sendUpdatedSubCategories.emit(data);
   }
+
   // saveProjectDetails() {
   //   let total = 0;
   //   for (let i = 0; i < this.projectDetails.paymentSchedule.length ; i ++) {

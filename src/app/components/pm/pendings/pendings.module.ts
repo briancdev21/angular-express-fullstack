@@ -16,7 +16,7 @@ import { FilterService } from './filter.service';
 import { PendingsListTableComponent } from './pendingslisttable/pendingslisttable.component';
 import { PendingFilterComponent } from './pendingfilter/pendingfilter.component';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 
 
 @NgModule({
@@ -36,7 +36,7 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutocompleteModule,
+    AutoCompleteModule,
     PendingProjectCmpModule
   ],
   exports: [

@@ -79,18 +79,18 @@ export class ProjectInformationComponent implements OnInit {
   editableAm: boolean;
   inputChanged: any = '';
   selectedItem: any = '';
-  config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Dennis', imageUrl: 'assets/users/user3.png'}},
-    {id: 3, payload: {label: 'Sepher', imageUrl: 'assets/users/man.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
+    {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
   ];
   items3: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Dennis', imageUrl: 'assets/users/user3.png'}},
-    {id: 3, payload: {label: 'Sepher', imageUrl: 'assets/users/man.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
+    {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
   ];
   associationList = ['John Moss', 'Latif', 'Dennis'];
   pmList = ['John Moss', 'Latif', 'Dennis'];
@@ -129,28 +129,28 @@ export class ProjectInformationComponent implements OnInit {
   onSelectProjectManager(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.projectInformation.projectManager.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.projectInformation.projectManager.push({name: item.label, imageUrl: item.imageUrl });
   }
 
   removeProjectManager(i: number) {
     const item = this.projectInformation.projectManager[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectInformation.projectManager.splice(i, 1);
   }
 
   onSelectAccountManager(item: any) {
     this.selectedItem = item;
     this.items3 = this.items3.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.projectInformation.accountManager.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.projectInformation.accountManager.push({name: item.label, imageUrl: item.imageUrl });
   }
 
   removeAccountManager(i: number) {
     const item = this.projectInformation.accountManager[i];
-    this.items3.push({id: this.items3.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items3.push({id: this.items3.length, label: item.name, imageUrl: item.imageUrl});
     this.projectInformation.accountManager.splice(i, 1);
   }
 

@@ -29,12 +29,12 @@ export class OrderProfileComponent implements OnInit {
   savedStaff: any;
 
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
 
   constructor(private orderService: OrderService) {
     const comp = this;
@@ -241,7 +241,7 @@ export class OrderProfileComponent implements OnInit {
     const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
     this.orderProfileInfo.followers.forEach(element => {
       this.items2 = this.items2.filter(function( obj ) {
-        return obj.payload.label !== element.name;
+        return obj.label !== element.name;
       });
     });
 
@@ -398,11 +398,11 @@ export class OrderProfileComponent implements OnInit {
 
   onSelect(item: any) {
     this.selectedItem = item;
-    this.orderService.postTimelineData({title: item.payload.label, type: 'addNewStaff'});
+    this.orderService.postTimelineData({title: item.label, type: 'addNewStaff'});
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.orderProfileInfo.followers.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this.orderProfileInfo.followers.push({name: item.label, imageUrl: item.imageUrl });
   }
 
 
@@ -413,7 +413,7 @@ export class OrderProfileComponent implements OnInit {
   removeUser(i: number) {
     const item = this.orderProfileInfo.followers[i];
     this.orderService.postTimelineData({title: item.name, type: 'removeStaff'});
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.orderProfileInfo.followers.splice(i, 1);
   }
 

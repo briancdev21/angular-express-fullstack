@@ -22,7 +22,7 @@ import { DragulaModule } from 'ng2-dragula';
 
 import { PmService } from './pm.service';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 import { Autosize } from 'ng-autosize/src/autosize.directive';
 import { MapToKeysPipe } from './mytasks/map-to-keys.pipe';
 
@@ -49,7 +49,7 @@ import { MapToKeysPipe } from './mytasks/map-to-keys.pipe';
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutocompleteModule,
+    AutoCompleteModule,
     MatInputModule,
     MatButtonModule,
     MatButtonToggleModule,

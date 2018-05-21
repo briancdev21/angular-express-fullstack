@@ -20,7 +20,7 @@ import { WorkOrdersCmpModule } from './workorders/workorders.module';
 
 import { CollaborationService } from './collaboration.service';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { AutoCompleteModule } from 'ng5-auto-complete';
 
 
 @NgModule({
@@ -42,7 +42,7 @@ import { AutocompleteModule } from 'ng2-input-autocomplete';
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutocompleteModule,
+    AutoCompleteModule,
     MatInputModule,
     MatButtonModule,
     MatButtonToggleModule,

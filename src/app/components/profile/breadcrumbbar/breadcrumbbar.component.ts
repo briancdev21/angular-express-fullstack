@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,21 +8,27 @@ import { Router } from '@angular/router';
     './breadcrumbbar.component.css'
   ]
 })
-export class BreadcrumbBarComponent {
-  @Input() userInfo;
+export class BreadcrumbBarComponent implements AfterViewInit {
+  @Input() set userInfo(val) {
+    this._userInfo = val;
+    this.init();
+  }
   @Input() keywords;
+  autocompleterLoaded = false;
   editable: boolean;
+  _userInfo: any;
   newKeyword: string;
-  selectedItem: any = '';
+  selectedItem: any;
   inputChanged: any = '';
   public data = ['contact', ''];
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
+    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  list = ['hiello', 'world', 'this'];
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
 
   constructor() {
     const comp = this;
@@ -31,24 +37,24 @@ export class BreadcrumbBarComponent {
     });
   }
 
-  ngOnInit() {
-    this.editable = false;
-    this.userInfo.followers.forEach(element => {
-      this.items2 = this.items2.filter(function( obj ) {
-        return obj.payload.label !== element.name;
+  init() {
+      this.editable = false;
+      this._userInfo.followers.forEach(element => {
+        this.items2 = this.items2.filter(function( obj ) {
+          return obj.label !== element.name;
+        });
       });
-    });
-
-    // input breadcrumb bar info
-    this.data = ['contact', this.userInfo.name];
+      console.log('followers:', this.items2);
+      // input breadcrumb bar info
+      this.data = ['contact', this._userInfo.name];
   }
 
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.payload.label !== item.payload.label;
+      return obj.label !== item.label;
     });
-    this.userInfo.followers.push({name: item.payload.label, imageUrl: item.payload.imageUrl });
+    this._userInfo.followers.push({name: item.label, imageUrl: item.imageUrl });
   }
 
 
@@ -65,8 +71,12 @@ export class BreadcrumbBarComponent {
   }
 
   removeUser(i: number) {
-    const item = this.userInfo.followers[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
-    this.userInfo.followers.splice(i, 1);
+    const item = this._userInfo.followers[i];
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
+    this._userInfo.followers.splice(i, 1);
+  }
+
+  ngAfterViewInit() {
+    this.autocompleterLoaded = true;
   }
 }
