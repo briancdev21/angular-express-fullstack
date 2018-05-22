@@ -120,6 +120,7 @@ import { EstimatesService } from './services/estimates.service';
     AuthGuard,
     EstimatesService,
     SuppliersService,
+    ProductsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
