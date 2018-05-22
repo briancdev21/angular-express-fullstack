@@ -6,12 +6,18 @@ import { HorizontalBarComponent } from './horizontalbar/horizontalbar.component'
 import { Ng2CompleterModule,  } from 'ng2-completer';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MorrisDonutComponent } from './morrisdonut/morrisdonut.component';
+import { MorrisLineComponent } from './morrislinechart/morrislinechart.component';
+import { MorrisAreaComponent } from './morrisareachart/morrisareachart.component';
 
 @NgModule({
   declarations: [
     CommonComponent,
     Ng2CompleterComponent,
-    HorizontalBarComponent
+    HorizontalBarComponent,
+    MorrisDonutComponent,
+    MorrisLineComponent,
+    MorrisAreaComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +28,10 @@ import { FormsModule } from '@angular/forms';
   exports: [
     CommonComponent,
     Ng2CompleterComponent,
-    HorizontalBarComponent
+    HorizontalBarComponent,
+    MorrisDonutComponent,
+    MorrisLineComponent,
+    MorrisAreaComponent
   ]
 })
 export class CommonCmpModule { }

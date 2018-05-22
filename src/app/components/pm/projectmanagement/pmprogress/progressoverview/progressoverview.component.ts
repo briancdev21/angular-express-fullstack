@@ -59,6 +59,22 @@ export class ProgressOverviewComponent implements OnInit {
     title: 'Project health is at ' + this.projectInfo.projectHealth + '%',
     completeness: this.projectInfo.projectHealth,
   };
+
+  public morrisDonutInfo = [
+    {
+        label: 'Online Sales',
+        value: 45,
+
+    }, {
+        label: 'Store Sales',
+        value: 35
+    }, {
+        label: 'Email Sales',
+        value: 8
+    }, {
+        label: 'Agent Sales',
+        value: 12
+    }];
   constructor( private pmService: PmService ) {
   }
 

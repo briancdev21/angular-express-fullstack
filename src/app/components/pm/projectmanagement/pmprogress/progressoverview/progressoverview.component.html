@@ -3,8 +3,22 @@
   <div class="horizontal-bar">
     <app-horizontalbar [barInfo]="barInfo"></app-horizontalbar>
   </div>
+  <div class="charts-area">
+    <div class="chart-row">
+      <div class="card">
+        <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo"></app-morrisdonut>
+      </div>
+      <div class="card">
+        <app-morrislinechart></app-morrislinechart>
+      </div>
+      <div class="card">
+        <app-morrisareachart></app-morrisareachart>
+      </div>
+    </div>
+  </div>
   <div>
     <app-progressprojectinformation></app-progressprojectinformation>
   </div>
+  
 
 </div>
