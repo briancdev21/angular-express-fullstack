@@ -11,6 +11,7 @@ import { ProductCustomDonutChartComponent } from './productcustomdonutchart/prod
 import { ProductCardsComponent } from './productcards/productcards.component';
 import { VariantsListTableComponent } from './variantslisttable/variantslisttable.component';
 import { ProductPricingComponent } from './productpricing/productpricing.component';
+import { ProductAccAlterComponent } from './productaccalter/productaccalter.component';
 
 import { TabModule } from 'angular-tabs-component';
 import { FormsModule } from '@angular/forms';
@@ -25,7 +26,8 @@ import { BreadcrumbModule } from '../../../breadcrumb/breadcrumb.module';
     ProductCustomDonutChartComponent,
     ProductCardsComponent,
     VariantsListTableComponent,
-    ProductPricingComponent
+    ProductPricingComponent,
+    ProductAccAlterComponent
   ],
   imports: [
     BrowserModule,

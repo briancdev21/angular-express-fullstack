@@ -1,0 +1,50 @@
+<div class="acce-alter">
+  <div class="product-acce-list">
+    <div class="acce-title">ACCESSORIES</div>
+    <div class="acce-content">
+      <table>
+        <tr>
+          <th (click)="sortArray('sku')">SKU</th>
+          <th (click)="sortArray('productName')">PRODUCT NAME</th>
+          <th (click)="sortArray('modelNumber')">MODEL NUMBER</th>
+          <th (click)="sortArray('brand')">BRAND</th>
+          <th (click)="sortArray('qty')">QTY</th> 
+          <th (click)="sortArray('price')">PRICE</th>
+          <th (click)="sortArray('options')">OPTIONS</th>
+        </tr>
+        <tr *ngFor="let product of productAccessories; let i = index">
+          <td>{{product.sku}}</td>
+          <td>{{product.productName}}</td>
+          <td>{{product.modelNumber}}</td>
+          <td>{{product.brand}}</td>
+          <td>$ {{product.qty}}</td>
+          <td>$ {{product.price | number: '1.2-2'}}</td>
+          <td>{{product.options}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="product-acce-list">
+    <div class="title">ALTERNATIVES</div>
+    <div class="alter-content">
+      <table>
+        <tr>
+          <th (click)="sortArray('sku')">SKU</th>
+          <th (click)="sortArray('productName')">PRODUCT NAME</th>
+          <th (click)="sortArray('modelNumber')">MODEL NUMBER</th>
+          <th (click)="sortArray('brand')">BRAND</th>
+          <th (click)="sortArray('qty')">QTY</th> 
+          <th (click)="sortArray('price')">PRICE</th>
+        </tr>
+        <tr *ngFor="let product of productAlternatives; let i = index">
+          <td>{{product.sku}}</td>
+          <td>{{product.productName}}</td>
+          <td>{{product.modelNumber}}</td>
+          <td>{{product.brand}}</td>
+          <td>$ {{product.qty}}</td>
+          <td>$ {{product.price | number: '1.2-2'}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
