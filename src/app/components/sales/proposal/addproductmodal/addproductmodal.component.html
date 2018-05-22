@@ -44,7 +44,7 @@
           </div>
           <div class="product-name">
             <span>Product Name</span>
-            <input placeholder="Enter the product title" [ngClass]="{'validation-required': invalidProductName}" maxlength="100" [(ngModel)]="addedProduct.name" [value]="addedProduct.productName">
+            <input placeholder="Enter the product title" [ngClass]="{'validation-required': invalidProductName}" maxlength="100" [(ngModel)]="addedProduct.productName">
           </div>
           <div class="product-desc">
             <span>Product Description</span>
@@ -72,9 +72,9 @@
             <div class="inventory-type">
               <span>Inventory Type</span>
               <select [(ngModel)]="addedProduct.inventoryType" (ngModelChange)="changeType(addedProduct.inventoryType)">
-                <option value="stockable">Stockable</option>
-                <option value="non-stockable">Non-Stockable</option>
-                <option value="service">Service</option>
+                <option value="STOCKABLE">Stockable</option>
+                <option value="NON_STOCKABLE">Non-Stockable</option>
+                <option value="SERVICE">Service</option>
               </select>
             </div>
             <div class="measure-exp">

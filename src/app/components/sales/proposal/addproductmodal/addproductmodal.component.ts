@@ -61,7 +61,7 @@ export class AddProductModalComponent implements OnInit {
     { color: 'yellow', value: '#ff0' },
     { color: 'black', value: '#000' }
   ];
-  protected types = ['Stockable', 'Non-Stockable', 'Service Product'];
+  protected types = ['STOCKABLE', 'NON_STOCKABLE', 'SERVICE'];
   private suppliers;
   private brands;
 
@@ -81,15 +81,19 @@ export class AddProductModalComponent implements OnInit {
   accQueryString: any;
   queryString: any;
   onUploadStateChanged: any;
+  brandsListInfo: any;
+  suppliersListInfo: any;
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService) {
     this.suppliersService.getSuppliersList().subscribe(res => {
+      this.brandsListInfo = res.results;
       this.suppliers = res.results.map(s => s.name);
       console.log('supplier: ', this.suppliers);
     });
 
     this.sharedService.getBrands().subscribe(res => {
+      this.brandsListInfo = res.results;
       this.brands = res.results.map(b => b.name);
     });
     this.dataService = completerService.local(this.searchData, 'color', 'color');
@@ -103,7 +107,7 @@ export class AddProductModalComponent implements OnInit {
       measureCount: '1',
       expiration: '',
       brand: '',
-      inventoryType: 'stockable',
+      inventoryType: 'STOCKABLE',
       measure: 'perUnit',
       expirationType: '',
       qty: 0,
@@ -182,7 +186,7 @@ export class AddProductModalComponent implements OnInit {
         if (!this.addedProduct.productDesc) {
           this.invalidProductDescription = true;
         }
-        if (!this.type) {
+        if (!this.addedProduct.type) {
           this.invalidProductType = true;
         }
         if (!this.supplier) {
@@ -508,10 +512,10 @@ export class AddProductModalComponent implements OnInit {
   }
 
   changeType (value) {
-    if (value === 'stockable') {
+    if (value === 'STOCKABLE') {
       this.greyedNonStock = false;
       this.greyedService = false;
-    } else if (value === 'non-stockable') {
+    } else if (value === 'NON_STOCKABLE') {
       this.greyedNonStock = true;
       this.greyedService = false;
     } else {
