@@ -29,6 +29,7 @@ export class BreadcrumbBarComponent implements AfterViewInit {
   ];
   list = ['hiello', 'world', 'this'];
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
+  isAutocompleteUpdated = false;
 
   constructor() {
     const comp = this;
@@ -74,6 +75,7 @@ export class BreadcrumbBarComponent implements AfterViewInit {
     const item = this._userInfo.followers[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this._userInfo.followers.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   ngAfterViewInit() {
