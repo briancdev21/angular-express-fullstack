@@ -83,7 +83,32 @@ export class ProgressOverviewComponent implements OnInit {
 
   public morrisDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
-    donutTimePeriod = 'month';
+  donutTimePeriod = 'month';
+
+  public morrisLineChartInfo = [
+    {
+      period: 'Jun',
+      revenue: 67000,
+    }, {
+      period: 'JUL',
+      revenue: 54000,
+    }, {
+      period: 'AUG',
+      revenue: 35203,
+    }, {
+      period: 'SEP',
+      revenue: 62652,
+    }, {
+      period: 'OCT',
+      revenue: 802520,
+    }, {
+      period: 'NOV',
+      revenue: 152000,
+    }, {
+      period: 'DEC',
+      revenue: 1520003,
+    },
+    ];
   constructor( private pmService: PmService ) {
   }
 
