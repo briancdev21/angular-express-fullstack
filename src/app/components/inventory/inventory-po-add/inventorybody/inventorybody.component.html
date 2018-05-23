@@ -6,7 +6,7 @@
           <app-po-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" ></app-po-customer-name>
           <app-po-project-selector class="flex1 ml-15" [projects]="projects" ></app-po-project-selector>
         </div>
-        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" (shippingAddressChange)="onShippingAddressChanged($event)" ></app-shippingaddress>
+        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [addressFromLocation]="shippingAddress" (shippingAddressChange)="onShippingAddressChanged($event)" ></app-shippingaddress>
       </div>
       <div class="right-sidebar">
         <app-po-orderidfield [po_id]="po_id" ></app-po-orderidfield>
@@ -29,11 +29,11 @@
         </div>
       </div>
       <div class="bill-count" >
-          <app-po-subtotalproducts [subtotalproducts]="subtotalproducts" ></app-po-subtotalproducts>
-          <app-po-discount [discountTypeIn]="discountType" [discountamount]="discountAmount" (discountChange)="onTotalPriceChange($event)" ></app-po-discount>
-          <app-po-freightcosts [(freightcosts)]="freightcosts" (freightcostsChange)="onTotalPriceChange($event)" ></app-po-freightcosts>
-          <app-po-taxes [taxes]="taxes" ></app-po-taxes>
-          <app-po-totalamountdue [totalamountdue]="totalamountdue" ></app-po-totalamountdue>
+          <app-po-subtotalproducts [subtotalproducts]="po_mock.subTotal" ></app-po-subtotalproducts>
+          <app-po-discount [discountTypeIn]="po_mock.discount.unit" [discountamount]="po_mock.discount.value" (discountChange)="onTotalPriceChange($event)" ></app-po-discount>
+          <app-po-freightcosts [(freightcosts)]="po_mock.freightCost" (freightcostsChange)="onTotalPriceChange($event)" ></app-po-freightcosts>
+          <app-po-taxes [taxes]="po_mock.totalTax" ></app-po-taxes>
+          <app-po-totalamountdue [totalamountdue]="po_mock.total" ></app-po-totalamountdue>
       </div>
     </div>
   </div>

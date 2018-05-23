@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 export default class InventoryBodyComponent {
   @Input() set poData(_podata) {
     this.po_mock = _podata;
+    console.log('po mock', this.po_mock);
     if (_podata) {
       this.po_id = `PO-${this.po_mock.id}`;
       this.discountAmount = this.po_mock.discount.value;
@@ -104,76 +105,43 @@ export default class InventoryBodyComponent {
     this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id, 10);
   }
 
-  onSelectLocation(selectedLocation: string) {
-    this.po_mock.location = parseInt(selectedLocation, 10);
+  onSelectLocation(selectedLocationId: string) {
+    this.po_mock.location = parseInt(selectedLocationId, 10);
+    const selectedLocation = this.locations.filter(location => location.id.toString() === selectedLocationId);
+    console.log('address:', selectedLocation[0].address);
+    this.shippingAddress = selectedLocation[0].address;
   }
 
-  onSelectTerm(selectedTerm: string) {
-    this.po_mock.term = parseInt(selectedTerm, 10);
-  }
-
-  onPriceChanged() {
-    this.subtotalproducts = 0;
-    this.taxes = 0;
-    this.taxrate = 0;
-    this.origin_taxes = this.taxes;
-
-    this.productDetails.forEach( product => {
-      let taxrate;
-      switch (product.taxrate) {
-        case 'GST': taxrate = 5; break;
-        case 'PST': taxrate = 7; break;
-        case undefined: taxrate = 0; break;
-        default: {
-          taxrate = parseInt(product.taxrate, 10);
-        }
-      }
-      if (product.total !== undefined) {
-        this.subtotalproducts += product.total;
-        if (taxrate !== 0) { this.taxes += product.total * taxrate / 100; this.taxrate = taxrate; }
-        this.subtotalproducts = Math.round(this.subtotalproducts * 100) / 100 ;
-        this.taxes = Math.round(this.taxes * 100) / 100 ;
-        this.origin_taxes = this.taxes;
-      }
+  onSelectTerm(selectedTermId: string) {
+    this.po_mock.term = parseInt(selectedTermId, 10);
+    const selectedTerm = this.terms.filter(term => term.id.toString() === selectedTermId);
+    const dueDateTimestamp = new Date(this.po_mock.dueDate);
+    this.dueDate = new Date(dueDateTimestamp.getTime() + selectedTerm[0]['days'] * 86400 * 1000);
+    console.log(this.dueDate, 'sec:', selectedTerm[0]['days']);
+    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
+      console.log('mock_data term', data.data);
     });
-    this.onTotalPriceChange(this);
-
   }
 
   onTotalPriceChange(data) {
-    let freightcosts;
-    let discountAmount;
-    this.taxes = this.origin_taxes;
-
-    if (data.amount !== undefined) { this.discountAmount = data.amount; this.po_mock.discount.value = data.amount; }
-    if (data.discountType !== this.discountType && data.type) { this.discountType = data.type; this.po_mock.discount.unit = data.type; }
-    if (data.freightcosts !== undefined) { this.freightcosts = data.freightcosts; this.po_mock.freightCost = data.freightcosts; }
-    freightcosts = this.freightcosts;
-    discountAmount = this.discountAmount;
-    if (freightcosts === undefined) { freightcosts = 0; this.po_mock.freightCost = freightcosts; }
-    if (discountAmount === 0) { discountAmount = 0; this.discountAmount  = undefined; this.po_mock.discount.value = discountAmount; }
-    if (freightcosts !== undefined && this.subtotalproducts !== undefined) {
-      if (discountAmount === undefined) { discountAmount = 0; this.po_mock.discount.value = discountAmount; }
-
-      switch (this.discountType.toLowerCase()) {
-        case 'percent': {
-          this.taxes = this.taxes * (1 - discountAmount / 100);
-          this.totalamountdue = this.subtotalproducts * (100 - discountAmount) / 100 + freightcosts + this.taxes;
-        }
-        break;
-        case 'amount': {
-          this.taxes -= discountAmount * this.taxrate / 100;
-          this.totalamountdue = this.subtotalproducts - discountAmount + freightcosts + this.taxes;
-        }
-        break;
-      }
-      this.totalamountdue =  Math.round(this.totalamountdue * 100) / 100;
-
-      // Fill freightCost, discount unit, discount value
-      this.po_mock.freightCost = freightcosts;
-      this.po_mock.discount.value = discountAmount;
-      this.po_mock.discount.unit = this.discountType.toUpperCase();
+    if (data.amount !== undefined) {
+      this.discountAmount = data.amount;
+      this.po_mock.discount.value = data.amount;
     }
+    if (data.discountType !== this.discountType && data.type) {
+      this.discountType = data.type;
+      this.po_mock.discount.unit = data.type;
+    }
+    if (data.freightcosts !== undefined) {
+      this.freightcosts = data.freightcosts;
+      this.po_mock.freightCost = data.freightcosts;
+    }
+    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((resp) => {
+      console.log('mock_data term', resp.data);
+      this.po_mock.subTotal = resp.data.subTotal;
+      this.po_mock.totalTax = resp.data.totalTax;
+      this.po_mock.total = resp.data.total;
+    });
   }
 
   onCancel() {
@@ -196,16 +164,28 @@ export default class InventoryBodyComponent {
 
   onDueDateChanged(event) {
     this.po_mock.dueDate = event;
+    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
+      console.log('mock_data term', data.data);
+    });
   }
   onNoteChanged(event) {
     this.po_mock.supplierNote = event;
+    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
+      console.log('mock_data term', data.data);
+    });
   }
 
   onMemoChanged(event) {
     this.po_mock.internalMemo = event;
+    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
+      console.log('mock_data term', data.data);
+    });
   }
 
   onShippingAddressChanged(event) {
     this.po_mock.shippingAddress = event;
+    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
+      console.log('mock_data term', data.data);
+    });
   }
 }
