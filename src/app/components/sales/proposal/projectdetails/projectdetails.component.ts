@@ -50,6 +50,10 @@ export class ProjectDetailsComponent implements OnInit {
   invalidSchedule = false;
   invalidAccountManager = false;
   invalidProjectManager = false;
+  isAutocompleteUpdated2 = false;
+  isAutocompleteUpdated3 = false;
+  isAutocompleteUpdated4 = false;
+  isAutocompleteUpdated5 = false;
 
   editable: boolean;
   accountEditable: boolean;
@@ -259,24 +263,28 @@ export class ProjectDetailsComponent implements OnInit {
     const item = this.projectDetails.collaborators[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectDetails.collaborators.splice(i, 1);
+    this.isAutocompleteUpdated2 = !this.isAutocompleteUpdated2;
   }
 
   removeAccountManager(i: number) {
     const item = this.projectDetails.accountManager[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectDetails.accountManager.splice(i, 1);
+    this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
   }
 
   removeProjectManager (i: number) {
     const item = this.projectDetails.projectManager[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectDetails.projectManager.splice(i, 1);
+    this.isAutocompleteUpdated4 = !this.isAutocompleteUpdated4;
   }
 
   removeDesigner (i: number) {
     const item = this.projectDetails.designer[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectDetails.designer.splice(i, 1);
+    this.isAutocompleteUpdated5 = !this.isAutocompleteUpdated5;
   }
 
   getCategories(data) {
