@@ -33,6 +33,7 @@ export class WorkOrderFilterComponent implements OnInit {
     {id: 3, label: 'Joseph', imageUrl: 'assets/users/man.png'},
   ];
   config2: any = {'placeholder': 'No Result', 'sourceField': 'label'};
+  isAutocompleteUpdated = false;
 
   public selectedMoment = new Date();
   public startedMin;
@@ -125,6 +126,7 @@ export class WorkOrderFilterComponent implements OnInit {
     const item = this.collaborators[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.collaborators.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   selectStartedFrom(event) {

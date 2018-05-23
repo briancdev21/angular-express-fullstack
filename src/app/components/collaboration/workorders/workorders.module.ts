@@ -13,7 +13,7 @@ import { WorkOrdersTableComponent } from './workorderstable/workorderstable.comp
 import { WorkOrderFilterComponent } from './workorderfilter/workorderfilter.component';
 import { AddWorkOrderComponent } from './addworkorder/addworkorder.component';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutoCompleteModule } from 'ng5-auto-complete';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { DragulaModule } from 'ng2-dragula';
 import { ClickOutsideModule } from 'ng4-click-outside';
 
@@ -40,7 +40,7 @@ import { SharedPipesModule } from '../../../pipes/sharedpipes.module';
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutoCompleteModule,
+    NgSelectModule,
     OrderProfileCmpModule,
     DragulaModule,
     ClickOutsideModule,
