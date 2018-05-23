@@ -6,6 +6,8 @@
 @import "~quill/dist/quill.core.css";
 @import "~quill/dist/quill.snow.css";
 @import "~quill/dist/quill.bubble.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~@ng-select/ng-select/themes/material.theme.css";
 
 .editor tabs .tabs__tab-bar {
   display: block;
@@ -230,4 +232,51 @@
 .main-content-small app-inventoryfooter #main,
 .main-content-small app-inventoryfooter #header  {
   left: 200px;
+}
+
+/* Ng Select Component Custom Style */
+.ng-select.ng-select-single .ng-select-container {
+  height: 30px;
+  min-height: auto;
+  display: flex;
+  align-items: center;
+  flex-flow: row;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper {
+  display: none;
+}
+
+.ng-select .ng-select-container .ng-value-container {
+  border-top: 0;
+  padding-left: 1em;
+  min-height: 25px;
+}
+
+.ng-select {
+  padding-bottom: .25em !important;
+  min-width: 150px;
+  font-size: 12px;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-clear-wrapper {
+  padding-right: 6px;
+}
+
+.ng-select .ng-select-container .ng-value-container {
+  display: flex;
+  flex: 1;
+  padding-top: 0;
+  align-items: center;
+  padding-bottom: 0;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-clear-wrapper {
+  top: 0;
+  bottom: 0;
+  align-self: center;
+}
+
+.ng-select .ng-select-container:after {
+  display: none;
 }

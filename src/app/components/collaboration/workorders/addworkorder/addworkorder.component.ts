@@ -270,7 +270,7 @@ export class AddWorkOrderComponent implements OnInit {
   workorderName: any;
   topTimeEstimationModal = false;
   queryString: any;
-
+  isAutocompleteUpdated = false;
 
   constructor(private completerService: CompleterService) {
     const comp = this;
@@ -299,6 +299,7 @@ export class AddWorkOrderComponent implements OnInit {
     const item = this.workorderDetails.followers[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.workorderDetails.followers.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   generateAutoId() {
