@@ -27,6 +27,7 @@ export class OrderProfileComponent implements OnInit {
   originalInternalNotes = '';
   originalWorkOrderDesc = '';
   savedStaff: any;
+  isAutocompleteUpdated = false;
 
   items2: any[] = [
     {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
@@ -415,6 +416,7 @@ export class OrderProfileComponent implements OnInit {
     this.orderService.postTimelineData({title: item.name, type: 'removeStaff'});
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.orderProfileInfo.followers.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   clickOutsideDesc (data) {
