@@ -15,8 +15,7 @@ import { FilterService } from './filter.service';
 import { ProjectsListTableComponent } from './projectslisttable/projectslisttable.component';
 import { ProjectsListFilterComponent } from './projectslistfilter/projectslistfilter.component';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutoCompleteModule } from 'ng5-auto-complete';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -35,7 +34,7 @@ import { AutoCompleteModule } from 'ng5-auto-complete';
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutoCompleteModule
+    NgSelectModule,
   ],
   exports: [
     ProjectsListTableComponent,

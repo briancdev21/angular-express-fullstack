@@ -56,6 +56,7 @@ export class ProjectsListFilterComponent implements OnInit {
   projectTotalFrom = 0;
   projectTotalTo = 0;
   filterClicked = false;
+  isAutocompleteUpdated = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -137,6 +138,7 @@ export class ProjectsListFilterComponent implements OnInit {
     const item = this.collaborators[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.collaborators.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   selectCreatedFrom(event) {
