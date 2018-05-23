@@ -100,6 +100,8 @@ export class ProjectInformationComponent implements OnInit {
   selectAssociation: any;
   selectPmManager: any;
   selectAccountReceivable: any;
+  isAutocompleteUpdated1 = false;
+  isAutocompleteUpdated2 = false;
 
   constructor( private router: Router, private pendingProjectService: PendingProjectService ) {
   }
@@ -109,6 +111,17 @@ export class ProjectInformationComponent implements OnInit {
     this.formattedEnd = moment(this.projectInformation.endDate).format('MMMM DD, YYYY');
     this.startMax = this.projectInformation.endDate;
     this.endMin = this.projectInformation.startDate;
+    const cmp = this;
+    for (let i = 0; i < this.projectInformation.projectManager.length; i++) {
+      this.items2 = this.items2.filter(function( obj ) {
+        return obj.name !== cmp.projectInformation.projectManager[i].name;
+      });
+    }
+    for (let j = 0; j < this.projectInformation.accountManager.length; j++) {
+      this.items3 = this.items3.filter(function( obj ) {
+        return obj.name !== cmp.projectInformation.accountManager[j].name;
+      });
+    }
   }
 
   selectStartDate(event) {
@@ -138,6 +151,7 @@ export class ProjectInformationComponent implements OnInit {
     const item = this.projectInformation.projectManager[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.projectInformation.projectManager.splice(i, 1);
+    this.isAutocompleteUpdated1 = !this.isAutocompleteUpdated1;
   }
 
   onSelectAccountManager(item: any) {
@@ -152,6 +166,7 @@ export class ProjectInformationComponent implements OnInit {
     const item = this.projectInformation.accountManager[i];
     this.items3.push({id: this.items3.length, label: item.name, imageUrl: item.imageUrl});
     this.projectInformation.accountManager.splice(i, 1);
+    this.isAutocompleteUpdated2 = !this.isAutocompleteUpdated2;
   }
 
   closePmEditableModal() {
