@@ -6,9 +6,32 @@
   <div class="charts-area">
     <div class="chart-row">
       <div class="card">
-        <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo"></app-morrisdonut>
+        <div class="card-header">
+          <span>PROJECT HOURS</span>
+          <select [(ngModel)]="donutTimePeriod">
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left" >
+            <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
+          </div>
+          <div class="card-centent-right">
+            <div class="row" *ngFor="let person of morrisDonutInfo; let i = index">
+              <div class="square" [ngStyle]="{'background-color': morrisDonutColors[i]}"></div>
+              <span>{{person.label}}</span>
+            </div>
+          </div>
+        </div>
+        
       </div>
       <div class="card">
+        <div class="card-header">
+          <span>REVENUE FOR THIS PROJECT</span>
+        </div>
         <app-morrislinechart></app-morrislinechart>
       </div>
       <div class="card">

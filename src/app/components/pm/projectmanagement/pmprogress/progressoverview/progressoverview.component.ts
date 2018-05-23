@@ -62,19 +62,28 @@ export class ProgressOverviewComponent implements OnInit {
 
   public morrisDonutInfo = [
     {
-        label: 'Online Sales',
-        value: 45,
-
+      label: 'Michael Yue',
+      value: 49,
     }, {
-        label: 'Store Sales',
-        value: 35
+      label: 'Tyler labonte',
+      value: 35
     }, {
-        label: 'Email Sales',
-        value: 8
+      label: 'Sepehr Shoarinejad',
+      value: 8
     }, {
-        label: 'Agent Sales',
-        value: 12
+      label: 'Steve Rogers',
+      value: 12
+    }, {
+      label: 'John Smith',
+      value: 8
+    }, {
+      label: 'Iron Man',
+      value: 99
     }];
+
+  public morrisDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
+
+    donutTimePeriod = 'month';
   constructor( private pmService: PmService ) {
   }
 

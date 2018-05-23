@@ -66,11 +66,104 @@ span {
   padding: 15px 100px 0 100px;
 }
 
-@media screen and (max-width: 1550px) {
+.chart-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+  width: 32.5%;
+  box-shadow: 1px 3px 7px #95989a;
+  border-top: 3px solid #cdd1d3;
+}
+
+.card-header {
+  border-bottom: 1px solid #cdd1d3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 25px;
+  color: #95989A;
+}
+
+.card-header span {
+  font-size: 19px;
+}
+
+.card-header select {
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: #95989A;
+  background: transparent;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.card-content-left {
+  /* flex: 2; */
+  width: 65%;
+  padding-right: 10%;
+}
+
+.card-content-right {
+  /* flex: 1; */
+  width: 24%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.square {
+  width: 20px;
+  height: 20px;
+  margin-right: 13px;
+}
+
+
+
+
+
+@media screen and (max-width: 1650px) {
 
   .top-project-info-section {
     padding-bottom: 5px;
   }
   
+  .card-content-left {
+    width: 70%;
+    padding-right: 5%;
+  }
+  
+  .card-content-right {
+    width: 25%;
+  }
+}
 
+@media screen and (max-width: 1550px) {
+  
+  .card-content-left {
+    width: 72%;
+    padding-right: 5%;
+  }
+  
+  .card-content-right {
+    width: 24%;
+  }
+
+  .row span {
+    font-size: 12px;
+  }
+
+  .square {
+    width: 15px;
+    height: 15px;;
+  }
 }
