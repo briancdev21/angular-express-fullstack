@@ -39,6 +39,9 @@ export class AddDetailedTaskComponent implements OnInit {
   mainContent = '';
   dependencyEditableTop = false;
   following = false;
+  isAutocompleteUpdated1 = false;
+  isAutocompleteUpdated2 = false;
+  isAutocompleteUpdated3 = false;
 
   private taskOwners = [
     {
@@ -133,6 +136,13 @@ export class AddDetailedTaskComponent implements OnInit {
 
   ngOnInit() {
     this.currentTaskOwner = {};
+    const cmp = this;
+    for (let i = 0; i < this.followers.length; i++) {
+      this.items2 = this.items2.filter(function( obj ) {
+        return obj.userId !== cmp.followers[i].userId;
+      });
+    }
+
   }
 
   openOwnerModal() {
@@ -175,7 +185,7 @@ export class AddDetailedTaskComponent implements OnInit {
     if (checkAvail) {
       return;
     } else {
-      this.selectedDependencies.push(item.id);
+      this.selectedDependencies.push(item);
     }
   }
 
@@ -186,8 +196,11 @@ export class AddDetailedTaskComponent implements OnInit {
 
   removeTask (i: number) {
     const item = this.selectedDependencies[i];
-    this.items2.push({id: this.items2.length, payload: {id: item.id, title: item.title}});
+    console.log('item:', item);
+    this.dependencyData.push({id: item.id, title: item.title});
     this.selectedDependencies.splice(i, 1);
+    this.isAutocompleteUpdated2 = !this.isAutocompleteUpdated2;
+    this.isAutocompleteUpdated1 = !this.isAutocompleteUpdated1;
   }
 
   onSelect(item: any) {
@@ -205,8 +218,9 @@ export class AddDetailedTaskComponent implements OnInit {
 
   removeUser(i: number) {
     const item = this.followers[i];
-    this.items2.push({id: this.items2.length, payload: {label: item.name, imageUrl: item.imageUrl}});
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl, userId: item.userId});
     this.followers.splice(i, 1);
+    this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
   }
 
   openAlert() {

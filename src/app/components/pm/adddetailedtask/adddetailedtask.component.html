@@ -40,18 +40,18 @@
       <div class="dependencies" (click)='dependencyEditableTop=true;$event.stopPropagation();'>
         <div class="edit-dependencies" *ngIf="dependencyEditableTop" (click)="dependencyEditableTop=true;$event.stopPropagation()" (clickOutside)="dependencyEditableTop=false">
           <ul>
-            <li *ngFor="let task of selectedDependencies; let i = index">{{task}}<span (click)="removeTask(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+            <li *ngFor="let task of selectedDependencies; let i = index">{{task.id}}<span (click)="removeTask(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
             <li style="background: none; width: 100%; margin: 0;">
-                <!-- <input autocomplete [config]="dependencyConfig" [items]="dependencyData"
-                (inputChangedEvent)="onInputChangedEvent($event)"
-                (selectEvent)="onDependencySelect($event)"> -->
-                <input 
-                  [ng5-auto-complete]="dependencyData"
-                  filterName="dependencyConfig.sourceField"
-                  no-record-text="dependencyConfig.placeholder"
-                  (valueChanged)="onDependencySelect($event)"
-                  (input)="onInputChangedEvent($event)"
-                />
+                <ng-select *ngIf="isAutocompleteUpdated1" [items]="dependencyData"
+                  bindLabel="title"
+                  [clearSearchOnAdd]="false"
+                  (add)="onDependencySelect($event)" >
+                </ng-select>
+                <ng-select *ngIf="!isAutocompleteUpdated1" [items]="dependencyData"
+                  bindLabel="title"
+                  [clearSearchOnAdd]="false"
+                  (add)="onDependencySelect($event)">
+                </ng-select>
             </li>
           </ul>
         </div>
@@ -92,25 +92,25 @@
   <div class="dependency" (click)='dependencyEditable=true;$event.stopPropagation();'>
     <img src="assets/images/link.png">
     <span *ngFor="let task of selectedDependencies; let i = index" class="selected-dependency" >
-      {{task}}
+      {{task.id}}
       <!-- <input [(ngModel)]="task.id" (input)="changeDependency(task.id, selectedDependencies, i)" disabled> -->
     </span>
     <div class="dependency-section">
       <div class="dependencies" (click)='dependencyEditable=true;$event.stopPropagation();'>
         <div class="edit-dependencies dp-down" *ngIf="dependencyEditable" (click)="dependencyEditable=true;$event.stopPropagation()" (clickOutside)="dependencyEditable=false">
           <ul>
-            <li *ngFor="let task of selectedDependencies; let i = index">{{task}}<span (click)="removeTask(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+            <li *ngFor="let task of selectedDependencies; let i = index">{{task.id}}<span (click)="removeTask(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
             <li style="background: none; width: 100%; margin: 0;">
-                <!-- <input autocomplete [config]="dependencyConfig" [items]="dependencyData"
-                (inputChangedEvent)="onInputChangedEvent($event)"
-                (selectEvent)="onDependencySelect($event)"> -->
-                <input 
-                  [ng5-auto-complete]="dependencyData"
-                  filterName="dependencyConfig.sourceField"
-                  no-record-text="dependencyConfig.placeholder"
-                  (valueChanged)="onDependencySelect($event)"
-                  (input)="onInputChangedEvent($event)"
-                />
+                <ng-select *ngIf="isAutocompleteUpdated2" [items]="dependencyData"
+                  bindLabel="title"
+                  [clearSearchOnAdd]="false"
+                  (add)="onDependencySelect($event)" >
+                </ng-select>
+                <ng-select *ngIf="!isAutocompleteUpdated2" [items]="dependencyData"
+                  bindLabel="title"
+                  [clearSearchOnAdd]="false"
+                  (add)="onDependencySelect($event)">
+                </ng-select>
             </li>
           </ul>
         </div>
@@ -137,16 +137,16 @@
         <ul>
           <li *ngFor="let user of followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;">
-              <!-- <input autocomplete [config]="config2" [items]="items2"
-              (inputChangedEvent)="onInputChangedEvent($event)"
-              (selectEvent)="onSelect($event)"> -->
-              <input 
-                [ng5-auto-complete]="items2"
-                filterName="config2.sourceField"
-                no-record-text="config2.placeholder"
-                (valueChanged)="onSelect($event)"
-                (input)="onInputChangedEvent($event)"
-              />
+              <ng-select *ngIf="isAutocompleteUpdated3" [items]="items2"
+                [bindLabel]="config2.sourceField"
+                [clearSearchOnAdd]="false"
+                (add)="onSelect($event)" >
+              </ng-select>
+              <ng-select *ngIf="!isAutocompleteUpdated3" [items]="items2"
+                [bindLabel]="config2.sourceField"
+                [clearSearchOnAdd]="false"
+                (add)="onSelect($event)">
+              </ng-select>
           </li>
         </ul>
       </div>
