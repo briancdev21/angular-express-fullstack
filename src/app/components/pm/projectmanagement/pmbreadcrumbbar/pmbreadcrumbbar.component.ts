@@ -25,6 +25,7 @@ export class PmBreadcrumbBarComponent implements OnInit {
     {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
+  isAutocompleteUpdated = false;
 
   constructor() {
     const comp = this;
@@ -67,6 +68,7 @@ export class PmBreadcrumbBarComponent implements OnInit {
     const item = this.userInfo.followers[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.userInfo.followers.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   tabChange(event) {
