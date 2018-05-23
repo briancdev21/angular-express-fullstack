@@ -75,16 +75,16 @@
                           <ul>
                             <li *ngFor="let task of milestones[i].tasks[j].dependency; let k = index">{{task}}<span (click)="removeDependency(i, j, k)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                             <li style="background: none; width: 100%; margin: 0;">
-                                <!-- <input autocomplete [config]="config2" [items]="allTasks"
-                                (inputChangedEvent)="onInputChangedEvent($event)"
-                                (selectEvent)="onSelect(i, j, $event)"> -->
-                                <input 
-                                  [ng5-auto-complete]="allTasks"
-                                  filterName="config2.sourceField"
-                                  no-record-text="config2.placeholder"
-                                  (valueChanged)="onSelect(i, j, $event)"
-                                  (input)="onInputChangedEvent($event)"
-                                />
+                                <ng-select *ngIf="isAutocompleteUpdated" [items]="allTasks"
+                                  bindLabel="config2.sourceField"
+                                  [clearSearchOnAdd]="false"
+                                  (add)="onSelect(i, j, $event)" >
+                                </ng-select>
+                                <ng-select *ngIf="!isAutocompleteUpdated" [items]="allTasks"
+                                  bindLabel="config2.sourceField"
+                                  [clearSearchOnAdd]="false"
+                                  (add)="onSelect(i, j, $event)">
+                                </ng-select>
                             </li>
                           </ul>
                         </div>
