@@ -57,6 +57,7 @@ export class ProductFilterComponent implements OnInit {
   inputChanged: any = '';
   selectSupplier =  '';
   filterClicked: any;
+  isAutocompleteUpdated = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -69,6 +70,12 @@ export class ProductFilterComponent implements OnInit {
     this.filteredProducts = this.productsListInfo;
     this.backUpProducts = this.productsListInfo;
     this.originFilters = Object.assign({}, this.filters);
+    const cmp = this;
+    for (let i = 0; i < this.productTags.length; i++) {
+      this.items2 = this.items2.filter(function( obj ) {
+        return obj !== cmp.productTags[i];
+      });
+    }
     // this.scoreFrom = this.filters.scoreFrom;
     // this.scoreTo = this.filters.scoreTo;
   }
@@ -94,6 +101,7 @@ export class ProductFilterComponent implements OnInit {
     const item = this.productTags[i];
     this.items2.push(item);
     this.productTags.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   selectCreatedFrom(event) {
