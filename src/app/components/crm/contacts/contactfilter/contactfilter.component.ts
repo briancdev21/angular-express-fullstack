@@ -57,6 +57,7 @@ export class ContactFilterComponent implements OnInit {
   selectedItem: any = '';
   inputChanged: any = '';
   filterClicked = false;
+  isAutocompleteUpdated = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -69,6 +70,13 @@ export class ContactFilterComponent implements OnInit {
     this.filteredContacts = this.contactsListInfo;
     this.backUpContacts = this.contactsListInfo;
     this.originFilters = Object.assign({}, this.filters);
+    const cmp = this;
+    for (let i = 0; i < this.contactOwners.length; i++) {
+      this.items2 = this.items2.filter(function( obj ) {
+        return obj !== cmp.contactOwners[i];
+      });
+    }
+
     // this.scoreFrom = this.filters.scoreFrom;
     // this.scoreTo = this.filters.scoreTo;
   }
@@ -89,6 +97,7 @@ export class ContactFilterComponent implements OnInit {
     const item = this.contactOwners[i];
     this.items2.push(item);
     this.contactOwners.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   // rangeSliderChange(event) {
