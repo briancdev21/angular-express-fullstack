@@ -18,5 +18,8 @@ export class PurchaseOrderModel {
     unit: string;
   };
   internalMemo: string;
-  supplierNote: string
+  supplierNote: string;
+  subTotal: number;
+  totalTax: number;
+  total: number;
 }

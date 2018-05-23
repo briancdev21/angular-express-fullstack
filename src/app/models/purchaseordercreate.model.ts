@@ -1,20 +1,20 @@
 export class PurchaseOrderCreateModel {
-  contactId:number = 1;
-  shippingAddress:any = {
-    address: '',
-    city:  '',
-    province:  '',
-    postalCode:  '',
-    country:  ''
+  contactId: number;
+  shippingAddress: {
+    address: string,
+    city:  string,
+    province:  string,
+    postalCode:  string,
+    country:  string
   };
-  location:number = 1;
-  freightCost:number = 0;
-  term:number = 1;
-  discount:any = {
+  location: number;
+  freightCost: number;
+  term: number;
+  discount: any = {
     value: 0,
-    unit: "AMOUNT"
+    unit: 'AMOUNT'
   };
-  internalMemo:string = '';
-  supplierNote:string = '';
-  dueDate:string = new Date().toJSON().slice(0, 10);
+  internalMemo: string;
+  supplierNote: string;
+  dueDate: string;
 }
