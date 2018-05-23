@@ -180,6 +180,10 @@ export class AddProposalComponent implements OnInit {
   selectName: any;
   selectAssociation: any;
   selectType: any;
+  isAutocompleteUpdated2 = false;
+  isAutocompleteUpdated3 = false;
+  isAutocompleteUpdated4 = false;
+  isAutocompleteUpdated5 = false;
 
   constructor(private completerService: CompleterService) {
     const comp = this;
@@ -286,24 +290,28 @@ export class AddProposalComponent implements OnInit {
     const item = this.proposalDetails.collaborators[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.proposalDetails.collaborators.splice(i, 1);
+    this.isAutocompleteUpdated2 = !this.isAutocompleteUpdated2;
   }
 
   removeAccountManager(i: number) {
     const item = this.proposalDetails.accountManager[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.proposalDetails.accountManager.splice(i, 1);
+    this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
   }
 
   removeProjectManager (i: number) {
     const item = this.proposalDetails.projectManager[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.proposalDetails.projectManager.splice(i, 1);
+    this.isAutocompleteUpdated4 = !this.isAutocompleteUpdated4;
   }
 
   removeDesigner (i: number) {
     const item = this.proposalDetails.designer[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.proposalDetails.designer.splice(i, 1);
+    this.isAutocompleteUpdated5 = !this.isAutocompleteUpdated5;
   }
 
   clickIconAutoId() {

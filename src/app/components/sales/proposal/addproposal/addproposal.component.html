@@ -30,13 +30,16 @@
                       <span *ngIf="!proposalDetails.collaborators.length" class="type-here">Type collaborator's name</span>
                       <li *ngFor="let user of proposalDetails.collaborators; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <input 
-                          [ng5-auto-complete]="items2"
-                          filterName="config2.sourceField"
-                          no-record-text="config2.placeholder"
-                          (valueChanged)="onSelect($event)"
-                          (input)="onInputChangedEvent($event)"
-                        />
+                        <ng-select *ngIf="isAutocompleteUpdated2" [items]="items2"
+                          bindLabel="config2.sourceField"
+                          [clearSearchOnAdd]="false"
+                          (add)="onSelect($event)" >
+                        </ng-select>
+                        <ng-select *ngIf="!isAutocompleteUpdated2" [items]="items2"
+                          bindLabel="config2.sourceField"
+                          [clearSearchOnAdd]="false"
+                          (add)="onSelect($event)">
+                        </ng-select>
                       </li>
                     </ul>
                   </div>
@@ -199,16 +202,16 @@
                       <span *ngIf="!proposalDetails.accountManager.length" class="type-here">Type User's name</span>
                       <li *ngFor="let user of proposalDetails.accountManager; let i = index">{{user.name}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <!-- <input autocomplete [config]="config2" [items]="items3"
-                          (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelectAccountManager($event)"> -->
-                        <input 
-                          [ng5-auto-complete]="items3"
-                          filterName="config2.sourceField"
-                          no-record-text="config2.placeholder"
-                          (valueChanged)="onSelectAccountManager($event)"
-                          (input)="onInputChangedEvent($event)"
-                        />
+                        <ng-select *ngIf="isAutocompleteUpdated3" [items]="items3"
+                          bindLabel="config2.sourceField"
+                          [clearSearchOnAdd]="false"
+                          (add)="onSelectAccountManager($event)" >
+                        </ng-select>
+                        <ng-select *ngIf="!isAutocompleteUpdated3" [items]="items3"
+                          bindLabel="config2.sourceField"
+                          [clearSearchOnAdd]="false"
+                          (add)="onSelectAccountManager($event)">
+                        </ng-select>
                       </li>
                     </ul>
                   </div>
@@ -227,16 +230,16 @@
                       <span *ngIf="!proposalDetails.projectManager.length" class="type-here">Type User's name</span>
                       <li *ngFor="let user of proposalDetails.projectManager; let i = index">{{user.name}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <!-- <input autocomplete [config]="config2" [items]="items4"
-                          (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelectProjectManager($event)"> -->
-                        <input 
-                          [ng5-auto-complete]="items4"
-                          filterName="config2.sourceField"
-                          no-record-text="config2.placeholder"
-                          (valueChanged)="onSelectProjectManager($event)"
-                          (input)="onInputChangedEvent($event)"
-                        />
+                        <ng-select *ngIf="isAutocompleteUpdated4" [items]="items4"
+                          bindLabel="config2.sourceField"
+                          [clearSearchOnAdd]="false"
+                          (add)="onSelectProjectManager($event)" >
+                        </ng-select>
+                        <ng-select *ngIf="!isAutocompleteUpdated4" [items]="items4"
+                          bindLabel="config2.sourceField"
+                          [clearSearchOnAdd]="false"
+                          (add)="onSelectProjectManager($event)">
+                        </ng-select>
                       </li>
                     </ul>
                   </div>
@@ -258,16 +261,16 @@
                       <span *ngIf="!proposalDetails.designer.length" class="type-here">Type User's name</span>
                       <li *ngFor="let user of proposalDetails.designer; let i = index">{{user.name}}<span (click)="removeDesigner(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <!-- <input autocomplete [config]="config2" [items]="items5"
-                          (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelectDesigner($event)"> -->
-                        <input 
-                          [ng5-auto-complete]="items5"
-                          filterName="config2.sourceField"
-                          no-record-text="config2.placeholder"
-                          (valueChanged)="onSelectDesigner($event)"
-                          (input)="onInputChangedEvent($event)"
-                        />
+                        <ng-select *ngIf="isAutocompleteUpdated5" [items]="items5"
+                          bindLabel="config2.sourceField"
+                          [clearSearchOnAdd]="false"
+                          (add)="onSelectDesigner($event)" >
+                        </ng-select>
+                        <ng-select *ngIf="!isAutocompleteUpdated5" [items]="items5"
+                          bindLabel="config2.sourceField"
+                          [clearSearchOnAdd]="false"
+                          (add)="onSelectDesigner($event)">
+                        </ng-select>
                       </li>
                     </ul>
                   </div>
