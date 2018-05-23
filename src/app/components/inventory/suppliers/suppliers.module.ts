@@ -16,7 +16,7 @@ import { SuppliersListTableComponent } from './supplierslisttable/supplierslistt
 import { SupplierFilterComponent } from './supplierfilter/supplierfilter.component';
 import { AddSupplierComponent } from './addsupplier/addsupplier.component';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutoCompleteModule } from 'ng5-auto-complete';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -36,7 +36,7 @@ import { AutoCompleteModule } from 'ng5-auto-complete';
     BrowserAnimationsModule,
     ProfileCmpModule,
     Ng2CompleterModule,
-    AutoCompleteModule,
+    NgSelectModule,
     CommonCmpModule
   ],
   exports: [

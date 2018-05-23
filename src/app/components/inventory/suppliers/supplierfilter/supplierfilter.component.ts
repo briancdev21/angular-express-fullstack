@@ -47,6 +47,7 @@ export class SupplierFilterComponent implements OnInit {
   selectSupplier =  '';
   selectContact = '';
   filterClicked = false;
+  isAutocompleteUpdated = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -81,6 +82,7 @@ export class SupplierFilterComponent implements OnInit {
     const item = this.supplierTags[i];
     this.allTags.push(item);
     this.supplierTags.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   filterTxt (arr, searchKey) {
