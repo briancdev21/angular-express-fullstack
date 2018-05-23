@@ -22,8 +22,7 @@ export class PurchaseOrderListFilterComponent implements OnInit {
   @Input() purchaseorderStatus;
   @Input() purchaseOrderTypes;
   @Output() filterParent: EventEmitter<any> = new EventEmitter;
-  @ViewChild('autofocus')
-  private elementRef: ElementRef;
+  // @ViewChild('autofocus') private elementRef: ElementRef;
 
   customersList = [];
   purchaseOrdersList = [];
@@ -37,7 +36,7 @@ export class PurchaseOrderListFilterComponent implements OnInit {
     {id: 3, label: 'Delivered'},
   ];
   config2: any = {'placeholder': 'No Result', 'sourceField': 'label'};
-
+  isAutocompleteUpdated = false;
   public selectedMoment = new Date();
   public startedMin;
   public startedMax;
@@ -94,7 +93,7 @@ export class PurchaseOrderListFilterComponent implements OnInit {
 
   editStatus() {
     this.editable = true;
-    setTimeout(() => this.elementRef.nativeElement.focus());
+    // setTimeout(() => this.elementRef.nativeElement.focus());
   }
 
   totalRangeSliderChange(event) {
@@ -121,8 +120,9 @@ export class PurchaseOrderListFilterComponent implements OnInit {
 
   removeStatus(i: number) {
     const item = this.purchaseorderStatus[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
+    this.items2.push({id: this.items2.length, label: item});
     this.purchaseorderStatus.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   selectStartedFrom(event) {
