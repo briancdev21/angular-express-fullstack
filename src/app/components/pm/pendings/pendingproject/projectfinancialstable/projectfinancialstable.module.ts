@@ -16,7 +16,7 @@ import { ProjectFinancialsTableComponent } from './projectfinancialstable.compon
 import { PfProductsListTableComponent } from './pfproductslisttable/pfproductslisttable.component';
 import { PfTableFilterComponent } from './pftablefilter/pftablefilter.component';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutoCompleteModule } from 'ng5-auto-complete';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { ClickOutsideModule } from 'ng4-click-outside';
 
 
@@ -39,7 +39,7 @@ import { ClickOutsideModule } from 'ng4-click-outside';
     ProfileCmpModule,
     Ng2CompleterModule,
     CommonCmpModule,
-    AutoCompleteModule,
+    NgSelectModule,
     ClickOutsideModule
   ],
   exports: [

@@ -23,7 +23,7 @@ import { SupplierProfileCmpModule } from './supplierprofile/supplierprofile.modu
 
 import { InventoryService } from './inventory.service';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutoCompleteModule } from 'ng5-auto-complete';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { InventoryADModule } from './inventory-ad-add/inventory.module';
 import { InventoryModule } from './inventory-po-profile/inventory.module';
 import { InventoryTRAddModule } from './inventory-tr-add/inventory.module';
@@ -48,7 +48,7 @@ import { InventoryPOAddModule } from './inventory-po-add/inventory.module';
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutoCompleteModule,
+    NgSelectModule,
     MatInputModule,
     MatButtonModule,
     MatButtonToggleModule,

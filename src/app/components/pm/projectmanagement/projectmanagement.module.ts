@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AutoCompleteModule } from 'ng5-auto-complete';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { PmBreadcrumbBarComponent } from './pmbreadcrumbbar/pmbreadcrumbbar.component';
 import { PmBoardComponent } from './pmboard/pmboard.component';
 import { PmScheduleComponent } from './pmschedule/pmschedule.component';
@@ -76,7 +76,7 @@ export const MY_NATIVE_FORMATS = {
     CommonCmpModule,
     ProfileCmpModule,
     TabModule,
-    AutoCompleteModule,
+    NgSelectModule,
     FormsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,

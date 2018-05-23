@@ -15,7 +15,8 @@ import { FilterService } from './filter.service';
 import { InvoicesListTableComponent } from './invoiceslisttable/invoiceslisttable.component';
 import { InvoiceFilterComponent } from './invoicefilter/invoicefilter.component';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutoCompleteModule } from 'ng5-auto-complete';
+import { NgSelectModule } from '@ng-select/ng-select';
+
 
 import { InCustomerNameComponent } from './components/in-customer-name/in-customer-name.component';
 import { InProjectSelectorComponent } from './components/in-project-selector/in-project-selector.component';
@@ -98,7 +99,7 @@ import {AddEstimateBodyComponent} from './addestimate/addestimatebody/addestimat
     ProfileCmpModule,
     CommonCmpModule,
     Ng2CompleterModule,
-    AutoCompleteModule
+    NgSelectModule,
   ],
   exports: [
     InvoicesListTableComponent,

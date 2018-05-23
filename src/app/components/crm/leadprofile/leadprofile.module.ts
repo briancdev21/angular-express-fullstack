@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AutoCompleteModule } from 'ng5-auto-complete';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { LeadProfileComponent } from './leadprofile.component';
 import { CommonCmpModule } from '../../../components/common/common.module';
 import { BreadcrumbModule } from '../../../components/breadcrumb/breadcrumb.module';
@@ -30,7 +30,7 @@ import { ProfileCmpModule } from '../../profile/profile.module';
     BreadcrumbModule,
     CommonCmpModule,
     TabModule,
-    AutoCompleteModule,
+    NgSelectModule,
     FormsModule,
     ImageCropperModule,
     ProfileCmpModule
