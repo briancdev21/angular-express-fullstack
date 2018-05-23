@@ -5,6 +5,7 @@ import { ProposalService } from '../proposal.service';
 import { SuppliersService } from '../../../../services/suppliers.service';
 import { SharedService } from '../../../../services/shared.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { ProductsService } from '../../../../services/products.service';
 
 @Component({
   selector: 'app-addproductmodal',
@@ -83,13 +84,20 @@ export class AddProductModalComponent implements OnInit {
   onUploadStateChanged: any;
   brandsListInfo: any;
   suppliersListInfo: any;
+  newProductId: any;
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
-     private suppliersService: SuppliersService, private sharedService: SharedService) {
+     private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
+
+    this.proposalService.newProductId.subscribe(data => {
+      if (data.id) {
+        this.newProductId = data.id;
+      }
+    });
+
     this.suppliersService.getSuppliersList().subscribe(res => {
       this.brandsListInfo = res.results;
       this.suppliers = res.results.map(s => s.name);
-      console.log('supplier: ', this.suppliers);
     });
 
     this.sharedService.getBrands().subscribe(res => {
@@ -159,6 +167,14 @@ export class AddProductModalComponent implements OnInit {
     this.addVariantContent = false;
     this.editVariant = false;
 
+  }
+
+  cancelNewProduct() {
+    this.proposalService.closeModal(true);
+    console.log('deleted: ', this.newProductId);
+    this.productsService.deleteIndividualProduct(this.newProductId).subscribe(res => {
+      console.log('deleted: ', res);
+    });
   }
 
   clickNext(pos) {
@@ -437,7 +453,6 @@ export class AddProductModalComponent implements OnInit {
     const allArrays = this.addedProduct.variantValue.map(e => e.data);
     this.possibleCombination = this.allPossibleCases(allArrays);
     const skuNumber = this.autoGenerate();
-    console.log('added product: ', this.addedProduct);
     for ( let i = 0; i < this.possibleCombination.length; i++) {
       this.addedProduct.variantProducts[i] = {
         name: this.possibleCombination[i],
@@ -474,7 +489,6 @@ export class AddProductModalComponent implements OnInit {
   }
 
   addToAccessories(product) {
-    console.log('product', product);
     if (!this.addedAccList.map(a => a.skuNumber).includes(product.sku)) {
       this.addedAcc = {
         skuNumber: product.sku,

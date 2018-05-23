@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProposalService } from '../proposal.service';
+import { ProductsService } from '../../../../services/products.service';
 
 @Component({
   selector: 'app-productdetails',
@@ -40,8 +41,33 @@ export class ProductDetailsComponent implements OnInit {
   queryString: any;
   selected: any;
   measure: any;
+  newProductMock = {
+    'brandId': 1,
+    'productTypeId': 1,
+    'supplierId': 1,
+    'currencyId': 1,
+    'keywordIds': [
+      1
+    ],
+    'model': 'model1',
+    'name': 'product1',
+    'description': 'prod-desc',
+    'inventoryType': 'STOCKABLE',
+    'unitOfMeasure': {
+      'quantity': 1,
+      'unit': 'PER_UNIT'
+    },
+    'expiration': {
+      'duration': 10,
+      'unit': 'HOURS'
+    },
+    'leadTime': {
+      'duration': 1,
+      'unit': 'HOURS'
+    }
+  };
 
-  constructor( private proposalService: ProposalService ) {
+  constructor( private proposalService: ProposalService, private productsService: ProductsService ) {
     this.selectedData = this.productsInfoAll || [];
     this.searchableList = ['productName', 'model'];
     this.onSelect('all');
@@ -124,6 +150,10 @@ export class ProductDetailsComponent implements OnInit {
   openAddProductModal() {
     this.showAddProductModal = true;
     this.addProductModalCollapsed = false;
+    this.productsService.createProduct(this.newProductMock).subscribe(res => {
+      console.log(res);
+      this.proposalService.newProductId.next({'id': res.data.id});
+    });
   }
 
   openAttachmentModal(product) {
