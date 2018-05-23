@@ -41,6 +41,7 @@ export class PfTableFilterComponent implements OnInit {
   backUpInventoryList = [];
   selectedItem: any = '';
   editable = false;
+  isAutocompleteUpdated = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
   }
@@ -84,6 +85,7 @@ export class PfTableFilterComponent implements OnInit {
     const item = this.tagsList[i];
     this.items2.push(item);
     this.tagsList.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   filterTxt (arr, searchKey) {
