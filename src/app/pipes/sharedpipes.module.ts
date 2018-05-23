@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { PhonePipe } from './phone.pipe';
 import { ArraySortPipe } from './arraysort.pipe';
 import { SearchPipe } from './search.pipe';
-import {Pipe, PipeTransform} from '@angular/core';
+import {Pipe, PipeTransform, ModuleWithProviders} from '@angular/core';
 
 @NgModule({
   declarations: [
@@ -20,4 +20,10 @@ import {Pipe, PipeTransform} from '@angular/core';
     SearchPipe
   ]
 })
-export class SharedPipesModule { }
+export class SharedPipesModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: SharedPipesModule
+    };
+  }
+}

@@ -42,6 +42,7 @@ import { ServicingCmpModule } from './components/servicing/servicing.module';
 import { ReportsCmpModule } from './components/reports/reports.module';
 import { LeadProfileCmpModule } from './components/crm/leadprofile/leadprofile.module';
 import { ProductProfileCmpModule } from './components/inventory/products/productprofile/productprofile.module';
+import { SharedPipesModule } from './pipes/sharedpipes.module';
 
 import { Pipe, PipeTransform } from '@angular/core';
 
@@ -94,7 +95,8 @@ import { ProductsService } from './services/inventory/products.service';
     ServicingCmpModule,
     ReportsCmpModule,
     LeadProfileCmpModule,
-    ProductProfileCmpModule
+    ProductProfileCmpModule,
+    SharedPipesModule
   ],
   exports: [
     SubmenuComponent,

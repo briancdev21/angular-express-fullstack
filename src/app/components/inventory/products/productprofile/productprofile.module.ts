@@ -12,13 +12,18 @@ import { ProductCardsComponent } from './productcards/productcards.component';
 import { VariantsListTableComponent } from './variantslisttable/variantslisttable.component';
 import { ProductPricingComponent } from './productpricing/productpricing.component';
 import { ProductAccAlterComponent } from './productaccalter/productaccalter.component';
+import { EditProductModalComponent } from './editproductmodal/editproductmodal.component';
 
 import { TabModule } from 'angular-tabs-component';
 import { FormsModule } from '@angular/forms';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { BreadcrumbModule } from '../../../breadcrumb/breadcrumb.module';
+import { ProfileCmpModule } from '../../../profile/profile.module';
+import { Ng2CompleterModule } from 'ng2-completer';
+import { ImageUploadModule } from 'angular2-image-upload';
+import { SharedPipesModule } from '../../../../pipes/sharedpipes.module';
 
-
+import { ProductProfileService } from './productprofile.service';
 @NgModule({
   declarations: [
     ProductProfileComponent,
@@ -27,7 +32,8 @@ import { BreadcrumbModule } from '../../../breadcrumb/breadcrumb.module';
     ProductCardsComponent,
     VariantsListTableComponent,
     ProductPricingComponent,
-    ProductAccAlterComponent
+    ProductAccAlterComponent,
+    EditProductModalComponent
   ],
   imports: [
     BrowserModule,
@@ -37,10 +43,17 @@ import { BreadcrumbModule } from '../../../breadcrumb/breadcrumb.module';
     AutocompleteModule,
     FormsModule,
     ImageCropperModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    Ng2CompleterModule,
+    ImageUploadModule,
+    ProfileCmpModule,
+    SharedPipesModule
   ],
   exports: [
     ProductCustomDonutChartComponent,
+  ],
+  providers: [
+    ProductProfileService
   ]
 })
 export class ProductProfileCmpModule { }

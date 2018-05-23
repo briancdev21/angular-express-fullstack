@@ -1,5 +1,9 @@
 <div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
-  <app-breadcrumb [data]='productPathInfo' ></app-breadcrumb>
+  <div class="top-bar">
+    <app-breadcrumb [data]='productPathInfo' ></app-breadcrumb>
+    <div class="add-btn" (click)="openEditProductModal()">Edit</div>
+  </div>
+  
   <div class="content">
     <div class="profile-info">
       <app-productinfobar [productInfo]='productInfo' (changedUserInfo)="onChangedUserInfo($event)"></app-productinfobar>
@@ -22,4 +26,9 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="add-product-modal-wrapper" *ngIf="showAddProductModal"></div>
+<div class="add-product-modal"  [ngClass]="{'show-add-product-modal': showAddProductModal, 'hide-add-product-modal': !showAddProductModal }">
+  <app-editproductmodal [showAddProductModal]="showAddProductModal" [productsInfoAll]="productsInfoAll" (closeEditProductModal)="closeEditModal($event)"></app-editproductmodal>
 </div>

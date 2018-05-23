@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductsService } from '../../../../services/inventory/products.service';
 import * as moment from 'moment';
@@ -250,6 +250,7 @@ export class ProductProfileComponent implements OnInit {
 
   currentContact: any;
   savingContact: any;
+  showAddProductModal = false;
 
   dataRetrieved = false;
   constructor(private router: Router, private route: ActivatedRoute, private productsService: ProductsService) {
@@ -279,5 +280,11 @@ export class ProductProfileComponent implements OnInit {
     console.log(event);
   }
 
+  openEditProductModal() {
+    this.showAddProductModal = true;
+  }
 
+  closeEditModal(event) {
+    this.showAddProductModal = false;
+  }
 }
