@@ -34,6 +34,7 @@ export class MyTasksComponent implements OnInit {
   dDate: any;
   inputRowCount = 1;
   maxHeight = 30;
+  isAutocompleteUpdated = false;
 
   config2 = {'placeholder': 'Type here', 'sourceField': ''};
   colors = ['#F0D7BD', '#DFE5B0', '#F0C9C9', '#CBE0ED', '#E0BBCC', '#C4BBE0', '#BBC0E0', '#BBE0CC', '#E0BBBB', '#E8E3A7'];
@@ -573,6 +574,7 @@ export class MyTasksComponent implements OnInit {
     const item = this.panels[i].tasks[j].dependency[k];
     this.allTasks.push(item);
     this.panels[i].tasks[j].dependency.splice(k, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   onInputChangedEvent(val: string) {
