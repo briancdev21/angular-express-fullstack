@@ -61,6 +61,7 @@ export class ProposalListFilterComponent implements OnInit {
   selectCustomer =  '';
   selectProject = '';
   filterClicked = false;
+  isAutocompleteUpdated = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
     const comp = this;
@@ -130,6 +131,7 @@ export class ProposalListFilterComponent implements OnInit {
     const item = this.owners[i];
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.owners.splice(i, 1);
+    this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
   selectCreatedFrom(event) {
