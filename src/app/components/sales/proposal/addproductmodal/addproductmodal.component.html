@@ -81,7 +81,7 @@
               <div class="measure">
                 <span>Unit of Measure</span>
                 <div>
-                  <select [(ngModel)]="measure" >
+                  <select [(ngModel)]="addedProduct.measure" >
                     <option value="PER_UNIT" selected>Per Unit</option>
                     <option value="PER_PACKAGE">Per Package</option>
                     <option value="PER_VOL">Per Volumn</option>
@@ -93,7 +93,7 @@
               <div class="expiration">
                 <span>Expiration</span>
                 <div>
-                  <select [(ngModel)]="expirationType">
+                  <select [(ngModel)]="addedProduct.expirationType">
                     <option value="HOURS">Hours</option>
                     <option value="DAYS">Days</option>
                     <option value="WEEKS">Weeks</option>
@@ -189,18 +189,16 @@
                   <span>$</span>
                   <input 
                     placeholder="0.00" 
-                    [(ngModel)]="addedProduct.friendPrice" 
-                    [value]="pricing.margin" 
-                    (input)="calcFriend('price')" 
+                    [(ngModel)]="pricing.price"
+                    (input)="calcCost('price', i)" 
                     type="number">
                 </div>
                 <div class="margin-box">
                   <span>%</span>
                   <input 
                     placeholder="0.00" 
-                    [(ngModel)]="addedProduct.friendMargin" 
-                    [value]="pricing.margin" 
-                    (input)="calcFriend('margin')" 
+                    [(ngModel)]="pricing.margin"
+                    (input)="calcCost('margin', i)" 
                     type="number">
                 </div>
               </div>

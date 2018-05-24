@@ -255,6 +255,16 @@ input::placeholder, textarea::placeholder {
 	justify-content: space-between;
 }
 
+.tab-two .modal-tab-content .friend-royalty-retail {
+	display: flex;
+	justify-content: flex-start;
+	flex-flow: nowrap;
+}
+
+.friend {
+	margin-right: 2%;
+}
+
 .type-measure-exp>div, .stock-reorder-cost-lead>div, .sku-supplier-upc>div {
 	width: 48%;
 }

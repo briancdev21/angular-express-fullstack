@@ -87,6 +87,8 @@ export class AddProductModalComponent implements OnInit {
   newProductId: any;
   currenciesListInfo: any;
   pricingCategoriesListInfo: any;
+  productCategories = [];
+
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
@@ -113,6 +115,7 @@ export class AddProductModalComponent implements OnInit {
 
     this.sharedService.getPricingCategories().subscribe(res => {
       this.pricingCategoriesListInfo = res.results;
+      this.pricingCategoriesListInfo.map(p => p['price'] = 0);
       console.log('currency: ', this.pricingCategoriesListInfo);
     });
 
@@ -142,18 +145,18 @@ export class AddProductModalComponent implements OnInit {
       upc: '',
       option: 'optional',
       priceAdjust: 0,
-      friendMargin: '0',
-      friendPrice: '',
-      royaltyPrice: '',
-      royaltyMargin: '0',
-      builderPrice: '',
-      buildersMargin: '0',
-      wholesalePrice: '',
-      wholesaleMargin: '0',
-      retailPrice: '',
-      retailMargin: '0',
-      costPrice: '',
-      costMargin: '0',
+      // friendMargin: '0',
+      // friendPrice: '',
+      // royaltyPrice: '',
+      // royaltyMargin: '0',
+      // builderPrice: '',
+      // buildersMargin: '0',
+      // wholesalePrice: '',
+      // wholesaleMargin: '0',
+      // retailPrice: '',
+      // retailMargin: '0',
+      // costPrice: '',
+      // costMargin: '0',
       variantValue: [{id: 1, data: []}],
       variantProducts: []
     };
@@ -290,106 +293,28 @@ export class AddProductModalComponent implements OnInit {
     return randNum;
   }
 
-  calcFriend(value) {
+  calcCost(value, i) {
     this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.friendPrice = +this.addedProduct.friendPrice;
-    if ((this.addedProduct.friendPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.friendMargin = ((this.addedProduct.friendPrice - this.addedProduct.unitCost) / this.addedProduct.friendPrice) * 100;
+
+    if ((this.pricingCategoriesListInfo[i].price !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
+      this.pricingCategoriesListInfo[i].margin = ((this.pricingCategoriesListInfo[i].price - this.addedProduct.unitCost) /
+                                                  this.pricingCategoriesListInfo[i].price) * 100;
       // show 2 decimal places
-      this.addedProduct.friendMargin = parseFloat(this.addedProduct.friendMargin).toFixed(2);
+      this.pricingCategoriesListInfo[i].margin = parseFloat(this.pricingCategoriesListInfo[i].margin).toFixed(2);
     }
-    if ((this.addedProduct.friendMargin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
-      this.addedProduct.friendPrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.friendMargin);
+    if ((this.pricingCategoriesListInfo[i].margin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
+      this.pricingCategoriesListInfo[i].price = this.addedProduct.unitCost * 100 / (100 - this.pricingCategoriesListInfo[i].margin);
       // show 2 decimal places
-      this.addedProduct.friendPrice = parseFloat(this.addedProduct.friendPrice).toFixed(2);
+      this.pricingCategoriesListInfo[i].price = parseFloat(this.pricingCategoriesListInfo[i].price).toFixed(2);
     }
   }
 
-  calcCost(value) {
-    this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.costPrice = +this.addedProduct.costPrice;
-    if ((this.addedProduct.costPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.costMargin = ((this.addedProduct.costPrice - this.addedProduct.unitCost) / this.addedProduct.costPrice) * 100;
-      // show 2 decimal places
-      this.addedProduct.costMargin = parseFloat(this.addedProduct.costMargin).toFixed(2);
-    }
-    if ((this.addedProduct.costMargin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
-      this.addedProduct.costPrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.costMargin);
-      // show 2 decimal places
-      this.addedProduct.costPrice = parseFloat(this.addedProduct.costPrice).toFixed(2);
-    }
-  }
-
-  calcRoyalty(value) {
-    this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.royaltyPrice = +this.addedProduct.royaltyPrice;
-    if ((this.addedProduct.royaltyPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.royaltyMargin = ((this.addedProduct.royaltyPrice - this.addedProduct.unitCost) /
-                                         this.addedProduct.royaltyPrice) * 100;
-      // show 2 decimal places
-      this.addedProduct.royaltyMargin = parseFloat(this.addedProduct.royaltyMargin).toFixed(2);
-    }
-    if ((this.addedProduct.royaltyMargin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
-      this.addedProduct.royaltyPrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.royaltyMargin);
-      // show 2 decimal places
-      this.addedProduct.royaltyPrice = parseFloat(this.addedProduct.royaltyPrice).toFixed(2);
-    }
-  }
-
-  calcRetail(value) {
-    this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.retailPrice = +this.addedProduct.retailPrice;
-    if ((this.addedProduct.retailPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.retailMargin = ((this.addedProduct.retailPrice - this.addedProduct.unitCost) / this.addedProduct.retailPrice) * 100;
-      // show 2 decimal places
-      this.addedProduct.retailMargin = parseFloat(this.addedProduct.retailMargin).toFixed(2);
-    }
-    if (this.addedProduct.retailMargin && this.addedProduct.unitCost && (value === 'margin')) {
-      this.addedProduct.retailPrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.retailMargin);
-      // show 2 decimal places
-      this.addedProduct.retailPrice = parseFloat(this.addedProduct.retailPrice).toFixed(2);
-    }
-  }
-
-  calcBuilders(value) {
-    this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.buildersPrice = +this.addedProduct.buildersPrice;
-    if ((this.addedProduct.buildersPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.buildersMargin = ((this.addedProduct.buildersPrice - this.addedProduct.unitCost) /
-                                          this.addedProduct.buildersPrice) * 100;
-      // show 2 decimal places
-      this.addedProduct.buildersMargin = parseFloat(this.addedProduct.buildersMargin).toFixed(2);
-    }
-    if ((this.addedProduct.buildersMargin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
-      this.addedProduct.buildersPrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.buildersMargin);
-      // show 2 decimal places
-      this.addedProduct.buildersPrice = parseFloat(this.addedProduct.buildersPrice).toFixed(2);
-    }
-  }
-
-  calcWholesale(value) {
-    this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.wholesalePrice = +this.addedProduct.wholesalePrice;
-    if ((this.addedProduct.wholesalePrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.wholesaleMargin = ((this.addedProduct.wholesalePrice - this.addedProduct.unitCost) /
-                                           this.addedProduct.wholesalePrice) * 100;
-      // show 2 decimal places
-      this.addedProduct.wholesaleMargin = parseFloat(this.addedProduct.wholesaleMargin).toFixed(2);
-    }
-    if ((this.addedProduct.wholesaleMargin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
-      this.addedProduct.wholesalePrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.wholesaleMargin);
-      // show 2 decimal places
-      this.addedProduct.wholesalePrice = parseFloat(this.addedProduct.wholesalePrice).toFixed(2);
-    }
-  }
 
   changeCost() {
-    this.calcCost('margin');
-    this.calcFriend('margin');
-    this.calcRetail('margin');
-    this.calcRoyalty('margin');
-    this.calcWholesale('margin');
-    this.calcBuilders('margin');
+    for (let i = 0; i < this.pricingCategoriesListInfo.length; i ++) {
+      this.pricingCategoriesListInfo[i].price = this.addedProduct.unitCost * 100 / (100 - this.pricingCategoriesListInfo[i].margin);
+      this.pricingCategoriesListInfo[i].price = parseFloat(this.pricingCategoriesListInfo[i].price).toFixed(2);
+    }
   }
 
   tabChange(event) {
