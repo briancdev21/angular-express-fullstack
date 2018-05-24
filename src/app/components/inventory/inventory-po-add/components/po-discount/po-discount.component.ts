@@ -13,6 +13,8 @@ export class PODiscountComponent {
 
   @Output() discountChange: EventEmitter<any> = new EventEmitter();
   discounttype: string;
+  isEditable = false;
+
   onDiscountChange() {
     const result = {
       type: this.discounttype,
@@ -34,4 +36,11 @@ export class PODiscountComponent {
     this.discountChange.emit(result);
   }
 
+  showEditInput() {
+    this.isEditable = true;
+    document.getElementById('discountamount_edit_input').focus();
+  }
+  hideEditInput() {
+    this.isEditable = false;
+  }
 }
