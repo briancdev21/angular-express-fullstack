@@ -151,8 +151,7 @@ export class ProductDetailsComponent implements OnInit {
     this.showAddProductModal = true;
     this.addProductModalCollapsed = false;
     this.productsService.createProduct(this.newProductMock).subscribe(res => {
-      console.log(res);
-      this.proposalService.newProductId.next({'id': res.data.id});
+      // this.proposalService.newProductId.next({'id': res.data.id});
     });
   }
 

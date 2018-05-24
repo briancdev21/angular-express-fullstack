@@ -82,25 +82,25 @@
                 <span>Unit of Measure</span>
                 <div>
                   <select [(ngModel)]="measure" >
-                    <option [value]="perUnit" selected>Per Unit</option>
-                    <option value="perGroup">Per Group</option>
-                    <option value="perBox">Per Box</option>
+                    <option value="PER_UNIT" selected>Per Unit</option>
+                    <option value="PER_PACKAGE">Per Package</option>
+                    <option value="PER_VOL">Per Volumn</option>
+                    <option value="PER_WEIGHT">Per Weight</option>
                   </select>
-                  <input [(ngModel)]="addedProduct.measureCount" [value]="addedProduct.measureCount" type="number">
+                  <input [(ngModel)]="addedProduct.measureCount" type="number">
                 </div>
               </div>
               <div class="expiration">
                 <span>Expiration</span>
                 <div>
                   <select [(ngModel)]="expirationType">
-                    <option [value]="none" selected>None</option>
-                    <option value="hours">Hours</option>
-                    <option value="days">Days</option>
-                    <option value="weeks">Weeks</option>
-                    <option value="months">Months</option>
-                    <option value="years">Years</option>
+                    <option value="HOURS">Hours</option>
+                    <option value="DAYS">Days</option>
+                    <option value="WEEKS">Weeks</option>
+                    <option value="MONTHS">Months</option>
+                    <option value="YEARS">Years</option>
                   </select>
-                  <input [(ngModel)]="addedProduct.expiration" [value]="addedProduct.expiration" type="number">
+                  <input [(ngModel)]="addedProduct.expiration" type="number">
                 </div>
               </div>
             </div>
@@ -129,14 +129,11 @@
                     <input 
                       placeholder="00.00" 
                       [(ngModel)]="addedProduct.unitCost" 
-                      [value]="addedProduct.unitCost" 
                       type="number"
                       (input)="changeCost()">
                   </div>
-                  <select [(ngModel)]="addedProduct.currency" >
-                    <option [value]="cad" selected>CAD</option>
-                    <option value="usd">USD</option>
-                    <option value="euro">EURO</option>
+                  <select [(ngModel)]="addedProduct.currency" *ngIf="currenciesListInfo">
+                    <option [value]="currency.id" *ngFor="let currency of currenciesListInfo">{{currency.currencyCode}}</option>
                   </select>
                 </div>
               </div>
@@ -145,10 +142,10 @@
                 <div>
                   <div class="greyed-select">
                     <select [(ngModel)]="addedProduct.leadTime"  [ngClass]="{'greyed-layer': greyedService}">
-                      <option value="days" selected >Days</option>
-                      <option value="weeks">Weeks</option>
-                      <option value="months">Months</option>
-                      <option value="years">Years</option>
+                      <option value="DAYS" selected >Days</option>
+                      <option value="WEEKS">Weeks</option>
+                      <option value="MONTHS">Months</option>
+                      <option value="YEARS">Years</option>
                     </select>
                   </div>
                   <div class="greyed-input">
@@ -184,16 +181,16 @@
             </div>
           </div>
           <div class="page-divider"></div>
-          <div class="friend-royalty-retail">
-            <div class="friend">
-              <span>{{pricingType[0]}}</span>
+          <div class="friend-royalty-retail" *ngIf="pricingCategoriesListInfo">
+            <div class="friend" *ngFor="let pricing of pricingCategoriesListInfo; let i = index">
+              <span>{{pricing.name}}</span>
               <div class="price-margin">
                 <div class="price-box">
                   <span>$</span>
                   <input 
                     placeholder="0.00" 
                     [(ngModel)]="addedProduct.friendPrice" 
-                    [value]="addedProduct.friendPrice" 
+                    [value]="pricing.margin" 
                     (input)="calcFriend('price')" 
                     type="number">
                 </div>
@@ -202,13 +199,13 @@
                   <input 
                     placeholder="0.00" 
                     [(ngModel)]="addedProduct.friendMargin" 
-                    [value]="addedProduct.friendMargin" 
+                    [value]="pricing.margin" 
                     (input)="calcFriend('margin')" 
                     type="number">
                 </div>
               </div>
             </div>
-            <div class="royalty">
+            <!-- <div class="royalty">
               <span>{{pricingType[1]}}</span>
               <div class="price-margin">
                 <div class="price-box">
@@ -253,9 +250,9 @@
                     type="number">
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
-          <div class="builders-wholesale-cost">
+          <!-- <div class="builders-wholesale-cost">
             <div class="builders">
               <span>{{pricingType[3]}}</span>
               <div class="price-margin">
@@ -322,8 +319,8 @@
                     type="number">
                 </div>
               </div>
-            </div>
-          </div>
+            </div> 
+          </div>  -->
         </div>
         <div class="btn-section" >
           <button class="cancel-btn" (click)="clickBack('tab-two')"  >

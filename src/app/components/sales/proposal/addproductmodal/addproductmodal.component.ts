@@ -85,6 +85,8 @@ export class AddProductModalComponent implements OnInit {
   brandsListInfo: any;
   suppliersListInfo: any;
   newProductId: any;
+  currenciesListInfo: any;
+  pricingCategoriesListInfo: any;
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
@@ -104,6 +106,16 @@ export class AddProductModalComponent implements OnInit {
       this.brandsListInfo = res.results;
       this.brands = res.results.map(b => b.name);
     });
+
+    this.sharedService.getCurrencies().subscribe(res => {
+      this.currenciesListInfo = res.results;
+    });
+
+    this.sharedService.getPricingCategories().subscribe(res => {
+      this.pricingCategoriesListInfo = res.results;
+      console.log('currency: ', this.pricingCategoriesListInfo);
+    });
+
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.addedProduct = {
       productType: this.type,
@@ -116,14 +128,14 @@ export class AddProductModalComponent implements OnInit {
       expiration: '',
       brand: '',
       inventoryType: 'STOCKABLE',
-      measure: 'perUnit',
-      expirationType: '',
+      measure: 'PER_UNIT',
+      expirationType: 'HOURS',
       qty: 0,
       initialStockLevel: '',
       reorderPoint: '',
       unitCost: 0,
-      currenty: 'cad',
-      leadTime: 'days',
+      currenty: 'CAD',
+      leadTime: 'DAYS',
       leadTimeCount: 0,
       skuNumber: '',
       supplierCode: '',
