@@ -280,3 +280,12 @@
 .ng-select .ng-select-container:after {
   display: none;
 }
+
+.ng-select.ng-select-opened .ng-select-container {
+  z-index: auto;
+}
+
+.ng-dropdown-panel.ng-select-bottom {
+  left: 0;
+  top: 32px !important;
+}
