@@ -54,7 +54,9 @@ export class ProgressOverviewComponent implements OnInit {
     labor: 0,
   };
 
-
+  dueToday = 12;
+  dueThisWeek = 24;
+  dueNextWeek = 16;
   public barInfo = {
     title: 'Project health is at ' + this.projectInfo.projectHealth + '%',
     completeness: this.projectInfo.projectHealth,

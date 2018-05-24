@@ -127,9 +127,45 @@ span {
   margin-right: 13px;
 }
 
+.card-content {
+  padding-top: 30px;
+}
 
+.tasks-card .card-content-left {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-size: 25px;
+  padding-right: 0;
+}
 
+.tasks-card .title {
+  font-size: 12px;
+}
 
+.tasks-card .card-content-right {
+  display: flex;
+  flex-direction: column;
+  font-size: 140px;
+  flex: 2;
+}
+
+.card-content-right span {
+  color: #FF7E7E;
+}
+
+.card-content-right .due-tasks-title {
+  font-size: 25px;
+  color: #95989A;
+  font-weight: 300;
+}
+
+.tasks-card .card-content-left>div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 27px;
+  font-size: 50px;
+}
 
 @media screen and (max-width: 1650px) {
 

@@ -26,7 +26,6 @@
             </div>
           </div>
         </div>
-        
       </div>
       <div class="card">
         <div class="card-header">
@@ -34,6 +33,33 @@
         </div>
         <app-morrislinechart [morrisLineChartInfo]="morrisLineChartInfo"></app-morrislinechart>
       </div>
+      <div class="card tasks-card">
+        <div class="card-header">
+          <span>PROJECT TASKS</span>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left">
+            <div>
+              <span class="title">Tasks Due Today</span>
+              <span>{{dueToday}}</span>
+            </div>
+            <div>
+              <span class="title">Tasks Due This Week</span>
+              <span>{{dueThisWeek}}</span>
+            </div>
+            <div>
+              <span class="title">Tasks Due Next Week</span>
+              <span>{{dueNextWeek}}</span>
+            </div>
+          </div>
+          <div class="card-content-right">
+            <span class="due-tasks-title">Overdue Tasks</span>
+            <span>{{projectInfo.projectTasks.overdue}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-row">
       <div class="card">
         <app-morrisareachart></app-morrisareachart>
       </div>
