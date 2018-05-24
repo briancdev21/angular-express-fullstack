@@ -38,8 +38,8 @@ export class PODiscountComponent {
 
   showEditInput() {
     this.isEditable = true;
-    document.getElementById('discountamount_edit_input').focus();
   }
+
   hideEditInput() {
     this.isEditable = false;
   }
