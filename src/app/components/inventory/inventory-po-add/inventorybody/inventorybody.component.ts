@@ -22,6 +22,7 @@ export default class InventoryBodyComponent {
       this.discountAmount = this.po_mock.discount.value;
       this.discountType = this.po_mock.discount.unit;
       this.freightcosts = this.po_mock.freightCost;
+      this.po_mock.status = 'SENT';
     }
   }
 
@@ -114,12 +115,10 @@ export default class InventoryBodyComponent {
 
   onSelectTerm(selectedTermId: string) {
     this.po_mock.term = parseInt(selectedTermId, 10);
-    const selectedTerm = this.terms.filter(term => term.id.toString() === selectedTermId);
-    const dueDateTimestamp = new Date(this.po_mock.dueDate);
-    this.dueDate = new Date(dueDateTimestamp.getTime() + selectedTerm[0]['days'] * 86400 * 1000);
-    console.log(this.dueDate, 'sec:', selectedTerm[0]['days']);
     this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term', data.data);
+      console.log('mock_data term changed', data.data);
+      this.po_mock.dueDate = data.data.dueDate;
+      this.dueDate = data.data.dueDate;
     });
   }
 
