@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 declare const $: any;
 declare const Morris: any;
@@ -9,58 +9,28 @@ declare const Morris: any;
   styleUrls: ['./morrisareachart.component.css']
 })
 export class MorrisAreaComponent implements OnInit {
-
+  @Input() areaChartInfo;
   constructor() { }
 
   ngOnInit() {
       Morris.Area({
           element: 'm_area_chart2',
-          data: [{
-              period: '2012',
-              SiteA: 10,
-              SiteB: 0,
-
-          }, {
-              period: '2013',
-              SiteA: 126,
-              SiteB: 78,
-
-          }, {
-              period: '2014',
-              SiteA: 78,
-              SiteB: 58,
-
-          }, {
-              period: '2015',
-              SiteA: 89,
-              SiteB: 185,
-
-          }, {
-              period: '2016',
-              SiteA: 175,
-              SiteB: 124,
-
-          }, {
-              period: '2017',
-              SiteA: 126,
-              SiteB: 102  ,
-
-          }
-          ],
+          data: this.areaChartInfo,
           xkey: 'period',
-          ykeys: ['SiteA', 'SiteB'],
-          labels: ['Site A', 'Site B'],
-          pointSize: 0,
+          ykeys: ['Actual', 'Estimate'],
+          labels: ['Actual', 'Estimate'],
+          pointSize: 4,
           fillOpacity: 0.4,
-          pointStrokeColors: ['#9e9e9e', '#457fca'],
+          pointStrokeColors: ['#4FE3C3', '#F5A622'],
           behaveLikeLine: true,
           gridLineColor: '#e0e0e0',
           lineWidth: 0,
           smooth: false,
           hideHover: 'auto',
-          lineColors: ['#9e9e9e', '#457fca'],
-          resize: true
-
+          lineColors: ['#4FE3C3', '#F5A622'],
+          resize: true,
+					parseTime: false,
+					preUnits: '$',
       });
     }
 

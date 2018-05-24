@@ -111,6 +111,61 @@ export class ProgressOverviewComponent implements OnInit {
       revenue: 1520003,
     },
     ];
+
+    public areaChartInfo = [{
+      period: 'JAN',
+      Actual: 35000,
+      Estimate: 30000,
+
+  }, {
+      period: 'FEB',
+      Actual: 15000,
+      Estimate: 25000,
+
+  }, {
+      period: 'MAR',
+      Actual: 31000,
+      Estimate: 20000,
+
+  }, {
+      period: 'APR',
+      Actual: 25000,
+      Estimate: 25000,
+
+  }, {
+      period: 'MAY',
+      Actual: 18000,
+      Estimate: 20000,
+
+  }, {
+      period: 'JUN',
+      Actual: 17000,
+      Estimate: 15000,
+  }, {
+      period: 'JUL',
+      Actual: 20000,
+      Estimate: 14000,
+  }, {
+      period: 'AUG',
+      Actual: 32000,
+      Estimate: 30000,
+  }, {
+      period: 'SEP',
+      Actual: 23000,
+      Estimate: 20000,
+  }, {
+      period: 'OCT',
+      Actual: 32000,
+      Estimate: 19000,
+  }, {
+      period: 'NOV',
+      Actual: 20000,
+      Estimate: 34000,
+  }, {
+      period: 'DEC',
+      Actual: 32000,
+      Estimate: 30000,
+  }];
   constructor( private pmService: PmService ) {
   }
 

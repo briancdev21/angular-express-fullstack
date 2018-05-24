@@ -60,8 +60,26 @@
       </div>
     </div>
     <div class="chart-row">
-      <div class="card">
-        <app-morrisareachart></app-morrisareachart>
+      <div class="card area-chart">
+        <div class="card-header">
+          <span>ACTUAL vs ESTIMATE BUDGET</span>
+          <div class="legend-sec">
+            <div class="row">
+              <div class="square blue"></div>
+              <span>Created</span>
+            </div>
+            <div class="row">
+              <div class="square green"></div>
+              <span>Complete</span>
+            </div>
+            <div class="row">
+              <div class="square red"></div>
+              <span>Incomplete</span>
+            </div>
+          </div>
+          
+        </div>
+        <app-morrisareachart [areaChartInfo]="areaChartInfo"></app-morrisareachart>
       </div>
     </div>
   </div>
