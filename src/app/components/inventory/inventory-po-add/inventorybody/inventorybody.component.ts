@@ -29,6 +29,8 @@ export default class InventoryBodyComponent {
   // Footer
   showButtons = false;
   showPrintOptions = false;
+  showSendPOModal = false;
+  showCancelPOModal = false;
   printOptions = {
    brand: false,
    qty: false,
@@ -75,6 +77,14 @@ export default class InventoryBodyComponent {
     postalCode: undefined
   };
   customerAddress: any = {};
+  errors = {
+    termChanged: false,
+    locationChanged: false,
+    customerChanged: false,
+    memoChanged: false,
+    noteToSupplierChanged: false
+  };
+  showErrors = false;
 
   constructor(private sharedService: SharedService, private router: Router) {
     this.createdDate = new Date().toISOString();
@@ -101,12 +111,18 @@ export default class InventoryBodyComponent {
   }
 
   onSelectUser(selectedIndex: string) {
+    console.log('selected user:', selectedIndex);
+    this.errors.customerChanged = true;
+
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
     this.contactId = this.contactList[selectedIndex].id;
     this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id, 10);
   }
 
   onSelectLocation(selectedLocationId: string) {
+    console.log('selected location:', selectedLocationId);
+    this.errors.locationChanged = true;
+
     this.po_mock.location = parseInt(selectedLocationId, 10);
     const selectedLocation = this.locations.filter(location => location.id.toString() === selectedLocationId);
     console.log('address:', selectedLocation[0].address);
@@ -114,6 +130,9 @@ export default class InventoryBodyComponent {
   }
 
   onSelectTerm(selectedTermId: string) {
+    console.log('selected term:', selectedTermId);
+    this.errors.termChanged = true;
+
     this.po_mock.term = parseInt(selectedTermId, 10);
     this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
       console.log('mock_data term changed', data.data);
@@ -143,22 +162,30 @@ export default class InventoryBodyComponent {
     });
   }
 
+
   onCancel() {
+    this.showCancelPOModal = true;
+  }
+
+  deletePO() {
     this.sharedService.deletePurchaseOrder(this.po_mock.id).subscribe(() => {
       this.router.navigate(['./inventory/stock-control']);
     });
   }
 
   onSave() {
-    if (this.po_mock.term !== undefined && this.contactId !== undefined && this.po_mock.location !== undefined) {
-      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe(() => {
-        this.router.navigate(['./inventory/stock-control']);
-      });
+    this.showErrors = true;
+    if (this.po_mock.term !== undefined
+      && this.contactId !== undefined
+      && this.po_mock.location !== undefined
+      && this.po_mock.supplierNote
+      && this.po_mock.internalMemo) {
+      this.showSendPOModal = true;
     }
   }
 
-  onSupplierSentSwitchChanged(val) {
-
+  savePO() {
+    this.router.navigate(['./inventory/stock-control']);
   }
 
   onDueDateChanged(event) {
@@ -168,17 +195,29 @@ export default class InventoryBodyComponent {
     });
   }
   onNoteChanged(event) {
-    this.po_mock.supplierNote = event;
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term', data.data);
-    });
+    if (event) {
+      this.errors.noteToSupplierChanged = true;
+
+      this.po_mock.supplierNote = event;
+      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
+        console.log('mock_data term', data.data);
+      });
+    } else {
+      this.errors.noteToSupplierChanged = false;
+    }
   }
 
   onMemoChanged(event) {
-    this.po_mock.internalMemo = event;
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term', data.data);
-    });
+    if (event) {
+      this.errors.memoChanged = true;
+
+      this.po_mock.internalMemo = event;
+      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
+        console.log('mock_data term', data.data);
+      });
+    } else {
+      this.errors.memoChanged = false;
+    }
   }
 
   onShippingAddressChanged(event) {
