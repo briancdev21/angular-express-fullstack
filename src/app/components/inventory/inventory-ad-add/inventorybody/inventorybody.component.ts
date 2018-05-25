@@ -43,6 +43,8 @@ export class InventoryBodyComponent {
   ad_id = '';
   ad_mock: AdjustmentModel;
   transferdate: any;
+  showSendPOModal = false;
+  showCancelPOModal = false;
 
   constructor(private sharedService: SharedService, private router: Router) {
     this.transferdate = new Date().toISOString();
@@ -66,20 +68,22 @@ export class InventoryBodyComponent {
   }
 
   onCancel() {
+    this.showCancelPOModal = true;
+  }
+  deletePO() {
     this.sharedService.deleteInventoryAdjustment(this.ad_mock.id).subscribe(() => {
       this.router.navigate(['./inventory/stock-control']);
     });
   }
-
   onSave() {
     console.log('mock:', this.ad_mock);
-    this.saveBtnClicked = true;
     // tslint:disable-next-line:curly
-    if (this.ad_mock.internalMemo !== null && this.ad_mock.adjustedLocation !== null) {
-      this.sharedService.updateInventoryAdjustment(this.ad_mock.id, this.ad_mock).subscribe(() => {
-        this.router.navigate(['./inventory/stock-control']);
-      });
-    }
+    // if (this.ad_mock.internalMemo !== null && this.ad_mock.adjustedLocation !== null) {
+      this.showSendPOModal = true;
+    // }
+  }
+  savePO() {
+    this.router.navigate(['./inventory/stock-control']);
   }
 
 }
