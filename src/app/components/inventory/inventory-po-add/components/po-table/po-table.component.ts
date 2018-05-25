@@ -30,25 +30,27 @@ export class POTableComponent implements OnInit {
   poProductModel: any;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
-    this.sharedService.getTaxRates().subscribe(taxRateRes => {
-      this.taxRateOptions = taxRateRes.results;
-    });
+
     this.sharedService.getInventoryProducts().subscribe(productsRes => {
       productsRes.results.forEach(product => {
         this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
           this.skus = this.skus.concat(skuRes.results);
           this.originSkus = this.skus.slice();
           this.skuService = completerService.local(this.skus, 'sku', 'sku');
+          this.sharedService.getTaxRates().subscribe(taxRateRes => {
+            this.taxRateOptions = taxRateRes.results;
+            this.addNewProduct();
+          });
         });
       });
     });
   }
   ngOnInit() {
-    this.addNewProduct();
   }
 
   addNewProduct() {
     const newProduct = new ProductDetailInfo();
+    newProduct.taxRateId = this.taxRateOptions[0].id;
     this.productDetails.push(newProduct);
   }
 
