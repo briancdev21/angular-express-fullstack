@@ -8,8 +8,7 @@ import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, Renderer
 export class POFreightCostsComponent {
   @Input() freightcosts;
   @Output() freightcostsChange: EventEmitter<any> = new EventEmitter();
-  @ViewChild("editInput", {read: ElementRef}) editInput: ElementRef;
-  isEditable = true;
+  isEditable = false;
 
   constructor(private rd: Renderer2) {}
 
