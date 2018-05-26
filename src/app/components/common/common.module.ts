@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { MorrisDonutComponent } from './morrisdonut/morrisdonut.component';
 import { MorrisLineComponent } from './morrislinechart/morrislinechart.component';
 import { MorrisAreaComponent } from './morrisareachart/morrisareachart.component';
+import { MorrisBarChartComponent } from './morrisbarchart/morrisbarchart.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { MorrisAreaComponent } from './morrisareachart/morrisareachart.component
     HorizontalBarComponent,
     MorrisDonutComponent,
     MorrisLineComponent,
-    MorrisAreaComponent
+    MorrisAreaComponent,
+    MorrisBarChartComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +33,8 @@ import { MorrisAreaComponent } from './morrisareachart/morrisareachart.component
     HorizontalBarComponent,
     MorrisDonutComponent,
     MorrisLineComponent,
-    MorrisAreaComponent
+    MorrisAreaComponent,
+    MorrisBarChartComponent
   ]
 })
 export class CommonCmpModule { }
