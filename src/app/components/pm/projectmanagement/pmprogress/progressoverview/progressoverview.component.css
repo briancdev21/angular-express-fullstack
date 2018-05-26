@@ -205,6 +205,46 @@ span {
   font-size: 16px;
 }
 
+.activity-content {
+  padding: 0 20px;
+  max-height: 350px;
+  overflow: auto;
+}
+
+.activity-row {
+  display: flex;
+  border-bottom: 1px solid #F5F5F5;
+  padding: 17px 5px;
+  align-items: center;
+}
+
+.activity-row:last-child {
+  border-bottom: none;
+}
+
+.activity-row img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.activity-desc {
+  height: 46px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.activity-date {
+  font-size: 11px;
+  color: #95989A;
+  text-align: left;
+}
+
+.user-name {
+  font-weight: 800;
+}
+
 @media screen and (max-width: 1650px) {
 
   .top-project-info-section {

@@ -166,6 +166,41 @@ export class ProgressOverviewComponent implements OnInit {
       Actual: 32000,
       Estimate: 30000,
   }];
+
+  activities = [
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new acticle in knowledgebase',
+      createdTimeAt: '5:28 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    }
+  ];
   constructor( private pmService: PmService ) {
   }
 

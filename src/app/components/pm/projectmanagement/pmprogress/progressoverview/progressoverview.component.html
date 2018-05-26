@@ -84,14 +84,16 @@
         <div class="card-header">
           <span>PROJECT TASKS</span>
         </div>
-        <div class="event-name b-greensea row">
-          <div class="col-2 text-center">
-            <h4>16<span>Dec</span><span>2017</span></h4>
-          </div>
-          <div class="col-10">
-            <h6>Repeating Event</h6>
-            <p>It is a long established fact that a reader will be distracted</p>
-            <address><i class="zmdi zmdi-pin"></i> 123 6th St. Melbourne, FL 32904</address>
+        <div class="activity-content">
+          <div class="activity-row" *ngFor="let activity of activities">
+            <img [src]="activity.imgUrl">
+            <div class="activity-desc">
+              <div>
+                <span class="user-name">{{activity.userName}}</span>
+                <span>{{activity.description}}</span>
+              </div>
+              <div class="activity-date">{{activity.passedDays}} {{activity.createdTimeAt}} - {{activity.createdDateAt}}</div>
+            </div>
           </div>
         </div>
       </div>
