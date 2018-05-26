@@ -89,22 +89,22 @@ export class SharedService {
 
   // Product Type
   getProductTypes(): Observable<any> {
-    const url = `${environment.apiUrl}/organization/productTypes/`;
+    const url = `${environment.apiUrl}/organization/product-types/`;
     return this.http.get(url);
   }
 
   createProductType (body): Observable<any> {
-    const url = `${environment.apiUrl}/organization/productTypes/`;
+    const url = `${environment.apiUrl}/organization/product-types/`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualProductType(id): Observable<any>  {
-    const url = `${environment.apiUrl}/organization/productTypes/${id}`;
+    const url = `${environment.apiUrl}/organization/product-types/${id}`;
     return this.http.get(url);
   }
 
   deleteProductType (id): Observable<any> {
-    const url = `${environment.apiUrl}/organization/productTypes/${id}`;
+    const url = `${environment.apiUrl}/organization/product-types/${id}`;
     return this.http.delete<any>(url);
   }
 

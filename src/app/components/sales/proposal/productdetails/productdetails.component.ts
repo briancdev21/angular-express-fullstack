@@ -2,6 +2,7 @@ import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProposalService } from '../proposal.service';
 import { ProductsService } from '../../../../services/products.service';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-productdetails',
@@ -13,9 +14,9 @@ import { ProductsService } from '../../../../services/products.service';
 
 export class ProductDetailsComponent implements OnInit {
 
-  @Input() productsInfoAll;
-  @Input() productType;
-
+  // @Input() productType;
+  productsInfoAll: any;
+  productType: any;
   public showAddProductModal = false;
   public addProductModalCollapsed = true;
   showProductDetailsModal = false;
@@ -67,10 +68,19 @@ export class ProductDetailsComponent implements OnInit {
     }
   };
 
-  constructor( private proposalService: ProposalService, private productsService: ProductsService ) {
+  constructor( private proposalService: ProposalService, private productsService: ProductsService, private sharedService: SharedService ) {
     this.selectedData = this.productsInfoAll || [];
     this.searchableList = ['productName', 'model'];
     this.onSelect('all');
+    this.productsService.getProductsList().subscribe(res => {
+      console.log('123', res);
+      this.productsInfoAll = res.results;
+    });
+
+    this.sharedService.getProductTypes().subscribe(res => {
+      this.productType = res.results;
+      console.log('product types:', res);
+    });
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -112,11 +122,13 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onSelect(val) {
+    console.log('select val', val);
     if (val === 'all') {
       this.selectedData = this.productsInfoAll;
     } else {
-      this.selectedData = this.productsInfoAll.filter(x => x.productType === val);
+      this.selectedData = this.productsInfoAll.filter(x => x.productTypeId == val);
     }
+    console.log('select val', this.selectedData);
   }
 
   ngOnInit() {
@@ -150,9 +162,9 @@ export class ProductDetailsComponent implements OnInit {
   openAddProductModal() {
     this.showAddProductModal = true;
     this.addProductModalCollapsed = false;
-    this.productsService.createProduct(this.newProductMock).subscribe(res => {
-      // this.proposalService.newProductId.next({'id': res.data.id});
-    });
+    // this.productsService.createProduct(this.newProductMock).subscribe(res => {
+    //   this.proposalService.newProductId.next({'id': res.data.id});
+    // });
   }
 
   openAttachmentModal(product) {
