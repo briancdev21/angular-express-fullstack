@@ -255,6 +255,16 @@ input::placeholder, textarea::placeholder {
 	justify-content: space-between;
 }
 
+.tab-two .modal-tab-content .friend-royalty-retail {
+	display: flex;
+	justify-content: flex-start;
+	flex-flow: nowrap;
+}
+
+.friend {
+	margin-right: 2%;
+}
+
 .type-measure-exp>div, .stock-reorder-cost-lead>div, .sku-supplier-upc>div {
 	width: 48%;
 }
@@ -804,6 +814,38 @@ input::placeholder, textarea::placeholder {
 
 :host ::ng-deep .completer-validation-required .completer-holder input{
 	border: 1px solid red !important;
+}
+
+.main-content {
+	padding: 25px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+select {
+	background: none;
+  -webkit-appearance: none;
+  background: url(/assets/images/down-arrow.png) no-repeat;
+  background-position: right 10px center;
+	background-size: 30%;
+	height: 24px;
+	font-size: 12px;
+	padding-left: 10px;
+	border-radius: 0;
+	border-color: lightgray;
+	color: #95989a;
+}
+
+.main-content>span {
+	width: 100%;
+	margin-left: 5%;
+	font-size: 1.5em;
+	text-align: left;
+}
+
+input.upc-validation, input.supplier-code-validation {
+	border: 1px solid red!important;
 }
 
 
