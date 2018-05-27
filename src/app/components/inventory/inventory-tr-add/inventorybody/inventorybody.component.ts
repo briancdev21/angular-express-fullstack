@@ -32,6 +32,8 @@ export class InventoryBodyComponent {
   createdDate: any;
   transferdate: any;
   showButtons = false;
+  showSendPOModal = false;
+  showCancelPOModal = false;
 
   constructor(private sharedService: SharedService, private router: Router) {
     this.createdDate = new Date().toISOString();
@@ -53,20 +55,26 @@ export class InventoryBodyComponent {
   }
 
   onCancel() {
-    this.sharedService.deleteTransfer(this.tr_mock.id).subscribe(() => {
+    this.showCancelPOModal = true;
+  }
+
+  deletePO() {
+    this.sharedService.deleteInventoryAdjustment(this.tr_mock.id).subscribe(() => {
       this.router.navigate(['./inventory/stock-control']);
     });
   }
 
   onSave() {
     console.log('mock:', this.tr_mock);
-    // tslint:disable-next-line:curly
     if (this.tr_mock.fromLocation !== null &&
       this.tr_mock.toLocation !== null &&
       this.tr_mock.internalMemo !== null
-    )
-    this.sharedService.updateTransfer(this.tr_mock.id, this.tr_mock).subscribe(() => {
-      this.router.navigate(['./inventory/stock-control']);
-    });
+    ) {
+      this.showSendPOModal = true;
+    }
+  }
+
+  savePO() {
+    this.router.navigate(['./inventory/stock-control']);
   }
 }
