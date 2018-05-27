@@ -292,22 +292,14 @@ app-po-discount {
   background-color: #C5D92D;
 }
 
-::ng-deep .has-error ng2-completer.ng2completer .completer-input {
+::ng-deep app-tr-locationtofrom.has-error-tolocation .toLocation {
   border: solid 1px red;
 }
 
-::ng-deep app-po-termsfield.has-error .orderinfo-input {
+::ng-deep app-tr-locationtofrom.has-error-fromlocation .fromLocation {
   border: solid 1px red;
 }
 
-::ng-deep app-po-locationsfield.has-error .orderinfo-input {
-  border: solid 1px red;
-}
-
-::ng-deep app-po-internalmemo.has-error textarea {
-  border: solid 1px red;
-}
-
-::ng-deep app-po-notetosupplier.has-error textarea {
+::ng-deep app-tr-internalmemo.has-error textarea {
   border: solid 1px red;
 }

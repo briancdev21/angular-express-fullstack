@@ -34,6 +34,12 @@ export class InventoryBodyComponent {
   showButtons = false;
   showSendPOModal = false;
   showCancelPOModal = false;
+  showErrors = false;
+  errors = {
+    locationToChanged: false,
+    locationFromChanged: false,
+    memoChanged: false,
+  };
 
   constructor(private sharedService: SharedService, private router: Router) {
     this.createdDate = new Date().toISOString();
@@ -45,12 +51,19 @@ export class InventoryBodyComponent {
   }
 
   onMemoChanged(event) {
-    this.tr_mock.internalMemo = event;
+    if (event) {
+      this.errors.memoChanged = true;
+      this.tr_mock.internalMemo = event;
+    }
   }
 
   onSelectLocation(event) {
-    this.tr_mock.fromLocation = parseInt(event.fromLocation, 10);
-    this.tr_mock.toLocation = parseInt(event.toLocation, 10);
+    if (event.fromLocation) {
+      this.tr_mock.fromLocation = parseInt(event.fromLocation, 10);
+    }
+    if (event.toLocation) {
+      this.tr_mock.toLocation = parseInt(event.toLocation, 10);
+    }
     console.log('mock:', this.tr_mock);
   }
 
@@ -66,6 +79,7 @@ export class InventoryBodyComponent {
 
   onSave() {
     console.log('mock:', this.tr_mock);
+    this.showErrors = true;
     if (this.tr_mock.fromLocation !== null &&
       this.tr_mock.toLocation !== null &&
       this.tr_mock.internalMemo !== null

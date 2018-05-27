@@ -17,11 +17,14 @@
     <div class="sub__info">
       <div>
         <app-tr-locationtofrom
+          [ngClass]="{'has-error-tolocation': showErrors&&!errors.locationToChanged, 'has-error-fromlocation': showErrors&&!errors.locationFromChanged}"
           [locations]="locations"
           (selectedLocation)="onSelectLocation($event)" >
         </app-tr-locationtofrom>
         <div class="internal-memo">
-          <app-tr-internalmemo (memoChanged)="onMemoChanged($event)" ></app-tr-internalmemo>
+          <app-tr-internalmemo
+            [ngClass]="{'has-error': showErrors&&!errors.memoChanged}"
+            (memoChanged)="onMemoChanged($event)" ></app-tr-internalmemo>
         </div>
       </div>
     </div>
