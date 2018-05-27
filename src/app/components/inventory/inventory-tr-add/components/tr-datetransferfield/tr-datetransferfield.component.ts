@@ -7,12 +7,11 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TRDateTransferFieldComponent implements OnInit {
   @Input() transferdate;
-  yesterday: Date;
+  today: Date;
 
   ngOnInit() {
     const date = new Date();
-    date.setDate(date.getDate() - 1);
-    this.yesterday = date;
+    this.today = date;
   }
   selectCreatedFrom(event) {
     this.transferdate = event.value;
