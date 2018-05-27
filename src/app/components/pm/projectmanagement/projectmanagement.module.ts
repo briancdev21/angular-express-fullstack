@@ -26,6 +26,8 @@ import { ProgressOverviewComponent } from './pmprogress/progressoverview/progres
 import {
     ProgressProjectInformationComponent
   } from './pmprogress/progressoverview/progressprojectinformation/progressprojectinformation.component';
+import { ProgressProjectBriefComponent } from './pmprogress/progressprojectbrief/progressprojectbrief.component';
+
 
 import { CommonCmpModule } from '../../../components/common/common.module';
 import { ProfileCmpModule } from '../../profile/profile.module';
@@ -73,7 +75,8 @@ export const MY_NATIVE_FORMATS = {
     ChangeLogsTableComponent,
     TaskStableMapToKeysPipe,
     ProgressOverviewComponent,
-    ProgressProjectInformationComponent
+    ProgressProjectInformationComponent,
+    ProgressProjectBriefComponent
   ],
   imports: [
     BrowserModule,
