@@ -297,13 +297,145 @@
             Next
           </button>
         </div>
-        
+        <div class="btn-section" *ngIf="addVariantContent">
+          <button class="cancel-btn" (click)="moveToConfirm()"  >
+            Back
+          </button>
+          <button class="save-btn" (click)="moveToEdit()">
+            Next
+          </button>
+        </div>
+        <div class="btn-section" *ngIf="editVariant">
+          <button class="cancel-btn 123" (click)="addVariantContent=true; editVariant=false;">
+            Back
+          </button>
+          <button class="save-btn" (click)="clickNextEditVariant()">
+            Next
+          </button>
+        </div>
       </div>
 
 
     </tab>
     <tab tabTitle="ACCESSORIES & ALTERNATIVES" class="tab-won" [active]="tabActiveFour">
-      
+      <div class="tab-four">
+        <div class="accessories-alternatives edit-variant">
+          <div class="accessories">
+            <span>Accessories</span>
+            <input [(ngModel)]="accQueryString" placeholder="Search for a product" (input)="startSearch()">
+            <table class="acc-table">
+              <tr>
+                <th>SKU</th>
+                <th>PRODUCT NAME</th>
+                <th>MODEL</th>
+                <th>BRAND</th>
+                <th>QTY</th>
+                <th>PRICE</th>
+                <th>OPTIONS</th>
+              </tr>
+              <tr *ngFor="let acc of addedAccList; let i = index;">
+                <td>
+                  <div class="accessory-sku" >
+                    <div class="check-box" [ngClass]="getSkuCheckColor(acc)"></div>
+                    <span>{{acc.skuNumber}}</span>
+                  </div>
+                </td>
+                <td>{{acc.productName}}</td>
+                <td>{{acc.modelNumber}}</td>
+                <td>{{acc.brandName}}</td>
+                <td><input [(ngModel)]="acc.qty" ></td>
+                <td>
+                  <div class="acc-td-price">
+                    $ <input decimal value="{{acc.friendPrice * acc.qty}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
+                    <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.friendPrice * acc.qty | number: '1.2-2'}}</span>
+                  </div>
+                </td>
+                <td>
+                  <div class="td-option">
+                    <select [(ngModel)]="acc.option">
+                      <option value="optional">Optional</option>
+                      <option value="auto">Automatically</option>
+                    </select>
+                    <img src="assets/images/garbage.png" (click)="removeAcc(i, acc)">
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <div class="search-modal" [ngClass]="{'show-modal': !searchModalCollapsed, 'hide-modal': searchModalCollapsed}" (clickOutside)="removeSearchModal();">
+              <div class="search-modal-content">
+                <table>
+                  <tr *ngFor="let product of productsInfoAll | SearchPipe: accQueryString : searchableList; let i = index;" (click)="addToAccessories(product)">
+                    <td><img src="{{product.pictureURI}}" alt=""></td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.sku}}</td>
+                    <td>{{product.modelNumber}}</td>
+                    <td>{{product.productType}}</td>
+                    <td>$ {{product.total | number: '2.2-2'}}</td>
+                  </tr>
+                </table>
+                
+              </div>
+            </div>
+          </div>
+
+          <div class="alternatives">
+            <span>Alternatives</span>
+            <input [(ngModel)]="queryString" placeholder="Search for a product" (input)="startAlterSearch()">
+            <table class="alter-table">
+              <tr>
+                <th>SKU</th>
+                <th>PRODUCT NAME</th>
+                <th>MODEL</th>
+                <th>BRAND</th>
+                <th>QTY</th>
+                <th>PRICE</th>
+              </tr>
+              <tr *ngFor="let alter of addedAlterList; let i = index;">
+                <td>{{alter.skuNumber}}</td>
+                <td>{{alter.productName}}</td>
+                <td>{{alter.modelNumber}}</td>
+                <td>{{alter.brandName}}</td>
+                <td><input [(ngModel)]="alter.qty" ></td>
+                <td >
+                  <div class="calcedPrice">
+                    <div>
+                      $ <input value="{{alter.friendPrice * alter.qty}}" name="inputField" type="number" *ngIf="alterPriceEditable" (blur)="alterPriceEditable=false">
+                      <span *ngIf="!alterPriceEditable" (click)="alterPriceEditable=true">{{ alter.friendPrice * alter.qty | number: '1.2-2'}}</span>
+                      
+                    </div>
+                    <img src="assets/images/garbage.png" (click)="removeAlter(i, alter)">
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <div class="search-modal" [ngClass]="{'show-modal': !searchAlterModalCollapsed, 'hide-modal': searchAlterModalCollapsed}" (clickOutside)="removeSearchModal();">
+              <div class="search-modal-content">
+                <table>
+                  <tr *ngFor="let product of productsInfoAll | SearchPipe: queryString : searchableList; let i = index;" (click)="addToAlternatives(product)">
+                    <td><img src="{{product.pictureURI}}" alt=""></td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.sku}}</td>
+                    <td>{{product.modelNumber}}</td>
+                    <td>{{product.productType}}</td>
+                    <td>$ {{product.total | number: '2.2-2'}}</td>
+                  </tr>
+                </table>
+                
+              </div>
+            </div>
+          </div>
+          <div class="btn-section" >
+            <button class="cancel-btn" (click)="clickBack('tab-four')">
+              Back
+            </button>
+            <button class="save-btn" (click)="closeModal()">
+              Finish
+            </button>
+          </div>
+        </div>
+        
+        
+      </div>
     </tab>
   </tabs>
 </div>

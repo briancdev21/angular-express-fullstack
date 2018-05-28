@@ -2,6 +2,10 @@ import { Component, Input, ViewChild, ElementRef, OnInit, EventEmitter, Output }
 import { Router } from '@angular/router';
 import { ProductProfileService } from '../productprofile.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordselect/multikeywordselect.component';
+import { SuppliersService } from '../../../../../services/suppliers.service';
+import { SharedService } from '../../../../../services/shared.service';
+import { ProductsService } from '../../../../../services/inventory/products.service';
 
 @Component({
   selector: 'app-editproductmodal',
@@ -394,6 +398,12 @@ export class EditProductModalComponent implements OnInit {
     }
   }
 
+  getKeywords(event) {
+    const keywordNamesList = event.map(k => k.name);
+    this.addedProduct.variantValue[this.addedProduct.variantValue.length - 1].data = keywordNamesList;
+    // this.variantKeywordsIdList = event.map(k => k.id);
+  }
+
   moveToConfirm() {
     this.addVariantConfirm = true;
     this.addVariantContent = false;
@@ -401,7 +411,6 @@ export class EditProductModalComponent implements OnInit {
 
   removeVariantList(index) {
     this.addedProduct.variantValue.splice(index, 1);
-    console.log('111', this.addedProduct.variantValue);
   }
 
   moveToEdit() {
@@ -410,10 +419,10 @@ export class EditProductModalComponent implements OnInit {
     const allArrays = this.addedProduct.variantValue.map(e => e.data);
     this.possibleCombination = this.allPossibleCases(allArrays);
     const skuNumber = this.autoGenerate();
-    console.log('added product: ', this.addedProduct);
     for ( let i = 0; i < this.possibleCombination.length; i++) {
       this.addedProduct.variantProducts[i] = {
         name: this.possibleCombination[i],
+        qty: 0,
         sku: skuNumber + i,
         cost: this.addedProduct.unitCost,
         supplierCode: '',
@@ -447,18 +456,19 @@ export class EditProductModalComponent implements OnInit {
   }
 
   addToAccessories(product) {
-    console.log('product', product);
     if (!this.addedAccList.map(a => a.skuNumber).includes(product.sku)) {
       this.addedAcc = {
         skuNumber: product.sku,
-        productName: product.productName,
+        productName: product.name,
         modelNumber: product.model,
-        brand: product.brand,
+        brandId: product.brandId,
         qty: product.qty,
         friendPrice: product.total,
-        option: 'optional'
+        option: 'optional',
+        brandName: this.getBrandNamefromId(product.brandId)
       };
       this.addedAccList.push(this.addedAcc);
+      console.log('addedAccList: ', this.addedAccList);
     }
   }
 
@@ -466,11 +476,12 @@ export class EditProductModalComponent implements OnInit {
     if (!this.addedAlterList.map(a => a.skuNumber).includes(product.sku)) {
       this.addedAlter = {
         skuNumber: product.sku,
-        productName: product.productName,
+        productName: product.name,
         modelNumber: product.model,
-        brand: product.brand,
+        brandId: product.brandId,
         qty: product.qty,
-        friendPrice: product.total
+        friendPrice: product.total,
+        brandName: this.getBrandNamefromId(product.brandId)
       };
       this.addedAlterList.push(this.addedAlter);
     }
