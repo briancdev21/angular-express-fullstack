@@ -1,15 +1,19 @@
-import {Component, Input, Output, EventEmitter, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
 
 @Component({
   selector: 'app-po-customer-name',
   templateUrl: './po-customer-name.component.html',
-  styleUrls: ['./po-customer-name.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./po-customer-name.component.css']
 })
 
 export class POCustomerNameComponent implements OnInit {
-  @Input() userList;
+  @Input() set userList(_users: any[]) {
+    _users.forEach((user, index) => {
+        this.users.push({'name': user, 'value': index});
+      });
+  }
+
   @Output() selectedUser: EventEmitter<any> = new EventEmitter();
   users = [];
 
@@ -22,15 +26,13 @@ export class POCustomerNameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userList
-      .forEach((user, index) => {
-        this.users.push({'name': user});
-      });
+
   }
 
   onSelected(item: CompleterItem) {
     if (item) {
-      this.selectedUser.emit(item.title);
+      console.log('value:', item.originalObject.value);
+      this.selectedUser.emit(item.originalObject.value);
     }
   }
 }
