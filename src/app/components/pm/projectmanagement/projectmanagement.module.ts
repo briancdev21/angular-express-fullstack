@@ -28,10 +28,10 @@ import {
   } from './pmprogress/progressoverview/progressprojectinformation/progressprojectinformation.component';
 import { ProgressProjectBriefComponent } from './pmprogress/progressprojectbrief/progressprojectbrief.component';
 
-
 import { CommonCmpModule } from '../../../components/common/common.module';
 import { ProfileCmpModule } from '../../profile/profile.module';
 import { BreadcrumbModule } from '../../../components/breadcrumb/breadcrumb.module';
+import { ProgressProductLogCmpModule } from './pmprogress/progressproductlog/progressproductlog.module';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { DragulaModule } from 'ng2-dragula';
 
@@ -91,7 +91,8 @@ export const MY_NATIVE_FORMATS = {
     OwlNativeDateTimeModule,
     ClickOutsideModule,
     DragulaModule,
-    QuillModule
+    QuillModule,
+    ProgressProductLogCmpModule
   ],
   exports: [
     PmBreadcrumbBarComponent,

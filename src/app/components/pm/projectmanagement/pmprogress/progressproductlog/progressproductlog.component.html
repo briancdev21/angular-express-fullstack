@@ -1,0 +1,22 @@
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
+  <span class="purchase-order-title">PURCHASE ORDERS</span>
+  <div class="main-content-box">
+    <div class="leads-table">
+      <app-pgproductlogtable [(reservedInventoryList)]="reservedInventoryList" [purchaseOrdersList]="purchaseOrdersList"></app-pgproductlogtable>
+    </div>
+    <div class="leads-filter">
+      <app-logstablefilter 
+        [(reservedInventoryList)]="reservedInventoryList" 
+        [purchaseOrdersList]="purchaseOrdersList"
+        [productNameList]="productNameList"
+        [supplierList]="supplierList"
+        [statusList]="statusList"
+        [brandsList]="brandsList"
+        [tagsList]="tagsList"
+        (filterParent)="getFilteredLists($event)">
+      </app-logstablefilter>
+    </div>
+  </div>
+</div>
+
+
