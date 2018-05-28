@@ -203,122 +203,9 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="royalty">
-              <span>{{pricingType[1]}}</span>
-              <div class="price-margin">
-                <div class="price-box">
-                  <span>$</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.royaltyPrice" 
-                    [value]="addedProduct.royaltyPrice"
-                    (input)="calcRoyalty('price')" 
-                    type="number">
-                </div>
-                <div class="margin-box">
-                  <span>%</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.royaltyMargin" 
-                    [value]="addedProduct.royaltyMargin"
-                    (input)="calcRoyalty('margin')" 
-                    type="number">
-                </div>
-              </div>
-            </div>
-            <div class="retail">
-              <span>{{pricingType[2]}}</span>
-              <div class="price-margin">
-                <div class="price-box">
-                  <span>$</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.retailPrice" 
-                    [value]="retailPrice"
-                    (input)="calcRetail('price')" 
-                    type="number">
-                </div>
-                <div class="margin-box">
-                  <span>%</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.retailMargin" 
-                    [value]="retailMargin"
-                    (input)="calcRetail('margin')" 
-                    type="number">
-                </div>
-              </div>
-            </div> -->
+            
           </div>
-          <!-- <div class="builders-wholesale-cost">
-            <div class="builders">
-              <span>{{pricingType[3]}}</span>
-              <div class="price-margin">
-                <div class="price-box">
-                  <span>$</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.buildersPrice"
-                    (input)="calcBuilders('price')" 
-                    type="number">
-                </div>
-                <div class="margin-box">
-                  <span>%</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.buildersMargin"
-                    (input)="calcBuilders('margin')" 
-                    type="number">
-                </div>
-              </div>
-            </div>
-            <div class="wholesale">
-              <span>{{pricingType[4]}}</span>
-              <div class="price-margin">
-                <div class="price-box">
-                  <span>$</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.wholesalePrice" 
-                    [value]="addedProduct.wholesalePrice"
-                    (input)="calcWholesale('price')" 
-                    type="number">
-                </div>
-                <div class="margin-box">
-                  <span>%</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.wholesaleMargin" 
-                    [value]="addedProduct.wholesaleMargin"
-                    (input)="calcWholesale('margin')" 
-                    type="number">
-                </div>
-              </div>
-            </div>
-            <div class="cost">
-              <span>{{pricingType[5]}}</span>
-              <div class="price-margin">
-                <div class="price-box">
-                  <span>$</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.costPrice" 
-                    [value]="addedProduct.costPrice"
-                    (input)="calcCost('price')" 
-                    type="number">
-                </div>
-                <div class="margin-box">
-                  <span>%</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.costMargin" 
-                    [value]="addedProduct.costMargin"
-                    (input)="calcCost('margin')" 
-                    type="number">
-                </div>
-              </div>
-            </div> 
-          </div>  -->
+          
         </div>
         <div class="btn-section" >
           <button class="cancel-btn" (click)="clickBack('tab-two')"  >
@@ -356,7 +243,7 @@
               <span>Variant Values</span>
               <div class="value-editable">
                 <div class="values-section">
-                  <app-multikeywordselect [(keywords)]="variant.data" ></app-multikeywordselect>
+                  <app-multikeywordselect [keywords]="emptyArr" (sendKeywords)="getKeywords($event)"></app-multikeywordselect>
                 </div>
                 <img src="assets/images/garbage.png" (click)="removeVariantList(i);" class="remove-variants" [ngClass]="getVisibility(i)">
               </div>
@@ -371,6 +258,7 @@
           <table>
             <tr>
               <th>VARIANT NAME</th>
+              <th>QTY</th>
               <th>SKU</th>
               <th>COST</th>
               <th>SUPPLIER CODE</th>
@@ -379,6 +267,7 @@
             </tr>
             <tr *ngFor="let variant of addedProduct.variantProducts; let i = index">
               <td>{{variant.name}}</td>
+              <td><input placeholder="" [(ngModel)]="variant.qty" type="number"></td>
               <td><input placeholder="" [(ngModel)]="variant.sku" ></td>
               <td>
                 <div class="td-input">
@@ -387,7 +276,7 @@
                   <span *ngIf="!variableCostEditable" (click)="variableCostEditable=true">{{variant.cost | number: '1.2-2'}}</span>
                 </div>  
               </td>
-              <td><input placeholder="Supplier code here" [(ngModel)]="variant.supplierCode" ></td>
+              <td><input placeholder="Supplier code here" [(ngModel)]="variant.supplierCode" [ngClass]="{'supplier-code-validation': !variant.supplierCode && missingSupplierCode}"></td>
               <td>
                 <div class="td-input">
                   <span style="margin-right: 5px">$</span>
@@ -395,12 +284,13 @@
                   <span *ngIf="!variablePriceEditable" (click)="variablePriceEditable=true">{{variant.priceAdjust | number: '1.2-2'}}</span>
                 </div>
               </td>
-              <td><input placeholder="UPC number here" [(ngModel)]="variant.upcNumber" ></td>
+              <td><input placeholder="UPC number here" [(ngModel)]="variant.upcNumber" [ngClass]="{'upc-validation': !variant.upcNumber && missingUpcNumber}"></td>
             </tr>
           </table>
         </div>
-        <div class="btn-section" *ngIf="!addVariantContent">
-          <button class="cancel-btn rewwer" (click)="moveAddVariant()"  >
+        
+        <div class="btn-section" *ngIf="addVariantConfirm">
+          <button class="cancel-btn rewwer" (click)="clickNext('tab-one')"  >
             Back
           </button>
           <button class="save-btn" (click)="clickNext('tab-three')">
@@ -415,7 +305,17 @@
             Next
           </button>
         </div>
+        <div class="btn-section" *ngIf="editVariant">
+          <button class="cancel-btn 123" (click)="addVariantContent=true; editVariant=false;">
+            Back
+          </button>
+          <button class="save-btn" (click)="clickNextEditVariant()">
+            Next
+          </button>
+        </div>
       </div>
+
+
     </tab>
     <tab tabTitle="ACCESSORIES & ALTERNATIVES" class="tab-won" [active]="tabActiveFour">
       <div class="tab-four">
@@ -442,7 +342,7 @@
                 </td>
                 <td>{{acc.productName}}</td>
                 <td>{{acc.modelNumber}}</td>
-                <td>{{acc.brand}}</td>
+                <td>{{acc.brandName}}</td>
                 <td><input [(ngModel)]="acc.qty" ></td>
                 <td>
                   <div class="acc-td-price">
@@ -465,10 +365,10 @@
               <div class="search-modal-content">
                 <table>
                   <tr *ngFor="let product of productsInfoAll | SearchPipe: accQueryString : searchableList; let i = index;" (click)="addToAccessories(product)">
-                    <td><img src="{{product.imgUrl}}" alt=""></td>
-                    <td>{{product.productName}}</td>
+                    <td><img src="{{product.pictureURI}}" alt=""></td>
+                    <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
-                    <td>{{product.model}}</td>
+                    <td>{{product.modelNumber}}</td>
                     <td>{{product.productType}}</td>
                     <td>$ {{product.total | number: '2.2-2'}}</td>
                   </tr>
@@ -494,7 +394,7 @@
                 <td>{{alter.skuNumber}}</td>
                 <td>{{alter.productName}}</td>
                 <td>{{alter.modelNumber}}</td>
-                <td>{{alter.brand}}</td>
+                <td>{{alter.brandName}}</td>
                 <td><input [(ngModel)]="alter.qty" ></td>
                 <td >
                   <div class="calcedPrice">
@@ -512,10 +412,10 @@
               <div class="search-modal-content">
                 <table>
                   <tr *ngFor="let product of productsInfoAll | SearchPipe: queryString : searchableList; let i = index;" (click)="addToAlternatives(product)">
-                    <td><img src="{{product.imgUrl}}" alt=""></td>
-                    <td>{{product.productName}}</td>
+                    <td><img src="{{product.pictureURI}}" alt=""></td>
+                    <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
-                    <td>{{product.model}}</td>
+                    <td>{{product.modelNumber}}</td>
                     <td>{{product.productType}}</td>
                     <td>$ {{product.total | number: '2.2-2'}}</td>
                   </tr>
@@ -539,5 +439,3 @@
     </tab>
   </tabs>
 </div>
-
-  

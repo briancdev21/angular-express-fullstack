@@ -816,6 +816,38 @@ input::placeholder, textarea::placeholder {
 	border: 1px solid red !important;
 }
 
+.main-content {
+	padding: 25px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+select {
+	background: none;
+  -webkit-appearance: none;
+  background: url(/assets/images/down-arrow.png) no-repeat;
+  background-position: right 10px center;
+	background-size: 30%;
+	height: 24px;
+	font-size: 12px;
+	padding-left: 10px;
+	border-radius: 0;
+	border-color: lightgray;
+	color: #95989a;
+}
+
+.main-content>span {
+	width: 100%;
+	margin-left: 5%;
+	font-size: 1.5em;
+	text-align: left;
+}
+
+input.upc-validation, input.supplier-code-validation {
+	border: 1px solid red!important;
+}
+
 
 @media screen and (max-width: 1650px) {
 	/deep/ .add-product-modal .content>tabs .tabs__tab:last-child {

@@ -88,7 +88,12 @@ export class AddProductModalComponent implements OnInit {
   currenciesListInfo: any;
   pricingCategoriesListInfo: any;
   productCategories = [];
-
+  emptyArr = [];
+  showVariantConfirmModal = false;
+  missingSupplierCode = false;
+  missingUpcNumber = false;
+  productTypesListInfo: any;
+  productTypeNames: any;
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
@@ -116,7 +121,11 @@ export class AddProductModalComponent implements OnInit {
     this.sharedService.getPricingCategories().subscribe(res => {
       this.pricingCategoriesListInfo = res.results;
       this.pricingCategoriesListInfo.map(p => p['price'] = 0);
-      console.log('currency: ', this.pricingCategoriesListInfo);
+    });
+
+    this.sharedService.getProductTypes().subscribe(res => {
+      this.productTypesListInfo = res.results;
+      this.productTypeNames = res.results.map(b => b.name);
     });
 
     this.dataService = completerService.local(this.searchData, 'color', 'color');
@@ -127,8 +136,8 @@ export class AddProductModalComponent implements OnInit {
       productName: '',
       modelNumber: '',
       productDesc: '',
-      measureCount: '1',
-      expiration: '',
+      measureCount: undefined,
+      expiration: undefined,
       brand: '',
       inventoryType: 'STOCKABLE',
       measure: 'PER_UNIT',
@@ -137,7 +146,7 @@ export class AddProductModalComponent implements OnInit {
       initialStockLevel: '',
       reorderPoint: '',
       unitCost: 0,
-      currenty: 'CAD',
+      currency: 'CAD',
       leadTime: 'DAYS',
       leadTimeCount: 0,
       skuNumber: '',
@@ -186,7 +195,6 @@ export class AddProductModalComponent implements OnInit {
 
   cancelNewProduct() {
     this.proposalService.closeModal(true);
-    console.log('deleted: ', this.newProductId);
     this.productsService.deleteIndividualProduct(this.newProductId).subscribe(res => {
       console.log('deleted: ', res);
     });
@@ -239,6 +247,29 @@ export class AddProductModalComponent implements OnInit {
       this.tabActiveSecond = false;
       this.tabActiveFour = false;
     } else if (pos === 'tab-three') {
+      this.tabActiveFour = true;
+      this.tabActiveFirst = false;
+      this.tabActiveThird = false;
+      this.tabActiveSecond = false;
+    }
+  }
+
+  clickNextEditVariant() {
+    const variantSuppliercode = this.addedProduct.variantProducts.map(v => v.supplierCode);
+    if (variantSuppliercode.filter(s => s === '').length > 0) {
+      this.missingSupplierCode = true;
+    } else {
+      this.missingSupplierCode = false;
+    }
+    const variantUpcNumber = this.addedProduct.variantProducts.map(v => v.upcNumber);
+    if (variantUpcNumber.filter(s => s === '').length > 0) {
+      this.missingUpcNumber = true;
+    } else {
+      this.missingUpcNumber = false;
+    }
+    if (this.missingUpcNumber || this.missingSupplierCode) {
+      return;
+    } else {
       this.tabActiveFour = true;
       this.tabActiveFirst = false;
       this.tabActiveThird = false;
@@ -374,6 +405,12 @@ export class AddProductModalComponent implements OnInit {
     }
   }
 
+  getKeywords(event) {
+    const keywordNamesList = event.map(k => k.name);
+    this.addedProduct.variantValue[this.addedProduct.variantValue.length - 1].data = keywordNamesList;
+    // this.variantKeywordsIdList = event.map(k => k.id);
+  }
+
   moveToConfirm() {
     this.addVariantConfirm = true;
     this.addVariantContent = false;
@@ -381,7 +418,6 @@ export class AddProductModalComponent implements OnInit {
 
   removeVariantList(index) {
     this.addedProduct.variantValue.splice(index, 1);
-    console.log('111', this.addedProduct.variantValue);
   }
 
   moveToEdit() {
@@ -393,6 +429,7 @@ export class AddProductModalComponent implements OnInit {
     for ( let i = 0; i < this.possibleCombination.length; i++) {
       this.addedProduct.variantProducts[i] = {
         name: this.possibleCombination[i],
+        qty: 0,
         sku: skuNumber + i,
         cost: this.addedProduct.unitCost,
         supplierCode: '',
@@ -429,14 +466,16 @@ export class AddProductModalComponent implements OnInit {
     if (!this.addedAccList.map(a => a.skuNumber).includes(product.sku)) {
       this.addedAcc = {
         skuNumber: product.sku,
-        productName: product.productName,
+        productName: product.name,
         modelNumber: product.model,
-        brand: product.brand,
+        brandId: product.brandId,
         qty: product.qty,
         friendPrice: product.total,
-        option: 'optional'
+        option: 'optional',
+        brandName: this.getBrandNamefromId(product.brandId)
       };
       this.addedAccList.push(this.addedAcc);
+      console.log('addedAccList: ', this.addedAccList);
     }
   }
 
@@ -444,11 +483,12 @@ export class AddProductModalComponent implements OnInit {
     if (!this.addedAlterList.map(a => a.skuNumber).includes(product.sku)) {
       this.addedAlter = {
         skuNumber: product.sku,
-        productName: product.productName,
+        productName: product.name,
         modelNumber: product.model,
-        brand: product.brand,
+        brandId: product.brandId,
         qty: product.qty,
-        friendPrice: product.total
+        friendPrice: product.total,
+        brandName: this.getBrandNamefromId(product.brandId)
       };
       this.addedAlterList.push(this.addedAlter);
     }
@@ -499,6 +539,16 @@ export class AddProductModalComponent implements OnInit {
     if (this.addedProduct.inventoryType === 'service') {
       return 'greyed';
     }
+  }
+
+  getProductTypeNamefromId(id) {
+    const filterProductType = this.productTypesListInfo.filter(p => p.id === id);
+    return filterProductType.name;
+  }
+
+  getBrandNamefromId(id) {
+    const filterBrandName = this.brandsListInfo.filter(p => p.id === id);
+    return filterBrandName.name;
   }
 }
 
