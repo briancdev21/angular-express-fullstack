@@ -1,8 +1,8 @@
 <div class="main-content" >
   <header>
-    <app-inventoryheader [createdDate]="'2018-01-10'" [dueDate]="'2018-01-20'" ></app-inventoryheader>
+    <app-inventoryheader [createdDate]="createdDate" [dueDate]="dueDate" ></app-inventoryheader>
   </header>
   <main>
-    <app-inventorybody></app-inventorybody>
+    <app-inventorybody [poData]="po_mock" ></app-inventorybody>
   </main>
 </div>
