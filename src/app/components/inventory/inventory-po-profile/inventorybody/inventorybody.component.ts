@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inventorybody',
@@ -46,7 +47,21 @@ export class InventoryBodyComponent {
   createdDate: any;
   noteToSupplier: any;
 
-  constructor() {
+  // footer
+  currency = 'CAD';
+  language = 'ENG';
+  showButtons = false;
+  showSendPOModal = false;
+  showCancelPOModal = false;
+  showPrintOptions = false;
+  printOptions = {
+   brand: false,
+   qty: false,
+   supplier: false,
+   totalprice: false
+  };
+
+  constructor(private router: Router) {
     this.createdDate = new Date().toJSON().slice(0, 10);
     this.dueDate = new Date().toJSON().slice(0, 10);
 
@@ -121,5 +136,30 @@ export class InventoryBodyComponent {
       }
       this.totalamountdue =  Math.round(this.totalamountdue * 100) / 100;
     }
+  }
+
+
+  onCancel() {
+    this.showCancelPOModal = true;
+  }
+
+  deletePO() {
+    // this.sharedService.deletePurchaseOrder(this.po_mock.id).subscribe(() => {
+      this.router.navigate(['./inventory/stock-control']);
+    // });
+  }
+
+  onSave() {
+    // if (this.po_mock.term !== undefined
+    //   && this.contactId !== undefined
+    //   && this.po_mock.location !== undefined
+    //   && this.po_mock.supplierNote
+    //   && this.po_mock.internalMemo) {
+      this.showSendPOModal = true;
+    // }
+  }
+
+  savePO() {
+    this.router.navigate(['./inventory/stock-control']);
   }
 }
