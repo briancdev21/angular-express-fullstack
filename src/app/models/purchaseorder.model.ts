@@ -12,6 +12,7 @@ export class PurchaseOrderModel {
   location: number;
   term: number;
   freightCost: number;
+  createdAt: Date;
   dueDate: string;
   discount: {
     value: number;
