@@ -6,12 +6,12 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./po-createddatefield.component.css']
 })
 export class POCreatedDateFieldComponent implements OnInit {
-  @Input() createdDate;
-  today: Date;
+  @Input() set createdDate(val: string) {
+    this._createdDate = new Date(val);
+  }
+  _createdDate: Date;
 
   ngOnInit() {
-    const date = new Date();
-    this.today = date;
   }
   selectCreatedFrom(event) {
     this.createdDate = event.value;
