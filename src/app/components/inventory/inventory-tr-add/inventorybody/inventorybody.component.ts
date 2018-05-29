@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './inventorybody.component.html',
   styleUrls: ['./inventorybody.component.css']
 })
-export default class InventoryBodyComponent {
+export class InventoryBodyComponent {
 
   @Input() set trData(_trdata) {
     this.tr_mock = new TransferModel();
@@ -31,6 +31,7 @@ export default class InventoryBodyComponent {
   tr_mock: TransferModel;
   createdDate: any;
   transferdate: any;
+  showButtons = false;
 
   constructor(private sharedService: SharedService, private router: Router) {
     this.createdDate = new Date().toISOString();

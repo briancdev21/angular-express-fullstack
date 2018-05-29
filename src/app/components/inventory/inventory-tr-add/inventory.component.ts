@@ -8,7 +8,7 @@ import { SharedService } from '../../../services/shared.service';
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.css']
 })
-export default class InventoryTrAddComponent implements OnInit {
+export class InventoryTrAddComponent implements OnInit {
   tr_mock: TransferModel;
   constructor(private sharedService: SharedService) {
     // constructor

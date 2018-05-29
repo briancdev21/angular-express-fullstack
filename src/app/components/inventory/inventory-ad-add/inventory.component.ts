@@ -8,7 +8,7 @@ import { AdjustmentCreateModel } from '../../../models/adjustmentcreate.model';
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.css']
 })
-export default class InventoryAdAddComponent implements OnInit {
+export class InventoryAdAddComponent implements OnInit {
   ad_mock: AdjustmentModel;
   constructor(private sharedService: SharedService) {
     // constructor

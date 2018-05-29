@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./inventorybody.component.css'],
   providers: [SharedService]
 })
-export default class InventoryBodyComponent {
+export class InventoryBodyComponent {
   @Input() set poData(_podata) {
     this.po_mock = _podata;
     console.log('po mock', this.po_mock);

@@ -27,7 +27,7 @@ export class InventoryBodyComponent {
     country: 'Canada',
     postcode: 'T3C 0J7'
   };
-
+  showButtons = false;
 
   @Input() set adData(_addata) {
     this.ad_mock = new AdjustmentModel();
