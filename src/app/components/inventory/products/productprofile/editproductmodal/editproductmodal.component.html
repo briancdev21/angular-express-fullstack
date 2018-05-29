@@ -1,6 +1,6 @@
 <div class="header">
   <span>ADDING PRODUCT</span>
-  <img class="close-btn" src="assets/images/x-sign-red.png" (click)="cancelNewProduct()"/>
+  <img class="close-btn" src="assets/images/x-sign-red.png" (click)="closeModal()"/>
 </div>
 
 <div class="content add-product-modal" >
@@ -56,7 +56,7 @@
         </div>
         
         <div class="btn-section" >
-          <button class="cancel-btn" (click)="cancelNewProduct()"  >
+          <button class="cancel-btn" (click)="closeModal()"  >
             Cancel
           </button>
           <button class="save-btn" (click)="clickNext('tab-one')"  >

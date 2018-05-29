@@ -52,6 +52,7 @@ import { CrmService } from './services/crm.service';
 import { SharedService } from './services/shared.service';
 import { InvoicesService } from './services/invoices.service';
 import { ProductsService } from './services/inventory/products.service';
+import { SuppliersService } from './services/suppliers.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -107,6 +108,7 @@ import { ProductsService } from './services/inventory/products.service';
     InvoicesService,
     SharedService,
     ProductsService,
+    SuppliersService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
