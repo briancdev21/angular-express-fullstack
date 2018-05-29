@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-po-internalmemo',
@@ -6,5 +6,10 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./po-internalmemo.component.css']
 })
 export class POInternalMemoComponent {
-  @Input() internalMemo;
+
+  @Output() memoChanged: EventEmitter<any> = new EventEmitter();
+
+  onMemoChange(event) {
+    this.memoChanged.emit(event.target.value);
+  }
 }
