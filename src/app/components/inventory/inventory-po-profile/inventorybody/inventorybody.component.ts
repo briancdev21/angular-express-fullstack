@@ -81,11 +81,8 @@ export class InventoryBodyComponent {
 
   po_id = '';
   createdDate: any;
-<<<<<<< HEAD
   noteToSupplier: any;
 
-=======
->>>>>>> Show errors when form is invalid
   // footer
   currency = 'CAD';
   language = 'ENG';
