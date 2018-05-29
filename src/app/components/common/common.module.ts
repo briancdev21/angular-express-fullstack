@@ -10,6 +10,7 @@ import { MorrisDonutComponent } from './morrisdonut/morrisdonut.component';
 import { MorrisLineComponent } from './morrislinechart/morrislinechart.component';
 import { MorrisAreaComponent } from './morrisareachart/morrisareachart.component';
 import { MorrisBarChartComponent } from './morrisbarchart/morrisbarchart.component';
+import { AgendaBoxComponent } from './agendabox/agendabox.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { MorrisBarChartComponent } from './morrisbarchart/morrisbarchart.compone
     MorrisDonutComponent,
     MorrisLineComponent,
     MorrisAreaComponent,
-    MorrisBarChartComponent
+    MorrisBarChartComponent,
+    AgendaBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,8 @@ import { MorrisBarChartComponent } from './morrisbarchart/morrisbarchart.compone
     MorrisDonutComponent,
     MorrisLineComponent,
     MorrisAreaComponent,
-    MorrisBarChartComponent
+    MorrisBarChartComponent,
+    AgendaBoxComponent
   ]
 })
 export class CommonCmpModule { }
