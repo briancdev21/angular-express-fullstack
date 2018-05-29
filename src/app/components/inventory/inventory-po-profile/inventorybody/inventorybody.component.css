@@ -325,3 +325,23 @@ select:invalid {
 .createpdf .ok {
   background-color: #C5D92D;
 }
+
+::ng-deep .has-error ng2-completer.ng2completer .completer-input {
+  border: solid 1px red;
+}
+
+::ng-deep app-po-termsfield.has-error .orderinfo-input {
+  border: solid 1px red;
+}
+
+::ng-deep app-po-locationsfield.has-error .orderinfo-input {
+  border: solid 1px red;
+}
+
+::ng-deep app-po-internalmemo.has-error textarea {
+  border: solid 1px red;
+}
+
+::ng-deep app-po-notetosupplier.has-error textarea {
+  border: solid 1px red;
+}
