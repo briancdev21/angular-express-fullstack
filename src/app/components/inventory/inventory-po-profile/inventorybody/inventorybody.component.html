@@ -38,7 +38,7 @@
     </div>
   </div>
   <footer>
-    <section id="header" *ngIf="!showButtons" >
+    <section id="header" class="inventory-footer" *ngIf="!showButtons" >
       <div (click)="showButtons=true" >
         Setting
       </div>
@@ -47,14 +47,14 @@
       </div>
     </section>
     <div class="footer-main-wrapper" (click)="showButtons=false" *ngIf="showButtons"  ></div>
-    <section id="main" *ngIf="showButtons"  >
+    <section id="main" class="inventory-footer" *ngIf="showButtons"  >
       <div class="header" >
         <div>
           PURCHASE ORDER SETTINGS
         </div>
         <div class="red_close" (click)="showButtons=false" ><img src="/assets/images/X sign Red.png" /></div>
       </div>
-      <div class="flex main">
+      <div class="flex main" >
         <div class="flex" >
           <div class="print" (click)="showPrintOptions=true" ><img src="/assets/images/printer.png" /></div>
           <div>
