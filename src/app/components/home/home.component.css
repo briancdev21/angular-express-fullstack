@@ -56,3 +56,73 @@ h1 {
   color: #70EACA;
   font-size: 23px;
 }
+
+.cards-multi-charts {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+  box-shadow: 1px 3px 7px #95989a;
+  border-top: 3px solid #cdd1d3;
+}
+
+.card-header {
+  border-bottom: 1px solid #cdd1d3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 25px;
+  color: #95989A;
+}
+
+.card-header span {
+  font-size: 19px;
+}
+
+.card-header select {
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: #95989A;
+  background: transparent;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.charts-left {
+  width: 66.5%;
+}
+
+.agenda-tasks {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bar-chart {
+  margin-top: 30px;
+}
+
+.agenda-tasks>* {
+  width: 49%;
+}
+
+app-activitiesbox {
+  width: 32.5%;
+}
+
+/deep/ app-activitiesbox .card {
+  height: 100%;
+}
+
+/deep/ app-tasksbox .card {
+  height: 100%;
+}
+
+/deep/ app-activitiesbox .card .activity-content {
+  max-height: none;
+}

@@ -1,0 +1,17 @@
+<div class="card">
+  <div class="card-header">
+    <span>PROJECT TASKS</span>
+  </div>
+  <div class="activity-content">
+    <div class="activity-row" *ngFor="let activity of activitiesInfo">
+      <img [src]="activity.imgUrl">
+      <div class="activity-desc">
+        <div class="activity-data">
+          <span class="user-name">{{activity.userName}}</span>
+          <span>{{activity.description}}</span>
+        </div>
+        <div class="activity-date">{{activity.passedDays}} {{activity.createdTimeAt}} - {{activity.createdDateAt}}</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -11,9 +11,27 @@
     </div>
   </div>
 
-  <div class="cards-agenda-tasks-activity-bar">
-    <app-agendabox [agendaInfo]="agendaInfo"></app-agendabox>
-    <app-tasksbox [tasksInfo]="tasksInfo"></app-tasksbox>
+  <div class="cards-multi-charts">
+    <div class="charts-left">
+      <div class="agenda-tasks">
+        <app-agendabox [agendaInfo]="agendaInfo"></app-agendabox>
+        <app-tasksbox [tasksInfo]="tasksInfo"></app-tasksbox>
+      </div>
+      <div class="bar-chart card">
+        <div class="card-header">
+          <span>PROJECT HOURS</span>
+          <select [(ngModel)]="donutTimePeriod">
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
+        <app-morrisbarchart [morrisBarChartInfo]="morrisBarChartInfo"></app-morrisbarchart>
+      </div>
+      
+    </div>
+    <app-activitiesbox [activitiesInfo]="activitiesInfo"></app-activitiesbox>
   </div>
   <div class="cards-line-charts">
 

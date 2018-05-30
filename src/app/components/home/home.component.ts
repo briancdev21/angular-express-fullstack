@@ -89,6 +89,112 @@ export class HomeComponent implements OnInit {
       followerImg: 'assets/users/user1.png'
     }
   ];
+
+  activitiesInfo = [
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new acticle in knowledgebase',
+      createdTimeAt: '5:28 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new acticle in knowledgebase',
+      createdTimeAt: '5:28 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    }
+  ];
+
+  morrisBarChartInfo = [{
+      y: 'January',
+      revenue: 80
+    }, {
+      y: 'February',
+      revenue: 70
+    }, {
+      y: 'March',
+      revenue: 90
+    }, {
+      y: 'April',
+      revenue: 60
+    }, {
+      y: 'May',
+      revenue: 70
+    }, {
+      y: 'June',
+      revenue: 90
+    }, {
+      y: 'July',
+      revenue: 80
+    }, {
+      y: 'August',
+      revenue: 60
+    }, {
+      y: 'September',
+      revenue: 70
+    }, {
+      y: 'October',
+      revenue: 90
+    }, {
+      y: 'November',
+      revenue: 85
+    }, {
+      y: 'December',
+      revenue: 60
+    }];
+
   ngOnInit() {
     if (this.currentHr < 4) {
       this.greeting = 'Good Night';
