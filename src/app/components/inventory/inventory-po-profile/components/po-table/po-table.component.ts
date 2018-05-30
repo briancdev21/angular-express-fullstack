@@ -37,11 +37,11 @@ export class POTableComponent implements OnInit {
           this.skus = this.skus.concat(skuRes.results);
           this.originSkus = this.skus.slice();
           this.skuService = completerService.local(this.skus, 'sku', 'sku');
-          this.sharedService.getTaxRates().subscribe(taxRateRes => {
-            this.taxRateOptions = taxRateRes.results;
-            this.addNewProduct();
-          });
         });
+      });
+      this.sharedService.getTaxRates().subscribe(taxRateRes => {
+        this.taxRateOptions = taxRateRes.results;
+        this.addNewProduct();
       });
     });
   }
@@ -49,6 +49,7 @@ export class POTableComponent implements OnInit {
   }
 
   addNewProduct() {
+    console.log('new product added');
     const newProduct = new ProductDetailInfo();
     newProduct.taxRateId = this.taxRateOptions[0].id;
     this.productDetails.push(newProduct);
