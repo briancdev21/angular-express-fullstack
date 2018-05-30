@@ -1,3 +1,21 @@
 <app-common (expandSidebar)="toggleMenubar($event)"></app-common>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
+  <div class="top-sec">
+    <div class="greetings">
+      <h1>{{greeting}} {{userInfo.name}}</h1>
+      <span>You have {{userInfo.tasksCount}} tasks and {{userInfo.eventsCount}} events today</span>
+    </div>
+    <div class="date-sec">
+      <span class="current-day">{{currentDay}}</span>
+      <span>{{currentDate}}</span>
+    </div>
+  </div>
 
-<h1 style="margin-top: 0; padding-top: 100px; padding-left: 35%;">Main Home page</h1>
+  <div class="cards-agenda-tasks-activity-bar">
+    <app-agendabox [agendaInfo]="agendaInfo"></app-agendabox>
+    <app-tasksbox [tasksInfo]="tasksInfo"></app-tasksbox>
+  </div>
+  <div class="cards-line-charts">
+
+  </div>
+</div>
