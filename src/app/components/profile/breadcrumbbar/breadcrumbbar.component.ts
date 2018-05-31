@@ -1,5 +1,6 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
   selector: 'app-breadcrumbbar',
@@ -22,16 +23,24 @@ export class BreadcrumbBarComponent implements AfterViewInit {
   inputChanged: any = '';
   public data = ['contact', ''];
   items2: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
-  list = ['hiello', 'world', 'this'];
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
-  isAutocompleteUpdated = false;
+  usersList: any;
 
-  constructor() {
+  constructor(private sharedService: SharedService) {
+    this.sharedService.getUsers().subscribe(res => {
+      console.log('users: ', res);
+      this.usersList = res;
+      res.forEach((element, index) => {
+        this.items2.push({
+          id: index,
+          label: element.username,
+          imageUrl: element.pictureURI
+        });
+      });
+
+      console.log('items: ', this.items2);
+    });
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
