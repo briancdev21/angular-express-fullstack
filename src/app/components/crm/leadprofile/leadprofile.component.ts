@@ -14,6 +14,7 @@ import { DocumentsComponent } from '../../profile/cards/documents/documents.comp
 import { CollaboratorsComponent } from '../../profile/cards/collaborators/collaborators.component';
 import { Router, ActivatedRoute, NavigationStart, RoutesRecognized, NavigationEnd } from '@angular/router';
 import { CrmService } from '../../../services/crm.service';
+import { SharedService } from '../../../services/shared.service';
 import * as moment from 'moment';
 import 'rxjs/add/operator/pairwise';
 
@@ -40,45 +41,6 @@ export class LeadProfileComponent implements OnInit {
     * which will be displayed on the side. Icon is in html
     */
   public timelineData: Array<Object> = [
-    {
-      title: 'Meeting',
-      icon: 'fa-home',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
-       Below please find the currnet status of the sale',
-      timelineBtnColor: 'green-btn',
-      buttontitle: 'More Info',
-      date: '2018-1-9',
-      buttonClickEventHandlerName: 'getMoreInfo'
-    },
-    {
-      title: 'Send Document to Mike',
-      icon: 'fa-file-text-o',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
-       Below please find the currnet status of the sale',
-      timelineBtnColor: 'lime-btn',
-      buttontitle: 'Download document',
-      date: '2018-1-9',
-      buttonClickEventHandlerName: 'downloadDoc'
-    },
-    {
-      title: 'Coffee Break',
-      icon: 'fa-coffee',
-      content: 'Conference on the sales for the previous year. Monica please examine sales\
-       trends in marketing and products. Below please find the currnet status of the sale',
-      timelineBtnColor: 'blue-btn',
-      buttontitle: 'Read more',
-      date: '2018-1-8',
-      buttonClickEventHandlerName: 'readMoreCoffee'
-    },
-    {
-      title: 'Phone with Jeronimo',
-      icon: 'fa-phone',
-      content: 'Following step to complete',
-      timelineBtnColor: 'orange-btn',
-      buttontitle: 'Download doc',
-      date: '2018-1-7',
-      buttonClickEventHandlerName: 'downloadDoc'
-    }
   ];
   public cards =
     {
@@ -251,12 +213,12 @@ export class LeadProfileComponent implements OnInit {
   };
   currentLead: any;
   savingLead: any;
+  contactsList: any;
 
-  constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService) {
+  constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService, private sharedService: SharedService) {
     this.leadInfoIndex = this.route.snapshot.paramMap.get('id');
     this.crmService.getIndividualLead(this.leadInfoIndex).subscribe(res => {
       this.currentLead = res.data;
-      console.log('leadData: ', res.data);
       // Update userInfo
       this.userInfo = {
         name: res.data.person.firstName + ' ' + res.data.person.lastName,
@@ -279,12 +241,47 @@ export class LeadProfileComponent implements OnInit {
       // Update cards info
       this.cards.leadScore = res.data.score;
 
+      this.crmService.getLeadActivities(this.currentLead.id).subscribe(response => {
+        console.log('get activities: ', response);
+        const activities = response.results;
+        this.timelineData = activities;
+        // Update time line data
+        this.timelineData.map(a => {
+          a['title'] = a['type'];
+          a['content'] = a['detail'];
+          a['buttontitle'] = 'More Info';
+          a['date'] = moment(a['createdAt']).format('YYYY-MM-DD');
+          a['buttonClickEventHandlerName'] = 'getMoreInfo';
+
+          switch (a['title']) {
+            case 'NOTE':
+              a['icon'] = 'fa-file-text-o';
+              a['timelineBtnColor'] = 'lime-btn';
+              break;
+            case 'EMAIL':
+              a['icon'] = 'fa fa-envelope-o';
+              a['timelineBtnColor'] = 'orangered-btn';
+            break;
+            case 'CALL':
+              a['icon'] = 'fa fa-phone';
+              a['timelineBtnColor'] = 'orange-btn';
+            break;
+            default:
+              a['icon'] = 'fa fa-home';
+              break;
+          }
+        });
+      });
+    });
+
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res;
     });
   }
 
   ngOnInit() {
     this.activity = {
-      title: 'Notes',
+      title: 'NOTE',
       subject: undefined,
       contact: undefined,
       content: ''
@@ -312,15 +309,15 @@ export class LeadProfileComponent implements OnInit {
     };
 
     switch (nitem.title) {
-      case 'Notes':
+      case 'NOTE':
         nitem.icon = 'fa-file-text-o';
         nitem.timelineBtnColor = 'lime-btn';
         break;
-      case 'Email':
+      case 'EMAIL':
         nitem.icon = 'fa fa-envelope-o';
         nitem.timelineBtnColor = 'orangered-btn';
       break;
-      case 'Call':
+      case 'CALL':
         nitem.icon = 'fa fa-phone';
         nitem.timelineBtnColor = 'orange-btn';
       break;
@@ -328,10 +325,19 @@ export class LeadProfileComponent implements OnInit {
         nitem.icon = 'fa fa-home';
         break;
     }
+
+    const savingActivityInfo = {
+      'contactId':  nitem.contact ? parseInt(nitem.contact, 10) : undefined,
+      'emailSubject': nitem.subject,
+      'leadId': this.currentLead.id,
+      'type': nitem.title,
+      'detail': nitem.content
+    };
+
+    this.crmService.createLeadActivity(this.currentLead.id, savingActivityInfo).subscribe( res => {
+    });
     this.timelineData.unshift(nitem);
     this.activity.subject = undefined;
-    this.activity.contact = undefined;
-    this.activity.title = undefined;
   }
 
   toggleMenubar(data: boolean) {
@@ -340,7 +346,6 @@ export class LeadProfileComponent implements OnInit {
 
   onChangedUserInfo(event) {
     this.savingLead = this.currentLead;
-    console.log('changed User inf:', event);
     const userInfo = event.data;
     const shippingArr = userInfo.shippingaddress.split(',');
     const billingArr = userInfo.billingaddress.split(',');
@@ -372,7 +377,6 @@ export class LeadProfileComponent implements OnInit {
     delete this.savingLead.createdAt;
     delete this.savingLead.updatedAt;
     this.crmService.updateIndividualLead(this.currentLead.id, this.savingLead).subscribe( res => {
-      console.log('success: ', res);
     });
   }
 

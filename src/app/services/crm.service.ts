@@ -78,5 +78,16 @@ export class CrmService {
     const url = `${apiUrl}crm/contacts/${id}`;
     return this.http.put<any> (url, body);
   }
+
+  getLeadActivities(id): Observable<any> {
+    const url = `${apiUrl}crm/leads/${id}/recent-activities`;
+    return this.http.get(url);
+  }
+
+  createLeadActivity (id, body): Observable<any> {
+    const url = `${apiUrl}crm/leads/${id}/recent-activities`;
+    return this.http.post(url, body, this.options)
+      .map((res) => res);
+  }
 }
 

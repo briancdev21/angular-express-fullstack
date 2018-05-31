@@ -77,11 +77,9 @@ export class ProfileInfoBarComponent implements OnInit {
   }
 
   onKeywordsChanged(event) {
-    console.log('keywords changed: ', event);
     const keywordIds = event.map( k => k.id);
     this.userInfo.keywordIds = keywordIds;
     this.changedUserInfo.emit({'data': this.userInfo});
-    console.log('this.uerif: ', this.userInfo);
   }
 
   confirmChange() {
