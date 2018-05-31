@@ -25,6 +25,7 @@ export class BreadcrumbBarComponent implements AfterViewInit {
   items2: any[] = [
   ];
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
+  isAutocompleteUpdated = false;
   usersList: any;
 
   constructor(private sharedService: SharedService) {
