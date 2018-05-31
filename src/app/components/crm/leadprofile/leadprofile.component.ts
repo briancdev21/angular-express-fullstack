@@ -273,7 +273,8 @@ export class LeadProfileComponent implements OnInit {
                         res.data.billingAddress.province + ', ' +
                         res.data.billingAddress.postalCode,
         keywords: res.data.keywordIds ? res.data.keywordIds : [],
-        followers: res.data.followers ? res.data.followers : []
+        followers: res.data.followers ? res.data.followers : [],
+        note: res.data.note
       };
       // Update cards info
       this.cards.leadScore = res.data.score;
@@ -366,6 +367,7 @@ export class LeadProfileComponent implements OnInit {
       'facebook': 'string',
       'twitter': 'string'
     };
+    this.savingLead.keywordIds = userInfo.keywordIds;
     this.savingLead.followers = ['string'];
     delete this.savingLead.createdAt;
     delete this.savingLead.updatedAt;
