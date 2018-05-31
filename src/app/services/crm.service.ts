@@ -47,6 +47,11 @@ export class CrmService {
     return this.http.get(url);
   }
 
+  deleteIndividualLead(id): Observable<any>  {
+    const url = `${apiUrl}crm/leads/${id}`;
+    return this.http.delete(url);
+  }
+
   updateIndividualLead(id, body): Observable<any> {
     const url = `${apiUrl}crm/leads/${id}`;
     return this.http.put<any> (url, body);

@@ -30,6 +30,13 @@ export class LeadsComponent implements OnInit {
 
   constructor( private filterService: FilterService, private router: Router, private crmService: CrmService  ) {
     this.filterAvaliableTo = 'everyone';
+    this.filterService.saveClicked.subscribe( data => {
+      if (data) {
+        this.crmService.getLeadsList().subscribe(res => {
+          this.leadsListInfo = res.results;
+        });
+      }
+    });
   }
 
   public filters  = {

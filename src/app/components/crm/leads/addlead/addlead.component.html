@@ -6,7 +6,7 @@
 <div class="add-lead-modal"  [ngClass]="{'show-modal': !addLeadModalCollapsed, 'hide-modal': addLeadModalCollapsed }">
   <div class="header">
     <span>ADD LEAD</span>
-    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addLeadModalCollapsed=true; showAddLeadModal=false" />
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addLeadModalCollapsed=true; showAddLeadModal=false; clearInputs();" />
   </div>
 
   <div class="content" >
@@ -59,8 +59,8 @@
 
 					<div class=" tab-row">
             <div>
-              <span>Email</span>
-              <input placeholder="Enter email" [(ngModel)]="email">
+              <span>Email <span *ngIf="wrongEmailFormat" class="wrong-format"> : Wrong Email Format!</span></span>
+              <input placeholder="Enter email" [(ngModel)]="email" type="email" [ngClass]="{'validation-required': invalidContactEmail}"  >
             </div>
             <div>
               <span>Department</span>
@@ -74,15 +74,15 @@
           <div class="name-type tab-row">
             <div>
               <span>Primary number (*required)</span>
-              <input placeholder="Enter primary phone number" [ngClass]="{'validation-required': invalidPrimaryNumber}" [(ngModel)]="primaryNumber">
+              <input placeholder="(XXX)XXX-XXXX" [ngClass]="{'validation-required': invalidPrimaryNumber}" [(ngModel)]="primaryNumber" type="tel">
             </div>
             <div *ngIf="!typeAccountTypeChange">
               <span>Mobile</span>
-              <input placeholder="Enter mobile number" [(ngModel)]="secondaryNumber" >
+              <input placeholder="(XXX)XXX-XXXX" pattern='[(\d{3}[\)]\d{4}[\-]\d{4}' [(ngModel)]="secondaryNumber"  type="tel">
             </div>
 						<div *ngIf="typeAccountTypeChange">
               <span>Secondary number</span>
-              <input placeholder="Enter secondary number" [(ngModel)]="secondaryNumber">
+              <input placeholder="(XXX)XXX-XXXX" [(ngModel)]="secondaryNumber" type="tel">
             </div>
           </div>
 
@@ -92,7 +92,7 @@
               <div class="switch-bar">
                 <img src="assets/images/switch.png" *ngIf="switchIconShipping" (click)="clickIconShipping()">
                 <img src="assets/images/switch-off.png" *ngIf="!switchIconShipping" (click)="clickIconShipping()">
-                <span>Same as the customer profile</span>
+                <span>Same address for the billing address</span>
               </div>
             </div>
             <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="address">

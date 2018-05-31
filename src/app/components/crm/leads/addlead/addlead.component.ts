@@ -5,6 +5,8 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 import { SharedService } from '../../../../services/shared.service';
 import { CrmService } from '../../../../services/crm.service';
 import * as moment from 'moment';
+import { LeadModel } from '../../../../models/lead.model';
+import { FilterService } from '../filter.service';
 
 @Component({
   selector: 'app-addlead',
@@ -43,7 +45,7 @@ export class AddLeadComponent implements OnInit {
   city = '';
   province = '';
   postalCode = '';
-  country: '';
+  country = '';
   typeAccountTypeChange = false;
   keywords: any;
   contactAssociation: any;
@@ -95,8 +97,11 @@ export class AddLeadComponent implements OnInit {
   selectedSourceId: any;
   businessAssociation: any;
   newLead: any;
+  invalidContactEmail = false;
+  wrongEmailFormat = false;
 
-  constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService) {
+  constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService, 
+    private filterService: FilterService ) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.keywords = [];
     this.contactAssociation = ['Danny Shibley', 'John Stephen'];
@@ -144,7 +149,6 @@ export class AddLeadComponent implements OnInit {
 
   clickIconShipping() {
     this.switchIconShipping = !this.switchIconShipping;
-    this.address = (this.switchIconShipping) ? 'test' : '';
   }
 
   onEnter() {
@@ -170,8 +174,11 @@ export class AddLeadComponent implements OnInit {
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
+    this.invalidContactEmail = false;
+    this.wrongEmailFormat = !this.checkEmailValidation(this.email);
+
     if (this.businessType === 'PERSON') {
-      if (this.firstName && this.lastName && this.primaryNumber) {
+      if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -184,9 +191,12 @@ export class AddLeadComponent implements OnInit {
         if (!this.primaryNumber) {
           this.invalidPrimaryNumber = true;
         }
+        if (!this.email || this.wrongEmailFormat) {
+          this.invalidContactEmail = true;
+        }
       }
     } else if (this.businessType === 'BUSINESS') {
-      if (this.businessName) {
+      if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat ) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -195,6 +205,12 @@ export class AddLeadComponent implements OnInit {
         }
         if (!this.primaryNumber) {
           this.invalidPrimaryNumber = true;
+        }
+        if (!this.primaryNumber) {
+          this.invalidPrimaryNumber = true;
+        }
+        if (!this.email || this.wrongEmailFormat) {
+          this.invalidContactEmail = true;
         }
       }
     } else {
@@ -208,6 +224,23 @@ export class AddLeadComponent implements OnInit {
       if (!this.primaryNumber) {
         this.invalidPrimaryNumber = true;
       }
+      if (!this.email || this.wrongEmailFormat) {
+        this.invalidContactEmail = true;
+      }
+    }
+    // check the switch and make billing address same as shipping address
+    if (this.switchIconShipping) {
+      this.billingAddress = this.address;
+      this.billingCity = this.city;
+      this.billingProvince = this.province;
+      this.billingCountry = this.country;
+      this.billingPostalCode = this.postalCode;
+    } else {
+      this.billingAddress = '';
+      this.billingCity = '';
+      this.billingProvince = '';
+      this.billingCountry = '';
+      this.billingPostalCode = '';
     }
   }
 
@@ -226,9 +259,11 @@ export class AddLeadComponent implements OnInit {
         this.invalidBusinessName = false;
         this.invalidAccountType = false;
         this.invalidPrimaryNumber = false;
+        this.invalidContactEmail = false;
+        this.wrongEmailFormat = this.checkEmailValidation(this.email);
 
         if (this.businessType === 'PERSON') {
-          if (this.firstName && this.lastName && this.primaryNumber) {
+          if (this.firstName && this.lastName && this.primaryNumber && this.email) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
             break;
@@ -246,9 +281,12 @@ export class AddLeadComponent implements OnInit {
             if (!this.primaryNumber) {
               this.invalidPrimaryNumber = true;
             }
+            if (!this.email || this.wrongEmailFormat) {
+              this.invalidContactEmail = true;
+            }
           }
         } else if (this.businessType === 'BUSINESS') {
-          if (this.businessName) {
+          if (this.businessName  && this.email) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
           } else {
@@ -261,6 +299,9 @@ export class AddLeadComponent implements OnInit {
             }
             if (!this.primaryNumber) {
               this.invalidPrimaryNumber = true;
+            }
+            if (!this.email || this.wrongEmailFormat) {
+              this.invalidContactEmail = true;
             }
           }
         } else {
@@ -278,10 +319,64 @@ export class AddLeadComponent implements OnInit {
           if (!this.primaryNumber) {
             this.invalidPrimaryNumber = true;
           }
+          if (!this.email || this.wrongEmailFormat) {
+            this.invalidContactEmail = true;
+          }
         }
         break;
       }
     }
+  }
+
+  checkEmailValidation(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  clearInputs() {
+    this.address = '';
+    this.city = '';
+    this.province = '';
+    this.postalCode = '';
+    this.country = '';
+    this.typeAccountTypeChange = false;
+    this.keywords = [];
+    this.contactAssociation = undefined;
+    this.businessType = undefined;
+    this.tabActiveFirst = true;
+    this.tabActiveSecond = false;
+    this.invalidFirstname = false;
+    this.invalidLastname = false;
+    this.invalidBusinessName = false;
+    this.invalidAccountType = false;
+    this.firstName = '';
+    this.lastName = '';
+    this.businessName = '';
+    this.defaultTerm = '';
+    this.defaultCurrency = '';
+    this.defaultPricing = '';
+    this.primaryNumber = '';
+    this.invalidDefaultTerm = false;
+    this.invalidDefaultCurrency = false;
+    this.invalidDefaultPricing = false;
+    this.invalidPrimaryNumber = false;
+    this.sourceValue = true;
+    this.currencyList = [];
+    this.keywordsIdList = [];
+    this.headContact = undefined;
+    this.jobTitle = '';
+    this.email = '';
+    this.notes = '';
+    this.billingAddress = '';
+    this.billingCity = '';
+    this.billingProvince = '';
+    this.billingCountry = '';
+    this.billingPostalCode = '';
+    this.secondaryNumber = '';
+    this.selectedSourceId = undefined;
+    this.businessAssociation = undefined;
+    this.invalidContactEmail = false;
+    this.wrongEmailFormat = false;
   }
   clickSaveLead() {
     this.invalidDefaultTerm = false;
@@ -389,65 +484,13 @@ export class AddLeadComponent implements OnInit {
           'lastContacted': moment().format('YYYY-MM-DD')
         };
       }
-          // "currencyId": 1,
-          // "termId": 1,
-          // "sourceId": 1,
-          // "pricingCategoryId": 1,
-          // "keywordIds": [
-          //   1, 5
-          // ],
-          // "owner": "string",
-          // "followers": [
-          //   "string"
-          // ],
-          // "type": "PERSON",
-          // "person": {
-          //   "firstName": "string",
-          //   "lastName": "string",
-          //   "jobTitle": "string",
-          //   "department": "string",
-          //   "businessAssociation": 1
-          // },
-          // "business": {
-          //   "name": "string",
-          //   "headContact": 1,
-          //   "accountReceivable": 1,
-          //   "personAssociations": [
-          //     1
-          //   ]
-          // },
-          // "shippingAddress": {
-          //   "address": "string",
-          //   "city": "string",
-          //   "province": "string",
-          //   "postalCode": "string",
-          //   "country": "string"
-          // },
-          // "billingAddress": {
-          //   "address": "string",
-          //   "city": "string",
-          //   "province": "string",
-          //   "postalCode": "string",
-          //   "country": "string"
-          // },
-          // "email": "string",
-          // "socialMediaUrl": {
-          //   "linkedIn": "string",
-          //   "facebook": "string",
-          //   "twitter": "string"
-          // },
-          // "phoneNumbers": {
-          //   "primary": "43223423",
-          //   "secondary": "423423432"
-          // },
-          // "timezone": 1,
-          // "note": "string",
-          // "lastContacted": "2018-05-08"
       this.crmService.createLead(JSON.stringify(this.newLead)).subscribe(data => {
         this.addLeadModalCollapsed = true;
         this.showAddLeadModal = false;
         this.tabActiveFirst = true;
         this.tabActiveSecond = false;
+        this.clearInputs();
+        this.filterService.saveClicked.next(true);
       });
     } else {
       if (!this.defaultCurrency) {
