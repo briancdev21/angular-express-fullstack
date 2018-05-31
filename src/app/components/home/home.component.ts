@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   currentDay = moment().format('dddd');
   currentHr = new Date().getHours();
   greeting: string;
+  barTimePeriod = 'month';
   userInfo = {
     name: 'Sepehr',
     tasksCount: 10,
@@ -194,6 +195,79 @@ export class HomeComponent implements OnInit {
       y: 'December',
       revenue: 60
     }];
+
+  public activeProjectsLine = [
+    {
+      period: 'Jun',
+      project: 3,
+    }, {
+      period: 'JUL',
+      project: 4,
+    }, {
+      period: 'AUG',
+      project: 3,
+    }, {
+      period: 'SEP',
+      project: 5,
+    }, {
+      period: 'OCT',
+      project: 3,
+    }, {
+      period: 'NOV',
+      project: 6,
+    }, {
+      period: 'DEC',
+      project: 4,
+    }];
+
+  public leadsToWinLine = [
+    {
+      period: 'Jun',
+      percent: 2,
+    }, {
+      period: 'JUL',
+      percent: 3,
+    }, {
+      period: 'AUG',
+      percent: 4,
+    }, {
+      period: 'SEP',
+      percent: 2,
+    }, {
+      period: 'OCT',
+      percent: 7,
+    }, {
+      period: 'NOV',
+      percent: 5,
+    }, {
+      period: 'DEC',
+      percent: 1,
+    }];
+
+  public salesMarginsLine = [
+    {
+      period: 'Jun',
+      margin: 45,
+    }, {
+      period: 'JUL',
+      margin: 55,
+    }, {
+      period: 'AUG',
+      margin: 50,
+    }, {
+      period: 'SEP',
+      margin: 45,
+    }, {
+      period: 'OCT',
+      margin: 30,
+    }, {
+      period: 'NOV',
+      margin: 45,
+    }, {
+      period: 'DEC',
+      margin: 50,
+    }];
+
 
   ngOnInit() {
     if (this.currentHr < 4) {

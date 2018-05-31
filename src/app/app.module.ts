@@ -16,6 +16,9 @@ import { SalesComponent } from './components/sales/sales.component';
 import { SubmenuComponent } from './components/submenu/submenu.component';
 import { CollaborationComponent } from './components/collaboration/collaboration.component';
 import { HomeComponent } from './components/home/home.component';
+import { SalesMarginsChartComponent } from './components/home/salesmarginschart/salesmarginschart.component';
+import { ActiveProjectsChartComponent } from './components/home/activeprojectschart/activeprojectschart.component';
+import { LeadsToWinChartComponent } from './components/home/leadstowinchart/leadstowinchart.component';
 import { CrmComponent } from './components/crm/crm.component';
 import { PmComponent } from './components/pm/pm.component';
 import { InventoryComponent } from './components/inventory/inventory.component';
@@ -69,6 +72,9 @@ import { SuppliersService } from './services/suppliers.service';
     CrmComponent,
     CollaborationComponent,
     ServicingComponent,
+    SalesMarginsChartComponent,
+    ActiveProjectsChartComponent,
+    LeadsToWinChartComponent
   ],
   imports: [
     BrowserModule,

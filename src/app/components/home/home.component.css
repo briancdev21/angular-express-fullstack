@@ -126,3 +126,13 @@ app-activitiesbox {
 /deep/ app-activitiesbox .card .activity-content {
   max-height: none;
 }
+
+.cards-line-charts {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.cards-line-charts .card {
+  width: 32.5%;
+}
