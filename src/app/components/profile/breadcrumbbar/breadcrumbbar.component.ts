@@ -11,13 +11,21 @@ import { SharedService } from '../../../services/shared.service';
 })
 export class BreadcrumbBarComponent implements AfterViewInit {
   @Input() set userInfo(val) {
-    this._userInfo = val;
-    this.init();
+    console.log('val:', val.followers);
+    
+    if (val.followers !== undefined) {
+    console.log('val:', val);
+      this._userInfo = val;
+      this.init();
+    }
   }
   @Input() keywords;
   autocompleterLoaded = false;
   editable: boolean;
-  _userInfo: any;
+  _userInfo: any = {
+    name: '',
+    followers: []
+  };
   newKeyword: string;
   selectedItem: any;
   inputChanged: any = '';
@@ -50,6 +58,7 @@ export class BreadcrumbBarComponent implements AfterViewInit {
 
   init() {
       this.editable = false;
+      console.log('userInfo:', this._userInfo);
       this._userInfo.followers.forEach(element => {
         this.items2 = this.items2.filter(function( obj ) {
           return obj.label !== element.name;
