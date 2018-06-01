@@ -82,9 +82,6 @@ import { ProductProfileComponent } from './components/inventory/products/product
 
 import { AuthGuard } from './services/authguard.service';
 
-import { InvoiceProfileComponent } from './components/sales/invoices/invoiceprofile/invoiceprofile.component';
-import { EstimateProfileComponent } from './components/sales/invoices/estimateprofile/estimateprofile.component';
-
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },

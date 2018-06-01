@@ -15,7 +15,7 @@ export class InCustomerNameComponent implements OnInit {
     this._userList = val;
     console.log('userlist', this._userList);
     this._userList.forEach((user, index) => {
-      this.users.push({'name': user});
+      this.users.push({'name': user['owner']});
     });
   }
 

@@ -24,7 +24,6 @@ import { ProfileCmpModule } from '../../profile/profile.module';
 import { ArraySortPipe } from './pipes/arraysort.pipe';
 import { SearchPipe } from './pipes/search.pipe';
 import { Pipe, PipeTransform } from '@angular/core';
-import { AddProposalComponent } from './addproposal/addproposal.component';
 import { AddProposalTaskComponent } from './addproposaltask/addproposaltask.component';
 import { SearchProjectComponent } from './searchproject/searchproject.component';
 import { InvoicesCmpModule } from '../invoices/invoices.module';
@@ -41,7 +40,6 @@ import { InvoicesCmpModule } from '../invoices/invoices.module';
     ScheduleMultiKeywordComponent,
     ArraySortPipe,
     SearchPipe,
-    AddProposalComponent,
     AddProposalTaskComponent,
     SearchProjectComponent
   ],
@@ -66,7 +64,6 @@ import { InvoicesCmpModule } from '../invoices/invoices.module';
     ProductListTableComponent,
     AddProductModalComponent,
     ScheduleMultiKeywordComponent,
-    AddProposalComponent,
     AddProposalTaskComponent,
     SearchProjectComponent
   ],

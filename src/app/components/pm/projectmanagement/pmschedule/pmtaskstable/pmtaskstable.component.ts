@@ -4,7 +4,7 @@ import { PmService } from '../../pm.service';
 import { DragulaService } from 'ng2-dragula';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {MapToKeysPipe} from './map-to-keys.pipe';
+import {TasksTableMapToKeysPipe} from './map-to-keys.pipe';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 @Component({

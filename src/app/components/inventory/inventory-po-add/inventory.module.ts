@@ -6,7 +6,7 @@ import {NgxDnDModule} from '@swimlane/ngx-dnd';
 
 import {InventoryHeaderComponent} from './inventoryheader/inventoryheader.component';
 import {InventoryPoAddComponent} from './inventory.component';
-import {InventoryBodyComponent} from './inventorybody/inventorybody.component';
+import InventoryBodyComponent from './inventorybody/inventorybody.component';
 import { POCustomerNameComponent } from './components/po-customer-name/po-customer-name.component';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { POProjectSelectorComponent } from './components/po-project-selector/po-project-selector.component';
