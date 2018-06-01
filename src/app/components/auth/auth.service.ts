@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 
 export class AuthService {
   auth0 = new auth0.WebAuth({
-    clientID: '6oI06gi4pieicugAx0QaSfRkuVlpEiOg',
+    clientID: '5cG8b1OSQZ0XD3HxI3uaPuTK6q3dUpZz',
     domain: 'koridor.auth0.com',
     responseType: 'token id_token',
     grant_type: 'implicit',
