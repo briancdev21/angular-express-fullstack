@@ -53,29 +53,47 @@ export class InvoicesService {
     return this.http.put<any>(url, body);
   }
 
-  getInvoicesProducts (id): Observable<any> {
-    const url = `${apiUrl}sales/invoices/${id}/products`;
-    return this.http.get(url);
+  // Get Products
+  getInventoryProducts (): Observable<any> {
+    const url = `${apiUrl}inventory/products`;
+    return this.http.get<any>(url);
   }
 
-  createInvoiceProduct (id, body): Observable<any> {
-    const url = `${apiUrl}sales/invoices/${id}/products`;
+  getInventoryProduct (id): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  // Get Sku for a product
+  getInventoryProductSkus (productId): Observable<any> {
+    const url = `${apiUrl}inventory/products/${productId}/variants`;
+    return this.http.get<any>(url);
+  }
+
+  // Purchase Order Products
+  addInvoiceProduct (invoiceId, body): Observable<any> {
+    const url = `${apiUrl}sales/invoices/${invoiceId}/products`;
     return this.http.post<any>(url, body);
   }
 
-  getIndividualInvoiceProducts(id, productId): Observable<any>  {
-    const url = `${apiUrl}sale/invoices/${id}/products/${productId}`;
-    return this.http.get(url);
+  getInvoiceProducts (invoiceId): Observable<any> {
+    const url = `${apiUrl}sales/invoices/${invoiceId}/products`;
+    return this.http.get<any>(url);
   }
 
-  updateInvoiceProduct (id, productId, body): Observable<any> {
-    const url = `${apiUrl}sales/invoices/${id}/products/${productId}`;
+  getInvoiceProduct (invoiceId, id): Observable<any> {
+    const url = `${apiUrl}sales/invoices/${invoiceId}/products/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateInvoiceProduct (invoiceId, id, body): Observable<any> {
+    const url = `${apiUrl}sales/invoices/${invoiceId}/products/${id}`;
     return this.http.put<any>(url, body);
   }
 
-  deleteInvoiceProduct (id, productId, body): Observable<any> {
-    const url = `${apiUrl}sales/invoices/${id}/products/${productId}`;
-    return this.http.delete<any>(url, body);
+  deleteInvoiceProduct (invoiceId, id): Observable<any> {
+    const url = `${apiUrl}sales/invoices/${invoiceId}/products/${id}`;
+    return this.http.delete<any>(url);
   }
 
   hideDetailedTaskModal(data) {
