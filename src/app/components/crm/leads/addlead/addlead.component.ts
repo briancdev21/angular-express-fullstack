@@ -49,7 +49,7 @@ export class AddLeadComponent implements OnInit {
   typeAccountTypeChange = false;
   keywords: any;
   contactAssociation: any;
-  businessType: any;
+  businessType = 'PERSON';
   tabActiveFirst = true;
   tabActiveSecond = false;
   invalidFirstname = false;
@@ -363,7 +363,7 @@ export class AddLeadComponent implements OnInit {
     this.typeAccountTypeChange = false;
     this.keywords = [];
     this.contactAssociation = undefined;
-    this.businessType = undefined;
+    this.businessType = 'PERSON';
     this.tabActiveFirst = true;
     this.tabActiveSecond = false;
     this.invalidFirstname = false;

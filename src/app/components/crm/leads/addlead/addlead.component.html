@@ -45,7 +45,6 @@
               <span>Account type (*required)</span>
               <div class="account-type">
                 <select [(ngModel)]='businessType' #accountType (ngModelChange)="onAccountTypeChange(businessType)" [ngClass]="{'validation-required': invalidAccountType}" >
-                  <option value="" selected disabled class="default-option">Choose an account type</option>
 									<option value="PERSON">Individual</option>
                   <option value="BUSINESS">Business</option>
                 </select>

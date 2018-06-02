@@ -277,7 +277,7 @@ export class ProfileComponent implements OnInit {
       // Update userInfo
       this.userInfo = {
         name: res.data.person.firstName + ' ' + res.data.person.lastName,
-        profileLink: 'assets/users/Random.jpg',
+        profileLink: res.data.pictureURI,
         email: res.data.email,
         primaryphone: res.data.phoneNumbers.primary,
         mobilephone: res.data.phoneNumbers.secondary,
