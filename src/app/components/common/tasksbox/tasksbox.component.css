@@ -4,7 +4,7 @@
 }
 
 .card-header {
-  border-bottom: 1px solid #cdd1d3;
+  border-bottom: 3px solid #cdd1d3;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -72,6 +72,10 @@
 
 .blured {
   opacity: 0.2;
+}
+
+.task-icons {
+  margin-top: 7px;
 }
 
 .task-icons .follower-img {

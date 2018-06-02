@@ -1,1 +1,138 @@
-<h1 style="margin-top: 0; padding-top: 100px;">CRM Dashboard page</h1>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
+  <div class="charts-area">
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-header">
+          <span>LEAD CONVERSION</span>
+          <select [(ngModel)]="donutTimePeriod">
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left" >
+            <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
+          </div>
+          <div class="card-centent-right">
+            <div class="row" *ngFor="let person of morrisDonutInfo; let i = index">
+              <div class="square" [ngStyle]="{'background-color': morrisDonutColors[i]}"></div>
+              <span>{{person.label}}</span>
+            </div>
+            <div class="conversion">
+              <span>Conversion Rate</span>
+              <span class="conversion-value">{{conversionRate}}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span>NEW LEADS</span>
+        </div>
+        <app-newleadline [morrisLineChartInfo]="newLeadsLine"></app-newleadline>
+      </div>
+      <div class="card top-customer-card">
+        <div class="card-header">
+          <span>TOP CUSTOMERS IN VALUE</span>
+        </div>
+        <div class="card-content">
+          <table>
+            <tr>
+              <th>CUSTOMER NAME</th>
+              <th>CUSTOMER RATING</th>
+              <th>TOTAL VALUE</th>
+            </tr>
+            <tr *ngFor="let customer of topCustomers">
+              <td>{{customer.customerName}}</td>
+              <td>{{customer.customerRating}}%</td>
+              <td>${{customer.totalValue | number: '1.2-2'}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="multi-charts-left">
+        <div class="card sales-conversion">
+          <div class="card-header">
+            <span>SALES CONVERSION</span>
+            <select [(ngModel)]="salesConversionTime">
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+              <option value="quarter">This Quarter</option>
+              <option value="year">This Year</option>
+            </select>
+          </div>
+          <div class="card-content">
+            <table>
+              <tr>
+                <th>MEMBER</th>
+                <th>NEW LEADS</th>
+                <th>OPPORTUNITIES</th>
+                <th>WON DEALS</th>
+                <th>CONVERSION RATE</th>
+              </tr>
+              <tr *ngFor="let conversion of salesConversion">
+                <td>{{conversion.member}}</td>
+                <td>{{conversion.newLeads}}</td>
+                <td>${{conversion.opportunity}}</td>
+                <td>{{conversion.wonDeals}}</td>
+                <td>{{conversion.conversionRate}}%</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="pipeline-ratio">
+          <div class="card sales-pipeline">
+            <div class="card-header">
+              <span>SALES PIPELINE</span>
+              <select [(ngModel)]="salesPipelineTime">
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="quarter">This Quarter</option>
+                <option value="year">This Year</option>
+              </select>
+              <app-pipelinechart></app-pipelinechart>
+            </div>
+          </div>
+          <div class="card conversion-card">
+              <div class="card-header">
+                <span>PROJECT TASKS</span>
+                <select [(ngModel)]="conversionRatioTime">
+                  <option value="week">This Week</option>
+                  <option value="month">This Month</option>
+                  <option value="quarter">This Quarter</option>
+                  <option value="year">This Year</option>
+                </select>
+              </div>
+              <div class="card-content">
+                <div class="card-content-left">
+                  <div>
+                    <span class="title">Number of New Leads</span>
+                    <span>{{conversionRatio.newLeads}}</span>
+                  </div>
+                  <div>
+                    <span class="title">Number of Won Deals</span>
+                    <span>{{conversionRatio.wonDeals}}</span>
+                  </div>
+                  <div>
+                    <span class="title">Number of Lost Deals</span>
+                    <span>{{conversionRatio.lostDeals}}</span>
+                  </div>
+                </div>
+                <div class="card-content-right">
+                  <span class="due-tasks-title">Won vs Lost Ratio</span>
+                  <span>{{wonVsLost}}</span>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      <app-activitiesbox [activitiesInfo]="activitiesInfo"></app-activitiesbox>
+      
+    </div>
+  </div>
+</div>

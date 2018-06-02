@@ -68,7 +68,7 @@ h1 {
 }
 
 .card-header {
-  border-bottom: 1px solid #cdd1d3;
+  border-bottom: 3px solid #cdd1d3;
   display: flex;
   justify-content: space-between;
   align-items: center;
