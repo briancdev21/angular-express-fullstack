@@ -200,6 +200,5 @@ export class CrmDashboardComponent implements OnInit {
     if (total) {
       this.conversionRate = Math.floor(wonLead[0].value * 100 / total);
     }
-    console.log('conversion: ', this.conversionRate);
   }
 }

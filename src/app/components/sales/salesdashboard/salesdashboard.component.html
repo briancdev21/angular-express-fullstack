@@ -1,1 +1,22 @@
-<h1 style="margin-top: 0; padding-top: 100px;">Sales Dashboard page</h1>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
+  <div class="charts-area">
+    <div class="chart-row">
+      <div class="card revenue-area-chart">
+        <div class="card-header">
+          <span>REVENUE</span>
+          <select [(ngModel)]="revenueTime">
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
+        <div class="card-content">
+          <app-revenueareachart [revenueAreaChartInfo]="revenueAreaChartInfo" ></app-revenueareachart>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>

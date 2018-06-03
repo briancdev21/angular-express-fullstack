@@ -15,6 +15,47 @@ import * as _ from 'lodash';
 
 export class SalesDashboardComponent implements OnInit {
 
+  revenueTime = 'month';
+  menuCollapsed = true;
+
+  public revenueAreaChartInfo = [
+    {
+        period: 'JAN',
+        revenue: 30000,
+    }, {
+        period: 'FEB',
+        revenue: 25000,
+    }, {
+        period: 'MAR',
+        revenue: 20000,
+    }, {
+        period: 'APR',
+        revenue: 25000,
+    }, {
+        period: 'MAY',
+        revenue: 20000,
+    }, {
+        period: 'JUN',
+        revenue: 15000,
+    }, {
+        period: 'JUL',
+        revenue: 14000,
+    }, {
+        period: 'AUG',
+        revenue: 30000,
+    }, {
+        period: 'SEP',
+        revenue: 20000,
+    }, {
+        period: 'OCT',
+        revenue: 19000,
+    }, {
+        period: 'NOV',
+        revenue: 34000,
+    }, {
+        period: 'DEC',
+        revenue: 30000,
+    }];
   ngOnInit() {
 
   }

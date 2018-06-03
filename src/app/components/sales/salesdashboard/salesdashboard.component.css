@@ -1,0 +1,225 @@
+.main-content {
+	position: absolute;  
+	text-align: center;
+	color: #464646;
+}
+
+.main-content-small {
+	transition: 0.2s all;
+	right: 0;
+	left: 200px;
+  top: 68px;
+  padding: 20px 20px;
+}
+
+.main-content-large {
+	top: 68px;
+	right: 0;
+	left: 0;
+  transition: 0.2s all;
+  padding: 30px 30px;
+}
+
+.blue {
+  background: #4A90E2;
+}
+
+.green {
+  background: #7ED421;
+}
+
+.red {
+  background: #E66A4D;
+}
+
+span {
+  color: #95989A;
+}
+
+.chart-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.card {
+  width: 32.5%;
+  box-shadow: 1px 3px 7px #95989a;
+  border-top: 3px solid #cdd1d3;
+}
+
+.card-header {
+  border-bottom: 3px solid #cdd1d3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 25px;
+  color: #95989A;
+}
+
+.card-header span {
+  font-size: 19px;
+}
+
+.card-header select {
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: #95989A;
+  background: transparent;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  overflow: auto;
+}
+
+.card-content-left {
+  /* flex: 2; */
+  width: 65%;
+  padding-right: 10%;
+}
+
+.card-content-right {
+  /* flex: 1; */
+  width: 24%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.square {
+  width: 20px;
+  height: 20px;
+  margin-right: 13px;
+}
+
+.card-content {
+  padding-top: 30px;
+}
+
+.conversion-card .card-content-left {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-size: 25px;
+  padding-right: 0;
+}
+
+.conversion-card .title {
+  font-size: 12px;
+}
+
+.conversion-card .card-content-right {
+  display: flex;
+  flex-direction: column;
+  font-size: 140px;
+  flex: 2;
+}
+
+.top-customer-card .card-content {
+  padding: 0;
+}
+
+.card-content-right span {
+  color: #95989a;
+}
+
+.card-content-right .due-tasks-title {
+  font-size: 25px;
+  color: #95989A;
+  font-weight: 300;
+}
+
+.conversion-card .card-content-left>div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 27px;
+  font-size: 50px;
+}
+
+.card.area-chart {
+  width: 66.2%;
+}
+
+.conversion-value {
+  font-size: 22px;
+  margin-top: 10px;
+}
+
+.conversion {
+  display: flex;
+  flex-direction: column;
+}
+
+table {
+  width: 100%;
+  color: #95989a;
+  font-weight: 300;
+  font-size: 15px;
+  text-align: left;
+}
+
+table tr:first-child {
+  border-bottom: 3px solid #cdd1d3;
+}
+
+table tr:last-child {
+  border-bottom: 0;
+}
+
+tr {
+  border-bottom: 1px solid #cdd1d3;
+}
+
+th {
+  padding: 8px 14px;
+  font-weight: 300;
+}
+
+td {
+  padding: 18px 16px;
+}
+
+.multi-charts-left {
+  width: 66.5%;
+}
+
+.activity-cmp {
+  width: 32.5%;
+}
+
+.multi-charts-left .sales-conversion {
+  width: 100%;
+}
+
+.sales-conversion .card-content {
+  padding: 0;
+}
+
+.sales-conversion .card-content, .top-customer-card .card-content {
+  align-items: flex-start; 
+}
+
+.pipeline-ratio {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.pipeline-ratio .card {
+  width: 49%;
+}
+
+.revenue-area-chart.card {
+  width: 66.5%;
+}
+
+app-revenueareachart {
+  width: 100%;
+}

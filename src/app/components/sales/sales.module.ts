@@ -16,6 +16,8 @@ import { DealsPipelineComponent } from './dealspipeline/dealspipeline.component'
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ProposalListComponent } from './proposallist/proposallist.component';
 import { SalesDashboardComponent } from './salesdashboard/salesdashboard.component';
+import { RevenueAreaChartComponent } from './salesdashboard/revenueareachart/revenueareachart.component';
+
 import { InvoicesCmpModule } from './invoices/invoices.module';
 import { DealsPipelineCmpModule } from './dealspipeline/dealspipeline.module';
 import { ProposalListCmpModule } from './proposallist/proposallist.module';
@@ -31,7 +33,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     DealsPipelineComponent,
     InvoicesComponent,
     ProposalListComponent,
-    SalesDashboardComponent
+    SalesDashboardComponent,
+    RevenueAreaChartComponent
   ],
   imports: [
     BrowserModule,
