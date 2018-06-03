@@ -13,9 +13,11 @@ export class InCustomerNameComponent implements OnInit {
 
   @Input() set userList(val: string[]) {
     this._userList = val;
-    console.log('userlist', this._userList);
     this._userList.forEach((user, index) => {
-      this.users.push({'name': user['owner']});
+      this.users.push({
+        name: user['person'].firstName + ' ' + user['person'].lastName,
+        value: user['id']
+      });
     });
   }
 
@@ -35,7 +37,6 @@ export class InCustomerNameComponent implements OnInit {
 
   onSelected(item: CompleterItem) {
     if (item) {
-      console.log('value:', item.originalObject.value);
       this.selectedUser.emit(item.originalObject.value);
     }
   }

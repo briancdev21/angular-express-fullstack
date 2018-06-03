@@ -172,7 +172,7 @@ export default class AddInvoiceBodyComponent implements OnInit {
       this.classList = res.results;
     });
 
-    this.sharedService.getPricingCategories().subscribe(res => {
+    this.sharedService.getCategories().subscribe(res => {
       this.categoryList = res.results;
     });
 
@@ -200,6 +200,7 @@ export default class AddInvoiceBodyComponent implements OnInit {
 
   onSelectUser(selectedIndex: any) {
     const contactIdList = this.contactList.map(c => c.id);
+    console.log('selected user: ', contactIdList, selectedIndex);
     const pos = contactIdList.indexOf(selectedIndex);
     this.customerAddress = this.contactList[pos].shippingAddress;
     this.saveInvoiceData.contactId = selectedIndex;
@@ -335,8 +336,7 @@ export default class AddInvoiceBodyComponent implements OnInit {
   }
 
   saveInvoice() {
-    if (this.newCustomerName && this.newEmail && this.newClass && this.newCategory && this.newInternalMemo
-      && this.newCustomerNote && this.newTerms && this.newTermId) {
+    if (this.newCustomerName && this.newEmail && this.newClass && this.newCategory && this.newTermId) {
       if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
         this.saveInvoiceData.deposit = 0;
       }

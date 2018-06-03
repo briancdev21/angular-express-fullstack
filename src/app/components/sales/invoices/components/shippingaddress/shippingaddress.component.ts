@@ -9,6 +9,8 @@ export class ShippingAddressComponent implements OnInit {
   @Input() set customerAddress(contactUserAddress: any) {
     this._customerAddress = contactUserAddress;
     console.log('_customerAddress', this._customerAddress);
+    this.shippingAddress = this._customerAddress;
+    console.log('shippping: ', this.shippingAddress);
   }
   @Input() shippingAddress;
   @Output() updateAddress = new EventEmitter;

@@ -12,7 +12,7 @@ export class InSwitcherComponent implements OnInit {
   labelText = 'Switch';
 
   constructor() {
-    this.status = false;
+    this.status = true;
   }
 
   ngOnInit() {
