@@ -1,0 +1,113 @@
+<div class="name editable">
+  <input value="{{userInfo.name}}" id="name" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" >
+</div>
+<div class="role editable">
+  <textarea value="{{userInfo.role}}" id="role" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" > </textarea>
+</div>
+<div class="logo">
+    
+  <img [src]='userInfo.profileLink' alt = "Add Profile Image Here"/>
+  <img src="assets/images/Cloud.png" class="img-settings" (click)="changeImage()"/>
+</div>
+<div class="email editable">
+  <img src="assets/images/envelope.png" />
+  <textarea value="{{userInfo.email}}" id="email" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)"></textarea>
+</div>
+<div class="phone editable">
+  <img src="assets/images/ringing.png" />
+  <div>
+    <span>
+      <input value="{{userInfo.primaryphone}}" id="primaryphone" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" >
+      <span>(Primary Contact)</span>
+    </span>
+    <span>
+      <input value="{{userInfo.mobilephone}}" id="mobilephone" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" >
+      <span>(Mobile)</span>
+    </span>
+  </div>
+  <!-- <span>{{formatPhoneNumber(userInfo.primaryphone)}}&nbsp;(Primary Contact)<br/>{{formatPhoneNumber(userInfo.mobilephone)}}&nbsp;(Mobile)</span> -->
+</div>
+
+<h5>Shipping</h5>
+<div class="shipping editable">
+  <img src="assets/images/placeholder.png" />
+  <textarea value="{{userInfo.shippingaddress}}" id="shippingaddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea>
+</div>
+
+<h5>Billing Address</h5>
+<div class="billing-address editable">
+  <img src="assets/images/placeholder.png" />
+  <textarea value="{{userInfo.billingaddress}}" id="billingaddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea>
+</div>
+
+<h4>Customer Keywords</h4>
+<div class="keywords" *ngIf="userInfo.keywords">
+  <app-multikeywordselect [keywords]="userInfo.keywords" (sendKeywords)="onKeywordsChanged($event)" ></app-multikeywordselect>
+</div>
+
+<div>
+  <app-contactassociation [contactUser]="userInfo.contactUser" [subAssoUsers]="userInfo.subAssoUsers" ></app-contactassociation>
+</div>
+
+<h4>Customer Notes</h4>
+<div class="customer-notes">
+    <textarea  [(ngModel)]="userInfo.note" id="customerNotes" (blur)="showConfirmModal($event)"></textarea>
+</div>
+
+<!-- Confirm Alert Box -->
+<div class="confirm-modal-wrapper" *ngIf="showModal" ></div>
+<div [ngClass]="{'confirm-modal': showModal, 'confirm-modal-hide': !showModal }">
+  <div class="header">
+    <span>Confirm</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="cancelChange();showModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      Do you really want to change?
+    </div>
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="confirmChange();showModal=false" >
+        Confirm
+      </button>
+      <button class="cancel-btn" (click)="cancelChange();showModal=false" >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>  
+
+
+<!-- Image Edit Modal -->
+
+<div class="edit-image-modal-wrapper" *ngIf="showEditImageModal" ></div>
+<div [ngClass]="{'confirm-modal': showEditImageModal, 'confirm-modal-hide': !showEditImageModal }">
+  <div class="header">
+    <span>Change Image</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="cancelCrop();showEditImageModal=false" />
+  </div>
+  <div class="edit-modal-content">
+    <input type="file" (change)="fileChangeEvent($event)" />
+    <div class="image-content">
+      <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="1"
+          [resizeToWidth]="300"
+          format="png"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded()"
+          (loadImageFailed)="loadImageFailed()"
+      ></image-cropper>
+      
+      <img [src]="croppedImage" />
+    </div>
+  </div>
+  <div class="center-btn-section" >
+    <button class="cancel-btn" (click)="cancelCrop()">
+      Cancel
+    </button>
+    <button class="done-btn" (click)="saveCrop()">
+      Confirm
+    </button>
+  </div>
+</div>  
