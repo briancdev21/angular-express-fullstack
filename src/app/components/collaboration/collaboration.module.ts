@@ -14,6 +14,7 @@ import { ProfileCmpModule } from '../profile/profile.module';
 import { CommonCmpModule } from '../common/common.module';
 import { PersonalScheduleComponent } from './personalschedule/personalschedule.component';
 import { TeamScheduleComponent } from './teamschedule/teamschedule.component';
+import { TeamUpcomingEventComponent } from './teamschedule/teamupcomingevent/teamupcomingevent.component';
 import { WorkOrdersComponent } from './workorders/workorders.component';
 import { CollaborationDashboardComponent } from './collaborationdashboard/collaborationdashboard.component';
 import { PersonalUpcomingEventsComponent } from './personalschedule/personalupcomingevents/personalupcomingevents.component';
@@ -32,7 +33,8 @@ import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
     TeamScheduleComponent,
     WorkOrdersComponent,
     CollaborationDashboardComponent,
-    PersonalUpcomingEventsComponent
+    PersonalUpcomingEventsComponent,
+    TeamUpcomingEventComponent
   ],
   imports: [
     BrowserModule,

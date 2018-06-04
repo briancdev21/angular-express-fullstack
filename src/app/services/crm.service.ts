@@ -1,3 +1,4 @@
+declare function require(path: string);
 import { Injectable, Output, EventEmitter, Input } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -87,6 +88,13 @@ export class CrmService {
   createLeadActivity (id, body): Observable<any> {
     const url = `${apiUrl}crm/leads/${id}/recent-activities`;
     return this.http.post(url, body, this.options)
+      .map((res) => res);
+  }
+
+  uploadProfileImage (leadId, body): Observable<any> {
+    const url = `${apiUrl}crm/leads/${leadId}/lead-picture`;
+    // const option = { headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' }) };
+    return this.http.put(url, body)
       .map((res) => res);
   }
 }

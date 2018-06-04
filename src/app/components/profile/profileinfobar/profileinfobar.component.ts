@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../multikeywordselect/multikeywordselect.component';
+import { CrmService } from '../../../services/crm.service';
 
 @Component({
   selector: 'app-profileinfobar',
@@ -24,12 +25,14 @@ export class ProfileInfoBarComponent implements OnInit {
   showEditImageModal = false;
   customerNotes: string;
 
-  imageChangedEvent: any = '';
   croppedImage: any = '';
-  // croppedImage = this.userInfo.profileLink;
+  BASE64_MARKER = ';base64,';
+  selectedUncroppedFile: any;
+  imageChangedEvent: any;
 
   fileChangeEvent(event: any): void {
-      this.imageChangedEvent = event;
+    this.imageChangedEvent = event;
+    this.selectedUncroppedFile = event.target.files[0];
   }
   imageCropped(image: string) {
       this.croppedImage = image;
@@ -38,7 +41,7 @@ export class ProfileInfoBarComponent implements OnInit {
   imageLoaded() {
 
   }
-  constructor(private router: Router) {
+  constructor(private router: Router, private crmService: CrmService ) {
 
     this.eventData = undefined;
     this.name = 'Angular2';
@@ -55,9 +58,45 @@ export class ProfileInfoBarComponent implements OnInit {
     this.showEditImageModal = false;
   }
 
+  // dataURLtoFile(dataurl, filename) {
+  //   const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
+  //   const bstr = window.atob(arr[1]);
+  //   let n = bstr.length;
+  //   const u8arr = new Uint8Array(n);
+  //   while (n--) {
+  //       u8arr[n] = bstr.charCodeAt(n);
+  //   }
+  //   return new File([u8arr], filename, {type: mime});
+  // }
+
+  convertDataURIToBinary(dataURI) {
+    const base64Index = dataURI.indexOf(this.BASE64_MARKER) + this.BASE64_MARKER.length;
+    const base64 = dataURI.substring(base64Index);
+    const raw = window.atob(base64);
+    const rawLength = raw.length;
+    const array = new Uint8Array(new ArrayBuffer(rawLength));
+
+    for (let i = 0; i < rawLength; i++) {
+      array[i] = raw.charCodeAt(i);
+    }
+    return array;
+  }
+
   saveCrop() {
     this.showEditImageModal = false;
     this.userInfo.profileLink = this.croppedImage;
+
+    const uploadData = new FormData();
+    uploadData.append('leadPicture', this.selectedUncroppedFile, this.selectedUncroppedFile.name);
+
+    // const binary = this.convertDataURIToBinary(this.croppedImage);
+    // console.log('binary', binary);
+
+    this.crmService.uploadProfileImage(3, uploadData).subscribe(res => {
+      console.log('imga result: ', res);
+      this.userInfo.profileLink = res.data.fulfillmentValue.pictureURI;
+      this.changedUserInfo.emit({'data': this.userInfo});
+    });
   }
 
   formatPhoneNumber(s) {
