@@ -6,9 +6,8 @@
 
 ng2-completer.ng2completer .completer-input {
   padding: 0.4em 1em;
-  border: solid;
   border: solid 1px lightgray;
-  font-weight: 500;
+  font-weight: 400;
   height: 32px;
   width: 100%;
   font-size: 12px;
