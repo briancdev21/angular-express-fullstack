@@ -16,7 +16,110 @@
         </div>
       </div>
 
+      <div class="card invoicing-card">
+        <div class="card-header">
+          <span>INVOICING</span>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left">
+            <div>
+              <span class="title">Number of Open Estimates</span>
+              <span>{{invoicingInfo.openEstimate}}</span>
+            </div>
+            <div>
+              <span class="title">Number of Open Invoices</span>
+              <span>{{invoicingInfo.openInvoice}}</span>
+            </div>
+            <div>
+              <span class="title">Number of Proposals</span>
+              <span>{{invoicingInfo.proposalCount}}</span>
+            </div>
+          </div>
+          <div class="card-content-right">
+            <span class="due-tasks-title">Outstanding Invoices</span>
+            <span style="color: #FF7E7E">{{invoicingInfo.openInvoice}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div class="chart-row">
+      <div class="multi-charts-left">
+        <div class="card sales-conversion">
+          <div class="card-header">
+            <span>SALES</span>
+          </div>
+          <div class="card-content">
+            <table>
+              <tr>
+                <th>MEMBER</th>
+                <th>PROPOSALS VALUE</th>
+                <th>APPROVED VALUE</th>
+                <th>TOTAL MARGIN</th>
+              </tr>
+              <tr *ngFor="let sale of salesInfo">
+                <td>{{sale.member}}</td>
+                <td>${{sale.proposalsValue}}</td>
+                <td>${{sale.approvedValue}}</td>
+                <td>{{sale.totalMargin}}%</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="sales-proposal">
+          <div class="card">
+            <div class="card-header">
+              <span>SALES PIPELINE PERCENTAGE</span>
+              <select [(ngModel)]="donutTimePeriod">
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="quarter">This Quarter</option>
+                <option value="year">This Year</option>
+              </select>
+            </div>
+            <div class="card-content">
+              <div class="card-content-left" >
+                <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
+              </div>
+              <div class="card-centent-right">
+                <div class="row" *ngFor="let person of morrisDonutInfo; let i = index">
+                  <div class="square" [ngStyle]="{'background-color': morrisDonutColors[i]}"></div>
+                  <span>{{person.label}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card invoicing-card">
+            <div class="card-header">
+              <span>PROPOSAL FORECASTING</span>
+            </div>
+            <div class="card-content">
+              <div class="card-content-left">
+                <div>
+                  <span class="title">Number of New Proposals</span>
+                  <span>{{proposalForecasting.newProposal}}</span>
+                </div>
+                <div>
+                  <span class="title">Number of Proposal in Pipeline</span>
+                  <span>{{proposalForecasting.proposalInPipe}}</span>
+                </div>
+                <div>
+                  <span class="title">Average Approval Time</span>
+                  <div><span>{{proposalForecasting.approvalTime}}</span> <span class="title">Days</span></div>
+                  
+                </div>
+              </div>
+              <div class="card-content-right">
+                <span class="due-tasks-title">Closed This Month</span>
+                <span>{{proposalForecasting.closed}}</span> 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-activitiesbox [activitiesInfo]="activitiesInfo"></app-activitiesbox>
     </div>
   </div>
 </div>

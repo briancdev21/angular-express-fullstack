@@ -103,7 +103,7 @@ span {
   padding-top: 30px;
 }
 
-.conversion-card .card-content-left {
+.invoicing-card .card-content-left {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -111,11 +111,11 @@ span {
   padding-right: 0;
 }
 
-.conversion-card .title {
+.invoicing-card .title {
   font-size: 12px;
 }
 
-.conversion-card .card-content-right {
+.invoicing-card .card-content-right {
   display: flex;
   flex-direction: column;
   font-size: 140px;
@@ -136,7 +136,7 @@ span {
   font-weight: 300;
 }
 
-.conversion-card .card-content-left>div {
+.invoicing-card .card-content-left>div {
   display: flex;
   flex-direction: column;
   margin-bottom: 27px;
@@ -222,4 +222,36 @@ td {
 
 app-revenueareachart {
   width: 100%;
+}
+
+.chart-area {
+  display: flex;
+  flex-direction: column;
+}
+
+app-activitiesbox {
+  width: 32.5%;
+}
+
+/deep/ app-activitiesbox .card {
+  height: 100%;
+}
+
+/deep/ app-activitiesbox .activity-content {
+  max-height: none !important;
+}
+
+.sales-conversion .card-content {
+  height: 402px;
+  overflow: auto;
+}
+
+.sales-proposal {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.sales-proposal .card {
+  width: 49%;
 }

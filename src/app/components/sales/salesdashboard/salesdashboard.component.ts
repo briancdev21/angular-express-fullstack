@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 export class SalesDashboardComponent implements OnInit {
 
   revenueTime = 'month';
+  donutTimePeriod = 'month';
   menuCollapsed = true;
 
   public revenueAreaChartInfo = [
@@ -56,6 +57,134 @@ export class SalesDashboardComponent implements OnInit {
         period: 'DEC',
         revenue: 30000,
     }];
+
+  public invoicingInfo = {
+    openEstimate: 6,
+    openInvoice: 5,
+    proposalCount: 16
+  };
+
+  public proposalForecasting = {
+    newProposal: 6,
+    proposalInPipe: 10,
+    approvalTime: 61,
+    closed: 3
+  };
+
+  salesInfo = [
+    {
+      member: 'Michael Yue',
+      proposalsValue: 63622.32,
+      approvedValue: 23231,
+      totalMargin: 43
+    }, {
+      member: 'Michael Yue',
+      proposalsValue: 63622.32,
+      approvedValue: 23231,
+      totalMargin: 43
+    },
+    {
+      member: 'Michael Yue',
+      proposalsValue: 63622.32,
+      approvedValue: 23231,
+      totalMargin: 43
+    }
+  ];
+
+  activitiesInfo = [
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new acticle in knowledgebase',
+      createdTimeAt: '5:28 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new acticle in knowledgebase',
+      createdTimeAt: '5:28 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    },
+    {
+      imgUrl: 'assets/users/user1.png',
+      userName: 'Michael Yue',
+      description: 'posted a new ticket',
+      createdTimeAt: '5:30 pm',
+      createdDateAt: '27.05.2018',
+      passedDays: 'Yesterday'
+    }
+  ];
+
+  public morrisDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
+
+  public morrisDonutInfo = [
+    {
+      label: 'New',
+      value: 49,
+    }, {
+      label: 'Follow Up',
+      value: 35
+    }, {
+      label: 'Seen',
+      value: 29
+    }, {
+      label: 'Demo',
+      value: 12
+    }, {
+      label: 'Negotiation',
+      value: 8
+    }, {
+      label: 'Won',
+      value: 58
+    }, {
+      label: 'Lost',
+      value: 2
+    }
+  ];
+
   ngOnInit() {
 
   }
