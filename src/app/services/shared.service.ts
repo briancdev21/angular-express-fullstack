@@ -113,7 +113,10 @@ export class SharedService {
     const url = `${environment.apiUrl}/organization/currencies/`;
     return this.http.get(url);
   }
-
+  getCurrency(id): Observable<any> {
+    const url = `${apiUrl}organization/currencies/${id}`;
+    return this.http.get(url);
+  }
   createCurrency (body): Observable<any> {
     const url = `${environment.apiUrl}/organization/currencies/`;
     return this.http.post<any>(url, body);
@@ -134,6 +137,10 @@ export class SharedService {
   getUsers (): Observable<any> {
     const url = `${environment.apiUrl}/users/`;
     return this.http.get(url).map(data => data['results']);
+  }
+  getUser (username): Observable<any> {
+    const url = `${apiUrl}users/${username}`;
+    return this.http.get(url);
   }
 
   createUser (body): Observable<any> {
@@ -166,6 +173,10 @@ export class SharedService {
     const url = `${environment.apiUrl}/crm/contacts/`;
     return this.http.get(url).map(data => data['results']);
   }
+  getContact(id) {
+    const url = `${apiUrl}crm/contacts/${id}`;
+    return this.http.get(url);
+  }
 
   createContact (body): Observable<any> {
     const url = `${environment.apiUrl}/users/`;
@@ -182,7 +193,10 @@ export class SharedService {
     const url = `${environment.apiUrl}/organization/terms`;
     return this.http.get(url);
   }
-
+  getTerm(id): Observable<any> {
+    const url = `${apiUrl}organization/terms/${id}`;
+    return this.http.get(url);
+  }
   createTerm (body): Observable<any> {
     const url = `${environment.apiUrl}/organization/terms`;
     return this.http.post<any>(url, body);
@@ -466,6 +480,10 @@ export class SharedService {
   updateSupplier (supplierId, body): Observable<any> {
     const url = `${environment.apiUrl}/inventory/suppliers/${supplierId}`;
     return this.http.put<any>(url, body);
+  }
+  getSupplier (id): Observable<any> {
+    const url = `${apiUrl}inventory/suppliers/${id}`;
+    return this.http.get<any>(url);
   }
   deleteSupplier (supplierId, body): Observable<any> {
     const url = `${environment.apiUrl}/inventory/suppliers/${supplierId}`;
