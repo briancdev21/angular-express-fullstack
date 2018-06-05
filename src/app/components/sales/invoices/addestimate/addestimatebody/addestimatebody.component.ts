@@ -89,9 +89,9 @@ export default class AddEstimateBodyComponent implements OnInit {
   newCountry: string;
   newClass: any;
   newCategory: any;
-  newInternalMemo: string;
-  newCustomerNote: string;
-  newTerms: string;
+  newInternalMemo = '';
+  newCustomerNote = '';
+  newTerms = '';
   newExpiryDate: string;
 
   public timelineData: Array<Object> = [
@@ -160,7 +160,7 @@ export default class AddEstimateBodyComponent implements OnInit {
       this.classList = res.results;
     });
 
-    this.sharedService.getPricingCategories().subscribe(res => {
+    this.sharedService.getCategories().subscribe(res => {
       this.categoryList = res.results;
     });
 
@@ -230,6 +230,11 @@ export default class AddEstimateBodyComponent implements OnInit {
 
   onDepositChange(event) {
     this.saveInvoiceData.deposit = parseInt(event, 10);
+  }
+
+  getShippingAddress(event) {
+    console.log('shipping address: ', event);
+    this.saveInvoiceData.shippingAddress = event.data;
   }
 
   onPriceChanged() {
@@ -308,8 +313,7 @@ export default class AddEstimateBodyComponent implements OnInit {
   }
 
   saveEstimate() {
-    if (this.newCustomerName && this.newEmail && this.newClass && this.newCategory && this.newInternalMemo
-      && this.newCustomerNote && this.newTerms) {
+    if (this.newCustomerName && this.newEmail && this.newClass && this.newCategory) {
       if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
         this.saveInvoiceData.deposit = 0;
       }

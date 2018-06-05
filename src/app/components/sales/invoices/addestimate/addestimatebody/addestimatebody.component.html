@@ -9,7 +9,7 @@
             <app-multiemailselect [keywords]="emailAddresses" (multiEmails)="getMultiEmails($event)"></app-multiemailselect>
           </div>
         </div>
-        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" ></app-shippingaddress>
+        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [shippingAddress]="shippingAddress" (updateAddress)="getShippingAddress($event)" ></app-shippingaddress>
         <div class="project-log">
           <app-in-project-selector class="flex1 mr-15" [projects]="projects" ></app-in-project-selector>
           <div class="log-number">
@@ -70,10 +70,7 @@
       <span *ngIf="!newCustomerName">Customer name, </span>
       <span *ngIf="!newEmail">Email address, </span>
       <span *ngIf="!newClass">Class, </span>
-      <span *ngIf="!newInternalMemo">Internal Memo, </span>
-      <span *ngIf="!newCustomerNote">Customer Note, </span>
-      <span *ngIf="!newTerms">Terms of the estimate, </span>
-      <span *ngIf="!newCategory">Category, </span> etc fields are missing.
+      <span *ngIf="!newCategory">Category,</span> etc fields are missing.
     </div>
     <div class="center-btn-section" >
       <button class="done-btn" (click)="showModal=false" >

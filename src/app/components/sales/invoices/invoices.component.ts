@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { InvoicesService } from '../../../services/invoices.service';
 import { EstimatesService } from '../../../services/estimates.service';
 import { EstimateModel } from '../../../models/estimate.model';
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
   selector: 'app-invoices',
@@ -33,6 +34,7 @@ export class InvoicesComponent implements OnInit {
   invoiceTags: any;
   invoiceTypes: any;
   today = moment().format('YYYY-MM-DD');
+  contactsList: any;
 
   public filters  = {
     createdFrom: '',
@@ -57,11 +59,17 @@ export class InvoicesComponent implements OnInit {
     private filterService: FilterService,
     private router: Router,
     private invoicesService: InvoicesService,
-    private estimatesService: EstimatesService
+    private estimatesService: EstimatesService,
+    private sharedService: SharedService
   ) {
+    this.sharedService.getContacts()
+    .subscribe(data => {
+      console.log('userlist: ', data);
+      this.contactsList = data;
+    });
+
     this.filterAvaliableTo = 'everyone';
     this.invoicesService.getInvoices().subscribe(res => {
-      console.log('invoices: ', res.results);
       this.invoicesListInfo = res.results;
       this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
       this.estimatesService.getEstimates().subscribe(data => {
@@ -74,9 +82,10 @@ export class InvoicesComponent implements OnInit {
         this.invoicesListInfo.forEach(element => {
           element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
         });
-        console.log('invoices + estimates: ', this.estimatesListInfo);
         this.invoicesListInfo = this.sortDateArray('createdAt');
-        console.log('invoices + estimates123: ', this.invoicesListInfo);
+        console.log('invoiceslist: ', this.invoicesListInfo);
+
+        this.invoicesListInfo.map(i => i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].slice(-1), 10)));
       });
     });
   }
@@ -121,6 +130,12 @@ export class InvoicesComponent implements OnInit {
 
   toggleMenubar(data: boolean) {
     this.menuCollapsed  = data;
+  }
+
+  getCustomerName(list, id) {
+    const idList = list.map( c => c.id);
+    const pos = idList.indexOf(id);
+    return list[pos].person.firstName + ' ' + list[pos].person.lastName;
   }
 
   closeModal() {

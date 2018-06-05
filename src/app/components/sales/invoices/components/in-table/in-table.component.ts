@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 import { ProductDetailInfo } from '../../../../../models/ProductDetailInfo.model';
 import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
 import { SharedService } from '../../../../../services/shared.service';
+import { InvoicesService } from '../../../../../services/invoices.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-in-table',
@@ -31,22 +33,8 @@ export class InTableComponent implements OnInit {
   invoiceProductModel: any;
 
   serviceDate: any;
-  private models = [
-    {model: 'model1'},
-    {model: 'model2'},
-    {model: 'model3'},
-    {model: 'model4'},
-    {model: 'model5'}
-  ];
-  private names = [
-    {productname: 'name1'},
-    {productname: 'name2'},
-    {productname: 'name3'},
-    {productname: 'name4'},
-    {productname: 'name5'}
-  ];
 
-  constructor(private completerService: CompleterService, private sharedService: SharedService) {
+  constructor(private completerService: CompleterService, private sharedService: SharedService, private invoicesService: InvoicesService) {
     this.sharedService.getTaxRates().subscribe(taxRateRes => {
       this.taxRateOptions = taxRateRes.results;
     });
@@ -66,7 +54,6 @@ export class InTableComponent implements OnInit {
 
   addNewProduct() {
     const newProduct = new ProductDetailInfo();
-    console.log(newProduct);
     this.productDetails.push(newProduct);
   }
 
@@ -77,7 +64,7 @@ export class InTableComponent implements OnInit {
 
     this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
 
-    this.sharedService.deletePurchaseOrderProduct(this.invoiceId, this.productDetails[index].purchaseOrderProductId).subscribe(res => {
+    this.invoicesService.deleteInvoiceProduct(this.invoiceId, this.productDetails[index].purchaseOrderProductId).subscribe(res => {
       this.productDetails.splice(index, 1);
       this.priceChange.emit(null);
     });
@@ -105,14 +92,13 @@ export class InTableComponent implements OnInit {
       this.invoiceProductModel = {
         sku: item.originalObject.sku,
         taxRateId: this.taxRateOptions[0].id,
-        supplierId: product.supplierId,
         discount: {
           value: 0,
           unit: 'PERCENT'
         },
-        quantity: 1
+        quantity: 1,
       };
-      this.sharedService.addPurchaseOrderProduct(this.invoiceId, this.invoiceProductModel).subscribe(data => {
+      this.invoicesService.addInvoiceProduct(this.invoiceId, this.invoiceProductModel).subscribe(data => {
         this.productDetails[index].purchaseOrderProductId = data.data.id;
       });
     });
@@ -163,7 +149,6 @@ export class InTableComponent implements OnInit {
     this.invoiceProductModel = {
       sku: this.productDetails[index].sku,
       taxRateId: this.selectedTaxRateId,
-      supplierId: this.productDetails[index].supplierId,
       discount: {
         value: this.productDetails[index].discount,
         unit: 'PERCENT'
@@ -171,7 +156,7 @@ export class InTableComponent implements OnInit {
       recieved: 0,
       quantity: this.productDetails[index].quantity
     };
-    this.sharedService.updatePurchaseOrderProduct(this.invoiceId, this.productDetails[index].purchaseOrderProductId, this.invoiceProductModel).
+    this.invoicesService.updateInvoiceProduct(this.invoiceId, this.productDetails[index].purchaseOrderProductId, this.invoiceProductModel).
     subscribe(res => {
     });
   }

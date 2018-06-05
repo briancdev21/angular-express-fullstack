@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-invoiceslisttable',
@@ -20,9 +21,12 @@ export class InvoicesListTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
+  contactsList: any;
 
-  constructor( private filterService: FilterService, private router: Router ) {
-
+  constructor( private filterService: FilterService, private router: Router, private sharedService: SharedService ) {
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res.data;
+    });
   }
 
   ngOnInit() {

@@ -134,6 +134,7 @@ export default class InvoiceProfileBodyComponent implements OnInit {
         this.contactList = data;
         this.userList = this.contactList;
         this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
+        this.currentOwner = this.getCustomerName(this.contactList, res.data.contactId);
       });
 
       this.sharedService.getTerms().subscribe(data => {
@@ -174,7 +175,6 @@ export default class InvoiceProfileBodyComponent implements OnInit {
       this.currentClassId = res.data.classificationId;
       this.currentCategoryId = res.data.categoryId;
       this.currentTermId = res.data.termId;
-      this.currentOwner = res.data.owner;
       this.emailAddresses = res.data.emails;
       this.shippingAddress = res.data.shippingAddress;
     });
@@ -210,6 +210,12 @@ export default class InvoiceProfileBodyComponent implements OnInit {
     const idList = list.map( c => c.id);
     const pos = idList.indexOf(id);
     return list[pos].shippingAddress;
+  }
+
+  getCustomerName(list, id) {
+    const idList = list.map( c => c.id);
+    const pos = idList.indexOf(id);
+    return list[pos].person.firstName + ' ' + list[pos].person.lastName;
   }
 
   onCustomerSelected(user) {
