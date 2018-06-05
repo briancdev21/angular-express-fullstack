@@ -9,7 +9,7 @@
             <app-multiemailselect [keywords]="emailAddresses" (multiEmails)="getMultiEmails($event)"></app-multiemailselect>
           </div>
         </div>
-        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" (updateAddress)="getUpdatedShippiingAddress($event)"></app-shippingaddress>
+        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" (updateAddress)="getUpdatedShippiingAddress($event)" (updateAddress)="getShippingAddress($event)"></app-shippingaddress>
         <div class="project-log">
           <app-in-project-selector class="flex1 mr-15" [projects]="projects" ></app-in-project-selector>
           <div class="log-number">

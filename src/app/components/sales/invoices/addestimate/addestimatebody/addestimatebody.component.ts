@@ -233,7 +233,6 @@ export default class AddEstimateBodyComponent implements OnInit {
   }
 
   getShippingAddress(event) {
-    console.log('shipping address: ', event);
     this.saveInvoiceData.shippingAddress = event.data;
   }
 

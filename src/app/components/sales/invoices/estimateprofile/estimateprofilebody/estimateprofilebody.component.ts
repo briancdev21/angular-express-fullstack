@@ -262,6 +262,10 @@ export default class EstimateProfileBodyComponent implements OnInit {
     this.saveInvoiceData.billingAddress = event.data;
   }
 
+  getShippingAddress(event) {
+    this.saveInvoiceData.shippingAddress = event.data;
+  }
+
   onPriceChanged() {
     this.subtotalproducts = 0;
     this.subtotalServices = 0;

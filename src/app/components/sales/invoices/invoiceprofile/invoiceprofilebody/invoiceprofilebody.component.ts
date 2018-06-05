@@ -265,6 +265,10 @@ export default class InvoiceProfileBodyComponent implements OnInit {
     this.saveInvoiceData.deposit = parseInt(event, 10);
   }
 
+  getShippingAddress(event) {
+    this.saveInvoiceData.shippingAddress = event.data;
+  }
+  
   onPriceChanged() {
     this.subtotalproducts = 0;
     this.subtotalServices = 0;
