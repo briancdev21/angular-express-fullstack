@@ -1,1 +1,132 @@
-<h1 style="margin-top: 0; padding-top: 100px;">Inventory Dashboard page</h1>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
+  <div class="charts-area">
+    <div class="chart-row">
+      <div class="card conversion-card">
+        <div class="card-header">
+          <span>INVENTORY VALUES</span>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left">
+            <div>
+              <span class="title">Aging Inventory 0 - 30 Days</span>
+              <span class="font-color-green">{{inventoryValues.lessThirty}}</span>
+            </div>
+            <div>
+              <span class="title">Aging Inventory 30 - 60 Days</span>
+              <span class="font-color-orange">{{inventoryValues.thirtyToSixty}}</span>
+            </div>
+            <div>
+              <span class="title">Aging Inventory Over 60 Days</span>
+              <span class="font-color-red">{{inventoryValues.overSixty}}</span>
+            </div>
+          </div>
+          <div class="card-content-right">
+            <span class="due-tasks-title">Inventory Turnover</span>
+            <span class="font-color-black">{{inventoryValues.turnover}}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card conversion-card">
+        <div class="card-header">
+          <span>INVENTORY LEVELS</span>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left">
+            <div>
+              <span class="title">Number of New Projects</span>
+              <span>{{inventoryLevel.noStock | number}}</span>
+            </div>
+            <div>
+              <span class="title">Number of Active Projects</span>
+              <span>{{inventoryLevel.placeOrder | number}}</span>
+            </div>
+            <div>
+              <span class="title">Number of Completed Projects</span>
+              <span>{{inventoryLevel.totalPhysical | number}}</span>
+            </div>
+          </div>
+          <div class="card-content-right">
+            <span class="due-tasks-title">Pending Projects</span>
+            <span>{{inventoryLevel.belowLevel}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card top-customer-card">
+        <div class="card-header">
+          <span>PENDING PURCHASE ORDERS</span>
+        </div>
+        <div class="card-content">
+          <table>
+            <tr>
+              <th>PURCHASE ORDER NUMBER</th>
+              <th>DUE DATE</th>
+            </tr>
+            <tr *ngFor="let order of pendingOrders">
+              <td>{{order.orderNumber}}</td>
+              <td>{{order.dueDate}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="multi-charts-left">
+        <div class="card area-chart">
+          <div class="card-header">
+            <span>GROSS MARGIN</span>
+            <div class="legend-sec">
+              <div class="row">
+                <div class="square blue"></div>
+                <span>Created</span>
+              </div>
+              <div class="row">
+                <div class="square green"></div>
+                <span>Complete</span>
+              </div>
+              <div class="row">
+                <div class="square red"></div>
+                <span>Incomplete</span>
+              </div>
+            </div>
+          </div>
+          <app-morrisareachart [areaChartInfo]="areaChartInfo"></app-morrisareachart>
+        </div>
+
+        <div class="pipeline-ratio">
+          <div class="card">
+            <div class="card-header">
+              <span>SUPPLIER PURCHASES</span>
+              <select [(ngModel)]="donutTimePeriod">
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="quarter">This Quarter</option>
+                <option value="year">This Year</option>
+              </select>
+            </div>
+            <div class="card-content">
+              <div class="card-content-left" >
+                <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
+              </div>
+              <div class="card-centent-right">
+                <div class="row" *ngFor="let project of morrisDonutInfo; let i = index">
+                  <div class="square" [ngStyle]="{'background-color': morrisDonutColors[i]}"></div>
+                  <span>{{project.label}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span>PURCHASE ORDER VALUES</span>
+            </div>
+            <app-morrislinechart [morrisLineChartInfo]="morrisLineChartInfo"></app-morrislinechart>
+          </div>
+        </div>
+      </div>
+      <app-activitiesbox [activitiesInfo]="activitiesInfo"></app-activitiesbox>
+      
+    </div>
+  </div>
+</div>
