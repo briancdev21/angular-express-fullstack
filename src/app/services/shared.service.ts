@@ -454,4 +454,21 @@ export class SharedService {
     return this.http.delete<any>(url);
   }
 
+  // Inventory Suppliers
+  getSuppliers (): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/suppliers`;
+    return this.http.get<any>(url);
+  }
+  addSupplier (body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/suppliers`;
+    return this.http.post<any>(url, body);
+  }
+  updateSupplier (supplierId, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/suppliers/${supplierId}`;
+    return this.http.put<any>(url, body);
+  }
+  deleteSupplier (supplierId, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/suppliers/${supplierId}`;
+    return this.http.delete<any>(url);
+  }
 }

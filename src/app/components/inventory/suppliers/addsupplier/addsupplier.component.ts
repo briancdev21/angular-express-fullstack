@@ -2,6 +2,7 @@ import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, EventEmi
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-addsupplier',
@@ -37,7 +38,7 @@ export class AddSupplierComponent implements OnInit {
   showAddSupplierModal = false;
   switchIconShipping = true;
   typeAccountTypeChange = false;
-  keywords: any;
+  keywords = [];
   supplierAssociation: any;
   businessType: any;
   tabActiveFirst = true;
@@ -56,6 +57,7 @@ export class AddSupplierComponent implements OnInit {
   invalidAccountNumber = false;
   invalidDefaultCurrency = false;
   wrongEmailFormat = true;
+  invalidBusinessNumber = false;
 
   supplierName = '';
   contactName = '';
@@ -77,11 +79,21 @@ export class AddSupplierComponent implements OnInit {
   payablePhone: any;
   businessNumber: any;
   productNotes: any;
+  contacts = [];
+  contactId: number;
 
-  constructor(private completerService: CompleterService) {
+  constructor(private completerService: CompleterService, private sharedService: SharedService) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
-    this.keywords = ['control4', 'theatre', 'renovation'];
     this.supplierAssociation = ['Danny Shibley', 'John Stephen'];
+    this.sharedService.getContacts().subscribe(contacts => {
+      this.contacts = contacts;
+    });
+    this.sharedService.getTerms().subscribe(terms => {
+      this.supplierTerm = terms.results;
+    });
+    this.sharedService.getCurrencies().subscribe(currencies => {
+      this.supplierCurrencies = currencies.results;
+    });
   }
 
   ngOnInit() {
@@ -100,6 +112,7 @@ export class AddSupplierComponent implements OnInit {
     this.invalidState = false;
     this.invalidZipcode = false;
     this.invalidCountry = false;
+    this.invalidBusinessNumber = false;
     this.wrongEmailFormat = this.checkEmailValidation(this.contactEmail);
 
     if (this.supplierName && this.contactName && this.supplierPhone && this.contactEmail && this.newAddress
@@ -137,6 +150,9 @@ export class AddSupplierComponent implements OnInit {
       }
       if (!this.wrongEmailFormat) {
         this.invalidContactEmail = true;
+      }
+      if (!this.businessNumber) {
+        this.invalidBusinessNumber = true;
       }
     }
   }
@@ -214,24 +230,25 @@ export class AddSupplierComponent implements OnInit {
   }
   clickSaveSupplier() {
     const newSupplier = {
-      id: this.suppliersListInfo.length,
-      supplierName: this.supplierName,
-      contactName: this.contactName,
-      supplierPhone: this.supplierPhone,
-      supplierEmail: this.contactEmail,
-      contactPhone: this.contactPhone,
-      contactEmail: this.contactEmail,
-      address: this.newAddress,
-      term: this.defaultTerm,
+      name: this.supplierName,
+      contactId: this.contactId,
+      termId: this.defaultTerm,
+      currencyId: this.defaultCurrency,
+      shippingAddress: {
+        address: this.newAddress,
+        city: this.newCity,
+        province: this.newState,
+        country: this.newCountry,
+        postalCode: this.newZipcode
+      },
+      businessNumber: this.businessNumber,
       accountNumber: this.accountNumber,
-      currency: this.defaultCurrency,
-      country: this.newCountry,
-      state: this.newState,
-      tag: this.keywords,
+      keywords: this.keywords,
     };
 
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
+    this.invalidBusinessNumber = false;
     this.invalidAccountNumber = false;
     if (this.defaultTerm && this.defaultCurrency && this.accountNumber) {
       this.addSupplierModalCollapsed = true;
@@ -250,5 +267,12 @@ export class AddSupplierComponent implements OnInit {
         this.invalidAccountNumber = true;
       }
     }
+  }
+
+  contactNameChanged (event) {
+    const contact = this.contacts.filter(contactItem => contactItem.id.toString() === event.target.value).pop();
+    this.contactEmail = contact['email'];
+    this.contactPhone = contact['phoneNumbers'].primary;
+    this.contactId = event.target.value;
   }
 }
