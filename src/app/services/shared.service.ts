@@ -21,22 +21,22 @@ export class SharedService {
   }
 
   getKeywords (): Observable<any> {
-    const url = `${apiUrl}keywords/`;
+    const url = `${apiUrl}organization/keywords/`;
     return this.http.get(url);
   }
 
   createKeyword (body): Observable<any> {
-    const url = `${apiUrl}keywords/`;
+    const url = `${apiUrl}organization/keywords/`;
     return this.http.post<any>(url, body);
   }
 
   deleteKeyword (id): Observable<any> {
-    const url = `${apiUrl}keywords/${id}`;
+    const url = `${apiUrl}organization/keywords/${id}`;
     return this.http.delete<any>(url);
   }
 
   getIndividualKeyword(id): Observable<any>  {
-    const url = `${apiUrl}keywords/${id}`;
+    const url = `${apiUrl}organization/keywords/${id}`;
     return this.http.get(url);
   }
 
@@ -63,27 +63,27 @@ export class SharedService {
 
   // Location
   getLocations(): Observable<any> {
-    const url = `${apiUrl}locations/`;
+    const url = `${apiUrl}organization/locations/`;
     return this.http.get(url);
   }
 
   createLocation (body): Observable<any> {
-    const url = `${apiUrl}locations/`;
+    const url = `${apiUrl}organization/locations/`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualLocation(id): Observable<any>  {
-    const url = `${apiUrl}locations/${id}`;
+    const url = `${apiUrl}organization/locations/${id}`;
     return this.http.get(url);
   }
 
   deleteLocation (id): Observable<any> {
-    const url = `${apiUrl}locations/${id}`;
+    const url = `${apiUrl}organization/locations/${id}`;
     return this.http.delete<any>(url);
   }
 
   updateIndividualLocation(id, body) {
-    const url = `${apiUrl}locations/${id}`;
+    const url = `${apiUrl}organization/locations/${id}`;
     return this.http.post<any>(url, body);
   }
 
