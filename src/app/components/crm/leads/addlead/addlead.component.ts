@@ -56,6 +56,11 @@ export class AddLeadComponent implements OnInit {
   invalidLastname = false;
   invalidBusinessName = false;
   invalidAccountType = false;
+  invalidAddress = false;
+  invalidCity = false;
+  invalidProvince = false;
+  invalidCountry = false;
+  invalidPostalCode = false;
   firstName = '';
   lastName = '';
   businessName = '';
@@ -161,6 +166,11 @@ export class AddLeadComponent implements OnInit {
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
+    this.invalidAddress = false;
+    this.invalidCity = false;
+    this.invalidProvince = false;
+    this.invalidCountry = false;
+    this.invalidPostalCode = false;
     if (event === 'PERSON') {
       this.typeAccountTypeChange = false;
     } else if (event === 'BUSINESS') {
@@ -196,10 +206,16 @@ export class AddLeadComponent implements OnInit {
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
     this.invalidContactEmail = false;
+    this.invalidAddress = false;
+    this.invalidCity = false;
+    this.invalidProvince = false;
+    this.invalidCountry = false;
+    this.invalidPostalCode = false;
     this.wrongEmailFormat = !this.checkEmailValidation(this.email);
 
     if (this.businessType === 'PERSON') {
-      if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat) {
+      if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address && 
+        this.city && this.province && this.country && this.postalCode) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -215,9 +231,25 @@ export class AddLeadComponent implements OnInit {
         if (!this.email || this.wrongEmailFormat) {
           this.invalidContactEmail = true;
         }
+        if (!this.address) {
+          this.invalidAddress = true;
+        }
+        if (!this.city) {
+          this.invalidCity = true;
+        }
+        if (!this.province) {
+          this.invalidProvince = true;
+        }
+        if (!this.country) {
+          this.invalidCountry = true;
+        }
+        if (!this.postalCode) {
+          this.invalidPostalCode = true;
+        }
       }
     } else if (this.businessType === 'BUSINESS') {
-      if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat ) {
+      if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat && this.address &&
+        this.city && this.province && this.country && this.postalCode) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -227,11 +259,26 @@ export class AddLeadComponent implements OnInit {
         if (!this.primaryNumber) {
           this.invalidPrimaryNumber = true;
         }
-        if (!this.primaryNumber) {
-          this.invalidPrimaryNumber = true;
+        if (!this.email || this.wrongEmailFormat) {
+          this.invalidContactEmail = true;
         }
         if (!this.email || this.wrongEmailFormat) {
           this.invalidContactEmail = true;
+        }
+        if (!this.address) {
+          this.invalidAddress = true;
+        }
+        if (!this.city) {
+          this.invalidCity = true;
+        }
+        if (!this.province) {
+          this.invalidProvince = true;
+        }
+        if (!this.country) {
+          this.invalidCountry = true;
+        }
+        if (!this.postalCode) {
+          this.invalidPostalCode = true;
         }
       }
     } else {
@@ -247,6 +294,21 @@ export class AddLeadComponent implements OnInit {
       }
       if (!this.email || this.wrongEmailFormat) {
         this.invalidContactEmail = true;
+      }
+      if (!this.address) {
+        this.invalidAddress = true;
+      }
+      if (!this.city) {
+        this.invalidCity = true;
+      }
+      if (!this.province) {
+        this.invalidProvince = true;
+      }
+      if (!this.country) {
+        this.invalidCountry = true;
+      }
+      if (!this.postalCode) {
+        this.invalidPostalCode = true;
       }
     }
     // check the switch and make billing address same as shipping address
@@ -281,10 +343,16 @@ export class AddLeadComponent implements OnInit {
         this.invalidAccountType = false;
         this.invalidPrimaryNumber = false;
         this.invalidContactEmail = false;
+        this.invalidAddress = false;
+        this.invalidCity = false;
+        this.invalidProvince = false;
+        this.invalidCountry = false;
+        this.invalidPostalCode = false;
         this.wrongEmailFormat = this.checkEmailValidation(this.email);
 
         if (this.businessType === 'PERSON') {
-          if (this.firstName && this.lastName && this.primaryNumber && this.email) {
+          if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
+            this.city && this.province && this.country && this.postalCode) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
             break;
@@ -305,9 +373,25 @@ export class AddLeadComponent implements OnInit {
             if (!this.email || this.wrongEmailFormat) {
               this.invalidContactEmail = true;
             }
+            if (!this.address) {
+              this.invalidAddress = true;
+            }
+            if (!this.city) {
+              this.invalidCity = true;
+            }
+            if (!this.province) {
+              this.invalidProvince = true;
+            }
+            if (!this.country) {
+              this.invalidCountry = true;
+            }
+            if (!this.postalCode) {
+              this.invalidPostalCode = true;
+            }
           }
         } else if (this.businessType === 'BUSINESS') {
-          if (this.businessName  && this.email) {
+          if (this.businessName  && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
+            this.city && this.province && this.country && this.postalCode) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
           } else {
@@ -323,6 +407,21 @@ export class AddLeadComponent implements OnInit {
             }
             if (!this.email || this.wrongEmailFormat) {
               this.invalidContactEmail = true;
+            }
+            if (!this.address) {
+              this.invalidAddress = true;
+            }
+            if (!this.city) {
+              this.invalidCity = true;
+            }
+            if (!this.province) {
+              this.invalidProvince = true;
+            }
+            if (!this.country) {
+              this.invalidCountry = true;
+            }
+            if (!this.postalCode) {
+              this.invalidPostalCode = true;
             }
           }
         } else {
@@ -342,6 +441,21 @@ export class AddLeadComponent implements OnInit {
           }
           if (!this.email || this.wrongEmailFormat) {
             this.invalidContactEmail = true;
+          }
+          if (!this.address) {
+            this.invalidAddress = true;
+          }
+          if (!this.city) {
+            this.invalidCity = true;
+          }
+          if (!this.province) {
+            this.invalidProvince = true;
+          }
+          if (!this.country) {
+            this.invalidCountry = true;
+          }
+          if (!this.postalCode) {
+            this.invalidPostalCode = true;
           }
         }
         break;
@@ -398,6 +512,11 @@ export class AddLeadComponent implements OnInit {
     this.businessAssociation = undefined;
     this.invalidContactEmail = false;
     this.wrongEmailFormat = false;
+    this.invalidAddress = false;
+    this.invalidCity = false;
+    this.invalidProvince = false;
+    this.invalidCountry = false;
+    this.invalidPostalCode = false;
   }
   clickSaveLead() {
     this.invalidDefaultTerm = false;

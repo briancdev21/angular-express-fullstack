@@ -10,7 +10,8 @@
     </tr>
     <tr *ngFor="let lead of leadsListInfo; let i = index" (click)="redirectTo(lead.id)">
       <td *ngIf="lead.type === 'PERSON'">{{lead.person.firstName}} {{lead.person.lastName}}</td> <td *ngIf="lead.type === 'BUSINESS'">{{lead.business.name}}</td>
-      <td>{{formatPhoneNumber(lead.phoneNumbers.primary)}}</td>
+      <!-- <td>{{formatPhoneNumber(lead.phoneNumbers.primary)}}</td> -->
+      <td>{{lead.phoneNumbers.primary}}</td>
       <td>{{lead.email}}</td> 
       <td [ngClass]="getDateColor(lead.status)">{{changeDateFormat(lead.createdAt)}}</td>
       <td>{{lead.status}}</td>

@@ -94,15 +94,15 @@
                 <span>Same address for the billing address</span>
               </div>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="address">
+            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="address" [ngClass]="{'validation-required': invalidAddress}" >
 
             <div class="city-state">
-              <input placeholder="Enter City" [(ngModel)]="city">
-              <input placeholder="Enter State" [(ngModel)]="province">
+              <input placeholder="Enter City" [(ngModel)]="city" [ngClass]="{'validation-required': invalidCity}" >
+              <input placeholder="Enter State" [(ngModel)]="province" [ngClass]="{'validation-required': invalidProvince}" >
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country" [(ngModel)]="country">
-              <input placeholder="Enter Zipcode" [(ngModel)]="postalCode">
+              <input placeholder="Enter Country" [(ngModel)]="country" [ngClass]="{'validation-required': invalidCountry}" >
+              <input placeholder="Enter Zipcode" [(ngModel)]="postalCode" [ngClass]="{'validation-required': invalidPostalCode}" >
             </div>
           </div>
 
