@@ -215,8 +215,11 @@
 						<textarea placeholder="Enter customer notes here" [(ngModel)]="notes"></textarea>
 					</div>
           <div class="btn-section" >
-            <button class="cancel-btn" (click)="addLeadModalCollapsed=true; showAddLeadModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
+            <button *ngIf="tabActiveFirst" class="cancel-btn" (click)="addLeadModalCollapsed=true; showAddLeadModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
               Cancel
+            </button>
+            <button *ngIf="!tabActiveFirst" class="cancel-btn" (click)="tabActiveFirst=true; tabActiveSecond=false;"  >
+              Back
             </button>
             <button class="save-btn" (click)="clickSaveLead()"  >
               Save lead

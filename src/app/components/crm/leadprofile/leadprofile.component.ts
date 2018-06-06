@@ -375,6 +375,14 @@ export class LeadProfileComponent implements OnInit {
     this.savingLead.followers = ['string'];
     delete this.savingLead.createdAt;
     delete this.savingLead.updatedAt;
+
+    // remove Null fields to save lead
+    if (this.savingLead.sourceId === null) {
+      delete this.savingLead.sourceId;
+    }
+    if (this.savingLead.phoneNumbers.secondary === null) {
+      delete this.savingLead.phoneNumbers.secondary;
+    }
     this.crmService.updateIndividualLead(this.currentLead.id, this.savingLead).subscribe( res => {
     });
   }

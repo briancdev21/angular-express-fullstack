@@ -214,7 +214,7 @@ export class AddLeadComponent implements OnInit {
     this.wrongEmailFormat = !this.checkEmailValidation(this.email);
 
     if (this.businessType === 'PERSON') {
-      if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address && 
+      if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
         this.city && this.province && this.country && this.postalCode) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
@@ -348,7 +348,7 @@ export class AddLeadComponent implements OnInit {
         this.invalidProvince = false;
         this.invalidCountry = false;
         this.invalidPostalCode = false;
-        this.wrongEmailFormat = this.checkEmailValidation(this.email);
+        this.wrongEmailFormat = !this.checkEmailValidation(this.email);
 
         if (this.businessType === 'PERSON') {
           if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
@@ -538,8 +538,8 @@ export class AddLeadComponent implements OnInit {
           'person': {
             'firstName': this.firstName,
             'lastName': this.lastName,
-            'jobTitle': this.jobTitle,
-            'department': this.captain,
+            'jobTitle': this.jobTitle ? this.jobTitle : 'a',
+            'department': this.captain ? this.captain : 'a',
             'businessAssociation': parseInt(this.businessAssociation, 10),
           },
           'shippingAddress': {
@@ -583,8 +583,8 @@ export class AddLeadComponent implements OnInit {
           ],
           'type': this.businessType,
           'person': {
-            'jobTitle': this.jobTitle,
-            'department': this.captain,
+            'jobTitle': this.jobTitle ? this.jobTitle : 'a',
+            'department': this.captain ? this.captain : 'a',
             'businessAssociation': parseInt(this.businessAssociation, 10),
           },
           'business': {
@@ -623,6 +623,14 @@ export class AddLeadComponent implements OnInit {
           'note': this.notes,
           'lastContacted': moment().format('YYYY-MM-DD')
         };
+      }
+
+      if (isNaN(this.newLead.sourceId)) {
+        delete this.newLead.sourceId;
+      }
+
+      if (isNaN(this.newLead.person.businessAssociation)) {
+        delete this.newLead.person.businessAssociation;
       }
       this.crmService.createLead(JSON.stringify(this.newLead)).subscribe(data => {
         this.addLeadModalCollapsed = true;
