@@ -127,11 +127,9 @@ export default class InvoiceProfileBodyComponent implements OnInit {
 
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
-      console.log('getIndividualInvoice: ', res);
 
       this.sharedService.getContacts()
       .subscribe(data => {
-        console.log('userlist: ', data);
         this.contactList = data;
         this.userList = this.contactList;
         this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
@@ -157,13 +155,7 @@ export default class InvoiceProfileBodyComponent implements OnInit {
       });
 
       this.invoicesService.getInvoiceProducts(this.currentInvoiceId).subscribe(data => {
-        console.log('invoiceproducts: ', data);
         const invoiceProducts = data.results;
-        // this.productDetails = invoiceProducts.map( i => {
-        //   i['serviceDate'] = moment(i.updatedAt).format('YYYY-MM-DD');
-        //   i['unitprice'] = i.unitPrice;
-        //   i['discount'] = i.discount.value;
-        // });
 
         invoiceProducts.forEach(i => {
           i['serviceDate'] = moment(i.updatedAt).format('YYYY-MM-DD');
@@ -171,7 +163,6 @@ export default class InvoiceProfileBodyComponent implements OnInit {
           i['discount'] = i.discount.value;
         });
         this.productDetails = invoiceProducts;
-        console.log('product details 123: ', this.productDetails);
       });
 
       this.saveInvoiceData = res.data;
@@ -204,12 +195,10 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('createdInvoice', this.createdInvoice);
 
     this.in_id = 'IN - ' + this.currentInvoiceId;
 
     this.filterService.chargeFeeData.subscribe(data => {
-      console.log('lateFee: ', data);
       if (data.lateFee) {
         this.saveInvoiceData.chargeLateFee = data.lateFee;
         this.saveInvoiceData.lateFee.value = data.value;
@@ -238,7 +227,6 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   }
 
   onCustomerSelected(user) {
-    console.log(user);
   }
 
   onSelectUser(selectedIndex: any) {
@@ -262,6 +250,7 @@ export default class InvoiceProfileBodyComponent implements OnInit {
 
   onChangedMemo(event) {
     this.saveInvoiceData.internalNote = event;
+    console.log('123', this.saveInvoiceData);
   }
 
   onChangedNote(event) {
@@ -287,7 +276,7 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   getShippingAddress(event) {
     this.saveInvoiceData.shippingAddress = event.data;
   }
-  
+
   onPriceChanged() {
     this.subtotalproducts = 0;
     this.subtotalServices = 0;
@@ -326,7 +315,6 @@ export default class InvoiceProfileBodyComponent implements OnInit {
   }
 
   onTotalPriceChange(data) {
-    console.log('discountChange: ', data);
     if (data.type) {
       this.saveInvoiceData.discount.unit = data.type;
       this.saveInvoiceData.discount.value = data.amount;
@@ -349,11 +337,9 @@ export default class InvoiceProfileBodyComponent implements OnInit {
     if (this.subtotalServices === undefined) { subtotalServices = 0; }
     if (depositsAmount !== undefined && this.subtotalproducts !== undefined) {
       if (discountAmount === undefined) { discountAmount = 0; }
-      console.log('totla price discountAmount change', discountAmount);
       const totalprice = this.subtotalproducts + subtotalServices;
       switch (this.discountType) {
         case 'percent': {
-          console.log('taxes', this.taxes);
           this.taxes = this.taxes * (1 - discountAmount / 100);
           this.totalamountdue = totalprice * (100 - discountAmount) / 100 - depositsAmount + this.taxes;
         }

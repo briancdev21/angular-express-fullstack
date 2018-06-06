@@ -16,7 +16,7 @@
     </thead>
     <tbody class="ngx-dnd-container" ngxDroppable>
 
-      <tr *ngFor="let productDetailInfo of productDetails; index as i" class="ngx-dnd-item has-handle" ngxDraggable>
+      <tr *ngFor="let productDetailInfo of _productDetails; index as i" class="ngx-dnd-item has-handle" ngxDraggable>
         
         <td class="handle-bar">
           <span ngxDragHandle class="handlebar">:</span>
@@ -29,7 +29,7 @@
         </td>
         <td class="sku">
           <div class="flex">
-            <img class="remove-btn" [ngClass]="{'hide': i == 0 && productDetails.length == 1 }" src="/assets/images/Trash Symbol.svg" (click)="removeProduct(i)"
+            <img class="remove-btn" [ngClass]="{'hide': i == 0 && _productDetails.length == 1 }" src="/assets/images/Trash Symbol.svg" (click)="removeProduct(i)"
             />
             <ng2-completer [disableInput]="productDetailInfo.readonly" (keyup)="keyListener($event, i)" [dataService]="skuService" placeholder="Type SKU here..." [minSearchLength]="0" (selected)="onSkuSelected($event, i)" [(ngModel)]="productDetailInfo.sku" ></ng2-completer>
           </div>

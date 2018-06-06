@@ -345,11 +345,12 @@ export default class AddInvoiceBodyComponent implements OnInit {
         this.saveInvoiceData.classificationId = 1;
       }
       if (typeof(this.saveInvoiceData.contactId) !== 'string') {
+        console.log('save invoice true case', this.saveInvoiceData);
         this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
           console.log('saved invoice: ', res);
+          this.router.navigate(['./sales/invoices']);
         });
       }
-      this.router.navigate(['./sales/invoices']);
     } else {
       this.showModal = true;
     }
