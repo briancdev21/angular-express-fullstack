@@ -45,7 +45,6 @@
               <span>Account type (*required)</span>
               <div class="account-type">
                 <select [(ngModel)]='businessType' #accountType (ngModelChange)="onAccountTypeChange(businessType)" [ngClass]="{'validation-required': invalidAccountType}" >
-                  <option value="" selected disabled class="default-option">Choose an account type</option>
 									<option value="PERSON">Individual</option>
                   <option value="BUSINESS">Business</option>
                 </select>
@@ -59,8 +58,8 @@
 
 					<div class=" tab-row">
             <div>
-              <span>Email</span>
-              <input placeholder="Enter email" [(ngModel)]="email">
+              <span>Email <span *ngIf="wrongEmailFormat" class="wrong-format"> : Wrong Email Format!</span></span>
+              <input placeholder="Enter email" [(ngModel)]="email" type="email" [ngClass]="{'validation-required': invalidContactEmail}"  >
             </div>
             <div>
               <span>Department</span>
@@ -92,18 +91,18 @@
               <div class="switch-bar">
                 <img src="assets/images/switch.png" *ngIf="switchIconShipping" (click)="clickIconShipping()">
                 <img src="assets/images/switch-off.png" *ngIf="!switchIconShipping" (click)="clickIconShipping()">
-                <span>Same as the customer profile</span>
+                <span>Same address for the billing address</span>
               </div>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="address">
+            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="address" [ngClass]="{'validation-required': invalidAddress}" >
 
             <div class="city-state">
-              <input placeholder="Enter City" [(ngModel)]="city">
-              <input placeholder="Enter State" [(ngModel)]="province">
+              <input placeholder="Enter City" [(ngModel)]="city" [ngClass]="{'validation-required': invalidCity}" >
+              <input placeholder="Enter State" [(ngModel)]="province" [ngClass]="{'validation-required': invalidProvince}" >
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country" [(ngModel)]="country">
-              <input placeholder="Enter Zipcode" [(ngModel)]="postalCode">
+              <input placeholder="Enter Country" [(ngModel)]="country" [ngClass]="{'validation-required': invalidCountry}" >
+              <input placeholder="Enter Zipcode" [(ngModel)]="postalCode" [ngClass]="{'validation-required': invalidPostalCode}" >
             </div>
           </div>
 
@@ -216,8 +215,11 @@
 						<textarea placeholder="Enter customer notes here" [(ngModel)]="notes"></textarea>
 					</div>
           <div class="btn-section" >
-            <button class="cancel-btn" (click)="addContactModalCollapsed=true; showAddContactModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
+            <button *ngIf="tabActiveFirst" class="cancel-btn" (click)="addContactModalCollapsed=true; showAddContactModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
               Cancel
+            </button>
+            <button *ngIf="!tabActiveFirst" class="cancel-btn" (click)="tabActiveFirst=true; tabActiveSecond=false;"  >
+              Back
             </button>
             <button class="save-btn" (click)="clickSaveContact()"  >
               Save contact

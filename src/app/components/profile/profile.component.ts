@@ -4,6 +4,7 @@ import { BreadcrumbBarComponent } from './breadcrumbbar/breadcrumbbar.component'
 import { Router, ActivatedRoute } from '@angular/router';
 import { CrmService } from '../../services/crm.service';
 import * as moment from 'moment';
+import { SharedService } from '../../services/shared.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,13 +21,14 @@ export class ProfileComponent implements OnInit {
 
   menuCollapsed = true;
   contactInfoIndex: any;
+  contactsList: any;
 
   userInfo = {
   };
   public chartSetData: Array<Object> = [
     {
       title: 'Account Rating',
-      percentage: 10,
+      percentage: 0,
     },
     {
       title: 'Loyalty Rating',
@@ -46,45 +48,6 @@ export class ProfileComponent implements OnInit {
     * which will be displayed on the side. Icon is in html
     */
   public timelineData: Array<Object> = [
-    {
-      title: 'Meeting',
-      icon: 'fa-home',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends\
-       in marketing and products. Below please find the currnet status of the sale',
-      timelineBtnColor: 'green-btn',
-      buttontitle: 'More Info',
-      date: '2018-1-9',
-      buttonClickEventHandlerName: 'getMoreInfo'
-    },
-    {
-      title: 'Send Document to Mike',
-      icon: 'fa-file-text-o',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends\
-       in marketing and products. Below please find the currnet status of the sale',
-      timelineBtnColor: 'lime-btn',
-      buttontitle: 'Download document',
-      date: '2018-1-9',
-      buttonClickEventHandlerName: 'downloadDoc'
-    },
-    {
-      title: 'Coffee Break',
-      icon: 'fa-coffee',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends\
-       in marketing and products. Below please find the currnet status of the sale',
-      timelineBtnColor: 'blue-btn',
-      buttontitle: 'Read more',
-      date: '2018-1-8',
-      buttonClickEventHandlerName: 'readMoreCoffee'
-    },
-    {
-      title: 'Phone with Jeronimo',
-      icon: 'fa-phone',
-      content: 'Following step to complete',
-      timelineBtnColor: 'orange-btn',
-      buttontitle: 'Download doc',
-      date: '2018-1-7',
-      buttonClickEventHandlerName: 'downloadDoc'
-    }
   ];
   public cards =
     {
@@ -268,7 +231,7 @@ export class ProfileComponent implements OnInit {
   savingContact: any;
 
   dataRetrieved = false;
-  constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService) {
+  constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService, private sharedService: SharedService) {
     this.contactInfoIndex = this.route.snapshot.paramMap.get('id');
     this.crmService.getIndividualContact(this.contactInfoIndex).subscribe(res => {
       console.log('contactData: ', res.data);
@@ -290,22 +253,56 @@ export class ProfileComponent implements OnInit {
                         res.data.billingAddress.province + ', ' +
                         res.data.billingAddress.postalCode,
         keywords: res.data.keywordIds ? res.data.keywordIds : [],
-        followers: res.data.followers ? res.data.followers : []
+        followers: res.data.followers ? res.data.followers : [],
+        note: res.data.note
       };
-      // Update cards info
-      // this.cards = res.data.score;
 
       // Update donut chart info
       this.chartSetData[0]['percentage'] = res.data.accountRating;
       this.chartSetData[1]['percentage'] = res.data.loyaltyRating;
       this.chartSetData[2]['percentage'] = res.data.dealsRatio;
       this.chartSetData[3]['percentage'] = res.data.serviceRatio;
+
+      this.crmService.getContactActivities(this.currentContact.id).subscribe(response => {
+        const activities = response.results;
+        this.timelineData = activities;
+        // Update time line data
+        this.timelineData.map(a => {
+          a['title'] = a['type'];
+          a['content'] = a['detail'];
+          a['buttontitle'] = 'More Info';
+          a['date'] = moment(a['createdAt']).format('YYYY-MM-DD');
+          a['buttonClickEventHandlerName'] = 'getMoreInfo';
+
+          switch (a['title']) {
+            case 'NOTE':
+              a['icon'] = 'fa-file-text-o';
+              a['timelineBtnColor'] = 'lime-btn';
+              break;
+            case 'EMAIL':
+              a['icon'] = 'fa fa-envelope-o';
+              a['timelineBtnColor'] = 'orangered-btn';
+            break;
+            case 'CALL':
+              a['icon'] = 'fa fa-phone';
+              a['timelineBtnColor'] = 'orange-btn';
+            break;
+            default:
+              a['icon'] = 'fa fa-home';
+              break;
+          }
+        });
+      });
+    });
+
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res;
     });
   }
 
   ngOnInit() {
     this.activity = {
-      title: 'Notes',
+      title: 'NOTE',
       subject: undefined,
       contact: undefined,
       content: ''
@@ -333,15 +330,15 @@ export class ProfileComponent implements OnInit {
     };
 
     switch (nitem.title) {
-      case 'Notes':
+      case 'NOTE':
         nitem.icon = 'fa-file-text-o';
         nitem.timelineBtnColor = 'lime-btn';
         break;
-      case 'Email':
+      case 'EMAIL':
         nitem.icon = 'fa fa-envelope-o';
         nitem.timelineBtnColor = 'orangered-btn';
       break;
-      case 'Call':
+      case 'CALL':
         nitem.icon = 'fa fa-phone';
         nitem.timelineBtnColor = 'orange-btn';
       break;
@@ -349,6 +346,17 @@ export class ProfileComponent implements OnInit {
         nitem.icon = 'fa fa-home';
         break;
     }
+
+    const savingActivityInfo = {
+      'contactId':  nitem.contact ? parseInt(nitem.contact, 10) : undefined,
+      'emailSubject': nitem.subject,
+      'leadId': this.currentContact.id,
+      'type': nitem.title,
+      'detail': nitem.content
+    };
+
+    this.crmService.createContactActivity(this.currentContact.id, savingActivityInfo).subscribe( res => {
+    });
     this.timelineData.unshift(nitem);
     this.activity.subject = undefined;
     this.activity.contact = undefined;
@@ -388,9 +396,18 @@ export class ProfileComponent implements OnInit {
       'facebook': 'string',
       'twitter': 'string'
     };
+    this.savingContact.keywordIds = userInfo.keywordIds;
     this.savingContact.followers = ['string'];
     delete this.savingContact.createdAt;
     delete this.savingContact.updatedAt;
+
+    // remove Null fields to save lead
+    if (this.savingContact.sourceId === null) {
+      delete this.savingContact.sourceId;
+    }
+    if (this.savingContact.phoneNumbers.secondary === null) {
+      delete this.savingContact.phoneNumbers.secondary;
+    }
     this.crmService.updateIndividualContact(this.currentContact.id, this.savingContact).subscribe( res => {
       console.log('success: ', res);
     });

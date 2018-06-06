@@ -30,6 +30,13 @@ export class ContactsComponent implements OnInit {
 
   constructor( private filterService: FilterService,  private router: Router, private crmService: CrmService  ) {
     this.filterAvaliableTo = 'everyone';
+    this.filterService.saveClicked.subscribe( data => {
+      if (data) {
+        this.crmService.getContactsList().subscribe(res => {
+          this.contactsListInfo = res.results;
+        });
+      }
+    });
   }
 
   public filters  = {

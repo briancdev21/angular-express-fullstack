@@ -5,6 +5,7 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 import { CrmService } from '../../../../services/crm.service';
 import * as moment from 'moment';
 import { SharedService } from '../../../../services/shared.service';
+import { FilterService } from '../filter.service';
 
 @Component({
   selector: 'app-addcontact',
@@ -21,8 +22,8 @@ export class AddContactComponent implements OnInit {
   @Input() contactOwners;
   @Input() contactStatus;
   @Output() addToContactsList: EventEmitter<any> = new EventEmitter;
-  searchStr: string;
-  captain: string;
+  searchStr = '';
+  captain = '';
   captainSource: string;
   dataService: CompleterData;
   searchData = [
@@ -48,13 +49,14 @@ export class AddContactComponent implements OnInit {
   typeAccountTypeChange = false;
   keywords: any;
   contactAssociation: any;
-  businessType: any;
+  businessType = 'PERSON';
   tabActiveFirst = true;
   tabActiveSecond = false;
   invalidFirstname = false;
   invalidLastname = false;
   invalidBusinessName = false;
   invalidAccountType = false;
+  invalidContactEmail = false;
   firstName = '';
   lastName = '';
   businessName = '';
@@ -66,6 +68,11 @@ export class AddContactComponent implements OnInit {
   invalidDefaultCurrency = false;
   invalidDefaultPricing = false;
   invalidPrimaryNumber = false;
+  invalidAddress = false;
+  invalidCity = false;
+  invalidProvince = false;
+  invalidCountry = false;
+  invalidPostalCode = false;
   sourceValue = true;
   newEmail = '';
   newAddress = '';
@@ -84,7 +91,7 @@ export class AddContactComponent implements OnInit {
   Test2: any;
   currencyList = [];
   keywordsIdList = [];
-  headContact: any;
+  headContact = '';
   jobTitle = '';
   email = '';
   notes = '';
@@ -101,10 +108,12 @@ export class AddContactComponent implements OnInit {
   sourcesList = [];
   sourcesNameList = [];
   selectedSourceId: any;
-  businessAssociation: any;
+  businessAssociation = '';
   newContact: any;
+  wrongEmailFormat = false;
 
-  constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService) {
+  constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService
+    , private filterService: FilterService ) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.keywords = [];
     this.contactAssociation = ['Danny Shibley', 'John Stephen'];
@@ -143,6 +152,12 @@ export class AddContactComponent implements OnInit {
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
+    this.invalidContactEmail = false;
+    this.invalidAddress = false;
+    this.invalidCity = false;
+    this.invalidProvince = false;
+    this.invalidCountry = false;
+    this.invalidPostalCode = false;
     if (event === 'PERSON') {
       this.typeAccountTypeChange = false;
     } else if (event === 'BUSINESS') {
@@ -178,8 +193,16 @@ export class AddContactComponent implements OnInit {
     this.invalidBusinessName = false;
     this.invalidAccountType = false;
     this.invalidPrimaryNumber = false;
+    this.invalidContactEmail = false;
+    this.invalidAddress = false;
+    this.invalidCity = false;
+    this.invalidProvince = false;
+    this.invalidCountry = false;
+    this.invalidPostalCode = false;
+    this.wrongEmailFormat = !this.checkEmailValidation(this.email);
     if (this.businessType === 'PERSON') {
-      if (this.firstName && this.lastName && this.primaryNumber) {
+      if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
+        this.city && this.province && this.country && this.postalCode) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -192,9 +215,28 @@ export class AddContactComponent implements OnInit {
         if (!this.primaryNumber) {
           this.invalidPrimaryNumber = true;
         }
+        if (!this.email || this.wrongEmailFormat) {
+          this.invalidContactEmail = true;
+        }
+        if (!this.address) {
+          this.invalidAddress = true;
+        }
+        if (!this.city) {
+          this.invalidCity = true;
+        }
+        if (!this.province) {
+          this.invalidProvince = true;
+        }
+        if (!this.country) {
+          this.invalidCountry = true;
+        }
+        if (!this.postalCode) {
+          this.invalidPostalCode = true;
+        }
       }
     } else if (this.businessType === 'BUSINESS') {
-      if (this.businessName) {
+      if (this.businessName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
+        this.city && this.province && this.country && this.postalCode) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -203,6 +245,24 @@ export class AddContactComponent implements OnInit {
         }
         if (!this.primaryNumber) {
           this.invalidPrimaryNumber = true;
+        }
+        if (!this.email || this.wrongEmailFormat) {
+          this.invalidContactEmail = true;
+        }
+        if (!this.address) {
+          this.invalidAddress = true;
+        }
+        if (!this.city) {
+          this.invalidCity = true;
+        }
+        if (!this.province) {
+          this.invalidProvince = true;
+        }
+        if (!this.country) {
+          this.invalidCountry = true;
+        }
+        if (!this.postalCode) {
+          this.invalidPostalCode = true;
         }
       }
     } else {
@@ -216,6 +276,38 @@ export class AddContactComponent implements OnInit {
       if (!this.primaryNumber) {
         this.invalidPrimaryNumber = true;
       }
+      if (!this.email || this.wrongEmailFormat) {
+        this.invalidContactEmail = true;
+      }
+      if (!this.address) {
+        this.invalidAddress = true;
+      }
+      if (!this.city) {
+        this.invalidCity = true;
+      }
+      if (!this.province) {
+        this.invalidProvince = true;
+      }
+      if (!this.country) {
+        this.invalidCountry = true;
+      }
+      if (!this.postalCode) {
+        this.invalidPostalCode = true;
+      }
+    }
+    // check the switch and make billing address same as shipping address
+    if (this.switchIconShipping) {
+      this.billingAddress = this.address;
+      this.billingCity = this.city;
+      this.billingProvince = this.province;
+      this.billingCountry = this.country;
+      this.billingPostalCode = this.postalCode;
+    } else {
+      this.billingAddress = '';
+      this.billingCity = '';
+      this.billingProvince = '';
+      this.billingCountry = '';
+      this.billingPostalCode = '';
     }
   }
 
@@ -234,9 +326,17 @@ export class AddContactComponent implements OnInit {
         this.invalidBusinessName = false;
         this.invalidAccountType = false;
         this.invalidPrimaryNumber = false;
+        this.invalidContactEmail = false;
+        this.invalidAddress = false;
+        this.invalidCity = false;
+        this.invalidProvince = false;
+        this.invalidCountry = false;
+        this.invalidPostalCode = false;
+        this.wrongEmailFormat = this.checkEmailValidation(this.email);
 
         if (this.businessType === 'PERSON') {
-          if (this.firstName && this.lastName && this.primaryNumber) {
+          if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
+            this.city && this.province && this.country && this.postalCode) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
             break;
@@ -254,9 +354,28 @@ export class AddContactComponent implements OnInit {
             if (!this.primaryNumber) {
               this.invalidPrimaryNumber = true;
             }
+            if (!this.email || this.wrongEmailFormat) {
+              this.invalidContactEmail = true;
+            }
+            if (!this.address) {
+              this.invalidAddress = true;
+            }
+            if (!this.city) {
+              this.invalidCity = true;
+            }
+            if (!this.province) {
+              this.invalidProvince = true;
+            }
+            if (!this.country) {
+              this.invalidCountry = true;
+            }
+            if (!this.postalCode) {
+              this.invalidPostalCode = true;
+            }
           }
         } else if (this.businessType === 'BUSINESS') {
-          if (this.businessName) {
+          if (this.businessName  && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
+            this.city && this.province && this.country && this.postalCode) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
           } else {
@@ -269,6 +388,24 @@ export class AddContactComponent implements OnInit {
             }
             if (!this.primaryNumber) {
               this.invalidPrimaryNumber = true;
+            }
+            if (!this.email || this.wrongEmailFormat) {
+              this.invalidContactEmail = true;
+            }
+            if (!this.address) {
+              this.invalidAddress = true;
+            }
+            if (!this.city) {
+              this.invalidCity = true;
+            }
+            if (!this.province) {
+              this.invalidProvince = true;
+            }
+            if (!this.country) {
+              this.invalidCountry = true;
+            }
+            if (!this.postalCode) {
+              this.invalidPostalCode = true;
             }
           }
         } else {
@@ -286,11 +423,94 @@ export class AddContactComponent implements OnInit {
           if (!this.primaryNumber) {
             this.invalidPrimaryNumber = true;
           }
+          if (!this.email || this.wrongEmailFormat) {
+            this.invalidContactEmail = true;
+          }
+          if (!this.address) {
+            this.invalidAddress = true;
+          }
+          if (!this.city) {
+            this.invalidCity = true;
+          }
+          if (!this.province) {
+            this.invalidProvince = true;
+          }
+          if (!this.country) {
+            this.invalidCountry = true;
+          }
+          if (!this.postalCode) {
+            this.invalidPostalCode = true;
+          }
         }
         break;
       }
     }
   }
+
+  checkEmailValidation(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  clearInputs() {
+    this.address = '';
+    this.city = '';
+    this.province = '';
+    this.postalCode = '';
+    this.country = '';
+    this.typeAccountTypeChange = false;
+    this.keywords = [];
+    this.contactAssociation = undefined;
+    this.businessType = 'PERSON';
+    this.tabActiveFirst = true;
+    this.tabActiveSecond = false;
+    this.invalidFirstname = false;
+    this.invalidLastname = false;
+    this.invalidBusinessName = false;
+    this.invalidAccountType = false;
+    this.firstName = '';
+    this.lastName = '';
+    this.businessName = '';
+    this.defaultTerm = '';
+    this.defaultCurrency = '';
+    this.defaultPricing = '';
+    this.primaryNumber = '';
+    this.invalidDefaultTerm = false;
+    this.invalidDefaultCurrency = false;
+    this.invalidDefaultPricing = false;
+    this.invalidPrimaryNumber = false;
+    this.sourceValue = true;
+    this.currencyList = [];
+    this.keywordsIdList = [];
+    this.headContact = undefined;
+    this.jobTitle = '';
+    this.email = '';
+    this.notes = '';
+    this.billingAddress = '';
+    this.billingCity = '';
+    this.billingProvince = '';
+    this.billingCountry = '';
+    this.billingPostalCode = '';
+    this.secondaryNumber = '';
+    this.selectedSourceId = undefined;
+    this.businessAssociation = undefined;
+    this.invalidContactEmail = false;
+    this.wrongEmailFormat = false;
+    this.invalidAddress = false;
+    this.invalidCity = false;
+    this.invalidProvince = false;
+    this.invalidCountry = false;
+    this.invalidPostalCode = false;
+  }
+
+  // clean(obj) {
+  //   for (const propName in obj) {
+  //     if (obj[propName] === null || obj[propName] === undefined || isNaN(obj[propName])) {
+  //       delete obj[propName];
+  //     }
+  //   }
+  // }
+
   clickSaveContact() {
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
@@ -311,8 +531,8 @@ export class AddContactComponent implements OnInit {
           'person': {
             'firstName': this.firstName,
             'lastName': this.lastName,
-            'jobTitle': this.jobTitle,
-            'department': this.captain,
+            'jobTitle': this.jobTitle ? this.jobTitle : 'a',
+            'department': this.captain ? this.captain : 'a',
             'businessAssociation': parseInt(this.businessAssociation, 10),
           },
           'shippingAddress': {
@@ -356,8 +576,8 @@ export class AddContactComponent implements OnInit {
           ],
           'type': this.businessType,
           'person': {
-            'jobTitle': this.jobTitle,
-            'department': this.captain,
+            'jobTitle': this.jobTitle ? this.jobTitle : 'a',
+            'department': this.captain ? this.captain : 'a',
             'businessAssociation': parseInt(this.businessAssociation, 10),
           },
           'business': {
@@ -397,11 +617,24 @@ export class AddContactComponent implements OnInit {
           'lastContacted': moment().format('YYYY-MM-DD')
         };
       }
+
+      if (isNaN(this.newContact.sourceId)) {
+        delete this.newContact.sourceId;
+      }
+
+      if (isNaN(this.newContact.person.businessAssociation)) {
+        delete this.newContact.person.businessAssociation;
+      }
+
+      // this.clean(this.newContact);
+      console.log('new contact: ', this.newContact);
       this.crmService.createContact(JSON.stringify(this.newContact)).subscribe(data => {
         this.addContactModalCollapsed = true;
         this.showAddContactModal = false;
         this.tabActiveFirst = true;
         this.tabActiveSecond = false;
+        this.clearInputs();
+        this.filterService.saveClicked.next(true);
       });
     } else {
       if (!this.defaultCurrency) {

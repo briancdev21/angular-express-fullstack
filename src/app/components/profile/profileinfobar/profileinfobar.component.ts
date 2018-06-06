@@ -92,7 +92,7 @@ export class ProfileInfoBarComponent implements OnInit {
     // const binary = this.convertDataURIToBinary(this.croppedImage);
     // console.log('binary', binary);
 
-    this.crmService.uploadProfileImage(3, uploadData).subscribe(res => {
+    this.crmService.uploadContactProfileImage(3, uploadData).subscribe(res => {
       console.log('imga result: ', res);
       this.userInfo.profileLink = res.data.fulfillmentValue.pictureURI;
       this.changedUserInfo.emit({'data': this.userInfo});
