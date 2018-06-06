@@ -93,7 +93,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
 
     this.crmService.uploadLeadProfileImage(this.currentLead.id, uploadData).subscribe(res => {
       console.log('imga result: ', res);
-      this.userInfo.profileLink = res.data.fulfillmentValue.pictureURI;
+      // this.userInfo.profileLink = res.data.fulfillmentValue.pictureURI;
       this.changedUserInfo.emit({'data': this.userInfo});
     });
   }

@@ -2,7 +2,7 @@
   <app-breadcrumbbar [userInfo]='userInfo' ></app-breadcrumbbar>
   <div class="content">
     <div class="profile-info" *ngIf="userInfo">
-      <app-profileinfobar [userInfo]='userInfo' (changedUserInfo)="onChangedUserInfo($event)" [currentLead]="currentLead"></app-profileinfobar>
+      <app-leadprofileinfobar [userInfo]='userInfo' (changedUserInfo)="onChangedUserInfo($event)" [currentLead]="currentLead"></app-leadprofileinfobar>
     </div>
     <div style="flex: 5;border-left:solid 1px #D3D3D3; display: flex; flex-flow: column;" >
       <div style="display: flex; flex: 1;" >
