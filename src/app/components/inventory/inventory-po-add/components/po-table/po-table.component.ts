@@ -119,7 +119,7 @@ export class POTableComponent implements OnInit {
     if ( discount === undefined ) { discount = 0; }
     if ( product.unitprice !== undefined && product.quantity !== undefined ) {
       product.total = product.unitprice * product.quantity * (100 - discount)  / 100;
-      this.priceChange.emit(null);
+      this.updatePurchaseOrderProduct(index);
     }
   }
 
@@ -158,6 +158,7 @@ export class POTableComponent implements OnInit {
     };
     this.sharedService.updatePurchaseOrderProduct(this.po_id, this.productDetails[index].purchaseOrderProductId, this.poProductModel)
     .subscribe(res => {
+      this.priceChange.emit(null);
     });
   }
 }
