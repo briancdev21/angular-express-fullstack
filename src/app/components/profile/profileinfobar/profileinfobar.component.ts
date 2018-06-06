@@ -16,6 +16,7 @@ import { CrmService } from '../../../services/crm.service';
 export class ProfileInfoBarComponent implements OnInit {
 
   @Input() userInfo;
+  @Input() currentContact;
   @Output() changedUserInfo = new EventEmitter;
   showModal = false;
   eventData: any;
@@ -91,8 +92,9 @@ export class ProfileInfoBarComponent implements OnInit {
 
     // const binary = this.convertDataURIToBinary(this.croppedImage);
     // console.log('binary', binary);
+    console.log('current contact: ', this.currentContact);
 
-    this.crmService.uploadContactProfileImage(3, uploadData).subscribe(res => {
+    this.crmService.uploadContactProfileImage(this.currentContact.id, uploadData).subscribe(res => {
       console.log('imga result: ', res);
       this.userInfo.profileLink = res.data.fulfillmentValue.pictureURI;
       this.changedUserInfo.emit({'data': this.userInfo});
