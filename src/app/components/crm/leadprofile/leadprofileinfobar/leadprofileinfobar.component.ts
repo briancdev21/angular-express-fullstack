@@ -14,6 +14,7 @@ import { CrmService } from '../../../../services/crm.service';
 export class LeadProfileInfoBarComponent implements OnInit {
 
   @Input() userInfo;
+  @Input() currentLead;
   @Output() changedUserInfo = new EventEmitter;
   showModal = false;
   eventData: any;
@@ -90,7 +91,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
     // const binary = this.convertDataURIToBinary(this.croppedImage);
     // console.log('binary', binary);
 
-    this.crmService.uploadLeadProfileImage(3, uploadData).subscribe(res => {
+    this.crmService.uploadLeadProfileImage(this.currentLead.id, uploadData).subscribe(res => {
       console.log('imga result: ', res);
       this.userInfo.profileLink = res.data.fulfillmentValue.pictureURI;
       this.changedUserInfo.emit({'data': this.userInfo});
