@@ -22,7 +22,7 @@ export class InventoryBodyComponent {
       this.discountAmount = this.po_mock.discount.value;
       this.discountType = this.po_mock.discount.unit;
       this.freightcosts = this.po_mock.freightCost;
-      this.po_mock.status = 'SENT';
+      this.po_mock.status = 'OPEN';
     }
   }
 
@@ -80,9 +80,7 @@ export class InventoryBodyComponent {
   errors = {
     termChanged: false,
     locationChanged: false,
-    customerChanged: false,
-    memoChanged: false,
-    noteToSupplierChanged: false
+    customerChanged: false
   };
   showErrors = false;
 
@@ -117,6 +115,9 @@ export class InventoryBodyComponent {
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
     this.contactId = this.contactList[selectedIndex].id;
     this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id, 10);
+    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
+      console.log('mock_data term', data.data);
+    });
   }
 
   onSelectLocation(selectedLocationId: string) {
@@ -194,7 +195,11 @@ export class InventoryBodyComponent {
   }
 
   savePO() {
-    this.router.navigate(['./inventory/stock-control']);
+    this.po_mock.status = 'SENT';
+    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
+      console.log('mock_data term', data.data);
+      this.router.navigate(['./inventory/stock-control']);
+    });
   }
 
   onDueDateChanged(event) {
@@ -204,29 +209,17 @@ export class InventoryBodyComponent {
     });
   }
   onNoteChanged(event) {
-    if (event) {
-      this.errors.noteToSupplierChanged = true;
-
       this.po_mock.supplierNote = event;
       this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
         console.log('mock_data term', data.data);
       });
-    } else {
-      this.errors.noteToSupplierChanged = false;
-    }
   }
 
   onMemoChanged(event) {
-    if (event) {
-      this.errors.memoChanged = true;
-
       this.po_mock.internalMemo = event;
       this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
         console.log('mock_data term', data.data);
       });
-    } else {
-      this.errors.memoChanged = false;
-    }
   }
 
   onShippingAddressChanged(event) {

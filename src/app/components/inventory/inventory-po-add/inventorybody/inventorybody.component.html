@@ -22,10 +22,10 @@
     <div class="sub__info">
       <div class="flex" >
         <div class="internal-memo">
-          <app-po-internalmemo [ngClass]="{'has-error': showErrors&&!errors.memoChanged}" (memoChanged)="onMemoChanged($event)"  ></app-po-internalmemo>
+          <app-po-internalmemo (memoChanged)="onMemoChanged($event)"  ></app-po-internalmemo>
         </div>
         <div class="notetosupplier">
-            <app-po-notetosupplier [ngClass]="{'has-error': showErrors&&!errors.noteToSupplierChanged}" (noteChanged)="onNoteChanged($event)" ></app-po-notetosupplier>
+          <app-po-notetosupplier (noteChanged)="onNoteChanged($event)" ></app-po-notetosupplier>
         </div>
       </div>
       <div class="bill-count" >
