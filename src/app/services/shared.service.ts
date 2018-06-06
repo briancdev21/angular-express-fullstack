@@ -454,26 +454,4 @@ export class SharedService {
     return this.http.delete<any>(url);
   }
 
-
-  // Sources
-  getSources(): Observable<any> {
-    const url = `${apiUrl}organization/sources`;
-    return this.http.get(url);
-  }
-
-  createSource (body): Observable<any> {
-    const url = `${apiUrl}organization/sources`;
-    return this.http.post<any>(url, body);
-  }
-
-  getIndividualSource(id): Observable<any>  {
-    const url = `${apiUrl}organization/sources/${id}`;
-    return this.http.get(url);
-  }
-
-  deleteSource (id): Observable<any> {
-    const url = `${apiUrl}organization/sources/${id}`;
-    return this.http.delete<any>(url);
-  }
-
 }
