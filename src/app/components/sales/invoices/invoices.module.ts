@@ -40,6 +40,7 @@ import { InTermsOfInvoiceComponent } from './components/in-terms-of-invoice/in-t
 import { InSubTotalServicesComponent } from './components/in-subtotalservices/in-subtotalservices.component';
 import { InDepositsCreditsComponent } from './components/in-deposits-credits/in-deposits-credits.component';
 import { MultiEmailSelectComponent } from './components/multiemailselect/multiemailselect.component';
+import { EsTableComponent } from './components/es-table/es-table.component';
 
 import { AddInvoiceComponent } from './addinvoice/addinvoice.component';
 import { AddEstimateComponent } from './addestimate/addestimate.component';
@@ -94,6 +95,7 @@ import EstimateProfileFooterComponent from './estimateprofile/estimateprofilefoo
     InSubTotalServicesComponent,
     InDepositsCreditsComponent,
     MultiEmailSelectComponent,
+    EsTableComponent,
     AddInvoiceComponent,
     AddEstimateComponent,
     InvoiceProfileComponent,
@@ -149,7 +151,8 @@ import EstimateProfileFooterComponent from './estimateprofile/estimateprofilefoo
     InTermsOfInvoiceComponent,
     InSubTotalServicesComponent,
     InDepositsCreditsComponent,
-    MultiEmailSelectComponent
+    MultiEmailSelectComponent,
+    EsTableComponent
   ],
   providers: [FilterService]
 })

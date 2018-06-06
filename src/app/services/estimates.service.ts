@@ -66,8 +66,8 @@ export class EstimatesService {
     return this.http.put<any>(url, body);
   }
 
-  deleteEstimateProduct (id, productId, body): Observable<any> {
+  deleteEstimateProduct (id, productId): Observable<any> {
     const url = `${apiUrl}sales/estimates/${id}/products/${productId}`;
-    return this.http.delete<any>(url, body);
+    return this.http.delete<any>(url);
   }
 }

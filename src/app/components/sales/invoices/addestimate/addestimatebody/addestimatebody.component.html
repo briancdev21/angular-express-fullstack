@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="product__table">
-      <app-in-table [(productDetails)]="productDetails" (priceChange)="onPriceChanged()" ></app-in-table>
+      <app-es-table [(productDetails)]="productDetails" [estimateId]="currentInvoiceId" (priceChange)="onPriceChanged()" ></app-es-table>
     </div>
     <div class="sub__info">
       <div class="notes-activity">
