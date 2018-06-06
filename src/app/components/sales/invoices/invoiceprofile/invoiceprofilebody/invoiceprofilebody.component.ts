@@ -7,6 +7,7 @@ import { InvoicesService } from '../../../../../services/invoices.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InvoiceModel } from '../../../../../models/invoice.model';
 import { FilterService } from '../../filter.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-invoiceprofilebody',
@@ -153,6 +154,24 @@ export default class InvoiceProfileBodyComponent implements OnInit {
         this.categoryList = data.results;
         const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
         this.currentCategory = this.categoryList[categoryPos].name;
+      });
+
+      this.invoicesService.getInvoiceProducts(this.currentInvoiceId).subscribe(data => {
+        console.log('invoiceproducts: ', data);
+        const invoiceProducts = data.results;
+        // this.productDetails = invoiceProducts.map( i => {
+        //   i['serviceDate'] = moment(i.updatedAt).format('YYYY-MM-DD');
+        //   i['unitprice'] = i.unitPrice;
+        //   i['discount'] = i.discount.value;
+        // });
+
+        invoiceProducts.forEach(i => {
+          i['serviceDate'] = moment(i.updatedAt).format('YYYY-MM-DD');
+          i['unitprice'] = i.unitPrice;
+          i['discount'] = i.discount.value;
+        });
+        this.productDetails = invoiceProducts;
+        console.log('product details 123: ', this.productDetails);
       });
 
       this.saveInvoiceData = res.data;

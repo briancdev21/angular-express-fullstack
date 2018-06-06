@@ -29,7 +29,7 @@ export class InTableComponent implements OnInit {
   private originSkus = [];
   public unitpriceEditable = false;
   taxRateOptions = [];
-  selectedTaxRateId: number;
+  // selectedTaxRateId: number;
   invoiceProductModel: any;
 
   serviceDate: any;
@@ -64,7 +64,7 @@ export class InTableComponent implements OnInit {
 
     this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
 
-    this.invoicesService.deleteInvoiceProduct(this.invoiceId, this.productDetails[index].purchaseOrderProductId).subscribe(res => {
+    this.invoicesService.deleteInvoiceProduct(this.invoiceId, this.productDetails[index].id).subscribe(res => {
       this.productDetails.splice(index, 1);
       this.priceChange.emit(null);
     });
@@ -82,7 +82,7 @@ export class InTableComponent implements OnInit {
       this.productDetails[index].sku = item.originalObject.sku;
       this.productDetails[index].readonly = true;
       this.productDetails[index].taxRateId = this.taxRateOptions[0].id;
-      this.selectedTaxRateId = this.taxRateOptions[0].id;
+      // this.selectedTaxRateId = this.taxRateOptions[0].id;
       this.productDetails[index].taxrate = this.taxRateOptions[0].rate;
       this.productDetails[index].supplierId = product.supplierId;
       this.productDetails[index].model = product.model;
@@ -98,8 +98,9 @@ export class InTableComponent implements OnInit {
         },
         quantity: 1,
       };
+      console.log('product details: ', this.productDetails);
       this.invoicesService.addInvoiceProduct(this.invoiceId, this.invoiceProductModel).subscribe(data => {
-        this.productDetails[index].purchaseOrderProductId = data.data.id;
+        this.productDetails[index].id = data.data.id;
       });
     });
     if (index === this.productDetails.length - 1) {
@@ -138,6 +139,13 @@ export class InTableComponent implements OnInit {
     if (e.target.value < 0) { e.target.value = undefined; }
   }
 
+  changedTaxRate(index, e) {
+    // this.selectedTaxRateId =  this.taxRateOptions[e.target.selectedIndex].id;
+    this.productDetails[index].taxrate = this.taxRateOptions[e.target.selectedIndex].rate;
+    this.productDetails[index].taxRateId = this.taxRateOptions[e.target.selectedIndex].id;
+    this.updatePurchaseOrderProduct(index);
+  }
+
   selectCreatedFrom(event) {
     this.serviceDate = event.value;
   }
@@ -148,15 +156,16 @@ export class InTableComponent implements OnInit {
 
     this.invoiceProductModel = {
       sku: this.productDetails[index].sku,
-      taxRateId: this.selectedTaxRateId,
+      taxRateId: parseInt(this.productDetails[index].taxRateId, 10),
       discount: {
         value: this.productDetails[index].discount,
         unit: 'PERCENT'
       },
-      recieved: 0,
+      received: 0,
       quantity: this.productDetails[index].quantity
     };
-    this.invoicesService.updateInvoiceProduct(this.invoiceId, this.productDetails[index].purchaseOrderProductId, this.invoiceProductModel).
+    console.log('invoice product model: ', this.invoiceProductModel);
+    this.invoicesService.updateInvoiceProduct(this.invoiceId, this.productDetails[index].id, this.invoiceProductModel).
     subscribe(res => {
     });
   }

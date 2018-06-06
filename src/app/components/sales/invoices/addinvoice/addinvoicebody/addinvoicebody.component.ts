@@ -139,7 +139,7 @@ export default class AddInvoiceBodyComponent implements OnInit {
     }
   ];
 
-  currentInvoiceId: number;
+  currentInvoiceId: any;
   saveInvoiceData: any;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
@@ -336,6 +336,7 @@ export default class AddInvoiceBodyComponent implements OnInit {
   }
 
   saveInvoice() {
+    console.log('save invoice: ', this.newCustomerName, this.newEmail, this.newClass, this.newCategory, this.newTermId);
     if (this.newCustomerName && this.newEmail && this.newClass && this.newCategory && this.newTermId) {
       if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
         this.saveInvoiceData.deposit = 0;
