@@ -215,7 +215,6 @@ export class ContactsListTableComponent implements OnInit {
     this.contactModalInfoCollapsed[index] = false;
     this.showContactModalInfo = false;
     this.showDeleteConfirmModal = true;
-    console.log('contact: ', contact, index);
   }
 
   confirmClone() {
@@ -227,7 +226,6 @@ export class ContactsListTableComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.contactsListInfo.splice(this.deletedRowIndex, 1);
     this.crmService.deleteIndividualContact(this.deletedRowIndex).subscribe(res => {
       this.crmService.getContactsList().subscribe(data => {
         this.contactsListInfo = data.results;

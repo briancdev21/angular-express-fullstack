@@ -120,5 +120,10 @@ export class CrmService {
     return this.http.put(url, body)
       .map((res) => res);
   }
+
+  convertLeadToContact(id) {
+    const url = `${apiUrl}crm/leads/${id}/contact-convert`;
+    return this.http.post(url, null);
+  }
 }
 

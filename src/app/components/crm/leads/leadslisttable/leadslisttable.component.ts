@@ -175,8 +175,8 @@ export class LeadsListTableComponent implements OnInit {
     this.showCloneConfirmModal = true;
   }
 
-  deleteRow(index) {
-    this.deletedRowIndex = index;
+  deleteRow(lead, index) {
+    this.deletedRowIndex = lead.id;
     this.leadModalInfoCollapsed[index] = false;
     this.showLeadModalInfo = false;
     this.showDeleteConfirmModal = true;
@@ -192,7 +192,20 @@ export class LeadsListTableComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.leadsListInfo.splice(this.deletedRowIndex, 1);
+    this.crmService.deleteIndividualLead(this.deletedRowIndex).subscribe(res => {
+      this.crmService.getLeadsList().subscribe(data => {
+        this.leadsListInfo = data.results;
+      });
+    });
+  }
+
+  convertToContact(lead) {
+    this.crmService.convertLeadToContact(lead.id).subscribe(res => {
+      console.log('converted: ', res);
+      this.crmService.getLeadsList().subscribe(data => {
+        this.leadsListInfo = data.results;
+      });
+    });
   }
 
   redirectTo(id) {

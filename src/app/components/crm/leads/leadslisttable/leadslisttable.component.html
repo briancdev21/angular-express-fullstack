@@ -29,7 +29,7 @@
           [ngClass]="{'show-lead-modal': leadModalInfoCollapsed[i], 'hide-lead-modal': !leadModalInfoCollapsed[i] }">
           <div class="dots-icon"><img src="assets/images/three-dots.png"></div>
           <div>
-            <div><a routerLink="/" ><img src="assets/images/Convert.png"><span>Convert</span></a></div>
+            <div (click)="convertToContact(lead); leadModalInfoCollapsed[i]=false; $event.stopPropagation()"><a ><img src="assets/images/Convert.png"><span>Convert</span></a></div>
             <div (click)="addLogModalCollapsed=false; 
                       showAddLogModal=true; 
                       leadModalInfoCollapsed[i]=false; 
@@ -41,7 +41,7 @@
           </div>
           <div>
             <div (click)="cloneRow(lead, i); $event.stopPropagation()"><img src="assets/images/Delete.png"><span>Clone</span></div>
-            <div (click)="deleteRow(i); $event.stopPropagation()"><img src="assets/images/Convert.png"><span>Delete</span></div>
+            <div (click)="deleteRow(lead, i); $event.stopPropagation()"><img src="assets/images/Convert.png"><span>Delete</span></div>
           </div>
           <div (click)="showModal=true; leadModalInfoCollapsed[i]=false; showLeadModalInfo=false; $event.stopPropagation()"><img src="assets/images/calendar with Edit.png"><span>Appointment</span></div>
         </div>
