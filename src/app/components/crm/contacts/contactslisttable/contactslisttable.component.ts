@@ -215,7 +215,6 @@ export class ContactsListTableComponent implements OnInit {
     this.contactModalInfoCollapsed[index] = false;
     this.showContactModalInfo = false;
     this.showDeleteConfirmModal = true;
-    console.log('contact: ', contact, index);
   }
 
   confirmClone() {
