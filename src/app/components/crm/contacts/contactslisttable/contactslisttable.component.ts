@@ -202,7 +202,7 @@ export class ContactsListTableComponent implements OnInit {
     // Remove empty/null field from object.
     Object.keys(contact).forEach((key) => (contact[key] == null) && delete contact[key]);
     Object.keys(contact.person).forEach((key) => (contact.person[key] == null) && delete contact.person[key]);
-
+    Object.keys(contact.phoneNumbers).forEach((key) => (contact.phoneNumbers[key] == null) && delete contact.phoneNumbers[key]);
     this.clonedRowIndex = index;
     this.clonedRowContact = contact;
     this.contactModalInfoCollapsed[index] = false;
@@ -210,11 +210,12 @@ export class ContactsListTableComponent implements OnInit {
     this.showCloneConfirmModal = true;
   }
 
-  deleteRow(index) {
-    this.deletedRowIndex = index;
+  deleteRow(index, contact) {
+    this.deletedRowIndex = contact.id;
     this.contactModalInfoCollapsed[index] = false;
     this.showContactModalInfo = false;
     this.showDeleteConfirmModal = true;
+    console.log('contact: ', contact, index);
   }
 
   confirmClone() {
@@ -227,6 +228,11 @@ export class ContactsListTableComponent implements OnInit {
 
   confirmDelete() {
     this.contactsListInfo.splice(this.deletedRowIndex, 1);
+    this.crmService.deleteIndividualContact(this.deletedRowIndex).subscribe(res => {
+      this.crmService.getContactsList().subscribe(data => {
+        this.contactsListInfo = data.results;
+      });
+    });
   }
 
   clickOutsideInfo(i) {

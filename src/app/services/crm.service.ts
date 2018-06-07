@@ -103,6 +103,11 @@ export class CrmService {
     return this.http.get(url);
   }
 
+  deleteIndividualContact(id): Observable<any>  {
+    const url = `${apiUrl}crm/contacts/${id}`;
+    return this.http.delete(url);
+  }
+
   createContactActivity (id, body): Observable<any> {
     const url = `${apiUrl}crm/contacts/${id}/recent-activities`;
     return this.http.post(url, body, this.options)

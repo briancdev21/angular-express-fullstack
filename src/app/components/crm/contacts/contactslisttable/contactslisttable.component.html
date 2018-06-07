@@ -60,7 +60,7 @@
             </div>
             <div>
               <div (click)="cloneRow(contact, i); $event.stopPropagation();"><img src="assets/images/Delete.png"><span>Clone</span></div>
-              <div (click)="deleteRow(i); $event.stopPropagation();"><img src="assets/images/Convert.png"><span>Delete</span></div>
+              <div (click)="deleteRow(i, contact); $event.stopPropagation();"><img src="assets/images/Convert.png"><span>Delete</span></div>
             </div>
             <div (click)="showModal=true; contactModalInfoCollapsed[i]=false; showContactModalInfo=false; $event.stopPropagation();"><img src="assets/images/calendar with Edit.png"><span>Appointment</span></div>
           </div>
