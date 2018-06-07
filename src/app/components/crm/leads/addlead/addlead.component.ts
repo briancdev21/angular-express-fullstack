@@ -550,11 +550,11 @@ export class AddLeadComponent implements OnInit {
             'country': this.country
           },
           'billingAddress': {
-            'address': this.billingAddress,
-            'city': this.billingCity,
-            'province': this.billingProvince,
-            'postalCode': this.billingPostalCode,
-            'country': this.billingCountry
+            'address': this.switchIconShipping ? this.address : this.billingAddress,
+            'city': this.switchIconShipping ? this.city : this.billingCity,
+            'province': this.switchIconShipping ? this.province : this.billingProvince,
+            'postalCode': this.switchIconShipping ? this.postalCode : this.billingPostalCode,
+            'country': this.switchIconShipping ? this.country : this.billingCountry
           },
           'email':  this.email,
           'socialMediaUrl': {
@@ -603,11 +603,11 @@ export class AddLeadComponent implements OnInit {
             'country': this.country
           },
           'billingAddress': {
-            'address': this.billingAddress,
-            'city': this.billingCity,
-            'province': this.billingProvince,
-            'postalCode': this.billingPostalCode,
-            'country': this.billingCountry
+            'address': this.switchIconShipping ? this.address : this.billingAddress,
+            'city': this.switchIconShipping ? this.city : this.billingCity,
+            'province': this.switchIconShipping ? this.province : this.billingProvince,
+            'postalCode': this.switchIconShipping ? this.postalCode : this.billingPostalCode,
+            'country': this.switchIconShipping ? this.country : this.billingCountry
           },
           'email':  this.email,
           'socialMediaUrl': {
