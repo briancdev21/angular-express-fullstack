@@ -53,6 +53,32 @@ export class CrmDashboardComponent implements OnInit {
       value: 8
     }];
 
+  public morrisSalesDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
+
+  public morrisSalesDonutInfo = [
+    {
+      label: 'New',
+      value: 49,
+    }, {
+      label: 'Follow Up',
+      value: 35
+    }, {
+      label: 'Seen',
+      value: 8
+    }, {
+      label: 'Demo',
+      value: 25
+    }, {
+      label: 'Negotiation',
+      value: 35
+    }, {
+      label: 'Won',
+      value: 15
+    }, {
+      label: 'Lost',
+      value: 5
+    }];
+
   public topCustomers = [
     {
       customerName: 'John Moss',
@@ -201,5 +227,8 @@ export class CrmDashboardComponent implements OnInit {
     if (total) {
       this.conversionRate = Math.floor(wonLead[0].value * 100 / total);
     }
+    this.morrisDonutInfo.forEach(ele => {
+      ele.value = Math.floor(ele.value * 100 / total);
+    });
   }
 }

@@ -205,6 +205,15 @@ export class ProgressOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    // change to percentage
+    const arr = this.morrisDonutInfo.map( v => v.value);
+    let total = 0;
+    arr.forEach(element => {
+      total = total + element;
+    });
+    this.morrisDonutInfo.forEach(ele => {
+      ele.value = Math.floor(ele.value * 100 / total);
+    });
   }
 
   toggleMenubar(data: boolean) {

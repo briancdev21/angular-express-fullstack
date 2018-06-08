@@ -88,14 +88,24 @@
         <div class="pipeline-ratio">
           <div class="card sales-pipeline">
             <div class="card-header">
-              <span>SALES PIPELINE</span>
-              <select [(ngModel)]="salesPipelineTime">
+              <span>LEAD CONVERSION</span>
+              <select [(ngModel)]="donutTimePeriod">
                 <option value="week">This Week</option>
                 <option value="month">This Month</option>
                 <option value="quarter">This Quarter</option>
                 <option value="year">This Year</option>
               </select>
-              <app-pipelinechart></app-pipelinechart>
+            </div>
+            <div class="card-content">
+              <div class="card-content-left" >
+                <app-pipelinechart [morrisSalesDonutInfo]="morrisSalesDonutInfo" [morrisSalesDonutColors]="morrisSalesDonutColors"></app-pipelinechart>
+              </div>
+              <div class="card-centent-right">
+                <div class="row" *ngFor="let person of morrisSalesDonutInfo; let i = index">
+                  <div class="square" [ngStyle]="{'background-color': morrisSalesDonutColors[i]}"></div>
+                  <span>{{person.label}}</span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card conversion-card">

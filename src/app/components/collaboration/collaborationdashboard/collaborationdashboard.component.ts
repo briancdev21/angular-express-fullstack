@@ -157,6 +157,29 @@ export class CollaborationDashboardComponent implements OnInit {
       value: 3,
     }];
 
+  public workOrderDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
+
+  public workOrderDonutInfo = [
+    {
+      label: 'Steve Rogers',
+      value: 49,
+    }, {
+      label: 'James Toa',
+      value: 35
+    }, {
+      label: 'Smith Will',
+      value: 8
+    }, {
+      label: 'Alpha Beta',
+      value: 12
+    }, {
+      label: 'Bruce Banner',
+      value: 8
+    }, {
+      label: 'Other',
+      value: 9
+    }];
+
   public activitiesInfo = [
     {
       imgUrl: 'assets/users/user1.png',
@@ -229,5 +252,14 @@ export class CollaborationDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.pendingOrders.map( p => p.timeLapsed = moment(p.timeLapsed).format('MMMM DD, YYYY'));
+    // change to percentage
+    const arr = this.morrisDonutInfo.map( v => v.value);
+    let total = 0;
+    arr.forEach(element => {
+      total = total + element;
+    });
+    this.morrisDonutInfo.forEach(ele => {
+      ele.value = Math.floor(ele.value * 100 / total);
+    });
   }
 }

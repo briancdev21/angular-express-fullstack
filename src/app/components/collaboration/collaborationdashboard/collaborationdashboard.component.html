@@ -103,6 +103,15 @@
               </select>
             </div>
             <div class="card-content">
+              <div class="card-content-left" >
+                <app-workorderdonutchart [workOrderDonutInfo]="workOrderDonutInfo" [workOrderDonutColors]="workOrderDonutColors"></app-workorderdonutchart>
+              </div>
+              <div class="card-centent-right">
+                <div class="row" *ngFor="let project of workOrderDonutInfo; let i = index">
+                  <div class="square" [ngStyle]="{'background-color': workOrderDonutColors[i]}"></div>
+                  <span>{{project.label}}</span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card">

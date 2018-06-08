@@ -186,6 +186,13 @@ export class SalesDashboardComponent implements OnInit {
   ];
 
   ngOnInit() {
-
+    const arr = this.morrisDonutInfo.map( v => v.value);
+    let total = 0;
+    arr.forEach(element => {
+      total = total + element;
+    });
+    this.morrisDonutInfo.forEach(ele => {
+      ele.value = Math.floor(ele.value * 100 / total);
+    });
   }
 }

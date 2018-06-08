@@ -19,7 +19,8 @@ export class MorrisDonutComponent implements OnInit {
       element: 'm_donut_chart',
       data: this.morrisDonutInfo,
       resize: true,
-      colors: this.morrisDonutColors
+      colors: this.morrisDonutColors,
+      formatter: function (x) { return x + '%'; }
     });
   }
 }
