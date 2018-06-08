@@ -87,13 +87,11 @@ export class InventoryBodyComponent {
   onSave() {
     console.log('mock:', this.ad_mock);
     this.showErrors = true;
-    // tslint:disable-next-line:curly
-    // if (this.ad_mock.internalMemo !== null && this.ad_mock.adjustedLocation !== null) {
-      this.showSendPOModal = true;
-    // }
+    if (this.ad_mock.adjustedLocation !== undefined) {
+      this.router.navigate(['./inventory/stock-control']);
+    }
   }
   savePO() {
-    this.router.navigate(['./inventory/stock-control']);
   }
 
 }

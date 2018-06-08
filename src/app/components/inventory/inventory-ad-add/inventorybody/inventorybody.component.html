@@ -23,7 +23,6 @@
         </app-ad-locationtofrom>
         <div class="internal-memo">
           <app-tr-internalmemo 
-            [ngClass]="{'has-error': showErrors&&!errors.memoChanged}" 
             (memoChanged)="onMemoChanged($event)" ></app-tr-internalmemo>
         </div>
       </div>
