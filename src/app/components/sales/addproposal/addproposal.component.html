@@ -14,7 +14,7 @@
       <tab tabTitle="CLIENT DETAILS" [(active)]="tabActiveFirst">
         <div class="tab-one">
           <div class="name-col tab-row">
-            <div>
+            <div *ngIf="customerList">
               <span>Customer Name (*required)</span>
               <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectCustomer($event)" [ngClass]="{'validation-required-name': invalidCustomerName}" [searchStr]="selectName"></app-in-customer-name>
             </div>
@@ -58,7 +58,7 @@
                   <span>Same as customer</span>
                 </div>
               </div>
-              <app-in-customer-name [userList]="projectManagerList" (selectedUser)="onSelectProjectManagementContact($event)" [searchStr]="selectProject"></app-in-customer-name>
+              <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectProjectManagementContact($event)" [searchStr]="selectProject"></app-in-customer-name>
             </div>
 
             <div>
@@ -70,14 +70,14 @@
                   <span>Same as customer</span>
                 </div>
               </div>
-              <app-in-customer-name [userList]="accountReceivableList" (selectedUser)="onSelectAccountReceivable($event)" [searchStr]="selectReceivable"></app-in-customer-name>
+              <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectAccountReceivable($event)" [searchStr]="selectReceivable"></app-in-customer-name>
             </div>
           </div>
 
           <div class="other-pri tab-row">
             <div>
               <span>Other Associations</span>
-              <app-in-customer-name [userList]="associationList" (selectedUser)="onSelectAssociation($event)" [searchStr]="selectAssociation"></app-in-customer-name>
+              <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectAssociation($event)" [searchStr]="selectAssociation"></app-in-customer-name>
             </div>
             <div>
               <span>Proposal Pricing (*required)</span>
@@ -98,7 +98,11 @@
             <div>
               <span>Project Type</span>
               <div>
-                <app-in-customer-name [userList]="projectTypeList" (selectedUser)="onSelectProjectType($event)" [searchStr]="selectType"></app-in-customer-name>
+                <!-- <app-in-customer-name [userList]="projectTypeList" (selectedUser)="onSelectProjectType($event)" [searchStr]="selectType"></app-in-customer-name> -->
+                <select [(ngModel)]="proposalDetails.projectType" [ngClass]="{'validation-required': invalidProjectType}">
+                  <option value="" disabled>Choose Project Type</option>
+                  <option *ngFor="let project of projectTypeList" [value]="project.id">{{project.name}}</option>
+                </select>
               </div>
             </div>
           </div>

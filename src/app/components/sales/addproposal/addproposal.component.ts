@@ -4,6 +4,7 @@ import { MultiKeywordSelectComponent } from '../../profile/multikeywordselect/mu
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { ScheduleMultiKeywordComponent } from '../proposal/schedulemultikeyword/schedulemultikeyword.component';
 import { InCreatedDateFieldComponent } from '../invoices/components/in-createddatefield/in-createddatefield.component';
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
   selector: 'app-addproposal',
@@ -56,7 +57,7 @@ export class AddProposalComponent implements OnInit {
     zipcode: '',
     pricing: '',
     projectName: '',
-    projectType: '',
+    projectType: undefined,
     collaborators: [
     ],
     accountManager: [
@@ -102,12 +103,9 @@ export class AddProposalComponent implements OnInit {
     }]
   };
 
-  customerList = ['customer1', 'customer2', 'customer3'];
-  projectManagerList = ['Manager1', 'Manager2', 'Manager3'];
-  accountReceivableList = ['Account Receivable 1', 'Account Receivable 2', 'Account Receivable 3'];
-  associationList = ['Associatioin 1', 'Associatioin 2', 'Associatioin 3'];
-  proposalPricingList = ['Friend & Family', 'Royalty Program', 'Retail', 'Builders Program', 'Wholesale', 'Cost'];
-  projectTypeList = ['Project Type 1', 'Project Type 2', 'Project Type 3'];
+  customerList = [];
+  proposalPricingList = [];
+  projectTypeList = [];
   scopeEditorContent = 'Test';
 
   sidebarCollapsed = true;
@@ -129,6 +127,7 @@ export class AddProposalComponent implements OnInit {
   invalidCustomerName = false;
   invalidCollaborators = false;
   invalidPricing = false;
+  invalidProjectType = false;
   invalidProjectName = false;
   invalidAddress = false;
   invalidCity = false;
@@ -185,13 +184,28 @@ export class AddProposalComponent implements OnInit {
   isAutocompleteUpdated4 = false;
   isAutocompleteUpdated5 = false;
 
-  constructor(private completerService: CompleterService) {
+  constructor(private completerService: CompleterService, private sharedService: SharedService) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
       comp.accountEditable = false;
       comp.projectEditable = false;
       comp.designerEditable = false;
+    });
+
+    this.sharedService.getContacts()
+    .subscribe(data => {
+      console.log('userlist: ', data);
+      this.customerList = data;
+    });
+
+    this.sharedService.getPricingCategories().subscribe(res => {
+      this.proposalPricingList = res.results;
+      // this.proposalPricingList.map(p => p['price'] = 0);
+    });
+
+    this.sharedService.getProjectTypes().subscribe(res => {
+      this.projectTypeList = res.results;
     });
   }
 
@@ -393,9 +407,10 @@ export class AddProposalComponent implements OnInit {
       this.invalidState = false;
       this.invalidCountry = false;
       this.invalidZipcode = false;
+      this.invalidProjectType = false;
       if (this.proposalDetails.contactName && this.proposalDetails.collaborators.length && this.proposalDetails.pricing
         && this.proposalDetails.projectName && this.proposalDetails.shippingAddress && this.proposalDetails.city
-        && this.proposalDetails.state && this.proposalDetails.country && this.proposalDetails.zipcode) {
+        && this.proposalDetails.state && this.proposalDetails.country && this.proposalDetails.zipcode && this.invalidProjectType) {
           this.tabActiveSecond = true;
           this.tabActiveFirst = false;
           this.tabActiveThird = false;
@@ -426,6 +441,9 @@ export class AddProposalComponent implements OnInit {
         }
         if (!this.proposalDetails.zipcode) {
           this.invalidZipcode = true;
+        }
+        if (!this.proposalDetails.projectType) {
+          this.invalidProjectType = true;
         }
         setTimeout(() => {
           this.tabActiveSecond = false;

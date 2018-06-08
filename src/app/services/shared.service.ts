@@ -510,4 +510,19 @@ export class SharedService {
     const url = `${environment.apiUrl}/inventory/suppliers/${supplierId}`;
     return this.http.delete<any>(url);
   }
+
+  getProjectTypes(): Observable<any> {
+    const url = `${apiUrl}organization/project-types`;
+    return this.http.get(url);
+  }
+
+  createProjectType (body): Observable<any> {
+    const url = `${apiUrl}organization/project-types`;
+    return this.http.post<any>(url, body);
+  }
+
+  deleteProjectType (id): Observable<any> {
+    const url = `${apiUrl}organization/project-types/${id}`;
+    return this.http.delete<any>(url);
+  }
 }

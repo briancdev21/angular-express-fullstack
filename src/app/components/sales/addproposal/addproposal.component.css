@@ -130,7 +130,7 @@ tab img {
 	display: flex;
 	justify-content: space-between;
 	flex-direction: row;
-	margin-bottom: 0px;
+	margin-bottom: 5px;
 }
 
 .tab-row:first-child {
@@ -415,4 +415,8 @@ app-schedulemultikeyword {
 
 .type-here {
 	font-size: 11px !important;
+}
+
+.shipping-address {
+	margin-top: 5px;
 }
