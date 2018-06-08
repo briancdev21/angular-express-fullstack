@@ -94,9 +94,19 @@
             <ul>
               <li *ngFor="let user of projectInformation.projectManager; let i = index">{{user.name}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
               <li style="background: none; width: 100%; margin: 0;">
-                <input autocomplete [config]="config2" [items]="items2"
+                <!-- <input autocomplete [config]="config2" [items]="items2"
                   (inputChangedEvent)="onInputChangedEvent($event)"
-                  (selectEvent)="onSelectProjectManager($event)">
+                  (selectEvent)="onSelectProjectManager($event)"> -->
+                <ng-select *ngIf="isAutocompleteUpdated2" [items]="items2"
+                  bindLabel="config2.sourceField"
+                  [clearSearchOnAdd]="false"
+                  (add)="onSelectProjectManager($event)" >
+                </ng-select>
+                <ng-select *ngIf="!isAutocompleteUpdated2" [items]="items2"
+                  bindLabel="config2.sourceField"
+                  [clearSearchOnAdd]="false"
+                  (add)="onSelectProjectManager($event)">
+                </ng-select>
               </li>
             </ul>
           </div>
@@ -115,9 +125,19 @@
             <ul>
               <li *ngFor="let user of projectInformation.accountManager; let i = index">{{user.name}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
               <li style="background: none; width: 100%; margin: 0;">
-                <input autocomplete [config]="config2" [items]="items2"
+                <!-- <input autocomplete [config]="config2" [items]="items2"
                   (inputChangedEvent)="onInputChangedEvent($event)"
-                  (selectEvent)="onSelectAccountManager($event)">
+                  (selectEvent)="onSelectAccountManager($event)"> -->
+                <ng-select *ngIf="isAutocompleteUpdated3" [items]="items2"
+                  bindLabel="config2.sourceField"
+                  [clearSearchOnAdd]="false"
+                  (add)="onSelectAccountManager($event)" >
+                </ng-select>
+                <ng-select *ngIf="!isAutocompleteUpdated3" [items]="items2"
+                  bindLabel="config2.sourceField"
+                  [clearSearchOnAdd]="false"
+                  (add)="onSelectAccountManager($event)">
+                </ng-select>
               </li>
             </ul>
           </div>

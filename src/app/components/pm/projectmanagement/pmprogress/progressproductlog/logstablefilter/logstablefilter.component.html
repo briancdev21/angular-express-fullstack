@@ -51,9 +51,19 @@
         <ul>
           <li *ngFor="let tag of tagsList; let i = index">{{tag}}<span (click)="removeTag(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;">
-            <input autocomplete [config]="config2" [items]="items2"
+            <!-- <input autocomplete [config]="config2" [items]="items2"
             (inputChangedEvent)="onInputChangedEvent($event)"
-            (selectEvent)="onSelectTag($event)">
+            (selectEvent)="onSelectTag($event)"> -->
+            <ng-select *ngIf="isAutocompleteUpdated2" [items]="items2"
+              bindLabel="config2.sourceField"
+              [clearSearchOnAdd]="false"
+              (add)="onSelectTag($event)" >
+            </ng-select>
+            <ng-select *ngIf="!isAutocompleteUpdated2" [items]="items2"
+              bindLabel="config2.sourceField"
+              [clearSearchOnAdd]="false"
+              (add)="onSelectTag($event)">
+            </ng-select>
           </li>
         </ul>
       </div>

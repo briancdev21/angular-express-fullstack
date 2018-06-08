@@ -16,8 +16,8 @@ import { PgProductLogTableComponent } from './pgproductlogtable/pgproductlogtabl
 import { LogsTableFilterComponent } from './logstablefilter/logstablefilter.component';
 import { ProgressProductLogComponent } from './progressproductlog.component';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
 import { ClickOutsideModule } from 'ng4-click-outside';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
@@ -39,8 +39,8 @@ import { ClickOutsideModule } from 'ng4-click-outside';
     ProfileCmpModule,
     Ng2CompleterModule,
     CommonCmpModule,
-    AutocompleteModule,
-    ClickOutsideModule
+    ClickOutsideModule,
+    NgSelectModule
   ],
   exports: [
     PgProductLogTableComponent,

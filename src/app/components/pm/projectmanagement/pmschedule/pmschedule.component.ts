@@ -15,10 +15,10 @@ import * as moment from 'moment';
 export class PmScheduleComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
-  public tasks = [];
-  private showDetailedTaskModal = false;
-  private newAddedTask: any;
-  private temp: number;
+  tasks = [];
+  showDetailedTaskModal = false;
+  newAddedTask: any;
+  temp: number;
   subscription: any;
   updatingTaskPosition = [];
   public pmBoardTableData = [

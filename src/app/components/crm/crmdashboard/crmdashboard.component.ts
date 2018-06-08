@@ -188,6 +188,7 @@ export class CrmDashboardComponent implements OnInit {
   conversionRate = undefined;
   conversionRatioTime = 'month';
   salesPipelineTime = 'month';
+  salesConversionTime = 'month';
   wonVsLost = (this.conversionRatio.wonDeals - this.conversionRatio.lostDeals) * 100 / this.conversionRatio.newLeads;
 
   ngOnInit() {

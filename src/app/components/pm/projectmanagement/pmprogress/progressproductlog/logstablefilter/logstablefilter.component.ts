@@ -32,14 +32,21 @@ export class LogsTableFilterComponent implements OnInit {
   selectBrand = '';
   applyClicked = false;
   filters = {};
-  config2: any = {'placeholder': 'Type here', 'sourceField': ''};
-  items2 = ['tag1', 'tag2'];
+  items2: any[] = [
+    {id: 0, label: 'item1'},
+    {id: 1, label: 'item2'},
+    {id: 2, label: 'item3'},
+    {id: 3, label: 'item4'},
+  ];
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   inputChange: any = [];
   filteredOrdersList = [];
   backUpOrdersList = [];
   filteredInventoryList = [];
   backUpInventoryList = [];
   selectedItem: any = '';
+  editable = false;
+  isAutocompleteUpdated2 = false;
 
   constructor( private filterService: FilterService, private ref: ChangeDetectorRef ) {
   }
@@ -83,6 +90,7 @@ export class LogsTableFilterComponent implements OnInit {
     const item = this.tagsList[i];
     this.items2.push(item);
     this.tagsList.splice(i, 1);
+    this.isAutocompleteUpdated2 = !this.isAutocompleteUpdated2;
   }
 
   filterTxt (arr, searchKey) {

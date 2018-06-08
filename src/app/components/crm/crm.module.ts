@@ -22,7 +22,6 @@ import { LeadsCmpModule } from './leads/leads.module';
 import { ContactsCmpModule } from './contacts/contacts.module';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
 
 @NgModule({
   declarations: [
