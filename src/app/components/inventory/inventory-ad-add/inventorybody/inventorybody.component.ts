@@ -8,7 +8,7 @@ import { AdjustmentModel } from '../../../../models/adjustment.model';
   templateUrl: './inventorybody.component.html',
   styleUrls: ['./inventorybody.component.css']
 })
-export class InventoryBodyComponent {
+export class InventoryBodyComponent implements OnDestroy {
   userList = ['John', 'Smith', 'jackie'];
 
   projects = ['task1', 'task2', 'task3'];
@@ -59,9 +59,9 @@ export class InventoryBodyComponent {
   }
 
   ngOnDestroy() {
-    if (this.saveBtnClicked) {
-      console.log('ng destroy called');
-    }
+    console.log('ng destroy called');
+    this.sharedService.deleteInventoryAdjustment(this.ad_mock.id).subscribe(() => {
+    });
   }
   onSelectLocation(event) {
     this.errors.locationChanged = true;
