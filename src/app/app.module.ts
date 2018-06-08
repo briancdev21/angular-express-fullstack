@@ -58,6 +58,7 @@ import { ProductsService } from './services/inventory/products.service';
 import { SuppliersService } from './services/suppliers.service';
 import { AuthGuard } from './services/authguard.service';
 import { EstimatesService } from './services/estimates.service';
+import { ProposalsService } from './services/proposals.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -121,6 +122,7 @@ import { EstimatesService } from './services/estimates.service';
     EstimatesService,
     SuppliersService,
     ProductsService,
+    ProposalsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
