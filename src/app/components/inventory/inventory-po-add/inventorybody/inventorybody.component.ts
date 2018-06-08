@@ -187,9 +187,7 @@ export class InventoryBodyComponent {
     this.showErrors = true;
     if (this.po_mock.term !== undefined
       && this.contactId !== undefined
-      && this.po_mock.location !== undefined
-      && this.po_mock.supplierNote
-      && this.po_mock.internalMemo) {
+      && this.po_mock.location !== undefined) {
       this.showSendPOModal = true;
     }
   }
