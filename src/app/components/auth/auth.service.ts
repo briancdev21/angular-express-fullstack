@@ -10,12 +10,11 @@ import { Router } from '@angular/router';
 
 export class AuthService {
   auth0 = new auth0.WebAuth({
-    clientID: '5cG8b1OSQZ0XD3HxI3uaPuTK6q3dUpZz',
-    domain: 'koridor.auth0.com',
+    clientID: 'kW7LPxzpyBUYXaYRqxHA3pf7QaLnN00G',
+    domain: 'koridor-development.auth0.com',
     responseType: 'token id_token',
     grant_type: 'implicit',
     audience: 'http://localhost:8080',
-    // redirectUri: 'http://localhost:8080/api/v1/authentication/callback',
     redirectUri: 'http://localhost:4200/home',
     scope: 'openid admin'
   });
