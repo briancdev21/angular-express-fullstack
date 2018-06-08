@@ -4,14 +4,15 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable()
 
 export class AuthService {
   auth0 = new auth0.WebAuth({
-    clientID: 'kW7LPxzpyBUYXaYRqxHA3pf7QaLnN00G',
-    domain: 'koridor-development.auth0.com',
+    clientID: environment.authClientId,
+    domain: environment.authDomain,
     responseType: 'token id_token',
     grant_type: 'implicit',
     audience: 'http://localhost:8080',

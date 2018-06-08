@@ -5,7 +5,9 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 // helpers
-import { apiHeaders, apiUrl } from '../config';
+import { apiHeaders } from '../config';
+import { environment } from '../../environments/environment';
+
 
 // rxjs
 import { Observable } from 'rxjs/Observable';
