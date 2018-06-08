@@ -251,6 +251,8 @@ export class LeadProfileComponent implements OnInit {
           a['buttontitle'] = 'More Info';
           a['date'] = moment(a['createdAt']).format('YYYY-MM-DD');
           a['buttonClickEventHandlerName'] = 'getMoreInfo';
+          a['subject'] = a['emailSubject'];
+          // a['contact'] = a['']
 
           switch (a['title']) {
             case 'NOTE':

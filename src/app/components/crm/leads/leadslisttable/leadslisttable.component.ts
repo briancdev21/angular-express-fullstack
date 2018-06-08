@@ -4,6 +4,7 @@ import { FilterService } from '../filter.service';
 import * as _ from 'lodash';
 import { CrmService } from '../../../../services/crm.service';
 import * as moment from 'moment';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-leadslisttable',
@@ -33,6 +34,8 @@ export class LeadsListTableComponent implements OnInit {
   clonedRowIndex: number;
   deletedRowIndex: number;
   sortLeadStatusArr: any;
+  currentLeadId: any;
+  contactsList: any;
 
   activity: {
     title: string;
@@ -48,12 +51,24 @@ export class LeadsListTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
-  constructor( private filterService: FilterService, private router: Router, private crmService: CrmService ) {
-
+  constructor( private filterService: FilterService, private router: Router, private crmService: CrmService,
+     private sharedService: SharedService ) {
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res;
+    });
   }
 
   ngOnInit() {
+    this.activity = {
+      title: 'NOTE',
+      subject: undefined,
+      contact: undefined,
+      content: ''
+    };
+  }
 
+  tabChanged(event) {
+    this.activity.title = event.tabTitle;
   }
 
   selectedFilterEventHandler(filteredList) {
@@ -70,6 +85,14 @@ export class LeadsListTableComponent implements OnInit {
   openLeadModal(index) {
      this.leadModalInfoCollapsed[index] = true;
 
+  }
+
+  openLog(lead, i) {
+    this.addLogModalCollapsed = false;
+    this.showAddLogModal = true;
+    this.leadModalInfoCollapsed[i] = false;
+    this.showLeadModalInfo = false;
+    this.currentLeadId = lead.id;
   }
 
   sortArray(field) {
@@ -143,19 +166,34 @@ export class LeadsListTableComponent implements OnInit {
     };
 
     switch (nitem.title) {
-      case 'Notes':
+      case 'NOTE':
         nitem.icon = 'fa-file-text-o';
+        nitem.timelineBtnColor = 'lime-btn';
         break;
-      case 'Email':
+      case 'EMAIL':
         nitem.icon = 'fa fa-envelope-o';
+        nitem.timelineBtnColor = 'orangered-btn';
       break;
-      case 'Call':
+      case 'CALL':
         nitem.icon = 'fa fa-phone';
+        nitem.timelineBtnColor = 'orange-btn';
       break;
       default:
         nitem.icon = 'fa fa-home';
         break;
     }
+
+    const savingActivityInfo = {
+      'contactId':  nitem.contact ? parseInt(nitem.contact, 10) : undefined,
+      'emailSubject': nitem.subject,
+      'leadId': this.currentLeadId,
+      'type': nitem.title,
+      'detail': nitem.content
+    };
+
+    this.crmService.createLeadActivity(this.currentLeadId, savingActivityInfo).subscribe( res => {
+    });
+    this.activity.subject = undefined;
   }
 
   cloneRow(lead, index) {

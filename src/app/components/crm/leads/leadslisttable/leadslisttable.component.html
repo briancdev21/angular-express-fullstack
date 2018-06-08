@@ -30,10 +30,7 @@
           <div class="dots-icon"><img src="assets/images/three-dots.png"></div>
           <div>
             <div (click)="convertToContact(lead); leadModalInfoCollapsed[i]=false; $event.stopPropagation()"><a ><img src="assets/images/Convert.png"><span>Convert</span></a></div>
-            <div (click)="addLogModalCollapsed=false; 
-                      showAddLogModal=true; 
-                      leadModalInfoCollapsed[i]=false; 
-                      showLeadModalInfo=false;
+            <div (click)="openLog(lead, i);
                       $event.stopPropagation()">
                       <img src="assets/images/phone log.png">
                       <span>Add a log</span>
@@ -61,28 +58,30 @@
   </div>
   <div class="content-modal">
     <div class="editor" >
-      <tabs >
-        <tab tabTitle="Notes"  >
+      <tabs (currentTabChange)="tabChanged($event); emailsubject.value='' " >
+        <tab tabTitle="NOTE"  >
           <textarea placeholder="Start tying..." #textarea1 (input)="activity.content=textarea1.value" (keyup.enter)="addNewTimelineItem(); textarea1.value=''" ></textarea>
         </tab>
-        <tab tabTitle="Email" class="tab-email" >
+        <tab tabTitle="EMAIL" class="tab-email" >
           <div>
             <input placeholder="Subject" #emailsubject (input)="activity.subject=emailsubject.value"  />
             <select #emailcontacts (change)="activity.contact=emailcontacts.value">
-              <option value="firstContact" >
-                Choose Contact Associated
+              <option>Select Contact</option>
+              <option [value]="contact.id" *ngFor="let contact of contactsList" >
+                {{contact.person.firstName}} {{contact.person.lastName}}
               </option>
             </select>
           </div>
-          <textarea  #textarea2 (input)="activity.content=textarea2.value" (keyup.enter)="addNewTimelineItem(); textarea2.value=''; emailsubject.value='' " ></textarea>
+          <textarea placeholder="Start tying..." #textarea2 (input)="activity.content=textarea2.value" (keyup.enter)="addNewTimelineItem(); textarea2.value=''; emailsubject.value='' " ></textarea>
         </tab>
-        <tab tabTitle="Call" class="tab-call" >
-          <select #callcontacts (change)="activity.contact=callcontacts.selectedValue" >
-            <option value="first contact">
-                Choose contact associated
+        <tab tabTitle="CALL" class="tab-call" >
+          <select #callcontacts (change)="activity.contact=callcontacts.value" >
+            <option>Select Contact</option>
+            <option [value]="contact.id" *ngFor="let contact of contactsList" >
+              {{contact.person.firstName}} {{contact.person.lastName}}
             </option>
           </select>
-          <textarea #textarea3 (input)="activity.content=textarea3.value" (keyup.enter)="addNewTimelineItem(); textarea3.value=''"></textarea>
+          <textarea placeholder="Start tying..." #textarea3 (input)="activity.content=textarea3.value" (keyup.enter)="addNewTimelineItem(); textarea3.value=''"></textarea>
         </tab>
       </tabs>
     </div>

@@ -261,7 +261,7 @@ tabs {
   padding: 15px 20px;
   min-height: 150px;
   outline: none;
-  color: #D3D3D3;
+  color: #95989a;
   border: none;
   resize: vertical;
 }
@@ -310,17 +310,17 @@ tab select {
 
 .tab-email input {
   padding: 5px 20px 4px;
-  color: #D3D3D3;
+  color: #95989a;
 }
 
 .tab-call select {
   width: 100%;
   background-size: 2%;
-  color: #D3D3D3
+  color: #95989a
 }
 
 .tab-email select {
-  color: #D3D3D3;
+  color: #95989a;
 }
 
 
