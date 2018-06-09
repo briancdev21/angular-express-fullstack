@@ -69,22 +69,19 @@ export class AddProposalComponent implements OnInit {
   };
 
   userInfo = {
-    name: 'John Moss',
-    role: 'Vice President / Sales Department',
-    profileLink: 'assets/users/John Moss.jpg',
-    email: 'john.moss@gmail.com',
-    primaryphone: '4038935433',
-    mobilephone: '4037101212',
-    shippingaddress: '2222 Crescent Hill Dr SW',
-    city: 'Calgary',
-    state: 'AB',
-    country: 'Canada',
-    zipcode: 'T3C 0J4',
-    billingaddress: '2893 Crescent Hill Dr SW Calgary, AB T3C 0J4',
+    name: '',
+    role: '',
+    profileLink: '',
+    email: '',
+    primaryphone: '',
+    mobilephone: '',
+    shippingaddress: '',
+    city: '',
+    state: '',
+    country: '',
+    zipcode: '',
+    billingaddress: '',
     keywords: [
-      'control4',
-      'theatre',
-      'renovation'
     ],
     contactUser: 'Hayati Homes',
     subAssoUsers: [
@@ -151,28 +148,12 @@ export class AddProposalComponent implements OnInit {
   inputChanged: any = '';
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   items2: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items3: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items4: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items5: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
 
   invalidFirstname = false;
@@ -220,13 +201,13 @@ export class AddProposalComponent implements OnInit {
 
   clickIconManagement() {
     this.proposalDetails.projectManagementContact = (!this.switchIconManagement) ? this.proposalDetails.contactName : '';
-    this.selectProject = (!this.switchIconManagement) ? this.proposalDetails.contactName : '';
+    this.selectProject = (!this.switchIconManagement) ? this.getContactNameFromId( this.proposalDetails.contactName) : '';
     this.switchIconManagement = !this.switchIconManagement;
   }
 
   clickIconReceivable() {
     this.proposalDetails.accountReceivable = (!this.switchIconReceivable) ? this.proposalDetails.contactName : '';
-    this.selectReceivable = (!this.switchIconReceivable) ? this.proposalDetails.contactName : '';
+    this.selectReceivable = (!this.switchIconReceivable) ? this.getContactNameFromId( this.proposalDetails.contactName) : '';
     this.switchIconReceivable = !this.switchIconReceivable;
   }
 
@@ -295,6 +276,10 @@ export class AddProposalComponent implements OnInit {
     this.proposalDetails.designer.push({name: item.label, imageUrl: item.imageUrl });
   }
 
+  getContactNameFromId(id) {
+    const selectedContact = this.customerList.filter( c => c.id === id);
+    return selectedContact[0].person.firstName + ' ' + selectedContact[0].person.lastName;
+  }
 
   onInputChangedEvent(val: string) {
     this.inputChanged = val;
