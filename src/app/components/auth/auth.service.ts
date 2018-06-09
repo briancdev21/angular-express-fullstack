@@ -3,7 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 
@@ -19,8 +19,10 @@ export class AuthService {
     redirectUri: 'http://localhost:4200/home',
     scope: 'openid admin'
   });
+  returnUrl: string;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private route: ActivatedRoute) {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '../home';
   }
 
 
@@ -35,10 +37,10 @@ export class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
         this.setSession(authResult);
-        this.router.navigate(['../home']);
+        this.router.navigate([this.returnUrl]);
         console.log('without error: ', authResult);
       } else if (err) {
-        this.router.navigate(['../home']);
+        this.router.navigate(['../login']);
         console.log(err);
       }
     });

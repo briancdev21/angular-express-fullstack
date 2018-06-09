@@ -56,6 +56,7 @@ import { SharedService } from './services/shared.service';
 import { InvoicesService } from './services/invoices.service';
 import { ProductsService } from './services/inventory/products.service';
 import { SuppliersService } from './services/suppliers.service';
+import { AuthGuard } from './services/authguard.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -115,6 +116,7 @@ import { SuppliersService } from './services/suppliers.service';
     SharedService,
     ProductsService,
     SuppliersService,
+    AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
