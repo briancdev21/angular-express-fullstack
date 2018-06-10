@@ -167,7 +167,6 @@ export class AddContactComponent implements OnInit {
 
   clickIconShipping() {
     this.switchIconShipping = !this.switchIconShipping;
-    this.address = (this.switchIconShipping) ? 'test' : '';
   }
 
   onEnter() {
@@ -551,9 +550,9 @@ export class AddContactComponent implements OnInit {
           },
           'email':  this.email,
           'socialMediaUrl': {
-            'linkedIn': 'string',
-            'facebook': 'string',
-            'twitter': 'string'
+            'linkedIn': undefined,
+            'facebook': undefined,
+            'twitter': undefined
           },
           'phoneNumbers': {
             'primary': this.primaryNumber,
@@ -604,9 +603,9 @@ export class AddContactComponent implements OnInit {
           },
           'email':  this.email,
           'socialMediaUrl': {
-            'linkedIn': 'string',
-            'facebook': 'string',
-            'twitter': 'string'
+            'linkedIn': undefined,
+            'facebook': undefined,
+            'twitter': undefined
           },
           'phoneNumbers': {
             'primary': this.primaryNumber,

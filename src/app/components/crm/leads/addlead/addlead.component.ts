@@ -558,9 +558,9 @@ export class AddLeadComponent implements OnInit {
           },
           'email':  this.email,
           'socialMediaUrl': {
-            'linkedIn': 'string',
-            'facebook': 'string',
-            'twitter': 'string'
+            'linkedIn': undefined,
+            'facebook': undefined,
+            'twitter': undefined
           },
           'phoneNumbers': {
             'primary': this.primaryNumber,
@@ -611,9 +611,9 @@ export class AddLeadComponent implements OnInit {
           },
           'email':  this.email,
           'socialMediaUrl': {
-            'linkedIn': 'string',
-            'facebook': 'string',
-            'twitter': 'string'
+            'linkedIn': undefined,
+            'facebook': undefined,
+            'twitter': undefined
           },
           'phoneNumbers': {
             'primary': this.primaryNumber,
