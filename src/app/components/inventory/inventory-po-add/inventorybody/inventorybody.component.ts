@@ -110,7 +110,6 @@ export class InventoryBodyComponent {
 
   onSelectUser(selectedIndex: string) {
     console.log('selected user:', selectedIndex);
-    this.errors.customerChanged = true;
 
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
     this.contactId = this.contactList[selectedIndex].id;
@@ -186,7 +185,6 @@ export class InventoryBodyComponent {
   onSave() {
     this.showErrors = true;
     if (this.po_mock.term !== undefined
-      && this.contactId !== undefined
       && this.po_mock.location !== undefined) {
       this.showSendPOModal = true;
     }
