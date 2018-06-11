@@ -289,6 +289,11 @@ export class SharedService {
     return this.http.post<any>(url, body);
   }
 
+  getPurchaseOrders (): Observable<any> {
+    const url = `${apiUrl}inventory/purchase-orders`;
+    return this.http.get<any>(url);
+  }
+
   getPurchaseOrder (id): Observable<any> {
     const url = `${apiUrl}inventory/purchase-orders/${id}`;
     return this.http.get<any>(url);
@@ -353,6 +358,10 @@ export class SharedService {
     const url = `${apiUrl}inventory/stock-transfers`;
     return this.http.post<any>(url, body);
   }
+  getTransfers (): Observable<any> {
+    const url = `${apiUrl}inventory/stock-transfers`;
+    return this.http.get<any>(url);
+  }
 
   getTransfer (id): Observable<any> {
     const url = `${apiUrl}inventory/stock-transfers/${id}`;
@@ -400,7 +409,10 @@ export class SharedService {
     const url = `${apiUrl}inventory/stock-adjustments`;
     return this.http.post<any>(url, body);
   }
-
+  getInventoryAdjustments (): Observable<any> {
+    const url = `${apiUrl}inventory/stock-adjustments`;
+    return this.http.get<any>(url);
+  }
   getInventoryAdjustment (id): Observable<any> {
     const url = `${apiUrl}inventory/stock-adjustments/${id}`;
     return this.http.get<any>(url);

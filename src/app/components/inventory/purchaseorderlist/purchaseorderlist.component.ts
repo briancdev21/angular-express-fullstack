@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
+import { SharedService } from '../../../services/shared.service';
 @Component({
   selector: 'app-purchaseorderlist',
   templateUrl: './purchaseorderlist.component.html',
@@ -25,8 +26,28 @@ export class PurchaseOrderListComponent implements OnInit {
   filterAvaliableTo: any;
   filterName = '';
 
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private sharedService: SharedService ) {
     this.filterAvaliableTo = 'everyone';
+    this.sharedService.getPurchaseOrders().subscribe(res => {
+      console.log('purchase orders:', res.results);
+      const purchaseOrdersInfoItem = {
+        purchaseOrderNumber: `PO${res.results.id}`,
+        source: 'Alliance Video Audio Distribution',
+        type: 'Purchase Order',
+        status: 'Partial Fulfilment',
+        quantity: 43,
+        received: 13,
+        totalCost: 23230.75,
+        dueDate: 'March 20, 2017',
+        lastUpdated: 'January 20, 2017'
+      };
+    });
+    this.sharedService.getTransfers().subscribe(res => {
+      console.log('transfers:', res.results);
+    });
+    this.sharedService.getInventoryAdjustments().subscribe(res => {
+      console.log('adjustments:', res.results);
+    });
   }
 
   public purchaseorderStatus = [];

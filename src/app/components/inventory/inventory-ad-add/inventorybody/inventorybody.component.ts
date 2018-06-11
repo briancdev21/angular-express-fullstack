@@ -60,9 +60,8 @@ export class InventoryBodyComponent implements OnDestroy {
 
   ngOnDestroy() {
     console.log('ng destroy called');
-    this.sharedService.deleteInventoryAdjustment(this.ad_mock.id).subscribe(() => {
-    });
   }
+
   onSelectLocation(event) {
     this.errors.locationChanged = true;
     this.ad_mock.adjustedLocation = parseInt(event, 10);
