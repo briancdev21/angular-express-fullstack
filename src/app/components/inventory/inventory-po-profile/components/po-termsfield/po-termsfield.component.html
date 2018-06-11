@@ -1,7 +1,7 @@
 <div class="flex" >
     <div class="orderinfo-label" >Terms</div>
     <div class="orderinfo-input" >
-      <select (change)="onchange($event)" >
+      <select (change)="onchange($event)" [(ngModel)]="selectedTermId" >
           <option value="" default>Choose a term</option>
           <option *ngFor="let term of terms_local" [value]="term.id">{{term.name}}</option>
       </select>

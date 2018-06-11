@@ -38,15 +38,15 @@ export class InventoryPoProfileComponent implements OnInit {
   constructor(private sharedService: SharedService, private route: ActivatedRoute) {
     this.route.params.subscribe( params => {
       this.mock_id = params.purchaseOrderId;
-      this.mock_id = 2;
+      this.mock_id = 3;
+      this.sharedService.getPurchaseOrder(this.mock_id).subscribe(po_res => {
+        this.po_mock = po_res.data;
+        this.createdDate = new Date().toISOString().slice(0, 10);
+        this.dueDate = this.po_mock.dueDate;
+      });
     });
   }
 
   ngOnInit() {
-    this.sharedService.getPurchaseOrder(this.mock_id).subscribe(po_res => {
-      this.po_mock = po_res.data;
-      this.createdDate = new Date().toISOString().slice(0, 10);
-      this.dueDate = this.po_mock.dueDate;
-    });
   }
 }

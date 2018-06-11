@@ -15,7 +15,41 @@ import { SharedService } from '../../../../../services/shared.service';
 
 
 export class POTableComponent implements OnInit {
-  @Input() productDetails;
+  @Input() set productDetailsData (val) {
+    console.log('product details: ', val);
+    if (val.length !== 0) {
+      this.productDetails = val;
+      this.sharedService.getInventoryProducts().subscribe(productsRes => {
+        productsRes.results.forEach(product => {
+          this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
+            this.skus = this.skus.concat(skuRes.results);
+            this.originSkus = this.skus.slice();
+            this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
+          });
+        });
+        this.sharedService.getTaxRates().subscribe(taxRateRes => {
+          this.taxRateOptions = taxRateRes.results;
+          this.addNewProduct();
+        });
+      });
+    } else {
+      console.log('product added');
+      this.sharedService.getInventoryProducts().subscribe(productsRes => {
+        productsRes.results.forEach(product => {
+          this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
+            this.skus = this.skus.concat(skuRes.results);
+            this.skus = _.uniq(this.skus);
+            this.originSkus = this.skus.slice();
+            this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
+          });
+        });
+        this.sharedService.getTaxRates().subscribe(taxRateRes => {
+          this.taxRateOptions = taxRateRes.results;
+          if (this.productDetails.length === 0) { this.addNewProduct(); }
+        });
+      });
+    }
+  }
   @Input() set poId(_id: string) {
     this.po_id = parseInt(_id.replace('PO-', ''), 10);
   }
@@ -28,22 +62,10 @@ export class POTableComponent implements OnInit {
   taxRateOptions = [];
   selectedTaxRateId: number;
   poProductModel: any;
+  productDetails = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
 
-    this.sharedService.getInventoryProducts().subscribe(productsRes => {
-      productsRes.results.forEach(product => {
-        this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
-          this.skus = this.skus.concat(skuRes.results);
-          this.originSkus = this.skus.slice();
-          this.skuService = completerService.local(this.skus, 'sku', 'sku');
-        });
-      });
-      this.sharedService.getTaxRates().subscribe(taxRateRes => {
-        this.taxRateOptions = taxRateRes.results;
-        this.addNewProduct();
-      });
-    });
   }
   ngOnInit() {
   }
@@ -61,8 +83,8 @@ export class POTableComponent implements OnInit {
     this.skus = this.skus.concat(addingItem);
 
     this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
-
-    this.sharedService.deletePurchaseOrderProduct(this.po_id, this.productDetails[index].purchaseOrderProductId).subscribe(res => {
+    console.log('product details:',  this.productDetails[index]);
+    this.sharedService.deletePurchaseOrderProduct(this.po_id, this.productDetails[index].id).subscribe(res => {
       this.productDetails.splice(index, 1);
       this.priceChange.emit(null);
     });
@@ -83,7 +105,7 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].taxrate = this.taxRateOptions[0].rate;
       this.productDetails[index].supplierId = product.supplierId;
       this.productDetails[index].model = product.model;
-      this.productDetails[index].unitprice = item.originalObject.cost;
+      this.productDetails[index].unitPrice = item.originalObject.cost;
       this.productDetails[index].name = product.name;
       this.productDetails[index].measure = product.unitOfMeasure.quantity;
       this.poProductModel = {
@@ -118,8 +140,8 @@ export class POTableComponent implements OnInit {
 
     let discount = product.discount;
     if ( discount === undefined ) { discount = 0; }
-    if ( product.unitprice !== undefined && product.quantity !== undefined ) {
-      product.total = product.unitprice * product.quantity * (100 - discount)  / 100;
+    if ( product.unitPrice !== undefined && product.quantity !== undefined ) {
+      product.total = product.unitPrice * product.quantity * (100 - discount)  / 100;
       this.priceChange.emit(null);
     }
   }

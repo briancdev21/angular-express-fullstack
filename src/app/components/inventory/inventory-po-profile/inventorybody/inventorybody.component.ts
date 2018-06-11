@@ -15,24 +15,37 @@ import { ContactUserModel } from '../../../../models/contactuser.model';
 export class InventoryBodyComponent {
   @Input() set poData(_podata) {
     this.po_mock = _podata;
-    console.log('po mock', this.po_mock);
-    if (_podata) {
-      this.po_id = `PO-${this.po_mock.id}`;
-      this.discountAmount = this.po_mock.discount.value;
-      this.discountType = this.po_mock.discount.unit;
-      this.freightcosts = this.po_mock.freightCost;
-      this.po_mock.status = 'SENT';
-      this.dueDate = this.po_mock.dueDate;
-      this.createdDate = this.po_mock.createdAt;
-      this.shippingAddress = this.po_mock.shippingAddress;
-      // Get customerAddress:
+    this.po_id = `PO-${this.po_mock.id}`;
+    this.contactId = this.po_mock.contactId;
+    // Get customerAddress:
+    if (this.po_mock.contactId !== undefined && this.contactList !== undefined) {
+      const contactIdNumber = parseInt(this.po_mock.contactId.toString().split('-').pop(), 10);
+      this.po_mock.contactId = contactIdNumber;
+      const selectedContact = this.contactList.filter(contact => contact.id === this.po_mock.contactId);
+      this.customerAddress = selectedContact[0]['shippingAddress'];
+    }
+    this.discountAmount = this.po_mock.discount.value;
+    this.discountType = this.po_mock.discount.unit;
+    this.freightcosts = this.po_mock.freightCost;
+    this.po_mock.status = 'SENT';
+    this.dueDate = this.po_mock.dueDate;
+    this.createdDate = this.po_mock.createdAt;
+    this.shippingAddress = this.po_mock.shippingAddress;
+    this.selectedTerm = this.po_mock.termId;
+    if (this.po_mock['storingAddressId'] !== undefined ) {
+      this.selectedLocation = parseInt(this.po_mock['storingAddressId'].split('-').pop(), 10);
+      this.po_mock.location = this.selectedLocation;
+    }
+    this.internalMemo = this.po_mock.internalMemo;
+    this.supplierNote = this.po_mock.supplierNote;
 
-      if (this.po_mock.contactId !== undefined && this.contactList !== undefined) {
-        const contactIdNumber = this.po_mock.contactId.toString().split('-').pop();
-        const selectedContact = this.contactList.filter(contact => contact.id.toString() === contactIdNumber);
-        this.customerAddress = selectedContact[0]['shippingAddress'];
-      console.log('contactId customerAddress:', this.customerAddress);
-      }
+    if (this.po_mock.id !== undefined) {
+      this.sharedService.getPurchaseOrderProducts(this.po_mock.id).subscribe( productRes => {
+        this.productDetails = productRes.results;
+        this.productDetails.forEach(productDetail => {
+          productDetail.discount = productDetail.discount.value;
+        });
+      });
     }
   }
 
@@ -81,7 +94,7 @@ export class InventoryBodyComponent {
 
   po_id = '';
   createdDate: any;
-  noteToSupplier: any;
+  supplierNote: any;
 
   // footer
   currency = 'CAD';
@@ -100,13 +113,12 @@ export class InventoryBodyComponent {
   constructor(private router: Router, private sharedService: SharedService) {
     this.sharedService.getContacts().subscribe(res => {
       this.contactList = res;
-      this.userList = this.contactList.map((contactUser) => contactUser.owner);
-      if (this.po_mock.contactId !== undefined && this.contactList !== undefined) {
-        const contactIdNumber = this.po_mock.contactId.toString().split('-').pop();
-        const selectedContact = this.contactList.filter(contact => contact.id.toString() === contactIdNumber);
-        this.customerAddress = selectedContact[0]['shippingAddress'];
-        console.log('contactId:', selectedContact);
-      }
+      this.userList = this.contactList.map((contactUser, index) => {
+        return {
+          'name': contactUser.person.firstName + ' ' + contactUser.person.lastName,
+          'value': index
+        };
+      });
     });
     this.sharedService.getLocations().subscribe(locationRes => {
       this.locations = locationRes.results;
@@ -117,14 +129,10 @@ export class InventoryBodyComponent {
   }
 
   onCustomerSelected(user) {
-    console.log(user);
   }
   onSelectUser(selectedIndex: string) {
-    console.log('selected user:', selectedIndex);
-    this.errors.customerChanged = true;
-
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
-    this.contactId = this.contactList[selectedIndex].id;
+    this.contactId = selectedIndex;
     this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id, 10);
   }
 
@@ -133,32 +141,19 @@ export class InventoryBodyComponent {
   }
 
   onSelectLocation(selectedLocationId: string) {
-    console.log('selected location:', selectedLocationId);
     this.errors.locationChanged = true;
-
     this.po_mock.location = parseInt(selectedLocationId, 10);
     const selectedLocation = this.locations.filter(location => location.id.toString() === selectedLocationId);
-    console.log('address:', selectedLocation[0].address);
     this.shippingAddress = selectedLocation[0].address;
   }
   onSelectTerm(selectedTermId: string) {
-    console.log('selected term:', selectedTermId);
     this.errors.termChanged = true;
 
     this.po_mock.term = parseInt(selectedTermId, 10);
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term changed', data.data);
-      this.po_mock.dueDate = data.data.dueDate;
-      this.dueDate = data.data.dueDate;
-    });
+    this.updatePO();
   }
   onPriceChanged() {
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((resp) => {
-      console.log('mock_data', resp.data);
-      this.po_mock.subTotal = resp.data.subTotal;
-      this.po_mock.totalTax = resp.data.totalTax;
-      this.po_mock.total = resp.data.total;
-    });
+    this.updatePO();
   }
 
   onTotalPriceChange(data) {
@@ -174,12 +169,7 @@ export class InventoryBodyComponent {
       this.freightcosts = data.freightcosts;
       this.po_mock.freightCost = data.freightcosts;
     }
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((resp) => {
-      console.log('mock_data term', resp.data);
-      this.po_mock.subTotal = resp.data.subTotal;
-      this.po_mock.totalTax = resp.data.totalTax;
-      this.po_mock.total = resp.data.total;
-    });
+    this.updatePO();
   }
 
   onCancel() {
@@ -193,34 +183,22 @@ export class InventoryBodyComponent {
   }
 
   onSave() {
-    this.showErrors = true;
-    if (this.po_mock.term !== undefined
-      && this.contactId !== undefined
-      && this.po_mock.location !== undefined
-      && this.po_mock.supplierNote
-      && this.po_mock.internalMemo) {
-      this.showSendPOModal = true;
-    }
+    this.router.navigate(['./inventory/stock-control']);
   }
 
   savePO() {
-    this.router.navigate(['./inventory/stock-control']);
   }
 
   onDueDateChanged(event) {
     this.po_mock.dueDate = event;
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term', data.data);
-    });
+    this.updatePO();
   }
   onNoteChanged(event) {
     if (event) {
       this.errors.noteToSupplierChanged = true;
 
       this.po_mock.supplierNote = event;
-      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-        console.log('mock_data term', data.data);
-      });
+      this.updatePO();
     } else {
       this.errors.noteToSupplierChanged = false;
     }
@@ -231,18 +209,33 @@ export class InventoryBodyComponent {
       this.errors.memoChanged = true;
 
       this.po_mock.internalMemo = event;
-      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-        console.log('mock_data term', data.data);
-      });
+      this.updatePO();
+
     } else {
       this.errors.memoChanged = false;
     }
-  }
 
+  }
   onShippingAddressChanged(event) {
     this.po_mock.shippingAddress = event;
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term', data.data);
-    });
+    this.updatePO();
+  }
+
+  updatePO () {
+    if (this.po_mock.location !== undefined
+      && this.po_mock.term !== undefined
+      && this.po_mock.freightCost !== undefined
+      && this.po_mock.discount !== undefined
+      && this.po_mock.internalMemo !== undefined
+      && this.po_mock.supplierNote !== undefined
+    ) {
+      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((resp) => {
+        this.po_mock.subTotal = resp.data.subTotal;
+        this.po_mock.totalTax = resp.data.totalTax;
+        this.po_mock.total = resp.data.total;
+        this.po_mock.dueDate = resp.data.dueDate;
+        this.dueDate = resp.data.dueDate;
+      });
+    }
   }
 }

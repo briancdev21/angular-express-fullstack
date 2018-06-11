@@ -10,9 +10,10 @@ import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
 export class POCustomerNameComponent implements OnInit {
   @Input() set userList(_users: any[]) {
     if (_users.length !== 0) {
-      _users.forEach((user, index) => {
-        this.users.push({'name': user, 'value': index});
-      });
+      this.users = _users;
+      this.dataService = this.completerService.local(this.users, 'name', 'name');
+
+      console.log('userlist:', this.users);
       if (this.index !== undefined) {
         this.searchStr = this.users[this.index].name;
       }
@@ -24,7 +25,7 @@ export class POCustomerNameComponent implements OnInit {
       if (typeof user === 'string' || user instanceof String) {
         this.index = parseInt(user.split('-').pop(), 10) - 1;
       } else {
-        this.index = user - 1;
+        this.index = user;
       }
       if (this.users.length !== 0) {
         this.searchStr = this.users[this.index].name;

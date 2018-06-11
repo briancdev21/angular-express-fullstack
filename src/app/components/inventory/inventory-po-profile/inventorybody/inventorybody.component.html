@@ -3,7 +3,7 @@
     <div class="main__info flex" >
       <div class="left-sidebar">
         <div class="flex aligntop" >
-          <app-po-customer-name class="flex1 mr-15" [ngClass]="{'has-error': showErrors&&!errors.customerChanged}" [contactUser]="po_mock.contactId" [userList]="userList" (selectedUser)="onSelectUser($event)" ></app-po-customer-name>
+          <app-po-customer-name class="flex1 mr-15" [contactUser]="contactId" [userList]="userList" (selectedUser)="onSelectUser($event)" ></app-po-customer-name>
           <app-po-project-selector class="flex1 ml-15" [projects]="projects" ></app-po-project-selector>
         </div>
         <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [addressFromLocation]="shippingAddress" (shippingAddressChange)="onShippingAddressChanged($event)" ></app-shippingaddress>
@@ -11,21 +11,21 @@
       <div class="right-sidebar">
         <app-po-orderidfield [po_id]="po_id" ></app-po-orderidfield>
         <app-po-createddatefield [createdDate]="po_mock.createdAt" ></app-po-createddatefield>
-        <app-po-termsfield  [ngClass]="{'has-error': showErrors&&!errors.termChanged}" [terms]="terms" (selectedTerm)="onSelectTerm($event)" ></app-po-termsfield>
+        <app-po-termsfield [terms]="terms" [selectedTermData]="selectedTerm" (selectedTerm)="onSelectTerm($event)" ></app-po-termsfield>
         <app-po-duedatefield [dueDate]="dueDate" [createdDate]="po_mock.createdAt" (dueDateChanged)="onDueDateChanged($event)" ></app-po-duedatefield>
-        <app-po-locationsfield  [ngClass]="{'has-error': showErrors&&!errors.locationChanged}"  [locations]="locations" (selectedLocation)="onSelectLocation($event)" ></app-po-locationsfield>
+        <app-po-locationsfield [locations]="locations" [selectedLocationData]="selectedLocation"  (selectedLocation)="onSelectLocation($event)" ></app-po-locationsfield>
       </div>
     </div>
     <div class="product__table">
-      <app-po-table [(productDetails)]="productDetails" [poId]="po_id" (priceChange)="onPriceChanged()" ></app-po-table>
+      <app-po-table [(productDetailsData)]="productDetails" [poId]="po_id" (priceChange)="onPriceChanged()" ></app-po-table>
     </div>
     <div class="sub__info">
       <div class="flex" >
         <div class="internal-memo">
-          <app-po-internalmemo [ngClass]="{'has-error': showErrors&&!errors.memoChanged}" (memoChanged)="onMemoChanged($event)"  ></app-po-internalmemo>
+          <app-po-internalmemo [internalMemoData]="internalMemo" (memoChanged)="onMemoChanged($event)"  ></app-po-internalmemo>
         </div>
         <div class="notetosupplier">
-          <app-po-notetosupplier [ngClass]="{'has-error': showErrors&&!errors.noteToSupplierChanged}" (noteChanged)="onNoteChanged($event)" ></app-po-notetosupplier>
+          <app-po-notetosupplier [supplierNoteData]="supplierNote" (noteChanged)="onNoteChanged($event)" ></app-po-notetosupplier>
         </div>
       </div>
       <div class="bill-count" >
@@ -61,14 +61,6 @@
             <div class="title" >PRINT</div>
             <div class="subtitle" >Print important documents such as the invocie, receipt and pick lists</div>
           </div>
-        </div>
-        <div class="flex" >
-          <div class="currency"><img src="/assets/images/User Icon.svg" /></div>
-          <div class="flex1" >
-            <div class="title" >SEND TO SUPPLIER(S)</div>
-            <div class="subtitle" >Will send this PO to all the associated Suppliers</div>
-          </div>
-          <app-po-switcher label=" " (switchChanged)="onSwitchChanged($event)" class="po-switch" ></app-po-switcher>
         </div>
       </div>
     </section>

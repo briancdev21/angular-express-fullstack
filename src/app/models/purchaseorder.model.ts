@@ -11,6 +11,7 @@ export class PurchaseOrderModel {
   };
   location: number;
   term: number;
+  termId: number;
   freightCost: number;
   createdAt: Date;
   dueDate: string;

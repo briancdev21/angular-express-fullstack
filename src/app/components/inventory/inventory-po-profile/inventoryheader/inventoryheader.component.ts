@@ -9,6 +9,9 @@ export class InventoryHeaderComponent implements OnInit {
   @Input() createdDate: string;
   @Input() set dueDate(val: string) {
     this._dueDate = val;
+    if (this._dueDate !== undefined) {
+      this.calculatorDiffs();
+    }
   }
   _dueDate: string;
   date_differ: number;
@@ -19,7 +22,6 @@ export class InventoryHeaderComponent implements OnInit {
   calculatorDiffs() {
     const one_day = 1000 * 60 * 60 * 24;
     const date1_ms = new Date().getTime();
-
     const dueDate_parts = this._dueDate.split('-');
     // tslint:disable-next-line:radix
     const mydate2 = new Date(parseInt(dueDate_parts[0]), parseInt(dueDate_parts[1]) - 1, parseInt(dueDate_parts[2]));
@@ -27,5 +29,6 @@ export class InventoryHeaderComponent implements OnInit {
     // Calculate the difference in milliseconds
     const difference_ms = date2_ms - date1_ms;
     this.date_differ = Math.round(difference_ms / one_day);
+    console.log('date differ:', this.date_differ);
   }
 }
