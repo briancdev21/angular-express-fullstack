@@ -32,8 +32,17 @@ export class InventoryBodyComponent implements OnDestroy {
   @Input() set adData(_addata) {
     this.ad_mock = new AdjustmentModel();
     this.ad_mock = _addata;
-    if (_addata) {
+    if (_addata !== undefined) {
       this.ad_id = `AD-${this.ad_mock.id}`;
+      this.transferdate = _addata.createdAt;
+      this.adjustedLocation = _addata.adjustedLocation;
+      this.internalMemo = _addata.internalMemo;
+      this.sharedService.getInventoryAdjustmentProducts(this.ad_mock.id).subscribe( productRes => {
+        this.productDetails = productRes.results;
+        this.productDetails.forEach(productDetail => {
+          productDetail.discount = productDetail.discount.value;
+        });
+      });
     }
   }
   saveBtnClicked = false;
@@ -50,6 +59,7 @@ export class InventoryBodyComponent implements OnDestroy {
     locationChanged: false,
     memoChanged: false,
   };
+  adjustedLocation: any;
 
   constructor(private sharedService: SharedService, private router: Router) {
     this.transferdate = new Date().toISOString();
@@ -65,6 +75,7 @@ export class InventoryBodyComponent implements OnDestroy {
   onSelectLocation(event) {
     this.errors.locationChanged = true;
     this.ad_mock.adjustedLocation = parseInt(event, 10);
+    console.log('mock:', this.ad_mock);
     this.updateAD();
   }
 
@@ -73,17 +84,18 @@ export class InventoryBodyComponent implements OnDestroy {
       this.errors.memoChanged = true;
       this.ad_mock.internalMemo = event;
     }
-    this.updateAD();
   }
 
   onCancel() {
     this.showCancelPOModal = true;
   }
+
   deletePO() {
     this.sharedService.deleteInventoryAdjustment(this.ad_mock.id).subscribe(() => {
       this.router.navigate(['./inventory/stock-control']);
     });
   }
+
   onSave() {
     console.log('mock:', this.ad_mock);
     this.showErrors = true;
@@ -94,10 +106,13 @@ export class InventoryBodyComponent implements OnDestroy {
       });
     }
   }
+
   savePO() {
   }
+
   updateAD() {
     this.sharedService.updateInventoryAdjustment(this.ad_mock.id, this.ad_mock).subscribe(() => {
     });
   }
+
 }
