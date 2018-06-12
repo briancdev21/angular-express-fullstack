@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
+import { SharedService } from '../../../../services/shared.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -52,39 +53,43 @@ export class ProductsListTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
-  constructor( private filterService: FilterService, private router: Router ) {
-  }
+  brandsList: any;
+  productTypesList: any;
+  constructor( private filterService: FilterService, private router: Router, private sharedService: SharedService ) {
+    this.sharedService.getBrands().subscribe(res => {
+      this.brandsList = res.results;
+      console.log('brandslist: ', res);
+    });
 
-  ngOnInit() {
-    this.productsListInfo.map(p => {
-      p.status = this.getStatus(p.stock, p.reorderPoint);
+    this.sharedService.getProductTypes().subscribe(res => {
+      this.productTypesList = res.results;
     });
   }
 
-  getStockColor(stock, reorderPoint) {
-    if (stock < reorderPoint) {
-      return 'red';
-    } else if (stock < reorderPoint + 3) {
+  ngOnInit() {
+    // this.productsListInfo.map(p => {
+    //   p.status = this.getStatus(p.stock, p.reorderPoint);
+    // });
+  }
+
+  getStatusColor(status) {
+    if (status === 'ACTIVE') {
+      return 'green';
+    } else if (status === 'PLACE_ORDER' || status === 'NO_STOCK') {
       return 'orange';
     } else {
-      return 'green';
+      return 'red';
     }
   }
 
-  getStatus(stock, reorderPoint) {
-    if (stock === undefined) {
-      return 'Active';
-    } else {
-      if (stock < 0) {
-        return 'No stock!';
-      } else if (stock < reorderPoint) {
-        return 'Below re-order point';
-      } else if (stock < reorderPoint + 3) {
-        return 'Place order';
-      } else {
-        return 'Active';
-      }
-    }
+  getBrandName(id) {
+    const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
+    return selectedBrand.name;
+  }
+
+  getProductTypeName(id) {
+    const selectedProductType = this.productTypesList.filter( p => p.id === id)[0];
+    return selectedProductType.name;
   }
 
   redirectTo(id) {

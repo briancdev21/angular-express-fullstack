@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
+import { ProductsService } from '../../../services/inventory/products.service';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -25,8 +26,13 @@ export class ProductsComponent implements OnInit {
   filterAvaliableTo: any;
   filterName = '';
 
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private productsService: ProductsService ) {
     this.filterAvaliableTo = 'everyone';
+
+    this.productsService.getProductsList().subscribe(res => {
+      this.productsListInfo = res.results;
+      console.log('productslist: ', res);
+    });
   }
 
 
@@ -48,120 +54,6 @@ export class ProductsComponent implements OnInit {
   ];
 
   public productsListInfo: Array<Object> = [
-    {
-      id: 0,
-      imgUrl: 'assets/images/tie.png',
-      productName: 'Home Controller 800',
-      modelNumber: 'Control4',
-      brand: 'Control4',
-      sku: 88021111,
-      stock: 5,
-      variant: 1,
-      reorderPoint: 3,
-      status: '',
-      supplier: 'John Smith',
-      createDate: 'Januanry 19, 2018',
-      updatedDate: 'Januanry 25, 2018',
-      tag: ['Home', 'Controller']
-    },
-    {
-      id: 1,
-      imgUrl: 'assets/images/tie.png',
-      productName: 'Home Controller 250',
-      modelNumber: 'Control4',
-      brand: 'Control4',
-      sku: 88021112,
-      stock: 2,
-      variant: 1,
-      reorderPoint: 3,
-      status: '',
-      supplier: 'Rob Harding',
-      createDate: 'Januanry 19, 2018',
-      updatedDate: 'Januanry 25, 2018',
-      tag: ['Home']
-    },
-    {
-      id: 2,
-      imgUrl: 'assets/images/tie.png',
-      productName: 'Adaptive Phase Dimmer',
-      modelNumber: 'Control4',
-      brand: 'Control4',
-      sku: 88021113,
-      stock: 5,
-      variant: 2,
-      reorderPoint: 3,
-      status: '',
-      supplier: 'John Smith',
-      createDate: 'Januanry 19, 2018',
-      updatedDate: 'Januanry 25, 2018',
-      tag: ['Adaptive', 'Dimmer', 'Home']
-    },
-    {
-      id: 3,
-      imgUrl: 'assets/images/tie.png',
-      productName: 'Low-Voltage Wired Keypad',
-      modelNumber: 'Control4',
-      brand: 'Control4',
-      sku: 88021115,
-      stock: -2,
-      variant: 2,
-      reorderPoint: 3,
-      status: '',
-      supplier: 'John Smith',
-      createDate: 'Januanry 19, 2018',
-      updatedDate: 'Januanry 25, 2018',
-      tag: ['Keypad', 'Controller']
-    },
-    {
-      id: 4,
-      imgUrl: 'assets/images/tie.png',
-      productName: '55" Smart LED TV',
-      modelNumber: 'Best Buy',
-      brand: 'Samsung',
-      sku: 88021117,
-      stock: 3,
-      variant: 2,
-      reorderPoint: 0,
-      status: '',
-      supplier: 'John Smith',
-      createDate: 'Januanry 19, 2018',
-      updatedDate: 'Januanry 25, 2018',
-      tag: ['TV', 'Samsung']
-    },
-    {
-      id: 5,
-      imgUrl: 'assets/images/tie.png',
-      productName: 'SPA Team Installation',
-      modelNumber: 'Service',
-      brand: 'No Automations',
-      sku: 88020000,
-      stock: 0,
-      variant: 0,
-      reorderPoint: 0,
-      status: '',
-      supplier: 'Diana Ilic',
-      createDate: 'Januanry 19, 2018',
-      updatedDate: 'Januanry 25, 2018',
-      tag: ['Service'],
-      type: 'Service'
-    },
-    {
-      id: 6,
-      imgUrl: 'assets/images/tie.png',
-      productName: '2 Year Warranty',
-      modelNumber: 'Service',
-      brand: 'No Automations',
-      sku: 88020001,
-      stock: 0,
-      variant: 0,
-      reorderPoint: 0,
-      status: '',
-      supplier: 'John Smith',
-      createDate: 'Januanry 19, 2018',
-      updatedDate: 'Januanry 25, 2018',
-      tag: ['Service'],
-      type: 'Non-Stockable'
-    }
   ];
 
   public productTypes = ['Individual', 'Business'];
