@@ -30,23 +30,60 @@ export class PurchaseOrderListComponent implements OnInit {
     this.filterAvaliableTo = 'everyone';
     this.sharedService.getPurchaseOrders().subscribe(res => {
       console.log('purchase orders:', res.results);
-      const purchaseOrdersInfoItem = {
-        purchaseOrderNumber: `PO${res.results.id}`,
-        source: 'Alliance Video Audio Distribution',
-        type: 'Purchase Order',
-        status: 'Partial Fulfilment',
-        quantity: 43,
-        received: 13,
-        totalCost: 23230.75,
-        dueDate: 'March 20, 2017',
-        lastUpdated: 'January 20, 2017'
-      };
+      res.results.forEach(ele => {
+        const purchaseOrdersInfoItem = {
+          projectNumber: ele.id,
+          purchaseOrderNumber: `PO${ele.id}`,
+          source: 'Alliance Video Audio Distribution',
+          type: 'Purchase Order',
+          status: ele.status,
+          quantity: ele.quantity,
+          received: ele.recieved,
+          totalCost: ele.total,
+          dueDate: this.formatDate(new Date(ele.dueDate)),
+          lastUpdated: this.formatDate(new Date(ele.updatedAt))
+        };
+        this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+      });
+      this.sortArray('purchaseOrderNumber');
     });
     this.sharedService.getTransfers().subscribe(res => {
       console.log('transfers:', res.results);
+      res.results.forEach(ele => {
+        const purchaseOrdersInfoItem = {
+          projectNumber: ele.id,
+          purchaseOrderNumber: `TR${ele.id}`,
+          source: '',
+          type: 'Stock Control',
+          status: ele.status,
+          quantity: ele.quantity,
+          received: ele.recieved,
+          totalCost: ele.total,
+          dueDate: '',
+          lastUpdated: this.formatDate(new Date(ele.updatedAt))
+        };
+        this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+      });
+      this.sortArray('purchaseOrderNumber');
     });
     this.sharedService.getInventoryAdjustments().subscribe(res => {
       console.log('adjustments:', res.results);
+      res.results.forEach(ele => {
+        const purchaseOrdersInfoItem = {
+          projectNumber: ele.id,
+          purchaseOrderNumber: `AD${ele.id}`,
+          source: '',
+          type: 'Stock Control',
+          status: ele.status,
+          quantity: ele.quantity,
+          received: ele.recieved,
+          totalCost: ele.total,
+          dueDate: '',
+          lastUpdated: this.formatDate(new Date(ele.updatedAt))
+        };
+        this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+      });
+      this.sortArray('purchaseOrderNumber');
     });
   }
 
@@ -62,74 +99,75 @@ export class PurchaseOrderListComponent implements OnInit {
     selectStatus: '',
   };
 
-  public purchaseOrdersInfo: Array<Object> = [
-    {
-      purchaseOrderNumber: 'PO88031237',
-      source: 'Alliance Video Audio Distribution',
-      type: 'Purchase Order',
-      status: 'Partial Fulfilment',
-      quantity: 43,
-      received: 13,
-      totalCost: 23230.75,
-      dueDate: 'March 20, 2017',
-      lastUpdated: 'January 20, 2017'
-    },
-    {
-      purchaseOrderNumber: 'PO88031236',
-      source: 'Alliance Video Audio Distribution',
-      type: 'Purchase Order',
-      status: 'Partial Fulfilment',
-      quantity: 5,
-      received: 3,
-      totalCost: 3230.75,
-      dueDate: 'January 28, 2017',
-      lastUpdated: 'January 20, 2017'
-    },
-    {
-      purchaseOrderNumber: 'PO88031233',
-      source: 'John Moss',
-      type: 'Purchase Order',
-      status: 'Partial Fulfilment',
-      quantity: 34,
-      received: 33,
-      totalCost: 7086.79,
-      dueDate: 'April 4, 2018',
-      lastUpdated: 'December 15, 2016'
-    },
-    {
-      purchaseOrderNumber: 'TR88020002',
-      source: '',
-      type: 'Stock Control',
-      status: 'Transfered',
-      quantity: 10,
-      received: 10,
-      totalCost: 3232.23,
-      dueDate: '',
-      lastUpdated: 'December 13, 2016'
-    },
-    {
-      purchaseOrderNumber: 'AD88020001',
-      source: '',
-      type: 'Stock Control',
-      status: 'Adjustment',
-      quantity: 5,
-      received: 5,
-      totalCost: 1322.23,
-      dueDate: '',
-      lastUpdated: 'December 13, 2016'
-    },
-    {
-      purchaseOrderNumber: 'PO88031230',
-      source: 'Rob Harding',
-      type: 'Purchase Order',
-      status: 'Delivered',
-      quantity: 34,
-      received: 34,
-      totalCost: 23322.23,
-      dueDate: 'December 16, 2018',
-      lastUpdated: 'December 12, 2017'
-    }
-  ];
+  // public purchaseOrdersInfo: Array<Object> = [
+  //   {
+  //     purchaseOrderNumber: 'PO88031237',
+  //     source: 'Alliance Video Audio Distribution',
+  //     type: 'Purchase Order',
+  //     status: 'Partial Fulfilment',
+  //     quantity: 43,
+  //     received: 13,
+  //     totalCost: 23230.75,
+  //     dueDate: 'March 20, 2017',
+  //     lastUpdated: 'January 20, 2017'
+  //   },
+  //   {
+  //     purchaseOrderNumber: 'PO88031236',
+  //     source: 'Alliance Video Audio Distribution',
+  //     type: 'Purchase Order',
+  //     status: 'Partial Fulfilment',
+  //     quantity: 5,
+  //     received: 3,
+  //     totalCost: 3230.75,
+  //     dueDate: 'January 28, 2017',
+  //     lastUpdated: 'January 20, 2017'
+  //   },
+  //   {
+  //     purchaseOrderNumber: 'PO88031233',
+  //     source: 'John Moss',
+  //     type: 'Purchase Order',
+  //     status: 'Partial Fulfilment',
+  //     quantity: 34,
+  //     received: 33,
+  //     totalCost: 7086.79,
+  //     dueDate: 'April 4, 2018',
+  //     lastUpdated: 'December 15, 2016'
+  //   },
+  //   {
+  //     purchaseOrderNumber: 'TR88020002',
+  //     source: '',
+  //     type: 'Stock Control',
+  //     status: 'Transfered',
+  //     quantity: 10,
+  //     received: 10,
+  //     totalCost: 3232.23,
+  //     dueDate: '',
+  //     lastUpdated: 'December 13, 2016'
+  //   },
+  //   {
+  //     purchaseOrderNumber: 'AD88020001',
+  //     source: '',
+  //     type: 'Stock Control',
+  //     status: 'Adjustment',
+  //     quantity: 5,
+  //     received: 5,
+  //     totalCost: 1322.23,
+  //     dueDate: '',
+  //     lastUpdated: 'December 13, 2016'
+  //   },
+  //   {
+  //     purchaseOrderNumber: 'PO88031230',
+  //     source: 'Rob Harding',
+  //     type: 'Purchase Order',
+  //     status: 'Delivered',
+  //     quantity: 34,
+  //     received: 34,
+  //     totalCost: 23322.23,
+  //     dueDate: 'December 16, 2018',
+  //     lastUpdated: 'December 12, 2017'
+  //   }
+  // ];
+  public purchaseOrdersInfo = [];
 
   ngOnInit() {
     this.backUpPurchaseOrders = this.purchaseOrdersInfo;
@@ -202,5 +240,30 @@ export class PurchaseOrderListComponent implements OnInit {
     this.purchaseOrdersInfo = this.backUpPurchaseOrders;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
+  }
+  formatDate(date) {
+    const monthNames = [
+      'January', 'February', 'March',
+      'April', 'May', 'June', 'July',
+      'August', 'September', 'October',
+      'November', 'December'
+    ];
+
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+
+    return monthNames[monthIndex] + ' ' + day + ', ' + year;
+  }
+  sortArray(field) {
+    this.purchaseOrdersInfo.sort( function(name1, name2) {
+      if ( name1[field] < name2[field] ) {
+        return -1;
+      } else if ( name1[field] > name2[field]) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
 }

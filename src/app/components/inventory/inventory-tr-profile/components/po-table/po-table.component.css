@@ -1,0 +1,272 @@
+
+.tr-add-table .content {
+  margin-top: 10px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  font-size: 12px;
+  color: #95989a;
+}
+
+th {
+  font-weight: 400;
+  border: solid 1px #d3d3d3;
+  padding: 10px 1em;
+  text-transform: uppercase;  
+  font-size: 1.1em;
+}
+
+td {
+  font-weight: 400;
+  border-bottom: solid 1px #F5F5F5;
+  padding: 5px 1em;
+}
+
+input {
+  border: none;
+  color: #95989a;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  padding: 3px 0.3em;
+}
+
+
+.tr-add-table ::ng-deep ng2-completer {
+  width: 100%;
+  display: block;
+  height: 30px;
+}
+
+.tr-add-table ::ng-deep ng2-completer .completer-input {
+  border: none;
+  height: 30px;
+  padding: 0 .5em;
+}
+
+.tr-add-table ::ng-deep ng2-completer .completer-input:focus {
+  outline: auto orange;
+}
+
+input:focus {
+  outline: auto orange;
+}
+
+.editable-select select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: none;
+	-webkit-appearance: none;
+	background: url(/assets/images/down-arrow.png) no-repeat;
+	background-position: right 10px center;
+  background-size: 10px;
+  height: 100%;
+	font-size: 12px;
+  border-radius: 0;
+  border: none;
+  padding-left: 1em;
+  padding-right: 50px;
+  width: 100%;
+  z-index: 5;
+}
+
+.editable-select {
+  position: relative;
+  height: 26px;
+  padding: 0 4px;
+}
+
+
+.editable-select input {
+  position: absolute;
+  z-index: 10;
+  top: 2%;
+  left: 1px;
+  width: calc(100% - 25px);
+  height: 90%;
+  outline: none;
+}
+
+.editable-select select:focus {
+  outline: auto orange;
+}
+
+.editable-select input:focus ~ select {
+  outline: auto orange;
+
+}
+
+td.handle-bar {
+  padding: 15px 5px;
+  width: 5px;
+}
+td.sku {
+  width: 200px;
+  padding: 5px 0.7em;
+}
+
+ td.model {
+  width: 150px;
+  padding: 5px 0.7em;
+}
+
+ td.name {
+  width: 400px;
+  padding: 5px 0.7em;
+}
+
+ td.measure {
+  width: 50px;
+}
+
+ td.quantity {
+  width: 50px;
+}
+
+ td.unitprice {
+  width: 150px;
+}
+
+ td.discount {
+  width: 100px;
+}
+
+ td.total {
+  width: 150px;
+}
+
+ td.taxrate {
+  width: 150px;
+}
+
+	
+.dollar{
+	display:inline-block;
+  position: relative;
+}
+
+.dollar input{
+  padding-left: 1.5em;
+	}
+.dollar:before {
+  position: absolute;
+  top: 0;
+  content: "$";
+  left: calc(5px);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  font-size: 14px;
+   }
+   
+   ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: #d3d3d3;
+  }
+  ::-moz-placeholder { /* Firefox 19+ */
+    color: #d3d3d3;
+  }
+  :-ms-input-placeholder { /* IE 10+ */
+    color: #d3d3d3;
+  }
+  :-moz-placeholder { /* Firefox 18- */
+    color: #d3d3d3;
+  }
+
+  .remove-btn {
+    width: 15px;
+    margin-right: 5px;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .flex {
+    display: flex;
+    align-items: center;
+  }
+
+  .hide {
+    display: none;
+  }
+
+
+[ngxDragHandle].icon {
+  font-size: 0.7em;
+  cursor: move;
+}
+
+.ngx-dnd-item {
+  transition: opacity 0.4s ease-in-out;
+  border-left: 4px solid transparent;
+
+}
+.ngx-dnd-item:not(.has-handle):not(.move-disabled), .ngx-dnd-item.has-handle [ngxdraghandle], .ngx-dnd-item.has-handle [ngxDragHandle] {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.ngx-dnd-item .ngx-dnd-content {
+  user-select: none;
+}
+.ngx-dnd-item:hover {
+  border-left: 4px solid royalblue;
+}
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  display: table-row;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+}
+.gu-hide {
+  display: none !important;
+}
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
+
+
+.ngx-dnd-container.gu-empty {
+  border: 2px dotted red;
+}
+.ngx-dnd-container:nth-child(odd) {
+}
+.ngx-dnd-container .ex-moved {
+  background-color: #e74c3c;
+}
+.ngx-dnd-container .ex-over {
+}
+.ngx-dnd-container .handle {
+  padding: 0 5px;
+  margin-right: 5px;
+  cursor: move;
+}
+.no-select {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+  user-select: none;
+  /* non-prefixed version, currently
+   not supported by any browser */
+}

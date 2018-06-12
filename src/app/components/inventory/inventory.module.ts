@@ -28,6 +28,8 @@ import { InventoryADModule } from './inventory-ad-add/inventory.module';
 import { InventoryModule } from './inventory-po-profile/inventory.module';
 import { InventoryTRAddModule } from './inventory-tr-add/inventory.module';
 import { InventoryPOAddModule } from './inventory-po-add/inventory.module';
+import {InventoryADProfileModule} from './inventory-ad-profile/inventory.module';
+import {InventoryTRProfileModule} from './inventory-tr-profile/inventory.module';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,9 @@ import { InventoryPOAddModule } from './inventory-po-add/inventory.module';
     InventoryADModule,
     InventoryModule,
     InventoryTRAddModule,
-    InventoryPOAddModule
+    InventoryPOAddModule,
+    InventoryADProfileModule,
+    InventoryTRProfileModule
   ],
   exports: [
     MatInputModule,

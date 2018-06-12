@@ -1,0 +1,21 @@
+<div>
+  <div class="flex" >
+    <div class="orderinfo-label" >Transfer From</div>
+    <div class="orderinfo-input" >
+      <select class="fromLocation" [(ngModel)]="fromLocation" (change)="onchangeFromLocation($event)" >
+          <option value="default" default>Choose a location</option>
+          <option *ngFor="let locationFrom of locations_local" [value]="locationFrom.id">{{locationFrom.name}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="flex" >
+    <div class="orderinfo-label" >Transfer To</div>
+    <div class="orderinfo-input" >
+      <select class="toLocation" [(ngModel)]="toLocation" (change)="onchangeToLocation($event)" >
+          <option value="default" default>Choose a location</option>
+          <option *ngFor="let locationTo of locations_local"  [value]="locationTo.id">{{locationTo.name}}</option>
+      </select>
+    </div>
+  </div>
+
+</div>
