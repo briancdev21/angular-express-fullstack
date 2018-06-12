@@ -36,7 +36,7 @@
 	border: 1px solid red !important;
 }
 
-:host ::ng-deep .name-col .validation-required-name ng2-completer.ng2completer .completer-input {
+:host ::ng-deep .validation-required-name ng2-completer.ng2completer .completer-input {
 	border: 1px solid red !important;
 }
 
