@@ -65,8 +65,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onLogin() {
+    console.log('login cre:', this.loginform);
+    const userName = this.loginform.value.userName;
+    const password = this.loginform.value.password;
     // this.router.navigate(['../home/']);
-    this.authService.login();
+    this.authService.login(userName, password);
   }
 
   ngOnDestroy() {
