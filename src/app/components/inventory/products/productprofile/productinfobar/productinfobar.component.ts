@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../../../../../services/shared.service';
+import { ProductsService } from '../../../../../services/inventory/products.service';
 
 @Component({
   selector: 'app-productinfobar',
@@ -20,9 +21,10 @@ export class ProductInfoBarComponent implements OnInit {
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
+  selectedUncroppedFile: any;
   // croppedImage = this.productInfo.profileLink;
 
-  constructor(private router: Router, private sharedService: SharedService) {
+  constructor(private router: Router, private sharedService: SharedService, private productsService: ProductsService) {
     this.data1 = {};
     this.sharedService.getKeywords().subscribe(res => {
       this.keywordsList = res.results;
@@ -35,9 +37,10 @@ export class ProductInfoBarComponent implements OnInit {
 
   fileChangeEvent(event: any): void {
     this.imageChangedEvent = event;
+    this.selectedUncroppedFile = event.target.files[0];
   }
   imageCropped(image: string) {
-      this.croppedImage = image;
+    this.croppedImage = image;
   }
 
   imageLoaded() {
@@ -51,6 +54,12 @@ export class ProductInfoBarComponent implements OnInit {
   saveCrop() {
     this.showEditImageModal = false;
     this.productInfo.pictureURI = this.croppedImage;
+    const uploadData = new FormData();
+    uploadData.append('productPicture', this.selectedUncroppedFile, this.selectedUncroppedFile.name);
+
+    this.productsService.uploadProductProfileImage(this.productInfo.id, uploadData).subscribe(res => {
+      console.log('imga result: ', res);
+    });
   }
 
   changeImage() {

@@ -57,5 +57,11 @@ export class ProductsService {
     return this.http.delete<any>(url);
   }
 
+  uploadProductProfileImage (productId, body): Observable<any> {
+    const url = `${apiUrl}inventory/products/${productId}/product-picture`;
+    return this.http.put(url, body)
+      .map((res) => res);
+  }
+
 }
 

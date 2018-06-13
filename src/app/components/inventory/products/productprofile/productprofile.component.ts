@@ -70,7 +70,7 @@ export class ProductProfileComponent implements OnInit {
     };
 
   public productInfo = {
-    'id': 0,
+    'id': 1,
     'brandId': 0,
     'productTypeId': 0,
     'supplierId': 0,
