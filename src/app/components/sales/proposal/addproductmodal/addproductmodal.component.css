@@ -258,7 +258,7 @@ input::placeholder, textarea::placeholder {
 .tab-two .modal-tab-content .friend-royalty-retail {
 	display: flex;
 	justify-content: flex-start;
-	flex-flow: nowrap;
+	flex-flow: wrap;
 }
 
 .friend {
