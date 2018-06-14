@@ -254,6 +254,37 @@ export class SharedService {
     return this.http.put(url, body);
   }
 
+  deleteIndividualCategory (id): Observable<any> {
+    const url = `${apiUrl}organization/categories/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+  //  SubCategory
+  getSubCategories(categoryId): Observable<any> {
+    const url = `${apiUrl}organization/categories/${categoryId}/subcategories`;
+    return this.http.get(url);
+  }
+
+  createSubCategory (categoryId, body): Observable<any> {
+    const url = `${apiUrl}organization/categories/${categoryId}/subcategories`;
+    return this.http.post<any>(url, body);
+  }
+
+  getIndividualSubCategory(categoryId, subId): Observable<any>  {
+    const url = `${apiUrl}organization/categories/${categoryId}/subcategories/${subId}`;
+    return this.http.get(url);
+  }
+
+  updateIndividualSubCategory(categoryId, subId, body): Observable<any>  {
+    const url = `${apiUrl}organization/categories/${categoryId}/subcategories/${subId}`;
+    return this.http.put(url, body);
+  }
+
+  deleteIndividualSubCategory (categoryId, subId): Observable<any> {
+    const url = `${apiUrl}organization/categories/${categoryId}/subcategories/${subId}`;
+    return this.http.delete<any>(url);
+  }
+
   // Tax-rate
   getTaxRates(): Observable<any> {
     const url = `${environment.apiUrl}/organization/tax-rates`;
