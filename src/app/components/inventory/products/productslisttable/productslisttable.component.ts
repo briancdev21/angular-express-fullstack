@@ -93,7 +93,7 @@ export class ProductsListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../inventory/product-profile']);
+    this.router.navigate(['../inventory/product-profile', {id: id}]);
   }
 
   sortArray(field) {

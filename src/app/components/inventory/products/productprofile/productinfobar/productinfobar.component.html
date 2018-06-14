@@ -3,10 +3,10 @@
   <img [src]='productInfo.pictureURI' alt = "Add Profile Image Here"/>
   <img src="assets/images/Cloud.png" class="img-settings" (click)="changeImage()"/>
 </div>
-<div class="product-info">
+<div class="product-info" *ngIf="productInfo">
   <span>{{productInfo.name}}</span>
+  <span>{{productInfo.brandName}}</span>
   <span>{{productInfo.model}}</span>
-  <span>{{productInfo.name}}</span>
   <span class="title">Product Description</span>
   <textarea disabled>{{productInfo.description}}</textarea>
   <span class="title">Primary Price</span>

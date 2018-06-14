@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductsService } from '../../../../services/inventory/products.service';
+import { SharedService } from '../../../../services/shared.service';
 import * as moment from 'moment';
 
 @Component({
@@ -251,10 +252,17 @@ export class ProductProfileComponent implements OnInit {
   currentContact: any;
   savingContact: any;
   showAddProductModal = false;
+  brandsList: any;
 
   dataRetrieved = false;
-  constructor(private router: Router, private route: ActivatedRoute, private productsService: ProductsService) {
+  constructor(private router: Router, private route: ActivatedRoute, private productsService: ProductsService,
+    private sharedService: SharedService) {
     this.contactInfoIndex = this.route.snapshot.paramMap.get('id');
+
+    this.sharedService.getBrands().subscribe(res => {
+      this.brandsList = res;
+    });
+
     this.productsService.getIndividualProduct(this.contactInfoIndex).subscribe(res => {
       console.log('product data: ', res.data);
 
@@ -266,6 +274,9 @@ export class ProductProfileComponent implements OnInit {
       this.chartSetData[1]['percentage'] = res.data.loyaltyRating;
       this.chartSetData[2]['percentage'] = res.data.dealsRatio;
       this.chartSetData[3]['percentage'] = res.data.serviceRatio;
+
+      this.productInfo = res.data;
+      this.productInfo['brandName'] = this.getBrandNameFromId(res.data.brandId);
     });
   }
 
@@ -286,5 +297,10 @@ export class ProductProfileComponent implements OnInit {
 
   closeEditModal(event) {
     this.showAddProductModal = false;
+  }
+
+  getBrandNameFromId(id) {
+    const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
+    return selectedBrand.name;
   }
 }

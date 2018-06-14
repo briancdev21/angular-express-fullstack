@@ -5,7 +5,6 @@
       <th (click)="sortArray('name')">PRODUCT NAME</th>
       <th (click)="sortArray('model')">MODEL NUMBER</th>
       <th (click)="sortArray('brand')">BRAND</th>
-      <th (click)="sortArray('skus')">SKU</th> 
       <th (click)="sortArray('stock')">AVAILABLE</th>
       <th (click)="sortArray('status')">STATUS</th>
     </tr>
@@ -14,7 +13,6 @@
       <td>{{product.name}}</td>
       <td>{{product.model}}</td>
       <td>{{getBrandName(product.brandId)}}</td>
-      <td>{{product.skus[0]}}</td>
       <td>
         <span *ngIf="product.productTypeId === 2" class="green">{{getProductTypeName(product.productTypeId)}}</span>
         <span *ngIf="product.productTypeId !== 2" ><span [ngClass]="getStatusColor(product.status)">{{product.quantity}} stock </span> and {{product.variantCount}} variant</span>
