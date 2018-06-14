@@ -63,5 +63,10 @@ export class ProductsService {
       .map((res) => res);
   }
 
+  getVariantsList(productId): Observable<any>  {
+    const url = `${apiUrl}inventory/products/${productId}/variants`;
+    return this.http.get(url);
+  }
+
 }
 

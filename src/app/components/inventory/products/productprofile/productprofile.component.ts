@@ -16,7 +16,7 @@ import * as moment from 'moment';
 export class ProductProfileComponent implements OnInit {
 
   menuCollapsed = true;
-  contactInfoIndex: any;
+  productInfoIndex: any;
   dateSelectorList = [
     'Today',
     'Yesterday',
@@ -71,36 +71,36 @@ export class ProductProfileComponent implements OnInit {
     };
 
   public productInfo = {
-    'id': 1,
-    'brandId': 0,
-    'productTypeId': 0,
-    'supplierId': 0,
-    'currencyId': 0,
-    'keywordIds': [
-      1
-    ],
-    'model': 'Control 4',
-    'name': 'C4-HC800',
-    'description': 'product description',
-    'inventoryType': 'STOCKABLE',
-    'status': 'PLACE_ORDER',
-    'unitOfMeasure': {
-      'quantity': 0,
-      'unit': 'PER_UNIT'
-    },
-    'expiration': {
-      'duration': 0,
-      'unit': 'HOURS'
-    },
-    'leadTime': {
-      'duration': 0,
-      'unit': 'HOURS'
-    },
-    'quantity': 0,
-    'variantCount': 0,
-    'pictureURI': 'assets/images/barrow.png',
-    'createdAt': '2018-05-15',
-    'updatedAt': '2018-05-15'
+    // 'id': 1,
+    // 'brandId': 0,
+    // 'productTypeId': 0,
+    // 'supplierId': 0,
+    // 'currencyId': 0,
+    // 'keywordIds': [
+    //   1
+    // ],
+    // 'model': 'Control 4',
+    // 'name': 'C4-HC800',
+    // 'description': 'product description',
+    // 'inventoryType': 'STOCKABLE',
+    // 'status': 'PLACE_ORDER',
+    // 'unitOfMeasure': {
+    //   'quantity': 0,
+    //   'unit': 'PER_UNIT'
+    // },
+    // 'expiration': {
+    //   'duration': 0,
+    //   'unit': 'HOURS'
+    // },
+    // 'leadTime': {
+    //   'duration': 0,
+    //   'unit': 'HOURS'
+    // },
+    // 'quantity': 0,
+    // 'variantCount': 0,
+    // 'pictureURI': 'assets/images/barrow.png',
+    // 'createdAt': '2018-05-15',
+    // 'updatedAt': '2018-05-15'
   };
 
   public productPricingCategories = [
@@ -155,66 +155,21 @@ export class ProductProfileComponent implements OnInit {
   ];
 
   public productVariants = [
-    {
-      'sku': 8802013,
-      'productId': 1,
-      'upc': '846321358163123456613',
-      'name': 'White / Icon',
-      'cost': 800,
-      'supplierCode': 'C4-Hc800-WI',
-      'priceAdjustment': 0,
-      'quantity': 2,
-      'createdAt': '2018-05-15',
-      'updatedAt': '2018-05-15',
-      'reOrder': 0,
-      'po': 0,
-      'reserved': 2
-    },
-    {
-      'sku': 8802014,
-      'productId': 1,
-      'upc': '84632135816312345633',
-      'name': 'Black / Icon',
-      'cost': 800,
-      'supplierCode': 'C4-HC800-BI',
-      'priceAdjustment': 0,
-      'quantity': 0,
-      'createdAt': '2018-05-15',
-      'updatedAt': '2018-05-15',
-      'reOrder': 1,
-      'po': 1,
-      'reserved': 0
-    },
-    {
-      'sku': 8802015,
-      'productId': 1,
-      'upc': '846321358163123457897',
-      'name': 'White / No Icon',
-      'cost': 800,
-      'supplierCode': 'C4-HC800-WNI',
-      'priceAdjustment': 20,
-      'quantity': 2,
-      'createdAt': '2018-05-15',
-      'updatedAt': '2018-05-15',
-      'reOrder': 0,
-      'po': 1,
-      'reserved': 2
-    },
-    {
-      'sku': 8802016,
-      'productId': 1,
-      'upc': '846321358163123453214',
-      'name': 'Black / No Icon',
-      'cost': 800,
-      'supplierCode': 'C4-HC800-WNI',
-      'priceAdjustment': 20,
-      'quantity': 1,
-      'createdAt': '2018-05-15',
-      'updatedAt': '2018-05-15',
-      'reOrder': 0,
-      'po': 0,
-      'reserved': 1
-    },
+    // {
+    //   'sku': 8802013,
+    //   'productId': 1,
+    //   'upc': '846321358163123456613',
+    //   'name': 'White / Icon',
+    //   'cost': 800,
+    //   'supplierCode': 'C4-Hc800-WI',
+    //   'priceAdjustment': 0,
+    //   'quantity': 2,
+    //   'createdAt': '2018-05-15',
+    //   'updatedAt': '2018-05-15',
+    //   'reOrder': 0,
+    //   'po': 0,
+    //   'reserved': 2
+    // },
   ];
 
   public productAccessories = [
@@ -252,31 +207,37 @@ export class ProductProfileComponent implements OnInit {
   currentContact: any;
   savingContact: any;
   showAddProductModal = false;
-  brandsList: any;
+  brandsList = [];
 
   dataRetrieved = false;
   constructor(private router: Router, private route: ActivatedRoute, private productsService: ProductsService,
     private sharedService: SharedService) {
-    this.contactInfoIndex = this.route.snapshot.paramMap.get('id');
+    this.productInfoIndex = this.route.snapshot.paramMap.get('id');
 
     this.sharedService.getBrands().subscribe(res => {
-      this.brandsList = res;
-    });
+      this.brandsList = res.results;
 
-    this.productsService.getIndividualProduct(this.contactInfoIndex).subscribe(res => {
-      console.log('product data: ', res.data);
+      this.productsService.getIndividualProduct(this.productInfoIndex).subscribe(response => {
+        console.log('product data: ', response.data);
 
-      // Update cards info
-      // this.cards = res.data.score;
+        // Update cards info
+        // this.cards = res.data.score;
 
-      // Update donut chart info
-      this.chartSetData[0]['percentage'] = res.data.accountRating;
-      this.chartSetData[1]['percentage'] = res.data.loyaltyRating;
-      this.chartSetData[2]['percentage'] = res.data.dealsRatio;
-      this.chartSetData[3]['percentage'] = res.data.serviceRatio;
+        // Update donut chart info
+        // this.chartSetData[0]['percentage'] = res.data.accountRating;
+        // this.chartSetData[1]['percentage'] = res.data.loyaltyRating;
+        // this.chartSetData[2]['percentage'] = res.data.dealsRatio;
+        // this.chartSetData[3]['percentage'] = res.data.serviceRatio;
 
-      this.productInfo = res.data;
-      this.productInfo['brandName'] = this.getBrandNameFromId(res.data.brandId);
+        this.productInfo = response.data;
+        this.productInfo['brandName'] = this.getBrandNameFromId(response.data.brandId);
+
+        // get variant info
+        this.productsService.getVariantsList(this.productInfoIndex).subscribe(data => {
+          console.log('variants: ', data);
+          this.productVariants = data.results;
+        });
+      });
     });
   }
 
@@ -300,7 +261,9 @@ export class ProductProfileComponent implements OnInit {
   }
 
   getBrandNameFromId(id) {
+    console.log('sleetedbrand: ', this.brandsList);
     const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
+    console.log('sleetedbrand: ', selectedBrand);
     return selectedBrand.name;
   }
 }
