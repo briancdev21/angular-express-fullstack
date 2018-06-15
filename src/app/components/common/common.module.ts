@@ -13,6 +13,7 @@ import { MorrisBarChartComponent } from './morrisbarchart/morrisbarchart.compone
 import { AgendaBoxComponent } from './agendabox/agendabox.component';
 import { TasksBoxComponent } from './tasksbox/tasksbox.component';
 import { ActivitiesBoxComponent } from './activitiesbox/activitiesbox.component';
+import { MatInputModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,11 @@ import { ActivitiesBoxComponent } from './activitiesbox/activitiesbox.component'
     BrowserModule,
     RouterModule,
     FormsModule,
-    Ng2CompleterModule
+    Ng2CompleterModule,
+    MatInputModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
   ],
   exports: [
     CommonComponent,
