@@ -53,14 +53,21 @@
 	display: flex;
 }
 
-.friend-royalty-retail, .builders-wholesale-cost {
-	margin-bottom: 20px;
+.friend-royalty-retail{
+	display: flex;
+	justify-content: flex-start;
+	flex-flow: wrap;
 } 
+
+.friend {
+	margin-right: 2%;
+}
 
 .friend-royalty-retail>div, .builders-wholesale-cost>div {
   width: 30%;
   display: flex;
 	flex-direction: column;
+	margin-bottom: 10px;
 }
 
 .pricing-content>div {

@@ -68,5 +68,10 @@ export class ProductsService {
     return this.http.get(url);
   }
 
+  getProductPricingsList(productId): Observable<any>  {
+    const url = `${apiUrl}inventory/products/${productId}/pricing-categories`;
+    return this.http.get(url);
+  }
+
 }
 

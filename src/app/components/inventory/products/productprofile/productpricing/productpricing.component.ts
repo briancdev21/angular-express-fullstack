@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { SharedService } from '../../../../../services/shared.service';
+import { ProductsService } from '../../../../../services/inventory/products.service';
 
 @Component({
   selector: 'app-productpricing',
@@ -13,22 +15,12 @@ import { Router } from '@angular/router';
 
 export class ProductPricingComponent {
 
-  private pricingType = ['Friend & Family', 'Royalty Program', 'Retail', 'Builders Program', 'Wholesale', 'Cost'];
-  private pricingData = {
-    friendMargin: undefined,
-    friendPrice: undefined,
-    royaltyPrice: undefined,
-    royaltyMargin: undefined,
-    builderPrice: undefined,
-    buildersMargin: undefined,
-    wholesalePrice: undefined,
-    wholesaleMargin: undefined,
-    retailPrice: undefined,
-    retailMargin: undefined,
-    costPrice: undefined,
-    costMargin: undefined,
-  };
-  constructor() {
-
+  productInfoIndex: any;
+  pricingCategoriesListInfo = [];
+  constructor( private sharedService: SharedService, private productsService: ProductsService, private route: ActivatedRoute) {
+    this.productInfoIndex = this.route.snapshot.paramMap.get('id');
+    this.productsService.getProductPricingsList(this.productInfoIndex).subscribe(res => {
+      this.pricingCategoriesListInfo = res.results;
+    });
   }
 }
