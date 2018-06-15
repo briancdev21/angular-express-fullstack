@@ -12,6 +12,7 @@ export class AdLocationFromToComponent implements OnInit {
   }
 
   @Input() set adjustLocation(_location) {
+    console.log('adjusted Location:', _location);
     if (_location !== undefined) {
       this.fromLocation = _location;
     }

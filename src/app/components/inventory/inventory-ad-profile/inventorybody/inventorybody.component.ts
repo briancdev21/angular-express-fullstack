@@ -35,7 +35,7 @@ export class InventoryBodyComponent implements OnDestroy {
     if (_addata !== undefined) {
       this.ad_id = `AD-${this.ad_mock.id}`;
       this.transferdate = _addata.createdAt;
-      this.adjustedLocation = _addata.adjustedLocation;
+      this.adjustedLocation = _addata.adjustedLocationId;
       this.internalMemo = _addata.internalMemo;
       this.sharedService.getInventoryAdjustmentProducts(this.ad_mock.id).subscribe( productRes => {
         this.productDetails = productRes.results;

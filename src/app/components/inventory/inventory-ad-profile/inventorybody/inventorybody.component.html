@@ -19,7 +19,7 @@
           <app-ad-locationtofrom
           [ngClass]="{'has-error': showErrors&&!errors.locationChanged}"
           [locations]="locations"
-          [adjustLocation]="adjustLocation"
+          [adjustLocation]="adjustedLocation"
           (selectedLocation)="onSelectLocation($event)" >
         </app-ad-locationtofrom>
         <div class="internal-memo">
