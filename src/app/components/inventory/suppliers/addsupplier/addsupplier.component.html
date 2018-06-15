@@ -21,9 +21,9 @@
             <div>
               <span>Contact Name (*required)</span>
               <select [(ngModel)]="contactName" [ngClass]="{'validation-required': invalidContactName, 'not-edited': !contactName}" class="contactNameField" 
-                (change)="contactNameChanged($event)" >
+                 >
                 <option value="" disabled selected class="default-option">Enter last name</option>
-                <option *ngFor="let contact of contacts" [value]="contact.id">{{contact.owner}}</option>
+                <option *ngFor="let contact of contacts" [value]="contact.id">{{contact.person.firstName + ' ' + contact.person.lastName}}</option>
               </select>
             </div>
           </div>
@@ -41,7 +41,6 @@
                 [ngClass]="{'validation-required': invalidContactEmail}" 
                 [(ngModel)]="contactEmail" 
                 [value]="contactEmail"
-                readonly
               >
             </div>
           </div>
@@ -53,7 +52,7 @@
             </div>
             <div>
               <span>Contact Phone</span>
-              <input placeholder="Enter contact phone" readonly [(ngModel)]="contactPhone" [value]="contactPhone">
+              <input placeholder="Enter contact phone" [(ngModel)]="contactPhone" [value]="contactPhone">
             </div>
           </div>
 

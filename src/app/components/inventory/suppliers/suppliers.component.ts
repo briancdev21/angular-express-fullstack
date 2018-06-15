@@ -127,11 +127,11 @@ export class SuppliersComponent implements OnInit {
         const supplierListItem = {
           id: ele.id,
           supplierName: ele.name,
-          contactEmail: contact['email'],
-          contactPhone: contact['phoneNumbers'].primary,
-          supplierPhone: contact['phoneNumbers'].primary,
-          supplierEmail: contact['email'],
-          contactName: contact['owner'],
+          contactEmail: ele.contactEmail,
+          contactPhone: ele.contactPhoneNumber,
+          supplierPhone: ele.phoneNumber,
+          supplierEmail: ele.contactEmail,
+          contactName: ele.contactName,
           currency: currency['currencyCode'],
           term: term['name'],
           tags: ele.keywordIds,
@@ -141,6 +141,7 @@ export class SuppliersComponent implements OnInit {
           state: ele.shippingAddress.province
         };
         this.suppliersListInfo.push(supplierListItem);
+        console.log('suppliers:', this.suppliersListInfo);
       });
     });
   }
