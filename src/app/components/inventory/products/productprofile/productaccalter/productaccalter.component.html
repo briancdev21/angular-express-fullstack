@@ -14,12 +14,12 @@
         </tr>
         <tr *ngFor="let product of productAccessories; let i = index">
           <td>{{product.sku}}</td>
-          <td>{{product.productName}}</td>
-          <td>{{product.modelNumber}}</td>
-          <td>{{product.brand}}</td>
-          <td>$ {{product.qty}}</td>
-          <td>$ {{product.price | number: '1.2-2'}}</td>
-          <td>{{product.options}}</td>
+          <td>{{getProductName(product.productId)}}</td>
+          <td>{{getModelNumber(product.productId)}}</td>
+          <td>{{getBrandId(product.productId)}}</td>
+          <td>$ {{product.quantity}}</td>
+          <td>$ {{product.total | number: '1.2-2'}}</td>
+          <td>{{product.option}}</td>
         </tr>
       </table>
     </div>
@@ -38,11 +38,11 @@
         </tr>
         <tr *ngFor="let product of productAlternatives; let i = index">
           <td>{{product.sku}}</td>
-          <td>{{product.productName}}</td>
-          <td>{{product.modelNumber}}</td>
-          <td>{{product.brand}}</td>
-          <td>$ {{product.qty}}</td>
-          <td>$ {{product.price | number: '1.2-2'}}</td>
+          <td>{{getProductName(product.productId)}}</td>
+          <td>{{getModelNumber(product.productId)}}</td>
+          <td>{{getBrandId(product.productId)}}</td>
+          <td>$ {{product.quantity}}</td>
+          <td>$ {{product.total | number: '1.2-2'}}</td>
         </tr>
       </table>
     </div>
