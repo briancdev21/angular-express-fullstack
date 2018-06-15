@@ -105,7 +105,9 @@ export class InventoryBodyComponent {
   }
 
   updateTR() {
-    this.sharedService.updateTransfer(this.tr_mock.id, this.tr_mock).subscribe(() => {
-    });
+    if (this.tr_mock.status === 'OPEN') {
+      this.sharedService.updateTransfer(this.tr_mock.id, this.tr_mock).subscribe(() => {
+      });
+    }
   }
 }

@@ -36,6 +36,7 @@ export class InventoryBodyComponent implements OnDestroy {
       this.ad_id = `AD-${this.ad_mock.id}`;
       this.transferdate = _addata.createdAt;
       this.adjustedLocation = _addata.adjustedLocationId;
+      this.ad_mock.adjustedLocation = _addata.adjustedLocationId;
       this.internalMemo = _addata.internalMemo;
       this.sharedService.getInventoryAdjustmentProducts(this.ad_mock.id).subscribe( productRes => {
         this.productDetails = productRes.results;
@@ -83,6 +84,7 @@ export class InventoryBodyComponent implements OnDestroy {
     if (event) {
       this.errors.memoChanged = true;
       this.ad_mock.internalMemo = event;
+      this.updateAD();
     }
   }
 
@@ -111,8 +113,10 @@ export class InventoryBodyComponent implements OnDestroy {
   }
 
   updateAD() {
-    this.sharedService.updateInventoryAdjustment(this.ad_mock.id, this.ad_mock).subscribe(() => {
-    });
+    if (this.ad_mock.status === 'OPEN') {
+      this.sharedService.updateInventoryAdjustment(this.ad_mock.id, this.ad_mock).subscribe(() => {
+      });
+    }
   }
 
 }

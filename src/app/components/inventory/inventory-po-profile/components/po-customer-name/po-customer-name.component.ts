@@ -14,6 +14,12 @@ export class POCustomerNameComponent implements OnInit {
       this.dataService = this.completerService.local(this.users, 'name', 'name');
 
       console.log('userlist:', this.users);
+      const user = this.index;
+      if (typeof user === 'string') {
+        const selectedContactInfo = this.users.filter(userInfo => userInfo.id === parseInt(user.split('-').pop(), 10)).pop();
+        // console.log('selected Contact Info: ', selectedContactInfo);
+        this.index = selectedContactInfo['index'];
+      }
       if (this.index !== undefined) {
         this.searchStr = this.users[this.index].name;
       }
@@ -22,19 +28,22 @@ export class POCustomerNameComponent implements OnInit {
   @Input() set contactUser(user: any) {
     if (user !== undefined) {
       console.log('contacted:', user);
-      if (typeof user === 'string' || user instanceof String) {
-        this.index = parseInt(user.split('-').pop(), 10) - 1;
+      if (typeof user === 'string' && this.users.length !== 0 || user instanceof String && this.users.length !== 0) {
+        const selectedContactInfo = this.users.filter(userInfo => userInfo.id === parseInt(user.split('-').pop(), 10)).pop();
+        // console.log('selected Contact Info: ', selectedContactInfo);
+        this.index = selectedContactInfo['index'];
       } else {
         this.index = user;
       }
       if (this.users.length !== 0) {
         this.searchStr = this.users[this.index].name;
+        console.log('search str', this.searchStr);
       }
     }
   }
   @Output() selectedUser: EventEmitter<any> = new EventEmitter();
   users = [];
-  index: number;
+  index: any;
   searchStr: string;
   dataService: CompleterData;
 

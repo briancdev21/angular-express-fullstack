@@ -15,8 +15,49 @@ import { SharedService } from '../../../../../services/shared.service';
 
 
 export class POTableComponent implements OnInit {
-  @Input() productDetails;
-  @Input() set adId(_id: string) {
+  @Input() set productDetailsData (val) {
+    console.log('product details: ', val);
+    if (val.length !== 0) {
+      this.productDetails = val;
+      this.sharedService.getInventoryProducts().subscribe(productsRes => {
+        productsRes.results.forEach(product => {
+          this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
+            this.skus = this.skus.concat(skuRes.results);
+            this.skus = _.uniqBy(this.skus, 'sku');
+            this.productDetails.forEach(productDetail => {
+              this.skus = this.skus.filter(sku => sku.sku !== productDetail.sku);
+            });
+            console.log('skus filters:', this.skus);
+            this.originSkus = this.skus.slice();
+            this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
+          });
+        });
+        this.sharedService.getTaxRates().subscribe(taxRateRes => {
+          this.taxRateOptions = taxRateRes.results;
+          this.addNewProduct();
+        });
+      });
+    } else {
+      console.log('product added');
+      this.sharedService.getInventoryProducts().subscribe(productsRes => {
+        productsRes.results.forEach(product => {
+          this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
+            this.skus = this.skus.concat(skuRes.results);
+            this.skus = _.uniqBy(this.skus, 'sku');
+            this.productDetails.forEach(productDetail => {
+              this.skus = this.skus.filter(sku => sku.sku !== productDetail.sku);
+            });
+            this.originSkus = this.skus.slice();
+            this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
+          });
+        });
+        this.sharedService.getTaxRates().subscribe(taxRateRes => {
+          this.taxRateOptions = taxRateRes.results;
+          if (this.productDetails.length === 0) { this.addNewProduct(); }
+        });
+      });
+    }
+  }  @Input() set adId(_id: string) {
     this.ad_id = parseInt(_id.replace('AD-', ''), 10);
   }
 
@@ -30,23 +71,11 @@ export class POTableComponent implements OnInit {
   taxRateOptions = [];
   selectedTaxRateId: number;
   trProductModel: any;
+  productDetails = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
-
-    this.sharedService.getInventoryProducts().subscribe(productsRes => {
-      productsRes.results.forEach(product => {
-        this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
-          this.skus = this.skus.concat(skuRes.results);
-          this.originSkus = this.skus.slice();
-          this.skuService = completerService.local(this.skus, 'sku', 'sku');
-        });
-      });
-      this.sharedService.getTaxRates().subscribe(taxRateRes => {
-        this.taxRateOptions = taxRateRes.results;
-        this.addNewProduct();
-      });
-    });
   }
+
   ngOnInit() {
   }
 

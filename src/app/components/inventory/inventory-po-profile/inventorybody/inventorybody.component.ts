@@ -33,7 +33,7 @@ export class InventoryBodyComponent {
     this.shippingAddress = this.po_mock.shippingAddress;
     this.selectedTerm = this.po_mock.termId;
     if (this.po_mock['storingAddressId'] !== undefined ) {
-      this.selectedLocation = parseInt(this.po_mock['storingAddressId'].split('-').pop(), 10);
+      this.selectedLocation = this.po_mock['storingAddressId'];
       this.po_mock.location = this.selectedLocation;
     }
     this.internalMemo = this.po_mock.internalMemo;
@@ -116,7 +116,8 @@ export class InventoryBodyComponent {
       this.userList = this.contactList.map((contactUser, index) => {
         return {
           'name': contactUser.person.firstName + ' ' + contactUser.person.lastName,
-          'value': index
+          'index': index,
+          'id': contactUser.id
         };
       });
     });

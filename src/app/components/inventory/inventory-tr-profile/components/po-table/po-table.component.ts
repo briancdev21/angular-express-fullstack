@@ -22,6 +22,10 @@ export class POTableComponent implements OnInit {
         productsRes.results.forEach(product => {
           this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
             this.skus = this.skus.concat(skuRes.results);
+            this.skus = _.uniqBy(this.skus, 'sku');
+            this.productDetails.forEach(productDetail => {
+              this.skus = this.skus.filter(sku => sku.sku !== productDetail.sku);
+            });
             this.originSkus = this.skus.slice();
             this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
           });
@@ -37,7 +41,10 @@ export class POTableComponent implements OnInit {
         productsRes.results.forEach(product => {
           this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
             this.skus = this.skus.concat(skuRes.results);
-            this.skus = _.uniq(this.skus);
+            this.skus = _.uniqBy(this.skus, 'sku');
+            this.productDetails.forEach(productDetail => {
+              this.skus = this.skus.filter(sku => sku.sku !== productDetail.sku);
+            });
             this.originSkus = this.skus.slice();
             this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
           });
