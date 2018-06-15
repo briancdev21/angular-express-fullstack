@@ -19,6 +19,9 @@ import { SalesDashboardComponent } from './salesdashboard/salesdashboard.compone
 import { RevenueAreaChartComponent } from './salesdashboard/revenueareachart/revenueareachart.component';
 
 import { AddProposalComponent } from './addproposal/addproposal.component';
+import { MultiSubCategoriesSelectComponent } from './addproposal/multisubcategoriesselect/multisubcategoriesselect.component';
+import { MultiCategoriesSelectComponent } from './addproposal/multicategoriesselect/multicategoriesselect.component';
+
 import { InvoicesCmpModule } from './invoices/invoices.module';
 import { DealsPipelineCmpModule } from './dealspipeline/dealspipeline.module';
 import { ProposalListCmpModule } from './proposallist/proposallist.module';
@@ -38,7 +41,9 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     ProposalListComponent,
     SalesDashboardComponent,
     RevenueAreaChartComponent,
-    AddProposalComponent
+    AddProposalComponent,
+    MultiCategoriesSelectComponent,
+    MultiSubCategoriesSelectComponent
   ],
   imports: [
     BrowserModule,
