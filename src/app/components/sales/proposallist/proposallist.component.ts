@@ -33,7 +33,7 @@ export class ProposalListComponent implements OnInit {
 
     this.proposalsService.getProposals().subscribe(res => {
       this.proposalListInfo = res.results;
-      console.log('Proposals list: ', res);
+      console.log('proposalList: ', this.proposalListInfo);
     });
   }
 
@@ -51,7 +51,7 @@ export class ProposalListComponent implements OnInit {
   ];
 
   public proposallistStatus: Array<string> = [
-    'Due', 'Overdue', 'Paid', 'Net 15', 'Net 30', 'Estimate', 'Approved', 'Rejected'
+    'NEW', 'FOLLOW_UP', 'SEEN', 'DEMO', 'NEGOTIOTION', 'WON', 'LOST'
   ];
 
   public proposalListInfo: Array<Object> = [

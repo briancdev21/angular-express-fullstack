@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import * as _ from 'lodash';
 import { HorizontalBarComponent } from '../../../common/horizontalbar/horizontalbar.component';
+import { SharedService } from '../../../../services/shared.service';
+import { CrmService } from '../../../../services/crm.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-proposallisttable',
@@ -21,8 +24,14 @@ export class ProposalListTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
+  contactsList: any;
 
-  constructor( private filterService: FilterService, private router: Router ) {
+  constructor( private filterService: FilterService, private router: Router, private sharedService: SharedService,
+    private crmService: CrmService ) {
+    // this.crmService.getIndividualContact(id).subscribe(res => {
+    //   this.contactsList = res;
+    //   console.log('contactsList: ', res);
+    // });
   }
 
   ngOnInit() {
@@ -69,6 +78,11 @@ export class ProposalListTableComponent implements OnInit {
     }
   }
 
+  getContactName(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.person.firstName + ' ' + selectedContact.person.lastName ;
+  }
+
   sortCreateDateArray(field) {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
@@ -89,6 +103,10 @@ export class ProposalListTableComponent implements OnInit {
 
   getDateColor(days) {
     return days <= 6 ? 'green' : days <= 14 ? 'orange' : 'red';
+  }
+
+  dateFormatChanged(date) {
+    return moment(date).format('YYYY-MM-DD');
   }
 
 }
