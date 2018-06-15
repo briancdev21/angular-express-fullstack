@@ -30,5 +30,5 @@
 
 <div class="add-product-modal-wrapper" *ngIf="showAddProductModal"></div>
 <div class="add-product-modal"  [ngClass]="{'show-add-product-modal': showAddProductModal, 'hide-add-product-modal': !showAddProductModal }">
-  <app-editproductmodal [showAddProductModal]="showAddProductModal" [productsInfoAll]="productsInfoAll" (closeEditProductModal)="closeEditModal($event)"></app-editproductmodal>
+  <app-editproductmodal [showAddProductModal]="showAddProductModal" [productsInfoAll]="productsInfoAll" (closeEditProductModal)="closeEditModal($event)" [productInfo]="productInfo"></app-editproductmodal>
 </div>

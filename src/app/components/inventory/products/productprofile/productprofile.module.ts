@@ -13,6 +13,7 @@ import { VariantsListTableComponent } from './variantslisttable/variantslisttabl
 import { ProductPricingComponent } from './productpricing/productpricing.component';
 import { ProductAccAlterComponent } from './productaccalter/productaccalter.component';
 import { EditProductModalComponent } from './editproductmodal/editproductmodal.component';
+import { VariantMultiKeywordComponent } from './editproductmodal/variantmultikeyword/variantmultikeyword.component';
 
 import { TabModule } from 'angular-tabs-component';
 import { FormsModule } from '@angular/forms';
@@ -33,7 +34,8 @@ import { ProductProfileService } from './productprofile.service';
     VariantsListTableComponent,
     ProductPricingComponent,
     ProductAccAlterComponent,
-    EditProductModalComponent
+    EditProductModalComponent,
+    VariantMultiKeywordComponent
   ],
   imports: [
     BrowserModule,

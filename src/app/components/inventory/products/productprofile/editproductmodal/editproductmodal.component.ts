@@ -23,6 +23,11 @@ export class EditProductModalComponent implements OnInit {
   @Input() addProductModalCollapsed;
   @Input() productsInfoAll;
   @Output() closeEditProductModal: EventEmitter<any> = new EventEmitter;
+  @Input() set productInfo (val: any) {
+    this._productInfo = val;
+    this.addedProduct = val;
+    console.log('added proudct: ', this.addedProduct);
+  }
   searchModalCollapsed = true;
   searchAlterModalCollapsed = true;
   addAttachmentModalCollapsed = true;
@@ -84,6 +89,7 @@ export class EditProductModalComponent implements OnInit {
   missingUpcNumber = false;
   productTypesListInfo: any;
   productTypeNames: any;
+  _productInfo: any;
 
   constructor(private productProfileService: ProductProfileService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
@@ -115,10 +121,10 @@ export class EditProductModalComponent implements OnInit {
 
     this.sharedService.getProductTypes().subscribe(res => {
       this.productTypesListInfo = res.results;
-      this.productTypeNames = res.results.map(b => b.name);
+      console.log('product types: ', this.productTypesListInfo);
+      this.productTypeNames = completerService.local(this.productTypesListInfo, 'type', 'type');
     });
 
-    this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.addedProduct = {
       productType: this.type,
       productSupplier: this.supplier,
@@ -144,18 +150,6 @@ export class EditProductModalComponent implements OnInit {
       upc: '',
       option: 'optional',
       priceAdjust: 0,
-      // friendMargin: '0',
-      // friendPrice: '',
-      // royaltyPrice: '',
-      // royaltyMargin: '0',
-      // builderPrice: '',
-      // buildersMargin: '0',
-      // wholesalePrice: '',
-      // wholesaleMargin: '0',
-      // retailPrice: '',
-      // retailMargin: '0',
-      // costPrice: '',
-      // costMargin: '0',
       variantValue: [{id: 1, data: []}],
       variantProducts: []
     };
@@ -164,7 +158,7 @@ export class EditProductModalComponent implements OnInit {
     // this.variants = this.addedProduct.variantValue;
   }
   ngOnInit() {
-
+    console.log('_productInf0:', this._productInfo);
   }
 
   closeModal() {
@@ -388,7 +382,7 @@ export class EditProductModalComponent implements OnInit {
   }
 
   getKeywords(event) {
-    const keywordNamesList = event.map(k => k.name);
+    const keywordNamesList = event;
     this.addedProduct.variantValue[this.addedProduct.variantValue.length - 1].data = keywordNamesList;
     // this.variantKeywordsIdList = event.map(k => k.id);
   }
@@ -531,6 +525,10 @@ export class EditProductModalComponent implements OnInit {
   getBrandNamefromId(id) {
     const filterBrandName = this.brandsListInfo.filter(p => p.id === id);
     return filterBrandName.name;
+  }
+
+  onProductTypeSelected(item) {
+    console.log('selecte prod type:', item);
   }
 }
 

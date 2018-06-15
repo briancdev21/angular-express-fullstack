@@ -104,104 +104,15 @@ export class ProductProfileComponent implements OnInit {
   };
 
   public productPricingCategories = [
-    {
-      'id': 0,
-      'productId': 1,
-      'category': 'Friend & Family',
-      'margin': 0,
-      'price': 0,
-      'updatedAt': '2018-05-15'
-    },
-    {
-      'id': 1,
-      'productId': 0,
-      'category': 'Royalty Program',
-      'margin': 0,
-      'price': 0,
-      'updatedAt': '2018-05-15'
-    },
-    {
-      'id': 0,
-      'productId': 0,
-      'category': 'Retail',
-      'margin': 0,
-      'price': 0,
-      'updatedAt': '2018-05-15'
-    },
-    {
-      'id': 0,
-      'productId': 0,
-      'category': 'Builders Program',
-      'margin': 0,
-      'price': 0,
-      'updatedAt': '2018-05-15'
-    },
-    {
-      'id': 0,
-      'productId': 0,
-      'category': 'Wholesale',
-      'margin': 0,
-      'price': 0,
-      'updatedAt': '2018-05-15'
-    },
-    {
-      'id': 0,
-      'productId': 0,
-      'category': 'Cost',
-      'margin': 0,
-      'price': 0,
-      'updatedAt': '2018-05-15'
-    },
   ];
 
   public productVariants = [
-    // {
-    //   'sku': 8802013,
-    //   'productId': 1,
-    //   'upc': '846321358163123456613',
-    //   'name': 'White / Icon',
-    //   'cost': 800,
-    //   'supplierCode': 'C4-Hc800-WI',
-    //   'priceAdjustment': 0,
-    //   'quantity': 2,
-    //   'createdAt': '2018-05-15',
-    //   'updatedAt': '2018-05-15',
-    //   'reOrder': 0,
-    //   'po': 0,
-    //   'reserved': 2
-    // },
   ];
 
   public productAccessories = [
-    {
-      sku: 880200000,
-      productName: 'SPA Team Installation',
-      modelNumber: 'NU-8802',
-      brand: 'Nu Automations',
-      qty: 14.22,
-      price: 1407.38,
-      options: 'Automatically'
-    },
-    {
-      sku: 880200001,
-      productName: '2 Year Warranty',
-      modelNumber: 'NU-WARRANTY-2Y',
-      brand: 'Nu Automations',
-      qty: 1,
-      price: 299,
-      options: 'Optional'
-    },
   ];
 
   public productAlternatives = [
-    {
-      sku: 8000000001,
-      productName: 'SPA Team',
-      modelNumber: 'NU-8800',
-      brand: 'Nu Auto',
-      qty: 1,
-      price: 200
-    }
   ];
 
   currentContact: any;

@@ -1,5 +1,5 @@
 <div class="header">
-  <span>ADDING PRODUCT</span>
+  <span>EDITING PRODUCT</span>
   <img class="close-btn" src="assets/images/x-sign-red.png" (click)="closeModal()"/>
 </div>
 
@@ -12,18 +12,18 @@
             <div class="content-left">
               <div>
                 <span>Model Number</span>
-                <input placeholder="Enter the product model number" [ngClass]="{'validation-required': invalidModelNumber}"  [(ngModel)]="addedProduct.modelNumber" [value]="addedProduct.modelNumber">
+                <input placeholder="Enter the product model number" [ngClass]="{'validation-required': invalidModelNumber}"  [(ngModel)]="addedProduct.model">
               </div>
               <div>
                 <span>Product Type</span>
-                <ng2-completer [(ngModel)]="addedProduct.type" [ngClass]="{'completer-validation-required': invalidProductType}" placeholder="Add or search for product type" [datasource]="types" [minSearchLength]="0" class="auto-comp"></ng2-completer>
+                <ng2-completer [(ngModel)]="addedProduct.type" [ngClass]="{'completer-validation-required': invalidProductType}" placeholder="Add or search for product type" (selected)="onProductTypeSelected($event)"  [datasource]="productTypeNames" [minSearchLength]="0" class="auto-comp"></ng2-completer>
               </div>
             </div>
             <div class="content-right">
               <image-upload
                 [max]="6"
                 [buttonCaption]="''"
-                [dropBoxMessage]="'Drage and Drop images here!'"
+                [dropBoxMessage]="'Drag and Drop images here!'"
                 [extensions]="['jpg','png','gif']"
                 [class]="customClass"
                 (removed)="onRemoved($event)"
@@ -243,7 +243,7 @@
               <span>Variant Values</span>
               <div class="value-editable">
                 <div class="values-section">
-                  <app-multikeywordselect [keywords]="emptyArr" (sendKeywords)="getKeywords($event)"></app-multikeywordselect>
+                  <app-variantmultikeyword [keywords]="emptyArr" (sendKeywords)="getKeywords($event)"></app-variantmultikeyword>
                 </div>
                 <img src="assets/images/garbage.png" (click)="removeVariantList(i);" class="remove-variants" [ngClass]="getVisibility(i)">
               </div>
