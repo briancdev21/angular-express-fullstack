@@ -2,8 +2,8 @@
   <table class="work-order-table">
     <tr>
       <th (click)="sortArray('id')">PROPOSAL ID</th>
-      <th (click)="sortArray('contactName')">CONTACT NAME</th>
-      <th (click)="sortArray('projectName')">PROJECT NAME</th>
+      <th (click)="sortArray('contactId')">CONTACT NAME</th>
+      <th (click)="sortArray('name')">PROJECT NAME</th>
       <th (click)="sortArray('total')">PROPOSAL AMOUNT</th> 
       <th (click)="sortArray('status')">DEAL STATUS</th>
       <th (click)="sortArray('revision')">REVISION</th>
@@ -13,7 +13,7 @@
     <tr *ngFor="let proposallist of proposalListInfo; let i = index" (click)="redirectTo(proposallist.projectNumber)">
       <td>{{proposallist.id}}</td>
       <td>{{proposallist.contactId}}</td>
-      <td>{{proposallist.projectName}}</td>
+      <td>{{proposallist.name}}</td>
       <td>$ {{proposallist.total | number: '1.2-2'}}</td>
       <td>{{proposallist.status}}</td>
       <td>{{proposallist.revision}}</td>
