@@ -179,107 +179,107 @@ export class SharedService {
 
   // Terms
   getTerms(): Observable<any> {
-    const url = `${apiUrl}organization/terms`;
+    const url = `${environment.apiUrl}organization/terms`;
     return this.http.get(url);
   }
 
   createTerm (body): Observable<any> {
-    const url = `${apiUrl}organization/terms`;
+    const url = `${environment.apiUrl}organization/terms`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualTerm(id): Observable<any>  {
-    const url = `${apiUrl}organization/terms/${id}`;
+    const url = `${environment.apiUrl}organization/terms/${id}`;
     return this.http.get(url);
   }
 
   deleteTerm (id): Observable<any> {
-    const url = `${apiUrl}organization/terms/${id}`;
+    const url = `${environment.apiUrl}organization/terms/${id}`;
     return this.http.delete<any>(url);
   }
 
   // Pricing Category
   getPricingCategories(): Observable<any> {
-    const url = `${apiUrl}organization/pricing-categories`;
+    const url = `${environment.apiUrl}organization/pricing-categories`;
     return this.http.get(url);
   }
 
   createPricingCategory (body): Observable<any> {
-    const url = `${apiUrl}organization/pricing-categories`;
+    const url = `${environment.apiUrl}organization/pricing-categories`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualPricingCategory(id): Observable<any>  {
-    const url = `${apiUrl}organization/pricing-categories/${id}`;
+    const url = `${environment.apiUrl}organization/pricing-categories/${id}`;
     return this.http.get(url);
   }
 
   updateIndividualPricingCategory(id, body): Observable<any>  {
-    const url = `${apiUrl}organization/pricing-categories/${id}`;
+    const url = `${environment.apiUrl}organization/pricing-categories/${id}`;
     return this.http.put(url, body);
   }
 
   // Tax-rate
   getTaxRates(): Observable<any> {
-    const url = `${apiUrl}organization/tax-rates`;
+    const url = `${environment.apiUrl}organization/tax-rates`;
     return this.http.get(url);
   }
 
   createTaxRate (body): Observable<any> {
-    const url = `${apiUrl}organization/tax-rates`;
+    const url = `${environment.apiUrl}organization/tax-rates`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualTaxRate(id): Observable<any>  {
-    const url = `${apiUrl}organization/tax-rates/${id}`;
+    const url = `${environment.apiUrl}organization/tax-rates/${id}`;
     return this.http.get(url);
   }
 
   deleteTaxRate (id): Observable<any> {
-    const url = `${apiUrl}organization/tax-rates/${id}`;
+    const url = `${environment.apiUrl}organization/tax-rates/${id}`;
     return this.http.delete<any>(url);
   }
 
   // Classification
   getClassifications(): Observable<any> {
-    const url = `${apiUrl}organization/classifications`;
+    const url = `${environment.apiUrl}organization/classifications`;
     return this.http.get(url);
   }
 
   createClassification (body): Observable<any> {
-    const url = `${apiUrl}organization/classifications`;
+    const url = `${environment.apiUrl}organization/classifications`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualClassification(id): Observable<any>  {
-    const url = `${apiUrl}organization/classifications/${id}`;
+    const url = `${environment.apiUrl}organization/classifications/${id}`;
     return this.http.get(url);
   }
 
   deleteClassification (id): Observable<any> {
-    const url = `${apiUrl}organization/classifications/${id}`;
+    const url = `${environment.apiUrl}organization/classifications/${id}`;
     return this.http.delete<any>(url);
   }
 
 
   // Sources
   getSources(): Observable<any> {
-    const url = `${apiUrl}organization/sources`;
+    const url = `${environment.apiUrl}organization/sources`;
     return this.http.get(url);
   }
 
   createSource (body): Observable<any> {
-    const url = `${apiUrl}organization/sources`;
+    const url = `${environment.apiUrl}organization/sources`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualSource(id): Observable<any>  {
-    const url = `${apiUrl}organization/sources/${id}`;
+    const url = `${environment.apiUrl}organization/sources/${id}`;
     return this.http.get(url);
   }
 
   deleteSource (id): Observable<any> {
-    const url = `${apiUrl}organization/sources/${id}`;
+    const url = `${environment.apiUrl}organization/sources/${id}`;
     return this.http.delete<any>(url);
   }
 
