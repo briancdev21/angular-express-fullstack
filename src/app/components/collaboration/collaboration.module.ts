@@ -27,7 +27,6 @@ import { WorkOrdersCmpModule } from './workorders/workorders.module';
 import { CollaborationService } from './collaboration.service';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
 import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 
 

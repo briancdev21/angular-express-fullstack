@@ -16,6 +16,7 @@ import * as moment from 'moment';
 export class ProductProfileComponent implements OnInit {
 
   menuCollapsed = true;
+  productsInfoAll: any;
   productInfoIndex: any;
   dateSelectorList = [
     'Today',
