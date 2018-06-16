@@ -79,15 +79,17 @@ import {InventoryAdAddComponent} from './components/inventory/inventory-ad-add/i
 import {InventoryPoProfileComponent} from './components/inventory/inventory-po-profile/inventory.component';
 import { ProductProfileComponent } from './components/inventory/products/productprofile/productprofile.component';
 
+import { AuthGuard } from './services/authguard.service';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'sign-up', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'home', component: HomeComponent},
-  { path: 'add-invoice', component: AddInvoiceComponent },
-  { path: 'add-estimate', component: AddEstimateComponent },
-  { path: 'crm', component: CrmComponent,
+  { path: 'home', component: HomeComponent , canActivate: [AuthGuard] },
+  { path: 'add-invoice', component: AddInvoiceComponent, canActivate: [AuthGuard] },
+  { path: 'add-estimate', component: AddEstimateComponent, canActivate: [AuthGuard] },
+  { path: 'crm', component: CrmComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'crm-dashboard', pathMatch: 'full' },
       { path: 'crm-dashboard', component: CrmDashboardComponent },
@@ -98,7 +100,7 @@ export const routes: Routes = [
       { path: 'contact-profile', component: ProfileComponent }
     ]
   },
-  { path: 'sales', component: SalesComponent,
+  { path: 'sales', component: SalesComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'sales-dashboard', pathMatch: 'full' },
       { path: 'sales-dashboard', component: SalesDashboardComponent },
@@ -108,7 +110,7 @@ export const routes: Routes = [
       { path: 'proposal-details', component: ProposalComponent }
     ]
   },
-  { path: 'pm', component: PmComponent,
+  { path: 'pm', component: PmComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'pm-dashboard', pathMatch: 'full' },
       { path: 'pm-dashboard', component: PmDashboardComponent },
@@ -143,7 +145,7 @@ export const routes: Routes = [
       },
     ]
   },
-  { path: 'inventory', component: InventoryComponent,
+  { path: 'inventory', component: InventoryComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'inventory-dashboard', pathMatch: 'full' },
       { path: 'inventory-dashboard', component: InventoryDashboardComponent },
@@ -158,7 +160,7 @@ export const routes: Routes = [
       { path: 'product-profile', component: ProductProfileComponent }
     ]
   },
-  { path: 'collaboration', component: CollaborationComponent,
+  { path: 'collaboration', component: CollaborationComponent, canActivate: [AuthGuard],
       children: [
         { path: '', redirectTo: 'collaboration-dashboard', pathMatch: 'full' },
         { path: 'collaboration-dashboard', component: CollaborationDashboardComponent },
@@ -168,7 +170,7 @@ export const routes: Routes = [
         { path: 'order-profile', component: OrderProfileComponent }
       ]
   },
-  { path: 'servicing', component: ServicingComponent,
+  { path: 'servicing', component: ServicingComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'servicing-dashboard', pathMatch: 'full' },
       { path: 'servicing-dashboard', component: ServicingDashboardComponent },
@@ -177,7 +179,7 @@ export const routes: Routes = [
       { path: 'solutions', component: SolutionsComponent },
     ]
   },
-  { path: 'reports', component: ReportsComponent,
+  { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'reports-dashboard', pathMatch: 'full' },
       { path: 'reports-dashboard', component: ReportsDashboardComponent },
@@ -186,7 +188,7 @@ export const routes: Routes = [
       { path: 'project-reports', component: ProjectReportsComponent },
     ]
   },
-  { path: '**', component: TestComponent },
+  { path: '**', redirectTo: 'home' },
 ];
 
 export const routing = RouterModule.forRoot(routes);

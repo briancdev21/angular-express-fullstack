@@ -20,6 +20,7 @@ import { CollaborationDashboardComponent } from './collaborationdashboard/collab
 import { PersonalUpcomingEventsComponent } from './personalschedule/personalupcomingevents/personalupcomingevents.component';
 import { BackLogLineChartComponent } from './collaborationdashboard/backloglinechart/backloglinechart.component';
 import { WorkOrderDonutChartComponent } from './collaborationdashboard/workorderdonutchart/workorderdonutchart.component';
+import { MorrisMultiLineComponent } from './collaborationdashboard/morrismultilinechart/morrismultilinechart.component';
 
 import { WorkOrdersCmpModule } from './workorders/workorders.module';
 
@@ -40,7 +41,8 @@ import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
     TeamUpcomingEventComponent,
     BackLogLineChartComponent,
     BackLogLineChartComponent,
-    WorkOrderDonutChartComponent
+    WorkOrderDonutChartComponent,
+    MorrisMultiLineComponent
   ],
   imports: [
     BrowserModule,

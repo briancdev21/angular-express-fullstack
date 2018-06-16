@@ -4,5 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: 'https://api.dev.koridor.io/api/v1',
+  authClientId: 'kW7LPxzpyBUYXaYRqxHA3pf7QaLnN00G',
+  authDomain: 'koridor-development.auth0.com'
 };

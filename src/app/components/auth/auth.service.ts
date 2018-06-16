@@ -3,44 +3,58 @@ import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable()
 
 export class AuthService {
   auth0 = new auth0.WebAuth({
-    clientID: 'kW7LPxzpyBUYXaYRqxHA3pf7QaLnN00G',
-    domain: 'koridor-development.auth0.com',
-    responseType: 'token id_token',
-    grant_type: 'implicit',
-    audience: 'http://localhost:8080',
-    redirectUri: 'http://localhost:4200/home',
-    scope: 'openid admin'
+    clientID: environment.authClientId,
+    domain: environment.authDomain,
+    // responseType: 'token id_token',
+    // audience: 'http://localhost:8080',
+    // redirectUri: 'http://localhost:4200/home',
+    // scope: 'openid'
   });
+  returnUrl: string;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private route: ActivatedRoute) {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '../home';
+    console.log('returnUrl: ', this.returnUrl);
   }
 
 
-  public login(): void {
-    this.handleAuthentication();
-    this.auth0.authorize();
-    // this.handleAuthentication();
+  public login(userName, password): void {
+    const _this = this;
+    this.auth0.client.login({
+      realm: 'Username-Password-Authentication',
+      username: userName,
+      password: password,
+      scope: 'openid',
+      responseType: 'code'
+    }, function(err, authResult) {
+      if (err) {
+        console.log('auth error: ', err, 'res', authResult);
+        return;
+      } else {
+        _this.handleAuthentication(authResult);
+      }
+    });
   }
 
-  public handleAuthentication(): void {
-    this.auth0.parseHash((err, authResult) => {
+  handleAuthentication(authResult) {
+    console.log('123321');
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
         this.setSession(authResult);
-        this.router.navigate(['../home']);
+        this.router.navigate([this.returnUrl]);
         console.log('without error: ', authResult);
-      } else if (err) {
-        this.router.navigate(['../home']);
-        console.log(err);
+      } else {
+        this.router.navigate(['../login']);
+        console.log('login err: ');
       }
-    });
   }
 
   private setSession(authResult): void {
