@@ -154,7 +154,7 @@ export const routes: Routes = [
       { path: 'stock-control/add-purchase-order', component: InventoryPoAddComponent },
       { path: 'stock-control/add-transfer', component: InventoryTrAddComponent },
       { path: 'stock-control/add-adjustment', component: InventoryAdAddComponent },
-      { path: 'stock-control/purchaseorder/:id', component: InventoryPoProfileComponent },
+      { path: 'stock-control/purchase-order/:id', component: InventoryPoProfileComponent },
       { path: 'stock-control/transfer/:id', component: InventoryTrProfileComponent },
       { path: 'stock-control/adjustment/:id', component: InventoryAdProfileComponent },
       { path: 'products', component: ProductsComponent },

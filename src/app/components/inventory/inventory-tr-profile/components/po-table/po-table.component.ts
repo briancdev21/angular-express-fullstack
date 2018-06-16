@@ -71,8 +71,8 @@ export class POTableComponent implements OnInit {
   productDetails = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
-
   }
+
   ngOnInit() {
   }
 

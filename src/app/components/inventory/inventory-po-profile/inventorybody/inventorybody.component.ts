@@ -18,7 +18,7 @@ export class InventoryBodyComponent {
     this.po_id = `PO-${this.po_mock.id}`;
     this.contactId = this.po_mock.contactId;
     // Get customerAddress:
-    if (this.po_mock.contactId !== undefined && this.contactList !== undefined) {
+    if (this.po_mock.contactId !== undefined && this.contactList.length !== 0) {
       const contactIdNumber = parseInt(this.po_mock.contactId.toString().split('-').pop(), 10);
       this.po_mock.contactId = contactIdNumber;
       const selectedContact = this.contactList.filter(contact => contact.id === this.po_mock.contactId);
@@ -27,7 +27,6 @@ export class InventoryBodyComponent {
     this.discountAmount = this.po_mock.discount.value;
     this.discountType = this.po_mock.discount.unit;
     this.freightcosts = this.po_mock.freightCost;
-    this.po_mock.status = 'SENT';
     this.dueDate = this.po_mock.dueDate;
     this.createdDate = this.po_mock.createdAt;
     this.shippingAddress = this.po_mock.shippingAddress;
@@ -50,7 +49,7 @@ export class InventoryBodyComponent {
   }
 
   po_mock: PurchaseOrderModel;
-  contactList: ContactUserModel[];
+  contactList: ContactUserModel[] = [];
   contactId = undefined;
   userList = [];
 
@@ -113,6 +112,12 @@ export class InventoryBodyComponent {
   constructor(private router: Router, private sharedService: SharedService) {
     this.sharedService.getContacts().subscribe(res => {
       this.contactList = res;
+      if (this.po_mock.contactId !== undefined && this.contactList.length !== 0) {
+        const contactIdNumber = parseInt(this.po_mock.contactId.toString().split('-').pop(), 10);
+        this.po_mock.contactId = contactIdNumber;
+        const selectedContact = this.contactList.filter(contact => contact.id === this.po_mock.contactId);
+        this.customerAddress = selectedContact[0]['shippingAddress'];
+      }
       this.userList = this.contactList.map((contactUser, index) => {
         return {
           'name': contactUser.person.firstName + ' ' + contactUser.person.lastName,
@@ -184,7 +189,14 @@ export class InventoryBodyComponent {
   }
 
   onSave() {
-    this.router.navigate(['./inventory/stock-control']);
+    if (this.po_mock.status === 'OPEN') {
+      this.po_mock.status = 'SENT';
+      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((resp) => {
+        this.router.navigate(['./inventory/stock-control']);
+      });
+    } else {
+      this.router.navigate(['./inventory/stock-control']);
+    }
   }
 
   savePO() {
@@ -223,13 +235,7 @@ export class InventoryBodyComponent {
   }
 
   updatePO () {
-    if (this.po_mock.location !== undefined
-      && this.po_mock.term !== undefined
-      && this.po_mock.freightCost !== undefined
-      && this.po_mock.discount !== undefined
-      && this.po_mock.internalMemo !== undefined
-      && this.po_mock.supplierNote !== undefined
-    ) {
+    if (this.po_mock.status === 'OPEN') {
       this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((resp) => {
         this.po_mock.subTotal = resp.data.subTotal;
         this.po_mock.totalTax = resp.data.totalTax;

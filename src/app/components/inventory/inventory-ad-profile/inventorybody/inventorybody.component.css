@@ -303,3 +303,7 @@ app-po-discount {
 ::ng-deep app-tr-internalmemo.has-error textarea {
   border: solid 1px red;
 }
+
+.disabled {
+  pointer-events: none;
+}

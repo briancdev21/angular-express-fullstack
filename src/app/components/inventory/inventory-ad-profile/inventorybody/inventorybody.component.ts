@@ -30,9 +30,8 @@ export class InventoryBodyComponent implements OnDestroy {
   showButtons = false;
 
   @Input() set adData(_addata) {
-    this.ad_mock = new AdjustmentModel();
-    this.ad_mock = _addata;
     if (_addata !== undefined) {
+      this.ad_mock = _addata;
       this.ad_id = `AD-${this.ad_mock.id}`;
       this.transferdate = _addata.createdAt;
       this.adjustedLocation = _addata.adjustedLocationId;
@@ -41,7 +40,7 @@ export class InventoryBodyComponent implements OnDestroy {
       this.sharedService.getInventoryAdjustmentProducts(this.ad_mock.id).subscribe( productRes => {
         this.productDetails = productRes.results;
         this.productDetails.forEach(productDetail => {
-          productDetail.discount = productDetail.discount.value;
+          productDetail.discount = productDetail.discount !== undefined ? productDetail.discount.value : undefined;
         });
       });
     }
@@ -64,6 +63,9 @@ export class InventoryBodyComponent implements OnDestroy {
 
   constructor(private sharedService: SharedService, private router: Router) {
     this.transferdate = new Date().toISOString();
+    this.ad_mock = new AdjustmentModel();
+    console.log('this admock', this.ad_mock);
+    this.ad_mock.status = 'OPEN';
     this.sharedService.getLocations().subscribe(locationRes => {
       this.locations = locationRes.results;
     });
@@ -101,11 +103,13 @@ export class InventoryBodyComponent implements OnDestroy {
   onSave() {
     console.log('mock:', this.ad_mock);
     this.showErrors = true;
-    if (this.ad_mock.adjustedLocation !== undefined) {
+    if (this.ad_mock.status === 'OPEN') {
       this.ad_mock.status = 'ADJUSTED';
       this.sharedService.updateInventoryAdjustment(this.ad_mock.id, this.ad_mock).subscribe(() => {
         this.router.navigate(['./inventory/stock-control']);
       });
+    } else {
+      this.router.navigate(['./inventory/stock-control']);
     }
   }
 
