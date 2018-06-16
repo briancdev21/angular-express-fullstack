@@ -139,8 +139,8 @@
 	font-weight: 400;
 }
 
-/deep/ .wrong-credentials .mat-form-field-flex {
-	border-bottom: 7px solid red;
+.wrong-credentials {
+	color: red;
 }
 
 .remember-check {

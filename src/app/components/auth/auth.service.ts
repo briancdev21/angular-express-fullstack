@@ -29,22 +29,26 @@ export class AuthService {
 
   public login(userName, password): void {
     const _this = this;
-    this.auth0.client.login({
-      realm: 'Username-Password-Authentication',
-      username: userName,
-      password: password,
-      scope: 'openid',
-      responseType: 'code'
-    }, function(err, authResult) {
-      if (err) {
-        console.log('auth error: ', err, 'res', authResult);
-        _this.loginFailed.next(true);
-        return;
-      } else {
-        _this.handleAuthentication(authResult);
-        _this.loginFailed.next(false);
-      }
-    });
+    if (environment.production) {
+      _this.auth0.crossOriginVerification();
+    } else {
+      this.auth0.client.login({
+        realm: 'Username-Password-Authentication',
+        username: userName,
+        password: password,
+        scope: 'openid',
+        responseType: 'code'
+      }, function(err, authResult) {
+        if (err) {
+          console.log('auth error: ', err, 'res', authResult);
+          _this.loginFailed.next(true);
+          return;
+        } else {
+          _this.handleAuthentication(authResult);
+          _this.loginFailed.next(false);
+        }
+      });
+    }
   }
 
   handleAuthentication(authResult) {

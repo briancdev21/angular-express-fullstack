@@ -16,8 +16,9 @@
 		<span>{{currentHour}}</span><span class="blink">:</span><span>{{currentMin}}</span>
 		<span class="time-convention">{{timeConvention}}</span>
 	</div>
+	<span class="wrong-credentials" *ngIf="wrongCredentials">The provided email/password is not valid, please try again</span>
 	<div class="login-sec">
-		<form class="login-form" (ngSubmit)="onLogin()" [formGroup]="loginform" [ngClass]="{'wrong-credentials':wrongCredentials === true}">
+		<form class="login-form" (ngSubmit)="onLogin()" [formGroup]="loginform">
 			<mat-form-field>
 				<input matInput placeholder="USERNAME" formControlName="userName" >
 			</mat-form-field>
