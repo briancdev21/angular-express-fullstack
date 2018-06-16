@@ -21,111 +21,111 @@ export class SharedService {
   }
 
   getKeywords (): Observable<any> {
-    const url = `${environment.apiUrl}/keywords/`;
+    const url = `${environment.apiUrl}/organization/keywords/`;
     return this.http.get(url);
   }
 
   createKeyword (body): Observable<any> {
-    const url = `${environment.apiUrl}/keywords/`;
+    const url = `${environment.apiUrl}/organization/keywords/`;
     return this.http.post<any>(url, body);
   }
 
   deleteKeyword (id): Observable<any> {
-    const url = `${environment.apiUrl}/keywords/${id}`;
+    const url = `${environment.apiUrl}/organization/keywords/${id}`;
     return this.http.delete<any>(url);
   }
 
   getIndividualKeyword(id): Observable<any>  {
-    const url = `${environment.apiUrl}/keywords/${id}`;
+    const url = `${environment.apiUrl}/organization/keywords/${id}`;
     return this.http.get(url);
   }
 
   // brand
   getBrands(): Observable<any> {
-    const url = `${environment.apiUrl}/brands/`;
+    const url = `${environment.apiUrl}/organization/brands/`;
     return this.http.get(url);
   }
 
   createBrand (body): Observable<any> {
-    const url = `${environment.apiUrl}/brands/`;
+    const url = `${environment.apiUrl}/organization/brands/`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualBrand(id): Observable<any>  {
-    const url = `${environment.apiUrl}/brands/${id}`;
+    const url = `${environment.apiUrl}/organization/brands/${id}`;
     return this.http.get(url);
   }
 
   deleteBrand (id): Observable<any> {
-    const url = `${environment.apiUrl}/brands/${id}`;
+    const url = `${environment.apiUrl}/organization/brands/${id}`;
     return this.http.delete<any>(url);
   }
 
   // Location
   getLocations(): Observable<any> {
-    const url = `${environment.apiUrl}/locations/`;
+    const url = `${environment.apiUrl}/organization/locations/`;
     return this.http.get(url);
   }
 
   createLocation (body): Observable<any> {
-    const url = `${environment.apiUrl}/locations/`;
+    const url = `${environment.apiUrl}/organization/locations/`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualLocation(id): Observable<any>  {
-    const url = `${environment.apiUrl}/locations/${id}`;
+    const url = `${environment.apiUrl}/organization/locations/${id}`;
     return this.http.get(url);
   }
 
   deleteLocation (id): Observable<any> {
-    const url = `${environment.apiUrl}/locations/${id}`;
+    const url = `${environment.apiUrl}/organization/locations/${id}`;
     return this.http.delete<any>(url);
   }
 
   updateIndividualLocation(id, body) {
-    const url = `${environment.apiUrl}/locations/${id}`;
+    const url = `${environment.apiUrl}/organization/locations/${id}`;
     return this.http.post<any>(url, body);
   }
 
   // Product Type
   getProductTypes(): Observable<any> {
-    const url = `${environment.apiUrl}/productTypes/`;
+    const url = `${environment.apiUrl}/organization/productTypes/`;
     return this.http.get(url);
   }
 
   createProductType (body): Observable<any> {
-    const url = `${environment.apiUrl}/productTypes/`;
+    const url = `${environment.apiUrl}/organization/productTypes/`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualProductType(id): Observable<any>  {
-    const url = `${environment.apiUrl}/productTypes/${id}`;
+    const url = `${environment.apiUrl}/organization/productTypes/${id}`;
     return this.http.get(url);
   }
 
   deleteProductType (id): Observable<any> {
-    const url = `${environment.apiUrl}/productTypes/${id}`;
+    const url = `${environment.apiUrl}/organization/productTypes/${id}`;
     return this.http.delete<any>(url);
   }
 
   // Currency
   getCurrencies(): Observable<any> {
-    const url = `${environment.apiUrl}/currencies/`;
+    const url = `${environment.apiUrl}/organization/currencies/`;
     return this.http.get(url);
   }
 
   createCurrency (body): Observable<any> {
-    const url = `${environment.apiUrl}/currencies/`;
+    const url = `${environment.apiUrl}/organization/currencies/`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualCurrency(id): Observable<any>  {
-    const url = `${environment.apiUrl}/currencies/${id}`;
+    const url = `${environment.apiUrl}/organization/currencies/${id}`;
     return this.http.get(url);
   }
 
   deleteCurrency (id): Observable<any> {
-    const url = `${environment.apiUrl}/currencies/${id}`;
+    const url = `${environment.apiUrl}/organization/currencies/${id}`;
     return this.http.delete<any>(url);
   }
 
