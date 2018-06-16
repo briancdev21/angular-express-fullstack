@@ -12,6 +12,8 @@ import { UpcomingAppointmentsComponent } from '../../profile/cards/upcomingappoi
 import { TasksComponent } from '../../profile/cards/tasks/tasks.component';
 import { DocumentsComponent } from '../../profile/cards/documents/documents.component';
 import { CollaboratorsComponent } from '../../profile/cards/collaborators/collaborators.component';
+import { SharedService } from '../../../services/shared.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-supplierprofile',
@@ -27,46 +29,42 @@ import { CollaboratorsComponent } from '../../profile/cards/collaborators/collab
 export class SupplierProfileComponent implements OnInit {
 
   menuCollapsed = true;
+  supplierId: number;
 
-  constructor() {
-
+  constructor(private sharedSevice: SharedService, private route: ActivatedRoute) {
+    this.route.params.subscribe( params => {
+      this.supplierId = params.id;
+      this.getSupplierInfo();
+    });
   }
+
+
   userInfo = {
-    name: 'Alliance Video Audio Distribution',
-    contactName: 'Jeff Neilson',
-    email: 'Jeff.neilson@AVAD.com',
-    primaryphone: '5873337937',
-    shippingaddress: '#12, 2420 34th Ave SW Calgary, AB T2T 2CB',
-    billingaddress: '#12, 2420 34th Ave SW Calgary, AB T2T 2CB',
-    keywords: [
-    ],
-    followers: [{
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Michael'
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/Joseph',
-      name: 'Joseph'
-    }]
+    name: '',
+    contactName: '',
+    email: '',
+    primaryphone: '',
+    shippingaddress: undefined,
+    billingaddress: undefined,
+    keywords: [],
+    followers: []
   };
   public chartSetData: Array<Object> = [
     {
       title: 'Supplier Rating',
-      percentage: '120%',
+      percentage: '120',
     },
     {
       title: 'Sensitivity Rating',
-      percentage: '90%',
+      percentage: '90',
     },
     {
       title: 'PO Ratio',
-      percentage: '70%',
+      percentage: '70',
     },
     {
       title: 'Efficiency Ratio',
-      percentage: '50%',
+      percentage: '50',
     }
   ];
    /**
@@ -304,5 +302,57 @@ export class SupplierProfileComponent implements OnInit {
 
   toggleMenubar(data: boolean) {
     this.menuCollapsed  = data;
+  }
+
+  getSupplierInfo () {
+    this.sharedSevice.getSupplier(this.supplierId).subscribe(supplierRes => {
+      const data = supplierRes.data;
+      console.log('supplierRes id:', supplierRes.data);
+      this.sharedSevice.getContact(data.contactId).subscribe(contactRes => {
+        const contact = contactRes['data'];
+        this.sharedSevice.getTerm(data.contactId).subscribe(termRes => {
+          const term = termRes.data;
+          this.sharedSevice.getCurrency(data.contactId).subscribe(res => {
+            const followers = [];
+            if (contact.followers) {
+              contact.followers.forEach(follower => {
+                this.sharedSevice.getUser(follower).subscribe(followerRes => {
+                  followers.push({
+                    imageUrl: followerRes.data.pictureURI,
+                    name: `${followerRes.data.firstName} ${followerRes.data.lastName}`,
+                    profileLink: `crm/contacts/${followerRes.data.username}`,
+                  });
+                });
+                if (followers.length === contact.followers.length) {
+                  this.userInfo = {
+                    name: data.name,
+                    contactName: contact.name,
+                    email: contact.email,
+                    primaryphone: contact.phoneNumbers.primary,
+                    // tslint:disable-next-line:max-line-length
+                    shippingaddress: `${data.shippingAddress.address}, ${data.shippingAddress.city}, ${data.shippingAddress.province}, ${data.shippingAddress.postalCode}`,
+                    billingaddress: `${data.billingAddress.address}, ${data.billingAddress.city}, ${data.billingAddress.province}, ${data.billingAddress.postalCode}`,
+                    keywords: data.keywords,
+                    followers: followers
+                  };
+                }
+              });
+            } else {
+              this.userInfo = {
+                name: data.name,
+                contactName: contact.name,
+                email: contact.email,
+                primaryphone: contact.phoneNumbers.primary,
+                // tslint:disable-next-line:max-line-length
+                shippingaddress: `${data.shippingAddress.address}, ${data.shippingAddress.city}, ${data.shippingAddress.province}, ${data.shippingAddress.postalCode}`,
+                billingaddress: `${data.billingAddress.address}, ${data.billingAddress.city}, ${data.billingAddress.province}, ${data.billingAddress.postalCode}`,
+                keywords: data.keywords,
+                followers: followers
+              };
+            }
+          });
+        });
+      });
+    });
   }
 }

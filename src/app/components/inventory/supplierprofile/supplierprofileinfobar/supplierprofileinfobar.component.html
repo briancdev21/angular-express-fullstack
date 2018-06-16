@@ -1,5 +1,5 @@
 <div class="name editable">
-  <div  class="supplier-name" (keyup.enter)="showConfirmModal($event)" contentEditable >{{userInfo.name}}</div>
+  <input  class="supplier-name" (keyup.enter)="showConfirmModal($event)" contentEditable [(ngModel)]="userInfo.name" />
 </div>
 <div class="role editable">
   <input [(ngModel)]="userInfo.contactName" id="role" (keyup.enter)="showConfirmModal($event)" >

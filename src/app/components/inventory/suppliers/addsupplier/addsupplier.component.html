@@ -20,7 +20,11 @@
             </div>
             <div>
               <span>Contact Name (*required)</span>
-              <input placeholder="Enter last name" [ngClass]="{'validation-required': invalidContactName}" [(ngModel)]="contactName" [value]="contactName">
+              <select [(ngModel)]="contactName" [ngClass]="{'validation-required': invalidContactName, 'not-edited': !contactName}" class="contactNameField" 
+                 >
+                <option value="" disabled selected class="default-option">Enter last name</option>
+                <option *ngFor="let contact of contacts" [value]="contact.id">{{contact.person.firstName + ' ' + contact.person.lastName}}</option>
+              </select>
             </div>
           </div>
 
@@ -58,8 +62,9 @@
               <input placeholder="Enter account payable phone" [(ngModel)]="payablePhone" [value]="payablePhone">
             </div>
             <div>
-              <span>Business Number</span>
-              <input placeholder="Enter business number" [(ngModel)]="businessNumber" [value]="businessNumber">
+              <span>Business Number (*required)</span>
+              <input placeholder="Enter business number" [(ngModel)]="businessNumber" [value]="businessNumber"
+                [ngClass]="{'validation-required': invalidBusinessNumber}">
             </div>
           </div>
 
@@ -104,9 +109,9 @@
             <div>
               <span>Default terms (*required)</span>
               <div>
-                <select [(ngModel)]="defaultTerm" [ngClass]="{'validation-required': invalidDefaultTerm}">
+                <select [(ngModel)]="defaultTerm" [ngClass]="{'validation-required': invalidDefaultTerm}" >
                   <option value="" disabled selected class="default-option">Choose the default terms</option>
-                  <option *ngFor="let term of supplierTerm" [value]="term">{{term}}</option>
+                  <option *ngFor="let term of supplierTerm" [value]="term.id">{{term.name}}</option>
                 </select>
               </div>
             </div>
@@ -122,7 +127,7 @@
               <div>
                 <select [(ngModel)]="defaultCurrency" [ngClass]="{'validation-required': invalidDefaultCurrency}">
                   <option value="" disabled selected class="default-option">Choose the default currency</option>
-                  <option *ngFor="let currency of supplierCurrencies" [value]="currency">{{currency}}</option>
+                  <option *ngFor="let currency of supplierCurrencies" [value]="currency.id">{{currency.currencyCode}}</option>
                 </select>
               </div>
             </div>

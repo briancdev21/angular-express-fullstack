@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
+import { SharedService } from '../../../services/shared.service';
 @Component({
   selector: 'app-suppliers',
   templateUrl: './suppliers.component.html',
@@ -10,7 +11,7 @@ import { FilterService } from './filter.service';
   entryComponents: [
     CommonComponent
   ],
-  providers: [FilterService]
+  providers: [FilterService, SharedService]
 })
 export class SuppliersComponent implements OnInit {
 
@@ -24,11 +25,24 @@ export class SuppliersComponent implements OnInit {
   savedFiltersArr = [];
   filterAvaliableTo: any;
   filterName = '';
+  currencies = [];
 
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private sharedService: SharedService ) {
     this.filterAvaliableTo = 'everyone';
+    this.sharedService.getCurrencies().subscribe(currencies => {
+      this.currencies = currencies.results;
+      this.sharedService.getContacts().subscribe(contacts => {
+        this.contacts = contacts;
+        this.sharedService.getTerms().subscribe(terms => {
+          this.terms = terms.results;
+          this.getSuppliers();
+        });
+      });
+    });
   }
 
+  contacts = [];
+  terms = [];
   public filters  = {
     selectTag: '',
     accountNumber: '',
@@ -45,75 +59,27 @@ export class SuppliersComponent implements OnInit {
   ];
 
   public suppliersListInfo: Array<Object> = [
-    {
-      id: 0,
-      supplierName: 'Alliance Video Distribution',
-      contactName: 'Jeff Neilson',
-      supplierPhone: '4039696480',
-      supplierEmail: 'alliance@outlook.com',
-      contactPhone: '4039696480',
-      contactEmail: 'jeff.neilson@outlook.com',
-      address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      term: 'Net 30',
-      accountNumber: '320ATATECH0001',
-      currency: 'CAD',
-      country: 'Canada',
-      state: 'Alberta',
-      tags: ['Control4', 'Alliance']
-    },
-    {
-      id: 1,
-      supplierName: 'Control4',
-      contactName: 'Jordan Chase',
-      supplierPhone: '4039696480',
-      supplierEmail: 'control4@outlook.com',
-      contactPhone: '4039696481',
-      contactEmail: 'jordan.chase@outlook.com',
-      address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      term: 'Net 15',
-      accountNumber: 'CAD32000232',
-      currency: 'CAD',
-      country: 'Canada',
-      state: 'Alberta',
-      tags: ['Control4', 'House']
-    },
-    {
-      id: 2,
-      supplierName: 'House Logixs',
-      contactName: '',
-      supplierPhone: '4039696480',
-      supplierEmail: 'alliance@outlook.com',
-      contactPhone: '',
-      contactEmail: '',
-      address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      term: 'Due on Receipt',
-      accountNumber: '',
-      currency: 'USD',
-      country: 'USA',
-      state: 'Florida',
-      tags: ['House', 'Logixs']
-    },
-    {
-      id: 3,
-      supplierName: 'Best Buy',
-      contactName: 'Shayan Lotifi',
-      supplierPhone: '4039696480',
-      supplierEmail: 'bestbuy@outlook.com',
-      contactPhone: '4039696482',
-      contactEmail: 'shayan.lotify@outlook.com',
-      address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-      term: 'Due on Receipt',
-      accountNumber: '',
-      currency: 'CAD',
-      country: 'Canada',
-      state: 'British Colombia',
-      tags: ['Buy', 'Best']
-    },
+    // {
+    //   id: 0,
+    //   supplierName: 'Alliance Video Distribution',
+    //   contactName: 'Jeff Neilson',
+    //   supplierPhone: '4039696480',
+    //   supplierEmail: 'alliance@outlook.com',
+    //   contactPhone: '4039696480',
+    //   contactEmail: 'jeff.neilson@outlook.com',
+    //   address: '2222 Crescent Hill Dr SW Calgary, AB T3C 0J4',
+    //   term: 'Net 30',
+    //   accountNumber: '320ATATECH0001',
+    //   currency: 'CAD',
+    //   country: 'Canada',
+    //   state: 'Alberta',
+    //   tags: ['Control4', 'Alliance']
+    // }
   ];
 
 
-  public supplierTerm = ['Net 15', 'Net 30', 'Due on Receipt'];
-  public supplierCurrencies = ['CAD', 'USD'];
+  public supplierTerm = [];
+  public supplierCurrencies = [];
 
   ngOnInit() {
     this.backUpSuppliers = this.suppliersListInfo;
@@ -125,8 +91,59 @@ export class SuppliersComponent implements OnInit {
   }
 
   addNewSupplier(event) {
-    this.suppliersListInfo.push(event.data);
+    console.log('event data:', event.data);
+    const newSupplier = {
+      name: event.data.name,
+      contactId: parseInt(event.data.contactId, 10),
+      termId: parseInt(event.data.termId, 10),
+      currencyId: parseInt(event.data.currencyId, 10),
+      shippingAddress: {
+        address: event.data.shippingAddress.address,
+        city: event.data.shippingAddress.city,
+        province: event.data.shippingAddress.province,
+        country: event.data.shippingAddress.country,
+        postalCode: event.data.shippingAddress.postalCode
+      },
+      businessNumber: event.data.businessNumber,
+      accountNumber: event.data.accountNumber,
+      keywords: event.data.keywords,
+    };
+    this.sharedService.addSupplier(newSupplier).subscribe(res => {
+      console.log('supplier added:', res.data);
+      this.getSuppliers();
+    });
     this.allTags = this.allTags.concat(event.data.tag);
+  }
+
+  getSuppliers() {
+    this.sharedService.getSuppliers().subscribe(resp => {
+      const results = resp.results;
+      this.suppliersListInfo = [];
+      results.forEach(ele => {
+        const currency = this.currencies.filter(currencyItem => currencyItem.id === ele.currencyId).pop();
+        console.log('currency:', currency);
+        const contact = this.contacts.filter(contactItem => contactItem.id === ele.contactId).pop();
+        const term = this.terms.filter(termItem => termItem.id === ele.termId).pop();
+        const supplierListItem = {
+          id: ele.id,
+          supplierName: ele.name,
+          contactEmail: ele.contactEmail,
+          contactPhone: ele.contactPhoneNumber,
+          supplierPhone: ele.phoneNumber,
+          supplierEmail: ele.contactEmail,
+          contactName: ele.contactName,
+          currency: currency['currencyCode'],
+          term: term['name'],
+          tags: ele.keywordIds,
+          accountNumber: ele.accountNumber,
+          address: ele.shippingAddress.address,
+          country: ele.shippingAddress.country,
+          state: ele.shippingAddress.province
+        };
+        this.suppliersListInfo.push(supplierListItem);
+        console.log('suppliers:', this.suppliersListInfo);
+      });
+    });
   }
 
   toggleMenubar(data: boolean) {

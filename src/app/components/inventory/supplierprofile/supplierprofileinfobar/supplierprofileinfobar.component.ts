@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-supplierprofileinfobar',
@@ -21,7 +22,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
   name: string;
   data1: any;
   showEditImageModal = false;
-
+  contacts = [];
   imageChangedEvent: any = '';
   croppedImage: any = '';
   // croppedImage = this.userInfo.profileLink;
@@ -36,12 +37,15 @@ export class SupplierProfileInfoBarComponent implements OnInit {
   imageLoaded() {
 
   }
-  constructor(private router: Router) {
+  constructor(private router: Router, private sharedService: SharedService) {
 
     this.eventData = undefined;
     this.name = 'Angular2';
 
     this.data1 = {};
+    this.sharedService.getContacts().subscribe(contacts => {
+      this.contacts = contacts;
+    });
   }
 
   public onReturnData(data: any) {

@@ -289,3 +289,12 @@ app-multikeywordselect {
 .wrong-format {
 	color: red !important;
 }
+
+.contactNameField {
+	color: black !important;
+	background: none !important;
+}
+
+.contactNameField.not-edited {
+	color: lightgray !important;
+}
