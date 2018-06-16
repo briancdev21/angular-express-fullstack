@@ -12,12 +12,67 @@
       </div>
     </div>
     <div class="product__table">
-      <app-po-table [(productDetails)]="productDetails" ></app-po-table>
+      <app-po-table [(productDetails)]="productDetails" [adId]="ad_id"  ></app-po-table>
     </div>
     <div class="sub__info">
-      <div class="flex" >
+      <div >
+          <app-ad-locationtofrom
+          [ngClass]="{'has-error': showErrors&&!errors.locationChanged}"
+          [locations]="locations"
+          (selectedLocation)="onSelectLocation($event)" >
+        </app-ad-locationtofrom>
         <div class="internal-memo">
-          <app-tr-internalmemo [(internalMemo)]="internalMemo" ></app-tr-internalmemo>
+          <app-tr-internalmemo 
+            (memoChanged)="onMemoChanged($event)" ></app-tr-internalmemo>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <section id="header" >
+      <div (click)="showButtons=true" >
+        &nbsp;
+      </div>
+      <div class="btn-group" >
+        <div class="btn cancel" (click)="onCancel()" >Cancel</div>
+        <div class="btn save_and_close" (click)="onSave()" >Send</div>
+      </div>
+    </section>
+  </footer>
+  <div class="printoptions-modal send-po-modal" *ngIf="showSendPOModal" >
+    <div class="wrapper" (click)="showSendPOModal=false;" >
+      <div class="content" (click)="$event.stopPropagation();" >
+        <div class="header" >
+          <div>
+            Sending STOCK ADJUSTMENT
+          </div>
+          <div class="red_close" (click)="showSendPOModal=false" ><img src="/assets/images/X sign Red.png" /></div>
+        </div>
+        <div class="main">
+          <div class="desc" >Do you want to send this Stock Adjustment to suppliers?</div>
+          <div class="createpdf" >
+            <div class="button cancel" (click)="showSendPOModal=false" >Cancel</div>
+            <div class="button ok" (click)="savePO()" >Send</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="printoptions-modal cancel-po-modal" *ngIf="showCancelPOModal" >
+    <div class="wrapper" (click)="showCancelPOModal=false;" >
+      <div class="content" (click)="$event.stopPropagation();" >
+        <div class="header" >
+          <div>
+            Deleting STOCK ADJUSTMENT
+          </div>
+          <div class="red_close" (click)="showCancelPOModal=false" ><img src="/assets/images/X sign Red.png" /></div>
+        </div>
+        <div class="main">
+          <div class="desc" >Do you want to delete this Stock Adjustment?</div>
+          <div class="createpdf" >
+            <div class="button cancel" (click)="showCancelPOModal=false"  >Cancel</div>
+            <div class="button ok" (click)="deletePO()" >Ok</div>
+          </div>
         </div>
       </div>
     </div>

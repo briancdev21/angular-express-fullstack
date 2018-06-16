@@ -1,9 +1,9 @@
 <div class="flex" >
     <div class="orderinfo-label" >Location</div>
     <div class="orderinfo-input" >
-      <select [(ngModel)]="selectedLocation" required >
+      <select required (change)="onchange($event)" [(ngModel)]="selectedLocationId" >
           <option value="" default disabled >Choose a location</option>
-          <option *ngFor="let location of locations_local" [ngValue]="location">{{location}}</option>
+          <option *ngFor="let location of locations_local" [value]="location.id">{{location.name}}</option>
       </select>
     </div>
   </div>

@@ -1,12 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
-
+import { SharedService } from '../../../../services/shared.service';
+import { Router } from '@angular/router';
+import { AdjustmentModel } from '../../../../models/adjustment.model';
 @Component({
   selector: 'app-inventorybody',
   templateUrl: './inventorybody.component.html',
   styleUrls: ['./inventorybody.component.css']
 })
-export class InventoryBodyComponent {
+export class InventoryBodyComponent implements OnDestroy {
   userList = ['John', 'Smith', 'jackie'];
 
   projects = ['task1', 'task2', 'task3'];
@@ -25,42 +27,77 @@ export class InventoryBodyComponent {
     country: 'Canada',
     postcode: 'T3C 0J7'
   };
+  showButtons = false;
 
-  terms = ['term1', 'term2', 'term3'];
-  selectedTerm = '';
-  dueDate: any;
-
-  locations = ['locations1', 'locations2', 'locations3'];
-  selectedLocation = '';
+  @Input() set adData(_addata) {
+    this.ad_mock = new AdjustmentModel();
+    this.ad_mock = _addata;
+    if (_addata) {
+      this.ad_id = `AD-${this.ad_mock.id}`;
+    }
+  }
+  saveBtnClicked = false;
+  locations: string[] = [];
   productDetails = [];
   internalMemo = undefined;
-  subtotalproducts = 199.00;
-  discountType = 'percent';
-  discountAmount = undefined;
-  freightcosts = undefined;
-  taxes = undefined;
-  totalamountdue = undefined;
-  ad_id = 'AD-8802131';
-
-  po_id = 'PO-8802131';
-  createdDate: any;
+  ad_id = '';
+  ad_mock: AdjustmentModel;
   transferdate: any;
+  showSendPOModal = false;
+  showCancelPOModal = false;
+  showErrors = false;
+  errors = {
+    locationChanged: false,
+    memoChanged: false,
+  };
 
-  constructor() {
-    this.createdDate = new Date().toJSON().slice(0, 10);
-    this.dueDate = new Date().toJSON().slice(0, 10);
-    this.transferdate = new Date().toJSON().slice(0, 10);
+  constructor(private sharedService: SharedService, private router: Router) {
+    this.transferdate = new Date().toISOString();
+    this.sharedService.getLocations().subscribe(locationRes => {
+      this.locations = locationRes.results;
+    });
   }
 
-
-  onSelectUser(val: string) {
-    console.log('val', val);
-  }
-  onCustomerSelected(user) {
-    console.log(user);
+  ngOnDestroy() {
+    console.log('ng destroy called');
   }
 
-  onSwitchChanged(status: boolean) {
-    console.log('switch status:', status);
+  onSelectLocation(event) {
+    this.errors.locationChanged = true;
+    this.ad_mock.adjustedLocation = parseInt(event, 10);
+    this.updateAD();
+  }
+
+  onMemoChanged(event) {
+    if (event) {
+      this.errors.memoChanged = true;
+      this.ad_mock.internalMemo = event;
+    }
+    this.updateAD();
+  }
+
+  onCancel() {
+    this.showCancelPOModal = true;
+  }
+  deletePO() {
+    this.sharedService.deleteInventoryAdjustment(this.ad_mock.id).subscribe(() => {
+      this.router.navigate(['./inventory/stock-control']);
+    });
+  }
+  onSave() {
+    console.log('mock:', this.ad_mock);
+    this.showErrors = true;
+    if (this.ad_mock.adjustedLocation !== undefined) {
+      this.ad_mock.status = 'ADJUSTED';
+      this.sharedService.updateInventoryAdjustment(this.ad_mock.id, this.ad_mock).subscribe(() => {
+        this.router.navigate(['./inventory/stock-control']);
+      });
+    }
+  }
+  savePO() {
+  }
+  updateAD() {
+    this.sharedService.updateInventoryAdjustment(this.ad_mock.id, this.ad_mock).subscribe(() => {
+    });
   }
 }

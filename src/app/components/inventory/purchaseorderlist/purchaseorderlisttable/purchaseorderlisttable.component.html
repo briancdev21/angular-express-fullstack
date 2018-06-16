@@ -11,7 +11,7 @@
       <th (click)="sortDateArray('dueDate')">DUE DATE</th>
       <th (click)="sortDateArray('lastUpdated')">LAST UPDATED</th>
     </tr>
-    <tr *ngFor="let purchaseorder of purchaseOrdersInfo" (click)="redirectTo(purchaseorder.projectNumber)">
+    <tr *ngFor="let purchaseorder of purchaseOrdersInfo; let itemorder = index;" (click)="redirectTo(itemorder)">
       <td>{{purchaseorder.purchaseOrderNumber}}</td>
       <td>{{purchaseorder.source}}</td>
       <td>{{purchaseorder.type}}</td>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-po-freightcosts',
@@ -8,6 +8,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class POFreightCostsComponent {
   @Input() freightcosts;
   @Output() freightcostsChange: EventEmitter<any> = new EventEmitter();
+  isEditable = false;
+
+  constructor(private rd: Renderer2) {}
 
   onCostChange() {
     const result = {
@@ -17,5 +20,13 @@ export class POFreightCostsComponent {
   }
   checkValue(e) {
     if (e.target.value < 0) { e.target.value = undefined; }
+  }
+
+  showEditInput() {
+    this.isEditable = true;
+  }
+
+  hideEditInput() {
+    this.isEditable = false;
   }
 }

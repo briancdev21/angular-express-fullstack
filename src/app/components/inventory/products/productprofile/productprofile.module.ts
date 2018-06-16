@@ -1,9 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
-import { AutocompleteModule } from 'ng2-input-autocomplete';
-
 import { ProductProfileComponent } from './productprofile.component';
 import { CommonCmpModule } from '../../../../components/common/common.module';
 import { ProductInfoBarComponent } from './productInfobar/productinfobar.component';
@@ -42,7 +39,6 @@ import { ProductProfileService } from './productprofile.service';
     RouterModule,
     CommonCmpModule,
     TabModule,
-    AutocompleteModule,
     FormsModule,
     ImageCropperModule,
     BreadcrumbModule,

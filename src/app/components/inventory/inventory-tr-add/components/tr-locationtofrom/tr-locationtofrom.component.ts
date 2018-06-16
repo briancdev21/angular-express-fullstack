@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-tr-locationtofrom',
@@ -7,16 +7,32 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TRLocationFromToComponent implements OnInit {
 
-  @Input() locations;
-  @Input() selectedFromLocation;
-  @Input() selectedToLocation;
-  locations_local = [];
-
-  ngOnInit() {
-    console.log(this.locations);
-    if (this.locations) {
-      this.locations_local = this.locations;
-    }
+  @Input() set locations(_locations: any[]) {
+    this.locations_local = _locations;
   }
 
+  @Output() selectedLocation: EventEmitter<any> = new EventEmitter();
+  locations_local = [];
+  toLocation = 'default';
+  fromLocation = 'default';
+
+  onchangeToLocation (event) {
+    this.toLocation = event.target.value;
+    this.emitData();
+  }
+  onchangeFromLocation (event) {
+    this.fromLocation = event.target.value;
+    this.emitData();
+  }
+
+  emitData() {
+    const data = {
+      toLocation: this.toLocation,
+      fromLocation: this.fromLocation
+    };
+    this.selectedLocation.emit(data);
+  }
+
+  ngOnInit() {
+  }
 }

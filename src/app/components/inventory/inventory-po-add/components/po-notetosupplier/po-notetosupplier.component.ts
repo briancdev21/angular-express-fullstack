@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-po-notetosupplier',
@@ -6,5 +6,11 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./po-notetosupplier.component.css']
 })
 export class PONoteToSupplierComponent {
-  @Input() noteToSupplier;
+  
+  @Output() noteChanged: EventEmitter<any> = new EventEmitter();
+
+  onNoteChange(event) {
+    // Note Changed
+    this.noteChanged.emit(event.target.value);
+  }
 }

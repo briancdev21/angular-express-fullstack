@@ -14,7 +14,7 @@ export class InventoryFooterComponent {
    brand: false,
    qty: false,
    supplier: false,
-   totalprice: false 
+   totalprice: false
   };
 
   onCancel() {

@@ -5,8 +5,8 @@
         Setting
       </div>
       <div class="btn-group" >
-        <div class="btn cancel" >Cancel</div>
-        <div class="btn save_and_close" >Save</div>
+        <div class="btn cancel" (click)="onCancel()" >Cancel</div>
+        <div class="btn save_and_close" (click)="onSave()" >Save</div>
       </div>
     </section>
     <section id="main" *ngIf="showButtons"  >

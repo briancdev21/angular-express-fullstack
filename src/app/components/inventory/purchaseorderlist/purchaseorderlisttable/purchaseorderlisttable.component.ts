@@ -38,8 +38,22 @@ export class PurchaseOrderListTableComponent implements OnInit {
   getStatus() {
   }
 
-  redirectTo(id) {
-    this.router.navigate(['/inventory/stock-control/purchaseorder/' + id]);
+  redirectTo(index) {
+    console.log('redirect url', this.purchaseOrdersInfo[index]);
+    switch (this.purchaseOrdersInfo[index].purchaseOrderNumber.slice(0, 2)) {
+      case 'PO': {
+        this.router.navigate(['/inventory/stock-control/purchase-order/' + this.purchaseOrdersInfo[index].projectNumber]);
+        break;
+      }
+      case 'TR': {
+        this.router.navigate(['/inventory/stock-control/transfer/' + this.purchaseOrdersInfo[index].projectNumber]);
+        break;
+      }
+      case 'AD': {
+        this.router.navigate(['/inventory/stock-control/adjustment/' + this.purchaseOrdersInfo[index].projectNumber]);
+        break;
+      }
+    }
   }
 
   sortArray(field) {

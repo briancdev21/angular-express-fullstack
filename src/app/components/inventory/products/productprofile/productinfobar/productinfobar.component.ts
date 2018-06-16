@@ -69,6 +69,8 @@ export class ProductInfoBarComponent implements OnInit {
   getTagName(id) {
     return this.keywordsList.filter(k => k.id === id)[0].name;
   }
+  loadImageFailed() {
+  }
 
 }
 

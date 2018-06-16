@@ -53,11 +53,11 @@ export class EditProductModalComponent implements OnInit {
   greyedNonStock = false;
   greyedService = false;
   pricingType = ['Friend & Family', 'Royalty Program', 'Retail', 'Builders Program', 'Wholesale', 'Cost'];
-  protected searchStr: string;
+  searchStr: string;
   protected type: string;
-  protected supplier: string;
-  protected brand: string;
-  protected dataService: CompleterData;
+  supplier: string;
+  brand: string;
+  dataService: CompleterData;
   protected searchData = [
     { color: 'red', value: '#f00' },
     { color: 'green', value: '#0f0' },
@@ -68,8 +68,10 @@ export class EditProductModalComponent implements OnInit {
     { color: 'black', value: '#000' }
   ];
   protected types = ['STOCKABLE', 'NON_STOCKABLE', 'SERVICE'];
-  private suppliers;
-  private brands;
+  suppliers: any;
+  brands: any;
+  accQueryString: any;
+  queryString: any;
 
   invalidModelNumber = false;
   invalidProductType = false;
@@ -529,6 +531,9 @@ export class EditProductModalComponent implements OnInit {
 
   onProductTypeSelected(item) {
     console.log('selecte prod type:', item);
+  }
+
+  onUploadStateChanged(event) {
   }
 }
 

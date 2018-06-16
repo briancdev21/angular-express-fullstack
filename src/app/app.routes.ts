@@ -69,7 +69,8 @@ import { PendingProjectComponent } from './components/pm/pendings/pendingproject
 import {
   PendingWorkOrdersListTableComponent
 } from './components/pm/pendings/pendingproject/pendingworkorderslisttable/pendingworkorderslisttable.component';
-
+import {InventoryAdProfileComponent} from './components/inventory/inventory-ad-profile/inventory.component';
+import {InventoryTrProfileComponent} from './components/inventory/inventory-tr-profile/inventory.component';
 
 
 import { CommonComponent } from './components/common/common.component';
@@ -153,7 +154,9 @@ export const routes: Routes = [
       { path: 'stock-control/add-purchase-order', component: InventoryPoAddComponent },
       { path: 'stock-control/add-transfer', component: InventoryTrAddComponent },
       { path: 'stock-control/add-adjustment', component: InventoryAdAddComponent },
-      { path: 'stock-control/purchaseorder/:id', component: InventoryPoProfileComponent },
+      { path: 'stock-control/purchase-order/:id', component: InventoryPoProfileComponent },
+      { path: 'stock-control/transfer/:id', component: InventoryTrProfileComponent },
+      { path: 'stock-control/adjustment/:id', component: InventoryAdProfileComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'suppliers', component: SuppliersComponent },
       { path: 'supplier-profile', component: SupplierProfileComponent },

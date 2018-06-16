@@ -283,4 +283,176 @@ export class SharedService {
     return this.http.delete<any>(url);
   }
 
+  // Purchase Order
+  createPurchaseOrder (body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders`;
+    return this.http.post<any>(url, body);
+  }
+
+  getPurchaseOrders (): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders`;
+    return this.http.get<any>(url);
+  }
+
+  getPurchaseOrder (id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updatePurchaseOrder (id, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deletePurchaseOrder (id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+
+  // Get Products
+  getInventoryProducts (): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/products`;
+    return this.http.get<any>(url);
+  }
+
+  getInventoryProduct (id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/products/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  // Get Sku for a product
+  getInventoryProductSkus (productId): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/products/${productId}/variants`;
+    return this.http.get<any>(url);
+  }
+
+  // Purchase Order Products
+  addPurchaseOrderProduct (purchaseOrderId, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders/${purchaseOrderId}/products`;
+    return this.http.post<any>(url, body);
+  }
+
+  getPurchaseOrderProducts (purchaseOrderId): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders/${purchaseOrderId}/products`;
+    return this.http.get<any>(url);
+  }
+
+  getPurchaseOrderProduct (purchaseOrderId, id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders/${purchaseOrderId}/products/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updatePurchaseOrderProduct (purchaseOrderId, id, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders/${purchaseOrderId}/products/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deletePurchaseOrderProduct (purchaseOrderId, id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders/${purchaseOrderId}/products/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+  // Stock Transfers
+  createTransfer (body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers`;
+    return this.http.post<any>(url, body);
+  }
+  getTransfers (): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers`;
+    return this.http.get<any>(url);
+  }
+
+  getTransfer (id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateTransfer (id, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deleteTransfer (id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+  // Stock Transfer Products
+  addTransferProduct (transferId, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers/${transferId}/products`;
+    return this.http.post<any>(url, body);
+  }
+
+  getTransferProducts (transferId): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers/${transferId}/products`;
+    return this.http.get<any>(url);
+  }
+
+  getTransferProduct (transferId, id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers/${transferId}/products/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateTransferProduct (transferId, id, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers/${transferId}/products/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deleteTransferProduct (transferId, id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers/${transferId}/products/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+  // Inventory Stock Adjustment
+  createInventoryAdjustment (body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments`;
+    return this.http.post<any>(url, body);
+  }
+  getInventoryAdjustments (): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments`;
+    return this.http.get<any>(url);
+  }
+  getInventoryAdjustment (id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateInventoryAdjustment (id, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deleteInventoryAdjustment (id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+  // Stock InventoryAdjustment Products
+  addInventoryAdjustmentProduct (transferId, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments/${transferId}/products`;
+    return this.http.post<any>(url, body);
+  }
+
+  getInventoryAdjustmentProducts (transferId): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments/${transferId}/products`;
+    return this.http.get<any>(url);
+  }
+
+  getInventoryAdjustmentProduct (transferId, id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments/${transferId}/products/${id}`;
+    return this.http.get<any>(url);
+  }
+
+  updateInventoryAdjustmentProduct (transferId, id, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments/${transferId}/products/${id}`;
+    return this.http.put<any>(url, body);
+  }
+
+  deleteInventoryAdjustmentProduct (transferId, id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments/${transferId}/products/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+
 }

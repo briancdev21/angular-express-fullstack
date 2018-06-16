@@ -2,9 +2,12 @@
   <div class="discount-label" >Discount</div>
   <div class="flex" >
     <select [(ngModel)]="discounttype" (change)="onChangeDiscountType()" (ngModelChange)="onDiscountChange()" >
-      <option [ngValue]="'percent'" >%</option>
-      <option [ngValue]="'dollar'" >$</option>
+      <option [ngValue]="'PERCENT'" >%</option>
+      <option [ngValue]="'AMOUNT'" >$</option>
     </select>
-    <input type="number" min="0.00" step="0.01" placeholder="0.00" [(ngModel)]="discountamount" (input)="onCheckDiscountRange($event)" (ngModelChange)="onDiscountChange()" >
+    <div>
+      <input type="number" placeholder="0.00" step="0.01" [(ngModel)]="discountamount" id="discountamount_edit_input" (blur)="hideEditInput()" (input)="onCheckDiscountRange($event)" *ngIf="isEditable" (ngModelChange)="onDiscountChange()" >
+      <input type="text" placeholder="0.00" readonly [value]="discountamount| number: '1.2-2'" *ngIf="!isEditable" (focus)="showEditInput()"  />
+    </div>
   </div>
 </div>

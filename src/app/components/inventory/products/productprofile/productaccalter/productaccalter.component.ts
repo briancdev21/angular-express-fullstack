@@ -59,4 +59,6 @@ export class ProductAccAlterComponent {
     const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
     return selectedBrand.name;
   }
+  sortArray(sortField) {
+  }
 }

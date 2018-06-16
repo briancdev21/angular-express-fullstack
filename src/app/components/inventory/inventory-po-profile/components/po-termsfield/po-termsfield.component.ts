@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-po-termsfield',
@@ -7,15 +7,19 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class POTermSelectorComponent implements OnInit {
 
-  @Input() terms;
-  @Input() selectedTerm;
+  @Input() set selectedTermData(val: number) {
+    this.selectedTermId = val;
+  }
+  @Input() set terms(_terms: any[]) {
+    this.terms_local = _terms;
+  }
+  @Output() selectedTerm: EventEmitter<any> = new EventEmitter();
   terms_local = [];
+  selectedTermId: number;
 
   ngOnInit() {
-    console.log(this.terms);
-    if (this.terms) {
-      this.terms_local = this.terms;
-    }
   }
-
+  onchange(event) {
+    this.selectedTerm.emit(event.target.value);
+  }
 }

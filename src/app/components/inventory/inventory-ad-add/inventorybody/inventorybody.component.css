@@ -57,6 +57,11 @@ app-shippingaddress {
   margin-top: 5px;
 }
 
+app-ad-locationtofrom {
+  margin: 10px;
+  display: block;
+}
+
 .product__table {
   margin-top: 30px;
   margin-bottom: 50px;
@@ -81,4 +86,220 @@ app-shippingaddress {
 
 app-po-discount {
   width: 100%;
+}
+
+#header {
+  position: fixed;
+  bottom: 0;
+  align-items: center;
+  justify-content: space-between;
+  right: 0;
+  left: 68px;
+  border: solid 1px lightgray;
+  padding: 0.8em;
+  text-align: center;
+  background: white;
+  box-shadow: lightgrey 0 -2px 5px -1px;
+  z-index: 1000;
+}
+
+#header .btn-group {
+  position: absolute;
+  height:100%;
+  right: 80px;
+  top: 0;
+  display: flex;
+  align-items: center;
+}
+
+#header .btn-group .btn {
+  padding: 3px 10px;
+  cursor: pointer;
+  font-size: 10px;
+  margin: 0.5em;
+  border-radius: 3px;
+  width: 80px;
+}
+.cancel {
+  background: #eee;
+}
+
+.save_and_close {
+  background: #a9f2df;
+}
+
+/* #main of Footer */
+#main {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 68px;
+  background: white;
+  box-shadow: lightgrey 0 -2px 5px -1px;
+  z-index: 1001;
+}
+
+#main .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: solid 1px lightgray;
+  color: #95989A;
+
+}
+
+.red_close img {
+  width: 20px; 
+  height: 20px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+#main .header div:first-child {
+  padding: 1em;
+  font-size: 16px;
+}
+
+#main .main {
+  padding: 30px;
+  color: #95989A;
+}
+
+#main .main > div {
+  flex: 1;
+}
+
+#main .main img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+#main .main .flex {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.flex {
+  display: flex;
+}
+
+#main .main .title {
+  font-size: 15px;
+  font-weight: 300;
+  text-align: left;
+}
+
+#main .main .subtitle {
+  font-size: 11px;
+  text-align: left;
+  margin-right: 30px;
+  line-height: 2em;
+}
+
+.printoptions-modal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  top: 0;
+  left: 0;
+}
+
+.printoptions-modal .wrapper {
+  background: rgba(0, 0, 0, 0.15);
+  width: 100%;
+  height: 100%;
+  /* margin: auto; */
+  padding-top: 20%;
+}
+
+.printoptions-modal .content {
+  width: 620px;
+  background: white;
+  border-radius: 5px;
+  margin: auto;
+}
+
+.printoptions-modal .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #95989A;
+  padding: 1em;
+  padding-left: 2em;
+  border-bottom: solid 1px lightgray;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+.printoptions-modal .main {
+  padding: 20px 30px;
+  text-align: left;
+}
+
+.printoptions-modal .desc {
+  padding-left: 20px;
+}
+
+.printoptions-modal .checkbox-group {
+  padding: 15px 5px;
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.printoptions-modal .checkbox-group::before {
+  content: "";
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: solid 1px lightgray;
+  cursor: pointer;
+  margin-right: 5px;
+  align-items: center;
+}
+
+.printoptions-modal .checkbox-group.active::before {
+  content: "";
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: solid 1px lightgray;
+  background: #C5D92D;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.printoptions-modal .createpdf {
+  text-align: right;
+}
+
+.printoptions-modal .createpdf .button {
+  padding: 3px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  margin: 0.5em;
+  border: solid 1px lightgray;
+  border-radius: 3px;
+  width: 100px;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+
+.createpdf .ok {
+  background-color: #C5D92D;
+}
+
+::ng-deep app-ad-locationtofrom.has-error .orderinfo-input {
+  border: solid 1px red;
+}
+
+::ng-deep app-tr-internalmemo.has-error textarea {
+  border: solid 1px red;
 }

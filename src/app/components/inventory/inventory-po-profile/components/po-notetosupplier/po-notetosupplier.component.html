@@ -1,6 +1,6 @@
 <div class="text-align-left" >
     <div class="completer-label" >Note to Supplier</div>
     <div>
-      <textarea [(ngModel)]="noteToSupplier" placeholder="Enter customer note here..."></textarea>
+      <textarea (change)="onNoteChange($event)" placeholder="Enter customer note here...">{{supplierNote}}</textarea>
     </div>
   </div>

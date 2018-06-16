@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
+import { TransferModel } from '../../../../models/transfer.model';
+import { SharedService } from '../../../../services/shared.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inventorybody',
@@ -7,60 +10,85 @@ import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
   styleUrls: ['./inventorybody.component.css']
 })
 export class InventoryBodyComponent {
-  userList = ['John', 'Smith', 'jackie'];
 
-  projects = ['task1', 'task2', 'task3'];
-  labelText = 'Use customer address';
-  shippingAddress = {
-    address: '',
-    street: '',
-    city: '',
-    country: '',
-    postcode: ''
-  };
-  customerAddress =  {
-    address: '301,1615 10th Ave SW',
-    street: 'Calgary',
-    city: 'Alberta',
-    country: 'Canada',
-    postcode: 'T3C 0J7'
-  };
-  terms = ['term1', 'term2', 'term3'];
-  selectedTerm = '';
-  dueDate: any;
+  @Input() set trData(_trdata) {
+    this.tr_mock = new TransferModel();
+    this.tr_mock = _trdata;
+    if (_trdata !== undefined) {
+      console.log('trd data:', _trdata);
+      this.tr_mock.toLocation = undefined;
+      this.tr_mock.fromLocation = undefined;
+      if (_trdata) {
+        this.tr_id = `TR-${this.tr_mock.id}`;
+      }
+    }
+  }
 
-  locations = ['locations1', 'locations2', 'locations3'];
-  selectedLocation = '';
+  locations: string[] = [];
   productDetails = [];
   internalMemo = undefined;
-  subtotalproducts = 199.00;
-  discountType = 'percent';
-  discountAmount = undefined;
-  freightcosts = undefined;
-  taxes = undefined;
-  totalamountdue = undefined;
-  tr_id = 'TR-8802131';
-  selectedToLocation = 'default';
-  selectedFromLocation= 'default';
-
-  po_id = 'PO-8802131';
+  tr_id = '';
+  tr_mock: TransferModel;
   createdDate: any;
-
   transferdate: any;
-  constructor() {
-    this.createdDate = new Date().toJSON().slice(0, 10);
-    this.dueDate = new Date().toJSON().slice(0, 10);
-    this.transferdate = new Date().toJSON().slice(0, 10);
+  showButtons = false;
+  showSendPOModal = false;
+  showCancelPOModal = false;
+  showErrors = false;
+  errors = {
+    locationToChanged: false,
+    locationFromChanged: false,
+  };
+
+  constructor(private sharedService: SharedService, private router: Router) {
+    this.createdDate = new Date().toISOString();
+    this.transferdate = new Date().toISOString();
+
+    this.sharedService.getLocations().subscribe(locationRes => {
+      this.locations = locationRes.results;
+    });
   }
 
-  onSwitchChanged(status: boolean) {
-    console.log('switch status:', status);
-  }
-  onSelectUser(val: string) {
-    console.log('val', val);
-  }
-  onCustomerSelected(user) {
-    console.log(user);
+  onMemoChanged(event) {
+    if (event) {
+      this.tr_mock.internalMemo = event;
+    }
   }
 
+  onSelectLocation(event) {
+    console.log('event data;', event);
+    if (event.fromLocation !== 'default') {
+      this.errors.locationFromChanged = true;
+      this.tr_mock.fromLocation = parseInt(event.fromLocation, 10);
+    }
+    if (event.toLocation !== 'default') {
+      this.errors.locationToChanged = true;
+      this.tr_mock.toLocation = parseInt(event.toLocation, 10);
+    }
+    console.log('mock:', this.tr_mock);
+  }
+
+  onCancel() {
+    this.showCancelPOModal = true;
+  }
+
+  deletePO() {
+    this.sharedService.deleteInventoryAdjustment(this.tr_mock.id).subscribe(() => {
+      this.router.navigate(['./inventory/stock-control']);
+    });
+  }
+
+  onSave() {
+    console.log('mock:', this.tr_mock);
+    this.showErrors = true;
+    if (this.tr_mock.fromLocation !== undefined &&
+      this.tr_mock.toLocation !== undefined
+    ) {
+      this.showSendPOModal = true;
+    }
+  }
+
+  savePO() {
+    this.router.navigate(['./inventory/stock-control']);
+  }
 }

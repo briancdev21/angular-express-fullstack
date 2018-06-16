@@ -95,3 +95,7 @@ input {
     /* Firefox 18- */
     color: #d3d3d3;
 }
+
+#discountamount_edit_input {
+    padding-right: 0;
+}
