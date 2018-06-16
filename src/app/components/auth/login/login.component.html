@@ -17,7 +17,7 @@
 		<span class="time-convention">{{timeConvention}}</span>
 	</div>
 	<div class="login-sec">
-		<form class="login-form" (ngSubmit)="onLogin()" [formGroup]="loginform">
+		<form class="login-form" (ngSubmit)="onLogin()" [formGroup]="loginform" [ngClass]="{'wrong-credentials':wrongCredentials === true}">
 			<mat-form-field>
 				<input matInput placeholder="USERNAME" formControlName="userName" >
 			</mat-form-field>

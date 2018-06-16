@@ -19,6 +19,7 @@ export class AuthService {
     // scope: 'openid'
   });
   returnUrl: string;
+  loginFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(private router: Router, private route: ActivatedRoute) {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '../home';
@@ -37,9 +38,11 @@ export class AuthService {
     }, function(err, authResult) {
       if (err) {
         console.log('auth error: ', err, 'res', authResult);
+        _this.loginFailed.next(true);
         return;
       } else {
         _this.handleAuthentication(authResult);
+        _this.loginFailed.next(false);
       }
     });
   }

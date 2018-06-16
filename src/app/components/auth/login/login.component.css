@@ -139,6 +139,10 @@
 	font-weight: 400;
 }
 
+/deep/ .wrong-credentials .mat-form-field-flex {
+	border-bottom: 7px solid red;
+}
+
 .remember-check {
 	margin-top: 15px;
 	font-size: 17px;
