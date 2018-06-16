@@ -6,23 +6,49 @@ import { HorizontalBarComponent } from './horizontalbar/horizontalbar.component'
 import { Ng2CompleterModule,  } from 'ng2-completer';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MorrisDonutComponent } from './morrisdonut/morrisdonut.component';
+import { MorrisLineComponent } from './morrislinechart/morrislinechart.component';
+import { MorrisAreaComponent } from './morrisareachart/morrisareachart.component';
+import { MorrisBarChartComponent } from './morrisbarchart/morrisbarchart.component';
+import { AgendaBoxComponent } from './agendabox/agendabox.component';
+import { TasksBoxComponent } from './tasksbox/tasksbox.component';
+import { ActivitiesBoxComponent } from './activitiesbox/activitiesbox.component';
+import { MatInputModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModule } from '@angular/material';
 
 @NgModule({
   declarations: [
     CommonComponent,
     Ng2CompleterComponent,
-    HorizontalBarComponent
+    HorizontalBarComponent,
+    MorrisDonutComponent,
+    MorrisLineComponent,
+    MorrisAreaComponent,
+    MorrisBarChartComponent,
+    AgendaBoxComponent,
+    TasksBoxComponent,
+    ActivitiesBoxComponent
   ],
   imports: [
     BrowserModule,
     RouterModule,
     FormsModule,
-    Ng2CompleterModule
+    Ng2CompleterModule,
+    MatInputModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
   ],
   exports: [
     CommonComponent,
     Ng2CompleterComponent,
-    HorizontalBarComponent
+    HorizontalBarComponent,
+    MorrisDonutComponent,
+    MorrisLineComponent,
+    MorrisAreaComponent,
+    MorrisBarChartComponent,
+    AgendaBoxComponent,
+    TasksBoxComponent,
+    ActivitiesBoxComponent
   ]
 })
 export class CommonCmpModule { }

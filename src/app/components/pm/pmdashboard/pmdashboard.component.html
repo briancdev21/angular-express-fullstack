@@ -1,1 +1,135 @@
-<h1 style="margin-top: 0; padding-top: 100px;">PM Dashboard page</h1>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
+  <div class="charts-area">
+    <div class="chart-row">
+      <div class="card conversion-card">
+        <div class="card-header">
+          <span>PROJECT TASKS</span>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left">
+            <div>
+              <span class="title">Tasks Due Today</span>
+              <span>{{projectTasks.dueToday}}</span>
+            </div>
+            <div>
+              <span class="title">Tasks Due This Week</span>
+              <span>{{projectTasks.dueThisWeek}}</span>
+            </div>
+            <div>
+              <span class="title">Tasks Due Next Week</span>
+              <span>{{projectTasks.dueNextWeek}}</span>
+            </div>
+          </div>
+          <div class="card-content-right">
+            <span class="due-tasks-title">Overdue Tasks</span>
+            <span>{{projectTasks.overDue}}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card conversion-card">
+        <div class="card-header">
+          <span>PROJECTS</span>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left">
+            <div>
+              <span class="title">Number of New Projects</span>
+              <span>{{projectsInfo.newProject}}</span>
+            </div>
+            <div>
+              <span class="title">Number of Active Projects</span>
+              <span>{{projectsInfo.activeProject}}</span>
+            </div>
+            <div>
+              <span class="title">Number of Completed Projects</span>
+              <div>
+                <span>{{projectsInfo.completedproject}}</span>
+                <span class="title">This Month</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-content-right">
+            <span class="due-tasks-title">Pending Projects</span>
+            <span>{{projectsInfo.pendingProject}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card top-customer-card">
+        <div class="card-header">
+          <span>ACTIVE PROJECTS</span>
+        </div>
+        <div class="card-content">
+          <table>
+            <tr>
+              <th>PROJECT NAME</th>
+              <th>DUE DATE</th>
+            </tr>
+            <tr *ngFor="let project of activeProjects">
+              <td>{{project.projectName}}</td>
+              <td>{{project.dueDate}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="multi-charts-left">
+        <div class="card area-chart">
+          <div class="card-header">
+            <span>ACTUAL vs ESTIMATE BUDGET</span>
+            <div class="legend-sec">
+              <div class="row">
+                <div class="square blue"></div>
+                <span>Created</span>
+              </div>
+              <div class="row">
+                <div class="square green"></div>
+                <span>Complete</span>
+              </div>
+              <div class="row">
+                <div class="square red"></div>
+                <span>Incomplete</span>
+              </div>
+            </div>
+          </div>
+          <app-morrisareachart [areaChartInfo]="areaChartInfo"></app-morrisareachart>
+        </div>
+
+        <div class="pipeline-ratio">
+          <div class="card">
+            <div class="card-header">
+              <span>LEAD CONVERSION</span>
+              <select [(ngModel)]="donutTimePeriod">
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="quarter">This Quarter</option>
+                <option value="year">This Year</option>
+              </select>
+            </div>
+            <div class="card-content">
+              <div class="card-content-left" >
+                <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
+              </div>
+              <div class="card-centent-right">
+                <div class="row" *ngFor="let project of morrisDonutInfo; let i = index">
+                  <div class="square" [ngStyle]="{'background-color': morrisDonutColors[i]}"></div>
+                  <span>{{project.label}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span>NEW LEADS</span>
+            </div>
+            <app-morrislinechart [morrisLineChartInfo]="morrisLineChartInfo"></app-morrislinechart>
+          </div>
+        </div>
+      </div>
+      <app-activitiesbox [activitiesInfo]="activitiesInfo"></app-activitiesbox>
+      
+    </div>
+  </div>
+</div>

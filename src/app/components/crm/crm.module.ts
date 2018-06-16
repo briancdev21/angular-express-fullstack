@@ -15,9 +15,11 @@ import { LeadsComponent } from './leads/leads.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { CrmDashboardComponent } from './crmdashboard/crmdashboard.component';
+import { NewLeadLineComponent } from './crmdashboard/newleadline/newleadline.component';
+import { PipeLineChartComponent } from './crmdashboard/pipelinechart/pipelinechart.component';
+
 import { LeadsCmpModule } from './leads/leads.module';
 import { ContactsCmpModule } from './contacts/contacts.module';
-
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -26,7 +28,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     LeadsComponent,
     ContactsComponent,
     AccountsComponent,
-    CrmDashboardComponent
+    CrmDashboardComponent,
+    NewLeadLineComponent,
+    PipeLineChartComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +51,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ReactiveFormsModule,
     MatCheckboxModule,
     LeadsCmpModule,
-    ContactsCmpModule
+    ContactsCmpModule,
   ],
   exports: [
     MatInputModule,

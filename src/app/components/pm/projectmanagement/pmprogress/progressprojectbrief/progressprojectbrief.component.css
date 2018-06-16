@@ -1,0 +1,143 @@
+/* Text Editor sec CSS */
+
+.scope-description-change {
+  background: #F5F5F5;
+  margin: 15px 50px;
+  padding-top: 3px;
+}
+
+.editor-title {
+  margin: 0 10px;
+  background: white;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  font-size: 19px;
+  color: #95989A;
+  padding-left: 15px;
+  font-weight: 300;
+}
+
+
+/deep/ .text-editor-sec .ql-toolbar.ql-snow {
+  border: 0 !important;
+  text-align: left;
+  margin-left: 15px;
+  background: transparent;
+  padding-top: 20px;
+}
+
+/deep/ .text-editor-sec .ql-snow.ql-toolbar button, /deep/ .text-editor-sec .ql-snow .ql-toolbar button {
+  background: white;
+  border: 1px solid lightgray;
+}
+
+/deep/ .text-editor-sec .ql-snow .ql-picker {
+  background: white;
+  border: 1px solid lightgray;
+}
+
+/deep/ .text-editor-sec .ql-container.ql-snow {
+  border: 0;
+}
+
+/deep/ .text-editor-sec .ql-editor {
+  border: 10px solid #F5F5F5;
+  min-height: 600px;
+  background: white;
+}
+
+/deep/ .text-editor-sec .ql-editor.ql-blank::before {
+  left: 25px;
+}
+
+/deep/ .text-editor-sec .ql-snow.ql-toolbar button, /deep/ .text-editor-sec .ql-snow .ql-toolbar button {
+  height: 27px;
+  width: 32px;
+}
+
+
+/*  bottom btns section */
+
+.bottom-btns {
+  height: 55px;
+  border-top: 1px solid #95989A;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  padding: 7px;
+  background: white;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-section {
+	display: flex;
+  margin-right: 35px;
+  top: 7px;
+}
+
+.next-btn {
+	background-color: #a9f2df;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 80px;
+	outline: none;
+	box-shadow: inset #99f3db 0 0 1px 1px;
+	margin: 5px;
+  color: gray;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cancel-btn {
+	background-color: lightgray;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 80px;
+	outline: none;
+	margin: 5px;
+  color: gray;
+  cursor: pointer;
+  user-select: none;
+}
+
+.top-btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px 0 30px;
+}
+
+.top-btns span {
+  font-size: 35px;
+  text-align: left;
+  color: #95989A;
+}
+
+.top-btns>div {
+  display: flex;
+}
+
+.download-btn {
+  background-color: #a9f2df;
+	border-radius: 5px;
+	font-size: 10px;
+	border: 0;
+	width: 150px;
+	outline: none;
+	box-shadow: inset #99f3db 0 0 1px 1px;
+	margin: 5px;
+  color: gray;
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+  user-select: none;
+}

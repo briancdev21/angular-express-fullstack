@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-header">
+    <span>YOUR AGENDA</span>
+  </div>
+  <div class="activity-content">
+    <div class="activity-row" *ngFor="let agenda of agendaInfo">
+      <div class="divider-box">
+        <div class="date-sec">
+          <span class="agenda-day">{{agenda.day}}</span>
+          <span>{{agenda.month}}</span>
+          <span>{{agenda.year}}</span>
+        </div>
+        <div class="card-content">
+          <span class="agenda-title">{{agenda.title}}</span>
+          <span>{{agenda.details}}</span>
+          <div class="agenda-address">
+            <i class="fa fa-map-marker" aria-hidden="true"></i>
+            <span>{{agenda.address}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

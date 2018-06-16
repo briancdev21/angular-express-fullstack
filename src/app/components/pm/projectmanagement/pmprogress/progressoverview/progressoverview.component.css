@@ -1,0 +1,283 @@
+.main-content {
+  position: absolute;  
+  text-align: center;
+}
+
+.main-content-small {
+  transition: 0.2s all;
+  right: 0;
+  left: 200px;
+}
+
+.main-content-large {
+  right: 0;
+  left: 68px;
+  transition: 0.2s all;
+}
+
+.blue {
+  background: #4A90E2;
+}
+
+.green {
+  background: #7ED421;
+}
+
+.red {
+  background: #E66A4D;
+}
+
+span {
+  color: #95989A;
+}
+
+.top-project-info-section {
+  padding: 25px 30px;
+}
+
+.horizontal-bar {
+  margin: 50px 25px;
+}
+
+.gantt-chart {
+  width: 100%;
+  height: 400px;
+  overflow: auto;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
+.main-content {
+  display: flex;
+  width: 100%;
+}
+
+.content-left {
+  width: 75%;
+  border-right: 1px solid lightgray;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-right {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pm-table {
+  width: 100%;
+  height: 700px;
+  border-bottom: 1px solid lightgray;
+  overflow: auto;
+  position: relative;
+}
+
+.activity-timeline {
+  border-top: 1px solid lightgray;
+  padding: 15px 100px 0 100px;
+}
+
+.chart-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.card {
+  width: 32.5%;
+  box-shadow: 1px 3px 7px #95989a;
+  border-top: 3px solid #cdd1d3;
+}
+
+.card-header {
+  border-bottom: 3px solid #cdd1d3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 25px;
+  color: #95989A;
+}
+
+.card-header span {
+  font-size: 19px;
+}
+
+.card-header select {
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: #95989A;
+  background: transparent;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.card-content-left {
+  /* flex: 2; */
+  width: 65%;
+  padding-right: 10%;
+}
+
+.card-content-right {
+  /* flex: 1; */
+  width: 24%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.square {
+  width: 20px;
+  height: 20px;
+  margin-right: 13px;
+}
+
+.card-content {
+  padding-top: 30px;
+}
+
+.tasks-card .card-content-left {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-size: 25px;
+  padding-right: 0;
+}
+
+.tasks-card .title {
+  font-size: 12px;
+}
+
+.tasks-card .card-content-right {
+  display: flex;
+  flex-direction: column;
+  font-size: 140px;
+  flex: 2;
+}
+
+.card-content-right span {
+  color: #FF7E7E;
+}
+
+.card-content-right .due-tasks-title {
+  font-size: 25px;
+  color: #95989A;
+  font-weight: 300;
+}
+
+.tasks-card .card-content-left>div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 27px;
+  font-size: 50px;
+}
+
+.card.area-chart {
+  width: 66.2%;
+}
+
+.area-chart .card-header {
+  border-bottom: 0;
+}
+
+.legend-sec {
+  display: flex;
+  width: 280px;
+  justify-content: space-between;
+  margin-right: 30px;
+}
+
+.legend-sec .row .square {
+  width: 15px;
+  height: 15px;
+  margin-right: 7px;
+}
+
+.legend-sec .row span {
+  font-size: 16px;
+}
+
+.activity-content {
+  padding: 0 20px;
+  max-height: 350px;
+  overflow: auto;
+}
+
+.activity-row {
+  display: flex;
+  border-bottom: 1px solid #F5F5F5;
+  padding: 17px 5px;
+  align-items: center;
+}
+
+.activity-row:last-child {
+  border-bottom: none;
+}
+
+.activity-row img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.activity-desc {
+  height: 46px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.activity-date {
+  font-size: 11px;
+  color: #95989A;
+  text-align: left;
+}
+
+.user-name {
+  font-weight: 800;
+}
+
+@media screen and (max-width: 1650px) {
+
+  .top-project-info-section {
+    padding-bottom: 5px;
+  }
+  
+  .card-content-left {
+    width: 70%;
+    padding-right: 5%;
+  }
+  
+  .card-content-right {
+    width: 25%;
+  }
+}
+
+@media screen and (max-width: 1550px) {
+  
+  .card-content-left {
+    width: 72%;
+    padding-right: 5%;
+  }
+  
+  .card-content-right {
+    width: 24%;
+  }
+
+  .row span {
+    font-size: 12px;
+  }
+
+  .square {
+    width: 15px;
+    height: 15px;;
+  }
+}

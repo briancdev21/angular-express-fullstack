@@ -26,6 +26,7 @@
   user-select: none;
   margin: 0;
   height: 20px;
+  overflow: hidden;
 }
 
 /* Hide the browser's default checkbox */
@@ -496,4 +497,9 @@
   word-wrap: break-word;
   text-align: left;
   color: #95989a;
+  height: 25px;
+}
+
+.overDue {
+  color: red !important;
 }

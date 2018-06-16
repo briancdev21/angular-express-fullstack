@@ -1,0 +1,138 @@
+.main-content {
+	position: absolute;  
+	text-align: center;
+	color: #464646;
+}
+
+.main-content-small {
+	transition: 0.2s all;
+	right: 0;
+	left: 200px;
+  top: 68px;
+  padding: 20px 20px;
+}
+
+.main-content-large {
+	top: 68px;
+	right: 0;
+	left: 68px;
+  transition: 0.2s all;
+  padding: 30px 30px;
+}
+
+.top-sec {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.top-sec>div {
+  display: flex;
+  flex-direction: column;
+  height: 55px;
+  justify-content: space-between;
+}
+
+span {
+  font-size: 12px;
+  color: #95989A;
+  text-align: left;
+}
+
+h1 {
+  font-size: 30px;
+  color: #95989A;
+  font-weight: 300;
+  margin: 0;
+}
+
+.date-sec span {
+  color: #646464;
+  text-align: right;
+}
+
+.date-sec span.current-day {
+  color: #70EACA;
+  font-size: 23px;
+}
+
+.cards-multi-charts {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+  box-shadow: 1px 3px 7px #95989a;
+  border-top: 3px solid #cdd1d3;
+}
+
+.card-header {
+  border-bottom: 3px solid #cdd1d3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 25px;
+  color: #95989A;
+}
+
+.card-header span {
+  font-size: 19px;
+}
+
+.card-header select {
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: #95989A;
+  background: transparent;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.charts-left {
+  width: 66.5%;
+}
+
+.agenda-tasks {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bar-chart {
+  margin-top: 30px;
+}
+
+.agenda-tasks>* {
+  width: 49%;
+}
+
+app-activitiesbox {
+  width: 32.5%;
+}
+
+/deep/ app-activitiesbox .card {
+  height: 100%;
+}
+
+/deep/ app-tasksbox .card {
+  height: 100%;
+}
+
+/deep/ app-activitiesbox .card .activity-content {
+  max-height: none;
+}
+
+.cards-line-charts {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.cards-line-charts .card {
+  width: 32.5%;
+}

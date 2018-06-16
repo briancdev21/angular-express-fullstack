@@ -14,6 +14,7 @@ export class PmProgressComponent implements OnInit {
   tabActiveFirst: boolean;
   tabActiveSecond: boolean;
   tabActiveThird: boolean;
+  tabActiveFourth: boolean;
 
   constructor( private pmService: PmService, private router: Router ) {
   }

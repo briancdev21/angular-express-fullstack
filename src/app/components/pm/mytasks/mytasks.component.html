@@ -5,7 +5,7 @@
         <div class="panel-title" [ngStyle]="{'background': panel.color}" style="opacity: .7;">
           <span>{{panel.title | uppercase }}</span>
         </div>
-        <div class="panel-content" [dragula]="'dragTask'" [dragulaModel]='tasks'>
+        <div class="panel-content" [dragula]="'dragTask'" [dragulaModel]='panel.tasks'>
           <div *ngFor="let task of panel.tasks; let j = index;" class="draggable-task">
             <div class="task-content">
               <img *ngIf="task.attachmentImg" src="attachmentImg">
@@ -30,7 +30,7 @@
                   (keydown.enter)="task.inputShow=false; false" 
                   (clickOutside)="task.inputShow=false;">
                 </textarea>
-                <div (click)="task.inputShow=true; $event.stopPropagation();" *ngIf="!task.inputShow" class="task-title-show">
+                <div (click)="task.inputShow=true; task.maxHeight = 30;  $event.stopPropagation();" *ngIf="!task.inputShow" class="task-title-show">
                   {{task.taskTitle}}
                 </div>
               </div>
@@ -66,7 +66,7 @@
                     [(ngModel)]="task.dueDate" 
                   >
                   <owl-date-time [pickerType]="'calendar'" #dueDate></owl-date-time>
-                  <span [owlDateTimeTrigger]="dueDate" [ngClass]="{'due-date-empty': !task.dueDate}">{{task.dueDate}}</span>
+                  <span [owlDateTimeTrigger]="dueDate" [ngClass]="{'due-date-empty': !task.dueDate, 'overDue': checkOverdue(task.dueDate)}">{{task.dueDate}}</span>
                 </div>
                 <span class="duration" *ngIf="i == 2"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0"> Days</span>
                 <div class="task-actions">

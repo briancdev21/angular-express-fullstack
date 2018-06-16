@@ -37,7 +37,7 @@ export class PmScheduleComponent implements OnInit {
           progress: 100,
           start: '2018-02-15',
           dueDate: '2018-03-05',
-          duration: 18,
+          duration: 2,
           dependency: [],
           like: false,
           attachment: false,
@@ -70,7 +70,7 @@ export class PmScheduleComponent implements OnInit {
           progress: 80,
           start: '2018-02-17',
           dueDate: '2018-03-15',
-          duration: 26,
+          duration: 3,
           dependency: [1],
           like: true,
           attachment: true,
@@ -87,7 +87,7 @@ export class PmScheduleComponent implements OnInit {
             userId: 1
           },
           progress: 0,
-          start: '2018-02-15',
+          start: '2018-02-20',
           dueDate: '2018-03-03',
           duration: 18,
           dependency: [2],
@@ -537,7 +537,6 @@ export class PmScheduleComponent implements OnInit {
     // event.dueDate = moment(event.dueDate).format('YYYY-MM-DD');
     this.pmBoardTableData[this.updatingTaskPosition[0]].tasks[this.updatingTaskPosition[1]] = event;
     this.pmBoardTableData.map( m => m.tasks.map(t => t.dueDate = moment(t.dueDate).format('YYYY-MM-DD')));
-    console.log('Updated Pm table data: ',  this.pmBoardTableData);
     this.updateTasks();
   }
 
@@ -547,13 +546,29 @@ export class PmScheduleComponent implements OnInit {
       const midTk = {
         id: i,
         title: this.pmBoardTableData[i].title,
-        start_date: this.minDate(this.pmBoardTableData[i].tasks.map(t => t.start)),
+        start_date: moment(this.minDate(this.pmBoardTableData[i].tasks.map(t => t.start))).format('YYYY-MM-DD'),
         end_date: this.maxDate(this.pmBoardTableData[i].tasks.map(t => t.dueDate)),
         progress: this.getMilestoneProgress(this.pmBoardTableData[i].tasks)
       };
       tasks.push(midTk);
     }
     console.log('updatedTasks111111', tasks);
-    this.pmService.updateGantt(tasks);
+    this.tasks = tasks;
+    // this.pmService.updateGantt(tasks);
+  }
+
+  getUpdatedGanttData(event) {
+    const tasks = [];
+    for (let i = 0; i < event.data.length; i ++) {
+      const midTk = {
+        id: i,
+        title: event.data[i].title,
+        start_date: moment(this.minDate(event.data[i].tasks.map(t => t.start))).format('YYYY-MM-DD'),
+        end_date: this.maxDate(event.data[i].tasks.map(t => t.dueDate)),
+        progress: this.getMilestoneProgress(event.data[i].tasks)
+      };
+      tasks.push(midTk);
+    }
+    this.tasks = tasks;
   }
 }

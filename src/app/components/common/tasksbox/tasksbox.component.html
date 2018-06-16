@@ -1,0 +1,27 @@
+<div class="card">
+  <div class="card-header">
+    <span>YOUR TASKS</span>
+  </div>
+  <div class="activity-content">
+    <div class="activity-row" *ngFor="let task of tasksInfo">
+      <div class="divider-box">
+        <div class="date-sec">
+          <span class="agenda-day">{{task.day}}</span>
+          <span>{{task.month}}</span>
+          <span>{{task.year}}</span>
+        </div>
+        <div class="card-content">
+          <span class="agenda-title">{{task.title}}</span>
+          <div class="task-icons">
+            <img  *ngIf="task.followerImg" [src]="task.followerImg" class="follower-img">
+            <img *ngIf="task.like == true" src="assets/images/star.png"  (click)="task.like = !task.like">
+            <img *ngIf="task.like == false" src="assets/images/star-empty.png" (click)="task.like = !task.like">
+            <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.alert}" (click)="task.alert = !task.alert">
+            <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.fileUploaded}" (click)="uploadAttachment()">
+          </div>
+        </div>
+      </div>
+      <mat-checkbox></mat-checkbox>
+    </div>
+  </div>
+</div>

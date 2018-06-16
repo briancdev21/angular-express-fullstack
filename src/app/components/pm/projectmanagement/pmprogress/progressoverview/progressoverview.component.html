@@ -1,0 +1,107 @@
+<div class="top-project-info-section">
+  <app-pmboardtopinfo [projectInfo]="projectInfo"></app-pmboardtopinfo>
+  <div class="horizontal-bar">
+    <app-horizontalbar [barInfo]="barInfo"></app-horizontalbar>
+  </div>
+  <div class="charts-area">
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-header">
+          <span>PROJECT HOURS</span>
+          <select [(ngModel)]="donutTimePeriod">
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left" >
+            <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
+          </div>
+          <div class="card-centent-right">
+            <div class="row" *ngFor="let person of morrisDonutInfo; let i = index">
+              <div class="square" [ngStyle]="{'background-color': morrisDonutColors[i]}"></div>
+              <span>{{person.label}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span>REVENUE FOR THIS PROJECT</span>
+        </div>
+        <app-morrislinechart [morrisLineChartInfo]="morrisLineChartInfo"></app-morrislinechart>
+      </div>
+      <div class="card tasks-card">
+        <div class="card-header">
+          <span>PROJECT TASKS</span>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left">
+            <div>
+              <span class="title">Tasks Due Today</span>
+              <span>{{dueToday}}</span>
+            </div>
+            <div>
+              <span class="title">Tasks Due This Week</span>
+              <span>{{dueThisWeek}}</span>
+            </div>
+            <div>
+              <span class="title">Tasks Due Next Week</span>
+              <span>{{dueNextWeek}}</span>
+            </div>
+          </div>
+          <div class="card-content-right">
+            <span class="due-tasks-title">Overdue Tasks</span>
+            <span>{{projectInfo.projectTasks.overdue}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="card area-chart">
+        <div class="card-header">
+          <span>ACTUAL vs ESTIMATE BUDGET</span>
+          <div class="legend-sec">
+            <div class="row">
+              <div class="square blue"></div>
+              <span>Created</span>
+            </div>
+            <div class="row">
+              <div class="square green"></div>
+              <span>Complete</span>
+            </div>
+            <div class="row">
+              <div class="square red"></div>
+              <span>Incomplete</span>
+            </div>
+          </div>
+        </div>
+        <app-morrisareachart [areaChartInfo]="areaChartInfo"></app-morrisareachart>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span>PROJECT TASKS</span>
+        </div>
+        <div class="activity-content">
+          <div class="activity-row" *ngFor="let activity of activities">
+            <img [src]="activity.imgUrl">
+            <div class="activity-desc">
+              <div>
+                <span class="user-name">{{activity.userName}}</span>
+                <span>{{activity.description}}</span>
+              </div>
+              <div class="activity-date">{{activity.passedDays}} {{activity.createdTimeAt}} - {{activity.createdDateAt}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <app-progressprojectinformation></app-progressprojectinformation>
+  </div>
+  
+
+</div>

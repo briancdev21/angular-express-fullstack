@@ -4,7 +4,7 @@
       <div class="gantt-chart">
         <app-ganttchart [tasks]="tasks"></app-ganttchart>
       </div>
-      <app-pmtaskstable [milestones]="pmBoardTableData"></app-pmtaskstable>
+      <app-pmtaskstable [milestones]="pmBoardTableData" (updatedGanttData)="getUpdatedGanttData($event)"></app-pmtaskstable>
     </tab>
     <tab tabTitle="Project Work Orders" [(active)]="tabActiveFirst">
       <h1>PM Project Work Orders Content Here</h1>

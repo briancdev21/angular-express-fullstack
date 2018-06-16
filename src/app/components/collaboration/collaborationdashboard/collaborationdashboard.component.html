@@ -1,1 +1,129 @@
-<h1 style="margin-top: 0; padding-top: 100px;">Collaboration Dashboard page</h1>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
+  <div class="charts-area">
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-header">
+          <span>TEAM HOURS</span>
+          <select [(ngModel)]="donutTimePeriod">
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="quarter">This Quarter</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left" >
+            <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
+          </div>
+          <div class="card-centent-right">
+            <div class="row" *ngFor="let project of morrisDonutInfo; let i = index">
+              <div class="square" [ngStyle]="{'background-color': morrisDonutColors[i]}"></div>
+              <span>{{project.label}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card conversion-card">
+        <div class="card-header">
+          <span>WORK ORDER TASKS</span>
+        </div>
+        <div class="card-content">
+          <div class="card-content-left">
+            <div>
+              <span class="title">Total Tasks</span>
+              <span>{{orderTasks.totalTasks | number}}</span>
+            </div>
+            <div>
+              <span class="title">Number of Active Projects</span>
+              <span>{{orderTasks.taskCompleted | number}}</span>
+            </div>
+            <div>
+              <span class="title">Number of Completed Projects</span>
+              <span>{{orderTasks.averageTasks | number}}</span>
+            </div>
+          </div>
+          <div class="card-content-right">
+            <span class="due-tasks-title">Incomplete Tasks</span>
+            <span>{{orderTasks.incompleteTasks}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card top-customer-card">
+        <div class="card-header">
+          <span>PENDING WORK ORDERS</span>
+        </div>
+        <div class="card-content">
+          <table>
+            <tr>
+              <th>WORK ORDER NUMBERS</th>
+              <th>TIME LAPSED</th>
+            </tr>
+            <tr *ngFor="let order of pendingOrders">
+              <td>{{order.orderNumber}}</td>
+              <td>{{order.timeLapsed}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="chart-row">
+      <div class="multi-charts-left">
+        <div class="card area-chart">
+          <div class="card-header">
+            <span>GROSS MARGIN</span>
+            <div class="legend-sec">
+              <div class="row">
+                <div class="square blue"></div>
+                <span>Total Hours</span>
+              </div>
+              <div class="row">
+                <div class="square green"></div>
+                <span>Project Hours</span>
+              </div>
+              <div class="row">
+                <div class="square red"></div>
+                <span>Billable Hours</span>
+              </div>
+            </div>
+          </div>
+          <app-morrismultilinechart [morrisMultiLineChartInfo]="morrisMultiLineChartInfo"></app-morrismultilinechart>
+        </div>
+
+        <div class="pipeline-ratio">
+          <div class="card">
+            <div class="card-header">
+              <span>AVERAGE WORK ORDER HOURS</span>
+              <select [(ngModel)]="donutTimePeriod">
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="quarter">This Quarter</option>
+                <option value="year">This Year</option>
+              </select>
+            </div>
+            <div class="card-content">
+              <div class="card-content-left" >
+                <app-workorderdonutchart [workOrderDonutInfo]="workOrderDonutInfo" [workOrderDonutColors]="workOrderDonutColors"></app-workorderdonutchart>
+              </div>
+              <div class="card-centent-right">
+                <div class="row" *ngFor="let project of workOrderDonutInfo; let i = index">
+                  <div class="square" [ngStyle]="{'background-color': workOrderDonutColors[i]}"></div>
+                  <span>{{project.label}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span>WORK ORDER BACKLOG</span>
+            </div>
+            <app-backloglinechart [morrisLineChartInfo]="morrisLineChartInfo"></app-backloglinechart>
+          </div>
+        </div>
+      </div>
+      <app-activitiesbox [activitiesInfo]="activitiesInfo"></app-activitiesbox>
+      
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonComponent } from '../../../../common/common.component';
 import { PmService } from '../../pm.service';
 import { DragulaService } from 'ng2-dragula';
@@ -20,6 +20,7 @@ import * as moment from 'moment';
 })
 export class PmTasksTableComponent implements OnInit {
   @Input() milestones;
+  @Output() updatedGanttData = new EventEmitter;
 
   menuCollapsed = true;
   newMilestoneTitle = '';
@@ -96,8 +97,8 @@ export class PmTasksTableComponent implements OnInit {
       for (let j = 0; j < this.milestones[i].tasks.length; j++) {
         this.ownerModalCollapsed[i][j] = false;
         this.dependencyModalCollapsed[i][j] = false;
-        const date = new Date (this.milestones[i].tasks[j].dueDate);
-        this.milestones[i].tasks[j].dueDate = moment(this.milestones[i].tasks[j].dueDate).format('MMMM DD, YYYY');
+        const date = new Date (this.milestones[i].tasks[j].start);
+        this.milestones[i].tasks[j].start = moment(this.milestones[i].tasks[j].start).format('MMMM DD, YYYY');
       }
     }
     this.selectedOwner = 0;
@@ -117,14 +118,14 @@ export class PmTasksTableComponent implements OnInit {
     } else {
       foreTaskCount = 0;
     }
-    return foreTaskCount + this.milestones[milestone].tasks[task].id;
+    return foreTaskCount + task + 1;
   }
 
-  selectDueDate(event, i, j) {
+  selectStartDate(event, i, j) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const dDate = new Intl.DateTimeFormat('en-US', options).format(event.value);
     // Add dDate field to panel info and update it with formatted date.
-    this.milestones[i].tasks[j].dueDate = dDate;
+    this.milestones[i].tasks[j].start = dDate;
   }
 
   private onDropModel(args) {
@@ -235,5 +236,41 @@ export class PmTasksTableComponent implements OnInit {
         'openModal': true
       }
     );
+  }
+
+
+  minDate(arr) {
+    let min = arr[0];
+    arr.forEach(element => {
+      if (Date.parse(element) < Date.parse(min)) {
+        min = element;
+      }
+    });
+    return min;
+  }
+
+  maxDate(arr) {
+    let max = arr[0];
+    arr.forEach(element => {
+      if (Date.parse(element) > Date.parse(max)) {
+        max = element;
+      }
+    });
+    return max;
+  }
+
+  getMilestoneProgress(arr) {
+    let progressSum = 0;
+    arr.forEach(element => {
+      progressSum += element.progress;
+    });
+    return progressSum / (arr.length * 100);
+  }
+
+
+  changePercent(percent, panel, task) {
+    this.milestones[panel][task] = parseInt(percent, 10);
+    // send changed data to parent to update gantt chart
+    this.updatedGanttData.emit({'data': this.milestones});
   }
 }

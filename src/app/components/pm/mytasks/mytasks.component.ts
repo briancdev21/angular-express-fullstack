@@ -6,6 +6,7 @@ import {MapToKeysPipe} from './map-to-keys.pipe';
 import { Renderer } from '@angular/core';
 import * as _ from 'lodash';
 import {MyTasksModel, TaskModel} from '../../../models/mytasks.model';
+import * as moment from 'moment';
 @Component({
   selector: 'app-mytasks',
   templateUrl: './mytasks.component.html',
@@ -615,5 +616,13 @@ export class MyTasksComponent implements OnInit {
   removeFocus(event) {
     event.preventDefault();
     this.renderer.invokeElementMethod(event.target, 'blur');
+  }
+
+  checkOverdue(date) {
+    if (moment() > moment(date)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
