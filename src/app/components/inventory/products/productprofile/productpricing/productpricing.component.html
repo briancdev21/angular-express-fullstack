@@ -1,0 +1,26 @@
+<div class="product-pricing-sec">
+  <div class="title">PRODUCT PRICING</div>
+  <div class="pricing-content">
+    <div class="friend-royalty-retail" *ngIf="pricingCategoriesListInfo">
+      <div class="friend" *ngFor="let pricing of pricingCategoriesListInfo; let i = index;">
+        <span>{{pricing.category}}</span>
+        <div class="price-margin">
+          <div class="price-box">
+            <span>$</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricing.price"
+              disabled>
+          </div>
+          <div class="margin-box">
+            <span>%</span>
+            <input 
+              placeholder="0.00" 
+              [(ngModel)]="pricing.margin"
+              disabled>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </div>
+</div>

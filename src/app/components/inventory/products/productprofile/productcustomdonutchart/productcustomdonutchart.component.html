@@ -1,0 +1,42 @@
+
+  <div class="header">
+    <div>{{title}}</div>
+  </div>
+  <div class="content">
+    <svg viewBox="0 0 120 120">
+      <filter id="dropshadow" height="130%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="1"/> <!-- stdDeviation is how much to blur -->
+        <feOffset dx="1" dy="1" result="offsetblur"/> <!-- how much to offset -->
+        <feComponentTransfer>
+          <feFuncA type="linear" slope="0.2"/> <!-- slope is the opacity of the shadow -->
+        </feComponentTransfer>
+        <feMerge> 
+          <feMergeNode/> <!-- this contains the offset blurred image -->
+          <feMergeNode in="SourceGraphic"/> <!-- this contains the element that the filter is applied to -->
+        </feMerge>
+      </filter>
+      <linearGradient [attr.id]="'gradient'+number"  x1="50%" y1="0%" x2="50%" y2="100%" >
+        <stop offset="0%"  [(attr.stop-color)]="gradientColor.stopColor"/>
+        <stop offset="100%" [(attr.stop-color)]="gradientColor.endColor"/>
+      </linearGradient>
+        <linearGradient [attr.id]="'secgradient'+number"  x1="50%" y1="0%" x2="50%" y2="100%" [attr.gradientTransform]="gradientTransform" >
+              <!-- <stop offset="0%"  stop-color="#ff1410"/>
+              <stop offset="100%" stop-color="#f92e92"/> -->
+          <stop offset="0%"  [attr.stop-color]="gradientColor.startColor"/>
+          <stop offset="100%" [attr.stop-color]="gradientColor.endColor"/> 
+       </linearGradient>
+       <!-- Over 100% start -->
+      <path *ngIf="isFullPercent" d="M60 10 A50 50 0 0 1 110 60 A50 50 0 0 1 60 110 L60 100 A40 40 0 0 0 100 60 A40 40 0 0 0 60 20 L60 10" style="filter:url(#dropshadow)" [attr.fill]="'url(#gradient'+number+')'" />
+      <path *ngIf="isFullPercent" [attr.d]="notFullPercentPath"   [attr.stroke]="'url(#secgradient'+number+')'" style="filter:url(#dropshadow)" stroke-width="10" fill="none" stroke-linecap="round" />
+      <path *ngIf="isFullPercent" d="M60 105 L65 105" [attr.stroke]="gradientColor.endColor" stroke-width="10.4" stroke-linecap="round"></path>
+      <!-- end -->
+      <!-- Under 100% start-->
+      <circle *ngIf="!isFullPercent" cx="60" cy="60" r="50" stroke="#d3d3d3" stroke-width="0.4" fill="#eeeeee"></circle>
+      <circle *ngIf="!isFullPercent" cx="60" cy="60" r="40" stroke="#d3d3d3" stroke-width="0.4" fill="white"></circle>
+      <path *ngIf="!isFullPercent" [attr.d]="notFullPercentPath"  fill="none" [attr.stroke]="'url(#secgradient'+number+')'" stroke-width="10"  stroke-linecap="round"></path>
+      </svg>
+      <!-- end -->
+      <div class="text" >
+        {{percentage}}%
+      </div>
+  </div>

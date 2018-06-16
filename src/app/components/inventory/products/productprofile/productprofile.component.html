@@ -1,0 +1,34 @@
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
+  <div class="top-bar">
+    <app-breadcrumb [data]='productPathInfo' ></app-breadcrumb>
+    <div class="add-btn" (click)="openEditProductModal()">Edit</div>
+  </div>
+  
+  <div class="content">
+    <div class="profile-info">
+      <app-productinfobar [productInfo]='productInfo' (changedUserInfo)="onChangedUserInfo($event)"></app-productinfobar>
+    </div>
+    <div class="main-product-content">
+      <div class="chartset" >
+        <app-productcustomdonutchart *ngFor="let data of chartSetData; let i = index;" [title]="data.title" [percentage]="data.percentage" [number]="i" class="chart-wrapper" ></app-productcustomdonutchart>
+      </div>
+      <div>
+        <app-variantslisttable [productVariants]="productVariants"></app-variantslisttable>
+      </div>
+      <div style="display: flex; flex: 1;" >
+        <div class="left-sidebar" >
+          <app-productpricing></app-productpricing>
+          <app-productaccalter></app-productaccalter>
+        </div>  
+        <div class="right-sidebar">
+          <app-productcards [cardsInfo]="cardsInfo" [dateSelectorList]="dateSelectorList"></app-productcards>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="add-product-modal-wrapper" *ngIf="showAddProductModal"></div>
+<div class="add-product-modal"  [ngClass]="{'show-add-product-modal': showAddProductModal, 'hide-add-product-modal': !showAddProductModal }">
+  <app-editproductmodal [showAddProductModal]="showAddProductModal" [productsInfoAll]="productsInfoAll" (closeEditProductModal)="closeEditModal($event)" [productInfo]="productInfo"></app-editproductmodal>
+</div>

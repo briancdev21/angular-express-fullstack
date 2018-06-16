@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../../../services/shared.service';
 
@@ -11,10 +11,7 @@ import { SharedService } from '../../../services/shared.service';
 })
 export class BreadcrumbBarComponent implements AfterViewInit {
   @Input() set userInfo(val) {
-    console.log('val:', val.followers);
-    
     if (val.followers !== undefined) {
-    console.log('val:', val);
       this._userInfo = val;
       this.init();
     }
@@ -64,9 +61,11 @@ export class BreadcrumbBarComponent implements AfterViewInit {
           return obj.label !== element.name;
         });
       });
-      console.log('followers:', this.items2);
-      // input breadcrumb bar info
-      this.data = ['contact', this._userInfo.name];
+
+    // input breadcrumb bar info
+    if (this.userInfo.name) {
+      this.data = ['contact', this.userInfo.name];
+    }
   }
 
   onSelect(item: any) {

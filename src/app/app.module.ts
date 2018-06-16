@@ -41,14 +41,18 @@ import { InventoryCmpModule } from './components/inventory/inventory.module';
 import { ServicingCmpModule } from './components/servicing/servicing.module';
 import { ReportsCmpModule } from './components/reports/reports.module';
 import { LeadProfileCmpModule } from './components/crm/leadprofile/leadprofile.module';
+import { ProductProfileCmpModule } from './components/inventory/products/productprofile/productprofile.module';
+import { SharedPipesModule } from './pipes/sharedpipes.module';
 
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { TokenInterceptor } from './services/token.interceptor';
 import { SubnavHandlerService } from './services/subnav-handler.service';
 import { CrmService } from './services/crm.service';
 import { SharedService } from './services/shared.service';
 import { InvoicesService } from './services/invoices.service';
-import { TokenInterceptor } from './services/token.interceptor';
+import { ProductsService } from './services/inventory/products.service';
+import { SuppliersService } from './services/suppliers.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -92,6 +96,8 @@ import { TokenInterceptor } from './services/token.interceptor';
     ServicingCmpModule,
     ReportsCmpModule,
     LeadProfileCmpModule,
+    ProductProfileCmpModule,
+    SharedPipesModule
   ],
   exports: [
     SubmenuComponent,
@@ -101,6 +107,8 @@ import { TokenInterceptor } from './services/token.interceptor';
     CrmService,
     InvoicesService,
     SharedService,
+    ProductsService,
+    SuppliersService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

@@ -1,26 +1,24 @@
 <div class="content">
-  <table>
+  <table *ngIf="brandsList">
     <tr>
       <th></th>
-      <th (click)="sortArray('productName')">PRODUCT NAME</th>
-      <th (click)="sortArray('modelNumber')">MODEL NUMBER</th>
+      <th (click)="sortArray('name')">PRODUCT NAME</th>
+      <th (click)="sortArray('model')">MODEL NUMBER</th>
       <th (click)="sortArray('brand')">BRAND</th>
-      <th (click)="sortArray('sku')">SKU</th> 
       <th (click)="sortArray('stock')">AVAILABLE</th>
       <th (click)="sortArray('status')">STATUS</th>
     </tr>
     <tr *ngFor="let product of productsListInfo; let i = index" (click)="redirectTo(product.id)">
-      <td><img src="{{product.imgUrl}}"></td>
-      <td>{{product.productName}}</td>
-      <td>{{product.modelNumber}}</td>
-      <td>{{product.brand}}</td>
-      <td>{{product.sku}}</td>
+      <td><img src="{{product.pictureURI}}"></td>
+      <td>{{product.name}}</td>
+      <td>{{product.model}}</td>
+      <td>{{getBrandName(product.brandId)}}</td>
       <td>
-        <span *ngIf="product.type" class="green">{{product.type}}</span>
-        <span *ngIf="!product.type" ><span [ngClass]="getStockColor(product.stock, product.reorderPoint)">{{product.stock}} stock </span> and {{product.variant}} variant</span>
+        <span *ngIf="product.productTypeId === 2" class="green">{{getProductTypeName(product.productTypeId)}}</span>
+        <span *ngIf="product.productTypeId !== 2" ><span [ngClass]="getStatusColor(product.status)">{{product.quantity}} stock </span> and {{product.variantCount}} variant</span>
       </td>
       <td>
-        <span [ngClass]="getStockColor(product.stock, product.reorderPoint)">{{product.status}}</span> 
+        <span [ngClass]="getStatusColor(product.status)">{{product.status}}</span> 
         
       </td> 
     </tr>
