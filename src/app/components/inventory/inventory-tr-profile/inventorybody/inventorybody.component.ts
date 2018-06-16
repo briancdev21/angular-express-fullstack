@@ -12,22 +12,13 @@ import { Router } from '@angular/router';
 export class InventoryBodyComponent {
 
   @Input() set trData(_trdata) {
-<<<<<<< HEAD
     if (_trdata !== undefined) {
       this.tr_mock = _trdata;
-=======
-    this.tr_mock = new TransferModel();
-    this.tr_mock = _trdata;
-    if (_trdata !== undefined) {
->>>>>>> Create transfer profile page
       this.tr_mock.toLocation = _trdata.toLocation;
       this.toLocation = _trdata.toLocation;
       this.tr_mock.fromLocation = _trdata.fromLocation;
       this.fromLocation = _trdata.fromLocation;
-<<<<<<< HEAD
       this.tr_mock.status = _trdata.status;
-=======
->>>>>>> Create transfer profile page
       this.tr_mock.internalMemo = _trdata.internalMemo;
       this.transferdate = _trdata.createdAt;
       this.tr_id = `TR-${this.tr_mock.id}`;
@@ -35,11 +26,7 @@ export class InventoryBodyComponent {
         this.sharedService.getTransferProducts(this.tr_mock.id).subscribe( productRes => {
           this.productDetails = productRes.results;
           this.productDetails.forEach(productDetail => {
-<<<<<<< HEAD
             productDetail.discount = productDetail.discount !== undefined ? productDetail.discount.value : undefined;
-=======
-            productDetail.discount = productDetail.discount.value;
->>>>>>> Create transfer profile page
           });
         });
       }
@@ -66,12 +53,8 @@ export class InventoryBodyComponent {
 
   constructor(private sharedService: SharedService, private router: Router) {
     this.createdDate = new Date().toISOString();
-<<<<<<< HEAD
     this.tr_mock = new TransferModel();
     this.tr_mock.status = 'OPEN';
-=======
-
->>>>>>> Create transfer profile page
     this.sharedService.getLocations().subscribe(locationRes => {
       this.locations = locationRes.results;
     });
@@ -116,7 +99,6 @@ export class InventoryBodyComponent {
   }
 
   savePO() {
-<<<<<<< HEAD
     if (this.tr_mock.status === 'OPEN') {
       this.tr_mock.status = 'TRANSFERRED';
       this.sharedService.updateTransfer(this.tr_mock.id, this.tr_mock).subscribe(() => {
@@ -132,16 +114,5 @@ export class InventoryBodyComponent {
       this.sharedService.updateTransfer(this.tr_mock.id, this.tr_mock).subscribe(() => {
       });
     }
-=======
-    this.tr_mock.status = 'TRANSFERRED';
-    this.sharedService.updateTransfer(this.tr_mock.id, this.tr_mock).subscribe(() => {
-      this.router.navigate(['./inventory/stock-control']);
-    });
-  }
-
-  updateTR() {
-    this.sharedService.updateTransfer(this.tr_mock.id, this.tr_mock).subscribe(() => {
-    });
->>>>>>> Create transfer profile page
   }
 }

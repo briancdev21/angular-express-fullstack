@@ -22,13 +22,10 @@ export class POTableComponent implements OnInit {
         productsRes.results.forEach(product => {
           this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
             this.skus = this.skus.concat(skuRes.results);
-<<<<<<< HEAD
             this.skus = _.uniqBy(this.skus, 'sku');
             this.productDetails.forEach(productDetail => {
               this.skus = this.skus.filter(sku => sku.sku !== productDetail.sku);
             });
-=======
->>>>>>> Create transfer profile page
             this.originSkus = this.skus.slice();
             this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
           });
@@ -44,14 +41,10 @@ export class POTableComponent implements OnInit {
         productsRes.results.forEach(product => {
           this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
             this.skus = this.skus.concat(skuRes.results);
-<<<<<<< HEAD
             this.skus = _.uniqBy(this.skus, 'sku');
             this.productDetails.forEach(productDetail => {
               this.skus = this.skus.filter(sku => sku.sku !== productDetail.sku);
             });
-=======
-            this.skus = _.uniq(this.skus);
->>>>>>> Create transfer profile page
             this.originSkus = this.skus.slice();
             this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
           });
@@ -78,13 +71,8 @@ export class POTableComponent implements OnInit {
   productDetails = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
-<<<<<<< HEAD
   }
 
-=======
-
-  }
->>>>>>> Create transfer profile page
   ngOnInit() {
   }
 

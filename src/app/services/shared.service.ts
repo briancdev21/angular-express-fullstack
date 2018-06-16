@@ -114,7 +114,7 @@ export class SharedService {
     return this.http.get(url);
   }
   getCurrency(id): Observable<any> {
-    const url = `${apiUrl}organization/currencies/${id}`;
+    const url = `${environment.apiUrl}/organization/currencies/${id}`;
     return this.http.get(url);
   }
   createCurrency (body): Observable<any> {
@@ -139,7 +139,7 @@ export class SharedService {
     return this.http.get(url).map(data => data['results']);
   }
   getUser (username): Observable<any> {
-    const url = `${apiUrl}users/${username}`;
+    const url = `${environment.apiUrl}/users/${username}`;
     return this.http.get(url);
   }
 
@@ -174,7 +174,7 @@ export class SharedService {
     return this.http.get(url).map(data => data['results']);
   }
   getContact(id) {
-    const url = `${apiUrl}crm/contacts/${id}`;
+    const url = `${environment.apiUrl}/crm/contacts/${id}`;
     return this.http.get(url);
   }
 
@@ -194,7 +194,7 @@ export class SharedService {
     return this.http.get(url);
   }
   getTerm(id): Observable<any> {
-    const url = `${apiUrl}organization/terms/${id}`;
+    const url = `${environment.apiUrl}/organization/terms/${id}`;
     return this.http.get(url);
   }
   createTerm (body): Observable<any> {
@@ -482,7 +482,7 @@ export class SharedService {
     return this.http.put<any>(url, body);
   }
   getSupplier (id): Observable<any> {
-    const url = `${apiUrl}inventory/suppliers/${id}`;
+    const url = `${environment.apiUrl}/inventory/suppliers/${id}`;
     return this.http.get<any>(url);
   }
   deleteSupplier (supplierId, body): Observable<any> {
