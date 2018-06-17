@@ -38,19 +38,21 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
   ngOnInit() {
     const arr = [];
     this.editable = false;
-    this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
-      this.subCategoriesList = data.results;
-      this.subCategoriesNameList = data.results.map(k => k.name);
-      // Change subCategories ids to objects
-      this.subCategories.forEach(element => {
-        for (let i = 0; i < this.subCategoriesList.length; i ++) {
-          if (element === this.subCategoriesList[i].id) {
-            arr.push(this.subCategoriesList[i]);
+    if (this.categoryId) {
+      this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
+        this.subCategoriesList = data.results;
+        this.subCategoriesNameList = data.results.map(k => k.name);
+        // Change subCategories ids to objects
+        this.subCategories.forEach(element => {
+          for (let i = 0; i < this.subCategoriesList.length; i ++) {
+            if (element === this.subCategoriesList[i].id) {
+              arr.push(this.subCategoriesList[i]);
+            }
           }
-        }
+        });
+        this.subCategories = arr;
       });
-      this.subCategories = arr;
-    });
+    }
   }
 
   ngAfterViewInit() {
