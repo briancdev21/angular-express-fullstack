@@ -10,7 +10,7 @@
       <th (click)="sortCreateDateArray('createdDate')">CREATED DATE</th>
       <th >OWNER</th>
     </tr>
-    <tr *ngFor="let proposallist of proposalListInfo; let i = index" (click)="redirectTo(proposallist.projectNumber)">
+    <tr *ngFor="let proposallist of proposalListInfo; let i = index" (click)="redirectTo(proposallist.id)">
       <td>{{proposallist.id}}</td>
       <td>{{proposallist.contactId}}</td>
       <td>{{proposallist.name}}</td>

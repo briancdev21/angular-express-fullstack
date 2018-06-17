@@ -2,6 +2,7 @@ import { Component, Input, ViewChild, ElementRef, AfterViewInit, Renderer, Event
 import { Router } from '@angular/router';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { SharedService } from '../../../../services/shared.service';
+import { SalesService } from '../../sales.service';
 
 @Component({
   selector: 'app-multisubcategoriesselect',
@@ -15,17 +16,22 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
   @Input() subCategories;
   @ViewChild('box') input: ElementRef;
   @Input() placeholder;
-  @Input() categoryId;
   @Output() sendSubCategories: EventEmitter<any> = new EventEmitter;
   editable: boolean;
   newSubCategory: string;
   subCategoriesNameList = [];
   subCategoriesList = [];
+  categoryId: any;
 
-  constructor(private renderer: Renderer, private sharedService: SharedService) {
+  constructor(private renderer: Renderer, private sharedService: SharedService, private salesService: SalesService) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
+    });
+
+    this.salesService.selectedCategory.subscribe(res => {
+      console.log('receive cate: ', res);
+      this.categoryId = res;
     });
   }
 

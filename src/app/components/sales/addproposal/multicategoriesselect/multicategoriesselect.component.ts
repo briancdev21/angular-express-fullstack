@@ -2,6 +2,7 @@ import { Component, Input, ViewChild, ElementRef, AfterViewInit, Renderer, Event
 import { Router } from '@angular/router';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { SharedService } from '../../../../services/shared.service';
+import { SalesService } from '../../sales.service';
 
 @Component({
   selector: 'app-multicategoriesselect',
@@ -21,7 +22,7 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
   categoriesNameList = [];
   categoriesList = [];
 
-  constructor(private renderer: Renderer, private sharedService: SharedService) {
+  constructor(private renderer: Renderer, private sharedService: SharedService, private salesService: SalesService) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
@@ -57,11 +58,13 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       .subscribe((res) => {
         this.categories.push(res.data);
         this.sendCategories.emit(this.categories);
+        this.salesService.selectedCategory.next(res.data.id);
       });
     } else {
       const pos = this.categoriesNameList.indexOf(data);
       this.categories.push(this.categoriesList[pos]);
       this.sendCategories.emit(this.categories);
+      this.salesService.selectedCategory.next(this.categoriesList[pos]);
     }
   }
 
@@ -71,6 +74,7 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       this.sharedService.getCategories().subscribe(data => {
         this.categories = data.results;
       });
+      this.salesService.selectedCategory.next(res.data.id);
     });
   }
 

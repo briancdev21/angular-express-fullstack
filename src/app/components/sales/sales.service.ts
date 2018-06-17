@@ -6,7 +6,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class SalesService {
 
-constructor() {
-}
+  selectedCategory: BehaviorSubject<string> = new BehaviorSubject('');
+  constructor() {
+  }
 
 }
