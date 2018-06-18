@@ -216,18 +216,4 @@ export class InvoicesComponent implements OnInit {
     });
     return this.invoicesListInfo;
   }
-
-  sortDateArray(field) {
-    const cmp = this;
-    this.invoicesListInfo.sort( function(name1, name2) {
-      if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
-        return -1;
-      } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-    return this.invoicesListInfo;
-  }
 }

@@ -121,7 +121,6 @@ import { ProposalsService } from './services/proposals.service';
     AuthGuard,
     EstimatesService,
     SuppliersService,
-    ProductsService,
     ProposalsService,
     {
       provide: HTTP_INTERCEPTORS,

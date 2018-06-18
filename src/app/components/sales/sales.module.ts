@@ -30,7 +30,6 @@ import { ProposalCmpModule } from './proposal/proposal.module';
 import { SalesService } from './sales.service';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { AutocompleteModule } from 'ng2-input-autocomplete';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 

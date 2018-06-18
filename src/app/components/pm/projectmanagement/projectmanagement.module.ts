@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { AutocompleteModule } from 'ng2-input-autocomplete';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { PmBreadcrumbBarComponent } from './pmbreadcrumbbar/pmbreadcrumbbar.component';
 import { PmBoardComponent } from './pmboard/pmboard.component';
 import { PmScheduleComponent } from './pmschedule/pmschedule.component';
@@ -17,15 +17,21 @@ import { AddDetailedTaskComponent } from '../adddetailedtask/adddetailedtask.com
 import { SubTasksManagementComponent } from '../adddetailedtask/subtasksmanagement/subtasksmanagement.component';
 import { GanttChartComponent } from './pmboard/ganttchart/ganttchart.component';
 import { PmTasksTableComponent } from './pmschedule/pmtaskstable/pmtaskstable.component';
-import { ChangeLogProfileComponent } from './pmprogress/changelogprofile/changelogprofile.component';
-import { ChangeLogDetailsComponent } from './pmprogress/changelogdetails/changelogdetails.component';
-import { ChangeLogListTableComponent } from './pmprogress/changeloglisttable/changeloglisttable.component';
-import { ChangeLogSettingsComponent } from './pmprogress/changelogsettings/changelogsettings.component';
-import { ChangeLogsTableComponent } from './pmprogress/changelogstable/changelogstable.component';
+import { ChangeLogProfileComponent } from './pmprogress/progresschangelog/changelogprofile/changelogprofile.component';
+import { ChangeLogDetailsComponent } from './pmprogress/progresschangelog/changelogdetails/changelogdetails.component';
+import { ChangeLogListTableComponent } from './pmprogress/progresschangelog/changeloglisttable/changeloglisttable.component';
+import { ChangeLogSettingsComponent } from './pmprogress/progresschangelog/changelogsettings/changelogsettings.component';
+import { ChangeLogsTableComponent } from './pmprogress/progresschangelog/changelogstable/changelogstable.component';
+import { ProgressOverviewComponent } from './pmprogress/progressoverview/progressoverview.component';
+import {
+    ProgressProjectInformationComponent
+  } from './pmprogress/progressoverview/progressprojectinformation/progressprojectinformation.component';
+import { ProgressProjectBriefComponent } from './pmprogress/progressprojectbrief/progressprojectbrief.component';
 
 import { CommonCmpModule } from '../../../components/common/common.module';
 import { ProfileCmpModule } from '../../profile/profile.module';
 import { BreadcrumbModule } from '../../../components/breadcrumb/breadcrumb.module';
+import { ProgressProductLogCmpModule } from './pmprogress/progressproductlog/progressproductlog.module';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { DragulaModule } from 'ng2-dragula';
 
@@ -35,6 +41,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } fro
 import { QuillModule } from 'ngx-quill';
 
 import { PmService } from './pm.service';
+import { TaskStableMapToKeysPipe } from './pmschedule/pmtaskstable/map-to-keys.pipe';
 
 export const MY_NATIVE_FORMATS = {
   fullPickerInput: {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'},
@@ -65,7 +72,11 @@ export const MY_NATIVE_FORMATS = {
     ChangeLogDetailsComponent,
     ChangeLogListTableComponent,
     ChangeLogSettingsComponent,
-    ChangeLogsTableComponent
+    ChangeLogsTableComponent,
+    TaskStableMapToKeysPipe,
+    ProgressOverviewComponent,
+    ProgressProjectInformationComponent,
+    ProgressProjectBriefComponent
   ],
   imports: [
     BrowserModule,
@@ -74,13 +85,14 @@ export const MY_NATIVE_FORMATS = {
     CommonCmpModule,
     ProfileCmpModule,
     TabModule,
-    AutocompleteModule,
+    NgSelectModule,
     FormsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     ClickOutsideModule,
     DragulaModule,
-    QuillModule
+    QuillModule,
+    ProgressProductLogCmpModule
   ],
   exports: [
     PmBreadcrumbBarComponent,
@@ -91,7 +103,8 @@ export const MY_NATIVE_FORMATS = {
     PmFilesComponent,
     AddDetailedTaskComponent,
     SubTasksManagementComponent,
-    GanttChartComponent
+    GanttChartComponent,
+    TaskStableMapToKeysPipe
   ],
   providers: [
     PmService,
