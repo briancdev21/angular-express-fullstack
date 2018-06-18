@@ -3,6 +3,9 @@ import { CommonComponent } from '../../../components/common/common.component';
 import { SubmenuComponent } from '../../submenu/submenu.component';
 import { ProposalService } from './proposal.service';
 import { ActivatedRoute } from '@angular/router';
+import { SharedService } from '../../../services/shared.service';
+import { ProposalsService } from '../../../services/proposals.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-test',
@@ -13,23 +16,52 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProposalComponent implements OnInit {
 
-  constructor( private proposalService: ProposalService, private route: ActivatedRoute ) {
+  constructor( private proposalService: ProposalService, private route: ActivatedRoute, private sharedService: SharedService,
+    private proposalsService: ProposalsService ) {
     this.proposalId = this.route.snapshot.paramMap.get('id');
-    console.log('pro id: ', this.proposalId);
+    this.sharedService.getProjectTypes().subscribe(res => {
+      this.productTypesList = res;
+    });
+
+    this.sharedService.getContacts().subscribe(data => {
+      this.contactsList = data;
+      this.proposalsService.getIndividualProposal(this.proposalId).subscribe(res => {
+        console.log('proposals service: ', res);
+        this.proposalInfo = {
+          proposalId : res.data.id,
+          contactName : this.getContactNameFromId(res.data.contactId),
+          projectName: res.data.name,
+          projectType: 'New Construction',
+          proposalAmount: res.data.total,
+          dealStatus: res.data.status,
+          revision: res.data.revision,
+          createdDate: moment(res.data.updatedAt).format('MMMM DD, YYYY'),
+          owner: [
+            {
+            imageUrl: 'assets/users/user1.png',
+            profileLink: 'crm/contacts/michael',
+            name: 'Michael'
+            }
+          ],
+        };
+      });
+    });
   }
   menuCollapsed = true;
   proposalId: any;
   public searchQueryString = '';
   proposalProductListBackup = [];
+  contactsList = [];
+  productTypesList = [];
 
   public proposalInfo: any = {
-    proposalId : '123465',
+    proposalId : 0,
     contactName : 'DIANA ILIC',
     projectName: 'Live your Nu Life',
     projectType: 'New Construction',
     proposalAmount: 24202.37,
     dealStatus: 'New',
-    revision: '0',
+    revision: 0,
     createdDate: 'January 19, 2017',
     owner: [
       {
@@ -521,6 +553,17 @@ export class ProposalComponent implements OnInit {
     console.log('44444', data);
     this.proposalProductList = data;
     this.proposalService.massEditedList(this.proposalProductList);
+  }
+
+  getContactNameFromId(id) {
+    const idCroped = id.slice(-1);
+    const selectedContact = this.contactsList.filter(c => c.id.toString() === idCroped)[0];
+    return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+  }
+
+  getProductTypeNameFromId(id) {
+    const selectedType = this.productTypesList.filter(c => c.id.toString() === id)[0];
+    return selectedType.name;
   }
 
   filterTxt (arr, searchKey) {

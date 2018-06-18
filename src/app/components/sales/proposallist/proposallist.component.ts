@@ -33,7 +33,6 @@ export class ProposalListComponent implements OnInit {
 
     this.proposalsService.getProposals().subscribe(res => {
       this.proposalListInfo = res.results;
-      console.log('proposalList: ', this.proposalListInfo);
     });
   }
 

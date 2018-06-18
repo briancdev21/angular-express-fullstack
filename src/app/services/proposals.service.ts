@@ -49,4 +49,9 @@ export class ProposalsService {
     const url = `${apiUrl}sales/proposals/`;
     return this.http.post<any>(url, body);
   }
+
+  getIndividualProposal(id): Observable<any>  {
+    const url = `${apiUrl}sales/proposals/${id}`;
+    return this.http.get(url);
+  }
 }
