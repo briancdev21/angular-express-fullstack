@@ -18,6 +18,8 @@ import { ScheduleMultiKeywordComponent } from './schedulemultikeyword/schedulemu
 import { MassEditComponent } from './massedit/massedit.component';
 import { ProductListTableComponent } from './productlisttable/productlisttable.component';
 import { AddProductModalComponent } from './addproductmodal/addproductmodal.component';
+import { MultiVariantsSelectComponent } from './addproductmodal/multivariantsselect/multivariantsselect.component';
+
 import { ProposalService } from './proposal.service';
 import { SubmenuComponent } from '../../submenu/submenu.component';
 import { ProfileCmpModule } from '../../profile/profile.module';
@@ -41,7 +43,8 @@ import { InvoicesCmpModule } from '../invoices/invoices.module';
     ArraySortPipe,
     SearchPipe,
     AddProposalTaskComponent,
-    SearchProjectComponent
+    SearchProjectComponent,
+    MultiVariantsSelectComponent
   ],
   imports: [
     BrowserModule,

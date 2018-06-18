@@ -406,7 +406,7 @@ export class AddProductModalComponent implements OnInit {
   }
 
   getKeywords(event) {
-    const keywordNamesList = event.map(k => k.name);
+    const keywordNamesList = event;
     this.addedProduct.variantValue[this.addedProduct.variantValue.length - 1].data = keywordNamesList;
     // this.variantKeywordsIdList = event.map(k => k.id);
   }
