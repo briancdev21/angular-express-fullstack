@@ -24,7 +24,7 @@ export class SalesComponent implements OnInit {
       .filter(event => event instanceof NavigationEnd)
       .subscribe((val) => {
         console.log('router: ', val);
-        if (val['url'] === '/sales/proposal-details') {
+        if (val['url'].includes('/sales/proposal-details') ) {
           this.notProposalDetails = false;
         } else {
           this.notProposalDetails = true;

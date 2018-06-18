@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../../components/common/common.component';
 import { SubmenuComponent } from '../../submenu/submenu.component';
 import { ProposalService } from './proposal.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-test',
@@ -12,11 +13,12 @@ import { ProposalService } from './proposal.service';
 })
 export class ProposalComponent implements OnInit {
 
-  constructor( private proposalService: ProposalService ) {
-
+  constructor( private proposalService: ProposalService, private route: ActivatedRoute ) {
+    this.proposalId = this.route.snapshot.paramMap.get('id');
+    console.log('pro id: ', this.proposalId);
   }
   menuCollapsed = true;
-
+  proposalId: any;
   public searchQueryString = '';
   proposalProductListBackup = [];
 
