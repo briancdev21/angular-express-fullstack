@@ -3,15 +3,15 @@
     <tr>
       <th (click)="sortArray('projectNumber')">PROJECT #</th>
       <th (click)="sortArray('projectName')">NAME OF PROJECT</th>
-      <th (click)="sortArray('customerName')">CUSTOMER NAME</th>
+      <th (click)="sortArray('contactId')">CUSTOMER NAME</th>
       <th (click)="sortCreateDateArray('deliveryDate')">DELIVERY DATE</th> 
       <th (click)="sortArray('total')">PROJECT TOTAL</th>
       <th (click)="sortArray('projectHealth')">WORK ORDER COMPLETION</th>
     </tr>
     <tr *ngFor="let projectslist of projectsListInfo; let i = index" (click)="redirectTo(projectslist.projectNumber)">
-      <td>{{projectslist.projectNumber}}</td>
+      <td>{{projectslist.id}}</td>
       <td>{{projectslist.projectName}}</td>
-      <td>{{projectslist.customerName}}</td>
+      <td><span *ngIf="projectslist.contactId">{{getContactName(projectslist.contactId)}}</span></td>
       <td>{{projectslist.deliveryDate}}</td>
       <td>$ {{projectslist.total | number: '1.2-2'}}</td>
       <td class="work-order-completion"><app-horizontalbar [barInfo]="projectslist.barInfo"></app-horizontalbar></td> 

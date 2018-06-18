@@ -48,52 +48,20 @@ export class ProjectsListComponent implements OnInit {
   ];
 
   public projectsListInfo: Array<Object> = [
-    {
-      projectNumber: 'NU8802-0159',
-      projectName: 'Remodel with your Nu Life',
-      customerName: 'John Moss',
-      deliveryDate: 'November 20, 2017',
-      projectHealth: 33,
-      total: 22323.67,
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        }
-      ]
-    },
-    {
-      projectNumber: 'NU8802-0158',
-      projectName: 'Your Nu Life',
-      customerName: 'Steve Jobs',
-      deliveryDate: 'February 20, 2017',
-      projectHealth: 62,
-      total: 16439.03,
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        }
-      ]
-    },
-    {
-      projectNumber: 'NU8802-0157',
-      projectName: 'Your Nuer Life',
-      customerName: 'Bob Agile',
-      deliveryDate: 'November 15, 2017',
-      projectHealth: 89,
-      total: 112830,
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        },
-        {
-          name: 'Steve Jobs',
-          imgUrl: 'assets/users/user2.png'
-        }
-      ]
-    },
+    // {
+    //   projectNumber: 'NU8802-0159',
+    //   projectName: 'Remodel with your Nu Life',
+    //   customerName: 'John Moss',
+    //   deliveryDate: 'November 20, 2017',
+    //   projectHealth: 33,
+    //   total: 22323.67,
+    //   collaborators: [
+    //     {
+    //       name: 'John Moss',
+    //       imgUrl: 'assets/users/user1.png'
+    //     }
+    //   ]
+    // },
   ];
 
   ngOnInit() {

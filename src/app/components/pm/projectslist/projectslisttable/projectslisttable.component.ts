@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import * as _ from 'lodash';
 import { HorizontalBarComponent } from '../../../common/horizontalbar/horizontalbar.component';
+import { ProjectsService } from '../../../../services/projects.service';
+import { SharedService } from '../../../../services/shared.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-projectslisttable',
@@ -21,15 +24,34 @@ export class ProjectsListTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
+  contactsList = [];
 
-  constructor( private filterService: FilterService, private router: Router ) {
+  constructor( private filterService: FilterService, private router: Router, private projectsService: ProjectsService,
+    private sharedService: SharedService ) {
+    this.sharedService.getContacts().subscribe(data => {
+      console.log('contactslist: ', data);
+      this.contactsList = data;
+      this.projectsService.getProjectsList().subscribe(res => {
+        this.projectsListInfo = res.results;
+        this.projectsListInfo.forEach(element => {
+          element.deliveryDate = moment(element.deliveryDate).format('MMMM DD, YYYY');
+          element.barInfo = {
+            title: element.health + '%',
+            completeness: element.health
+          };
+        });
+        this.projectsListInfo = this.projectsListInfo.filter(p => p.status === 'OPEN');
+        console.log('projectslist: ', res);
+      });
+    });
+
   }
 
   ngOnInit() {
-    this.projectsListInfo.map(i => i.barInfo = {
-      title: i.projectHealth + '%',
-      completeness: i.projectHealth
-    });
+    // this.projectsListInfo.map(i => i.barInfo = {
+    //   title: i.health + '%',
+    //   completeness: i.health
+    // });
   }
 
   getStatus() {
@@ -89,6 +111,11 @@ export class ProjectsListTableComponent implements OnInit {
 
   getDateColor(days) {
     return days <= 6 ? 'green' : days <= 14 ? 'orange' : 'red';
+  }
+
+  getContactName(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
   }
 
 }
