@@ -12,6 +12,10 @@ import { PmService } from '../pm.service';
 
 export class PmProgressComponent implements OnInit {
 
+  tabActiveFirst = true;
+  tabActiveSecond = false;
+  tabActiveThird = false;
+
   constructor( private pmService: PmService, private router: Router ) {
   }
 

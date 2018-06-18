@@ -26,4 +26,7 @@ export class AddEstimateHeaderComponent implements OnInit {
   }
   ngOnInit() {
   }
+
+  redirectTo() {
+  }
 }

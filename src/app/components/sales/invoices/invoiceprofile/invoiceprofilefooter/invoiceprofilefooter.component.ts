@@ -8,7 +8,7 @@ import { InvoicesService } from '../../../../../services/invoices.service';
   templateUrl: './invoiceprofilefooter.component.html',
   styleUrls: ['./invoiceprofilefooter.component.css']
 })
-export default class InvoiceProfileFooterComponent implements OnInit {
+export class InvoiceProfileFooterComponent implements OnInit {
 
   @Input() set createdInvoice(_createdInvoice) {
   }
@@ -35,6 +35,15 @@ export default class InvoiceProfileFooterComponent implements OnInit {
   chargeFeeValue: number;
   chargeSwitchOn: false;
   currentInvoiceId: number;
+  reminderSwitchOn = false;
+  recurringSwitchOn = false;
+  creditSwitchOn = false;
+  switchOn = false;
+  frequency = 'Daily';
+  maxFrequency: any;
+  showRecurringModal = false;
+  template: any;
+  Interval = '';
 
   constructor(
     private router: Router,

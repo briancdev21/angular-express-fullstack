@@ -13,7 +13,7 @@ import { FilterService } from '../../filter.service';
   templateUrl: './addinvoicebody.component.html',
   styleUrls: ['./addinvoicebody.component.css']
 })
-export default class AddInvoiceBodyComponent implements OnInit {
+export class AddInvoiceBodyComponent implements OnInit {
   // @Input() createdInvoice;
 
   @Input() set createdInvoice(_createdInvoice) {

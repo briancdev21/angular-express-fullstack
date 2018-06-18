@@ -9,7 +9,7 @@ import { EstimatesService } from '../../../../../services/estimates.service';
   templateUrl: './estimateprofilefooter.component.html',
   styleUrls: ['./estimateprofilefooter.component.css']
 })
-export default class EstimateProfileFooterComponent implements OnInit {
+export class EstimateProfileFooterComponent implements OnInit {
 
   @Input() createdInvoice;
 
@@ -35,6 +35,15 @@ export default class EstimateProfileFooterComponent implements OnInit {
   chargeFeeValue: number;
   chargeSwitchOn: false;
   currentEstimateId: number;
+  reminderSwitchOn = false;
+  recurringSwitchOn = false;
+  creditSwitchOn = false;
+  switchOn = false;
+  frequency = 'Daily';
+  maxFrequency: any;
+  showRecurringModal = false;
+  template: any;
+  Interval = '';
 
   constructor(
     private router: Router,

@@ -45,28 +45,27 @@ import { EsTableComponent } from './components/es-table/es-table.component';
 import { AddInvoiceComponent } from './addinvoice/addinvoice.component';
 import { AddEstimateComponent } from './addestimate/addestimate.component';
 import {AddInvoiceHeaderComponent} from './addinvoice/addinvoiceheader/addinvoiceheader.component';
-import AddInvoiceBodyComponent from './addinvoice/addinvoicebody/addinvoicebody.component';
+import {AddInvoiceBodyComponent} from './addinvoice/addinvoicebody/addinvoicebody.component';
 import {AddInvoiceFooterComponent} from './addinvoice/addinvoicefooter/addinvoicefooter.component';
 import {AddEstimateHeaderComponent} from './addestimate/addestimateheader/addestimateheader.component';
 import {AddEstimateFooterComponent} from './addestimate/addestimatefooter/addestimatefooter.component';
-import AddEstimateBodyComponent from './addestimate/addestimatebody/addestimatebody.component';
+import {AddEstimateBodyComponent} from './addestimate/addestimatebody/addestimatebody.component';
 
 import { InvoiceProfileComponent } from './invoiceprofile/invoiceprofile.component';
 import { EstimateProfileComponent } from './estimateprofile/estimateprofile.component';
-import InvoiceProfileBodyComponent from './invoiceprofile/invoiceprofilebody/invoiceprofilebody.component';
-import InvoiceProfileHeaderComponent from './invoiceprofile/invoiceprofileheader/invoiceprofileheader.component';
-import InvoiceProfileFooterComponent from './invoiceprofile/invoiceprofilefooter/invoiceprofilefooter.component';
+import {InvoiceProfileBodyComponent} from './invoiceprofile/invoiceprofilebody/invoiceprofilebody.component';
+import {InvoiceProfileHeaderComponent} from './invoiceprofile/invoiceprofileheader/invoiceprofileheader.component';
+import {InvoiceProfileFooterComponent} from './invoiceprofile/invoiceprofilefooter/invoiceprofilefooter.component';
 
-import EstimateProfileBodyComponent from './estimateprofile/estimateprofilebody/estimateprofilebody.component';
-import EstimateProfileHeaderComponent from './estimateprofile/estimateprofileheader/estimateprofileheader.component';
-import EstimateProfileFooterComponent from './estimateprofile/estimateprofilefooter/estimateprofilefooter.component';
+import {EstimateProfileBodyComponent} from './estimateprofile/estimateprofilebody/estimateprofilebody.component';
+import {EstimateProfileHeaderComponent} from './estimateprofile/estimateprofileheader/estimateprofileheader.component';
+import {EstimateProfileFooterComponent} from './estimateprofile/estimateprofilefooter/estimateprofilefooter.component';
 
 
 @NgModule({
   declarations: [
     InvoicesListTableComponent,
     InvoiceFilterComponent,
-
     AddInvoiceHeaderComponent,
     AddInvoiceFooterComponent,
     AddInvoiceBodyComponent,

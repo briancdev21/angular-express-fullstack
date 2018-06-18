@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './invoiceprofileheader.component.html',
   styleUrls: ['./invoiceprofileheader.component.css']
 })
-export default class InvoiceProfileHeaderComponent implements OnInit {
+export class InvoiceProfileHeaderComponent implements OnInit {
 
   status = '';
   invoiceId: Number;

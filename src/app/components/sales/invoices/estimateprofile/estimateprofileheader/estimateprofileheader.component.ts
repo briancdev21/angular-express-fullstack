@@ -8,7 +8,7 @@ import { FilterService } from '../../filter.service';
   templateUrl: './estimateprofileheader.component.html',
   styleUrls: ['./estimateprofileheader.component.css']
 })
-export default class EstimateProfileHeaderComponent implements OnInit {
+export class EstimateProfileHeaderComponent implements OnInit {
 
   status = '';
   invoiceId: Number;

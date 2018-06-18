@@ -14,7 +14,7 @@ import { EstimatesService } from '../../../../../services/estimates.service';
   templateUrl: './addestimatebody.component.html',
   styleUrls: ['./addestimatebody.component.css']
 })
-export default class AddEstimateBodyComponent implements OnInit {
+export class AddEstimateBodyComponent implements OnInit {
 
   @Input() set createdInvoice(_createdInvoice) {
     this.invoice_mock = _createdInvoice;
@@ -234,6 +234,9 @@ export default class AddEstimateBodyComponent implements OnInit {
 
   getShippingAddress(event) {
     this.saveInvoiceData.shippingAddress = event.data;
+  }
+
+  changedCreatedDate(event) {
   }
 
   onPriceChanged() {

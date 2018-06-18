@@ -15,7 +15,7 @@ import * as moment from 'moment';
   templateUrl: './estimateprofilebody.component.html',
   styleUrls: ['./estimateprofilebody.component.css']
 })
-export default class EstimateProfileBodyComponent implements OnInit {
+export class EstimateProfileBodyComponent implements OnInit {
   // @Input() createdInvoice;
 
   @Input() set createdInvoice(_createdInvoice) {

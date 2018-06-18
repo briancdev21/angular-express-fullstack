@@ -62,9 +62,9 @@ export class AddProductModalComponent implements OnInit {
     { color: 'yellow', value: '#ff0' },
     { color: 'black', value: '#000' }
   ];
-  protected types = ['STOCKABLE', 'NON_STOCKABLE', 'SERVICE'];
-  private suppliers;
-  private brands;
+  types = ['STOCKABLE', 'NON_STOCKABLE', 'SERVICE'];
+  suppliers: any;
+  brands: any;
 
   invalidModelNumber = false;
   invalidProductType = false;
