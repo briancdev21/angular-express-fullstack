@@ -255,3 +255,17 @@ app-activitiesbox {
 .sales-proposal .card {
   width: 49%;
 }
+
+.approval-time {
+  margin-left: 13%;
+  width: 100%;
+}
+
+@media screen and (max-width: 1650px) {
+
+  .approval-time {
+    margin-left: 18%;
+    width: 100%;
+  }
+
+}
