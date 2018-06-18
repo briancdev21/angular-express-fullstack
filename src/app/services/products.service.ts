@@ -88,4 +88,14 @@ export class ProductsService {
     const url = `${apiUrl}inventory/products/${id}/product-picture/`;
     return this.http.put(url, body);
   }
+
+  getAlternatives(id): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/alternatives`;
+    return this.http.get(url);
+  }
+
+  getAccessories(id): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/accessories`;
+    return this.http.get(url);
+  }
 }
