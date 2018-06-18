@@ -42,22 +42,22 @@ export class SharedService {
 
   // brand
   getBrands(): Observable<any> {
-    const url = `${environment.apiUrl}/organization/brands/`;
+    const url = `${environment.apiUrl}/brands/`;
     return this.http.get(url);
   }
 
   createBrand (body): Observable<any> {
-    const url = `${environment.apiUrl}/organization/brands/`;
+    const url = `${environment.apiUrl}/brands/`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualBrand(id): Observable<any>  {
-    const url = `${environment.apiUrl}/organization/brands/${id}`;
+    const url = `${environment.apiUrl}/brands/${id}`;
     return this.http.get(url);
   }
 
   deleteBrand (id): Observable<any> {
-    const url = `${environment.apiUrl}/organization/brands/${id}`;
+    const url = `${environment.apiUrl}/brands/${id}`;
     return this.http.delete<any>(url);
   }
 

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProposalService } from '../proposal.service';
-import { ProductsService } from '../../../../services/products.service';
+import { ProductsService } from '../../../../services/inventory/products.service';
 import { SharedService } from '../../../../services/shared.service';
 
 @Component({

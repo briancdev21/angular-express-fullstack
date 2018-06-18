@@ -5,7 +5,7 @@ import { ProposalService } from '../proposal.service';
 import { SuppliersService } from '../../../../services/suppliers.service';
 import { SharedService } from '../../../../services/shared.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
-import { ProductsService } from '../../../../services/products.service';
+import { ProductsService } from '../../../../services/inventory/products.service';
 
 @Component({
   selector: 'app-addproductmodal',
