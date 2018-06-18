@@ -45,6 +45,7 @@ export class InventoryBodyComponent {
 
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
+
   terms = [];
   selectedTerm = undefined;
   dueDate: any;
@@ -108,8 +109,6 @@ export class InventoryBodyComponent {
   }
 
   onSelectUser(selectedIndex: string) {
-    console.log('selected user:', selectedIndex);
-
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
     this.contactId = this.contactList[selectedIndex].id;
     this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id, 10);
@@ -171,9 +170,6 @@ export class InventoryBodyComponent {
   }
 
 
-  onCancel() {
-    this.showCancelPOModal = true;
-  }
 
   deletePO() {
     this.sharedService.deletePurchaseOrder(this.po_mock.id).subscribe(() => {
@@ -181,13 +177,6 @@ export class InventoryBodyComponent {
     });
   }
 
-  onSave() {
-    this.showErrors = true;
-    if (this.po_mock.term !== undefined
-      && this.po_mock.location !== undefined) {
-      this.showSendPOModal = true;
-    }
-  }
 
   savePO() {
     this.po_mock.status = 'SENT';
@@ -222,5 +211,23 @@ export class InventoryBodyComponent {
     this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
       console.log('mock_data term', data.data);
     });
+  }
+
+  onCancel() {
+    this.sharedService.deletePurchaseOrder(this.po_mock.id).subscribe(() => {
+      this.router.navigate(['./inventory/stock-control']);
+    });
+  }
+
+  onSupplierSentSwitchChanged(val) {
+
+  }
+
+  onSave() {
+    if (this.po_mock.term != undefined && this.contactId != undefined && this.po_mock.location != undefined) {
+      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe(() => {
+        this.router.navigate(['./inventory/stock-control']);
+      });
+    }
   }
 }

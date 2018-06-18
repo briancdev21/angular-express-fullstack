@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-in-terms-of-invoice',
@@ -8,4 +8,8 @@ import { Component, Input } from '@angular/core';
 export class InTermsOfInvoiceComponent {
   @Input() termsOfInvoice;
   @Input() title;
+  @Output() changedTerm: EventEmitter<any> = new EventEmitter();
+  changeTerm() {
+    this.changedTerm.emit(this.termsOfInvoice);
+  }
 }

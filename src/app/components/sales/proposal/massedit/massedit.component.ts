@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { SharedService } from '../shared.service';
+import { ProposalService } from '../proposal.service';
 
 @Component({
   selector: 'app-massedit',
@@ -38,7 +38,7 @@ export class MassEditComponent implements OnInit {
   changeSubCategorySelect = '';
   expanded = false;
 
-  constructor( private sharedService: SharedService ) {
+  constructor( private proposalService: ProposalService ) {
   }
 
 
@@ -192,6 +192,6 @@ export class MassEditComponent implements OnInit {
 
   expandAll() {
     this.expanded = !this.expanded;
-    this.sharedService.expandAll(this.expanded);
+    this.proposalService.expandAll(this.expanded);
   }
 }

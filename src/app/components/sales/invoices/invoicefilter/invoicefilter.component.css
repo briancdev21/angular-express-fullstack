@@ -92,6 +92,10 @@ img {
   width: 100%;
 }
 
+/deep/ .invoices-filter .completer-label {
+  display: none;
+}
+
 /* tags section css */
 
 .tags {

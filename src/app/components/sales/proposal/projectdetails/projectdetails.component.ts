@@ -2,7 +2,7 @@ import { Component, Input, ViewChild, ElementRef, OnInit, EventEmitter, Output }
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
 import { Ng2TimelineComponent } from '../../../profile/ng2-timeline/ng2timeline.component';
-import { SharedService } from '../shared.service';
+import { ProposalService } from '../proposal.service';
 import { ScheduleMultiKeywordComponent } from '../schedulemultikeyword/schedulemultikeyword.component';
 
 
@@ -167,7 +167,7 @@ export class ProjectDetailsComponent implements OnInit {
     }
   ];
 
-  constructor( private sharedService: SharedService ) {
+  constructor( private proposalService: ProposalService ) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;

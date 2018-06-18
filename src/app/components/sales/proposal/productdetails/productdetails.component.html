@@ -16,10 +16,10 @@
     <span>Product type: </span>
     <select [(ngModel)]="selected" (ngModelChange)="onSelect(selected)">
       <option value='all'>All product types</option>
-      <option *ngFor="let type of productType" [value]="type">{{type}}</option>
+      <option *ngFor="let type of productType" [value]="type.id">{{type.type}}</option>
     </select>
   </div>
-  <div class="products-table">
+  <div class="products-table" *ngIf="selectedData">
     <table (clickOutside)="onClickedOutside($event)">
       <tr>
         <th>MODEL</th>
@@ -29,15 +29,15 @@
         <th>PRICE</th>
       </tr>
       <tr 
-        *ngFor="let productInfo of selectedData | sort:'productName'; let i = index;"
+        *ngFor="let productInfo of selectedData | sort:'name'; let i = index;"
         [ngStyle]="{'background-color': selectedRows.includes(productInfo.sku) ? '#dcdbdb':'#f5f5f5'}"
         (click)="onParentRowSelect(productInfo, i)"
         (dblclick)="sendIndividualProduct(productInfo)"
       >
         <td>{{productInfo.model}}</td>
-        <td>{{productInfo.productName}}</td>
+        <td>{{productInfo.name}}</td>
         <td>{{productInfo.sku}}</td>
-        <td><input [(ngModel)]="productInfo.qty"></td>
+        <td><input [(ngModel)]="productInfo.quantity"></td>
         <td>$ <input [(ngModel)]="productInfo.unitPrice"></td>
       </tr>
     </table>

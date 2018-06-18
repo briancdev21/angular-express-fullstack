@@ -13,11 +13,14 @@ export class InCustomerNameComponent implements OnInit {
 
   @Input() set userList(val: string[]) {
     this._userList = val;
-    console.log('userlist', this._userList);
     this._userList.forEach((user, index) => {
-      this.users.push({'name': user});
+      this.users.push({
+        name: user['person'].firstName + ' ' + user['person'].lastName,
+        value: user['id']
+      });
     });
   }
+
   @Input() searchStr;
   @Output() selectedUser: EventEmitter<any> = new EventEmitter();
   users = [];
@@ -30,16 +33,12 @@ export class InCustomerNameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._userList
-      .forEach((user, index) => {
-        this.users.push({'name': user});
-      });
   }
 
   onSelected(item: CompleterItem) {
-    console.log('123', item);
     if (item) {
-      this.selectedUser.emit(item.title);
+      this.selectedUser.emit(item.originalObject.value);
     }
   }
+
 }

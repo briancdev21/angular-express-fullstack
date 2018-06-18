@@ -19,7 +19,7 @@ export class InDiscountComponent {
   }
 
   onCheckDiscountRange(e) {
-    if (e.target.value > 100 && this.discounttype === 'percent') { e.target.value = 100; }
+    if (e.target.value > 100 && this.discounttype === 'PERCENT') { e.target.value = 100; }
     if (e.target.value < 0) { e.target.value = undefined; }
   }
   onChangeDiscountType() {

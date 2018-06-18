@@ -60,7 +60,7 @@ export class ScheduleMultiKeywordComponent implements AfterViewInit, OnInit {
       if (a >= 0) {
         this.remaining = a;
         this.keywords.push(this.schdulePercent);
-        this.scheduleRemain.emit(this.remaining);
+        this.scheduleRemain.emit({'remaining': this.remaining, 'keywords': this.keywords});
         this.schdulePercent = undefined;
       } else {
         this.remaining = 100 - total;
@@ -75,7 +75,7 @@ export class ScheduleMultiKeywordComponent implements AfterViewInit, OnInit {
       total = total + this.keywords[i];
     }
     this.remaining = 100 - total;
-    this.scheduleRemain.emit(this.remaining);
+    this.scheduleRemain.emit({'remaining': this.remaining, 'keywords': this.keywords});
   }
 
 }

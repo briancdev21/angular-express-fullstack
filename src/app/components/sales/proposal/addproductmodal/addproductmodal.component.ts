@@ -1,8 +1,11 @@
 import { Component, Input, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
-import { SharedService } from '../shared.service';
+import { ProposalService } from '../proposal.service';
+import { SuppliersService } from '../../../../services/suppliers.service';
+import { SharedService } from '../../../../services/shared.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { ProductsService } from '../../../../services/inventory/products.service';
 
 @Component({
   selector: 'app-addproductmodal',
@@ -59,9 +62,9 @@ export class AddProductModalComponent implements OnInit {
     { color: 'yellow', value: '#ff0' },
     { color: 'black', value: '#000' }
   ];
-  types = ['Type 1', 'TestType 2', 'Type 3', 'Type 4', 'Type 5'];
-  suppliers = ['test1', 'test2', 'test3', 'test4', 'test5'];
-  brands = ['test1', 'test2', 'test3', 'test4', 'test5'];
+  types = ['STOCKABLE', 'NON_STOCKABLE', 'SERVICE'];
+  suppliers: any;
+  brands: any;
 
   invalidModelNumber = false;
   invalidProductType = false;
@@ -79,8 +82,52 @@ export class AddProductModalComponent implements OnInit {
   accQueryString: any;
   queryString: any;
   onUploadStateChanged: any;
+  brandsListInfo: any;
+  suppliersListInfo: any;
+  newProductId: any;
+  currenciesListInfo: any;
+  pricingCategoriesListInfo: any;
+  productCategories = [];
+  emptyArr = [];
+  showVariantConfirmModal = false;
+  missingSupplierCode = false;
+  missingUpcNumber = false;
+  productTypesListInfo: any;
+  productTypeNames: any;
 
-  constructor(private sharedService: SharedService, private completerService: CompleterService) {
+  constructor(private proposalService: ProposalService, private completerService: CompleterService,
+     private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
+
+    this.proposalService.newProductId.subscribe(data => {
+      if (data.id) {
+        this.newProductId = data.id;
+      }
+    });
+
+    this.suppliersService.getSuppliersList().subscribe(res => {
+      this.brandsListInfo = res.results;
+      this.suppliers = res.results.map(s => s.name);
+    });
+
+    this.sharedService.getBrands().subscribe(res => {
+      this.brandsListInfo = res.results;
+      this.brands = res.results.map(b => b.name);
+    });
+
+    this.sharedService.getCurrencies().subscribe(res => {
+      this.currenciesListInfo = res.results;
+    });
+
+    this.sharedService.getPricingCategories().subscribe(res => {
+      this.pricingCategoriesListInfo = res.results;
+      this.pricingCategoriesListInfo.map(p => p['price'] = 0);
+    });
+
+    this.sharedService.getProductTypes().subscribe(res => {
+      this.productTypesListInfo = res.results;
+      this.productTypeNames = res.results.map(b => b.name);
+    });
+
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.addedProduct = {
       productType: this.type,
@@ -89,36 +136,36 @@ export class AddProductModalComponent implements OnInit {
       productName: '',
       modelNumber: '',
       productDesc: '',
-      measureCount: '1',
-      expiration: '',
+      measureCount: undefined,
+      expiration: undefined,
       brand: '',
-      inventoryType: 'stockable',
-      measure: 'perUnit',
-      expirationType: '',
+      inventoryType: 'STOCKABLE',
+      measure: 'PER_UNIT',
+      expirationType: 'HOURS',
       qty: 0,
       initialStockLevel: '',
       reorderPoint: '',
       unitCost: 0,
-      currenty: 'cad',
-      leadTime: 'days',
+      currency: 'CAD',
+      leadTime: 'DAYS',
       leadTimeCount: 0,
       skuNumber: '',
       supplierCode: '',
       upc: '',
       option: 'optional',
       priceAdjust: 0,
-      friendMargin: '0',
-      friendPrice: '',
-      royaltyPrice: '',
-      royaltyMargin: '0',
-      builderPrice: '',
-      buildersMargin: '0',
-      wholesalePrice: '',
-      wholesaleMargin: '0',
-      retailPrice: '',
-      retailMargin: '0',
-      costPrice: '',
-      costMargin: '0',
+      // friendMargin: '0',
+      // friendPrice: '',
+      // royaltyPrice: '',
+      // royaltyMargin: '0',
+      // builderPrice: '',
+      // buildersMargin: '0',
+      // wholesalePrice: '',
+      // wholesaleMargin: '0',
+      // retailPrice: '',
+      // retailMargin: '0',
+      // costPrice: '',
+      // costMargin: '0',
       variantValue: [{id: 1, data: []}],
       variantProducts: []
     };
@@ -137,13 +184,20 @@ export class AddProductModalComponent implements OnInit {
       this.editVariant = false;
       return;
     }
-    this.sharedService.closeModal(true);
+    this.proposalService.closeModal(true);
     this.tabActiveFirst = true;
     this.tabActiveSecond = this.tabActiveThird = this.tabActiveFour = false;
     this.addVariantConfirm = true;
     this.addVariantContent = false;
     this.editVariant = false;
 
+  }
+
+  cancelNewProduct() {
+    this.proposalService.closeModal(true);
+    this.productsService.deleteIndividualProduct(this.newProductId).subscribe(res => {
+      console.log('deleted: ', res);
+    });
   }
 
   clickNext(pos) {
@@ -171,7 +225,7 @@ export class AddProductModalComponent implements OnInit {
         if (!this.addedProduct.productDesc) {
           this.invalidProductDescription = true;
         }
-        if (!this.type) {
+        if (!this.addedProduct.type) {
           this.invalidProductType = true;
         }
         if (!this.supplier) {
@@ -193,6 +247,29 @@ export class AddProductModalComponent implements OnInit {
       this.tabActiveSecond = false;
       this.tabActiveFour = false;
     } else if (pos === 'tab-three') {
+      this.tabActiveFour = true;
+      this.tabActiveFirst = false;
+      this.tabActiveThird = false;
+      this.tabActiveSecond = false;
+    }
+  }
+
+  clickNextEditVariant() {
+    const variantSuppliercode = this.addedProduct.variantProducts.map(v => v.supplierCode);
+    if (variantSuppliercode.filter(s => s === '').length > 0) {
+      this.missingSupplierCode = true;
+    } else {
+      this.missingSupplierCode = false;
+    }
+    const variantUpcNumber = this.addedProduct.variantProducts.map(v => v.upcNumber);
+    if (variantUpcNumber.filter(s => s === '').length > 0) {
+      this.missingUpcNumber = true;
+    } else {
+      this.missingUpcNumber = false;
+    }
+    if (this.missingUpcNumber || this.missingSupplierCode) {
+      return;
+    } else {
       this.tabActiveFour = true;
       this.tabActiveFirst = false;
       this.tabActiveThird = false;
@@ -247,103 +324,28 @@ export class AddProductModalComponent implements OnInit {
     return randNum;
   }
 
-  calcFriend(value) {
+  calcCost(value, i) {
     this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.friendPrice = +this.addedProduct.friendPrice;
-    if ((this.addedProduct.friendPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.friendMargin = ((this.addedProduct.friendPrice - this.addedProduct.unitCost) / this.addedProduct.friendPrice) * 100;
+
+    if ((this.pricingCategoriesListInfo[i].price !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
+      this.pricingCategoriesListInfo[i].margin = ((this.pricingCategoriesListInfo[i].price - this.addedProduct.unitCost) /
+                                                  this.pricingCategoriesListInfo[i].price) * 100;
       // show 2 decimal places
-      this.addedProduct.friendMargin = parseFloat(this.addedProduct.friendMargin).toFixed(2);
+      this.pricingCategoriesListInfo[i].margin = parseFloat(this.pricingCategoriesListInfo[i].margin).toFixed(2);
     }
-    if ((this.addedProduct.friendMargin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
-      this.addedProduct.friendPrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.friendMargin);
+    if ((this.pricingCategoriesListInfo[i].margin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
+      this.pricingCategoriesListInfo[i].price = this.addedProduct.unitCost * 100 / (100 - this.pricingCategoriesListInfo[i].margin);
       // show 2 decimal places
-      this.addedProduct.friendPrice = parseFloat(this.addedProduct.friendPrice).toFixed(2);
+      this.pricingCategoriesListInfo[i].price = parseFloat(this.pricingCategoriesListInfo[i].price).toFixed(2);
     }
   }
 
-  calcCost(value) {
-    this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.costPrice = +this.addedProduct.costPrice;
-    if ((this.addedProduct.costPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.costMargin = ((this.addedProduct.costPrice - this.addedProduct.unitCost) / this.addedProduct.costPrice) * 100;
-      // show 2 decimal places
-      this.addedProduct.costMargin = parseFloat(this.addedProduct.costMargin).toFixed(2);
-    }
-    if ((this.addedProduct.costMargin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
-      this.addedProduct.costPrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.costMargin);
-      // show 2 decimal places
-      this.addedProduct.costPrice = parseFloat(this.addedProduct.costPrice).toFixed(2);
-    }
-  }
-
-  calcRoyalty(value) {
-    this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.royaltyPrice = +this.addedProduct.royaltyPrice;
-    if ((this.addedProduct.royaltyPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.royaltyMargin = ((this.addedProduct.royaltyPrice - this.addedProduct.unitCost) / this.addedProduct.royaltyPrice) * 100;
-      // show 2 decimal places
-      this.addedProduct.royaltyMargin = parseFloat(this.addedProduct.royaltyMargin).toFixed(2);
-    }
-    if ((this.addedProduct.royaltyMargin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
-      this.addedProduct.royaltyPrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.royaltyMargin);
-      // show 2 decimal places
-      this.addedProduct.royaltyPrice = parseFloat(this.addedProduct.royaltyPrice).toFixed(2);
-    }
-  }
-
-  calcRetail(value) {
-    this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.retailPrice = +this.addedProduct.retailPrice;
-    if ((this.addedProduct.retailPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.retailMargin = ((this.addedProduct.retailPrice - this.addedProduct.unitCost) / this.addedProduct.retailPrice) * 100;
-      // show 2 decimal places
-      this.addedProduct.retailMargin = parseFloat(this.addedProduct.retailMargin).toFixed(2);
-    }
-    if (this.addedProduct.retailMargin && this.addedProduct.unitCost && (value === 'margin')) {
-      this.addedProduct.retailPrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.retailMargin);
-      // show 2 decimal places
-      this.addedProduct.retailPrice = parseFloat(this.addedProduct.retailPrice).toFixed(2);
-    }
-  }
-
-  calcBuilders(value) {
-    this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.buildersPrice = +this.addedProduct.buildersPrice;
-    if ((this.addedProduct.buildersPrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.buildersMargin = ((this.addedProduct.buildersPrice - this.addedProduct.unitCost) / this.addedProduct.buildersPrice) * 100;
-      // show 2 decimal places
-      this.addedProduct.buildersMargin = parseFloat(this.addedProduct.buildersMargin).toFixed(2);
-    }
-    if ((this.addedProduct.buildersMargin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
-      this.addedProduct.buildersPrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.buildersMargin);
-      // show 2 decimal places
-      this.addedProduct.buildersPrice = parseFloat(this.addedProduct.buildersPrice).toFixed(2);
-    }
-  }
-
-  calcWholesale(value) {
-    this.addedProduct.unitCost = +this.addedProduct.unitCost;
-    this.addedProduct.wholesalePrice = +this.addedProduct.wholesalePrice;
-    if ((this.addedProduct.wholesalePrice !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'price')) {
-      this.addedProduct.wholesaleMargin = ((this.addedProduct.wholesalePrice - this.addedProduct.unitCost) / this.addedProduct.wholesalePrice) * 100;
-      // show 2 decimal places
-      this.addedProduct.wholesaleMargin = parseFloat(this.addedProduct.wholesaleMargin).toFixed(2);
-    }
-    if ((this.addedProduct.wholesaleMargin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
-      this.addedProduct.wholesalePrice = this.addedProduct.unitCost * 100 / (100 - this.addedProduct.wholesaleMargin);
-      // show 2 decimal places
-      this.addedProduct.wholesalePrice = parseFloat(this.addedProduct.wholesalePrice).toFixed(2);
-    }
-  }
 
   changeCost() {
-    this.calcCost('margin');
-    this.calcFriend('margin');
-    this.calcRetail('margin');
-    this.calcRoyalty('margin');
-    this.calcWholesale('margin');
-    this.calcBuilders('margin');
+    for (let i = 0; i < this.pricingCategoriesListInfo.length; i ++) {
+      this.pricingCategoriesListInfo[i].price = this.addedProduct.unitCost * 100 / (100 - this.pricingCategoriesListInfo[i].margin);
+      this.pricingCategoriesListInfo[i].price = parseFloat(this.pricingCategoriesListInfo[i].price).toFixed(2);
+    }
   }
 
   tabChange(event) {
@@ -403,6 +405,12 @@ export class AddProductModalComponent implements OnInit {
     }
   }
 
+  getKeywords(event) {
+    const keywordNamesList = event;
+    this.addedProduct.variantValue[this.addedProduct.variantValue.length - 1].data = keywordNamesList;
+    // this.variantKeywordsIdList = event.map(k => k.id);
+  }
+
   moveToConfirm() {
     this.addVariantConfirm = true;
     this.addVariantContent = false;
@@ -410,7 +418,6 @@ export class AddProductModalComponent implements OnInit {
 
   removeVariantList(index) {
     this.addedProduct.variantValue.splice(index, 1);
-    console.log('111', this.addedProduct.variantValue);
   }
 
   moveToEdit() {
@@ -419,10 +426,10 @@ export class AddProductModalComponent implements OnInit {
     const allArrays = this.addedProduct.variantValue.map(e => e.data);
     this.possibleCombination = this.allPossibleCases(allArrays);
     const skuNumber = this.autoGenerate();
-    console.log('added product: ', this.addedProduct);
     for ( let i = 0; i < this.possibleCombination.length; i++) {
       this.addedProduct.variantProducts[i] = {
         name: this.possibleCombination[i],
+        qty: 0,
         sku: skuNumber + i,
         cost: this.addedProduct.unitCost,
         supplierCode: '',
@@ -456,18 +463,19 @@ export class AddProductModalComponent implements OnInit {
   }
 
   addToAccessories(product) {
-    console.log('product', product);
     if (!this.addedAccList.map(a => a.skuNumber).includes(product.sku)) {
       this.addedAcc = {
         skuNumber: product.sku,
-        productName: product.productName,
+        productName: product.name,
         modelNumber: product.model,
-        brand: product.brand,
+        brandId: product.brandId,
         qty: product.qty,
         friendPrice: product.total,
-        option: 'optional'
+        option: 'optional',
+        brandName: this.getBrandNamefromId(product.brandId)
       };
       this.addedAccList.push(this.addedAcc);
+      console.log('addedAccList: ', this.addedAccList);
     }
   }
 
@@ -475,11 +483,12 @@ export class AddProductModalComponent implements OnInit {
     if (!this.addedAlterList.map(a => a.skuNumber).includes(product.sku)) {
       this.addedAlter = {
         skuNumber: product.sku,
-        productName: product.productName,
+        productName: product.name,
         modelNumber: product.model,
-        brand: product.brand,
+        brandId: product.brandId,
         qty: product.qty,
-        friendPrice: product.total
+        friendPrice: product.total,
+        brandName: this.getBrandNamefromId(product.brandId)
       };
       this.addedAlterList.push(this.addedAlter);
     }
@@ -494,10 +503,10 @@ export class AddProductModalComponent implements OnInit {
   }
 
   changeType (value) {
-    if (value === 'stockable') {
+    if (value === 'STOCKABLE') {
       this.greyedNonStock = false;
       this.greyedService = false;
-    } else if (value === 'non-stockable') {
+    } else if (value === 'NON_STOCKABLE') {
       this.greyedNonStock = true;
       this.greyedService = false;
     } else {
@@ -530,6 +539,16 @@ export class AddProductModalComponent implements OnInit {
     if (this.addedProduct.inventoryType === 'service') {
       return 'greyed';
     }
+  }
+
+  getProductTypeNamefromId(id) {
+    const filterProductType = this.productTypesListInfo.filter(p => p.id === id);
+    return filterProductType.name;
+  }
+
+  getBrandNamefromId(id) {
+    const filterBrandName = this.brandsListInfo.filter(p => p.id === id);
+    return filterBrandName.name;
   }
 }
 

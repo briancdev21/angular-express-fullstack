@@ -1,12 +1,12 @@
 <app-common (expandSidebar)="toggleMenubar($event)"></app-common>
 <div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }">
   <header>
-    <app-addinvoiceheader [createdDate]="'2018-01-10'" [dueDate]="'2018-01-20'" ></app-addinvoiceheader>
+    <app-addinvoiceheader [createdInvoice]="createdInvoice"></app-addinvoiceheader>
   </header>
   <main>
-    <app-addinvoicebody></app-addinvoicebody>
+    <app-addinvoicebody [createdInvoice]="createdInvoice"></app-addinvoicebody>
   </main>
   <footer>
-    <app-addinvoicefooter></app-addinvoicefooter>
+    <app-addinvoicefooter [createdInvoice]="createdInvoice"></app-addinvoicefooter>
   </footer>
 </div>

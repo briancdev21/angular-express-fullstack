@@ -42,22 +42,22 @@ export class SharedService {
 
   // brand
   getBrands(): Observable<any> {
-    const url = `${environment.apiUrl}/organization/brands/`;
+    const url = `${environment.apiUrl}/brands/`;
     return this.http.get(url);
   }
 
   createBrand (body): Observable<any> {
-    const url = `${environment.apiUrl}/organization/brands/`;
+    const url = `${environment.apiUrl}/brands/`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualBrand(id): Observable<any>  {
-    const url = `${environment.apiUrl}/organization/brands/${id}`;
+    const url = `${environment.apiUrl}/brands/${id}`;
     return this.http.get(url);
   }
 
   deleteBrand (id): Observable<any> {
-    const url = `${environment.apiUrl}/organization/brands/${id}`;
+    const url = `${environment.apiUrl}/brands/${id}`;
     return this.http.delete<any>(url);
   }
 
@@ -89,22 +89,22 @@ export class SharedService {
 
   // Product Type
   getProductTypes(): Observable<any> {
-    const url = `${environment.apiUrl}/organization/productTypes/`;
+    const url = `${environment.apiUrl}/organization/product-types/`;
     return this.http.get(url);
   }
 
   createProductType (body): Observable<any> {
-    const url = `${environment.apiUrl}/organization/productTypes/`;
+    const url = `${environment.apiUrl}/organization/product-types/`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualProductType(id): Observable<any>  {
-    const url = `${environment.apiUrl}/organization/productTypes/${id}`;
+    const url = `${environment.apiUrl}/organization/product-types/${id}`;
     return this.http.get(url);
   }
 
   deleteProductType (id): Observable<any> {
-    const url = `${environment.apiUrl}/organization/productTypes/${id}`;
+    const url = `${environment.apiUrl}/organization/product-types/${id}`;
     return this.http.delete<any>(url);
   }
 
@@ -231,6 +231,58 @@ export class SharedService {
   updateIndividualPricingCategory(id, body): Observable<any>  {
     const url = `${environment.apiUrl}/organization/pricing-categories/${id}`;
     return this.http.put(url, body);
+  }
+
+  //  Category
+  getCategories(): Observable<any> {
+    const url = `${environment.apiUrl}/organization/categories`;
+    return this.http.get(url);
+  }
+
+  createCategory (body): Observable<any> {
+    const url = `${environment.apiUrl}/organization/categories`;
+    return this.http.post<any>(url, body);
+  }
+
+  getIndividualCategory(id): Observable<any>  {
+    const url = `${environment.apiUrl}/organization/categories/${id}`;
+    return this.http.get(url);
+  }
+
+  updateIndividualCategory(id, body): Observable<any>  {
+    const url = `${environment.apiUrl}/organization/categories/${id}`;
+    return this.http.put(url, body);
+  }
+
+  deleteIndividualCategory (id): Observable<any> {
+    const url = `${environment.apiUrl}/organization/categories/${id}`;
+    return this.http.delete<any>(url);
+  }
+
+  //  SubCategory
+  getSubCategories(categoryId): Observable<any> {
+    const url = `${environment.apiUrl}/organization/categories/${categoryId}/subcategories`;
+    return this.http.get(url);
+  }
+
+  createSubCategory (categoryId, body): Observable<any> {
+    const url = `${environment.apiUrl}/organization/categories/${categoryId}/subcategories`;
+    return this.http.post<any>(url, body);
+  }
+
+  getIndividualSubCategory(categoryId, subId): Observable<any>  {
+    const url = `${environment.apiUrl}/organization/categories/${categoryId}/subcategories/${subId}`;
+    return this.http.get(url);
+  }
+
+  updateIndividualSubCategory(categoryId, subId, body): Observable<any>  {
+    const url = `${environment.apiUrl}/organization/categories/${categoryId}/subcategories/${subId}`;
+    return this.http.put(url, body);
+  }
+
+  deleteIndividualSubCategory (categoryId, subId): Observable<any> {
+    const url = `${environment.apiUrl}/organization/categories/${categoryId}/subcategories/${subId}`;
+    return this.http.delete<any>(url);
   }
 
   // Tax-rate
@@ -487,6 +539,21 @@ export class SharedService {
   }
   deleteSupplier (supplierId, body): Observable<any> {
     const url = `${environment.apiUrl}/inventory/suppliers/${supplierId}`;
+    return this.http.delete<any>(url);
+  }
+
+  getProjectTypes(): Observable<any> {
+    const url = `${environment.apiUrl}/organization/project-types`;
+    return this.http.get(url);
+  }
+
+  createProjectType (body): Observable<any> {
+    const url = `${environment.apiUrl}/organization/project-types`;
+    return this.http.post<any>(url, body);
+  }
+
+  deleteProjectType (id): Observable<any> {
+    const url = `${environment.apiUrl}/organization/project-types/${id}`;
     return this.http.delete<any>(url);
   }
 }

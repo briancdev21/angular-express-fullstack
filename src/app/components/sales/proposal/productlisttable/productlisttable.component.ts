@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, HostListener, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
-import { SharedService } from '../shared.service';
+import { ProposalService } from '../proposal.service';
 import * as moment from 'moment';
 import { forEach } from '@angular/router/src/utils/collection';
 
@@ -39,7 +39,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   proposalProductList = [];
   max = undefined;
 
-  constructor( private sharedService: SharedService ) {
+  constructor( private proposalService: ProposalService ) {
   }
 
   ngOnDestroy() {
@@ -48,7 +48,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.proposalProductList = this.originProposalProductList;
-    this.sharedService.tableExpanded.subscribe(
+    this.proposalService.tableExpanded.subscribe(
       data => {
         this.proposalProductList.map(product => product.expanded = false);
         this.parents = this.getParentNode(this.proposalProductList);
@@ -67,7 +67,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
       });
 
     // Insert data from product details to table
-    this.sharedService.insertedProducts.subscribe(
+    this.proposalService.insertedProducts.subscribe(
       data => {
         const insertedArr = [];
         this.addedIndex = this.proposalProductList.length;
@@ -122,7 +122,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
           }
         }
         this.proposalProductList = this.proposalProductList.concat(insertedArr);
-        this.sharedService.postUpdatedProposalProductList(this.proposalProductList);
+        this.proposalService.postUpdatedProposalProductList(this.proposalProductList);
       });
 
     // calculate the sum of all products price
@@ -133,7 +133,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     });
     cmp.proposalInfo.proposalAmount = cmp.productTotal;
 
-    this.sharedService.getProposalDiscount.subscribe(
+    this.proposalService.getProposalDiscount.subscribe(
       data => {
         if (data.type) {
           if (data.type[0] === '%') {
@@ -146,7 +146,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     );
 
     // Update table data after mass edited
-    this.sharedService.massEditedData.subscribe( data => {
+    this.proposalService.massEditedData.subscribe( data => {
       console.log('data', data);
       if (data.length) {
         console.log('data1', data);

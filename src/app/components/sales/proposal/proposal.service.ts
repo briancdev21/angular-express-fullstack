@@ -4,8 +4,9 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 
-export class SharedService {
-
+export class ProposalService {
+// send id to add product modal after new product is created
+  newProductId: BehaviorSubject<any> = new BehaviorSubject({});
   constructor() {
 
   }
@@ -50,4 +51,6 @@ export class SharedService {
   massEditedList(data) {
     this.massEdit.next(data);
   }
+
+  
 }

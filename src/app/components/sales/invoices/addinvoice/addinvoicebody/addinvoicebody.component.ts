@@ -3,6 +3,10 @@ import { ProductDetailInfo } from '../../../../../models/ProductDetailInfo.model
 import { Ng2TimelineComponent } from '../../../../profile/ng2-timeline/ng2timeline.component';
 import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordselect/multikeywordselect.component';
 import { SharedService } from '../../../../../services/shared.service';
+import { InvoicesService } from '../../../../../services/invoices.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { InvoiceModel } from '../../../../../models/invoice.model';
+import { FilterService } from '../../filter.service';
 
 @Component({
   selector: 'app-addinvoicebody',
@@ -10,9 +14,27 @@ import { SharedService } from '../../../../../services/shared.service';
   styleUrls: ['./addinvoicebody.component.css']
 })
 export class AddInvoiceBodyComponent implements OnInit {
+  // @Input() createdInvoice;
+
+  @Input() set createdInvoice(_createdInvoice) {
+    this.invoice_mock = _createdInvoice;
+    if (_createdInvoice) {
+      this.saveInvoiceData = _createdInvoice;
+      console.log('saved invoice: ', this.saveInvoiceData);
+      this.currentInvoiceId = this.invoice_mock.id;
+      this.discountType = this.invoice_mock.discount.unit;
+      this.discountAmount = this.invoice_mock.discount.value;
+      this.internalMemo = this.invoice_mock.internalNote;
+      this.noteToSupplier = this.invoice_mock.customerNote;
+      this.termsOfInvoice = this.invoice_mock.terms;
+      this.in_id = 'IN - ' + this.currentInvoiceId;
+    }
+  }
+
+  invoice_mock: any;
   userList = [];
-  classList = ['class1', 'class2', 'class3'];
-  categoryList = ['category1', 'category2', 'category3'];
+  classList = [];
+  categoryList = [];
   projects = ['task1', 'task2', 'task3'];
   changeLogNumbers = ['Number 1', 'Number 2', 'Number 3' ];
   labelText = 'Use customer address';
@@ -28,26 +50,22 @@ export class AddInvoiceBodyComponent implements OnInit {
     postcode: ''
   };
   customerAddress =  {
-    address: '301,1615 10th Ave SW',
-    street: 'Calgary',
-    city: 'Alberta',
-    country: 'Canada',
-    postcode: 'T3C 0J7'
+    address: '',
+    street: '',
+    city: '',
+    country: '',
+    postcode: ''
   };
 
-  terms = ['term1', 'term2', 'term3'];
+  terms = [];
   selectedTerm = '';
   dueDate: any;
-
-  locations = ['locations1', 'locations2', 'locations3'];
-  selectedLocation = '';
   productDetails = [];
   internalMemo = undefined;
-  noteToSupplier = undefined;
   selectItem = '';
   subtotalproducts = undefined;
-  discountType = 'percent';
-  discountAmount = undefined;
+  discountType: string;
+  discountAmount: number;
   freightcosts = undefined;
   taxes = undefined;
   totalamountdue = undefined;
@@ -55,13 +73,29 @@ export class AddInvoiceBodyComponent implements OnInit {
   origin_taxes = undefined;
   oneSide = true;
   depositsAmount = undefined;
-  in_id = 'IN - 123405';
+  in_id = '';
   createdDate: any;
+  contactList: any;
+  noteToSupplier: string;
 
   emailAddresses = [];
-  termsOfInvoice = 'All invoices are due upe3n their due date. Monies due for this invoice will be have a 21%\
-  annual interest charge incured on a monthly basis.\n\n Please send cheque to:\
-  \r Nu Automations \n 301, 108 9th Ave SW\n Calgary, AB T2P 0S9 \n\n Wire transfor instructions are as following:';
+  termsOfInvoice = '';
+  emails: any;
+  newEmail: any;
+  newCustomerName: any;
+  newAddress: string;
+  newCity: string;
+  newState: string;
+  newPostalCode: string;
+  newCountry: string;
+  newClass: any;
+  newCategory: any;
+  newInternalMemo: string;
+  newCustomerNote: string;
+  newTerms: string;
+  newExpiryDate: string;
+  newTermId: any;
+  showModal = false;
 
   public timelineData: Array<Object> = [
     {
@@ -105,39 +139,121 @@ export class AddInvoiceBodyComponent implements OnInit {
     }
   ];
 
-  constructor(private sharedService: SharedService) {
+  currentInvoiceId: any;
+  saveInvoiceData: any;
+
+  constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
+    private route: ActivatedRoute, private filterService: FilterService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
-    this.sharedService.getUsers()
-    .subscribe(data => {
-      this.userList = data.map(user => user.username);
-      console.log('userlist: ', this.userList);
+    this.sharedService.getContacts()
+      .subscribe(data => {
+        console.log('userlist: ', data);
+        this.contactList = data;
+        this.userList = this.contactList;
+      });
+
+    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.in_id = 'IN - ' + this.currentInvoiceId;
+    this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      console.log('getIndividualInvoice: ', res);
+      this.discountType = res.data.discount.unit;
+      this.discountAmount = res.data.discount.value;
+      this.internalMemo = res.data.internalNote;
+      this.noteToSupplier = res.data.customerNote;
+      this.termsOfInvoice = res.data.terms;
     });
+
+    this.sharedService.getTerms().subscribe(res => {
+      this.terms = res.results;
+    });
+
+    this.sharedService.getClassifications().subscribe(res => {
+      this.classList = res.results;
+    });
+
+    this.sharedService.getCategories().subscribe(res => {
+      this.categoryList = res.results;
+    });
+
   }
 
   ngOnInit() {
-    console.log('userlist: ', this.userList);
+
+    this.filterService.chargeFeeData.subscribe(data => {
+      if (data.lateFee) {
+        this.saveInvoiceData.chargeLateFee = data.lateFee;
+        this.saveInvoiceData.lateFee.value = data.value;
+        this.saveInvoiceData.lateFee.unit = data.unit;
+      }
+    });
+
+    this.filterService.saveClicked.subscribe(data => {
+      if (data) {
+        this.saveInvoice();
+      }
+    });
   }
 
   onCustomerSelected(user) {
-    console.log(user);
   }
 
-  onSelectUser(val) {
-    console.log('val', val);
+  onSelectUser(selectedIndex: any) {
+    const contactIdList = this.contactList.map(c => c.id);
+    console.log('selected user: ', contactIdList, selectedIndex);
+    const pos = contactIdList.indexOf(selectedIndex);
+    this.customerAddress = this.contactList[pos].shippingAddress;
+    this.saveInvoiceData.contactId = selectedIndex;
+    this.newCustomerName = selectedIndex;
   }
 
-  onSelectClass(val: string) {
-    console.log('val', val);
+  onSelectClass(val) {
+    this.saveInvoiceData.classificationId = val;
+    this.newClass = val;
   }
 
-  onSelectCategory(val: string) {
-    console.log('val', val);
+  onSelectCategory(val) {
+    this.saveInvoiceData.categoryId = val;
+    this.newCategory = val;
   }
 
-  onSwitchChanged(status: boolean) {
-    console.log('switch status:', status);
+  changedDueDate(event) {
+    this.saveInvoiceData.startDate = event;
   }
+
+  onChangedMemo(event) {
+    this.saveInvoiceData.internalNote = event;
+    this.newInternalMemo = event;
+  }
+
+  onChangedNote(event) {
+    this.saveInvoiceData.customerNote = event;
+    this.newCustomerNote = event;
+  }
+
+  onChangedTermsOfInvoice(event) {
+    this.saveInvoiceData.terms = event;
+    this.newTerms = event;
+  }
+
+  getMultiEmails(event) {
+    this.saveInvoiceData.emails = event;
+    this.newEmail = event;
+  }
+
+  onChangeTerm(event) {
+    this.saveInvoiceData['termId'] = parseInt(event, 10);
+    this.newTermId = event;
+  }
+
+  onDepositChange(event) {
+    this.saveInvoiceData.deposit = parseInt(event, 10);
+  }
+
+  changedCreatedDate(event) {
+    console.log('changedCreatedDate: ', event);
+  }
+
 
   onPriceChanged() {
     this.subtotalproducts = 0;
@@ -154,7 +270,6 @@ export class AddInvoiceBodyComponent implements OnInit {
           taxrate = parseInt(product.taxrate, 10);
         }
       }
-      console.log('tax', taxrate);
       if (product.type === 'service') {
         if (product.total !== undefined) {
           this.subtotalServices += product.total;
@@ -162,7 +277,6 @@ export class AddInvoiceBodyComponent implements OnInit {
           this.subtotalServices = Math.round(this.subtotalServices * 100) / 100 ;
           this.taxes = Math.round(this.taxes * 100) / 100 ;
           this.origin_taxes = this.taxes;
-          console.log('taxes:', this.origin_taxes);
         }
       } else {
         if (product.total !== undefined) {
@@ -171,7 +285,6 @@ export class AddInvoiceBodyComponent implements OnInit {
           this.subtotalproducts = Math.round(this.subtotalproducts * 100) / 100 ;
           this.taxes = Math.round(this.taxes * 100) / 100 ;
           this.origin_taxes = this.taxes;
-          console.log('taxes:', this.origin_taxes);
         }
       }
     });
@@ -180,6 +293,14 @@ export class AddInvoiceBodyComponent implements OnInit {
   }
 
   onTotalPriceChange(data) {
+    console.log('discountChange: ', data);
+    if (data.type) {
+      this.saveInvoiceData.discount.unit = data.type;
+      this.saveInvoiceData.discount.value = data.amount;
+    } else {
+      this.saveInvoiceData.deposit = data.depositsAmount;
+    }
+    this.saveInvoiceData.deposit = data;
     let depositsAmount;
     let discountAmount;
     this.taxes = this.origin_taxes;
@@ -211,6 +332,27 @@ export class AddInvoiceBodyComponent implements OnInit {
         break;
       }
       this.totalamountdue =  Math.round(this.totalamountdue * 100) / 100;
+    }
+  }
+
+  saveInvoice() {
+    console.log('save invoice: ', this.newCustomerName, this.newEmail, this.newClass, this.newCategory, this.newTermId);
+    if (this.newCustomerName && this.newEmail && this.newClass && this.newCategory && this.newTermId) {
+      if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
+        this.saveInvoiceData.deposit = 0;
+      }
+      if (!this.saveInvoiceData.hasOwnProperty('classificationId')) {
+        this.saveInvoiceData.classificationId = 1;
+      }
+      if (typeof(this.saveInvoiceData.contactId) !== 'string') {
+        console.log('save invoice true case', this.saveInvoiceData);
+        this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
+          console.log('saved invoice: ', res);
+          this.router.navigate(['./sales/invoices']);
+        });
+      }
+    } else {
+      this.showModal = true;
     }
   }
 }

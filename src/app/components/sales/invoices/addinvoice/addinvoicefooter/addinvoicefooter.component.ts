@@ -1,5 +1,7 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { FilterService } from '../../filter.service';
+import { InvoicesService } from '../../../../../services/invoices.service';
 
 @Component({
   selector: 'app-addinvoicefooter',
@@ -7,6 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./addinvoicefooter.component.css']
 })
 export class AddInvoiceFooterComponent {
+
+  @Input() createdInvoice;
 
   settingsCollapsed = true;
   showReminderModal = false;
@@ -20,7 +24,6 @@ export class AddInvoiceFooterComponent {
   showRecurringModal = false;
   template: any;
   interval: any;
-  
   currency = 'CAD';
   language = 'ENG';
   showButtons = false;
@@ -36,17 +39,32 @@ export class AddInvoiceFooterComponent {
   startDate: any;
   endDate: any;
 
-  constructor(private router: Router) {
+  chargeFeeUnit: string;
+  chargeFeeValue: number;
+
+  constructor(private router: Router, private filterService: FilterService, private invoicesService: InvoicesService) {
 
   }
 
   cancelInvoice() {
-    this.router.navigate(['./sales/invoices']);
+    const invoiceId = this.createdInvoice.id;
+    this.invoicesService.deleteIndividualInvoice(invoiceId).subscribe( res => {
+      console.log('invoice deleted');
+      this.router.navigate(['./sales/invoices']);
+    });
   }
 
   saveInvoice() {
-    this.router.navigate(['./sales/invoices']);
+    const chargeFeeData = {
+      chargeFee: this.chargeSwitchOn,
+      unit: this.chargeFeeUnit,
+      value: this.chargeFeeValue
+    };
+
+    this.filterService.chargeFeeData.next(chargeFeeData);
+    this.filterService.saveClicked.next( true );
   }
+
   onSwitchChanged(val) {
 
   }

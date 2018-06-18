@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { SharedService } from '../shared.service';
+import { ProposalService } from '../proposal.service';
+import { ProductsService } from '../../../../services/inventory/products.service';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-productdetails',
@@ -12,9 +14,9 @@ import { SharedService } from '../shared.service';
 
 export class ProductDetailsComponent implements OnInit {
 
-  @Input() productsInfoAll;
-  @Input() productType;
-
+  // @Input() productType;
+  productsInfoAll: any;
+  productType: any;
   public showAddProductModal = false;
   public addProductModalCollapsed = true;
   showProductDetailsModal = false;
@@ -40,11 +42,45 @@ export class ProductDetailsComponent implements OnInit {
   queryString: any;
   selected: any;
   measure: any;
+  newProductMock = {
+    'brandId': 1,
+    'productTypeId': 1,
+    'supplierId': 1,
+    'currencyId': 1,
+    'keywordIds': [
+      1
+    ],
+    'model': 'model1',
+    'name': 'product1',
+    'description': 'prod-desc',
+    'inventoryType': 'STOCKABLE',
+    'unitOfMeasure': {
+      'quantity': 1,
+      'unit': 'PER_UNIT'
+    },
+    'expiration': {
+      'duration': 10,
+      'unit': 'HOURS'
+    },
+    'leadTime': {
+      'duration': 1,
+      'unit': 'HOURS'
+    }
+  };
 
-  constructor( private sharedService: SharedService ) {
+  constructor( private proposalService: ProposalService, private productsService: ProductsService, private sharedService: SharedService ) {
     this.selectedData = this.productsInfoAll || [];
     this.searchableList = ['productName', 'model'];
     this.onSelect('all');
+    this.productsService.getProductsList().subscribe(res => {
+      console.log('123', res);
+      this.productsInfoAll = res.results;
+    });
+
+    this.sharedService.getProductTypes().subscribe(res => {
+      this.productType = res.results;
+      console.log('product types:', res);
+    });
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -86,15 +122,17 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onSelect(val) {
+    console.log('select val', val);
     if (val === 'all') {
       this.selectedData = this.productsInfoAll;
     } else {
-      this.selectedData = this.productsInfoAll.filter(x => x.productType === val);
+      this.selectedData = this.productsInfoAll.filter(x => x.productTypeId == val);
     }
+    console.log('select val', this.selectedData);
   }
 
   ngOnInit() {
-    this.sharedService.onModalStatus.subscribe(
+    this.proposalService.onModalStatus.subscribe(
       data => {
         this.showAddProductModal = false;
         this.addProductModalCollapsed = true;
@@ -112,7 +150,7 @@ export class ProductDetailsComponent implements OnInit {
     } else {
       // set option field as undefined for resolving conflice when expand table
       sendData.map( s => s[0].option = undefined );
-      this.sharedService.insertToTable(sendData);
+      this.proposalService.insertToTable(sendData);
     }
   }
 
@@ -124,6 +162,9 @@ export class ProductDetailsComponent implements OnInit {
   openAddProductModal() {
     this.showAddProductModal = true;
     this.addProductModalCollapsed = false;
+    // this.productsService.createProduct(this.newProductMock).subscribe(res => {
+    //   this.proposalService.newProductId.next({'id': res.data.id});
+    // });
   }
 
   openAttachmentModal(product) {
@@ -229,6 +270,6 @@ export class ProductDetailsComponent implements OnInit {
     this.alterQueryString = '';
     this.addAttachmentModalCollapsed = true;
     this.sidebarCollapsed = true;
-    this.sharedService.insertToTable([[this.selectedProduct]]);
+    this.proposalService.insertToTable([[this.selectedProduct]]);
   }
 }

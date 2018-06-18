@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-in-internalmemo',
@@ -7,4 +7,8 @@ import { Component, Input } from '@angular/core';
 })
 export class InInternalMemoComponent {
   @Input() internalMemo;
+  @Output() changedMemo: EventEmitter<any> = new EventEmitter();
+  changeMemo() {
+    this.changedMemo.emit(this.internalMemo);
+  }
 }

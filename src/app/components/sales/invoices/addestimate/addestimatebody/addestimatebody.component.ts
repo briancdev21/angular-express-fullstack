@@ -2,19 +2,39 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ProductDetailInfo } from '../../../../../models/ProductDetailInfo.model';
 import { Ng2TimelineComponent } from '../../../../profile/ng2-timeline/ng2timeline.component';
 import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordselect/multikeywordselect.component';
+import { SharedService } from '../../../../../services/shared.service';
+import { InvoicesService } from '../../../../../services/invoices.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { EstimateModel } from '../../../../../models/estimate.model';
+import { FilterService } from '../../filter.service';
+import { EstimatesService } from '../../../../../services/estimates.service';
 
 @Component({
   selector: 'app-addestimatebody',
   templateUrl: './addestimatebody.component.html',
   styleUrls: ['./addestimatebody.component.css']
 })
-export class AddEstimateBodyComponent {
-  userList = ['John', 'Smith', 'jackie'];
-  classList = ['class1', 'class2', 'class3'];
-  categoryList = ['category1', 'category2', 'category3'];
+export class AddEstimateBodyComponent implements OnInit {
+
+  @Input() set createdInvoice(_createdInvoice) {
+    this.invoice_mock = _createdInvoice;
+    if (_createdInvoice) {
+      this.saveInvoiceData = _createdInvoice;
+      console.log('saved estimate: ', this.saveInvoiceData);
+      this.currentInvoiceId = this.invoice_mock.id;
+      this.in_id = 'ES - ' + this.currentInvoiceId;
+    }
+  }
+
+  invoice_mock: any;
+  userList = [];
+  classList = [];
+  categoryList = [];
   projects = ['task1', 'task2', 'task3'];
-  labelText = 'Use customer address';
+  labelText = 'Same address for the billing address';
   title = 'Terms of the Estimate';
+  dueDateTitle = 'Expiry date';
+  invoiceNumberTitle = 'Estimate #';
   subtotalServices = undefined;
   shippingAddress = {
     address: '',
@@ -24,24 +44,24 @@ export class AddEstimateBodyComponent {
     postcode: ''
   };
   customerAddress =  {
-    address: '301,1615 10th Ave SW',
-    street: 'Calgary',
-    city: 'Alberta',
-    country: 'Canada',
-    postcode: 'T3C 0J7'
+    address: '',
+    street: '',
+    city: '',
+    country: '',
+    postcode: ''
   };
 
-  terms = ['term1', 'term2', 'term3'];
+  terms = [];
   selectedTerm = '';
   dueDate: any;
 
-  locations = ['locations1', 'locations2', 'locations3'];
+  locations = [];
   selectedLocation = '';
   productDetails = [];
   internalMemo = undefined;
   subtotalproducts = undefined;
-  discountType = 'percent';
-  discountAmount = undefined;
+  discountType: string;
+  discountAmount: number;
   freightcosts = undefined;
   taxes = undefined;
   totalamountdue = undefined;
@@ -49,13 +69,30 @@ export class AddEstimateBodyComponent {
   origin_taxes = undefined;
   oneSide = true;
   depositsAmount = undefined;
-  in_id = 'ES - 123405';
+  in_id = '';
   createdDate: any;
   expiryTitle = 'Expiry date';
   estimateNumberTitle = 'Estimate #';
 
   emailAddresses = [];
-  termsOfInvoice = 'All Estimates are valid for 30 days only.';
+  termsOfInvoice = '';
+  contactList: any;
+  noteToSupplier: string;
+  emails: any;
+  showModal = false;
+  newEmail: any;
+  newCustomerName: any;
+  newAddress: string;
+  newCity: string;
+  newState: string;
+  newPostalCode: string;
+  newCountry: string;
+  newClass: any;
+  newCategory: any;
+  newInternalMemo = '';
+  newCustomerNote = '';
+  newTerms = '';
+  newExpiryDate: string;
 
   public timelineData: Array<Object> = [
     {
@@ -100,31 +137,106 @@ export class AddEstimateBodyComponent {
   ];
   selectItem: any;
   logNumber: any;
-  noteToSupplier: any;
 
-  constructor() {
+  currentInvoiceId: number;
+  saveInvoiceData: any;
+
+  constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
+    private route: ActivatedRoute, private filterService: FilterService, private estimatesService: EstimatesService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
+    this.sharedService.getContacts()
+      .subscribe(data => {
+        console.log('userlist: ', data);
+        this.contactList = data;
+        this.userList = this.contactList;
+      });
+
+    this.sharedService.getTerms().subscribe(res => {
+      this.terms = res.results;
+    });
+
+    this.sharedService.getClassifications().subscribe(res => {
+      this.classList = res.results;
+    });
+
+    this.sharedService.getCategories().subscribe(res => {
+      this.categoryList = res.results;
+    });
 
   }
+
+  ngOnInit() {
+
+    this.filterService.chargeFeeData.subscribe(data => {
+      if (data.lateFee) {
+        this.saveInvoiceData.chargeLateFee = data.lateFee;
+        this.saveInvoiceData.lateFee.value = data.value;
+        this.saveInvoiceData.lateFee.unit = data.unit;
+      }
+    });
+
+    this.filterService.saveClicked.subscribe(data => {
+      if (data) {
+        this.saveEstimate();
+      }
+    });
+  }
+
   onCustomerSelected(user) {
-    console.log(user);
   }
 
-  onSelectUser(val: string) {
-    console.log('val', val);
+  onSelectUser(selectedIndex: any) {
+    const contactIdList = this.contactList.map(c => c.id);
+    const pos = contactIdList.indexOf(selectedIndex);
+    this.customerAddress = this.contactList[pos].shippingAddress;
+    this.saveInvoiceData.contactId = selectedIndex;
+    this.newCustomerName = selectedIndex;
   }
 
-  onSelectClass(val: string) {
-    console.log('val', val);
+  onSelectClass(val) {
+    this.saveInvoiceData.classificationId = val;
+    this.newClass = val;
   }
 
-  onSelectCategory(val: string) {
-    console.log('val', val);
+  onSelectCategory(val) {
+    this.saveInvoiceData.categoryId = val;
+    this.newCategory = val;
   }
 
-  onSwitchChanged(status: boolean) {
-    console.log('switch status:', status);
+  changedDueDate(event) {
+    this.saveInvoiceData.expiryDate = event;
+  }
+
+  onChangedMemo(event) {
+    this.saveInvoiceData.internalNote = event;
+    this.newInternalMemo = event;
+  }
+
+  onChangedNote(event) {
+    this.saveInvoiceData.customerNote = event;
+    this.newCustomerNote = event;
+  }
+
+  onChangedTermsOfInvoice(event) {
+    this.saveInvoiceData.terms = event;
+    this.newTerms = event;
+  }
+
+  getMultiEmails(event) {
+    this.saveInvoiceData.emails = event;
+    this.newEmail = event;
+  }
+
+  onDepositChange(event) {
+    this.saveInvoiceData.deposit = parseInt(event, 10);
+  }
+
+  getShippingAddress(event) {
+    this.saveInvoiceData.shippingAddress = event.data;
+  }
+
+  changedCreatedDate(event) {
   }
 
   onPriceChanged() {
@@ -199,6 +311,25 @@ export class AddEstimateBodyComponent {
         break;
       }
       this.totalamountdue =  Math.round(this.totalamountdue * 100) / 100;
+    }
+  }
+
+  saveEstimate() {
+    if (this.newCustomerName && this.newEmail && this.newClass && this.newCategory) {
+      if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
+        this.saveInvoiceData.deposit = 0;
+      }
+      if (!this.saveInvoiceData.hasOwnProperty('classificationId')) {
+        this.saveInvoiceData.classificationId = 1;
+      }
+      if (typeof(this.saveInvoiceData.contactId) !== 'string') {
+        this.estimatesService.updateEstimate(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
+          console.log('saved invoice: ', res);
+        });
+      }
+      this.router.navigate(['./sales/invoices']);
+    } else {
+      this.showModal = true;
     }
   }
 }

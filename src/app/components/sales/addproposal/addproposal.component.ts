@@ -1,9 +1,13 @@
 import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, } from '@angular/core';
 import { Router } from '@angular/router';
-import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
+import { MultiKeywordSelectComponent } from '../../profile/multikeywordselect/multikeywordselect.component';
 import { CompleterService, CompleterData } from 'ng2-completer';
-import { ScheduleMultiKeywordComponent } from '../../proposal/schedulemultikeyword/schedulemultikeyword.component';
-import { InCreatedDateFieldComponent } from '../../invoices/components/in-createddatefield/in-createddatefield.component';
+import { ScheduleMultiKeywordComponent } from '../proposal/schedulemultikeyword/schedulemultikeyword.component';
+import { InCreatedDateFieldComponent } from '../invoices/components/in-createddatefield/in-createddatefield.component';
+import { SharedService } from '../../../services/shared.service';
+import { ProposalsService } from '../../../services/proposals.service';
+import * as moment from 'moment';
+import { ProposalService } from '../proposal/proposal.service';
 
 @Component({
   selector: 'app-addproposal',
@@ -17,6 +21,7 @@ import { InCreatedDateFieldComponent } from '../../invoices/components/in-create
 export class AddProposalComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
+  today = new Date();
   public proposalInfo: any = {
     proposalId : '',
     contactName : '',
@@ -40,9 +45,9 @@ export class AddProposalComponent implements OnInit {
       amount: 0,
       type: ['$']
     },
-    contactName : '',
+    contactId : '',
     projectId: '',
-    completionDate: '',
+    completionDate: moment(this.today).format('YYYY-MM-DD'),
     paymentSchedule: [],
     projectCategoriesAll: [],
     projectSubCategoriesAll: [],
@@ -54,36 +59,30 @@ export class AddProposalComponent implements OnInit {
     state: '',
     country: '',
     zipcode: '',
-    pricing: '',
+    pricing: undefined,
     projectName: '',
-    projectType: '',
+    projectType: undefined,
     collaborators: [
     ],
-    accountManager: [
-    ],
-    projectManager: [
-    ],
-    designer: [
-    ]
+    accountManager: undefined,
+    projectManager: undefined,
+    designer: undefined
   };
 
   userInfo = {
-    name: 'John Moss',
-    role: 'Vice President / Sales Department',
-    profileLink: 'assets/users/John Moss.jpg',
-    email: 'john.moss@gmail.com',
-    primaryphone: '4038935433',
-    mobilephone: '4037101212',
-    shippingaddress: '2222 Crescent Hill Dr SW',
-    city: 'Calgary',
-    state: 'AB',
-    country: 'Canada',
-    zipcode: 'T3C 0J4',
-    billingaddress: '2893 Crescent Hill Dr SW Calgary, AB T3C 0J4',
+    name: '',
+    role: '',
+    profileLink: '',
+    email: '',
+    primaryphone: '',
+    mobilephone: '',
+    shippingaddress: '',
+    city: '',
+    state: '',
+    country: '',
+    zipcode: '',
+    billingaddress: '',
     keywords: [
-      'control4',
-      'theatre',
-      'renovation'
     ],
     contactUser: 'Hayati Homes',
     subAssoUsers: [
@@ -102,12 +101,9 @@ export class AddProposalComponent implements OnInit {
     }]
   };
 
-  customerList = ['customer1', 'customer2', 'customer3'];
-  projectManagerList = ['Manager1', 'Manager2', 'Manager3'];
-  accountReceivableList = ['Account Receivable 1', 'Account Receivable 2', 'Account Receivable 3'];
-  associationList = ['Associatioin 1', 'Associatioin 2', 'Associatioin 3'];
-  proposalPricingList = ['Friend & Family', 'Royalty Program', 'Retail', 'Builders Program', 'Wholesale', 'Cost'];
-  projectTypeList = ['Project Type 1', 'Project Type 2', 'Project Type 3'];
+  customerList = [];
+  proposalPricingList = [];
+  projectTypeList = [];
   scopeEditorContent = 'Test';
 
   sidebarCollapsed = true;
@@ -124,11 +120,12 @@ export class AddProposalComponent implements OnInit {
   showProposalInfo = false;
   showAddProposalModal = false;
   addProposalModalCollapsed = true;
-  scheduleRemain: any;
+  scheduleRemain: number;
   projectIDCount = [];
   invalidCustomerName = false;
   invalidCollaborators = false;
   invalidPricing = false;
+  invalidProjectType = false;
   invalidProjectName = false;
   invalidAddress = false;
   invalidCity = false;
@@ -140,6 +137,8 @@ export class AddProposalComponent implements OnInit {
   invalidAccountManager = false;
   invalidProjectManager = false;
   invalidScopeEditorContent = false;
+  invalidClientProjectManager = false;
+  invalidAccountReceivable = false;
   selectProject = '';
   selectReceivable = '';
 
@@ -152,28 +151,12 @@ export class AddProposalComponent implements OnInit {
   inputChanged: any = '';
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   items2: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items3: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items4: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   items5: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
 
   invalidFirstname = false;
@@ -184,8 +167,14 @@ export class AddProposalComponent implements OnInit {
   isAutocompleteUpdated3 = false;
   isAutocompleteUpdated4 = false;
   isAutocompleteUpdated5 = false;
+  selectedCustomer: any;
+  emptyArr = [];
+  usersList = [];
+  internalNoteContent = '';
+  clientNoteContent = '';
 
-  constructor(private completerService: CompleterService) {
+  constructor(private completerService: CompleterService, private sharedService: SharedService,
+     private proposalsService: ProposalsService) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
@@ -193,26 +182,60 @@ export class AddProposalComponent implements OnInit {
       comp.projectEditable = false;
       comp.designerEditable = false;
     });
+
+    this.sharedService.getContacts()
+    .subscribe(data => {
+      console.log('userlist: ', data);
+      this.customerList = data;
+      // Add collaborators list
+      this.customerList.forEach( ele => {
+        this.items2.push({
+          id: ele.id,
+          label: ele.person.firstName + ' ' + ele.person.lastName,
+          imageUrl: ele.pictureURI
+        });
+      });
+    });
+
+    this.sharedService.getUsers().subscribe(res => {
+      this.usersList = res;
+      this.usersList.forEach( ele => {
+        this.items3.push({
+          label: ele.firstName + ' ' + ele.lastName,
+          imageUrl: ele.pictureURI,
+          userName: ele.username
+        });
+      });
+      this.items4 = this.items5 = this.items3;
+    });
+
+    this.sharedService.getPricingCategories().subscribe(res => {
+      this.proposalPricingList = res.results;
+    });
+
+    this.sharedService.getProjectTypes().subscribe(res => {
+      this.projectTypeList = res.results;
+    });
   }
 
   clickIconShipping() {
-    this.proposalDetails.shippingAddress = (!this.switchIconShipping) ? this.userInfo.shippingaddress : '';
-    this.proposalDetails.city = (!this.switchIconShipping) ? this.userInfo.city : '';
-    this.proposalDetails.state = (!this.switchIconShipping) ? this.userInfo.state : '';
-    this.proposalDetails.country = (!this.switchIconShipping) ? this.userInfo.country : '';
-    this.proposalDetails.zipcode = (!this.switchIconShipping) ? this.userInfo.zipcode : '';
     this.switchIconShipping = !this.switchIconShipping;
+    this.proposalDetails.shippingAddress = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.address : '';
+    this.proposalDetails.city = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.city : '';
+    this.proposalDetails.state = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.province : '';
+    this.proposalDetails.country = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.country : '';
+    this.proposalDetails.zipcode = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.postalCode : '';
   }
 
   clickIconManagement() {
-    this.proposalDetails.projectManagementContact = (!this.switchIconManagement) ? this.proposalDetails.contactName : '';
-    this.selectProject = (!this.switchIconManagement) ? this.proposalDetails.contactName : '';
+    this.proposalDetails.projectManagementContact = (!this.switchIconManagement) ? this.proposalDetails.contactId : '';
+    this.selectProject = (!this.switchIconManagement) ? this.getContactNameFromId( this.proposalDetails.contactId) : '';
     this.switchIconManagement = !this.switchIconManagement;
   }
 
   clickIconReceivable() {
-    this.proposalDetails.accountReceivable = (!this.switchIconReceivable) ? this.proposalDetails.contactName : '';
-    this.selectReceivable = (!this.switchIconReceivable) ? this.proposalDetails.contactName : '';
+    this.proposalDetails.accountReceivable = (!this.switchIconReceivable) ? this.proposalDetails.contactId : '';
+    this.selectReceivable = (!this.switchIconReceivable) ? this.getContactNameFromId( this.proposalDetails.contactId) : '';
     this.switchIconReceivable = !this.switchIconReceivable;
   }
 
@@ -227,7 +250,8 @@ export class AddProposalComponent implements OnInit {
   }
 
   onSelectCustomer(event) {
-    this.proposalDetails.contactName = event;
+    this.proposalDetails.contactId = event;
+    this.selectedCustomer = this.customerList.filter( c => c.id === event)[0];
   }
 
   onSelectProjectManagementContact(event) {
@@ -252,35 +276,37 @@ export class AddProposalComponent implements OnInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.id !== item.id;
     });
-    this.proposalDetails.collaborators.push({name: item.label, imageUrl: item.imageUrl });
+    this.proposalDetails.collaborators.push({name: item.label, imageUrl: item.imageUrl, id: item.id });
   }
 
   onSelectAccountManager(item: any) {
     this.selectedItem = item;
-    this.items3 = this.items3.filter(function( obj ) {
-      return obj.label !== item.label;
-    });
-    this.proposalDetails.accountManager.push({name: item.label, imageUrl: item.imageUrl });
+    // this.items3 = this.items3.filter(function( obj ) {
+    //   return obj.id !== item.id;
+    // });
+    this.proposalDetails.accountManager = item;
   }
 
   onSelectProjectManager(item: any) {
     this.selectedItem = item;
-    this.items4 = this.items4.filter(function( obj ) {
-      return obj.label !== item.label;
-    });
-    this.proposalDetails.projectManager.push({name: item.label, imageUrl: item.imageUrl });
+    this.proposalDetails.projectManager = item;
   }
 
   onSelectDesigner(item: any) {
     this.selectedItem = item;
-    this.items5 = this.items5.filter(function( obj ) {
-      return obj.label !== item.label;
-    });
-    this.proposalDetails.designer.push({name: item.label, imageUrl: item.imageUrl });
+    this.proposalDetails.designer = item;
   }
 
+  getContactNameFromId(id) {
+    const selectedContact = this.customerList.filter( c => c.id === id);
+    if (selectedContact.length > 0) {
+      return selectedContact[0].person.firstName + ' ' + selectedContact[0].person.lastName;
+    } else {
+      return '';
+    }
+  }
 
   onInputChangedEvent(val: string) {
     this.inputChanged = val;
@@ -324,7 +350,8 @@ export class AddProposalComponent implements OnInit {
   }
 
   getSchduleRemain(event) {
-    this.scheduleRemain = event;
+    this.scheduleRemain = event.remaining;
+    this.proposalDetails.paymentSchedule = event.keywords;
   }
 
   generateAutoId() {
@@ -345,7 +372,6 @@ export class AddProposalComponent implements OnInit {
     if (count.toString().length === 1) {
       count = '0' + count;
     }
-    console.log('333', month, year);
     const projectId = 'PR ' + month + year + count;
     return projectId;
   }
@@ -355,6 +381,17 @@ export class AddProposalComponent implements OnInit {
   }
 
   saveproposalDetails() {
+  }
+
+  getProjectCategories(event) {
+    const projectCategories = event.map( k => k.id);
+    this.proposalDetails.projectCategoriesAll = projectCategories;
+    console.log('categories: ', event, this.proposalDetails.projectCategoriesAll);
+  }
+
+  getProjectSubCategories(event) {
+    const projectSubCategories = event.map( k => k.id);
+    this.proposalDetails.projectSubCategoriesAll = projectSubCategories;
   }
 
   tabChange(event) {
@@ -386,28 +423,29 @@ export class AddProposalComponent implements OnInit {
     if (pos === 'tab-one') {
       this.invalidCustomerName = false;
       this.invalidCollaborators = false;
-      this.invalidPricing = false;
       this.invalidProjectName = false;
       this.invalidAddress = false;
       this.invalidCity = false;
       this.invalidState = false;
       this.invalidCountry = false;
       this.invalidZipcode = false;
-      if (this.proposalDetails.contactName && this.proposalDetails.collaborators.length && this.proposalDetails.pricing
+      this.invalidProjectType = false;
+      this.invalidAccountReceivable = false;
+      this.invalidClientProjectManager = false;
+      if (this.proposalDetails.contactId && this.proposalDetails.collaborators.length
         && this.proposalDetails.projectName && this.proposalDetails.shippingAddress && this.proposalDetails.city
-        && this.proposalDetails.state && this.proposalDetails.country && this.proposalDetails.zipcode) {
+        && this.proposalDetails.state && this.proposalDetails.country && this.proposalDetails.zipcode && this.proposalDetails.projectType) {
           this.tabActiveSecond = true;
           this.tabActiveFirst = false;
           this.tabActiveThird = false;
+          console.log('tabone-click: ', this.proposalDetails);
       } else {
-        if (!this.proposalDetails.contactName) {
+        console.log('tabone-click1: ', this.proposalDetails);
+        if (!this.proposalDetails.contactId) {
           this.invalidCustomerName = true;
         }
         if (!this.proposalDetails.collaborators.length) {
           this.invalidCollaborators = true;
-        }
-        if (!this.proposalDetails.pricing) {
-          this.invalidPricing = true;
         }
         if (!this.proposalDetails.projectName) {
           this.invalidProjectName = true;
@@ -427,6 +465,15 @@ export class AddProposalComponent implements OnInit {
         if (!this.proposalDetails.zipcode) {
           this.invalidZipcode = true;
         }
+        if (!this.proposalDetails.projectType) {
+          this.invalidProjectType = true;
+        }
+        if (!this.proposalDetails.projectManagementContact) {
+          this.invalidClientProjectManager = true;
+        }
+        if (!this.proposalDetails.accountReceivable ) {
+          this.invalidAccountReceivable = true;
+        }
         setTimeout(() => {
           this.tabActiveSecond = false;
           this.tabActiveFirst = true;
@@ -434,17 +481,18 @@ export class AddProposalComponent implements OnInit {
         });
       }
     } else if (pos === 'tab-two') {
-      console.log('111', this.scheduleRemain);
       this.invalidProjectId = false;
       this.invalidSchedule = false;
       this.invalidAccountManager = false;
       this.invalidProjectManager = false;
-      if (this.proposalDetails.projectId && (this.scheduleRemain === 0) && this.proposalDetails.accountManager.length
-        && this.proposalDetails.projectManager.length) {
+      if (this.proposalDetails.projectId && (this.scheduleRemain === 0) && this.proposalDetails.accountManager
+        && this.proposalDetails.projectManager) {
           this.tabActiveThird = true;
           this.tabActiveFirst = false;
           this.tabActiveSecond = false;
+          console.log('111', this.proposalDetails);
       } else {
+        console.log('222', this.proposalDetails);
         if (!this.proposalDetails.projectId) {
           this.invalidProjectId = true;
         }
@@ -489,9 +537,56 @@ export class AddProposalComponent implements OnInit {
     this.addProposalModalCollapsed = false;
   }
 
+  extractStringFromEditor(str) {
+    const md = str.slice(3);
+    return md.slice(-3);
+  }
+
   finishAddProposal() {
     this.invalidScopeEditorContent = false;
+    const savingProposalData = {
+      'currencyId': 1,
+      'contactId': this.proposalDetails.contactId,
+      // 'leadId': 0,
+      'projectId': this.proposalDetails.projectId,
+      'projectTypeId': parseInt(this.proposalDetails.projectType, 10),
+      'pricingCategoryId': this.proposalDetails.pricing,
+      'categories': [
+        {
+          'categoryId': 1,
+        }
+      ],
+      'assignees': {
+        'accountManager': this.proposalDetails.accountManager.userName,
+        'projectManager': this.proposalDetails.projectManager.userName,
+        'designer': this.proposalDetails.designer ? this.proposalDetails.designer.userName : '',
+      },
+      'clientProjectManager': this.proposalDetails.projectManagementContact,
+      'accountReceivable': this.proposalDetails.accountReceivable,
+      'name': this.proposalDetails.projectName,
+      'shippingAddress': {
+        'address': this.proposalDetails.shippingAddress,
+        'city': this.proposalDetails.city,
+        'province': this.proposalDetails.state,
+        'postalCode': this.proposalDetails.zipcode,
+        'country': this.proposalDetails.country
+      },
+      'paymentSchedule': this.proposalDetails.paymentSchedule,
+      'scopeOfWork': this.extractStringFromEditor(this.scopeEditorContent),
+      'clientNote': this.extractStringFromEditor(this.clientNoteContent),
+      'internalNote': this.extractStringFromEditor(this.internalNoteContent),
+      'completionDate': this.proposalDetails.completionDate,
+      'discount': {
+        'value': this.proposalDetails.discount.amount,
+        'unit': this.proposalDetails.discount.type
+      }
+    };
+
     if (this.scopeEditorContent) {
+      console.log('saving_proposal: ', savingProposalData);
+      this.proposalsService.createProposal(JSON.stringify(savingProposalData)).subscribe(res => {
+        console.log('created proposal: ', res);
+      });
       this.tabActiveThird = false;
       this.tabActiveFirst = true;
       this.tabActiveSecond = false;

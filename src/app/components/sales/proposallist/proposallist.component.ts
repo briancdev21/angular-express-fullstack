@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
+import { ProposalsService } from '../../../services/proposals.service';
+
 @Component({
   selector: 'app-proposallist',
   templateUrl: './proposallist.component.html',
@@ -26,8 +28,12 @@ export class ProposalListComponent implements OnInit {
   filterName = '';
   proposallistTypes: any;
 
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private proposalsService: ProposalsService ) {
     this.filterAvaliableTo = 'everyone';
+
+    this.proposalsService.getProposals().subscribe(res => {
+      this.proposalListInfo = res.results;
+    });
   }
 
 
@@ -44,82 +50,27 @@ export class ProposalListComponent implements OnInit {
   ];
 
   public proposallistStatus: Array<string> = [
-    'Due', 'Overdue', 'Paid', 'Net 15', 'Net 30', 'Estimate', 'Approved', 'Rejected'
+    'NEW', 'FOLLOW_UP', 'SEEN', 'DEMO', 'NEGOTIOTION', 'WON', 'LOST'
   ];
 
   public proposalListInfo: Array<Object> = [
-    {
-      proposalId: '123465',
-      contactName: 'Diana Llic',
-      projectName: 'Live your Nu Life',
-      proposalAmount: 24202.37,
-      createdDate: 'November 20, 2017',
-      updatedDate: 'December 15, 2017',
-      completionDate: 'March 20, 2018',
-      dealStatus: 'New',
-      revision: 0,
-      owners: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        }
-      ]
-    },
-    {
-      proposalId: '123460',
-      contactName: 'John Moss',
-      projectName: 'Upgrade Security',
-      proposalAmount: 12552.37,
-      createdDate: 'March 20, 2017',
-      updatedDate: 'June 15, 2017',
-      completionDate: 'March 20, 2018',
-      dealStatus: 'Negotiation',
-      revision: 1,
-      owners: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        },
-        {
-          name: 'Steve Jobs',
-          imgUrl: 'assets/users/user2.png'
-        }
-      ]
-    },
-    {
-      proposalId: '123464',
-      contactName: 'Greg Johnson',
-      projectName: 'Live your Nu Life',
-      proposalAmount: 56230.37,
-      createdDate: 'January 20, 2017',
-      updatedDate: 'December 15, 2017',
-      completionDate: 'March 30, 2018',
-      dealStatus: 'Seen',
-      revision: 3,
-      owners: [
-        {
-          name: 'Steve Jobs',
-          imgUrl: 'assets/users/user2.png'
-        }
-      ]
-    },
-    {
-      proposalId: '123463',
-      contactName: 'John Smith',
-      projectName: 'The Smith Residence',
-      proposalAmount: 37552.37,
-      createdDate: 'December 1, 2017',
-      updatedDate: 'December 15, 2017',
-      completionDate: 'March 20, 2018',
-      dealStatus: 'Follow-up',
-      revision: 0,
-      owners: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        }
-      ]
-    },
+    // {
+    //   proposalId: '123465',
+    //   contactName: 'Diana Llic',
+    //   projectName: 'Live your Nu Life',
+    //   proposalAmount: 24202.37,
+    //   createdDate: 'November 20, 2017',
+    //   updatedDate: 'December 15, 2017',
+    //   completionDate: 'March 20, 2018',
+    //   dealStatus: 'New',
+    //   revision: 0,
+    //   owners: [
+    //     {
+    //       name: 'John Moss',
+    //       imgUrl: 'assets/users/user1.png'
+    //     }
+    //   ]
+    // },
   ];
 
   ngOnInit() {

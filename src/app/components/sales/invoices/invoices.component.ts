@@ -2,6 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
+import { InvoicesService } from '../../../services/invoices.service';
+import { EstimatesService } from '../../../services/estimates.service';
+import { EstimateModel } from '../../../models/estimate.model';
+import { SharedService } from '../../../services/shared.service';
+
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.component.html',
@@ -27,11 +33,8 @@ export class InvoicesComponent implements OnInit {
   filterName = '';
   invoiceTags: any;
   invoiceTypes: any;
-
-  constructor( private filterService: FilterService, private router: Router ) {
-    this.filterAvaliableTo = 'everyone';
-  }
-
+  today = moment().format('YYYY-MM-DD');
+  contactsList: any;
 
   public filters  = {
     createdFrom: '',
@@ -46,111 +49,74 @@ export class InvoicesComponent implements OnInit {
     'Due', 'Overdue', 'Paid', 'Net 15', 'Net 30', 'Estimate', 'Approved', 'Rejected'
   ];
 
-  public invoicesListInfo: Array<Object> = [
-    {
-      transactionId: 'IN-123404',
-      customerName: 'Monica Ilic',
-      balance: 208.95,
-      total: 208.95,
-      createdDate: 'January 20, 2017',
-      dueDate: 'March 14, 2018',
-      overdueDays: 0,
-      status: 'Due',
-    },
-    {
-      transactionId: 'IN-123403',
-      customerName: 'Rob Harding',
-      balance: 93.45,
-      total: 93.45,
-      createdDate: 'January 17, 2017',
-      dueDate: 'March 1, 2018',
-      overdueDays: 0,
-      status: 'Overdue',
-    },
-    {
-      transactionId: 'ES-123402',
-      customerName: 'Hugh Williamson',
-      balance: 0,
-      total: 93.45,
-      createdDate: 'January 20, 2017',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Paid',
-    },
-    {
-      transactionId: 'IN-123401',
-      customerName: 'Hayati Homes',
-      balance: 415.80,
-      total: 415.80,
-      createdDate: 'January 14, 2017',
-      dueDate: 'March 7, 2018',
-      overdueDays: 0,
-      status: 'Net 30',
-    },
-    {
-      transactionId: 'IN-123400',
-      customerName: 'John Moss',
-      balance: 0,
-      total: 1555.17,
-      createdDate: 'January 2, 2017',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Paid',
-    },
-    {
-      transactionId: 'IN-123399',
-      customerName: 'John Moss',
-      balance: 0,
-      total: 11161.84,
-      createdDate: 'December 20, 2016',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Paid',
-    },
-    {
-      transactionId: 'IN-123398',
-      customerName: 'Patrick Chew',
-      balance: 653.95,
-      total: 1153.95,
-      createdDate: 'December 19, 2016',
-      dueDate: 'Februry 6, 2018',
-      overdueDays: 0,
-      status: 'Overdue',
-    },
-    {
-      transactionId: 'ES-123397',
-      customerName: 'John Smith',
-      balance: 0,
-      total: 4293.45,
-      createdDate: 'December 19, 2016',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Paid',
-    },
-    {
-      transactionId: 'ES-123396',
-      customerName: 'Rockwood Homes',
-      balance: 0,
-      total: 61555.17,
-      createdDate: 'December 12, 2016',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Net 15',
-    },
-    {
-      transactionId: 'IN-123395',
-      customerName: 'Steve Conemharen',
-      balance: 93.45,
-      total: 93.45,
-      createdDate: 'December 10, 2016',
-      dueDate: 'March 15, 2018',
-      overdueDays: 0,
-      status: 'Estimate',
-    },
-  ];
+  public invoicesListInfo: Array<Object> = [];
+  public estimatesListInfo: Array<Object> = [];
+
+  newInvoice = {};
+  newEstimate = {};
+
+  constructor(
+    private filterService: FilterService,
+    private router: Router,
+    private invoicesService: InvoicesService,
+    private estimatesService: EstimatesService,
+    private sharedService: SharedService
+  ) {
+    this.sharedService.getContacts()
+    .subscribe(data => {
+      console.log('userlist: ', data);
+      this.contactsList = data;
+    });
+
+    this.filterAvaliableTo = 'everyone';
+    this.invoicesService.getInvoices().subscribe(res => {
+      this.invoicesListInfo = res.results;
+      this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
+      this.estimatesService.getEstimates().subscribe(data => {
+        this.estimatesListInfo = data.results;
+        this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['expiryDate'], i['status']));
+        this.estimatesListInfo.forEach(element => {
+          element['balance'] = 0;
+        });
+        this.invoicesListInfo = this.invoicesListInfo.concat(this.estimatesListInfo);
+        this.invoicesListInfo.forEach(element => {
+          element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
+        });
+        this.invoicesListInfo = this.sortDateArray('createdAt');
+        console.log('invoiceslist: ', this.invoicesListInfo);
+
+        this.invoicesListInfo.map(i => i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].slice(-1), 10)));
+      });
+    });
+  }
+
+  // constructor( private filterService: FilterService, private router: Router, private invoicesService: InvoicesService ) {
+  //   this.filterAvaliableTo = 'everyone';
+  //   this.invoicesService.getInvoices().subscribe(res => {
+  //     console.log('invoices: ', res.results);
+  //     this.invoicesListInfo = res.results;
+  //     this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
+  //   });
+  // }
 
   ngOnInit() {
     this.backUpInvoices = this.invoicesListInfo;
+  }
+
+  calcOverDueDays(due, status) {
+    console.log('due: ', due);
+    const today = new Date();
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const dueDate = new Date(due);
+    const diffDays = Math.round((today.getTime() - dueDate.getTime()) / (oneDay));
+    if (status === 'Paid' || status === 'Estimate') {
+      return 0;
+    }
+    if (diffDays < 0) {
+      return 0;
+    } else {
+      return diffDays;
+    }
   }
 
   getFilter(event) {
@@ -164,6 +130,12 @@ export class InvoicesComponent implements OnInit {
 
   toggleMenubar(data: boolean) {
     this.menuCollapsed  = data;
+  }
+
+  getCustomerName(list, id) {
+    const idList = list.map( c => c.id);
+    const pos = idList.indexOf(id);
+    return list[pos].person.firstName + ' ' + list[pos].person.lastName;
   }
 
   closeModal() {
@@ -223,12 +195,25 @@ export class InvoicesComponent implements OnInit {
   }
 
   toAddInvoice() {
-    this.router.navigate(['./add-invoice', {
-      title: 'NEW'
-    }]);
+    this.router.navigate(['./add-invoice']);
   }
 
   toAddEstimate() {
+    // this.router.navigate(['./add-estimate']);
     this.router.navigate(['./add-estimate']);
+  }
+
+  sortDateArray(field) {
+    const cmp = this;
+    this.invoicesListInfo.sort( function(name1, name2) {
+      if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
+        return -1;
+      } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return this.invoicesListInfo;
   }
 }

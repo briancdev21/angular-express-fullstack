@@ -5,6 +5,11 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 
 export class FilterService {
-	constructor() {
-	}
+constructor() {
+}
+
+saveClicked: BehaviorSubject<boolean> = new BehaviorSubject(false);
+chargeFeeData: BehaviorSubject<any> = new BehaviorSubject({});
+convertClicked: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
 }

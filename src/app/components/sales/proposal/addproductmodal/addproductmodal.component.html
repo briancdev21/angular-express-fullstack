@@ -1,6 +1,6 @@
 <div class="header">
   <span>ADDING PRODUCT</span>
-  <img class="close-btn" src="assets/images/x-sign-red.png" (click)="closeModal()" />
+  <img class="close-btn" src="assets/images/x-sign-red.png" (click)="cancelNewProduct()"/>
 </div>
 
 <div class="content add-product-modal" >
@@ -38,13 +38,13 @@
               <ng2-completer [(ngModel)]="supplier" [ngClass]="{'completer-validation-required': invalidSupplier}" placeholder="Add or search for a supplier" [datasource]="suppliers" [minSearchLength]="0" class="auto-comp"></ng2-completer>
             </div>
             <div>
-              <span>Manufacturer</span>
+              <span>Brand</span>
               <ng2-completer [(ngModel)]="brand" [ngClass]="{'completer-validation-required': invalidManufacturer}" placeholder="Add or search for manufacturer" [datasource]="brands" [minSearchLength]="0" class="auto-comp"></ng2-completer>
             </div>
           </div>
           <div class="product-name">
             <span>Product Name</span>
-            <input placeholder="Enter the product title" [ngClass]="{'validation-required': invalidProductName}" maxlength="100" [(ngModel)]="addedProduct.name" [value]="addedProduct.productName">
+            <input placeholder="Enter the product title" [ngClass]="{'validation-required': invalidProductName}" maxlength="100" [(ngModel)]="addedProduct.productName">
           </div>
           <div class="product-desc">
             <span>Product Description</span>
@@ -56,7 +56,7 @@
         </div>
         
         <div class="btn-section" >
-          <button class="cancel-btn" (click)="closeModal()"  >
+          <button class="cancel-btn" (click)="cancelNewProduct()"  >
             Cancel
           </button>
           <button class="save-btn" (click)="clickNext('tab-one')"  >
@@ -72,35 +72,35 @@
             <div class="inventory-type">
               <span>Inventory Type</span>
               <select [(ngModel)]="addedProduct.inventoryType" (ngModelChange)="changeType(addedProduct.inventoryType)">
-                <option value="stockable">Stockable</option>
-                <option value="non-stockable">Non-Stockable</option>
-                <option value="service">Service</option>
+                <option value="STOCKABLE">Stockable</option>
+                <option value="NON_STOCKABLE">Non-Stockable</option>
+                <option value="SERVICE">Service</option>
               </select>
             </div>
             <div class="measure-exp">
               <div class="measure">
                 <span>Unit of Measure</span>
                 <div>
-                  <select [(ngModel)]="measure" >
-                    <option [value]="perUnit" selected>Per Unit</option>
-                    <option value="perGroup">Per Group</option>
-                    <option value="perBox">Per Box</option>
+                  <select [(ngModel)]="addedProduct.measure" >
+                    <option value="PER_UNIT" selected>Per Unit</option>
+                    <option value="PER_PACKAGE">Per Package</option>
+                    <option value="PER_VOL">Per Volumn</option>
+                    <option value="PER_WEIGHT">Per Weight</option>
                   </select>
-                  <input [(ngModel)]="addedProduct.measureCount" [value]="addedProduct.measureCount" type="number">
+                  <input [(ngModel)]="addedProduct.measureCount" type="number">
                 </div>
               </div>
               <div class="expiration">
                 <span>Expiration</span>
                 <div>
-                  <select [(ngModel)]="expirationType">
-                    <option [value]="none" selected>None</option>
-                    <option value="hours">Hours</option>
-                    <option value="days">Days</option>
-                    <option value="weeks">Weeks</option>
-                    <option value="months">Months</option>
-                    <option value="years">Years</option>
+                  <select [(ngModel)]="addedProduct.expirationType">
+                    <option value="HOURS">Hours</option>
+                    <option value="DAYS">Days</option>
+                    <option value="WEEKS">Weeks</option>
+                    <option value="MONTHS">Months</option>
+                    <option value="YEARS">Years</option>
                   </select>
-                  <input [(ngModel)]="addedProduct.expiration" [value]="addedProduct.expiration" type="number">
+                  <input [(ngModel)]="addedProduct.expiration" type="number">
                 </div>
               </div>
             </div>
@@ -129,14 +129,11 @@
                     <input 
                       placeholder="00.00" 
                       [(ngModel)]="addedProduct.unitCost" 
-                      [value]="addedProduct.unitCost" 
                       type="number"
                       (input)="changeCost()">
                   </div>
-                  <select [(ngModel)]="addedProduct.currency" >
-                    <option [value]="cad" selected>CAD</option>
-                    <option value="usd">USD</option>
-                    <option value="euro">EURO</option>
+                  <select [(ngModel)]="addedProduct.currency" *ngIf="currenciesListInfo">
+                    <option [value]="currency.id" *ngFor="let currency of currenciesListInfo">{{currency.currencyCode}}</option>
                   </select>
                 </div>
               </div>
@@ -145,10 +142,10 @@
                 <div>
                   <div class="greyed-select">
                     <select [(ngModel)]="addedProduct.leadTime"  [ngClass]="{'greyed-layer': greyedService}">
-                      <option value="days" selected >Days</option>
-                      <option value="weeks">Weeks</option>
-                      <option value="months">Months</option>
-                      <option value="years">Years</option>
+                      <option value="DAYS" selected >Days</option>
+                      <option value="WEEKS">Weeks</option>
+                      <option value="MONTHS">Months</option>
+                      <option value="YEARS">Years</option>
                     </select>
                   </div>
                   <div class="greyed-input">
@@ -184,146 +181,31 @@
             </div>
           </div>
           <div class="page-divider"></div>
-          <div class="friend-royalty-retail">
-            <div class="friend">
-              <span>{{pricingType[0]}}</span>
+          <div class="friend-royalty-retail" *ngIf="pricingCategoriesListInfo">
+            <div class="friend" *ngFor="let pricing of pricingCategoriesListInfo; let i = index">
+              <span>{{pricing.name}}</span>
               <div class="price-margin">
                 <div class="price-box">
                   <span>$</span>
                   <input 
                     placeholder="0.00" 
-                    [(ngModel)]="addedProduct.friendPrice" 
-                    [value]="addedProduct.friendPrice" 
-                    (input)="calcFriend('price')" 
+                    [(ngModel)]="pricing.price"
+                    (input)="calcCost('price', i)" 
                     type="number">
                 </div>
                 <div class="margin-box">
                   <span>%</span>
                   <input 
                     placeholder="0.00" 
-                    [(ngModel)]="addedProduct.friendMargin" 
-                    [value]="addedProduct.friendMargin" 
-                    (input)="calcFriend('margin')" 
+                    [(ngModel)]="pricing.margin"
+                    (input)="calcCost('margin', i)" 
                     type="number">
                 </div>
               </div>
             </div>
-            <div class="royalty">
-              <span>{{pricingType[1]}}</span>
-              <div class="price-margin">
-                <div class="price-box">
-                  <span>$</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.royaltyPrice" 
-                    [value]="addedProduct.royaltyPrice"
-                    (input)="calcRoyalty('price')" 
-                    type="number">
-                </div>
-                <div class="margin-box">
-                  <span>%</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.royaltyMargin" 
-                    [value]="addedProduct.royaltyMargin"
-                    (input)="calcRoyalty('margin')" 
-                    type="number">
-                </div>
-              </div>
-            </div>
-            <div class="retail">
-              <span>{{pricingType[2]}}</span>
-              <div class="price-margin">
-                <div class="price-box">
-                  <span>$</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.retailPrice" 
-                    [value]="retailPrice"
-                    (input)="calcRetail('price')" 
-                    type="number">
-                </div>
-                <div class="margin-box">
-                  <span>%</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.retailMargin" 
-                    [value]="retailMargin"
-                    (input)="calcRetail('margin')" 
-                    type="number">
-                </div>
-              </div>
-            </div>
+            
           </div>
-          <div class="builders-wholesale-cost">
-            <div class="builders">
-              <span>{{pricingType[3]}}</span>
-              <div class="price-margin">
-                <div class="price-box">
-                  <span>$</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.buildersPrice"
-                    (input)="calcBuilders('price')" 
-                    type="number">
-                </div>
-                <div class="margin-box">
-                  <span>%</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.buildersMargin"
-                    (input)="calcBuilders('margin')" 
-                    type="number">
-                </div>
-              </div>
-            </div>
-            <div class="wholesale">
-              <span>{{pricingType[4]}}</span>
-              <div class="price-margin">
-                <div class="price-box">
-                  <span>$</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.wholesalePrice" 
-                    [value]="addedProduct.wholesalePrice"
-                    (input)="calcWholesale('price')" 
-                    type="number">
-                </div>
-                <div class="margin-box">
-                  <span>%</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.wholesaleMargin" 
-                    [value]="addedProduct.wholesaleMargin"
-                    (input)="calcWholesale('margin')" 
-                    type="number">
-                </div>
-              </div>
-            </div>
-            <div class="cost">
-              <span>{{pricingType[5]}}</span>
-              <div class="price-margin">
-                <div class="price-box">
-                  <span>$</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.costPrice" 
-                    [value]="addedProduct.costPrice"
-                    (input)="calcCost('price')" 
-                    type="number">
-                </div>
-                <div class="margin-box">
-                  <span>%</span>
-                  <input 
-                    placeholder="0.00" 
-                    [(ngModel)]="addedProduct.costMargin" 
-                    [value]="addedProduct.costMargin"
-                    (input)="calcCost('margin')" 
-                    type="number">
-                </div>
-              </div>
-            </div>
-          </div>
+          
         </div>
         <div class="btn-section" >
           <button class="cancel-btn" (click)="clickBack('tab-two')"  >
@@ -361,7 +243,7 @@
               <span>Variant Values</span>
               <div class="value-editable">
                 <div class="values-section">
-                  <app-multikeywordselect [(keywords)]="variant.data" ></app-multikeywordselect>
+                  <app-multivariantsselect [keywords]="emptyArr" (sendKeywords)="getKeywords($event)"></app-multivariantsselect>
                 </div>
                 <img src="assets/images/garbage.png" (click)="removeVariantList(i);" class="remove-variants" [ngClass]="getVisibility(i)">
               </div>
@@ -376,6 +258,7 @@
           <table>
             <tr>
               <th>VARIANT NAME</th>
+              <th>QTY</th>
               <th>SKU</th>
               <th>COST</th>
               <th>SUPPLIER CODE</th>
@@ -384,6 +267,7 @@
             </tr>
             <tr *ngFor="let variant of addedProduct.variantProducts; let i = index">
               <td>{{variant.name}}</td>
+              <td><input placeholder="" [(ngModel)]="variant.qty" type="number"></td>
               <td><input placeholder="" [(ngModel)]="variant.sku" ></td>
               <td>
                 <div class="td-input">
@@ -392,7 +276,7 @@
                   <span *ngIf="!variableCostEditable" (click)="variableCostEditable=true">{{variant.cost | number: '1.2-2'}}</span>
                 </div>  
               </td>
-              <td><input placeholder="Supplier code here" [(ngModel)]="variant.supplierCode" ></td>
+              <td><input placeholder="Supplier code here" [(ngModel)]="variant.supplierCode" [ngClass]="{'supplier-code-validation': !variant.supplierCode && missingSupplierCode}"></td>
               <td>
                 <div class="td-input">
                   <span style="margin-right: 5px">$</span>
@@ -400,12 +284,13 @@
                   <span *ngIf="!variablePriceEditable" (click)="variablePriceEditable=true">{{variant.priceAdjust | number: '1.2-2'}}</span>
                 </div>
               </td>
-              <td><input placeholder="UPC number here" [(ngModel)]="variant.upcNumber" ></td>
+              <td><input placeholder="UPC number here" [(ngModel)]="variant.upcNumber" [ngClass]="{'upc-validation': !variant.upcNumber && missingUpcNumber}"></td>
             </tr>
           </table>
         </div>
-        <div class="btn-section" *ngIf="!addVariantContent">
-          <button class="cancel-btn rewwer" (click)="moveAddVariant()"  >
+        
+        <div class="btn-section" *ngIf="addVariantConfirm">
+          <button class="cancel-btn rewwer" (click)="clickNext('tab-one')"  >
             Back
           </button>
           <button class="save-btn" (click)="clickNext('tab-three')">
@@ -420,7 +305,17 @@
             Next
           </button>
         </div>
+        <div class="btn-section" *ngIf="editVariant">
+          <button class="cancel-btn 123" (click)="addVariantContent=true; editVariant=false;">
+            Back
+          </button>
+          <button class="save-btn" (click)="clickNextEditVariant()">
+            Next
+          </button>
+        </div>
       </div>
+
+
     </tab>
     <tab tabTitle="ACCESSORIES & ALTERNATIVES" class="tab-won" [active]="tabActiveFour">
       <div class="tab-four">
@@ -447,7 +342,7 @@
                 </td>
                 <td>{{acc.productName}}</td>
                 <td>{{acc.modelNumber}}</td>
-                <td>{{acc.brand}}</td>
+                <td>{{acc.brandName}}</td>
                 <td><input [(ngModel)]="acc.qty" ></td>
                 <td>
                   <div class="acc-td-price">
@@ -470,10 +365,10 @@
               <div class="search-modal-content">
                 <table>
                   <tr *ngFor="let product of productsInfoAll | SearchPipe: accQueryString : searchableList; let i = index;" (click)="addToAccessories(product)">
-                    <td><img src="{{product.imgUrl}}" alt=""></td>
-                    <td>{{product.productName}}</td>
+                    <td><img src="{{product.pictureURI}}" alt=""></td>
+                    <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
-                    <td>{{product.model}}</td>
+                    <td>{{product.modelNumber}}</td>
                     <td>{{product.productType}}</td>
                     <td>$ {{product.total | number: '2.2-2'}}</td>
                   </tr>
@@ -499,7 +394,7 @@
                 <td>{{alter.skuNumber}}</td>
                 <td>{{alter.productName}}</td>
                 <td>{{alter.modelNumber}}</td>
-                <td>{{alter.brand}}</td>
+                <td>{{alter.brandName}}</td>
                 <td><input [(ngModel)]="alter.qty" ></td>
                 <td >
                   <div class="calcedPrice">
@@ -517,10 +412,10 @@
               <div class="search-modal-content">
                 <table>
                   <tr *ngFor="let product of productsInfoAll | SearchPipe: queryString : searchableList; let i = index;" (click)="addToAlternatives(product)">
-                    <td><img src="{{product.imgUrl}}" alt=""></td>
-                    <td>{{product.productName}}</td>
+                    <td><img src="{{product.pictureURI}}" alt=""></td>
+                    <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
-                    <td>{{product.model}}</td>
+                    <td>{{product.modelNumber}}</td>
                     <td>{{product.productType}}</td>
                     <td>$ {{product.total | number: '2.2-2'}}</td>
                   </tr>
@@ -544,5 +439,3 @@
     </tab>
   </tabs>
 </div>
-
-  

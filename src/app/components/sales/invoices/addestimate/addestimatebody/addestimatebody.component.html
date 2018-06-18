@@ -6,10 +6,10 @@
           <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" [searchStr]="selectItem"></app-in-customer-name>
           <div class="email-address">
             <span>Email address</span>
-            <app-multiemailselect [keywords]="emailAddresses"></app-multiemailselect>
+            <app-multiemailselect [keywords]="emailAddresses" (multiEmails)="getMultiEmails($event)"></app-multiemailselect>
           </div>
         </div>
-        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" ></app-shippingaddress>
+        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [shippingAddress]="shippingAddress" (updateAddress)="getShippingAddress($event)" ></app-shippingaddress>
         <div class="project-log">
           <app-in-project-selector class="flex1 mr-15" [projects]="projects" ></app-in-project-selector>
           <div class="log-number">
@@ -18,27 +18,27 @@
         </div>
       </div>
       <div class="right-sidebar">
-        <app-in-orderidfield [in_id]="in_id" [title]="estimateNumberTitle"></app-in-orderidfield>
-        <app-in-createddatefield [(createdDate)]="createdDate" ></app-in-createddatefield>
-        <app-in-duedatefield [(dueDate)]="dueDate" [title]="expiryTitle"></app-in-duedatefield>
+        <app-in-orderidfield [in_id]="in_id" [title]="invoiceNumberTitle"></app-in-orderidfield>
+        <app-in-createddatefield [(createdDate)]="createdDate" (changedCreatedDate)="changedCreatedDate($event)"></app-in-createddatefield>
+        <app-in-duedatefield [(dueDate)]="dueDate" [title]="dueDateTitle" (changedDueDate)="changedDueDate($event)"></app-in-duedatefield>
         <app-in-class  [classList]="classList" (selectedClass)="onSelectClass($event)" ></app-in-class>
         <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory($event)" ></app-in-category>
       </div>
     </div>
     <div class="product__table">
-      <app-in-table [(productDetails)]="productDetails" (priceChange)="onPriceChanged()" ></app-in-table>
+      <app-es-table [(productDetails)]="productDetails" [estimateId]="currentInvoiceId" (priceChange)="onPriceChanged()" ></app-es-table>
     </div>
     <div class="sub__info">
       <div class="notes-activity">
         <div class="flex" >
           <div class="internal-memo">
-            <app-in-internalmemo [(internalMemo)]="internalMemo" ></app-in-internalmemo>
+            <app-in-internalmemo [(internalMemo)]="internalMemo" (changedMemo)="onChangedMemo($event)"></app-in-internalmemo>
           </div>
           <div class="notetosupplier">
-              <app-in-notetosupplier [(noteToSupplier)]="noteToSupplier" ></app-in-notetosupplier>
+              <app-in-notetosupplier [(noteToSupplier)]="noteToSupplier" (changedNote)="onChangedNote($event)" ></app-in-notetosupplier>
           </div>
           <div class="term-of-invoice">
-              <app-in-terms-of-invoice [(termsOfInvoice)]="termsOfInvoice" [(title)]="title"></app-in-terms-of-invoice>
+              <app-in-terms-of-invoice [(termsOfInvoice)]="termsOfInvoice" [(title)]="title" (changedTerm)="onChangedTermsOfInvoice($event)"></app-in-terms-of-invoice>
           </div>
         </div>
         <div class="timeline-activity">
@@ -57,3 +57,25 @@
     
   </div>
 </div>
+
+<!-- alert modal -->
+<div class="confirm-modal-wrapper" *ngIf="showModal" ></div>
+<div [ngClass]="{'confirm-modal': showModal, 'confirm-modal-hide': !showModal }">
+  <div class="header">
+    <span>Alert</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      <span *ngIf="!newCustomerName">Customer name, </span>
+      <span *ngIf="!newEmail">Email address, </span>
+      <span *ngIf="!newClass">Class, </span>
+      <span *ngIf="!newCategory">Category,</span> etc fields are missing.
+    </div>
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="showModal=false" >
+        OK
+      </button>
+    </div>
+  </div>
+</div>  

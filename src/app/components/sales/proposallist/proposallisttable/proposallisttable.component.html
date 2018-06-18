@@ -1,23 +1,23 @@
 <div class="content">
   <table class="work-order-table">
     <tr>
-      <th (click)="sortArray('proposalId')">PROPOSAL ID</th>
-      <th (click)="sortArray('contactName')">CONTACT NAME</th>
-      <th (click)="sortArray('projectName')">PROJECT NAME</th>
-      <th (click)="sortArray('proposalAmount')">PROPOSAL AMOUNT</th> 
-      <th (click)="sortArray('dealStatus')">DEAL STATUS</th>
+      <th (click)="sortArray('id')">PROPOSAL ID</th>
+      <th (click)="sortArray('contactId')">CONTACT NAME</th>
+      <th (click)="sortArray('name')">PROJECT NAME</th>
+      <th (click)="sortArray('total')">PROPOSAL AMOUNT</th> 
+      <th (click)="sortArray('status')">DEAL STATUS</th>
       <th (click)="sortArray('revision')">REVISION</th>
       <th (click)="sortCreateDateArray('createdDate')">CREATED DATE</th>
       <th >OWNER</th>
     </tr>
-    <tr *ngFor="let proposallist of proposalListInfo; let i = index" (click)="redirectTo(proposallist.projectNumber)">
-      <td>{{proposallist.proposalId}}</td>
-      <td>{{proposallist.contactName}}</td>
-      <td>{{proposallist.projectName}}</td>
-      <td>$ {{proposallist.proposalAmount | number: '1.2-2'}}</td>
-      <td>{{proposallist.dealStatus}}</td>
+    <tr *ngFor="let proposallist of proposalListInfo; let i = index" (click)="redirectTo(proposallist.id)">
+      <td>{{proposallist.id}}</td>
+      <td>{{proposallist.contactId}}</td>
+      <td>{{proposallist.name}}</td>
+      <td>$ {{proposallist.total | number: '1.2-2'}}</td>
+      <td>{{proposallist.status}}</td>
       <td>{{proposallist.revision}}</td>
-      <td>{{proposallist.createdDate}}</td>
+      <td>{{dateFormatChanged(proposallist.createdDate)}}</td>
       <td class="collaborators">
         <div *ngFor="let col of proposallist.owners" >
           <img [src]="col.imgUrl">

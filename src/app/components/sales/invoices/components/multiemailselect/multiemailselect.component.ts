@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, AfterViewInit, Renderer } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit, Renderer, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
@@ -14,6 +14,7 @@ export class MultiEmailSelectComponent implements AfterViewInit, OnInit {
   @Input() keywords;
   @ViewChild('box') input: ElementRef;
   @Input() placeholder;
+  @Output() multiEmails: EventEmitter<any> = new EventEmitter();
   editable: boolean;
   newKeyword: string;
   addedItem: string;
@@ -44,9 +45,15 @@ export class MultiEmailSelectComponent implements AfterViewInit, OnInit {
       this.keywords.push(value);
       this.addedItem = '';
       this.invalid = false;
+      this.multiEmails.emit(this.keywords);
     } else {
       this.invalid = true;
     }
+  }
+
+  removeEmail(index) {
+    this.keywords.splice(index, 1);
+    this.multiEmails.emit(this.keywords);
   }
 
 }

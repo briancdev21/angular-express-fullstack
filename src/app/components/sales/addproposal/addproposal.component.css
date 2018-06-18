@@ -36,7 +36,7 @@
 	border: 1px solid red !important;
 }
 
-:host ::ng-deep .name-col .validation-required-name ng2-completer.ng2completer .completer-input {
+:host ::ng-deep .validation-required-name ng2-completer.ng2completer .completer-input {
 	border: 1px solid red !important;
 }
 
@@ -130,11 +130,11 @@ tab img {
 	display: flex;
 	justify-content: space-between;
 	flex-direction: row;
-	margin-bottom: 15px;
+	margin-bottom: 5px;
 }
 
 .tab-row:first-child {
-	margin-bottom: 5px;
+	margin-bottom: 15px;
 }
 
 .tab-row>div {
@@ -156,7 +156,8 @@ tab input, tab select {
 	height: 34px;
 	margin-top: 4px;
 	color: #646464;
-	font-weight: 300;
+	font-weight: 400;
+	font-size: 12px;
 }
 
 tab select {
@@ -370,7 +371,7 @@ app-schedulemultikeyword {
 }
 .edit-followers {
   position: absolute;
-  top: 45px;
+  top: 37px;
   border: solid 1px lightgray;
   background: white;
   padding: 5px;
@@ -415,4 +416,8 @@ app-schedulemultikeyword {
 
 .type-here {
 	font-size: 11px !important;
+}
+
+.shipping-address {
+	margin-top: 5px;
 }

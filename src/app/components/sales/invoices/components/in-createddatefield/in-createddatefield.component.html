@@ -1,7 +1,6 @@
 <div class="flex" >
   <div class="created-label" >Date Created</div>
   <div class="created-input" >
-    <input [owlDateTimeTrigger]="datecreated" [owlDateTime]="datecreated" (dateTimeChange)="selectCreatedFrom($event)" [(ngModel)]="createdDate" [min]="yesterday" >
-    <owl-date-time [pickerType]="'calendar'" #datecreated ></owl-date-time>
+    <div>{{createdDate}}</div>
   </div>
 </div>

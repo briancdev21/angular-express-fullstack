@@ -83,5 +83,45 @@ export class ProductsService {
     return this.http.get(url);
   }
 
+  getProductCategoriesList(id): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/pricing-categories`;
+    return this.http.get(url);
+  }
+
+  getProductIndividualCategory(id, categoryId): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/pricing-categories/${categoryId}`;
+    return this.http.get(url);
+  }
+
+  updateProductIndividualCategory(id, categoryId, body): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/pricing-categories/${categoryId}`;
+    return this.http.put(url, body);
+  }
+
+  getProductVariantsList(id): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/variants`;
+    return this.http.get(url);
+  }
+
+  getProductIndividualVariant(id, sku): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/pricing-categories/${sku}`;
+    return this.http.get(url);
+  }
+
+  updateProductIndividualVariant(id, sku, body): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/pricing-categories/${sku}`;
+    return this.http.put(url, body);
+  }
+
+  deleteProductIndividualVariant(id, sku): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/pricing-categories/${sku}`;
+    return this.http.delete(url);
+  }
+
+  updateProductImage(id, body): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/product-picture/`;
+    return this.http.put(url, body);
+  }
+
 }
 

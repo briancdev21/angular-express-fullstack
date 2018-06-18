@@ -2,6 +2,8 @@ import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import * as _ from 'lodash';
+import * as moment from 'moment';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-invoiceslisttable',
@@ -19,19 +21,29 @@ export class InvoicesListTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
+  contactsList: any;
 
-  constructor( private filterService: FilterService, private router: Router ) {
+  constructor( private filterService: FilterService, private router: Router, private sharedService: SharedService ) {
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res.data;
+    });
   }
 
   ngOnInit() {
-    this.invoicesListInfo.map(i => i.overdueDays = this.calcOverDueDays(i.dueDate, i.status));
+    
   }
 
   getStatus() {
   }
 
-  redirectTo(id) {
-    this.router.navigate(['../invoice/' + id]);
+  redirectTo(data) {
+    const contactId = data.contactId.slice(0, 7);
+    console.log('contactid..: ', contactId, data);
+    if (contactId === 'INVOICE') {
+      this.router.navigate(['./invoice-profile', {id: data.id}]);
+    } else {
+      this.router.navigate(['./estimate-profile', {id: data.id}]);
+    }
   }
 
   sortArray(field) {
@@ -49,21 +61,6 @@ export class InvoicesListTableComponent implements OnInit {
       });
     } else {
       this.invoicesListInfo.reverse();
-    }
-  }
-
-  calcOverDueDays(due, status) {
-    const today = new Date();
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-    const dueDate = new Date(due);
-    const diffDays = Math.round(Math.abs((today.getTime() - dueDate.getTime()) / (oneDay)));
-    if (status === 'Paid' || status === 'Estimate') {
-      return 0;
-    }
-    if (diffDays < 0) {
-      return 0;
-    } else {
-      return diffDays;
     }
   }
 

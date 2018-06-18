@@ -1,0 +1,12 @@
+<app-common (expandSidebar)="toggleMenubar($event)"></app-common>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }">
+  <header>
+    <app-estimateprofileheader></app-estimateprofileheader>
+  </header>
+  <main>
+    <app-estimateprofilebody [createdInvoice]="createdEstimate"></app-estimateprofilebody>
+  </main>
+  <footer>
+    <app-estimateprofilefooter [createdInvoice]="createdEstimate"></app-estimateprofilefooter>
+  </footer>
+</div>
