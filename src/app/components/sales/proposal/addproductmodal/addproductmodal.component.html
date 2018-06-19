@@ -16,7 +16,7 @@
               </div>
               <div>
                 <span>Product Type</span>
-                <ng2-completer [(ngModel)]="addedProduct.type" [ngClass]="{'completer-validation-required': invalidProductType}" placeholder="Add or search for product type" [datasource]="types" [minSearchLength]="0" class="auto-comp"></ng2-completer>
+                <ng2-completer [(ngModel)]="addedProduct.type" [ngClass]="{'completer-validation-required': invalidProductType}" placeholder="Add or search for product type" [datasource]="productTypeNames" [minSearchLength]="0" class="auto-comp" (selected)="productTypeIdSelected($event)"></ng2-completer>
               </div>
             </div>
             <div class="content-right">
@@ -35,11 +35,11 @@
           <div class="supplier-brand">
             <div>
               <span>Supplier</span>
-              <ng2-completer [(ngModel)]="supplier" [ngClass]="{'completer-validation-required': invalidSupplier}" placeholder="Add or search for a supplier" [datasource]="suppliers" [minSearchLength]="0" class="auto-comp"></ng2-completer>
+              <ng2-completer [(ngModel)]="supplier" [ngClass]="{'completer-validation-required': invalidSupplier}" placeholder="Add or search for a supplier" [datasource]="suppliers" [minSearchLength]="0" class="auto-comp" (selected)="supplierIdSelected($event)"></ng2-completer>
             </div>
             <div>
               <span>Brand</span>
-              <ng2-completer [(ngModel)]="brand" [ngClass]="{'completer-validation-required': invalidManufacturer}" placeholder="Add or search for manufacturer" [datasource]="brands" [minSearchLength]="0" class="auto-comp"></ng2-completer>
+              <ng2-completer [(ngModel)]="brand" [ngClass]="{'completer-validation-required': invalidManufacturer}" placeholder="Add or search for manufacturer" [datasource]="brands" [minSearchLength]="0" class="auto-comp" (selected)="brandIdSelected($event)"></ng2-completer>
             </div>
           </div>
           <div class="product-name">
@@ -51,7 +51,7 @@
             <textarea placeholder="Enter product description" [ngClass]="{'validation-required': invalidProductDescription}" [(ngModel)]="addedProduct.productDesc" [value]="addedProduct.productDesc"></textarea>
           </div>
           <div class="tags" *ngIf="showAddProductModal">
-            <app-multikeywordselect [keywords]="productTags" placeholder="Enter tags for the product"></app-multikeywordselect>
+            <app-multikeywordselect [keywords]="productTags" placeholder="Enter tags for the product" (sendKeywords)="getKeywordIds($event)"></app-multikeywordselect>
           </div>
         </div>
         

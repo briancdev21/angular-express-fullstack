@@ -94,6 +94,11 @@ export class AddProductModalComponent implements OnInit {
   missingUpcNumber = false;
   productTypesListInfo: any;
   productTypeNames: any;
+  selectedSupplierId: any;
+  selectedBrandId: any;
+  selectedProductTypeId: any;
+  selectedKeywordsId: any;
+
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
@@ -105,13 +110,15 @@ export class AddProductModalComponent implements OnInit {
     });
 
     this.suppliersService.getSuppliersList().subscribe(res => {
-      this.brandsListInfo = res.results;
-      this.suppliers = res.results.map(s => s.name);
+      this.suppliersListInfo = res.results;
+      // this.suppliers = res.results.map(s => s.name);
+      this.suppliers = completerService.local(this.suppliersListInfo, 'name', 'name');
     });
 
     this.sharedService.getBrands().subscribe(res => {
       this.brandsListInfo = res.results;
-      this.brands = res.results.map(b => b.name);
+      // this.brands = res.results.map(b => b.name);
+      this.brands = completerService.local(this.brandsListInfo, 'name', 'name');
     });
 
     this.sharedService.getCurrencies().subscribe(res => {
@@ -125,7 +132,8 @@ export class AddProductModalComponent implements OnInit {
 
     this.sharedService.getProductTypes().subscribe(res => {
       this.productTypesListInfo = res.results;
-      this.productTypeNames = res.results.map(b => b.name);
+      // this.productTypeNames = res.results.map(b => b.name);
+      this.productTypeNames = completerService.local(this.productTypesListInfo, 'type', 'type');
     });
 
     this.dataService = completerService.local(this.searchData, 'color', 'color');
@@ -154,18 +162,6 @@ export class AddProductModalComponent implements OnInit {
       upc: '',
       option: 'optional',
       priceAdjust: 0,
-      // friendMargin: '0',
-      // friendPrice: '',
-      // royaltyPrice: '',
-      // royaltyMargin: '0',
-      // builderPrice: '',
-      // buildersMargin: '0',
-      // wholesalePrice: '',
-      // wholesaleMargin: '0',
-      // retailPrice: '',
-      // retailMargin: '0',
-      // costPrice: '',
-      // costMargin: '0',
       variantValue: [{id: 1, data: []}],
       variantProducts: []
     };
@@ -242,10 +238,36 @@ export class AddProductModalComponent implements OnInit {
         });
       }
     } else if (pos === 'tab-two') {
-      this.tabActiveThird = true;
-      this.tabActiveFirst = false;
-      this.tabActiveSecond = false;
-      this.tabActiveFour = false;
+      const savingProductMd = {
+        'brandId': this.selectedBrandId,
+        'productTypeId': this.selectedProductTypeId,
+        'supplierId': this.selectedSupplierId,
+        'keywordIds': this.selectedKeywordsId,
+        'model': this.addedProduct.modelNumber,
+        'name': this.addedProduct.productName,
+        'description': this.addedProduct.productDesc,
+        'inventoryType': this.addedProduct.inventoryType,
+        'unitOfMeasure': {
+          'quantity': this.addedProduct.measureCount ? this.addedProduct.measureCount : 0,
+          'unit': this.addedProduct.measure
+        },
+        'expiration': {
+          'duration': this.addedProduct.expiration ? this.addedProduct.expiration : 0,
+          'unit': this.addedProduct.expirationType
+        },
+        'leadTime': {
+          'duration': this.addedProduct.leadTimeCount ? this.addedProduct.leadTimeCount : 0,
+          'unit': this.addedProduct.leadTime
+        }
+      };
+      const savingProductData = JSON.stringify(savingProductMd);
+      this.productsService.createProduct(savingProductData).subscribe(res => {
+        console.log('product created: ', res);
+        this.tabActiveThird = true;
+        this.tabActiveFirst = false;
+        this.tabActiveSecond = false;
+        this.tabActiveFour = false;
+      });
     } else if (pos === 'tab-three') {
       this.tabActiveFour = true;
       this.tabActiveFirst = false;
@@ -296,7 +318,24 @@ export class AddProductModalComponent implements OnInit {
     }
   }
 
+  supplierIdSelected(event) {
+    console.log('supplier selected: ', event);
+    this.selectedSupplierId = event.originalObject.id;
+  }
 
+  brandIdSelected(event) {
+    console.log('supplier selected: ', event);
+    this.selectedBrandId = event.originalObject.id;
+  }
+
+  productTypeIdSelected(event) {
+    this.selectedProductTypeId = event.originalObject.id;
+  }
+
+  getKeywordIds(event) {
+    this.selectedKeywordsId = event.map(e => e.id);
+    console.log('keywords : ', event, this.selectedKeywordsId);
+  }
 
   onUploadFinished(value) {
     this.imageCount ++;
