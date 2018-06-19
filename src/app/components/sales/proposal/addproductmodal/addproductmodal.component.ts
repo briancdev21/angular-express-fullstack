@@ -98,7 +98,8 @@ export class AddProductModalComponent implements OnInit {
   selectedBrandId: any;
   selectedProductTypeId: any;
   selectedKeywordsId: any;
-
+  newCreatedProductId: number;
+  availableProductsAll: any;
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
@@ -136,6 +137,11 @@ export class AddProductModalComponent implements OnInit {
       this.productTypeNames = completerService.local(this.productTypesListInfo, 'type', 'type');
     });
 
+    this.productsService.getProductCatalog().subscribe(res => {
+      console.log('catalog: ', res);
+      this.availableProductsAll = res.results;
+    });
+
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.addedProduct = {
       productType: this.type,
@@ -160,7 +166,7 @@ export class AddProductModalComponent implements OnInit {
       skuNumber: '',
       supplierCode: '',
       upc: '',
-      option: 'optional',
+      option: 'OPTIONAL',
       priceAdjust: 0,
       variantValue: [{id: 1, data: []}],
       variantProducts: []
@@ -262,6 +268,7 @@ export class AddProductModalComponent implements OnInit {
       };
       const savingProductData = JSON.stringify(savingProductMd);
       this.productsService.createProduct(savingProductData).subscribe(res => {
+        this.newCreatedProductId = res.data.id;
         console.log('product created: ', res);
         this.tabActiveThird = true;
         this.tabActiveFirst = false;
@@ -292,10 +299,8 @@ export class AddProductModalComponent implements OnInit {
     if (this.missingUpcNumber || this.missingSupplierCode) {
       return;
     } else {
-      this.tabActiveFour = true;
-      this.tabActiveFirst = false;
-      this.tabActiveThird = false;
-      this.tabActiveSecond = false;
+      this.createVariants();
+
     }
   }
 
@@ -318,13 +323,27 @@ export class AddProductModalComponent implements OnInit {
     }
   }
 
+  createVariants() {
+    console.log('variants list: ', this.addedProduct.variantProducts);
+    this.addedProduct.variantProducts.forEach(element => {
+      element.quantity = element.qty;
+      element.upc = element.upcNumber;
+      element.priceAdjustment = element.priceAdjust;
+      this.productsService.createVariants(this.newCreatedProductId, JSON.stringify(element)).subscribe(res => {
+        console.log('variants created: ', res);
+      });
+    });
+    this.tabActiveFour = true;
+    this.tabActiveFirst = false;
+    this.tabActiveThird = false;
+    this.tabActiveSecond = false;
+  }
+
   supplierIdSelected(event) {
-    console.log('supplier selected: ', event);
     this.selectedSupplierId = event.originalObject.id;
   }
 
   brandIdSelected(event) {
-    console.log('supplier selected: ', event);
     this.selectedBrandId = event.originalObject.id;
   }
 
@@ -334,7 +353,6 @@ export class AddProductModalComponent implements OnInit {
 
   getKeywordIds(event) {
     this.selectedKeywordsId = event.map(e => e.id);
-    console.log('keywords : ', event, this.selectedKeywordsId);
   }
 
   onUploadFinished(value) {
@@ -472,7 +490,7 @@ export class AddProductModalComponent implements OnInit {
         sku: skuNumber + i,
         cost: this.addedProduct.unitCost,
         supplierCode: '',
-        priceAdjust: this.addedProduct.friendPrice,
+        priceAdjust: this.addedProduct.priceAdjust,
         upcNumber: ''
       };
     }
@@ -510,7 +528,7 @@ export class AddProductModalComponent implements OnInit {
         brandId: product.brandId,
         qty: product.qty,
         friendPrice: product.total,
-        option: 'optional',
+        option: 'OPTIONAL',
         brandName: this.getBrandNamefromId(product.brandId)
       };
       this.addedAccList.push(this.addedAcc);
@@ -534,7 +552,7 @@ export class AddProductModalComponent implements OnInit {
   }
 
   getSkuCheckColor(acc) {
-    if (acc.option === 'optional') {
+    if (acc.option === 'OPTIONAL') {
       return 'gray';
     } else {
       return 'green';

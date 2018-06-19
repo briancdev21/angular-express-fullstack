@@ -273,7 +273,7 @@
                 <div class="td-input">
                   <span style="margin-right: 5px">$</span>
                   <input placeholder="0.00" [(ngModel)]="variant.cost" type="number" *ngIf="variableCostEditable" (blur)="variableCostEditable=false">
-                  <span *ngIf="!variableCostEditable" (click)="variableCostEditable=true">{{variant.cost | number: '1.2-2'}}</span>
+                  <span *ngIf="!variableCostEditable" (click)="variableCostEditable=true" style="width: 70px">{{variant.cost | number: '1.2-2'}}</span>
                 </div>  
               </td>
               <td><input placeholder="Supplier code here" [(ngModel)]="variant.supplierCode" [ngClass]="{'supplier-code-validation': !variant.supplierCode && missingSupplierCode}"></td>
@@ -281,7 +281,7 @@
                 <div class="td-input">
                   <span style="margin-right: 5px">$</span>
                   <input placeholder="0.00" [(ngModel)]="variant.priceAdjust" type="number" *ngIf="variablePriceEditable" (blur)="variablePriceEditable=false">
-                  <span *ngIf="!variablePriceEditable" (click)="variablePriceEditable=true">{{variant.priceAdjust | number: '1.2-2'}}</span>
+                  <span *ngIf="!variablePriceEditable" (click)="variablePriceEditable=true" style="width: 70px; height: 17px;">{{variant.priceAdjust | number: '1.2-2'}}</span>
                 </div>
               </td>
               <td><input placeholder="UPC number here" [(ngModel)]="variant.upcNumber" [ngClass]="{'upc-validation': !variant.upcNumber && missingUpcNumber}"></td>
@@ -353,8 +353,8 @@
                 <td>
                   <div class="td-option">
                     <select [(ngModel)]="acc.option">
-                      <option value="optional">Optional</option>
-                      <option value="auto">Automatically</option>
+                      <option value="OPTIONAL">Optional</option>
+                      <option value="AUTOMATIC">Automatically</option>
                     </select>
                     <img src="assets/images/garbage.png" (click)="removeAcc(i, acc)">
                   </div>
@@ -364,12 +364,12 @@
             <div class="search-modal" [ngClass]="{'show-modal': !searchModalCollapsed, 'hide-modal': searchModalCollapsed}" (clickOutside)="removeSearchModal();">
               <div class="search-modal-content">
                 <table>
-                  <tr *ngFor="let product of productsInfoAll | SearchPipe: accQueryString : searchableList; let i = index;" (click)="addToAccessories(product)">
+                  <tr *ngFor="let product of availableProductsAll | SearchPipe: accQueryString : searchableList; let i = index;" (click)="addToAccessories(product)">
                     <td><img src="{{product.pictureURI}}" alt=""></td>
                     <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
                     <td>{{product.modelNumber}}</td>
-                    <td>{{product.productType}}</td>
+                    <!-- <td>{{getBrandName(product.brandId)}}</td> -->
                     <td>$ {{product.total | number: '2.2-2'}}</td>
                   </tr>
                 </table>
@@ -394,7 +394,7 @@
                 <td>{{alter.skuNumber}}</td>
                 <td>{{alter.productName}}</td>
                 <td>{{alter.modelNumber}}</td>
-                <td>{{alter.brandName}}</td>
+                <!-- <td>{{alter.brandName}}</td> -->
                 <td><input [(ngModel)]="alter.qty" ></td>
                 <td >
                   <div class="calcedPrice">
@@ -411,12 +411,12 @@
             <div class="search-modal" [ngClass]="{'show-modal': !searchAlterModalCollapsed, 'hide-modal': searchAlterModalCollapsed}" (clickOutside)="removeSearchModal();">
               <div class="search-modal-content">
                 <table>
-                  <tr *ngFor="let product of productsInfoAll | SearchPipe: queryString : searchableList; let i = index;" (click)="addToAlternatives(product)">
+                  <tr *ngFor="let product of availableProductsAll | SearchPipe: queryString : searchableList; let i = index;" (click)="addToAlternatives(product)">
                     <td><img src="{{product.pictureURI}}" alt=""></td>
                     <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
                     <td>{{product.modelNumber}}</td>
-                    <td>{{product.productType}}</td>
+                    <td></td>
                     <td>$ {{product.total | number: '2.2-2'}}</td>
                   </tr>
                 </table>
