@@ -87,7 +87,7 @@ export class InventoryBodyComponent {
     if (this.tr_mock.fromLocation !== undefined &&
       this.tr_mock.toLocation !== undefined
     ) {
-      this.showSendPOModal = true;
+      this.savePO();
     }
   }
 
