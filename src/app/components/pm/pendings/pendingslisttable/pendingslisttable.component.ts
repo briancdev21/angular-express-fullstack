@@ -2,6 +2,9 @@ import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import * as _ from 'lodash';
+import { ProjectsService } from '../../../../services/projects.service';
+import { SharedService } from '../../../../services/shared.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-pendingslisttable',
@@ -19,12 +22,28 @@ export class PendingsListTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
+  contactsList = [];
 
-  constructor( private filterService: FilterService, private router: Router ) {
+  constructor( private filterService: FilterService, private router: Router, private projectsService: ProjectsService,
+    private sharedService: SharedService ) {
+    this.sharedService.getContacts().subscribe(data => {
+      console.log('contactslist: ', data);
+      this.contactsList = data;
+      this.projectsService.getProjectsList().subscribe(res => {
+        this.pendingsListInfo = res.results;
+        this.pendingsListInfo.forEach(element => {
+          element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+          element.timePassed = this.calcTimePassedDays(element.startDate, element.status);
+        });
+        this.pendingsListInfo = this.pendingsListInfo.filter(p => p.status === 'IN_PROGRESS');
+        console.log('pendingprojectslist: ', this.pendingsListInfo);
+      });
+    });
+
   }
 
   ngOnInit() {
-    this.pendingsListInfo.map(i => i.timePassed = this.calcTimePassedDays(i.signedDate, i.status));
+    // this.pendingsListInfo.map(i => i.timePassed = this.calcTimePassedDays(i.signedDate, i.status));
   }
 
   getStatus() {
@@ -84,6 +103,11 @@ export class PendingsListTableComponent implements OnInit {
 
   getDateColor(days) {
     return days <= 6 ? 'green' : days <= 14 ? 'orange' : 'red';
+  }
+
+  getContactName(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
   }
 
 }

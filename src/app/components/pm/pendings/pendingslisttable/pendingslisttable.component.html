@@ -1,21 +1,21 @@
 <div class="content">
   <table>
     <tr>
-      <th (click)="sortArray('projectNumber')">PROJECT #</th>
+      <th (click)="sortArray('id')">PROJECT #</th>
       <th (click)="sortArray('projectName')">NAME OF PROJECT</th>
       <th (click)="sortArray('customerName')">CUSTOMER NAME</th>
-      <th (click)="sortArray('estimatedBudget')">ESTIMATED BUDGET</th> 
-      <th (click)="sortArray('projectTotal')">PROJECT TOTAL</th>
-      <th (click)="sortCreateDateArray('signedDate')">DATE SIGNED</th>
+      <th (click)="sortArray('budget')">ESTIMATED BUDGET</th> 
+      <th (click)="sortArray('total')">PROJECT TOTAL</th>
+      <th (click)="sortCreateDateArray('startDate')">DATE SIGNED</th>
       <th (click)="sortArray('timePassed')">TIME PASSED</th>
     </tr>
     <tr *ngFor="let pending of pendingsListInfo; let i = index" (click)="redirectTo(pending.projectNumber)">
-      <td>{{pending.projectNumber}}</td>
+      <td>{{pending.id}}</td>
       <td>{{pending.projectName}}</td>
-      <td>{{pending.customerName}}</td>
-      <td>$ {{pending.estimatedBudget | number: '1.2-2'}}</td>
-      <td>$ {{pending.projectTotal | number: '1.2-2'}}</td>
-      <td>{{pending.signedDate}}</td>
+      <td><span *ngIf="pending.contactId">{{getContactName(pending.contactId)}}</span></td>
+      <td>$ {{pending.budget | number: '1.2-2'}}</td>
+      <td>$ {{pending.total | number: '1.2-2'}}</td>
+      <td>{{pending.startDate}}</td>
       <td [ngClass]="getDateColor(pending.timePassed)">{{pending.timePassed}} Day<span *ngIf="pending.timePassed > 1">s</span></td> 
     </tr>
   </table>

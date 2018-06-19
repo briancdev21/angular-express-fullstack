@@ -48,58 +48,6 @@ export class PendingsComponent implements OnInit {
   ];
 
   public pendingsListInfo: Array<Object> = [
-    {
-      projectNumber: 'PR 021704',
-      projectName: 'Remodel with your Nu Life',
-      customerName: 'John Moss',
-      estimatedBudget: 10203.32,
-      projectTotal: 22323.67,
-      signedDate: 'March 14, 2018',
-      timePassed: '',
-      collaborators: {
-        name: 'John Moss',
-        imgUrl: 'assets/images/user1.png'
-      }
-    },
-    {
-      projectNumber: 'PR 021702',
-      projectName: 'Fake Sample Project Name',
-      customerName: 'Fake Customer',
-      estimatedBudget: 23430.32,
-      projectTotal: 30289.94,
-      signedDate: 'February 16, 2018',
-      timePassed: '',
-      collaborators: {
-        name: 'John Moss',
-        imgUrl: 'assets/images/user1.png'
-      }
-    },
-    {
-      projectNumber: 'PR 021705',
-      projectName: 'Really Interesting Project',
-      customerName: 'Interesting Customer',
-      estimatedBudget: 30232.37,
-      projectTotal: 65984.02,
-      signedDate: 'January 2, 2018',
-      timePassed: '',
-      collaborators: {
-        name: 'Nick',
-        imgUrl: 'assets/images/user2.png'
-      }
-    },
-    {
-      projectNumber: 'PR 021706',
-      projectName: 'Remodel with your Nu Life',
-      customerName: 'Paul',
-      estimatedBudget: 10293.32,
-      projectTotal: 22399.67,
-      signedDate: 'March 24, 2018',
-      timePassed: '',
-      collaborators: {
-        name: 'John Moss',
-        imgUrl: 'assets/images/user1.png'
-      }
-    },
   ];
 
   ngOnInit() {
