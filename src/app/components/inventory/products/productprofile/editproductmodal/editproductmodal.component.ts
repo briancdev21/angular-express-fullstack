@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild, ElementRef, OnInit, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProductProfileService } from '../productprofile.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordselect/multikeywordselect.component';
@@ -25,8 +25,24 @@ export class EditProductModalComponent implements OnInit {
   @Output() closeEditProductModal: EventEmitter<any> = new EventEmitter;
   @Input() set productInfo (val: any) {
     this._productInfo = val;
-    this.addedProduct = val;
-    console.log('added proudct: ', this.addedProduct);
+    // this.addedProduct = val;
+    // console.log('added proudct: ', this.addedProduct);
+    // this.brand = val.brandName;
+    // this.selectedBrandId = val.brandId;
+    // this.selectedProductTypeId = val.productTypeId;
+    // this.selectedSupplierId = val.supplierId;
+    // this.selectedKeywordsId = val.keywordIds;
+    // this.addedProduct.productName = val.name;
+    // this.addedProduct.productDesc = val.description;
+    // this.addedProduct.measure = val.unitOfMeasure.unit;
+    // this.addedProduct.measureCount = val.unitOfMeasure.quantity;
+    // this.addedProduct.expirationType = val.expiration.unit;
+    // this.addedProduct.expiration = val.expiration.duration;
+    // this.addedProduct.leadTime = val.leadTime.unit;
+    // this.addedProduct.leadTimeCount = val.leadTime.duration;
+  }
+  @Input() set productVariants (val: any) {
+    this.variantsInfo = val;
   }
   searchModalCollapsed = true;
   searchAlterModalCollapsed = true;
@@ -79,7 +95,6 @@ export class EditProductModalComponent implements OnInit {
   invalidProductName = false;
   invalidManufacturer = false;
   invalidProductDescription = false;
-  brandsListInfo: any;
   suppliersListInfo: any;
   newProductId: any;
   currenciesListInfo: any;
@@ -92,9 +107,19 @@ export class EditProductModalComponent implements OnInit {
   productTypesListInfo: any;
   productTypeNames: any;
   _productInfo: any;
+  selectedProductTypeId: number;
+  selectedBrandId: number;
+  selectedSupplierId: number;
+  selectedKeywordsId: any;
+  keywordsListInfo: any;
+  variantsInfo: any;
+  productId: any;
+  brandsList = [];
+
 
   constructor(private productProfileService: ProductProfileService, private completerService: CompleterService,
-     private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
+    private route: ActivatedRoute, private suppliersService: SuppliersService,
+    private sharedService: SharedService, private productsService: ProductsService) {
 
     // this.proposalService.newProductId.subscribe(data => {
     //   if (data.id) {
@@ -102,14 +127,56 @@ export class EditProductModalComponent implements OnInit {
     //   }
     // });
 
-    this.suppliersService.getSuppliersList().subscribe(res => {
-      this.brandsListInfo = res.results;
-      this.suppliers = res.results.map(s => s.name);
-    });
-
+    this.productId = this.route.snapshot.paramMap.get('id');
     this.sharedService.getBrands().subscribe(res => {
-      this.brandsListInfo = res.results;
-      this.brands = res.results.map(b => b.name);
+      this.brandsList = res.results;
+      this.brands = completerService.local(this.brandsList, 'name', 'name');
+      this.productsService.getIndividualProduct(this.productId).subscribe(response => {
+        console.log('product data123: ', response.data);
+        const backedData = response.data;
+        // this.productInfo = response.data;
+        this.brand = this.getBrandNameFromId(response.data.brandId);
+        this.addedProduct = response.data;
+        this.selectedBrandId = response.data.brandId;
+        this.selectedBrandId = response.data.brandId;
+        this.selectedProductTypeId = response.data.productTypeId;
+        this.selectedSupplierId = response.data.supplierId;
+        this.selectedKeywordsId = response.data.keywordIds;
+        this.addedProduct.productName = response.data.name;
+        this.addedProduct.productDesc = response.data.description;
+        this.addedProduct.measureUnit = response.data.unitOfMeasure.unit;
+        this.addedProduct.measureCount = response.data.unitOfMeasure.quantity;
+        this.addedProduct.expirationType = backedData.expiration.unit;
+        this.addedProduct.expirationCount = backedData.expiration.duration;
+        this.addedProduct.leadTimeUnit = response.data.leadTime.unit;
+        this.addedProduct.leadTimeCount = response.data.leadTime.duration;
+        this.addedProduct.model = response.data.model;
+
+
+        // get variant info
+        this.productsService.getVariantsList(this.productId).subscribe(data => {
+          console.log('variants: ', data);
+          this.productVariants = data.results;
+        });
+
+        this.suppliersService.getSuppliersList().subscribe(data => {
+          this.suppliersListInfo = data.results;
+          this.suppliers = completerService.local(this.suppliersListInfo, 'name', 'name');
+          this.supplier = this.suppliersListInfo.filter(s => s.id === this.addedProduct.supplierId)[0].name;
+        });
+
+        this.sharedService.getProductTypes().subscribe(data => {
+          this.productTypesListInfo = data.results;
+          this.productTypeNames = completerService.local(this.productTypesListInfo, 'type', 'type');
+          this.addedProduct.type = this.productTypesListInfo.filter(p => p.id === this.addedProduct.productTypeId)[0].type;
+        });
+
+        this.sharedService.getKeywords().subscribe(data => {
+          this.keywordsListInfo = data.results;
+          // this.productTags = this.getKeywordsName(this.addedProduct.keywordIds);
+          this.productTags = this.addedProduct.keywordIds;
+        });
+      });
     });
 
     this.sharedService.getCurrencies().subscribe(res => {
@@ -121,46 +188,10 @@ export class EditProductModalComponent implements OnInit {
       this.pricingCategoriesListInfo.map(p => p['price'] = 0);
     });
 
-    this.sharedService.getProductTypes().subscribe(res => {
-      this.productTypesListInfo = res.results;
-      console.log('product types: ', this.productTypesListInfo);
-      this.productTypeNames = completerService.local(this.productTypesListInfo, 'type', 'type');
-    });
-
-    this.addedProduct = {
-      productType: this.type,
-      productSupplier: this.supplier,
-      manufactaurer: this.brand,
-      productName: '',
-      modelNumber: '',
-      productDesc: '',
-      measureCount: undefined,
-      expiration: undefined,
-      brand: '',
-      inventoryType: 'STOCKABLE',
-      measure: 'PER_UNIT',
-      expirationType: 'HOURS',
-      qty: 0,
-      initialStockLevel: '',
-      reorderPoint: '',
-      unitCost: 0,
-      currency: 'CAD',
-      leadTime: 'DAYS',
-      leadTimeCount: 0,
-      skuNumber: '',
-      supplierCode: '',
-      upc: '',
-      option: 'optional',
-      priceAdjust: 0,
-      variantValue: [{id: 1, data: []}],
-      variantProducts: []
-    };
-
     this.searchableList = ['productName', 'model', 'brand'];
     // this.variants = this.addedProduct.variantValue;
   }
   ngOnInit() {
-    console.log('_productInf0:', this._productInfo);
   }
 
   closeModal() {
@@ -187,7 +218,7 @@ export class EditProductModalComponent implements OnInit {
       this.invalidManufacturer = false;
       this.invalidProductDescription = false;
 
-      if (this.addedProduct.modelNumber && this.addedProduct.type && this.supplier && this.brand
+      if (this.addedProduct.model && this.addedProduct.type && this.supplier && this.brand
         && this.addedProduct.productName && this.addedProduct.productDesc) {
         this.tabActiveSecond = true;
         this.tabActiveFirst = false;
@@ -233,26 +264,28 @@ export class EditProductModalComponent implements OnInit {
   }
 
   clickNextEditVariant() {
-    const variantSuppliercode = this.addedProduct.variantProducts.map(v => v.supplierCode);
-    if (variantSuppliercode.filter(s => s === '').length > 0) {
-      this.missingSupplierCode = true;
-    } else {
-      this.missingSupplierCode = false;
-    }
-    const variantUpcNumber = this.addedProduct.variantProducts.map(v => v.upcNumber);
-    if (variantUpcNumber.filter(s => s === '').length > 0) {
-      this.missingUpcNumber = true;
-    } else {
-      this.missingUpcNumber = false;
-    }
-    if (this.missingUpcNumber || this.missingSupplierCode) {
-      return;
-    } else {
+    // Skip variants edit for now
+
+    // const variantSuppliercode = this.addedProduct.variantProducts.map(v => v.supplierCode);
+    // if (variantSuppliercode.filter(s => s === '').length > 0) {
+    //   this.missingSupplierCode = true;
+    // } else {
+    //   this.missingSupplierCode = false;
+    // }
+    // const variantUpcNumber = this.addedProduct.variantProducts.map(v => v.upcNumber);
+    // if (variantUpcNumber.filter(s => s === '').length > 0) {
+    //   this.missingUpcNumber = true;
+    // } else {
+    //   this.missingUpcNumber = false;
+    // }
+    // if (this.missingUpcNumber || this.missingSupplierCode) {
+    //   return;
+    // } else {
       this.tabActiveFour = true;
       this.tabActiveFirst = false;
       this.tabActiveThird = false;
       this.tabActiveSecond = false;
-    }
+    // }
   }
 
   clickBack(pos) {
@@ -450,7 +483,7 @@ export class EditProductModalComponent implements OnInit {
         qty: product.qty,
         friendPrice: product.total,
         option: 'optional',
-        brandName: this.getBrandNamefromId(product.brandId)
+        brandName: this.getBrandNameFromId(product.brandId)
       };
       this.addedAccList.push(this.addedAcc);
       console.log('addedAccList: ', this.addedAccList);
@@ -466,7 +499,7 @@ export class EditProductModalComponent implements OnInit {
         brandId: product.brandId,
         qty: product.qty,
         friendPrice: product.total,
-        brandName: this.getBrandNamefromId(product.brandId)
+        brandName: this.getBrandNameFromId(product.brandId)
       };
       this.addedAlterList.push(this.addedAlter);
     }
@@ -524,13 +557,34 @@ export class EditProductModalComponent implements OnInit {
     return filterProductType.name;
   }
 
-  getBrandNamefromId(id) {
-    const filterBrandName = this.brandsListInfo.filter(p => p.id === id);
-    return filterBrandName.name;
+  onProductTypeSelected(item) {
+    this.selectedProductTypeId = item.originalObject.id;
   }
 
-  onProductTypeSelected(item) {
-    console.log('selecte prod type:', item);
+  onSupplierSelected(item) {
+    this.selectedSupplierId = item.originalObject.id;
+  }
+
+  onBrandSelected(item) {
+    this.selectedBrandId = item.originalObject.id;
+  }
+
+  getKeywordsId(event) {
+    this.selectedKeywordsId = event.map(e => e.id);
+  }
+
+  getKeywordsName(val) {
+    const keywordsName = [];
+    val.forEach(element => {
+      const item = this.keywordsListInfo.filter(k => k.id === element)[0].name;
+      keywordsName.push(item);
+    });
+    return keywordsName;
+  }
+
+  getBrandNameFromId(id) {
+    const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
+    return selectedBrand.name;
   }
 
   onUploadStateChanged(event) {

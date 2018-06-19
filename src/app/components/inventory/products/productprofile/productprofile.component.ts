@@ -71,38 +71,7 @@ export class ProductProfileComponent implements OnInit {
       }
     };
 
-  public productInfo = {
-    // 'id': 1,
-    // 'brandId': 0,
-    // 'productTypeId': 0,
-    // 'supplierId': 0,
-    // 'currencyId': 0,
-    // 'keywordIds': [
-    //   1
-    // ],
-    // 'model': 'Control 4',
-    // 'name': 'C4-HC800',
-    // 'description': 'product description',
-    // 'inventoryType': 'STOCKABLE',
-    // 'status': 'PLACE_ORDER',
-    // 'unitOfMeasure': {
-    //   'quantity': 0,
-    //   'unit': 'PER_UNIT'
-    // },
-    // 'expiration': {
-    //   'duration': 0,
-    //   'unit': 'HOURS'
-    // },
-    // 'leadTime': {
-    //   'duration': 0,
-    //   'unit': 'HOURS'
-    // },
-    // 'quantity': 0,
-    // 'variantCount': 0,
-    // 'pictureURI': 'assets/images/barrow.png',
-    // 'createdAt': '2018-05-15',
-    // 'updatedAt': '2018-05-15'
-  };
+  public productInfo: any;
 
   public productPricingCategories = [
   ];
@@ -131,15 +100,6 @@ export class ProductProfileComponent implements OnInit {
 
       this.productsService.getIndividualProduct(this.productInfoIndex).subscribe(response => {
         console.log('product data: ', response.data);
-
-        // Update cards info
-        // this.cards = res.data.score;
-
-        // Update donut chart info
-        // this.chartSetData[0]['percentage'] = res.data.accountRating;
-        // this.chartSetData[1]['percentage'] = res.data.loyaltyRating;
-        // this.chartSetData[2]['percentage'] = res.data.dealsRatio;
-        // this.chartSetData[3]['percentage'] = res.data.serviceRatio;
 
         this.productInfo = response.data;
         this.productInfo['brandName'] = this.getBrandNameFromId(response.data.brandId);
@@ -173,9 +133,7 @@ export class ProductProfileComponent implements OnInit {
   }
 
   getBrandNameFromId(id) {
-    console.log('sleetedbrand: ', this.brandsList);
     const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
-    console.log('sleetedbrand: ', selectedBrand);
     return selectedBrand.name;
   }
 }
