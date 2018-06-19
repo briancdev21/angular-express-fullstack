@@ -139,6 +139,10 @@
 	font-weight: 400;
 }
 
+.wrong-credentials {
+	color: red;
+}
+
 .remember-check {
 	margin-top: 15px;
 	font-size: 17px;

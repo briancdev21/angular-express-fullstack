@@ -37,9 +37,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     'assets/Landscapes/Downtown_Calgary.jpg',
     'assets/Landscapes/Forest.jpg',
   ];
+  wrongCredentials = false;
 
   constructor (private formBuilder: FormBuilder, private authService: AuthService, private router: Router ) {
-
+    this.authService.loginFailed.subscribe(res => {
+      this.wrongCredentials = res;
+      console.log('wrong: ', res);
+    });
   }
 
   ngOnInit() {
