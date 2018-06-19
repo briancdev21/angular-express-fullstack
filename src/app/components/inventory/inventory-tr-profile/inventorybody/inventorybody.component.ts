@@ -20,6 +20,7 @@ export class InventoryBodyComponent {
       this.fromLocation = _trdata.fromLocation;
       this.tr_mock.status = _trdata.status;
       this.tr_mock.internalMemo = _trdata.internalMemo;
+      this.internalMemo = _trdata.internalMemo;
       this.transferdate = _trdata.createdAt;
       this.tr_id = `TR-${this.tr_mock.id}`;
       if (this.tr_mock.id !== undefined) {

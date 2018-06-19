@@ -8,7 +8,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class TRInternalMemoComponent {
 
   @Output() memoChanged: EventEmitter<any> = new EventEmitter();
-
+  @Input() internalMemo: any;
   onMemoChange(event) {
     this.memoChanged.emit(event.target.value);
   }

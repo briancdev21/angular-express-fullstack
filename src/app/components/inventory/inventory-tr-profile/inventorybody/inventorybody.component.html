@@ -25,6 +25,7 @@
         </app-tr-locationtofrom>
         <div class="internal-memo">
           <app-tr-internalmemo
+            [internalMemo]="internalMemo"
             (memoChanged)="onMemoChanged($event)" ></app-tr-internalmemo>
         </div>
       </div>
@@ -36,11 +37,7 @@
         &nbsp;
       </div>
       <div class="btn-group" >
-<<<<<<< HEAD
         <div class="btn cancel" (click)="onCancel()" [ngClass]="{'disabled': tr_mock.status === 'TRANSFERRED' }" >Cancel</div>
-=======
-        <div class="btn cancel" (click)="onCancel()" >Cancel</div>
->>>>>>> Create transfer profile page
         <div class="btn save_and_close" (click)="onSave()" >Send</div>
       </div>
     </section>
