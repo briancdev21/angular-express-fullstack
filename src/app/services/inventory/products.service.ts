@@ -68,6 +68,11 @@ export class ProductsService {
     return this.http.get(url);
   }
 
+  createVariants (productId, body): Observable<any> {
+    const url = `${apiUrl}inventory/products/${productId}/variants`;
+    return this.http.post(url, body, this.options);
+  }
+
   getProductPricingsList(productId): Observable<any>  {
     const url = `${apiUrl}inventory/products/${productId}/pricing-categories`;
     return this.http.get(url);
@@ -121,6 +126,11 @@ export class ProductsService {
   updateProductImage(id, body): Observable<any> {
     const url = `${apiUrl}inventory/products/${id}/product-picture/`;
     return this.http.put(url, body);
+  }
+
+  getProductCatalog(): Observable<any>  {
+    const url = `${apiUrl}inventory/catalog`;
+    return this.http.get(url);
   }
 
 }

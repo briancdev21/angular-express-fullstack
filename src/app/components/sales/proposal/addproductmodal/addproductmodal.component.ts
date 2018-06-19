@@ -94,6 +94,12 @@ export class AddProductModalComponent implements OnInit {
   missingUpcNumber = false;
   productTypesListInfo: any;
   productTypeNames: any;
+  selectedSupplierId: any;
+  selectedBrandId: any;
+  selectedProductTypeId: any;
+  selectedKeywordsId: any;
+  newCreatedProductId: number;
+  availableProductsAll: any;
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
@@ -105,13 +111,15 @@ export class AddProductModalComponent implements OnInit {
     });
 
     this.suppliersService.getSuppliersList().subscribe(res => {
-      this.brandsListInfo = res.results;
-      this.suppliers = res.results.map(s => s.name);
+      this.suppliersListInfo = res.results;
+      // this.suppliers = res.results.map(s => s.name);
+      this.suppliers = completerService.local(this.suppliersListInfo, 'name', 'name');
     });
 
     this.sharedService.getBrands().subscribe(res => {
       this.brandsListInfo = res.results;
-      this.brands = res.results.map(b => b.name);
+      // this.brands = res.results.map(b => b.name);
+      this.brands = completerService.local(this.brandsListInfo, 'name', 'name');
     });
 
     this.sharedService.getCurrencies().subscribe(res => {
@@ -125,7 +133,13 @@ export class AddProductModalComponent implements OnInit {
 
     this.sharedService.getProductTypes().subscribe(res => {
       this.productTypesListInfo = res.results;
-      this.productTypeNames = res.results.map(b => b.name);
+      // this.productTypeNames = res.results.map(b => b.name);
+      this.productTypeNames = completerService.local(this.productTypesListInfo, 'type', 'type');
+    });
+
+    this.productsService.getProductCatalog().subscribe(res => {
+      console.log('catalog: ', res);
+      this.availableProductsAll = res.results;
     });
 
     this.dataService = completerService.local(this.searchData, 'color', 'color');
@@ -152,20 +166,8 @@ export class AddProductModalComponent implements OnInit {
       skuNumber: '',
       supplierCode: '',
       upc: '',
-      option: 'optional',
+      option: 'OPTIONAL',
       priceAdjust: 0,
-      // friendMargin: '0',
-      // friendPrice: '',
-      // royaltyPrice: '',
-      // royaltyMargin: '0',
-      // builderPrice: '',
-      // buildersMargin: '0',
-      // wholesalePrice: '',
-      // wholesaleMargin: '0',
-      // retailPrice: '',
-      // retailMargin: '0',
-      // costPrice: '',
-      // costMargin: '0',
       variantValue: [{id: 1, data: []}],
       variantProducts: []
     };
@@ -242,10 +244,37 @@ export class AddProductModalComponent implements OnInit {
         });
       }
     } else if (pos === 'tab-two') {
-      this.tabActiveThird = true;
-      this.tabActiveFirst = false;
-      this.tabActiveSecond = false;
-      this.tabActiveFour = false;
+      const savingProductMd = {
+        'brandId': this.selectedBrandId,
+        'productTypeId': this.selectedProductTypeId,
+        'supplierId': this.selectedSupplierId,
+        'keywordIds': this.selectedKeywordsId,
+        'model': this.addedProduct.modelNumber,
+        'name': this.addedProduct.productName,
+        'description': this.addedProduct.productDesc,
+        'inventoryType': this.addedProduct.inventoryType,
+        'unitOfMeasure': {
+          'quantity': this.addedProduct.measureCount ? this.addedProduct.measureCount : 0,
+          'unit': this.addedProduct.measure
+        },
+        'expiration': {
+          'duration': this.addedProduct.expiration ? this.addedProduct.expiration : 0,
+          'unit': this.addedProduct.expirationType
+        },
+        'leadTime': {
+          'duration': this.addedProduct.leadTimeCount ? this.addedProduct.leadTimeCount : 0,
+          'unit': this.addedProduct.leadTime
+        }
+      };
+      const savingProductData = JSON.stringify(savingProductMd);
+      this.productsService.createProduct(savingProductData).subscribe(res => {
+        this.newCreatedProductId = res.data.id;
+        console.log('product created: ', res);
+        this.tabActiveThird = true;
+        this.tabActiveFirst = false;
+        this.tabActiveSecond = false;
+        this.tabActiveFour = false;
+      });
     } else if (pos === 'tab-three') {
       this.tabActiveFour = true;
       this.tabActiveFirst = false;
@@ -270,10 +299,8 @@ export class AddProductModalComponent implements OnInit {
     if (this.missingUpcNumber || this.missingSupplierCode) {
       return;
     } else {
-      this.tabActiveFour = true;
-      this.tabActiveFirst = false;
-      this.tabActiveThird = false;
-      this.tabActiveSecond = false;
+      this.createVariants();
+
     }
   }
 
@@ -296,7 +323,37 @@ export class AddProductModalComponent implements OnInit {
     }
   }
 
+  createVariants() {
+    console.log('variants list: ', this.addedProduct.variantProducts);
+    this.addedProduct.variantProducts.forEach(element => {
+      element.quantity = element.qty;
+      element.upc = element.upcNumber;
+      element.priceAdjustment = element.priceAdjust;
+      this.productsService.createVariants(this.newCreatedProductId, JSON.stringify(element)).subscribe(res => {
+        console.log('variants created: ', res);
+      });
+    });
+    this.tabActiveFour = true;
+    this.tabActiveFirst = false;
+    this.tabActiveThird = false;
+    this.tabActiveSecond = false;
+  }
 
+  supplierIdSelected(event) {
+    this.selectedSupplierId = event.originalObject.id;
+  }
+
+  brandIdSelected(event) {
+    this.selectedBrandId = event.originalObject.id;
+  }
+
+  productTypeIdSelected(event) {
+    this.selectedProductTypeId = event.originalObject.id;
+  }
+
+  getKeywordIds(event) {
+    this.selectedKeywordsId = event.map(e => e.id);
+  }
 
   onUploadFinished(value) {
     this.imageCount ++;
@@ -433,7 +490,7 @@ export class AddProductModalComponent implements OnInit {
         sku: skuNumber + i,
         cost: this.addedProduct.unitCost,
         supplierCode: '',
-        priceAdjust: this.addedProduct.friendPrice,
+        priceAdjust: this.addedProduct.priceAdjust,
         upcNumber: ''
       };
     }
@@ -471,7 +528,7 @@ export class AddProductModalComponent implements OnInit {
         brandId: product.brandId,
         qty: product.qty,
         friendPrice: product.total,
-        option: 'optional',
+        option: 'OPTIONAL',
         brandName: this.getBrandNamefromId(product.brandId)
       };
       this.addedAccList.push(this.addedAcc);
@@ -495,7 +552,7 @@ export class AddProductModalComponent implements OnInit {
   }
 
   getSkuCheckColor(acc) {
-    if (acc.option === 'optional') {
+    if (acc.option === 'OPTIONAL') {
       return 'gray';
     } else {
       return 'green';
