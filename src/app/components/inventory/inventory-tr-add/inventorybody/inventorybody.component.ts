@@ -18,6 +18,7 @@ export class InventoryBodyComponent {
       console.log('trd data:', _trdata);
       this.tr_mock.toLocation = undefined;
       this.tr_mock.fromLocation = undefined;
+      this.tr_mock.internalMemo = '';
       if (_trdata) {
         this.tr_id = `TR-${this.tr_mock.id}`;
       }
@@ -52,6 +53,7 @@ export class InventoryBodyComponent {
   onMemoChanged(event) {
     if (event) {
       this.tr_mock.internalMemo = event;
+      this.updateTR();
     }
   }
 
@@ -66,6 +68,7 @@ export class InventoryBodyComponent {
       this.tr_mock.toLocation = parseInt(event.toLocation, 10);
     }
     console.log('mock:', this.tr_mock);
+    this.updateTR();
   }
 
   onCancel() {
@@ -89,6 +92,16 @@ export class InventoryBodyComponent {
   }
 
   savePO() {
-    this.router.navigate(['./inventory/stock-control']);
+    this.tr_mock.status = 'TRANSFERRED';
+    this.sharedService.updateTransfer(this.tr_mock.id, this.tr_mock).subscribe(() => {
+      this.router.navigate(['./inventory/stock-control']);
+    });
+  }
+
+  updateTR() {
+    if (this.errors.locationFromChanged && this.errors.locationToChanged) {
+      this.sharedService.updateTransfer(this.tr_mock.id, this.tr_mock).subscribe(() => {
+      });
+    }
   }
 }
