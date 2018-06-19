@@ -56,6 +56,7 @@ import { SharedService } from './services/shared.service';
 import { InvoicesService } from './services/invoices.service';
 import { ProductsService } from './services/inventory/products.service';
 import { SuppliersService } from './services/suppliers.service';
+import { ProjectsService } from './services/projects.service';
 import { AuthGuard } from './services/authguard.service';
 import { EstimatesService } from './services/estimates.service';
 import { ProposalsService } from './services/proposals.service';
@@ -120,8 +121,8 @@ import { ProposalsService } from './services/proposals.service';
     SuppliersService,
     AuthGuard,
     EstimatesService,
-    SuppliersService,
     ProposalsService,
+    ProjectsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
