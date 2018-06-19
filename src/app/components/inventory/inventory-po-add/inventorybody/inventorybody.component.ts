@@ -112,15 +112,11 @@ export class InventoryBodyComponent {
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
     this.contactId = this.contactList[selectedIndex].id;
     this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id, 10);
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term', data.data);
-    });
   }
 
   onSelectLocation(selectedLocationId: string) {
     console.log('selected location:', selectedLocationId);
     this.errors.locationChanged = true;
-
     this.po_mock.location = parseInt(selectedLocationId, 10);
     const selectedLocation = this.locations.filter(location => location.id.toString() === selectedLocationId);
     console.log('address:', selectedLocation[0].address);
@@ -130,22 +126,12 @@ export class InventoryBodyComponent {
   onSelectTerm(selectedTermId: string) {
     console.log('selected term:', selectedTermId);
     this.errors.termChanged = true;
-
     this.po_mock.term = parseInt(selectedTermId, 10);
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term changed', data.data);
-      this.po_mock.dueDate = data.data.dueDate;
-      this.dueDate = data.data.dueDate;
-    });
+    this.updatePO();
   }
 
   onPriceChanged() {
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((resp) => {
-      console.log('mock_data', resp.data);
-      this.po_mock.subTotal = resp.data.subTotal;
-      this.po_mock.totalTax = resp.data.totalTax;
-      this.po_mock.total = resp.data.total;
-    });
+    this.updatePO();
   }
 
   onTotalPriceChange(data) {
@@ -181,36 +167,27 @@ export class InventoryBodyComponent {
   savePO() {
     this.po_mock.status = 'SENT';
     this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term', data.data);
       this.router.navigate(['./inventory/stock-control']);
     });
   }
 
   onDueDateChanged(event) {
     this.po_mock.dueDate = event;
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term', data.data);
-    });
+    this.updatePO();
   }
   onNoteChanged(event) {
       this.po_mock.supplierNote = event;
-      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-        console.log('mock_data term', data.data);
-      });
+      this.updatePO();
   }
 
   onMemoChanged(event) {
       this.po_mock.internalMemo = event;
-      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-        console.log('mock_data term', data.data);
-      });
+      this.updatePO();
   }
 
   onShippingAddressChanged(event) {
     this.po_mock.shippingAddress = event;
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
-      console.log('mock_data term', data.data);
-    });
+    this.updatePO();
   }
 
   onCancel() {
@@ -224,9 +201,21 @@ export class InventoryBodyComponent {
   }
 
   onSave() {
-    if (this.po_mock.term != undefined && this.contactId != undefined && this.po_mock.location != undefined) {
-      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe(() => {
-        this.router.navigate(['./inventory/stock-control']);
+    // tslint:disable-next-line:curly
+    this.showErrors = true;
+    if (this.errors.termChanged && this.errors.locationChanged) {
+      this.showSendPOModal = true;
+    }
+  }
+
+  updatePO() {
+    if (this.po_mock.id !== undefined && this.errors.termChanged && this.errors.locationChanged) {
+      this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((data) => {
+        this.po_mock.subTotal = data.data.subTotal;
+        this.po_mock.totalTax = data.data.totalTax;
+        this.po_mock.total = data.data.total;
+        this.po_mock.dueDate = data.data.dueDate;
+        this.dueDate = data.data.dueDate;
       });
     }
   }
