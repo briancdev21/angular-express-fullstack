@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 
 export class ProductProfileService {
+  editModalClosed: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor() {
 

@@ -73,17 +73,10 @@ export class ProductProfileComponent implements OnInit {
 
   public productInfo: any;
 
-  public productPricingCategories = [
-  ];
-
-  public productVariants = [
-  ];
-
-  public productAccessories = [
-  ];
-
-  public productAlternatives = [
-  ];
+  public productPricingCategories = [];
+  public productVariants = [];
+  public productAccessories = [];
+  public productAlternatives = [];
 
   currentContact: any;
   savingContact: any;
@@ -99,16 +92,15 @@ export class ProductProfileComponent implements OnInit {
       this.brandsList = res.results;
 
       this.productsService.getIndividualProduct(this.productInfoIndex).subscribe(response => {
-        console.log('product data: ', response.data);
 
         this.productInfo = response.data;
         this.productInfo['brandName'] = this.getBrandNameFromId(response.data.brandId);
 
         // get variant info
         this.productsService.getVariantsList(this.productInfoIndex).subscribe(data => {
-          console.log('variants: ', data);
           this.productVariants = data.results;
         });
+
       });
     });
   }

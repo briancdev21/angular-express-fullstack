@@ -20,6 +20,7 @@ import { ProfileCmpModule } from '../../../profile/profile.module';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { ImageUploadModule } from 'angular2-image-upload';
 import { SharedPipesModule } from '../../../../pipes/sharedpipes.module';
+import { ClickOutsideModule } from 'ng4-click-outside';
 
 import { ProductProfileService } from './productprofile.service';
 @NgModule({
@@ -45,7 +46,8 @@ import { ProductProfileService } from './productprofile.service';
     Ng2CompleterModule,
     ImageUploadModule,
     ProfileCmpModule,
-    SharedPipesModule
+    SharedPipesModule,
+    ClickOutsideModule
   ],
   exports: [
     ProductCustomDonutChartComponent,
