@@ -100,6 +100,7 @@ export class AddProductModalComponent implements OnInit {
   selectedKeywordsId: any;
   newCreatedProductId: number;
   availableProductsAll: any;
+  productsAll: any;
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
@@ -137,11 +138,6 @@ export class AddProductModalComponent implements OnInit {
       this.productTypeNames = completerService.local(this.productTypesListInfo, 'type', 'type');
     });
 
-    this.productsService.getProductCatalog().subscribe(res => {
-      console.log('catalog: ', res);
-      this.availableProductsAll = res.results;
-    });
-
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.addedProduct = {
       productType: this.type,
@@ -172,7 +168,7 @@ export class AddProductModalComponent implements OnInit {
       variantProducts: []
     };
 
-    this.searchableList = ['productName', 'model', 'brand'];
+    this.searchableList = ['name', 'model', 'productType'];
     // this.variants = this.addedProduct.variantValue;
   }
   ngOnInit() {
@@ -274,7 +270,24 @@ export class AddProductModalComponent implements OnInit {
         this.tabActiveFirst = false;
         this.tabActiveSecond = false;
         this.tabActiveFour = false;
+
+        // Get search modal data
+        this.productsService.getProductsList().subscribe(response => {
+          this.productsAll = response.results;
+          console.log('products All: ', response);
+
+          this.productsService.getProductCatalog().subscribe(data => {
+            this.availableProductsAll = data.results;
+            console.log('availableproudcts : ', this.availableProductsAll);
+            this.availableProductsAll = this.availableProductsAll.filter(p => p.id !== this.newCreatedProductId);
+            this.availableProductsAll.forEach(ele => {
+              ele.pictureURI = this.productsAll.filter(p => p.id === ele.productId)[0].pictureURI;
+              ele.brandId =  this.productsAll.filter(p => p.id === ele.productId)[0].brandId;
+            });
+          });
+        });
       });
+
     } else if (pos === 'tab-three') {
       this.tabActiveFour = true;
       this.tabActiveFirst = false;
@@ -526,8 +539,8 @@ export class AddProductModalComponent implements OnInit {
         productName: product.name,
         modelNumber: product.model,
         brandId: product.brandId,
-        qty: product.qty,
-        friendPrice: product.total,
+        qty: product.quantity,
+        price: product.price,
         option: 'OPTIONAL',
         brandName: this.getBrandNamefromId(product.brandId)
       };
@@ -543,8 +556,8 @@ export class AddProductModalComponent implements OnInit {
         productName: product.name,
         modelNumber: product.model,
         brandId: product.brandId,
-        qty: product.qty,
-        friendPrice: product.total,
+        qty: product.quantity,
+        price: product.total,
         brandName: this.getBrandNamefromId(product.brandId)
       };
       this.addedAlterList.push(this.addedAlter);
@@ -599,13 +612,43 @@ export class AddProductModalComponent implements OnInit {
   }
 
   getProductTypeNamefromId(id) {
-    const filterProductType = this.productTypesListInfo.filter(p => p.id === id);
+    const filterProductType = this.productTypesListInfo.filter(p => p.id === id)[0];
     return filterProductType.name;
   }
 
   getBrandNamefromId(id) {
-    const filterBrandName = this.brandsListInfo.filter(p => p.id === id);
+    const filterBrandName = this.brandsListInfo.filter(p => p.id === id)[0];
     return filterBrandName.name;
+  }
+
+  saveAlterAcc() {
+    this.proposalService.closeModal(true);
+    this.tabActiveFirst = true;
+    this.tabActiveSecond = this.tabActiveThird = this.tabActiveFour = false;
+    this.addVariantConfirm = true;
+    this.addVariantContent = false;
+    this.editVariant = false;
+    console.log(this.addedAlterList, this.addedAccList);
+    this.addedAlterList.forEach(ele => {
+      const savingAlter = {
+        sku: ele.skuNumber,
+        quantity: ele.qty
+      };
+      this.productsService.createAlternative(this.newCreatedProductId, savingAlter).subscribe(res => {
+        console.log('saved alter: ', res);
+      });
+    });
+
+    this.addedAccList.forEach(ele => {
+      const savingAcc = {
+        sku: ele.skuNumber,
+        quantity: ele.qty,
+        option: ele.option
+      };
+      this.productsService.createAlternative(this.newCreatedProductId, savingAcc).subscribe(res => {
+        console.log('saved acc: ', res);
+      });
+    });
   }
 }
 

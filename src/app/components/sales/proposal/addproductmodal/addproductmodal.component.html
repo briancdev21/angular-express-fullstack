@@ -368,9 +368,9 @@
                     <td><img src="{{product.pictureURI}}" alt=""></td>
                     <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
-                    <td>{{product.modelNumber}}</td>
-                    <!-- <td>{{getBrandName(product.brandId)}}</td> -->
-                    <td>$ {{product.total | number: '2.2-2'}}</td>
+                    <td>{{product.model}}</td>
+                    <td>{{product.productType}}</td>
+                    <td>$ {{product.price | number: '2.2-2'}}</td>
                   </tr>
                 </table>
                 
@@ -394,7 +394,7 @@
                 <td>{{alter.skuNumber}}</td>
                 <td>{{alter.productName}}</td>
                 <td>{{alter.modelNumber}}</td>
-                <!-- <td>{{alter.brandName}}</td> -->
+                <td>{{alter.brandName}}</td>
                 <td><input [(ngModel)]="alter.qty" ></td>
                 <td >
                   <div class="calcedPrice">
@@ -415,9 +415,9 @@
                     <td><img src="{{product.pictureURI}}" alt=""></td>
                     <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
-                    <td>{{product.modelNumber}}</td>
-                    <td></td>
-                    <td>$ {{product.total | number: '2.2-2'}}</td>
+                    <td>{{product.model}}</td>
+                    <td>{{product.productType}}</td>
+                    <td>$ {{product.price | number: '2.2-2'}}</td>
                   </tr>
                 </table>
                 
@@ -428,7 +428,7 @@
             <button class="cancel-btn" (click)="clickBack('tab-four')">
               Back
             </button>
-            <button class="save-btn" (click)="closeModal()">
+            <button class="save-btn" (click)="saveAlterAcc()">
               Finish
             </button>
           </div>
