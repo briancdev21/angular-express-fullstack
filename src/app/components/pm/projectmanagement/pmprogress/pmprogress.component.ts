@@ -11,10 +11,10 @@ import { PmService } from '../pm.service';
 })
 
 export class PmProgressComponent implements OnInit {
-
-  tabActiveFirst = true;
-  tabActiveSecond = false;
-  tabActiveThird = false;
+  tabActiveFirst: boolean;
+  tabActiveSecond: boolean;
+  tabActiveThird: boolean;
+  tabActiveFourth: boolean;
 
   constructor( private pmService: PmService, private router: Router ) {
   }
