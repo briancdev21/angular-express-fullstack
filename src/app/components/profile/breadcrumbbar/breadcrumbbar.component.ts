@@ -35,7 +35,6 @@ export class BreadcrumbBarComponent implements AfterViewInit {
 
   constructor(private sharedService: SharedService) {
     this.sharedService.getUsers().subscribe(res => {
-      console.log('users: ', res);
       this.usersList = res;
       res.forEach((element, index) => {
         this.items2.push({
@@ -44,8 +43,6 @@ export class BreadcrumbBarComponent implements AfterViewInit {
           imageUrl: element.pictureURI
         });
       });
-
-      console.log('items: ', this.items2);
     });
     const comp = this;
     document.addEventListener('click', function() {
@@ -55,7 +52,6 @@ export class BreadcrumbBarComponent implements AfterViewInit {
 
   init() {
       this.editable = false;
-      console.log('userInfo:', this._userInfo);
       this._userInfo.followers.forEach(element => {
         this.items2 = this.items2.filter(function( obj ) {
           return obj.payload.label !== element.name;
@@ -63,8 +59,8 @@ export class BreadcrumbBarComponent implements AfterViewInit {
       });
 
     // input breadcrumb bar info
-    if (this.userInfo.name) {
-      this.data = ['contact', this.userInfo.name];
+    if (this._userInfo.name) {
+      this.data = ['contact', this._userInfo.name];
     }
   }
 

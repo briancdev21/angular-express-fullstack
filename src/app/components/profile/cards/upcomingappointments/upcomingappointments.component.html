@@ -10,7 +10,7 @@
 	<div class="card-content">
 		<img src="assets/images/barrow.png"/>
 		<div>
-			<div class="content-top">
+			<div class="content-top" *ngIf="userInfo">
 				<h5>Install at {{userInfo.name}}</h5>
 			</div>
 			<div class="content-down">

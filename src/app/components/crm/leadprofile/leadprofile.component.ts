@@ -34,8 +34,7 @@ export class LeadProfileComponent implements OnInit {
   menuCollapsed = true;
   leadInfoIndex: any;
 
-  userInfo = {
-  };
+  userInfo: any;
    /**
     * Each item will have title,content,complete flag and icon
     * which will be displayed on the side. Icon is in html
