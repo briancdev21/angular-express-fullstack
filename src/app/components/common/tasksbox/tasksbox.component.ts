@@ -16,4 +16,10 @@ export class TasksBoxComponent implements OnInit {
   uploadAttachment() {
     window.alert('Upload file !');
   }
+
+  makeJSON(event, index) {
+    setTimeout(() => {
+      this.tasksInfo.splice(index, 1);
+    }, 500);
+  }
 }

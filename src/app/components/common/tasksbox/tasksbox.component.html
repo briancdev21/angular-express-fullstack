@@ -3,7 +3,7 @@
     <span>YOUR TASKS</span>
   </div>
   <div class="activity-content">
-    <div class="activity-row" *ngFor="let task of tasksInfo">
+    <div class="activity-row" *ngFor="let task of tasksInfo; let i = index;">
       <div class="divider-box">
         <div class="date-sec">
           <span class="agenda-day">{{task.day}}</span>
@@ -21,7 +21,9 @@
           </div>
         </div>
       </div>
-      <mat-checkbox></mat-checkbox>
+      <mat-checkbox 
+        (change)="makeJSON($event.checked, i)">
+      </mat-checkbox>
     </div>
   </div>
 </div>
