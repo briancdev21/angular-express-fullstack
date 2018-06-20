@@ -234,7 +234,6 @@ export class ProfileComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService, private sharedService: SharedService) {
     this.contactInfoIndex = this.route.snapshot.paramMap.get('id');
     this.crmService.getIndividualContact(this.contactInfoIndex).subscribe(res => {
-      console.log('contactData: ', res.data);
       this.currentContact = res.data;
       this.dataRetrieved = true;
       // Update userInfo
