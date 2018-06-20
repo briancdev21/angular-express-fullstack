@@ -373,15 +373,15 @@
                 <td><input [(ngModel)]="acc.qty" ></td>
                 <td>
                   <div class="acc-td-price">
-                    $ <input decimal value="{{acc.friendPrice * acc.qty}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
-                    <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.friendPrice * acc.qty | number: '1.2-2'}}</span>
+                    $ <input decimal value="{{acc.price * acc.qty}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
+                    <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.price * acc.qty | number: '1.2-2'}}</span>
                   </div>
                 </td>
                 <td>
                   <div class="td-option">
                     <select [(ngModel)]="acc.option">
-                      <option value="optional">Optional</option>
-                      <option value="auto">Automatically</option>
+                      <option value="OPTIONAL">Optional</option>
+                      <option value="AUTOMATIC">Automatic</option>
                     </select>
                     <img src="assets/images/garbage.png" (click)="removeAcc(i, acc)">
                   </div>
@@ -391,13 +391,13 @@
             <div class="search-modal" [ngClass]="{'show-modal': !searchModalCollapsed, 'hide-modal': searchModalCollapsed}" (clickOutside)="removeSearchModal();">
               <div class="search-modal-content">
                 <table>
-                  <tr *ngFor="let product of productsInfoAll | SearchPipe: accQueryString : searchableList; let i = index;" (click)="addToAccessories(product)">
+                  <tr *ngFor="let product of availableProductsAll; let i = index;" (click)="addToAccessories(product)">
                     <td><img src="{{product.pictureURI}}" alt=""></td>
                     <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
-                    <td>{{product.modelNumber}}</td>
+                    <td>{{product.model}}</td>
                     <td>{{product.productType}}</td>
-                    <td>$ {{product.total | number: '2.2-2'}}</td>
+                    <td>$ {{product.price | number: '2.2-2'}}</td>
                   </tr>
                 </table>
                 
@@ -426,8 +426,8 @@
                 <td >
                   <div class="calcedPrice">
                     <div>
-                      $ <input value="{{alter.friendPrice * alter.qty}}" name="inputField" type="number" *ngIf="alterPriceEditable" (blur)="alterPriceEditable=false">
-                      <span *ngIf="!alterPriceEditable" (click)="alterPriceEditable=true">{{ alter.friendPrice * alter.qty | number: '1.2-2'}}</span>
+                      $ <input value="{{alter.price * alter.qty}}" name="inputField" type="number" *ngIf="alterPriceEditable" (blur)="alterPriceEditable=false">
+                      <span *ngIf="!alterPriceEditable" (click)="alterPriceEditable=true">{{ alter.price * alter.qty | number: '1.2-2'}}</span>
                       
                     </div>
                     <img src="assets/images/garbage.png" (click)="removeAlter(i, alter)">
@@ -438,7 +438,7 @@
             <div class="search-modal" [ngClass]="{'show-modal': !searchAlterModalCollapsed, 'hide-modal': searchAlterModalCollapsed}" (clickOutside)="removeSearchModal();">
               <div class="search-modal-content">
                 <table>
-                  <tr *ngFor="let product of productsInfoAll | SearchPipe: queryString : searchableList; let i = index;" (click)="addToAlternatives(product)">
+                  <tr *ngFor="let product of availableProductsAll; let i = index;" (click)="addToAlternatives(product)">
                     <td><img src="{{product.pictureURI}}" alt=""></td>
                     <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
@@ -455,7 +455,7 @@
             <button class="cancel-btn" (click)="clickBack('tab-four')">
               Back
             </button>
-            <button class="save-btn" (click)="closeModal()">
+            <button class="save-btn" (click)="saveAlterAcc()">
               Finish
             </button>
           </div>

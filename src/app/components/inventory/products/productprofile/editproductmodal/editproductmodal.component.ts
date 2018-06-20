@@ -115,7 +115,10 @@ export class EditProductModalComponent implements OnInit {
   variantsInfo: any;
   productId: any;
   brandsList = [];
-
+  availableProductsAll = [];
+  productsAll = [];
+  productAccessories = [];
+  productAlternatives = [];
 
   constructor(private productProfileService: ProductProfileService, private completerService: CompleterService,
     private route: ActivatedRoute, private suppliersService: SuppliersService,
@@ -177,6 +180,38 @@ export class EditProductModalComponent implements OnInit {
           this.productTags = this.addedProduct.keywordIds;
         });
       });
+
+      this.productsService.getProductsList().subscribe(response => {
+        this.productsAll = response.results;
+        console.log('products All: ', response);
+
+        this.productsService.getProductCatalog().subscribe(data => {
+          this.availableProductsAll = data.results;
+          console.log('availableproudcts : ', this.availableProductsAll);
+          this.availableProductsAll = this.availableProductsAll.filter(p => p.id !== this.productId);
+          this.availableProductsAll.forEach(ele => {
+            ele.pictureURI = this.productsAll.filter(p => p.id === ele.productId)[0].pictureURI;
+            ele.brandId =  this.productsAll.filter(p => p.id === ele.productId)[0].brandId;
+          });
+        });
+
+        this.productsService.getProductAccessoriesList(this.productId).subscribe(data => {
+          this.productAccessories = data.results;
+          this.productAccessories.forEach(element => {
+            this.addedAccList.push({
+              skuNumber: element.variant.sku,
+              productName: element.variant.name,
+              modelNumber: this.productsAll.filter(p => p.id === element.productId)[0].model,
+              brandId: this.productsAll.filter(p => p.id === element.productId)[0].brandId,
+              brandName: this.getBrandNameFromId(this.productsAll.filter(p => p.id === element.productId)[0].brandId),
+              qty: element.quantity,
+              option: element.option,
+              price: element.variant.cost
+            });
+          });
+          console.log('accessories: ', data);
+        });
+      });
     });
 
     this.sharedService.getCurrencies().subscribe(res => {
@@ -186,6 +221,11 @@ export class EditProductModalComponent implements OnInit {
     this.sharedService.getPricingCategories().subscribe(res => {
       this.pricingCategoriesListInfo = res.results;
       this.pricingCategoriesListInfo.map(p => p['price'] = 0);
+    });
+
+    this.productsService.getProductAlternativesList(this.productId).subscribe(data => {
+      this.productAlternatives = data.results;
+      console.log('alternatives: ', data);
     });
 
     this.searchableList = ['productName', 'model', 'brand'];
@@ -251,6 +291,35 @@ export class EditProductModalComponent implements OnInit {
         });
       }
     } else if (pos === 'tab-two') {
+      const savingProductMd = {
+        'brandId': this.selectedBrandId,
+        'productTypeId': this.selectedProductTypeId,
+        'supplierId': this.selectedSupplierId,
+        'keywordIds': this.selectedKeywordsId,
+        'model': this.addedProduct.model,
+        'name': this.addedProduct.productName,
+        'description': this.addedProduct.productDesc,
+        'inventoryType': this.addedProduct.inventoryType,
+        'unitOfMeasure': {
+          'quantity': this.addedProduct.measureCount ? this.addedProduct.measureCount : 0,
+          'unit': this.addedProduct.measureUnit
+        },
+        'expiration': {
+          'duration': this.addedProduct.expirationCount ? this.addedProduct.expirationCount : 0,
+          'unit': this.addedProduct.expirationType
+        },
+        'leadTime': {
+          'duration': this.addedProduct.leadTimeCount ? this.addedProduct.leadTimeCount : 0,
+          'unit': this.addedProduct.leadTimeUnit
+        }
+      };
+      // let savingProductData = JSON.stringify(savingProductMd);
+      if (savingProductMd.keywordIds === null) {
+        delete savingProductMd.keywordIds;
+      }
+      this.productsService.updateIndividualProduct(this.productId, savingProductMd).subscribe(res => {
+        console.log('saving edits: ', res);
+      });
       this.tabActiveThird = true;
       this.tabActiveFirst = false;
       this.tabActiveSecond = false;
@@ -444,7 +513,7 @@ export class EditProductModalComponent implements OnInit {
         sku: skuNumber + i,
         cost: this.addedProduct.unitCost,
         supplierCode: '',
-        priceAdjust: this.addedProduct.friendPrice,
+        priceAdjust: this.addedProduct.price,
         upcNumber: ''
       };
     }
@@ -480,9 +549,9 @@ export class EditProductModalComponent implements OnInit {
         productName: product.name,
         modelNumber: product.model,
         brandId: product.brandId,
-        qty: product.qty,
-        friendPrice: product.total,
-        option: 'optional',
+        qty: 1,
+        price: product.price,
+        option: 'OPTIONAL',
         brandName: this.getBrandNameFromId(product.brandId)
       };
       this.addedAccList.push(this.addedAcc);
@@ -497,8 +566,8 @@ export class EditProductModalComponent implements OnInit {
         productName: product.name,
         modelNumber: product.model,
         brandId: product.brandId,
-        qty: product.qty,
-        friendPrice: product.total,
+        qty: 1,
+        price: product.price,
         brandName: this.getBrandNameFromId(product.brandId)
       };
       this.addedAlterList.push(this.addedAlter);
@@ -547,7 +616,7 @@ export class EditProductModalComponent implements OnInit {
   }
 
   getBtnBackgoundColor() {
-    if (this.addedProduct.inventoryType === 'service') {
+    if (this.addedProduct.inventoryType === 'SERVICE') {
       return 'greyed';
     }
   }
@@ -588,6 +657,37 @@ export class EditProductModalComponent implements OnInit {
   }
 
   onUploadStateChanged(event) {
+  }
+
+  saveAlterAcc() {
+    this.closeEditProductModal.emit({'close': true});
+    this.tabActiveFirst = true;
+    this.tabActiveSecond = this.tabActiveThird = this.tabActiveFour = false;
+    this.addVariantConfirm = true;
+    this.addVariantContent = false;
+    this.editVariant = false;
+    console.log(this.addedAlterList, this.addedAccList);
+    this.addedAlterList.forEach(ele => {
+      const savingAlter = {
+        sku: ele.skuNumber,
+        quantity: ele.qty
+      };
+      this.productsService.createAlternative(this.productId, savingAlter).subscribe(res => {
+        console.log('saved alter: ', res);
+      });
+    });
+
+    this.addedAccList.forEach(ele => {
+      const savingAcc = {
+        sku: ele.skuNumber,
+        quantity: ele.qty,
+        option: ele.option
+      };
+      this.productsService.createAlternative(this.productId, savingAcc).subscribe(res => {
+        console.log('saved acc: ', res);
+        this.productProfileService.editModalClosed.next(true);
+      });
+    });
   }
 }
 
