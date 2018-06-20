@@ -39,6 +39,7 @@ import { TabModule } from 'angular-tabs-component';
 import { FormsModule } from '@angular/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { QuillModule } from 'ngx-quill';
+import { DpDatePickerModule } from 'ng2-date-picker';
 
 import { PmService } from './pm.service';
 import { TaskStableMapToKeysPipe } from './pmschedule/pmtaskstable/map-to-keys.pipe';
@@ -92,7 +93,8 @@ export const MY_NATIVE_FORMATS = {
     ClickOutsideModule,
     DragulaModule,
     QuillModule,
-    ProgressProductLogCmpModule
+    ProgressProductLogCmpModule,
+    DpDatePickerModule
   ],
   exports: [
     PmBreadcrumbBarComponent,

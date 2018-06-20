@@ -1,0 +1,357 @@
+.content-top {
+  display: flex;
+  justify-content: space-between;
+  padding: 25px 30px;
+}
+
+.content-top>span {
+  font-size: 19px;
+  color: #95989a;
+}
+
+span {
+  color: #95989A;
+  text-align: left;
+}
+
+.btn-style {
+  width: 150px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #a9f2df;
+  margin-left: 10px;
+  border-radius: 4px;
+  padding: 4px;
+  color: #95989a;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cards-sec {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 150px;
+}
+
+.card-style {
+  background: #F7F7F7;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 3px 10px 0px lightgrey;
+  border-radius: 5px;
+  width: 17%;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  padding: 7px;
+  color: #95989A;
+  justify-content: center;
+  border-bottom: 1px solid #D3D3D3;
+}
+
+.card-content {
+  color: #C5D92D;
+  font-size: 30px;
+  padding: 15px;
+  font-weight: 300;
+}
+
+.schedule-sec {
+  display: flex;
+  justify-content: space-between;
+}
+
+.schedule-sec img {
+  width: 20px;
+  height: 20px;
+}
+
+.schedule-panel {
+  width: 32%;
+  height: 265px;
+  overflow: auto;
+  background: #F5F5F5;
+  padding: 5px;
+  margin: 30px;
+}
+
+.panel-top {
+  border-bottom: 1px solid #95989A;
+  font-size: 14px;
+  padding: 10px 5px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-sec {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  position: relative;
+}
+
+.input-sec input {
+  border: 1px solid #D3D3D3;
+  font-size: 12px;
+  color: #95989A;
+  height: 25px;
+  padding-left: 10px;
+  background: transparent;
+  margin-right: 5px;
+}
+
+.input-sec input::placeholder {
+  color: #D3D3d3;
+  font-size: 11px;
+}
+
+.input-sec select {
+  height: 25px;
+  border: 1px solid #D3D3D3;
+  background: transparent;
+  font-size: 14px;
+  border-radius: 0 !important;
+  margin-right: 5px;
+  color: #95989A;
+}
+
+.input-sec input:first-child {
+  width: 60%;
+}
+
+.cost-default-value {
+  background: white;
+  padding: 5px 5px 5px 10px;
+  border: 1px solid #D3D3D3;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-right: 25px;
+}
+
+.cost-default-value span {
+  font-size: 15px;
+}
+
+.cost-amount {
+  text-align: right;
+  padding-right: 5px;
+}
+
+.addtianal-schedule {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.addtianal-schedule .cost-default-value {
+  margin-right: 5px;
+  margin-top: 0;
+  width: 100%;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.dollar-sign {
+  position: absolute;
+  right: 150px;
+  font-size: 11px
+}
+
+.month-picker {
+  width: 100%;
+}
+
+.month-picker-wrapper {
+  width: 70%;
+  margin-right: 5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 2%;
+}
+
+:host ::ng-deep .month-picker .dp-picker-input {
+  width: 100%;
+  height: 25px;
+  background: transparent;
+  border: 1px solid #D3D3D3;
+  font-size: 13px;
+  padding-left: 10px;
+  color: #95989A;
+}
+
+:host ::ng-deep .validation-required .month-picker .dp-picker-input {
+  border: 0;
+}
+
+:host ::ng-deep .month-picker .dp-picker-input::placeholder {
+  color: #D3D3D3;
+}
+
+:host ::ng-deep .month-picker dp-month-calendar .dp-calendar-month {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 52.5px;
+  height: 38px;
+  cursor: pointer;
+  background-color: white;
+  border: none;
+  font-size: 15px;
+  color: #646464;
+}
+
+:host ::ng-deep .month-picker dp-month-calendar .dp-calendar-wrapper {
+  border: 1px solid #d3d3d3;
+  padding: 5px;
+}
+
+:host ::ng-deep .month-picker dp-calendar-nav .dp-calendar-nav-container {
+  border: 1px solid #d3d3d3;
+}
+
+:host ::ng-deep .month-picker dp-calendar-nav .dp-nav-header {
+  font-size: 15px;
+  margin-left: 10px;
+  color: #95989A;
+}
+
+:host ::ng-deep .month-picker dp-month-calendar .dp-calendar-month.dp-selected {
+  color: white;
+  background-color: #95989a;
+}
+
+.validation-required {
+  border: 1px solid red;
+}
+
+.invalid-budget {
+  color: red;
+}
+
+.cost-default-value .schedule-percent {
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.cost-default-value>div {
+  display: flex;
+  width: 65%;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.cost-default-value input {
+  width: 1px;
+  height: 17px;
+  padding: 0;
+  font-size: 12px;
+  background: white;
+  background-position: left 6px center;
+  background-size: 22%;
+  color: #95989A;
+  visibility: hidden;
+  border: 0;
+}
+
+.schedule-date {
+  position: absolute;
+}
+
+
+/*  bottom btns section */
+
+.bottom-btns {
+  height: 55px;
+  border-top: 1px solid #95989A;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  padding: 7px;
+  background: white;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  user-select: none;
+  margin-top: 30px;
+}
+
+.btn-section {
+	display: flex;
+  margin-right: 35px;
+  top: 7px;
+}
+
+.next-btn {
+	background-color: #a9f2df;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 100px;
+	outline: none;
+	box-shadow: inset #99f3db 0 0 1px 1px;
+	margin: 5px;
+  color: gray;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cancel-btn {
+	background-color: lightgray;
+	border-radius: 3px;
+	height: 2.5rem;
+	font-size: 10px;
+	border: 0;
+	width: 80px;
+	outline: none;
+	margin: 5px;
+  color: gray;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+
+
+
+
+@media screen and (max-width: 1650px) {
+  .card-top {
+    font-size: 17px;
+  }
+  .cards-sec {
+    padding: 10px 120px;
+  }
+  .card-content {
+    font-size: 28px;
+  }
+}
+
+@media screen and (max-width: 1550px) {
+  .card-top {
+    font-size: 16px;
+  }
+  .cards-sec {
+    padding: 10px 100px;
+  }
+  .card-content {
+    font-size: 26px;
+  }
+}
