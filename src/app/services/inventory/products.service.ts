@@ -133,5 +133,14 @@ export class ProductsService {
     return this.http.get(url);
   }
 
+  createAlternative (id, body): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/alternatives`;
+    return this.http.post(url, body, this.options);
+  }
+
+  createAccessory (id, body): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/accessories`;
+    return this.http.post(url, body, this.options);
+  }
 }
 

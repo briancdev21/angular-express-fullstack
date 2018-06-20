@@ -13,11 +13,11 @@
           <th (click)="sortArray('options')">OPTIONS</th>
         </tr>
         <tr *ngFor="let product of productAccessories; let i = index">
-          <td>{{product.sku}}</td>
+          <td>{{product.variant.sku}}</td>
           <td>{{getProductName(product.productId)}}</td>
           <td>{{getModelNumber(product.productId)}}</td>
           <td>{{getBrandId(product.productId)}}</td>
-          <td>$ {{product.quantity}}</td>
+          <td>{{product.quantity}}</td>
           <td>$ {{product.total | number: '1.2-2'}}</td>
           <td>{{product.option}}</td>
         </tr>
@@ -37,11 +37,11 @@
           <th (click)="sortArray('price')">PRICE</th>
         </tr>
         <tr *ngFor="let product of productAlternatives; let i = index">
-          <td>{{product.sku}}</td>
+          <td>{{product.variant.sku}}</td>
           <td>{{getProductName(product.productId)}}</td>
           <td>{{getModelNumber(product.productId)}}</td>
           <td>{{getBrandId(product.productId)}}</td>
-          <td>$ {{product.quantity}}</td>
+          <td>{{product.quantity}}</td>
           <td>$ {{product.total | number: '1.2-2'}}</td>
         </tr>
       </table>

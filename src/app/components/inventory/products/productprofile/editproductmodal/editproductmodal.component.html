@@ -3,7 +3,7 @@
   <img class="close-btn" src="assets/images/x-sign-red.png" (click)="closeModal()"/>
 </div>
 
-<div class="content add-product-modal" >
+<div class="content add-product-modal" *ngIf="addedProduct">
   <tabs (currentTabChange)="tabChange($event)">
     <tab tabTitle="PRODUCT DETAILS" [active]="tabActiveFirst">
       <div class="tab-one">
@@ -16,7 +16,14 @@
               </div>
               <div>
                 <span>Product Type</span>
-                <ng2-completer [(ngModel)]="addedProduct.type" [ngClass]="{'completer-validation-required': invalidProductType}" placeholder="Add or search for product type" (selected)="onProductTypeSelected($event)"  [datasource]="productTypeNames" [minSearchLength]="0" class="auto-comp"></ng2-completer>
+                <ng2-completer 
+                  [(ngModel)]="addedProduct.type" 
+                  [ngClass]="{'completer-validation-required': invalidProductType}" 
+                  placeholder="Add or search for product type" 
+                  (selected)="onProductTypeSelected($event)"  
+                  [datasource]="productTypeNames" 
+                  [minSearchLength]="0" 
+                  class="auto-comp"></ng2-completer>
               </div>
             </div>
             <div class="content-right">
@@ -35,11 +42,27 @@
           <div class="supplier-brand">
             <div>
               <span>Supplier</span>
-              <ng2-completer [(ngModel)]="supplier" [ngClass]="{'completer-validation-required': invalidSupplier}" placeholder="Add or search for a supplier" [datasource]="suppliers" [minSearchLength]="0" class="auto-comp"></ng2-completer>
+              <ng2-completer 
+                [(ngModel)]="supplier" 
+                [ngClass]="{'completer-validation-required': invalidSupplier}" 
+                placeholder="Add or search for a supplier" 
+                [datasource]="suppliers" 
+                [minSearchLength]="0" 
+                (selected)="onSupplierSelected($event)"
+                class="auto-comp">
+              </ng2-completer>
             </div>
             <div>
               <span>Brand</span>
-              <ng2-completer [(ngModel)]="brand" [ngClass]="{'completer-validation-required': invalidManufacturer}" placeholder="Add or search for manufacturer" [datasource]="brands" [minSearchLength]="0" class="auto-comp"></ng2-completer>
+              <ng2-completer 
+                [(ngModel)]="brand" 
+                [ngClass]="{'completer-validation-required': invalidManufacturer}" 
+                placeholder="Add or search for manufacturer" 
+                [datasource]="brands" 
+                [minSearchLength]="0" 
+                (selected)="onBrandSelected($event)"
+                class="auto-comp">
+              </ng2-completer>
             </div>
           </div>
           <div class="product-name">
@@ -51,7 +74,7 @@
             <textarea placeholder="Enter product description" [ngClass]="{'validation-required': invalidProductDescription}" [(ngModel)]="addedProduct.productDesc" [value]="addedProduct.productDesc"></textarea>
           </div>
           <div class="tags" *ngIf="showAddProductModal">
-            <app-multikeywordselect [keywords]="productTags" placeholder="Enter tags for the product"></app-multikeywordselect>
+            <app-multikeywordselect [keywords]="productTags" placeholder="Enter tags for the product" (sendKeywords)="getKeywordsId($event)"></app-multikeywordselect>
           </div>
         </div>
         
@@ -81,7 +104,7 @@
               <div class="measure">
                 <span>Unit of Measure</span>
                 <div>
-                  <select [(ngModel)]="addedProduct.measure" >
+                  <select [(ngModel)]="addedProduct.measureUnit" >
                     <option value="PER_UNIT" selected>Per Unit</option>
                     <option value="PER_PACKAGE">Per Package</option>
                     <option value="PER_VOL">Per Volumn</option>
@@ -100,7 +123,7 @@
                     <option value="MONTHS">Months</option>
                     <option value="YEARS">Years</option>
                   </select>
-                  <input [(ngModel)]="addedProduct.expiration" type="number">
+                  <input [(ngModel)]="addedProduct.expirationCount" type="number">
                 </div>
               </div>
             </div>
@@ -141,7 +164,8 @@
                 <span>Lead Time</span>
                 <div>
                   <div class="greyed-select">
-                    <select [(ngModel)]="addedProduct.leadTime"  [ngClass]="{'greyed-layer': greyedService}">
+                    <select [(ngModel)]="addedProduct.leadTimeUnit"  [ngClass]="{'greyed-layer': greyedService}">
+                      <option value="HOURS">Hours</option>
                       <option value="DAYS" selected >Days</option>
                       <option value="WEEKS">Weeks</option>
                       <option value="MONTHS">Months</option>
@@ -219,7 +243,9 @@
     </tab>
     <tab tabTitle="PRODUCT VARIANCE" class="tab-won" [active]="tabActiveThird" >
       <div class="tab-three">
-        <div class="confirm-content" *ngIf="addVariantConfirm">
+        <!-- direct move to edit variant page -->
+        
+        <!-- <div class="confirm-content" *ngIf="addVariantConfirm">
           <span>Would you like to add variants to this product?</span>
           <div class="btn-section" >
             <button class="cancel-btn" (click)="moveToFourthTab()" >
@@ -252,8 +278,8 @@
               <img src="assets/images/Add-Button.svg" >
             </div>
           </div>
-        </div>
-        <div class="edit-variant" *ngIf="editVariant">
+        </div> -->
+        <div class="edit-variant">
           <span>Edit Variant</span>
           <table>
             <tr>
@@ -265,31 +291,32 @@
               <th>PRICE ADJUST</th>
               <th>UPC NUMBER</th>
             </tr>
-            <tr *ngFor="let variant of addedProduct.variantProducts; let i = index">
+            <tr *ngFor="let variant of variantsInfo; let i = index">
               <td>{{variant.name}}</td>
-              <td><input placeholder="" [(ngModel)]="variant.qty" type="number"></td>
+              <td><input placeholder="" [(ngModel)]="variant.quantity" type="number"></td>
               <td><input placeholder="" [(ngModel)]="variant.sku" ></td>
               <td>
                 <div class="td-input">
                   <span style="margin-right: 5px">$</span>
-                  <input placeholder="0.00" [(ngModel)]="variant.cost" type="number" *ngIf="variableCostEditable" (blur)="variableCostEditable=false">
-                  <span *ngIf="!variableCostEditable" (click)="variableCostEditable=true">{{variant.cost | number: '1.2-2'}}</span>
+                  <!-- <input placeholder="0.00" [(ngModel)]="variant.cost" type="number" *ngIf="variableCostEditable" (blur)="variableCostEditable=false"> -->
+                  <span *ngIf="!variableCostEditable" >{{variant.cost | number: '1.2-2'}}</span>
                 </div>  
               </td>
               <td><input placeholder="Supplier code here" [(ngModel)]="variant.supplierCode" [ngClass]="{'supplier-code-validation': !variant.supplierCode && missingSupplierCode}"></td>
               <td>
                 <div class="td-input">
                   <span style="margin-right: 5px">$</span>
-                  <input placeholder="0.00" [(ngModel)]="variant.priceAdjust" type="number" *ngIf="variablePriceEditable" (blur)="variablePriceEditable=false">
-                  <span *ngIf="!variablePriceEditable" (click)="variablePriceEditable=true">{{variant.priceAdjust | number: '1.2-2'}}</span>
+                  <!-- <input placeholder="0.00" [(ngModel)]="variant.priceAdjust" type="number" *ngIf="variablePriceEditable" (blur)="variablePriceEditable=false"> -->
+                  <span *ngIf="!variablePriceEditable" >{{variant.priceAdjustment | number: '1.2-2'}}</span>
                 </div>
               </td>
-              <td><input placeholder="UPC number here" [(ngModel)]="variant.upcNumber" [ngClass]="{'upc-validation': !variant.upcNumber && missingUpcNumber}"></td>
+              <td><input placeholder="UPC number here" disabled [(ngModel)]="variant.upc" [ngClass]="{'upc-validation': !variant.upcNumber && missingUpcNumber}"></td>
             </tr>
           </table>
         </div>
-        
-        <div class="btn-section" *ngIf="addVariantConfirm">
+        <!-- direct move to edit variant page -->
+
+        <!-- <div class="btn-section" *ngIf="addVariantConfirm">
           <button class="cancel-btn rewwer" (click)="clickNext('tab-one')"  >
             Back
           </button>
@@ -304,8 +331,8 @@
           <button class="save-btn" (click)="moveToEdit()">
             Next
           </button>
-        </div>
-        <div class="btn-section" *ngIf="editVariant">
+        </div> -->
+        <div class="btn-section">
           <button class="cancel-btn 123" (click)="addVariantContent=true; editVariant=false;">
             Back
           </button>
@@ -346,15 +373,15 @@
                 <td><input [(ngModel)]="acc.qty" ></td>
                 <td>
                   <div class="acc-td-price">
-                    $ <input decimal value="{{acc.friendPrice * acc.qty}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
-                    <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.friendPrice * acc.qty | number: '1.2-2'}}</span>
+                    $ <input decimal value="{{acc.price * acc.qty}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
+                    <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.price * acc.qty | number: '1.2-2'}}</span>
                   </div>
                 </td>
                 <td>
                   <div class="td-option">
                     <select [(ngModel)]="acc.option">
-                      <option value="optional">Optional</option>
-                      <option value="auto">Automatically</option>
+                      <option value="OPTIONAL">Optional</option>
+                      <option value="AUTOMATIC">Automatic</option>
                     </select>
                     <img src="assets/images/garbage.png" (click)="removeAcc(i, acc)">
                   </div>
@@ -364,13 +391,13 @@
             <div class="search-modal" [ngClass]="{'show-modal': !searchModalCollapsed, 'hide-modal': searchModalCollapsed}" (clickOutside)="removeSearchModal();">
               <div class="search-modal-content">
                 <table>
-                  <tr *ngFor="let product of productsInfoAll | SearchPipe: accQueryString : searchableList; let i = index;" (click)="addToAccessories(product)">
+                  <tr *ngFor="let product of availableProductsAll; let i = index;" (click)="addToAccessories(product)">
                     <td><img src="{{product.pictureURI}}" alt=""></td>
                     <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
-                    <td>{{product.modelNumber}}</td>
+                    <td>{{product.model}}</td>
                     <td>{{product.productType}}</td>
-                    <td>$ {{product.total | number: '2.2-2'}}</td>
+                    <td>$ {{product.price | number: '2.2-2'}}</td>
                   </tr>
                 </table>
                 
@@ -399,8 +426,8 @@
                 <td >
                   <div class="calcedPrice">
                     <div>
-                      $ <input value="{{alter.friendPrice * alter.qty}}" name="inputField" type="number" *ngIf="alterPriceEditable" (blur)="alterPriceEditable=false">
-                      <span *ngIf="!alterPriceEditable" (click)="alterPriceEditable=true">{{ alter.friendPrice * alter.qty | number: '1.2-2'}}</span>
+                      $ <input value="{{alter.price * alter.qty}}" name="inputField" type="number" *ngIf="alterPriceEditable" (blur)="alterPriceEditable=false">
+                      <span *ngIf="!alterPriceEditable" (click)="alterPriceEditable=true">{{ alter.price * alter.qty | number: '1.2-2'}}</span>
                       
                     </div>
                     <img src="assets/images/garbage.png" (click)="removeAlter(i, alter)">
@@ -411,7 +438,7 @@
             <div class="search-modal" [ngClass]="{'show-modal': !searchAlterModalCollapsed, 'hide-modal': searchAlterModalCollapsed}" (clickOutside)="removeSearchModal();">
               <div class="search-modal-content">
                 <table>
-                  <tr *ngFor="let product of productsInfoAll | SearchPipe: queryString : searchableList; let i = index;" (click)="addToAlternatives(product)">
+                  <tr *ngFor="let product of availableProductsAll; let i = index;" (click)="addToAlternatives(product)">
                     <td><img src="{{product.pictureURI}}" alt=""></td>
                     <td>{{product.name}}</td>
                     <td>{{product.sku}}</td>
@@ -428,7 +455,7 @@
             <button class="cancel-btn" (click)="clickBack('tab-four')">
               Back
             </button>
-            <button class="save-btn" (click)="closeModal()">
+            <button class="save-btn" (click)="saveAlterAcc()">
               Finish
             </button>
           </div>
