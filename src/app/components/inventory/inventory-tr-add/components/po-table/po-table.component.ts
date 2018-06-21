@@ -120,14 +120,18 @@ export class POTableComponent implements OnInit {
     }
   }
 
+
   checkDiscount(e) {
-    if (e.target.value > 100) { e.target.value = 100; }
-    if (e.target.value < 0) { e.target.value = undefined; }
+    if (e.which < 47 || e.which > 58 ) {  return false; }
+    if (e.target.value >= 100) { e.target.value = 100;  return false; }
+    if (e.target.value < 0) { e.target.value = undefined;  return false;  }
   }
 
   checkValue(e) {
-    if (e.target.value < 0) { e.target.value = undefined; }
+    if (e.which < 47 || e.which > 58 ) { return false; }
+    if (e.target.value < 0) { e.target.value = undefined; return false;  }
   }
+
 
   changedTaxRate(index, e) {
     this.selectedTaxRateId =  this.taxRateOptions[e.target.selectedIndex].id;
