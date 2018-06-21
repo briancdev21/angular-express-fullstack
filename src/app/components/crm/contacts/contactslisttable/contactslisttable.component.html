@@ -8,7 +8,7 @@
       <th (click)="sortArray('accountType')">TYPE <img src="assets/images/Edit.png"></th>
     </tr>
     <tr *ngFor="let contact of contactsListInfo; let i = index" (click)="redirectTo(contact.id)">
-      <td *ngIf="contact.type === 'PERSON'">{{contact.person.firstName}} {{contact.person.lastName}}</td> <td *ngIf="contact.type === 'BUSINESS'">{{contact.business.name}}</td>
+      <td *ngIf="contact.type === 'PERSON'">{{contact.name}}</td> <td *ngIf="contact.type === 'BUSINESS'">{{contact.business.name}}</td>
       <td [ngClass]="{'green': contact.rating > 80}">{{contact.accountRating}}%</td>
       <td [ngClass]="{'green': contact.totalDeals > 0}">{{contact.totalNumberOfDeals}}</td> 
       <td >

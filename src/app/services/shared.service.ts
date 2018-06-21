@@ -171,7 +171,17 @@ export class SharedService {
   // Contact
   getContacts() {
     const url = `${environment.apiUrl}/crm/contacts/`;
-    return this.http.get(url).map(data => data['results']);
+    const contactsList = this.http.get(url).map(data => data['results']);
+    contactsList.forEach(ele => {
+      if (ele.type === 'PERSON') {
+        ele.name = ele.person.firstName + ' ' + ele.person.lastName;
+      } else if (ele.type === 'BUSINESS') {
+        ele.name = ele.business.name;
+      } else {
+        return [];
+      }
+    });
+    return contactsList;
   }
   getContact(id) {
     const url = `${environment.apiUrl}/crm/contacts/${id}`;

@@ -68,7 +68,7 @@
             <select #emailcontacts (change)="activity.contact=emailcontacts.value">
               <option>Select Contact</option>
               <option [value]="contact.id" *ngFor="let contact of contactsList" >
-                {{contact.person.firstName}} {{contact.person.lastName}}
+                {{contact.name}}
               </option>
             </select>
           </div>
@@ -78,7 +78,7 @@
           <select #callcontacts (change)="activity.contact=callcontacts.value" >
             <option>Select Contact</option>
             <option [value]="contact.id" *ngFor="let contact of contactsList" >
-              {{contact.person.firstName}} {{contact.person.lastName}}
+              {{contact.name}}
             </option>
           </select>
           <textarea placeholder="Start tying..." #textarea3 (input)="activity.content=textarea3.value" (keyup.enter)="addNewTimelineItem(); textarea3.value=''"></textarea>

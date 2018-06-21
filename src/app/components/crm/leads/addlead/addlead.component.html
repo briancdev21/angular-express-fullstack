@@ -33,7 +33,7 @@
 							<span>Head contact</span>
 							<div *ngIf="contactsList">
                 <select [(ngModel)]="headContact">
-                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.person.firstName}} {{contact.person.lastName}}</option>
+                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.name}}</option>
                 </select>
               </div>
 						</div> 
@@ -117,7 +117,7 @@
               <span>Business association</span>
               <div *ngIf="contactsList">
                 <select [(ngModel)]="businessAssociation">
-                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.person.firstName}} {{contact.person.lastName}}</option>
+                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.name}}</option>
                 </select>
               </div>
             </div>
@@ -190,7 +190,7 @@
               <span>Contact name</span>
               <div *ngIf="contactsList">
                 <select [(ngModel)]="contactName">
-                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.person.firstName}} {{contact.person.lastName}}</option>
+                  <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.name}}</option>
                 </select>
               </div>
             </div>
