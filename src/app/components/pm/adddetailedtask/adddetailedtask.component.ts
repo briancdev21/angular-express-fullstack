@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { SubTasksManagementComponent } from './subtasksmanagement/subtasksmanagement.component';
 import { MultiKeywordSelectComponent } from './../../profile/multikeywordselect/multikeywordselect.component';
-import { PmService } from '../projectmanagement/pm.service';
+import { ProjectManagementService } from '../projectmanagement/projectmanagement.service';
 import * as moment from 'moment';
 
 @Component({
@@ -99,7 +99,7 @@ export class AddDetailedTaskComponent implements OnInit {
   duration = 0;
   updatingInProgress = false;
 
-  constructor( private pmService: PmService ) {
+  constructor( private pmService: ProjectManagementService ) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;

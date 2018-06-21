@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../../pm.service';
+import { ProjectManagementService } from '../../projectmanagement.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 // import {GanttComponent, GanttConfiguration, GanttTaskItem, GanttTaskLink, GanttEvents } from 'gantt-ui-component';
@@ -33,7 +33,7 @@ export class GanttChartComponent implements OnInit {
 
   displayMonthes = [];
   dayCountArr = [];
-  constructor( private pmService: PmService ) {
+  constructor( private pmService: ProjectManagementService ) {
   }
 
   ngOnInit() {

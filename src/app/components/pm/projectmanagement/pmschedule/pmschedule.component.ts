@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../pm.service';
+import { ProjectManagementService } from '../projectmanagement.service';
 import { PmTasksData, TaskModel, SubTaskModel } from '../../../../models/pmtasksdata.model';
 import * as moment from 'moment';
 
@@ -483,7 +483,7 @@ export class PmScheduleComponent implements OnInit {
   tabActiveFirst = true;
   tabActiveSecond = false;
 
-  constructor( private pmService: PmService ) {
+  constructor( private pmService: ProjectManagementService ) {
     this.subscription = this.pmService.openDetailedTaskModal().subscribe(data => {
       this.showDetailedTaskModal = data.openModal;
       this.updatingTaskPosition = data.milestone;

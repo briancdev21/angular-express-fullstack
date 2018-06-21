@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../../../pm.service';
+import { ProjectManagementService } from '../../../projectmanagement.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
@@ -10,7 +10,6 @@ import * as moment from 'moment';
   styleUrls: [
     './changeloglisttable.component.css',
   ],
-  providers: [PmService],
 })
 
 
@@ -23,7 +22,7 @@ export class ChangeLogListTableComponent implements OnInit {
   sortScoreClicked = true;
   dateNow = new Date();
   aweekLater = new Date();
-  constructor( private pmService: PmService, private router: Router ) {
+  constructor( private pmService: ProjectManagementService, private router: Router ) {
   }
 
   ngOnInit() {

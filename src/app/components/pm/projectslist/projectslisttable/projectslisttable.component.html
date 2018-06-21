@@ -8,7 +8,7 @@
       <th (click)="sortArray('total')">PROJECT TOTAL</th>
       <th (click)="sortArray('projectHealth')">WORK ORDER COMPLETION</th>
     </tr>
-    <tr *ngFor="let projectslist of projectsListInfo; let i = index" (click)="redirectTo(projectslist.projectNumber)">
+    <tr *ngFor="let projectslist of projectsListInfo; let i = index" (click)="redirectTo(projectslist.id)">
       <td>{{projectslist.id}}</td>
       <td>{{projectslist.projectName}}</td>
       <td><span *ngIf="projectslist.contactId">{{getContactName(projectslist.contactId)}}</span></td>

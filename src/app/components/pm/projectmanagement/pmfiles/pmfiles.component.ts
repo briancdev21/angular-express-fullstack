@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../pm.service';
+import { ProjectManagementService } from '../projectmanagement.service';
 
 @Component({
   selector: 'app-pmfiles',
@@ -12,7 +12,7 @@ import { PmService } from '../pm.service';
 
 export class PmFilesComponent implements OnInit {
 
-  constructor( private pmService: PmService ) {
+  constructor( private pmService: ProjectManagementService ) {
   }
 
   ngOnInit() {

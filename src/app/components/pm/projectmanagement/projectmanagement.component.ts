@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../../components/common/common.component';
 import { PmBreadcrumbBarComponent } from './pmbreadcrumbbar/pmbreadcrumbbar.component';
-import { PmService } from './pm.service';
+import { ProjectManagementService } from './projectmanagement.service';
 
 @Component({
   selector: 'app-projectmanagement',

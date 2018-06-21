@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonComponent } from '../../../../common/common.component';
-import { PmService } from '../../pm.service';
+import { ProjectManagementService } from '../../projectmanagement.service';
 import { DragulaService } from 'ng2-dragula';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -61,7 +61,7 @@ export class PmTasksTableComponent implements OnInit {
     },
   ];
 
-  constructor( private dragulaService: DragulaService, private pmService: PmService, private fb: FormBuilder ) {
+  constructor( private dragulaService: DragulaService, private pmService: ProjectManagementService, private fb: FormBuilder ) {
     dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });

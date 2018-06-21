@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../pm.service';
+import { ProjectManagementService } from '../projectmanagement.service';
 
 @Component({
   selector: 'app-pmboard',
@@ -595,7 +595,7 @@ export class PmBoardComponent implements OnInit {
     title: 'Project health is at ' + this.projectInfo.projectHealth + '%',
     completeness: this.projectInfo.projectHealth,
   };
-  constructor( private pmService: PmService ) {
+  constructor( private pmService: ProjectManagementService ) {
   }
 
   ngOnInit() {

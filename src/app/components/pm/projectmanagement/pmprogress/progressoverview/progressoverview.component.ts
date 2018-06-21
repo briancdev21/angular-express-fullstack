@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../../pm.service';
+import { ProjectManagementService } from '../../projectmanagement.service';
 
 @Component({
   selector: 'app-progressoverview',
@@ -201,7 +201,7 @@ export class ProgressOverviewComponent implements OnInit {
       passedDays: 'Yesterday'
     }
   ];
-  constructor( private pmService: PmService ) {
+  constructor( private pmService: ProjectManagementService ) {
   }
 
   ngOnInit() {
