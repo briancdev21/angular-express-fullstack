@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { PmService } from '../../pm.service';
 import * as moment from 'moment';
+import { SharedService } from '../../../../services/shared.service';
+import { ProjectsService } from '../../../../services/projects.service';
 
 @Component({
   selector: 'app-pmfinancials',
@@ -61,16 +63,28 @@ export class PmFinancialsComponent implements OnInit {
   scheduleDateList = [];
   today = moment().format('YYYY-MM-DD');
   currentProjectId: any;
+  projectInfo: any;
+  contactsList: any;
 
-  constructor( private pmService: PmService, private router: Router ) {
-    this.pmService.currentProjectId.subscribe(data => {
-      console.log('current project id:', data);
-      if (data === '') {
-        return;
-      } else {
-        this.currentProjectId = data;
-      }
-    });
+  constructor( private pmService: PmService, private router: Router, private sharedService: SharedService,
+    private projectsService: ProjectsService, private route: ActivatedRoute ) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
+
+    if (this.currentProjectId !== '') {
+      this.sharedService.getContacts().subscribe(data => {
+        this.contactsList = data;
+
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+
+          this.projectInfo = res.data;
+          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+          console.log('indi project: ', this.projectInfo);
+        });
+
+      });
+    } else {
+      console.error('product id error');
+    }
   }
 
   ngOnInit() {
@@ -196,6 +210,9 @@ export class PmFinancialsComponent implements OnInit {
     this.router.navigate(['./pm/pending-project/pending-tasks']);
   }
 
-
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
 
 }

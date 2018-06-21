@@ -28,6 +28,11 @@ export class ProjectsService {
     return this.http.get(url);
   }
 
+  getIndividualProject(id): Observable<any>  {
+    const url = `${environment.apiUrl}/project-management/projects/${id}`;
+    return this.http.get(url);
+  }
+
   // createSupplier (body): Observable<any> {
   //   // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
   //   const url = `${apiUrl}inventory/suppliers/`;

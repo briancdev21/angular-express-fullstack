@@ -1,130 +1,132 @@
-<div class="content-top">
-  <span>PROJECT FINANCIALS</span>
-  <div class="btn-style">Add Document</div>
-</div>
+<div *ngIf="projectInfo">
+  <div class="content-top" >
+    <span>{{projectInfo.contactName}}</span>
+    <span>{{projectInfo.id}}</span>
+  </div>
 
-<div class="cards-sec">
-  <div class="card-style">
-    <div class="card-top">TOTAL BUDGET</div>
-    <div class="card-content">${{financialsInfo.totalBudget | number: '1.2-2'}}</div>
-  </div>
-  <div class="card-style">
-    <div class="card-top">PURCHASE ORDERS</div>
-    <div class="card-content">${{financialsInfo.purchaseOrders | number: '1.2-2'}}</div>
-  </div>
-  <div class="card-style">
-    <div class="card-top">RESERVED INVENTORY</div>
-    <div class="card-content">${{financialsInfo.reservedInventory | number: '1.2-2'}}</div>
-  </div>
-  <div class="card-style">
-    <div class="card-top">LABOUR COSTS</div>
-    <div class="card-content">${{financialsInfo.labourCosts | number: '1.2-2'}}</div>
-  </div>
-  <div class="card-style">
-    <div class="card-top">TOTAL REVENUE</div>
-    <div class="card-content">${{financialsInfo.totalRevenue | number: '1.2-2'}}</div>
-  </div>
-</div>
-
-<div class="schedule-sec">
-  <div class="schedule-panel">
-    <div class="panel-top">
-      <span>COST SUMMARY</span>
+  <div class="cards-sec" >
+    <div class="card-style">
+      <div class="card-top">PROJECT BUDGET</div>
+      <div class="card-content">$ {{projectInfo.budget | number: '1.2-2'}}</div>
     </div>
-    <div class="cost-summary-content">
-      <div class="input-sec">
-        <input placeholder="Type title of cost assocated with project here..." [(ngModel)]="costTitle">
-        <select [(ngModel)]="costType" (ngModelChange)="costTypeChange()">
-          <option value="amount">$</option>
-          <option value="percent">%</option>
-        </select>
-        <input placeholder="0.00" [(ngModel)]="costAmount" class="cost-amount" type="number" (input)="checkCostInputValidation(costAmount, costType)">
-        <img src="assets/images/add-button.png" (click)="addCost(costTitle, costType, costAmount)">
+    <div class="card-style">
+      <div class="card-top">BUDGET USERD</div>
+      <div class="card-content">$ {{(projectInfo.budget - projectInfo.budgetRemaining) | number: '1.2-2'}}</div>
+    </div>
+    <div class="card-style">
+      <div class="card-top">BUDGET VS USED</div>
+      <div class="card-content">{{projectInfo.budgetUsedRatio | number: '1.2-2'}} %</div>
+    </div>
+    <div class="card-style">
+      <div class="card-top">PROJECT REVENUE</div>
+      <div class="card-content">$ {{projectInfo.revenue | number: '1.2-2'}}</div>
+    </div>
+    <div class="card-style">
+      <div class="card-top">LABOUR COSTS</div>
+      <div class="card-content">$ {{projectInfo.labourCost | number: '1.2-2'}}</div>
+    </div>
+  </div>
+
+  <div class="schedule-sec">
+    <div class="schedule-panel">
+      <div class="panel-top">
+        <span>COST SUMMARY</span>
       </div>
-      <div class="cost-default-value">
-        <span>Purchase Orders</span>
-        <span>${{financialsInfo.purchaseOrders | number: '1.2-2'}}</span>
-      </div>
-      <div class="cost-default-value">
-        <span>Inventory</span>
-        <span>${{financialsInfo.reservedInventory | number: '1.2-2'}}</span>
-      </div>
-      <div class="cost-default-value">
-        <span>Labour Costs</span>
-        <span>${{financialsInfo.labourCosts | number: '1.2-2'}}</span>
-      </div>
-      <div *ngFor="let cost of additionalCosts; let i = index" class="addtianal-schedule">
-        <div class="cost-default-value">
-          <span>{{cost.title}}</span>
-          <span>${{cost.value | number: '1.2-2'}}</span>
+      <div class="cost-summary-content">
+        <div class="input-sec">
+          <input placeholder="Type title of cost assocated with project here..." [(ngModel)]="costTitle">
+          <select [(ngModel)]="costType" (ngModelChange)="costTypeChange()">
+            <option value="amount">$</option>
+            <option value="percent">%</option>
+          </select>
+          <input placeholder="0.00" [(ngModel)]="costAmount" class="cost-amount" type="number" (input)="checkCostInputValidation(costAmount, costType)">
+          <img src="assets/images/add-button.png" (click)="addCost(costTitle, costType, costAmount)">
         </div>
-        <img src="assets/images/error.png" (click)="removeAddtional(i)">
-      </div>
-    </div>
-  </div>
-
-  <div class="schedule-panel">
-    <div class="panel-top">
-      <span>BUDGET</span>
-      <span [ngClass]="{'invalid-budget': invalidBudget}">UNUSED BUDGET $ {{unusedBudget | number: '1.2-2'}}</span>
-    </div>
-    <div class="budget-summary">
-      <div class="input-sec">
-        <div [ngClass]="{'validation-required': invalidDate}" class="month-picker-wrapper">
-          <dp-date-picker [(ngModel)]="selectedDate" [config]="monthPickerConfig" placeholder="Choose a month here..." mode="month" theme="month-picker"></dp-date-picker>
-          <img src="assets/images/calendar with Edit.png" class="calendar-icon">
-        </div>
-        <span class="dollar-sign">$</span>
-        <input placeholder="0.00" [(ngModel)]="budgetAmount" class="cost-amount" type="number">
-        <img src="assets/images/add-button.png" (click)="addBudget(selectedDate, budgetAmount)">
-      </div>
-      <div *ngFor="let budget of budgetList; let i = index" class="addtianal-schedule">
         <div class="cost-default-value">
-          <span>{{budget.date}}</span>
-          <span>${{budget.value | number: '1.2-2'}}</span>
+          <span>Purchase Orders</span>
+          <span>${{financialsInfo.purchaseOrders | number: '1.2-2'}}</span>
         </div>
-        <img src="assets/images/error.png" (click)="removeBudget(i)">
-      </div>
-    </div>
-  </div>
-
-  <div class="schedule-panel">
-    <div class="panel-top">
-      <span>PAYMENT SCHEDULE</span>
-    </div>
-    <div class="payment-schedule-section">
-      <div *ngFor="let schedule of paymentSchedule; let i = index" class="addtianal-schedule">
         <div class="cost-default-value">
-          <div>
-            <input 
-              [owlDateTime]="scheduleDate" 
-              [owlDateTimeTrigger]="scheduleDate" 
-              (dateTimeChange)="selectScheduleDate($event, i)"
-              [disabled]="checkOverdue[i]"
-              [min]="today"
-            >
-            <owl-date-time [pickerType]="'calendar'" #scheduleDate [disabled]="checkOverdue[i]"></owl-date-time>
-            <span *ngIf="checkOverdue" [owlDateTimeTrigger]="scheduleDate" class="schedule-date">{{scheduleDateList[i]}}</span>
-            <span class="schedule-percent">{{schedule.percent}}% of Proposal</span>
+          <span>Inventory</span>
+          <span>${{financialsInfo.reservedInventory | number: '1.2-2'}}</span>
+        </div>
+        <div class="cost-default-value">
+          <span>Labour Costs</span>
+          <span>${{financialsInfo.labourCosts | number: '1.2-2'}}</span>
+        </div>
+        <div *ngFor="let cost of additionalCosts; let i = index" class="addtianal-schedule">
+          <div class="cost-default-value">
+            <span>{{cost.title}}</span>
+            <span>${{cost.value | number: '1.2-2'}}</span>
           </div>
-          <span>${{schedule.amount | number: '1.2-2'}}</span>
+          <img src="assets/images/error.png" (click)="removeAddtional(i)">
+        </div>
+      </div>
+    </div>
+
+    <div class="schedule-panel">
+      <div class="panel-top">
+        <span>BUDGET</span>
+        <span [ngClass]="{'invalid-budget': invalidBudget}">UNUSED BUDGET $ {{unusedBudget | number: '1.2-2'}}</span>
+      </div>
+      <div class="budget-summary">
+        <div class="input-sec">
+          <div [ngClass]="{'validation-required': invalidDate}" class="month-picker-wrapper">
+            <dp-date-picker [(ngModel)]="selectedDate" [config]="monthPickerConfig" placeholder="Choose a month here..." mode="month" theme="month-picker"></dp-date-picker>
+            <img src="assets/images/calendar with Edit.png" class="calendar-icon">
+          </div>
+          <span class="dollar-sign">$</span>
+          <input placeholder="0.00" [(ngModel)]="budgetAmount" class="cost-amount" type="number">
+          <img src="assets/images/add-button.png" (click)="addBudget(selectedDate, budgetAmount)">
+        </div>
+        <div *ngFor="let budget of budgetList; let i = index" class="addtianal-schedule">
+          <div class="cost-default-value">
+            <span>{{budget.date}}</span>
+            <span>${{budget.value | number: '1.2-2'}}</span>
+          </div>
+          <img src="assets/images/error.png" (click)="removeBudget(i)">
+        </div>
+      </div>
+    </div>
+
+    <div class="schedule-panel">
+      <div class="panel-top">
+        <span>PAYMENT SCHEDULE</span>
+      </div>
+      <div class="payment-schedule-section">
+        <div *ngFor="let schedule of paymentSchedule; let i = index" class="addtianal-schedule">
+          <div class="cost-default-value">
+            <div>
+              <input 
+                [owlDateTime]="scheduleDate" 
+                [owlDateTimeTrigger]="scheduleDate" 
+                (dateTimeChange)="selectScheduleDate($event, i)"
+                [disabled]="checkOverdue[i]"
+                [min]="today"
+              >
+              <owl-date-time [pickerType]="'calendar'" #scheduleDate [disabled]="checkOverdue[i]"></owl-date-time>
+              <span *ngIf="checkOverdue" [owlDateTimeTrigger]="scheduleDate" class="schedule-date">{{scheduleDateList[i]}}</span>
+              <span class="schedule-percent">{{schedule.percent}}% of Proposal</span>
+            </div>
+            <span>${{schedule.amount | number: '1.2-2'}}</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="table-sec">
-  <!-- <app-projectfinancialstable></app-projectfinancialstable> -->
-</div>
+  <div class="table-sec">
+    <!-- <app-projectfinancialstable></app-projectfinancialstable> -->
+  </div>
 
-<div class="bottom-btns">
-  <div class="btn-section" >
-    <button class="cancel-btn" (click)="toProjectTasks()">
-      Back
-    </button>
-    <button class="next-btn" (click)="startProject()">
-      Start the Project
-    </button>
+  <div class="bottom-btns">
+    <div class="btn-section" >
+      <button class="cancel-btn" (click)="toProjectTasks()">
+        Back
+      </button>
+      <button class="next-btn" (click)="startProject()">
+        Start the Project
+      </button>
+    </div>
   </div>
 </div>
