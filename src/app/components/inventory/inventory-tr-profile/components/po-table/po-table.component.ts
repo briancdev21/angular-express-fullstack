@@ -67,7 +67,7 @@ export class POTableComponent implements OnInit {
   po_id: number;
   taxRateOptions = [];
   selectedTaxRateId: number;
-  poProductModel: any;
+  trProductModel: any;
   productDetails = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
@@ -114,17 +114,11 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].unitPrice = item.originalObject.cost;
       this.productDetails[index].name = product.name;
       this.productDetails[index].measure = product.unitOfMeasure.quantity;
-      this.poProductModel = {
-        sku: item.originalObject.sku,
+      this.trProductModel = {
         taxRateId: this.taxRateOptions[0].id,
-        supplierId: product.supplierId,
-        discount: {
-          value: 0,
-          unit: 'PERCENT'
-        },
         quantity: 1
       };
-      this.sharedService.addTransferProduct(this.po_id, this.poProductModel).subscribe(resp => {
+      this.sharedService.addTransferProduct(this.po_id, this.trProductModel).subscribe(resp => {
         this.productDetails[index].purchaseOrderProductId = resp.data.id;
       });
     });
@@ -140,26 +134,14 @@ export class POTableComponent implements OnInit {
   }
 
   calcualteTotalPrice(index: number) {
-    const product = this.productDetails[index];
-    if (product.discount < 0 )  { product.discount = 0; }
-    if (product.discount > 100 ) { product.discount = 100; }
-
-    let discount = product.discount;
-    if ( discount === undefined ) { discount = 0; }
-    if ( product.unitPrice !== undefined && product.quantity !== undefined ) {
-      product.total = product.unitPrice * product.quantity * (100 - discount)  / 100;
-      this.priceChange.emit(null);
-    }
-  }
-
-  checkDiscount(e) {
-    if (e.target.value > 100) { e.target.value = 100; }
-    if (e.target.value < 0) { e.target.value = undefined; }
+    this.updatePurchaseOrderProduct(index);
   }
 
   checkValue(e) {
-    if (e.target.value < 0) { e.target.value = undefined; }
+    if (e.which < 47 || e.which > 58 ) { return false; }
+    if (e.target.value < 0) { e.target.value = undefined; return false;  }
   }
+
 
   changedTaxRate(index, e) {
     this.selectedTaxRateId =  this.taxRateOptions[e.target.selectedIndex].id;
@@ -168,25 +150,16 @@ export class POTableComponent implements OnInit {
   }
 
   updatePurchaseOrderProduct(index) {
-    if (this.productDetails[index].discount === undefined) {
-      this.productDetails[index].discount = 0;
-    }
     if (this.productDetails[index].quantity === undefined) {
       this.productDetails[index].quantity = 0;
     }
-    this.poProductModel = {
-      sku: this.productDetails[index].sku,
+    this.trProductModel = {
       taxRateId: this.selectedTaxRateId,
-      supplierId: this.productDetails[index].supplierId,
-      discount: {
-        value: this.productDetails[index].discount,
-        unit: 'PERCENT'
-      },
-      recieved: 0,
-      quantity: this.productDetails[index].quantity
+      quantity: parseInt(this.productDetails[index].quantity, 10)
     };
-    this.sharedService.updateTransferProduct(this.po_id, this.productDetails[index].purchaseOrderProductId, this.poProductModel)
-    .subscribe(res => {
+    this.sharedService.updateTransferProduct(this.trId,
+      this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
+        this.productDetails[index].total = res.data.total;
     });
   }
 }

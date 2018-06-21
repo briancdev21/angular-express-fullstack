@@ -108,26 +108,21 @@ export class POTableComponent implements OnInit {
 
 
   calcualteTotalPrice(index: number) {
-    const product = this.productDetails[index];
-    if (product.discount < 0 )  { product.discount = 0; }
-    if (product.discount > 100 ) { product.discount = 100; }
-
-    let discount = product.discount;
-    if ( discount === undefined ) { discount = 0; }
-    if ( product.unitprice !== undefined && product.quantity !== undefined ) {
-      product.total = product.unitprice * product.quantity * (100 - discount)  / 100;
-      this.priceChange.emit(null);
-    }
+    this.updatePurchaseOrderProduct(index);
   }
 
+
   checkDiscount(e) {
-    if (e.target.value > 100) { e.target.value = 100; }
-    if (e.target.value < 0) { e.target.value = undefined; }
+    if (e.which < 47 || e.which > 58 ) {  return false; }
+    if (e.target.value >= 100) { e.target.value = 100;  return false; }
+    if (e.target.value < 0) { e.target.value = undefined;  return false;  }
   }
 
   checkValue(e) {
-    if (e.target.value < 0) { e.target.value = undefined; }
+    if (e.which < 47 || e.which > 58 ) { return false; }
+    if (e.target.value < 0) { e.target.value = undefined; return false;  }
   }
+
 
   changedTaxRate(index, e) {
     this.selectedTaxRateId =  this.taxRateOptions[e.target.selectedIndex].id;
@@ -148,6 +143,7 @@ export class POTableComponent implements OnInit {
     };
     this.sharedService.updateTransferProduct(this.tr_id,
       this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
+        this.productDetails[index].total = res.data.total;
     });
   }
 }

@@ -9,7 +9,6 @@
         <th>MEASURE</th>
         <th>QUANTITY</th>
         <th>UNIT PRICE</th>
-        <th>DISCOUNT %</th>
         <th>TOTAL</th>
         <th>TAX RATE</th>
       </tr>
@@ -34,18 +33,15 @@
             <ng2-completer (keyup)="keyListener($event, i)" [dataService]="nameService" placeholder="Type NAME here..." [minSearchLength]="0" (selected)="onNameSelected($event, i)" [(ngModel)]="productDetailInfo.name" ></ng2-completer>
         </td>
         <td class="measure">
-          <input class="measure" type="number" placeholder="0" min="0" readonly [(ngModel)]="productDetailInfo.measure" (ngModelChange)="calcualteTotalPrice(i)" (input)="checkValue($event)" />
+          <input class="measure" type="number" placeholder="0" min="0" readonly [(ngModel)]="productDetailInfo.measure" (ngModelChange)="calcualteTotalPrice(i)" (keypress)="checkValue($event)" />
         </td>
         <td class="quantity">
-          <input class="quantity" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantity" (ngModelChange)="calcualteTotalPrice(i)" (change)="updatePurchaseOrderProduct(i)" (input)="checkValue($event)" />
+          <input class="quantity" type="text" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantity" (ngModelChange)="calcualteTotalPrice(i)" (change)="updatePurchaseOrderProduct(i)" (keypress)="checkValue($event)" />
         </td>
         <td class="unitprice">
           <div class="dollar">
-            <input type="number" class="unitprice" step="0.01" min="0.00" placeholder="0.00" [(ngModel)]="productDetailInfo.unitprice" (input)="checkValue($event)" (ngModelChange)="calcualteTotalPrice(i)" />
+            <input type="text" class="unitprice" step="0.01" min="0.00" placeholder="0.00" readonly [(ngModel)]="productDetailInfo.unitprice" (keypress)="checkValue($event)" (ngModelChange)="calcualteTotalPrice(i)" />
           </div>
-        </td>
-        <td class="discount">
-          <input class="discount" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.discount"  (input)="checkDiscount($event)"  (ngModelChange)="calcualteTotalPrice(i)"  (change)="updatePurchaseOrderProduct(i)" />
         </td>
         <td class="total">
           <div class="dollar">

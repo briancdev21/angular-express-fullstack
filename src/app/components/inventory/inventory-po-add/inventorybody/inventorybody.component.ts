@@ -147,12 +147,7 @@ export class InventoryBodyComponent {
       this.freightcosts = data.freightcosts;
       this.po_mock.freightCost = data.freightcosts;
     }
-    this.sharedService.updatePurchaseOrder(this.po_mock.id, this.po_mock).subscribe((resp) => {
-      console.log('mock_data term', resp.data);
-      this.po_mock.subTotal = resp.data.subTotal;
-      this.po_mock.totalTax = resp.data.totalTax;
-      this.po_mock.total = resp.data.total;
-    });
+    this.updatePO();
   }
 
 
