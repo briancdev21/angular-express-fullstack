@@ -15,6 +15,7 @@ import { SharedService } from '../../../../../services/shared.service';
 
 
 export class POTableComponent implements OnInit {
+  @Input() canUpdate: boolean;
   @Input() set productDetailsData (val) {
     console.log('product details: ', val);
     if (val.length !== 0) {
@@ -87,15 +88,16 @@ export class POTableComponent implements OnInit {
 
   removeProduct(index) {
     // Add sku of removing item to skus service
-    const addingItem = this.originSkus.filter(sku => sku.sku === this.productDetails[index].sku);
-    this.skus = this.skus.concat(addingItem);
+    if (this.canUpdate) {
+      const addingItem = this.originSkus.filter(sku => sku.sku === this.productDetails[index].sku);
+      this.skus = this.skus.concat(addingItem);
 
-    this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
-
-    this.sharedService.deleteInventoryAdjustmentProduct(this.ad_id,
-      this.productDetails[index].transferProductId).subscribe(res => {
-      this.productDetails.splice(index, 1);
-    });
+      this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
+      this.sharedService.deleteInventoryAdjustmentProduct(this.ad_id,
+        this.productDetails[index].transferProductId).subscribe(res => {
+        this.productDetails.splice(index, 1);
+      });
+    }
   }
 
   onSkuSelected(item: CompleterItem, index) {
@@ -137,16 +139,7 @@ export class POTableComponent implements OnInit {
 
 
   calcualteTotalPrice(index: number) {
-    const product = this.productDetails[index];
-    if (product.discount < 0 )  { product.discount = 0; }
-    if (product.discount > 100 ) { product.discount = 100; }
-
-    let discount = product.discount;
-    if ( discount === undefined ) { discount = 0; }
-    if ( product.unitprice !== undefined && product.quantity !== undefined ) {
-      product.total = product.unitprice * product.quantity * (100 - discount)  / 100;
-      this.priceChange.emit(null);
-    }
+    this.updatePurchaseOrderProduct(index);
   }
 
 
@@ -177,11 +170,14 @@ export class POTableComponent implements OnInit {
     }
     this.trProductModel = {
       taxRateId: this.selectedTaxRateId,
-      quantity: this.productDetails[index].quantity
+      quantity: parseInt(this.productDetails[index].quantity, 10)
     };
-    this.sharedService.updateInventoryAdjustmentProduct(this.ad_id,
-      this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
-    });
+    if (this.canUpdate) {
+      this.sharedService.updateInventoryAdjustmentProduct(this.ad_id,
+        this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
+          this.productDetails[index].total = res.data.total;
+      });
+    }
   }
 }
 

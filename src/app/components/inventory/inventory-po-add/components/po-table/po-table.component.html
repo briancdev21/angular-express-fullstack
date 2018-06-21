@@ -28,10 +28,10 @@
           </div>
         </td>
         <td class="model">
-          <ng2-completer (keyup)="keyListener($event, i)" [dataService]="modelService" placeholder="Type Model here..." [minSearchLength]="0" (selected)="onModelSelected($event, i)" [(ngModel)]="productDetailInfo.model" ></ng2-completer>
+          <ng2-completer (keyup)="keyListener($event, i)" [disableInput]="productDetailInfo.readonly" [dataService]="modelService" placeholder="Type Model here..." [minSearchLength]="0" (selected)="onModelSelected($event, i)" [(ngModel)]="productDetailInfo.model" ></ng2-completer>
         </td>
         <td class="name">
-            <ng2-completer (keyup)="keyListener($event, i)" [dataService]="nameService" placeholder="Type NAME here..." [minSearchLength]="0" (selected)="onNameSelected($event, i)" [(ngModel)]="productDetailInfo.name" ></ng2-completer>
+            <ng2-completer (keyup)="keyListener($event, i)" [disableInput]="productDetailInfo.readonly" [dataService]="nameService" placeholder="Type NAME here..." [minSearchLength]="0" (selected)="onNameSelected($event, i)" [(ngModel)]="productDetailInfo.name" ></ng2-completer>
         </td>
         <td class="measure">
           <input class="measure" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.measure" readonly (ngModelChange)="calcualteTotalPrice(i)" (keypress)="checkValue($event)" />
@@ -41,7 +41,7 @@
         </td>
         <td class="unitprice">
           <div class="dollar">
-            <input type="text" class="unitprice" step="0.01" min="0.00" placeholder="0.00" [(ngModel)]="productDetailInfo.unitprice" (keypress)="checkValue($event)" (ngModelChange)="calcualteTotalPrice(i)" />
+            <input type="text" class="unitprice" step="0.01" min="0.00" placeholder="0.00" readonly [(ngModel)]="productDetailInfo.unitprice" (keypress)="checkValue($event)" (ngModelChange)="calcualteTotalPrice(i)" />
           </div>
         </td>
         <td class="discount">

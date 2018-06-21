@@ -108,16 +108,7 @@ export class POTableComponent implements OnInit {
 
 
   calcualteTotalPrice(index: number) {
-    const product = this.productDetails[index];
-    if (product.discount < 0 )  { product.discount = 0; }
-    if (product.discount > 100 ) { product.discount = 100; }
-
-    let discount = product.discount;
-    if ( discount === undefined ) { discount = 0; }
-    if ( product.unitprice !== undefined && product.quantity !== undefined ) {
-      product.total = product.unitprice * product.quantity * (100 - discount)  / 100;
-      this.priceChange.emit(null);
-    }
+    this.updatePurchaseOrderProduct(index);
   }
 
   checkDiscount(e) {
@@ -146,10 +137,11 @@ export class POTableComponent implements OnInit {
     }
     this.trProductModel = {
       taxRateId: this.selectedTaxRateId,
-      quantity: this.productDetails[index].quantity
+      quantity: parseInt(this.productDetails[index].quantity, 10),
     };
     this.sharedService.updateInventoryAdjustmentProduct(this.ad_id,
       this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
+        this.productDetails[index].total = res.data.total;
     });
   }
 }

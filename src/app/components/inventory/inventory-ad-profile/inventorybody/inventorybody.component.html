@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="product__table">
-      <app-po-table [productDetailsData]="productDetails" [adId]="ad_id"  ></app-po-table>
+      <app-po-table [productDetailsData]="productDetails" [adId]="ad_id" [canUpdate]="ad_mock.status === 'OPEN'? true : false" ></app-po-table>
     </div>
     <div class="sub__info">
       <div >

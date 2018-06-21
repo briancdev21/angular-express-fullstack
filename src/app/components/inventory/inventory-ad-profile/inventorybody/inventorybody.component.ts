@@ -40,6 +40,7 @@ export class InventoryBodyComponent implements OnDestroy {
       this.sharedService.getInventoryAdjustmentProducts(this.ad_mock.id).subscribe( productRes => {
         this.productDetails = productRes.results;
         this.productDetails.forEach(productDetail => {
+          productDetail.readonly = true;
           productDetail.discount = productDetail.discount !== undefined ? productDetail.discount.value : undefined;
         });
       });
