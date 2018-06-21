@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../../../pm.service';
+import { ProjectManagementService } from '../../../projectmanagement.service';
 
 @Component({
   selector: 'app-changelogprofile',
@@ -74,7 +74,7 @@ export class ChangeLogProfileComponent implements OnInit {
   descriptionChange: any;
   detailsChange: any;
 
-  constructor( private pmService: PmService, private router: Router ) {
+  constructor( private pmService: ProjectManagementService, private router: Router ) {
   }
 
   ngOnInit() {

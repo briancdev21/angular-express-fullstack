@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 
-export class PmService {
+export class ProjectManagementService {
 
   private closeDetailedTaskModal = new BehaviorSubject<boolean>(false);
   private deleteTask = new BehaviorSubject<any>([]);

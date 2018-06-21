@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, HostListener, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
-import { PmService } from '../../projectmanagement/pm.service';
+import { ProjectManagementService } from '../../projectmanagement/projectmanagement.service';
 
 @Component({
   selector: 'app-subtasksmanagement',
@@ -28,7 +28,7 @@ export class SubTasksManagementComponent implements OnInit {
   mainTaskContent = '';
   showEditable = false;
 
-  constructor( private pmService: PmService ) {
+  constructor( private pmService: ProjectManagementService ) {
 
   }
 

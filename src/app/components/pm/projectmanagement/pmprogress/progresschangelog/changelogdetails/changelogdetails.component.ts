@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../../../pm.service';
+import { ProjectManagementService } from '../../../projectmanagement.service';
 
 @Component({
   selector: 'app-changelogdetails',
@@ -23,7 +23,7 @@ export class ChangeLogDetailsComponent implements OnInit {
   public endMin;
   public startMax;
 
-  constructor( private pmService: PmService ) {
+  constructor( private pmService: ProjectManagementService ) {
 
   }
 

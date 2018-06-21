@@ -41,7 +41,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } fro
 import { QuillModule } from 'ngx-quill';
 import { DpDatePickerModule } from 'ng2-date-picker';
 
-import { PmService } from './pm.service';
+import { ProjectManagementService } from './projectmanagement.service';
 import { TaskStableMapToKeysPipe } from './pmschedule/pmtaskstable/map-to-keys.pipe';
 
 export const MY_NATIVE_FORMATS = {
@@ -109,7 +109,7 @@ export const MY_NATIVE_FORMATS = {
     TaskStableMapToKeysPipe
   ],
   providers: [
-    PmService,
+    ProjectManagementService,
     {provide: OWL_DATE_TIME_FORMATS, useValue: MY_NATIVE_FORMATS},
   ]
 })

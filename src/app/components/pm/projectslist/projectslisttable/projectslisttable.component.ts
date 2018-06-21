@@ -6,6 +6,7 @@ import { HorizontalBarComponent } from '../../../common/horizontalbar/horizontal
 import { ProjectsService } from '../../../../services/projects.service';
 import { SharedService } from '../../../../services/shared.service';
 import * as moment from 'moment';
+import { PmService } from '../../pm.service';
 
 @Component({
   selector: 'app-projectslisttable',
@@ -27,7 +28,7 @@ export class ProjectsListTableComponent implements OnInit {
   contactsList = [];
 
   constructor( private filterService: FilterService, private router: Router, private projectsService: ProjectsService,
-    private sharedService: SharedService ) {
+    private sharedService: SharedService, private pmService: PmService ) {
     this.sharedService.getContacts().subscribe(data => {
       console.log('contactslist: ', data);
       this.contactsList = data;
@@ -59,6 +60,7 @@ export class ProjectsListTableComponent implements OnInit {
 
   redirectTo(id) {
     this.router.navigate(['./pm/pm-details/']);
+    this.pmService.currentProjectId.next(id);
   }
 
   sortArray(field) {

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../../pm.service';
+import { ProjectManagementService } from '../../projectmanagement.service';
 
 @Component({
   selector: 'app-pmboardtable',
@@ -22,7 +22,7 @@ export class PmBoardTableComponent implements OnInit {
   leftReached = true;
   rightReached = false;
 
-  constructor( private pmService: PmService ) {
+  constructor( private pmService: ProjectManagementService ) {
 
     // close detailed task modal
     this.pmService.closeTaskModal.subscribe(
