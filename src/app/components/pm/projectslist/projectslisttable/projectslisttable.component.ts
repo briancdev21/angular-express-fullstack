@@ -60,7 +60,7 @@ export class ProjectsListTableComponent implements OnInit {
 
   redirectTo(id) {
     this.router.navigate(['./pm/pm-details/']);
-    this.pmService.currentProjectId.next(id);
+    localStorage.setItem('current_projectId', id);
   }
 
   sortArray(field) {

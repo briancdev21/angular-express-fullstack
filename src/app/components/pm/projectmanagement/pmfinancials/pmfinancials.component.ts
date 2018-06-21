@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PmService } from '../pm.service';
+import { PmService } from '../../pm.service';
 import * as moment from 'moment';
 
 @Component({
@@ -60,8 +60,17 @@ export class PmFinancialsComponent implements OnInit {
   costTotal = 0;
   scheduleDateList = [];
   today = moment().format('YYYY-MM-DD');
+  currentProjectId: any;
 
   constructor( private pmService: PmService, private router: Router ) {
+    this.pmService.currentProjectId.subscribe(data => {
+      console.log('current project id:', data);
+      if (data === '') {
+        return;
+      } else {
+        this.currentProjectId = data;
+      }
+    });
   }
 
   ngOnInit() {

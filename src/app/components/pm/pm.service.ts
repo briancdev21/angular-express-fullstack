@@ -6,7 +6,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class PmService {
 
-constructor() {
-}
+  currentProjectId: BehaviorSubject<string> = new BehaviorSubject('');
+  constructor() {
+  }
 
 }
