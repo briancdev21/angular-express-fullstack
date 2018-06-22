@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { OrderService } from '../order.service'
+import { OrderService } from '../order.service';
 
 @Component({
   selector: 'app-titlebar',
@@ -30,7 +30,7 @@ export class TitleBarComponent {
   config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
 
   constructor(private orderService: OrderService) {
-    
+
   }
 
   ngOnInit() {
@@ -42,10 +42,10 @@ export class TitleBarComponent {
     this.titleOrigin = this.orderTitle;
     this.orderService.getAvailableStaff.subscribe(
       data => {
-        this.availableStaff = data
+        this.availableStaff = data;
       }
-    )
-    
+    );
+
   }
 
 

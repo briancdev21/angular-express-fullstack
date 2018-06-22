@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonComponent } from '../common/common.component';
+import { CommonComponent } from '../../../common/common.component';
 import { OrderService } from './order.service';
-import { Ng2TimelineComponent } from '../profile/ng2-timeline/ng2timeline.component';
+import { Ng2TimelineComponent } from '../../../profile/ng2-timeline/ng2timeline.component';
 @Component({
   selector: 'app-orderprofile',
   templateUrl: './orderprofile.component.html',
@@ -48,7 +48,8 @@ export class OrderProfileComponent implements OnInit {
     {
       title: 'Meeting',
       icon: 'fa-home',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products. Below please find the currnet status of the sale',
+      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
+       Below please find the currnet status of the sale',
       timelineBtnColor: 'green-btn',
       buttontitle: 'More Info',
       date: '2018-1-9',
@@ -57,7 +58,8 @@ export class OrderProfileComponent implements OnInit {
     {
       title: 'Send Document to Mike',
       icon: 'fa-file-text-o',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products. Below please find the currnet status of the sale',
+      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
+       Below please find the currnet status of the sale',
       timelineBtnColor: 'blue-btn',
       buttontitle: 'Download document',
       date: '2018-1-9',
@@ -66,7 +68,8 @@ export class OrderProfileComponent implements OnInit {
     {
       title: 'Coffee Break',
       icon: 'fa-coffee',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products. Below please find the currnet status of the sale',
+      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products. \
+      Below please find the currnet status of the sale',
       timelineBtnColor: 'lime-btn',
       buttontitle: 'Read more',
       date: '2018-1-8',

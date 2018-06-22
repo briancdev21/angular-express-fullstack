@@ -3,7 +3,7 @@ import { TestComponent } from './components/test/test.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProposalComponent } from './components/sales/proposal/proposal.component';
 import { LeadsComponent } from './components/crm/leads/leads.component';
-import { OrderProfileComponent } from './components/orderprofile/orderprofile.component';
+import { OrderProfileComponent } from './components/collaboration/workorders/orderprofile/orderprofile.component';
 import { DealsPipelineComponent } from './components/sales/dealspipeline/dealspipeline.component';
 import { ContactsComponent } from './components/crm/contacts/contacts.component';
 import { SuppliersComponent } from './components/inventory/suppliers/suppliers.component';

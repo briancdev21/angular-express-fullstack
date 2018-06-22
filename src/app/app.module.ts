@@ -11,7 +11,7 @@ import { routing } from './app.routes';
 import { TestComponent } from './components/test/test.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProposalComponent } from './components/sales/proposal/proposal.component';
-import { OrderProfileComponent } from './components/orderprofile/orderprofile.component';
+import { OrderProfileComponent } from './components/collaboration/workorders/orderprofile/orderprofile.component';
 import { SalesComponent } from './components/sales/sales.component';
 import { SubmenuComponent } from './components/submenu/submenu.component';
 import { CollaborationComponent } from './components/collaboration/collaboration.component';
@@ -27,7 +27,7 @@ import { ProjectManagementComponent } from './components/pm/projectmanagement/pr
 
 import { ProfileCmpModule } from './components/profile/profile.module';
 import { ProposalCmpModule } from './components/sales/proposal/proposal.module';
-import { OrderProfileCmpModule } from './components/orderprofile/orderprofile.module';
+import { OrderProfileCmpModule } from './components/collaboration/workorders/orderprofile/orderprofile.module';
 import { SalesCmpModule } from './components/sales/sales.module';
 import { CollaborationCmpModule } from './components/collaboration/collaboration.module';
 import { ProjectManagementCmpModule } from './components/pm/projectmanagement/projectmanagement.module';

@@ -31,7 +31,7 @@ export class OrderDetailsComponent implements OnInit {
 
   ngOnInit () {
     var options = { month: 'long', year: 'numeric', day: 'numeric' };
-    
+
     // const midVal = new Intl.DateTimeFormat('en-US', dateA11yLabel).format(this.orderProfileInfo.startDate);
     // this.startDateValue = new Date(midVal);
     this.startDateValue = new Date(this.orderProfileInfo.startDate);
