@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PendingProjectService } from '../pendingproject.service';
 import * as moment from 'moment';
+import { SharedService } from '../../../../../services/shared.service';
+import { ProjectsService } from '../../../../../services/projects.service';
 
 @Component({
   selector: 'app-pendingprojectfinancials',
@@ -59,13 +61,34 @@ export class PendingProjectFinancialsComponent implements OnInit {
   costTotal = 0;
   scheduleDateList = [];
   today = moment().format('YYYY-MM-DD');
+  currentProjectId: any;
+  projectInfo: any;
+  contactsList: any;
 
-  constructor( private pendingProjectService: PendingProjectService, private router: Router ) {
+  constructor( private pendingProjectService: PendingProjectService, private router: Router, private sharedService: SharedService,
+    private projectsService: ProjectsService) {
+    this.currentProjectId = localStorage.getItem('current_pending_projectId');
+
+    if (this.currentProjectId !== '') {
+      this.sharedService.getContacts().subscribe(data => {
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+
+          this.projectInfo = res.data;
+          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+          console.log('indi project: ', this.projectInfo);
+          // Initial cost total
+          this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.reservedInventoryCost + this.projectInfo.labourCost;
+        });
+
+      });
+    } else {
+      console.error('product id error');
+    }
   }
 
   ngOnInit() {
-    // Initial cost total
-    this.costTotal = this.financialsInfo.purchaseOrders + this.financialsInfo.reservedInventory + this.financialsInfo.labourCosts;
     // create new array to show formatted date for payment schedule
     this.scheduleDateList = this.paymentSchedule.map(p => moment(p.date).format('MMMM DD, YYYY'));
     // check overdue days and creat array of boolean
@@ -81,7 +104,7 @@ export class PendingProjectFinancialsComponent implements OnInit {
   addCost(costTitle, costType, costAmount) {
     if (costTitle && costType && costAmount) {
       if (costType === 'percent') {
-        costAmount = this.financialsInfo.totalBudget * costAmount / 100;
+        costAmount = this.projectInfo.total * costAmount / 100;
         this.additionalCosts.push({
           'title': costTitle,
           'value': costAmount
@@ -96,8 +119,8 @@ export class PendingProjectFinancialsComponent implements OnInit {
       const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
         return prev + cur.value;
       }, 0);
-      this.costTotal = costListTotal + this.financialsInfo.purchaseOrders +
-                      this.financialsInfo.reservedInventory + this.financialsInfo.labourCosts;
+      this.costTotal = costListTotal + this.projectInfo.purchaseOrderTotal +
+                      this.projectInfo.reservedInventoryCost + this.projectInfo.labourCost;
       // calc unused budget
       this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
         return prev + cur.value;
@@ -113,8 +136,8 @@ export class PendingProjectFinancialsComponent implements OnInit {
     const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
       return prev + cur.value;
     }, 0);
-    this.costTotal = costListTotal + this.financialsInfo.purchaseOrders +
-                    this.financialsInfo.reservedInventory + this.financialsInfo.labourCosts;
+    this.costTotal = costListTotal + this.projectInfo.purchaseOrderTotal +
+                    this.projectInfo.reservedInventoryCost + this.projectInfo.labourCost;
     // calc unused budget
     this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
       return prev + cur.value;
@@ -184,6 +207,22 @@ export class PendingProjectFinancialsComponent implements OnInit {
 
   toProjectTasks() {
     this.router.navigate(['./pm/pending-project/pending-tasks']);
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
 }
