@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../projectmanagement.service';
+import { SharedService } from '../../../../../services/shared.service';
 
 @Component({
   selector: 'app-progressoverview',
@@ -62,30 +63,11 @@ export class ProgressOverviewComponent implements OnInit {
     completeness: this.projectInfo.projectHealth,
   };
 
-  public morrisDonutInfo = [
-    {
-      label: 'Michael Yue',
-      value: 49,
-    }, {
-      label: 'Tyler labonte',
-      value: 35
-    }, {
-      label: 'Sepehr Shoarinejad',
-      value: 8
-    }, {
-      label: 'Steve Rogers',
-      value: 12
-    }, {
-      label: 'John Smith',
-      value: 8
-    }, {
-      label: 'Iron Man',
-      value: 99
-    }];
+  public morrisDonutInfo = [];
 
   public morrisDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
-  donutTimePeriod = 'month';
+  donutTimePeriod = 'MONTHLY';
 
   public morrisLineChartInfo = [
     {
@@ -201,7 +183,14 @@ export class ProgressOverviewComponent implements OnInit {
       passedDays: 'Yesterday'
     }
   ];
-  constructor( private pmService: ProjectManagementService ) {
+  constructor( private pmService: ProjectManagementService, private sharedService: SharedService ) {
+    this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'projectHoursOverTime').subscribe(res => {
+      this.morrisDonutInfo = res.projectHoursOverTime;
+      this.morrisDonutInfo.forEach(ele => {
+        ele.label = ele.name;
+        ele.value = ele.percent;
+      });
+    });
   }
 
   ngOnInit() {
@@ -218,6 +207,17 @@ export class ProgressOverviewComponent implements OnInit {
 
   toggleMenubar(data: boolean) {
     this.menuCollapsed  = data;
+  }
+
+  donutDurationChange(data) {
+    this.sharedService.getProjectsStatistics(0, 0, data, 'projectHoursOverTime').subscribe(res => {
+      console.log('statics: ', res);
+      this.morrisDonutInfo = res.projectHoursOverTime;
+      this.morrisDonutInfo.forEach(ele => {
+        ele.label = ele.name;
+        ele.value = ele.percent;
+      });
+    });
   }
 
 }

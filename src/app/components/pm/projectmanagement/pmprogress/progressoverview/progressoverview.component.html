@@ -8,15 +8,15 @@
       <div class="card">
         <div class="card-header">
           <span>PROJECT HOURS</span>
-          <select [(ngModel)]="donutTimePeriod">
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="quarter">This Quarter</option>
-            <option value="year">This Year</option>
+          <select [(ngModel)]="donutTimePeriod" (ngModelChange)="donutDurationChange(donutTimePeriod)">
+            <option value="WEEKLY">This Week</option>
+            <option value="MONTHLY">This Month</option>
+            <option value="QUARTERLY">This Quarter</option>
+            <option value="YEARLY">This Year</option>
           </select>
         </div>
         <div class="card-content">
-          <div class="card-content-left" >
+          <div class="card-content-left" *ngIf="morrisDonutInfo.length > 0">
             <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
           </div>
           <div class="card-centent-right">
