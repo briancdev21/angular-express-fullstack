@@ -62,6 +62,7 @@ span.progress-title {
   font-size: 19px;
   display: inline-table;
   margin-top: 5px;
+  width: 150px;
 }
 
 .product-delivery>span, .work-order-delivery>span, .order-activity>span, .internal-notes>span {

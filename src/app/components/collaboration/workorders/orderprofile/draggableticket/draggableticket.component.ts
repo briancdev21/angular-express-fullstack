@@ -8,7 +8,7 @@ import { OrderService } from '../order.service';
   templateUrl: './draggableticket.component.html',
   styleUrls: [
     './draggableticket.component.css',
-    '../../../../../node_modules/dragula/dist/dragula.css'
+    '../../../../../../../node_modules/dragula/dist/dragula.css'
   ]
 })
 export class DraggableTicketComponent implements OnInit {
