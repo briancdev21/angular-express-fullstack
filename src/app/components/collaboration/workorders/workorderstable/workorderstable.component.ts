@@ -1,8 +1,11 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FilterService } from '../filter.service';
 import * as _ from 'lodash';
 import { HorizontalBarComponent } from '../../../common/horizontalbar/horizontalbar.component';
+import { SharedService } from '../../../../services/shared.service';
+import { CollaboratorsService } from '../../../../services/collaborators.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-workorderstable',
@@ -16,27 +19,46 @@ import { HorizontalBarComponent } from '../../../common/horizontalbar/horizontal
 
 export class WorkOrdersTableComponent implements OnInit {
 
-  @Input() workOrdersInfo;
+  workOrdersInfo: any;
   public barInfo: any;
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
+  contactsList = [];
+  workOrdersList = [];
 
-  constructor( private filterService: FilterService, private router: Router ) {
+  constructor( private filterService: FilterService, private router: Router, private sharedService: SharedService,
+    private collaboratorsService: CollaboratorsService, private route: ActivatedRoute ) {
+
+    this.sharedService.getContacts().subscribe(data => {
+      this.contactsList = data;
+      this.addContactName(this.contactsList);
+      this.collaboratorsService.getWorkOrders().subscribe(res => {
+
+        this.workOrdersList = res.results;
+        this.workOrdersList.forEach(element => {
+          element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+          element.contactName = this.getContactNameFromId(element.contactId);
+          element.barInfo = {
+            title: element.completion + '%',
+            completeness: element.completion
+          };
+        });
+        console.log('work order list: ', this.workOrdersList);
+      });
+
+    });
+
   }
 
   ngOnInit() {
-    this.workOrdersInfo.map(i => i.barInfo = {
-      title: i.completion + '%',
-      completeness: i.completion
-    });
   }
 
   getStatus() {
   }
 
   redirectTo(id) {
-    this.router.navigate(['../collaboration/order-profile']);
+    this.router.navigate(['../collaboration/order-profile', {id: id}]);
   }
 
   sortArray(field) {
@@ -89,6 +111,22 @@ export class WorkOrdersTableComponent implements OnInit {
 
   getDateColor(days) {
     return days <= 6 ? 'green' : days <= 14 ? 'orange' : 'red';
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
   }
 
 }

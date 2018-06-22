@@ -1,4 +1,4 @@
-<div class="content">
+<div class="content" *ngIf="workOrdersList">
   <table class="work-order-table">
     <tr>
       <th (click)="sortArray('workOrderNumber')">WORK ORDER #</th>
@@ -9,10 +9,10 @@
       <th >COLLABORATORS</th>
       <th (click)="sortArray('completion')">WORK ORDER COMPLETION</th>
     </tr>
-    <tr *ngFor="let workorder of workOrdersInfo; let i = index" (click)="redirectTo(workorder.projectNumber)">
-      <td>{{workorder.workOrderNumber}}</td>
-      <td>{{workorder.workOrderName}}</td>
-      <td>{{workorder.customerName}}</td>
+    <tr *ngFor="let workorder of workOrdersList; let i = index" (click)="redirectTo(workorder.id)">
+      <td>{{workorder.id}}</td>
+      <td>{{workorder.name}}</td>
+      <td>{{workorder.contactName}}</td>
       <td>{{workorder.startDate}}</td>
       <td>{{workorder.scheduledStart}} - {{workorder.scheduledEnd}}</td>
       <td class="collaborators">
