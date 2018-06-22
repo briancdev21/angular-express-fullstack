@@ -42,7 +42,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor (private formBuilder: FormBuilder, private authService: AuthService, private router: Router ) {
     this.authService.loginFailed.subscribe(res => {
       this.wrongCredentials = res;
-      console.log('wrong: ', res);
     });
   }
 
