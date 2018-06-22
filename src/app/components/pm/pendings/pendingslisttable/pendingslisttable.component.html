@@ -9,7 +9,7 @@
       <th (click)="sortCreateDateArray('startDate')">DATE SIGNED</th>
       <th (click)="sortArray('timePassed')">TIME PASSED</th>
     </tr>
-    <tr *ngFor="let pending of pendingsListInfo; let i = index" (click)="redirectTo(pending.projectNumber)">
+    <tr *ngFor="let pending of pendingsListInfo; let i = index" (click)="redirectTo(pending.id)">
       <td>{{pending.id}}</td>
       <td>{{pending.projectName}}</td>
       <td><span *ngIf="pending.contactId">{{getContactName(pending.contactId)}}</span></td>
