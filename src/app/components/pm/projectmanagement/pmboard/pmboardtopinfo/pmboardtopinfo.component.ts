@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectManagementService } from '../../projectmanagement.service';
+import * as moment from 'moment';
+import { CompleterService, CompleterData } from 'ng2-completer';
+import { SharedService } from '../../../../../services/shared.service';
+import { ProjectsService } from '../../../../../services/projects.service';
 
 @Component({
   selector: 'app-pmboardtopinfo',
@@ -12,19 +16,37 @@ import { ProjectManagementService } from '../../projectmanagement.service';
 
 export class PmBoardTopInfoComponent implements OnInit {
 
-  @Input() projectInfo;
   tDate: '';
   targetDate = '';
   nDate: '';
   nextPaymentDate = '';
-  options = { year: 'numeric', month: 'short', day: 'numeric' };
+  currentProjectId: any;
+  contactsList = [];
+  projectInfo: any;
 
-  constructor( private pmService: ProjectManagementService ) {
+
+  constructor( private router: Router, private sharedService: SharedService,
+    private projectsService: ProjectsService, private route: ActivatedRoute) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
+    if (this.currentProjectId !== '') {
+      this.sharedService.getContacts().subscribe(data => {
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+
+          this.projectInfo = res.data;
+          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+          this.projectInfo.startDate = moment(this.projectInfo.startDate).format('MMM DD, YYYY');
+        });
+
+      });
+    } else {
+      console.error('product id error');
+    }
   }
 
   ngOnInit() {
-    const startDate = new Date(this.projectInfo.startDate);
-    this.projectInfo.startDate = new Intl.DateTimeFormat('en-US', this.options).format(startDate);
+
   }
 
   getPerformanceColor(value) {
@@ -38,13 +60,27 @@ export class PmBoardTopInfoComponent implements OnInit {
   }
 
   selectTargetDate(date) {
-    const targetDate = new Date(date.value);
-    this.projectInfo.targetDate = new Intl.DateTimeFormat('en-US', this.options).format(targetDate);
+    this.projectInfo.targetDate = moment(date.value).format('MMM DD, YYYY');
   }
 
   selectNextPaymentDate(date) {
-    const nextPaymentDate = new Date(date.value);
-    this.projectInfo.nextPaymentDate = new Intl.DateTimeFormat('en-US', this.options).format(nextPaymentDate);
+    this.projectInfo.nextPaymentDate = moment(date.value).format('MMM DD, YYYY');
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
   }
 
 }

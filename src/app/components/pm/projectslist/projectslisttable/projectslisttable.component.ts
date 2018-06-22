@@ -30,8 +30,8 @@ export class ProjectsListTableComponent implements OnInit {
   constructor( private filterService: FilterService, private router: Router, private projectsService: ProjectsService,
     private sharedService: SharedService, private pmService: PmService ) {
     this.sharedService.getContacts().subscribe(data => {
-      console.log('contactslist: ', data);
       this.contactsList = data;
+      this.addContactName(this.contactsList);
       this.projectsService.getProjectsList().subscribe(res => {
         this.projectsListInfo = res.results;
         this.projectsListInfo.forEach(element => {
@@ -117,7 +117,18 @@ export class ProjectsListTableComponent implements OnInit {
 
   getContactName(id) {
     const selectedContact = this.contactsList.filter(c => c.id === id)[0];
-    return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    return selectedContact.name;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
 }

@@ -1,7 +1,7 @@
 import { Injectable, Output, EventEmitter, Input } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
 // helpers
 import { environment } from '../../environments/environment';
@@ -171,18 +171,9 @@ export class SharedService {
   // Contact
   getContacts() {
     const url = `${environment.apiUrl}/crm/contacts/`;
-    const contactsList = this.http.get(url).map(data => data['results']);
-    contactsList.forEach(ele => {
-      if (ele.type === 'PERSON') {
-        ele.name = ele.person.firstName + ' ' + ele.person.lastName;
-      } else if (ele.type === 'BUSINESS') {
-        ele.name = ele.business.name;
-      } else {
-        return [];
-      }
-    });
-    return contactsList;
+    return this.http.get(url).map(data => data['results']);
   }
+
   getContact(id) {
     const url = `${environment.apiUrl}/crm/contacts/${id}`;
     return this.http.get(url);
@@ -565,5 +556,37 @@ export class SharedService {
   deleteProjectType (id): Observable<any> {
     const url = `${environment.apiUrl}/organization/project-types/${id}`;
     return this.http.delete<any>(url);
+  }
+
+  // Statistics
+
+  getSalesStatistics(start, end, interval, fields): Observable<any> {
+    const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
+    const url = `${environment.apiUrl}/organization/statistics/sales`;
+    return this.http.get(url, {params: params});
+  }
+
+  getCrmStatistics(start, end, interval, fields): Observable<any> {
+    const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
+    const url = `${environment.apiUrl}/organization/statistics/CRM`;
+    return this.http.get(url, {params: params});
+  }
+
+  getInventoryStatistics(start, end, interval, fields): Observable<any> {
+    const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
+    const url = `${environment.apiUrl}/organization/statistics/inventory`;
+    return this.http.get(url, {params: params});
+  }
+
+  getTasksStatistics(start, end, interval, fields): Observable<any> {
+    const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
+    const url = `${environment.apiUrl}/organization/statistics/tasks`;
+    return this.http.get(url, {params: params});
+  }
+
+  getProjectsStatistics(start, end, interval, fields): Observable<any> {
+    const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
+    const url = `${environment.apiUrl}/organization/statistics/projects`;
+    return this.http.get(url, {params: params});
   }
 }

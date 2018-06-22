@@ -52,16 +52,15 @@ export class AuthService {
   }
 
   handleAuthentication(authResult) {
-    console.log('123321');
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        window.location.hash = '';
-        this.setSession(authResult);
-        this.router.navigate([this.returnUrl]);
-        console.log('without error: ', authResult);
-      } else {
-        this.router.navigate(['../login']);
-        console.log('login err: ');
-      }
+    if (authResult && authResult.accessToken && authResult.idToken) {
+      window.location.hash = '';
+      this.setSession(authResult);
+      this.router.navigate([this.returnUrl]);
+      console.log('without error: ', authResult);
+    } else {
+      this.router.navigate(['../login']);
+      console.log('login err: ');
+    }
   }
 
   private setSession(authResult): void {
