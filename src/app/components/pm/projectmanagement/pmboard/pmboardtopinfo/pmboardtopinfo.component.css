@@ -114,8 +114,9 @@ span {
 }
 
 @media screen and (max-width: 1600px) {
-  .card .card-content {
+  .card .card-content, .show-date {
     font-size: 23px;
   }
+
 }
 
