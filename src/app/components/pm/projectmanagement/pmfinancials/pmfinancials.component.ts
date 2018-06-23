@@ -16,13 +16,6 @@ import { ProjectsService } from '../../../../services/projects.service';
 export class PmFinancialsComponent implements OnInit {
 
   menuCollapsed: any;
-  financialsInfo = {
-    totalBudget: 17000,
-    purchaseOrders: 7000,
-    reservedInventory: 3500,
-    labourCosts: 4500,
-    totalRevenue: 20000
-  };
 
   paymentSchedule = [
     {
@@ -73,11 +66,13 @@ export class PmFinancialsComponent implements OnInit {
     if (this.currentProjectId !== '') {
       this.sharedService.getContacts().subscribe(data => {
         this.contactsList = data;
-
+        this.addContactName(this.contactsList);
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
 
           this.projectInfo = res.data;
           this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+          // Initial cost total
+          this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.reservedInventoryCost + this.projectInfo.labourCost;
           console.log('indi project: ', this.projectInfo);
         });
 
@@ -88,8 +83,6 @@ export class PmFinancialsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Initial cost total
-    this.costTotal = this.financialsInfo.purchaseOrders + this.financialsInfo.reservedInventory + this.financialsInfo.labourCosts;
     // create new array to show formatted date for payment schedule
     this.scheduleDateList = this.paymentSchedule.map(p => moment(p.date).format('MMMM DD, YYYY'));
     // check overdue days and creat array of boolean
@@ -105,7 +98,7 @@ export class PmFinancialsComponent implements OnInit {
   addCost(costTitle, costType, costAmount) {
     if (costTitle && costType && costAmount) {
       if (costType === 'percent') {
-        costAmount = this.financialsInfo.totalBudget * costAmount / 100;
+        costAmount = this.projectInfo.totalBudget * costAmount / 100;
         this.additionalCosts.push({
           'title': costTitle,
           'value': costAmount
@@ -120,8 +113,8 @@ export class PmFinancialsComponent implements OnInit {
       const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
         return prev + cur.value;
       }, 0);
-      this.costTotal = costListTotal + this.financialsInfo.purchaseOrders +
-                      this.financialsInfo.reservedInventory + this.financialsInfo.labourCosts;
+      this.costTotal = costListTotal + this.projectInfo.purchaseOrderTotal +
+                      this.projectInfo.reservedInventoryCost + this.projectInfo.labourCost;
       // calc unused budget
       this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
         return prev + cur.value;
@@ -137,8 +130,8 @@ export class PmFinancialsComponent implements OnInit {
     const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
       return prev + cur.value;
     }, 0);
-    this.costTotal = costListTotal + this.financialsInfo.purchaseOrders +
-                    this.financialsInfo.reservedInventory + this.financialsInfo.labourCosts;
+    this.costTotal = costListTotal + this.projectInfo.purchaseOrderTotal +
+                    this.projectInfo.reservedInventoryCost + this.projectInfo.labourCost;
     // calc unused budget
     this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
       return prev + cur.value;
@@ -213,6 +206,17 @@ export class PmFinancialsComponent implements OnInit {
   getContactNameFromId(id) {
     const selectedContact = this.contactsList.filter(c => c.id === id)[0];
     return selectedContact.name;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
 }

@@ -36,23 +36,23 @@
         <div class="input-sec">
           <input placeholder="Type title of cost assocated with project here..." [(ngModel)]="costTitle">
           <select [(ngModel)]="costType" (ngModelChange)="costTypeChange()">
-            <option value="amount">$</option>
-            <option value="percent">%</option>
+            <option value="AMOUNT">$</option>
+            <option value="PERCENT">%</option>
           </select>
           <input placeholder="0.00" [(ngModel)]="costAmount" class="cost-amount" type="number" (input)="checkCostInputValidation(costAmount, costType)">
           <img src="assets/images/add-button.png" (click)="addCost(costTitle, costType, costAmount)">
         </div>
         <div class="cost-default-value">
           <span>Purchase Orders</span>
-          <span>${{financialsInfo.purchaseOrders | number: '1.2-2'}}</span>
+          <span>${{projectInfo.purchaseOrderTotal | number: '1.2-2'}}</span>
         </div>
         <div class="cost-default-value">
           <span>Inventory</span>
-          <span>${{financialsInfo.reservedInventory | number: '1.2-2'}}</span>
+          <span>${{projectInfo.reservedInventoryCost | number: '1.2-2'}}</span>
         </div>
         <div class="cost-default-value">
           <span>Labour Costs</span>
-          <span>${{financialsInfo.labourCosts | number: '1.2-2'}}</span>
+          <span>${{projectInfo.labourCost | number: '1.2-2'}}</span>
         </div>
         <div *ngFor="let cost of additionalCosts; let i = index" class="addtianal-schedule">
           <div class="cost-default-value">
