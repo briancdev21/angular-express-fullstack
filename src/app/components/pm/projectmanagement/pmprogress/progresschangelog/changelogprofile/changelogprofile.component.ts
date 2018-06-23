@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
-
+import * as moment from 'moment';
+import { SharedService } from '../../../../../../services/shared.service';
+import { ProjectsService } from '../../../../../../services/projects.service';
 @Component({
   selector: 'app-changelogprofile',
   templateUrl: './changelogprofile.component.html',
@@ -73,8 +75,27 @@ export class ChangeLogProfileComponent implements OnInit {
   showConfirmModal = false;
   descriptionChange: any;
   detailsChange: any;
+  usersList = [];
+  currentProjectId: any;
+  currentChangeLogId: any;
 
-  constructor( private pmService: ProjectManagementService, private router: Router ) {
+  constructor( private pmService: ProjectManagementService, private router: Router, private sharedService: SharedService,
+    private projectsService: ProjectsService, private route: ActivatedRoute ) {
+      this.currentProjectId = localStorage.getItem('project_id');
+      this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
+
+      console.log('project_id: ', this.currentProjectId, this.currentChangeLogId);
+      this.sharedService.getUsers().subscribe(data => {
+        this.usersList = data;
+        this.addUserRealName(this.usersList);
+        console.log('usersList: ', this.usersList);
+        this.projectsService.getIndividualProjectChangeLog(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
+          this.changeLogInfo = res.results;
+          this.changeLogInfo.customerName = this.getCustomerNameFromUsername(res.data.contactId);
+          console.log('indi project: ', this.changeLogInfo);
+        });
+
+      });
   }
 
   ngOnInit() {
@@ -83,6 +104,18 @@ export class ChangeLogProfileComponent implements OnInit {
 
   confirm() {
     this.router.navigate(['../estimate']);
+  }
+
+  addUserRealName(data) {
+    data.forEach(element => {
+      element.name = element.firstName + ' ' + element.lastName;
+    });
+    return data;
+  }
+
+  getCustomerNameFromUsername(username) {
+    const selectedUser = this.usersList.filter(c => c.username === username)[0];
+    return selectedUser.name;
   }
 
 }
