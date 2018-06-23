@@ -1,4 +1,4 @@
-<div class="top-project-info-section">
+<div class="top-project-info-section" *ngIf="projectInfo">
   <app-pmboardtopinfo></app-pmboardtopinfo>
   <div class="horizontal-bar">
     <app-horizontalbar [barInfo]="barInfo"></app-horizontalbar>
@@ -39,22 +39,22 @@
         </div>
         <div class="card-content">
           <div class="card-content-left">
-            <div>
+            <div *ngIf="dueToday">
               <span class="title">Tasks Due Today</span>
               <span>{{dueToday}}</span>
             </div>
-            <div>
+            <div *ngIf="dueThisWeek">
               <span class="title">Tasks Due This Week</span>
               <span>{{dueThisWeek}}</span>
             </div>
-            <div>
+            <div *ngIf="dueNextWeek">
               <span class="title">Tasks Due Next Week</span>
               <span>{{dueNextWeek}}</span>
             </div>
           </div>
-          <div class="card-content-right">
+          <div class="card-content-right" *ngIf="overdue">
             <span class="due-tasks-title">Overdue Tasks</span>
-            <span>{{projectInfo.projectTasks.overdue}}</span>
+            <span>{{overdue}}</span>
           </div>
         </div>
       </div>
