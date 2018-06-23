@@ -79,6 +79,8 @@ import {InventoryTrAddComponent} from './components/inventory/inventory-tr-add/i
 import {InventoryAdAddComponent} from './components/inventory/inventory-ad-add/inventory.component';
 import {InventoryPoProfileComponent} from './components/inventory/inventory-po-profile/inventory.component';
 import { ProductProfileComponent } from './components/inventory/products/productprofile/productprofile.component';
+import { InvoiceProfileComponent } from './components/sales/invoices/invoiceprofile/invoiceprofile.component';
+import { EstimateProfileComponent } from './components/sales/invoices/estimateprofile/estimateprofile.component';
 
 import { AuthGuard } from './services/authguard.service';
 
@@ -90,6 +92,8 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent , canActivate: [AuthGuard] },
   { path: 'add-invoice', component: AddInvoiceComponent, canActivate: [AuthGuard] },
   { path: 'add-estimate', component: AddEstimateComponent, canActivate: [AuthGuard] },
+  { path: 'invoice-profile/:id', component: InvoiceProfileComponent },
+  { path: 'estimate-profile/:id', component: EstimateProfileComponent },
   { path: 'crm', component: CrmComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'crm-dashboard', pathMatch: 'full' },

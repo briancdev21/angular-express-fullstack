@@ -86,6 +86,7 @@ export class AddSupplierComponent implements OnInit {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.supplierAssociation = ['Danny Shibley', 'John Stephen'];
     this.sharedService.getContacts().subscribe(contacts => {
+      contacts = this.addContactName(contacts);
       this.contacts = contacts;
     });
     this.sharedService.getTerms().subscribe(terms => {
@@ -274,5 +275,15 @@ export class AddSupplierComponent implements OnInit {
     this.contactEmail = contact['email'];
     this.contactPhone = contact['phoneNumbers'].primary;
     this.contactId = event.target.value;
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

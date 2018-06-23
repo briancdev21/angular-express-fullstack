@@ -64,6 +64,7 @@ export class InvoicesComponent implements OnInit {
   ) {
     this.sharedService.getContacts()
     .subscribe(data => {
+      data = this.addContactName(data);
       console.log('userlist: ', data);
       this.contactsList = data;
     });
@@ -215,5 +216,15 @@ export class InvoicesComponent implements OnInit {
       }
     });
     return this.invoicesListInfo;
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

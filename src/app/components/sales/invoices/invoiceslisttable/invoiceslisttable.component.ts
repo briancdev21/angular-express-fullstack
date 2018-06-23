@@ -25,12 +25,13 @@ export class InvoicesListTableComponent implements OnInit {
 
   constructor( private filterService: FilterService, private router: Router, private sharedService: SharedService ) {
     this.sharedService.getContacts().subscribe(res => {
+      res = this.addContactName(res);
+      console.log('userlist: ', res);
       this.contactsList = res.data;
     });
   }
 
   ngOnInit() {
-    
   }
 
   getStatus() {
@@ -40,9 +41,9 @@ export class InvoicesListTableComponent implements OnInit {
     const contactId = data.contactId.slice(0, 7);
     console.log('contactid..: ', contactId, data);
     if (contactId === 'INVOICE') {
-      this.router.navigate(['./invoice-profile', {id: data.id}]);
+      this.router.navigate([`invoice-profile/${data.id}`]);
     } else {
-      this.router.navigate(['./estimate-profile', {id: data.id}]);
+      this.router.navigate([`estimate-profile/${data.id}`]);
     }
   }
 
@@ -97,6 +98,15 @@ export class InvoicesListTableComponent implements OnInit {
   //     this.invoicesListInfo.reverse();
   //   }
   // }
-
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
 }
 

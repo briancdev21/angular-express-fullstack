@@ -130,6 +130,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
 
       this.sharedService.getContacts()
       .subscribe(data => {
+        data = this.addContactName(data);
         this.contactList = data;
         this.userList = this.contactList;
         this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
@@ -361,5 +362,15 @@ export class InvoiceProfileBodyComponent implements OnInit {
     this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
       console.log('saved invoice: ', res);
     });
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

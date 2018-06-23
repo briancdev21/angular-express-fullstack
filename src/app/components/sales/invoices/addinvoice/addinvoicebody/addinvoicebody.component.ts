@@ -75,7 +75,7 @@ export class AddInvoiceBodyComponent implements OnInit {
   depositsAmount = undefined;
   in_id = '';
   createdDate: any;
-  contactList: any;
+  contactList: any  ;
   noteToSupplier: string;
 
   emailAddresses = [];
@@ -148,9 +148,10 @@ export class AddInvoiceBodyComponent implements OnInit {
     this.dueDate = new Date().toJSON();
     this.sharedService.getContacts()
       .subscribe(data => {
-        console.log('userlist: ', data);
+        data = this.addContactName(data);
         this.contactList = data;
         this.userList = this.contactList;
+        console.log('userlist: ', data);
       });
 
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
@@ -354,5 +355,15 @@ export class AddInvoiceBodyComponent implements OnInit {
     } else {
       this.showModal = true;
     }
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

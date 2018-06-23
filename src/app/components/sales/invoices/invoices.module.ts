@@ -60,6 +60,7 @@ import {InvoiceProfileFooterComponent} from './invoiceprofile/invoiceprofilefoot
 import {EstimateProfileBodyComponent} from './estimateprofile/estimateprofilebody/estimateprofilebody.component';
 import {EstimateProfileHeaderComponent} from './estimateprofile/estimateprofileheader/estimateprofileheader.component';
 import {EstimateProfileFooterComponent} from './estimateprofile/estimateprofilefooter/estimateprofilefooter.component';
+import { InProfileTableComponent } from './components/in-profile-table/in-table.component';
 
 
 @NgModule({
@@ -104,7 +105,8 @@ import {EstimateProfileFooterComponent} from './estimateprofile/estimateprofilef
     InvoiceProfileFooterComponent,
     EstimateProfileBodyComponent,
     EstimateProfileHeaderComponent,
-    EstimateProfileFooterComponent
+    EstimateProfileFooterComponent,
+    InProfileTableComponent
   ],
   imports: [
     BrowserModule,
@@ -151,7 +153,8 @@ import {EstimateProfileFooterComponent} from './estimateprofile/estimateprofilef
     InSubTotalServicesComponent,
     InDepositsCreditsComponent,
     MultiEmailSelectComponent,
-    EsTableComponent
+    EsTableComponent,
+    InProfileTableComponent
   ],
   providers: [FilterService]
 })

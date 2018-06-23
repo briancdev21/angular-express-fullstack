@@ -88,6 +88,7 @@ export class InvoiceFilterComponent implements OnInit {
     // });
     this.sharedService.getContacts()
     .subscribe(data => {
+      data = this.addContactName(data);
       console.log('userlist: ', data);
       this.customersList = data;
     });
@@ -280,5 +281,15 @@ export class InvoiceFilterComponent implements OnInit {
     this.filteredInvoices = Array.from(new Set(this.filteredInvoices));
 
     this.filterParent.emit({filtered: this.filteredInvoices, clicked: this.applyClicked});
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

@@ -53,6 +53,7 @@ export class InventoryPoAddComponent implements OnInit {
       this.sharedService.getLocations().subscribe(locations => {
         po_create_mock.location = locations.results[0].id;
         this.sharedService.getContacts().subscribe(contacts => {
+          contacts = this.addContactName(contacts);
           po_create_mock.contactId = contacts[0].id;
           _.assign(po_create_mock, mockCreateData);
           console.log('po mock:', po_create_mock);
@@ -69,5 +70,15 @@ export class InventoryPoAddComponent implements OnInit {
 
   ngOnInit() {
     // OnInit LifeCycle
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

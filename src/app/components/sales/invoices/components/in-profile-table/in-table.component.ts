@@ -8,7 +8,7 @@ import { InvoicesService } from '../../../../../services/invoices.service';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-in-table',
+  selector: 'app-in-profile-table',
   templateUrl: './in-table.component.html',
   styleUrls: [
     './in-table.component.css',
@@ -17,7 +17,7 @@ import * as moment from 'moment';
 })
 
 
-export class InTableComponent implements OnInit {
+export class InProfileTableComponent implements OnInit {
   @Input() set productDetails(val) {
     this._productDetails = val;
     this.addNewProduct();
@@ -57,6 +57,7 @@ export class InTableComponent implements OnInit {
   addNewProduct() {
     const newProduct = new ProductDetailInfo();
     // newProduct.taxRateId = this.taxRateOptions[0].id;
+    newProduct.readonly = true;
     this._productDetails.push(newProduct);
   }
 

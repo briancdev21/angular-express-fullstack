@@ -148,6 +148,7 @@ export class AddEstimateBodyComponent implements OnInit {
     this.sharedService.getContacts()
       .subscribe(data => {
         console.log('userlist: ', data);
+        data = this.addContactName(data);
         this.contactList = data;
         this.userList = this.contactList;
       });
@@ -331,5 +332,15 @@ export class AddEstimateBodyComponent implements OnInit {
     } else {
       this.showModal = true;
     }
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

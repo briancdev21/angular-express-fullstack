@@ -44,6 +44,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
 
     this.data1 = {};
     this.sharedService.getContacts().subscribe(contacts => {
+      contacts = this.addContactName(contacts);
       this.contacts = contacts;
     });
   }
@@ -102,6 +103,16 @@ export class SupplierProfileInfoBarComponent implements OnInit {
   }
 
   loadImageFailed() {
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }
 
