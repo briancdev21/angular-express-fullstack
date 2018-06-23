@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../projectmanagement.service';
 import { SharedService } from '../../../../../services/shared.service';
+import { ProjectsService } from '../../../../../services/projects.service';
 
 @Component({
   selector: 'app-progressoverview',
@@ -15,53 +16,15 @@ export class ProgressOverviewComponent implements OnInit {
 
   menuCollapsed: any;
   public tasks = [];
-  links = [
-  ];
+  links = [];
 
+  public projectInfo: any;
 
-  public projectInfo = {
-    projectOwner: {
-      name: 'John Moss',
-      imgUrl: 'assets/users/user1.png',
-    },
-    projectId: 'NU8802-0159',
-    startDate: '2016-12-5',
-    targetDate: '',
-    nextPaymentDate: '',
-    budgetPerformance: 54,
-    schedulePerformance: 51,
-    roiPerformance: 67,
-    projectHealth: 33,
-    projectTasks: {
-      totalTasks: 25,
-      overdue: 1,
-      completed: 4
-    },
-    projectProgress: {
-      qualityPerformance: 93,
-      scopePerformance: 58,
-      scopeChange: 3,
-      mitigation: 3,
-    },
-    inventoryHealth: {
-      notProcessed: 0,
-      onOrder: 1,
-      checkedIn: 33,
-      delivered: 0
-    },
-    projectBudget: 12566.37,
-    budgetUsed: 6749,
-    revenue: 11164,
-    labor: 0,
-  };
-
-  dueToday = 12;
-  dueThisWeek = 24;
-  dueNextWeek = 16;
-  public barInfo = {
-    title: 'Project health is at ' + this.projectInfo.projectHealth + '%',
-    completeness: this.projectInfo.projectHealth,
-  };
+  dueToday: any;
+  dueThisWeek: any;
+  dueNextWeek: any;
+  overdue: any;
+  public barInfo: any;
 
   public morrisDonutInfo = [];
 
@@ -183,7 +146,12 @@ export class ProgressOverviewComponent implements OnInit {
       passedDays: 'Yesterday'
     }
   ];
-  constructor( private pmService: ProjectManagementService, private sharedService: SharedService ) {
+
+  currentProjectId: any;
+  contactsList = [];
+
+  constructor( private pmService: ProjectManagementService, private sharedService: SharedService,
+    private projectsService: ProjectsService ) {
     this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'projectHoursOverTime').subscribe(res => {
       this.morrisDonutInfo = res.projectHoursOverTime;
       this.morrisDonutInfo.forEach(ele => {
@@ -191,18 +159,48 @@ export class ProgressOverviewComponent implements OnInit {
         ele.value = ele.percent;
       });
     });
+
+    this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'projectTasksDueToday').subscribe(res => {
+      this.dueToday = res.projectTasksDueToday;
+      console.log('duetoday: ', res);
+    });
+
+    this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'projectTasksDueThisWeek').subscribe(res => {
+      this.dueThisWeek = res.projectTasksDueThisWeek;
+    });
+
+    this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'projectTasksDueNextWeek').subscribe(res => {
+      this.dueNextWeek = res.projectTasksDueNextWeek;
+    });
+
+    this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'overDueProjectTasks').subscribe(res => {
+      this.overdue = res.overDueProjectTasksOverTime[0].frameValue;
+    });
+
+    this.currentProjectId = localStorage.getItem('current_projectId');
+    if (this.currentProjectId !== '') {
+      this.sharedService.getContacts().subscribe(data => {
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+
+          this.projectInfo = res.data;
+          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+          this.barInfo = {
+            title: 'Project health is at ' + this.projectInfo.health + '%',
+            completeness: this.projectInfo.health,
+          };
+          console.log('indi project: ', this.projectInfo);
+        });
+
+      });
+    } else {
+      console.error('product id error');
+    }
   }
 
   ngOnInit() {
-    // change to percentage
-    const arr = this.morrisDonutInfo.map( v => v.value);
-    let total = 0;
-    arr.forEach(element => {
-      total = total + element;
-    });
-    this.morrisDonutInfo.forEach(ele => {
-      ele.value = Math.floor(ele.value * 100 / total);
-    });
+
   }
 
   toggleMenubar(data: boolean) {
@@ -218,6 +216,23 @@ export class ProgressOverviewComponent implements OnInit {
         ele.value = ele.percent;
       });
     });
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    console.log('selected: ', id, selectedContact, this.contactsList);
+    return selectedContact.name;
   }
 
 }
