@@ -162,6 +162,7 @@ export class InTableComponent implements OnInit {
       this.invoicesService.updateInvoiceProduct(this.invoiceId, this._productDetails[index].id, this.invoiceProductModel).
       subscribe(res => {
         this._productDetails[index].total = res.data.total;
+        this.priceChange.emit(null);
       });
     }
   }

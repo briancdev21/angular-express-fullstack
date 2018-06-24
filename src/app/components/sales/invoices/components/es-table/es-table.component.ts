@@ -164,6 +164,7 @@ export class EsTableComponent implements OnInit {
       this.estimatesService.updateEstimateProduct(this.estimateId, this._productDetails[index].id, this.estimateProductModel).
       subscribe(res => {
         this._productDetails[index].total = res.data.total;
+        this.priceChange.emit(null);
       });
     }
   }

@@ -175,6 +175,7 @@ export class POTableComponent implements OnInit {
     this.sharedService.updatePurchaseOrderProduct(this.po_id, this.productDetails[index].purchaseOrderProductId, this.poProductModel)
     .subscribe(res => {
       this.productDetails[index].total = res.data.total;
+      this.priceChange.emit(null);
     });
   }
 }

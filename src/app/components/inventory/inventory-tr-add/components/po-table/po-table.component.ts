@@ -144,6 +144,7 @@ export class POTableComponent implements OnInit {
     this.sharedService.updateTransferProduct(this.tr_id,
       this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
         this.productDetails[index].total = res.data.total;
+        this.priceChange.emit(null);
     });
   }
 }
