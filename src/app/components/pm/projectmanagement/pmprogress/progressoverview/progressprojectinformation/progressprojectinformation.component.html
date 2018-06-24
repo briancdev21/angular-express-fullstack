@@ -145,7 +145,38 @@
       </div>
     </div>
 
-    <div>
+    <div class="account-manager">
+      <span class="title">Contact Association</span>
+      <div class="content-info">
+        <div class="followers"  (click)="editableCa=true;$event.stopPropagation()" *ngIf="projectInformation.accountManager" (clickOutside)="closeCaEditableModal()"> 
+          <div class="follower" *ngFor="let user of projectInformation.contactAssociation; let i = index" >
+            <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editableCa=true;$event.stopPropagation()"/></a>
+          </div> 
+          <div class="edit-followers" *ngIf="editableCa" (click)="editableCa=true;$event.stopPropagation()" >
+            <ul>
+              <li *ngFor="let user of projectInformation.contactAssociation; let i = index">{{user.name}}<span (click)="removeContactAssociation(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+              <li style="background: none; width: 100%; margin: 0;">
+                <!-- <input autocomplete [config]="config2" [items]="items2"
+                  (inputChangedEvent)="onInputChangedEvent($event)"
+                  (selectEvent)="onSelectAccountManager($event)"> -->
+                <ng-select *ngIf="isAutocompleteUpdated4" [items]="items2"
+                  bindLabel="config2.sourceField"
+                  [clearSearchOnAdd]="false"
+                  (add)="onSelectContactAssociation($event)" >
+                </ng-select>
+                <ng-select *ngIf="!isAutocompleteUpdated4" [items]="items2"
+                  bindLabel="config2.sourceField"
+                  [clearSearchOnAdd]="false"
+                  (add)="onSelectContactAssociation($event)">
+                </ng-select>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div>
       <span class="title">Contact Association</span>
       <div class="text-autocomp">
         <app-ng2completer 
@@ -155,7 +186,7 @@
           [searchStr]="selectAssociation">
         </app-ng2completer>
       </div>
-    </div>
+    </div> -->
 
     <div>
       <span class="title">Contact Project Manager</span>
