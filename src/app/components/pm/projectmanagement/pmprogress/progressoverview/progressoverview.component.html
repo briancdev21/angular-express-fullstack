@@ -27,7 +27,7 @@
           </div>
         </div>
       </div>
-      <div class="card">
+      <div class="card" *ngIf="morrisLineChartInfo.length > 0">
         <div class="card-header">
           <span>REVENUE FOR THIS PROJECT</span>
         </div>
@@ -60,21 +60,17 @@
       </div>
     </div>
     <div class="chart-row">
-      <div class="card area-chart">
+      <div class="card area-chart" *ngIf="areaChartInfo.length > 0">
         <div class="card-header">
           <span>ACTUAL vs ESTIMATE BUDGET</span>
           <div class="legend-sec">
             <div class="row">
-              <div class="square blue"></div>
-              <span>Created</span>
+              <div class="square actual-color"></div>
+              <span>Actual</span>
             </div>
             <div class="row">
-              <div class="square green"></div>
-              <span>Complete</span>
-            </div>
-            <div class="row">
-              <div class="square red"></div>
-              <span>Incomplete</span>
+              <div class="square estimate-color"></div>
+              <span>Estimate</span>
             </div>
           </div>
         </div>
