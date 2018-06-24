@@ -3,11 +3,11 @@
 		<div class="customer-project">
 			<div class="customer-name">
 				<span>Customer name</span>
-				<input [value]="orderProfileInfo.contactName" disabled>
+				<input [(ngModel)]="orderProfileInfo.contactName" disabled>
 			</div>
 			<div class="project">
 				<span>Project</span>
-				<input [value]="orderProfileInfo.name" disabled>
+				<input [(ngModel)]="orderProfileInfo.name" disabled>
 			</div>
 		</div>
 		<div class="shipping-address">
@@ -19,21 +19,21 @@
 					<span>Use customer address</span>
 				</div>
 			</div>
-			<input placeholder="Enter Shipping Address" class="address" [value]="orderProfileInfo.shippingAddress.address">
+			<input placeholder="Enter Shipping Address" class="address" [(ngModel)]="orderProfileInfo.shippingAddress.address">
 			<div class="city-state">
-				<input placeholder="Enter City" [value]="orderProfileInfo.shippingAddress.city">
-				<input placeholder="Enter State" [value]="orderProfileInfo.shippingAddress.province">
+				<input placeholder="Enter City" [(ngModel)]="orderProfileInfo.shippingAddress.city">
+				<input placeholder="Enter State" [(ngModel)]="orderProfileInfo.shippingAddress.province">
 			</div>
 			<div class="country-zip">
-				<input placeholder="Enter Country" [value]="orderProfileInfo.shippingAddress.country">
-				<input placeholder="Enter Zipcode" [value]="orderProfileInfo.shippingAddress.postalCode">
+				<input placeholder="Enter Country" [(ngModel)]="orderProfileInfo.shippingAddress.country">
+				<input placeholder="Enter Zipcode" [(ngModel)]="orderProfileInfo.shippingAddress.postalCode">
 			</div>
 		</div>
 	</div>
 	<div class="content-right" >
 		<div>
 			<span>Work Order #</span>
-			<input placeholder="Enter Work order" [value]="orderProfileInfo.id">
+			<input placeholder="Enter Work order" [(ngModel)]="orderProfileInfo.id" disabled>
 		</div>
 		<div class="start-date">
 			<span>Start Date</span>

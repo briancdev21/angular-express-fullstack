@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { OrderService } from '../order.service';
 import * as moment from 'moment';
+import { CollaboratorsService } from '../../../../../services/collaborators.service';
 
 @Component({
   selector: 'app-orderdetails',
@@ -25,9 +26,19 @@ export class OrderDetailsComponent implements OnInit {
   endDateValue: Date;
   startTimeValue: any;
   endTimeValue: any;
+  currentWorkOrderId: any;
 
-  constructor( private orderService: OrderService ) {
-
+  constructor( private orderService: OrderService, private router: Router, private collaboratorsService: CollaboratorsService,
+    private route: ActivatedRoute ) {
+    this.orderService.saveWorkOrder.subscribe(res => {
+      // this.router.navigate(['../collaboration/work-order']);
+      this.currentWorkOrderId = this.route.snapshot.paramMap.get('id');
+      console.log('save: ', res);
+      if (res['sendSaveDataToDetails']) {
+        this.orderProfileInfo.isBillable = res['sendSaveDataToDetails']['isBillable'];
+        this.checkValidation();
+      }
+    });
   }
 
   ngOnInit () {
@@ -82,6 +93,26 @@ export class OrderDetailsComponent implements OnInit {
   onEndTime(event) {
     this.endTimeValue = event.value;
     this.orderService.postTimelineData({title: this.endTimeValue.toTimeString(), type: 'endTime'});
+  }
+
+  checkValidation() {
+    if (this.orderProfileInfo.shippingAddress.address && this.orderProfileInfo.shippingAddress.city
+      && this.orderProfileInfo.shippingAddress.province && this.orderProfileInfo.shippingAddress.country &&
+      this.orderProfileInfo.shippingAddress.postalCode && this.orderProfileInfo.contactId && this.startDateValue && this.endDateValue &&
+      this.orderProfileInfo.note && this.orderProfileInfo.description) {
+        this.saveWorkOrder();
+    }
+  }
+
+  saveWorkOrder() {
+    const savingData = this.orderProfileInfo;
+    savingData.startDate = moment(this.startDateValue).format('YYYY-MM-DD');
+    savingData.endDate = moment(this.endDateValue).format('YYYY-MM-DD');
+    console.log('saving Data: ', savingData);
+    this.collaboratorsService.updateIndividualWorkOrder(this.currentWorkOrderId, savingData).subscribe(res => {
+      console.log('saving workorder: ', res);
+      this.router.navigate(['../collaboration/work-order']);
+    });
   }
 
 }
