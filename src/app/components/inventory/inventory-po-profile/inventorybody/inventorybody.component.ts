@@ -111,6 +111,7 @@ export class InventoryBodyComponent {
 
   constructor(private router: Router, private sharedService: SharedService) {
     this.sharedService.getContacts().subscribe(res => {
+      res = this.addContactName(res);
       this.contactList = res;
       if (this.po_mock.contactId !== undefined && this.contactList.length !== 0) {
         const contactIdNumber = parseInt(this.po_mock.contactId.toString().split('-').pop(), 10);
@@ -244,5 +245,15 @@ export class InventoryBodyComponent {
         this.dueDate = resp.data.dueDate;
       });
     }
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

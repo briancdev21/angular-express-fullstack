@@ -130,10 +130,12 @@ export class InvoiceProfileBodyComponent implements OnInit {
 
       this.sharedService.getContacts()
       .subscribe(data => {
+        data = this.addContactName(data);
         this.contactList = data;
         this.userList = this.contactList;
         this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
         this.currentOwner = this.getCustomerName(this.contactList, res.data.contactId);
+        console.log('current owner:', this.currentOwner);
       });
 
       this.sharedService.getTerms().subscribe(data => {
@@ -223,7 +225,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
   getCustomerName(list, id) {
     const idList = list.map( c => c.id);
     const pos = idList.indexOf(id);
-    return list[pos].person.firstName + ' ' + list[pos].person.lastName;
+    return list[pos].name;
   }
 
   onCustomerSelected(user) {
@@ -361,5 +363,15 @@ export class InvoiceProfileBodyComponent implements OnInit {
     this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
       console.log('saved invoice: ', res);
     });
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

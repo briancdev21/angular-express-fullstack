@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="product__table" *ngIf="currentInvoiceId">
-      <app-es-table [(productDetails)]="productDetails" [estimateId]="currentInvoiceId" (priceChange)="onPriceChanged()"></app-es-table>
+      <app-es-profile-table [(productDetails)]="productDetails" [estimateId]="currentInvoiceId" (priceChange)="onPriceChanged()"></app-es-profile-table>
     </div>
     <div class="sub__info">
       <div class="notes-activity">

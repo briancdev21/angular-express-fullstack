@@ -41,16 +41,16 @@ export class AddEstimateComponent implements OnInit {
       'shippingAddress': {
         'address': '',
         'city': '',
-        'province': '',
+        'province': 'ON',
         'postalCode': '',
-        'country': ''
+        'country': 'CA'
       },
       'billingAddress': {
         'address': '',
         'city': '',
-        'province': '',
+        'province': 'ON',
         'postalCode': '',
-        'country': ''
+        'country': 'CA'
       },
       'internalNote': '',
       'customerNote': '',

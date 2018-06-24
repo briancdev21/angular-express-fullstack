@@ -23,7 +23,7 @@
         </td>
         <td class="service-date">
           <div class="created-input" >
-            <input [owlDateTimeTrigger]="serviceDate" [owlDateTime]="serviceDate" (dateTimeChange)="selectCreatedFrom($event)" [(ngModel)]="productDetailInfo.serviceDate" [min]="yesterday" placeholder="Enter date here">
+            <input [owlDateTimeTrigger]="serviceDate" [owlDateTime]="serviceDate" (dateTimeChange)="selectCreatedFrom(i, $event)" [(ngModel)]="productDetailInfo.serviceDate" [min]="yesterday" placeholder="Enter date here">
             <owl-date-time [pickerType]="'calendar'" #serviceDate ></owl-date-time>
           </div>
         </td>

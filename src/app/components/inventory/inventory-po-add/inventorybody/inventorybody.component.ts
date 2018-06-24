@@ -89,6 +89,7 @@ export class InventoryBodyComponent {
     this.dueDate = new Date().toISOString();
       // Get contacts
       this.sharedService.getContacts().subscribe(res => {
+        res = this.addContactName(res);
         this.contactList = res;
         this.userList = this.contactList.map((contactUser) => contactUser.person.firstName + ' ' + contactUser.person.lastName);
       });
@@ -213,5 +214,15 @@ export class InventoryBodyComponent {
         this.dueDate = data.data.dueDate;
       });
     }
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

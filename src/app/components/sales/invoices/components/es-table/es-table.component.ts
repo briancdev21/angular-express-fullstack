@@ -119,16 +119,7 @@ export class EsTableComponent implements OnInit {
   }
 
   calcualteTotalPrice(index: number) {
-    const product = this._productDetails[index];
-    if (product.discount < 0 )  { product.discount = 0; }
-    if (product.discount > 100 ) { product.discount = 100; }
-
-    let discount = product.discount;
-    if ( discount === undefined ) { discount = 0; }
-    if ( product.unitprice !== undefined && product.quantity !== undefined ) {
-      product.total = product.unitprice * product.quantity * (100 - discount)  / 100;
-      this.priceChange.emit(null);
-    }
+    this.updatePurchaseOrderProduct(index);
   }
 
   checkDiscount(e) {
@@ -147,27 +138,35 @@ export class EsTableComponent implements OnInit {
     this.updatePurchaseOrderProduct(index);
   }
 
-  selectCreatedFrom(event) {
+  selectCreatedFrom(index, event) {
     this.serviceDate = event.value;
+    this._productDetails[index].serviceDate = event.value;
+    this.updatePurchaseOrderProduct(index);
   }
 
   updatePurchaseOrderProduct(index) {
-    if (this._productDetails[index].discount == undefined) this._productDetails[index].discount = 0;
-    if (this._productDetails[index].quantity == undefined) this._productDetails[index].quantity = 0;
+    if (this._productDetails[index].quantity !== undefined &&
+      this._productDetails[index].serviceDate !== undefined &&
+      this._productDetails[index].taxRateId !== undefined
+    ) {
 
-    this.estimateProductModel = {
-      sku: this._productDetails[index].sku,
-      taxRateId: parseInt(this._productDetails[index].taxRateId, 10),
-      discount: {
-        value: this._productDetails[index].discount,
-        unit: 'PERCENT'
-      },
-      received: 0,
-      quantity: this._productDetails[index].quantity
-    };
-    this.estimatesService.updateEstimateProduct(this.estimateId, this._productDetails[index].id, this.estimateProductModel).
-    subscribe(res => {
-    });
+      this.estimateProductModel = {
+        sku: this._productDetails[index].sku,
+        taxRateId: parseInt(this._productDetails[index].taxRateId, 10),
+        discount: {
+          value: this._productDetails[index].discount ? this._productDetails[index].discount : 0,
+          unit: 'PERCENT'
+        },
+        received: 0,
+        serviceDate: this._productDetails[index].serviceDate.toISOString().slice(0, 10),
+        quantity: this._productDetails[index].quantity
+      };
+      this.estimatesService.updateEstimateProduct(this.estimateId, this._productDetails[index].id, this.estimateProductModel).
+      subscribe(res => {
+        this._productDetails[index].total = res.data.total;
+        this.priceChange.emit(null);
+      });
+    }
   }
 }
 

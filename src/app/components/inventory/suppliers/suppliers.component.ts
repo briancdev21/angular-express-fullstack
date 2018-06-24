@@ -32,6 +32,7 @@ export class SuppliersComponent implements OnInit {
     this.sharedService.getCurrencies().subscribe(currencies => {
       this.currencies = currencies.results;
       this.sharedService.getContacts().subscribe(contacts => {
+        contacts = this.addContactName(contacts);
         this.contacts = contacts;
         this.sharedService.getTerms().subscribe(terms => {
           this.terms = terms.results;
@@ -202,5 +203,15 @@ export class SuppliersComponent implements OnInit {
     this.suppliersListInfo = this.backUpSuppliers;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }
