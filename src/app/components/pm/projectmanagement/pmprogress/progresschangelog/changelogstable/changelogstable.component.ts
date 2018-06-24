@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
+import * as moment from 'moment';
+import { SharedService } from '../../../../../../services/shared.service';
+import { ProjectsService } from '../../../../../../services/projects.service';
 
 @Component({
   selector: 'app-changelogstable',
@@ -51,8 +54,25 @@ export class ChangeLogsTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
+  usersList = [];
+  currentProjectId: any;
+  changeLogsInfo: any;
 
-  constructor( private router: Router ) {
+  constructor( private router: Router, private sharedService: SharedService,
+    private projectsService: ProjectsService, private route: ActivatedRoute  ) {
+      this.currentProjectId = localStorage.getItem('project_id');
+      console.log('project_id: ', this.currentProjectId);
+      this.sharedService.getUsers().subscribe(data => {
+        this.usersList = data;
+        this.addUserRealName(this.usersList);
+        this.projectsService.getProjectChangeLogs(this.currentProjectId).subscribe(res => {
+
+          this.changeLogsInfo = res.data;
+          this.changeLogsInfo.customerName = this.getCustomerNameFromUsername(res.data.contactId);
+          console.log('indi project: ', this.changeLogsInfo);
+        });
+
+      });
   }
 
   ngOnInit() {
@@ -62,8 +82,8 @@ export class ChangeLogsTableComponent implements OnInit {
   getStatus() {
   }
 
-  redirectTo() {
-    this.router.navigate(['./pm/pm-details/pm-progress/pm-log-details/']);
+  redirectTo(id) {
+    this.router.navigate(['./pm/pm-details/pm-progress/pm-log-details/', {id: id}]);
   }
 
   sortArray(field) {
@@ -124,6 +144,18 @@ export class ChangeLogsTableComponent implements OnInit {
 
   getBudgetColor(budget) {
     return budget >= 0 ? 'green' : 'red';
+  }
+
+  addUserRealName(data) {
+    data.forEach(element => {
+      element.name = element.firstName + ' ' + element.lastName;
+    });
+    return data;
+  }
+
+  getCustomerNameFromUsername(username) {
+    const selectedUser = this.usersList.filter(c => c.username === username)[0];
+    return selectedUser.name;
   }
 
 }

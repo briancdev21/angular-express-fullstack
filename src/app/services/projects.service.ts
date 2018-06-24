@@ -49,25 +49,24 @@ export class ProjectsService {
     return this.http.delete(url);
   }
 
-  // createSupplier (body): Observable<any> {
-  //   // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
-  //   const url = `${apiUrl}inventory/suppliers/`;
-  //   return this.http.post(url, body, this.options)
-  //     .map((res) => res);
-  // }
+  getProjectChangeLogs (id): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs`;
+    return this.http.get(url);
+  }
 
-  // getIndividualSupplier(id): Observable<any>  {
-  //   const url = `${apiUrl}inventory/suppliers/${id}`;
-  //   return this.http.get(url);
-  // }
+  getIndividualProjectChangeLog(id, logId): Observable<any>  {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs/${logId}`;
+    return this.http.get(url);
+  }
 
-  // updateIndividualSupplier(id, body): Observable<any> {
-  //   const url = `${apiUrl}inventory/suppliers/${id}`;
-  //   return this.http.put(url, body);
-  // }
+  createProjectChangeLog (id, body): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs`;
+    return this.http.post(url, body, this.options);
+  }
 
-  // getSupplierActivity(id): Observable<any>  {
-  //   const url = `${apiUrl}inventory/suppliers/${id}/recent-activity`;
-  //   return this.http.get(url);
-  // }
+  updateIndividualChangeLog(id, logId, body): Observable<any> {
+    const url = `${apiUrl}inventory/suppliers/${id}/change-logs/${logId}`;
+    return this.http.put(url, body);
+  }
+
 }
