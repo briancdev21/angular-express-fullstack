@@ -1,5 +1,5 @@
 <div class="content-title-bar" >
-  <input class="title" placeholder="Work Order Title Here" [(ngModel)]="orderTitle" (clickOutside)="clickOutsideTitle(orderTitle)">
+  <input class="title" placeholder="Work Order Title Here" [(ngModel)]="orderProfileInfo.name" (clickOutside)="clickOutsideTitle(orderTitle)">
   <div class="titlebar-right">
     <span (click)="openAvailabilityModal();">Check Availability</span>
     <div class="followers" > 
@@ -7,7 +7,7 @@
         <a [title]='user.name'><img [src]='user.imageUrl'/></a>
       </div> 
     </div>
-    <div class="status">{{orderProfileInfo.orderStatus}}</div>
+    <div class="status">{{orderProfileInfo.status}}</div>
   <div>
  
 </div>

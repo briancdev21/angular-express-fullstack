@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../../common/common.component';
 import { OrderService } from './order.service';
 import { Ng2TimelineComponent } from '../../../profile/ng2-timeline/ng2timeline.component';
+import * as moment from 'moment';
+import { SharedService } from '../../../../services/shared.service';
+import { CollaboratorsService } from '../../../../services/collaborators.service';
+import { Router, ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-orderprofile',
   templateUrl: './orderprofile.component.html',
@@ -28,19 +33,64 @@ export class OrderProfileComponent implements OnInit {
   originalWorkOrderDesc = '';
   savedStaff: any;
   isAutocompleteUpdated = false;
+  currentWorkOrderId: any;
+  contactsList: any;
+  public orderProfileInfo: any;
+  usersList: any;
+  selectedContact: any;
+  followersDetails = [];
 
-  items2: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
-  ];
+  items2 = [];
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
 
-  constructor(private orderService: OrderService) {
+  constructor(private orderService: OrderService, private sharedService: SharedService,
+    private collaboratorsService: CollaboratorsService, private route: ActivatedRoute) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
+    });
+
+    this.sharedService.getUsers().subscribe(res => {
+      this.usersList = res;
+
+      for (let i = 0; i < this.usersList.length; i++) {
+        this.items2.push({
+          id: i,
+          label: this.usersList[i].firstName + ' ' + this.usersList[i].lastName,
+          imageUrl: this.usersList[i].pictureURI,
+          userName: this.usersList[i].username
+        });
+      }
+      console.log('item2:', this.items2);
+
+      this.currentWorkOrderId = this.route.snapshot.paramMap.get('id');
+      this.sharedService.getContacts().subscribe(data => {
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.collaboratorsService.getIndividualWorkOrder(this.currentWorkOrderId).subscribe(response => {
+          this.orderProfileInfo = response.data;
+          this.orderProfileInfo.contactName = this.getContactNameFromId(response.data.contactId);
+          this.orderProfileInfo.selectedContact = this.selectedContact;
+          // remove selected users from list
+          this.orderProfileInfo.followers.forEach(element => {
+            this.items2 = this.items2.filter(function( obj ) {
+              return obj.username !== element.username;
+            });
+            const selectedUser = this.usersList.filter(u => u.username === element)[0];
+            this.followersDetails.push({
+              name: selectedUser.firstName + ' ' + selectedUser.lastName,
+              imageUrl: selectedUser.pictureURI,
+              userName: selectedUser.username
+            });
+          });
+
+          this.orderProfileInfo.followersDetails = this.followersDetails;
+          console.log('followers details: ', this.orderProfileInfo);
+
+          this.originalInternalNotes = this.orderProfileInfo.note;
+          this.originalWorkOrderDesc = this.orderProfileInfo.description;
+        });
+      });
     });
   }
 
@@ -86,35 +136,37 @@ export class OrderProfileComponent implements OnInit {
     }
   ];
 
-  public orderProfileInfo = {
-    orderTitle: 'Work Order Title Here',
-    orderStatus: 'IN PROGRESS',
-    customerName: 'John Moss',
-    productName: 'Remodel with a Nu Life',
-    completion: 64,
-    shippingAddress: {
-      street: '301, 1615 10th Ave SW',
-      city: 'Calgary',
-      state: 'Alberta',
-      country: 'Canada',
-      zipcode: 'T3C 0J7',
-    },
-    workOrder: 'WO - 8802138',
-    startDate: 'November 20, 2017',
-    startTime: '12:00 PM',
-    endDate: 'November 20, 2017',
-    endTime: '6:30 PM',
-    followers: [
-      {
-        imageUrl: 'assets/users/user1.png',
-        name: 'Michael'
-      },
-      {
-        imageUrl: 'assets/users/user2.png',
-        name: 'Joseph'
-      }
-    ]
-  };
+  // public orderProfileInfo = {
+  //   orderTitle: 'Work Order Title Here',
+  //   orderStatus: 'IN PROGRESS',
+  //   customerName: 'John Moss',
+  //   productName: 'Remodel with a Nu Life',
+  //   completion: 64,
+  //   shippingAddress: {
+  //     street: '301, 1615 10th Ave SW',
+  //     city: 'Calgary',
+  //     state: 'Alberta',
+  //     country: 'Canada',
+  //     zipcode: 'T3C 0J7',
+  //   },
+  //   workOrder: 'WO - 8802138',
+  //   startDate: 'November 20, 2017',
+  //   startTime: '12:00 PM',
+  //   endDate: 'November 20, 2017',
+  //   endTime: '6:30 PM',
+  //   followers: [
+  //     {
+  //       imageUrl: 'assets/users/user1.png',
+  //       name: 'Michael'
+  //     },
+  //     {
+  //       imageUrl: 'assets/users/user2.png',
+  //       name: 'Joseph'
+  //     }
+  //   ]
+  // };
+
+
 
   public taskTicketInfo: Array<object> = [
     {
@@ -237,17 +289,10 @@ export class OrderProfileComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.originalInternalNotes = this.internalNotes;
-    this.originalWorkOrderDesc = this.workOrderDescription;
 
     this.editable = false;
     const date = new Date();
     const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-    this.orderProfileInfo.followers.forEach(element => {
-      this.items2 = this.items2.filter(function( obj ) {
-        return obj.label !== element.name;
-      });
-    });
 
     this.orderService.openModal.subscribe(
       data => {
@@ -444,5 +489,21 @@ export class OrderProfileComponent implements OnInit {
     if (product.delivery == product.quantity ) {
       this.orderService.postTimelineData({title: product.productName, type: 'delivered'});
     }
+  }
+
+  getContactNameFromId(id) {
+    this.selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return this.selectedContact.name;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }
