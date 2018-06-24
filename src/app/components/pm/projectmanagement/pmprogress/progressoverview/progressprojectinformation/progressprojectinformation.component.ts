@@ -143,21 +143,21 @@ export class ProgressProjectInformationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.formattedStart = moment(this.projectInformation.startDate).format('MMMM DD, YYYY');
-    this.formattedEnd = moment(this.projectInformation.endDate).format('MMMM DD, YYYY');
+    this.formattedStart = moment(this.projectInfo.startDate).format('MMMM DD, YYYY');
+    this.formattedEnd = moment(this.projectInfo.deliveryDate).format('MMMM DD, YYYY');
     this.startMax = this.projectInformation.endDate;
     this.endMin = this.projectInformation.startDate;
   }
 
   selectStartDate(event) {
     this.formattedStart = moment(event.value).format('MMMM DD, YYYY');
-    console.log('event: ', this.projectInformation.startDate);
-    this.endMin = this.projectInformation.startDate;
+    console.log('event: ', this.projectInfo.startDate);
+    this.endMin = this.projectInfo.startDate;
   }
 
   selectEndDate(event) {
     this.formattedEnd = moment(event.value).format('MMMM DD, YYYY');
-    this.startMax = this.projectInformation.endDate;
+    this.startMax = this.projectInfo.endDate;
   }
 
   onInputChangedEvent(val: string) {
