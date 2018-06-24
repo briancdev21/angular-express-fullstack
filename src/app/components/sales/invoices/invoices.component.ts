@@ -72,21 +72,29 @@ export class InvoicesComponent implements OnInit {
     this.filterAvaliableTo = 'everyone';
     this.invoicesService.getInvoices().subscribe(res => {
       this.invoicesListInfo = res.results;
+      this.invoicesListInfo = this.invoicesListInfo.map(element => {
+        element['isInvoice'] = true;
+        return element;
+      });
       this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
       this.estimatesService.getEstimates().subscribe(data => {
         this.estimatesListInfo = data.results;
         this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['expiryDate'], i['status']));
-        this.estimatesListInfo.forEach(element => {
+        this.estimatesListInfo = this.estimatesListInfo.map(element => {
           element['balance'] = 0;
+          element['isInvoice'] = false;
+          return element;
         });
+        console.log('estimatesListInfo:', this.estimatesListInfo);
         this.invoicesListInfo = this.invoicesListInfo.concat(this.estimatesListInfo);
         this.invoicesListInfo.forEach(element => {
           element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
         });
         this.invoicesListInfo = this.sortDateArray('createdAt');
+
+        this.invoicesListInfo.map(i => i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].split('-').pop(), 10)));
         console.log('invoiceslist: ', this.invoicesListInfo);
 
-        this.invoicesListInfo.map(i => i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].slice(-1), 10)));
       });
     });
   }
@@ -136,7 +144,8 @@ export class InvoicesComponent implements OnInit {
   getCustomerName(list, id) {
     const idList = list.map( c => c.id);
     const pos = idList.indexOf(id);
-    return list[pos].person.firstName + ' ' + list[pos].person.lastName;
+    console.log('customer name:', list[pos].name);
+    return list[pos].name;
   }
 
   closeModal() {

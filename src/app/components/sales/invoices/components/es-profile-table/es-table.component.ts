@@ -9,7 +9,7 @@ import { EstimatesService } from '../../../../../services/estimates.service';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-es-table',
+  selector: 'app-es-profile-table',
   templateUrl: './es-table.component.html',
   styleUrls: [
     './es-table.component.css',
@@ -18,7 +18,7 @@ import * as moment from 'moment';
 })
 
 
-export class EsTableComponent implements OnInit {
+export class EsProfileTableComponent implements OnInit {
   @Input() set productDetails(val) {
     this._productDetails = val;
     this.addNewProduct();
@@ -59,6 +59,7 @@ export class EsTableComponent implements OnInit {
   addNewProduct() {
     const newProduct = new ProductDetailInfo();
     // newProduct.taxRateId = this.taxRateOptions[0].id;
+    newProduct.readonly = true;
     this._productDetails.push(newProduct);
   }
 
@@ -91,7 +92,7 @@ export class EsTableComponent implements OnInit {
       this._productDetails[index].taxrate = this.taxRateOptions[0].rate;
       this._productDetails[index].supplierId = product.supplierId;
       this._productDetails[index].model = product.model;
-      this._productDetails[index].unitprice = item.originalObject.cost;
+      this._productDetails[index].unitPrice = item.originalObject.cost;
       this._productDetails[index].name = product.name;
       this._productDetails[index].measure = product.unitOfMeasure.quantity;
       this.estimateProductModel = {

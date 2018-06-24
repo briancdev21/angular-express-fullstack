@@ -61,7 +61,7 @@ import {EstimateProfileBodyComponent} from './estimateprofile/estimateprofilebod
 import {EstimateProfileHeaderComponent} from './estimateprofile/estimateprofileheader/estimateprofileheader.component';
 import {EstimateProfileFooterComponent} from './estimateprofile/estimateprofilefooter/estimateprofilefooter.component';
 import { InProfileTableComponent } from './components/in-profile-table/in-table.component';
-
+import { EsProfileTableComponent } from './components/es-profile-table/es-table.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +106,8 @@ import { InProfileTableComponent } from './components/in-profile-table/in-table.
     EstimateProfileBodyComponent,
     EstimateProfileHeaderComponent,
     EstimateProfileFooterComponent,
-    InProfileTableComponent
+    InProfileTableComponent,
+    EsProfileTableComponent
   ],
   imports: [
     BrowserModule,
@@ -154,7 +155,8 @@ import { InProfileTableComponent } from './components/in-profile-table/in-table.
     InDepositsCreditsComponent,
     MultiEmailSelectComponent,
     EsTableComponent,
-    InProfileTableComponent
+    InProfileTableComponent,
+    EsProfileTableComponent
   ],
   providers: [FilterService]
 })

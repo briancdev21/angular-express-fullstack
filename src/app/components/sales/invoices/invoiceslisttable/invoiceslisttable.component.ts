@@ -17,7 +17,10 @@ import { SharedService } from '../../../../services/shared.service';
 
 export class InvoicesListTableComponent implements OnInit {
 
-  @Input() invoicesListInfo;
+  @Input() set invoicesListInfoData(val) {
+    this.invoicesListInfo = val;
+  }
+  invoicesListInfo = [];
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
