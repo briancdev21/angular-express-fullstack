@@ -24,19 +24,34 @@ export class ChangeLogDetailsComponent implements OnInit {
   public endMin;
   public startMax;
   contactsList = [];
+  usersList = [];
 
   constructor( private pmService: ProjectManagementService, private sharedService: SharedService ) {
     this.sharedService.getContacts().subscribe(data => {
       this.contactsList = data;
       this.addContactName(this.contactsList);
+    });
 
+    this.sharedService.getUsers().subscribe(res => {
+      this.usersList = res;
     });
 
   }
 
   ngOnInit () {
     const options = { month: 'long', year: 'numeric', day: 'numeric' };
-    this.createChangeLogId();
+    // no need to create id because it will come from back end.
+    // this.createChangeLogId();
+
+    // comment for now because it cause some console error. Will reactivate after back end is ready
+
+    // this.street = this.changeLogInfo.shippingAddress.address;
+    // this.city = this.changeLogInfo.shippingAddress.city;
+    // this.state = this.changeLogInfo.shippingAddress.province;
+    // this.country = this.changeLogInfo.shippingAddress.country;
+    // this.zipcode = this.changeLogInfo.shippingAddress.postalCode;
+
+
     // this.startDateValue = new Date(this.changeLogInfo.startDate);
     // this.endDateValue = new Date(this.changeLogInfo.endDate);
     // this.startTimeValue = new Date(this.changeLogInfo.startTime);
@@ -45,11 +60,17 @@ export class ChangeLogDetailsComponent implements OnInit {
 
   clickIconShipping() {
     this.switchIconAddress = !this.switchIconAddress;
-    this.street = (this.switchIconAddress) ? this.changeLogInfo.projectAddress.street : '';
-    this.city = (this.switchIconAddress) ? this.changeLogInfo.projectAddress.city : '';
-    this.state = (this.switchIconAddress) ? this.changeLogInfo.projectAddress.state : '';
-    this.country = (this.switchIconAddress) ? this.changeLogInfo.projectAddress.country : '';
-    this.zipcode = (this.switchIconAddress) ? this.changeLogInfo.projectAddress.zipcode : '';
+    this.changeLogInfo.shippingAddress.address = (this.switchIconAddress) ? this.street :
+    this.changeLogInfo.selectedContact.shippingAddress.city;
+    this.changeLogInfo.shippingAddress.city = (this.switchIconAddress) ? this.city :
+    this.changeLogInfo.selectedContact.shippingAddress.city;
+    this.changeLogInfo.shippingAddress.province = (this.switchIconAddress) ? this.state :
+    this.changeLogInfo.selectedContact.shippingAddress.province;
+    this.changeLogInfo.shippingAddress.country = (this.switchIconAddress) ? this.country :
+    this.changeLogInfo.selectedContact.shippingAddress.country;
+    this.changeLogInfo.shippingAddress.postalCode = (this.switchIconAddress) ? this.zipcode :
+    this.changeLogInfo.selectedContact.shippingAddress.postalCode;
+    this.switchIconAddress = !this.switchIconAddress;
   }
 
   onCreatedDate(event) {
@@ -62,21 +83,21 @@ export class ChangeLogDetailsComponent implements OnInit {
     // this.orderService.postTimelineData({title: this.endDateValue.toDateString(), type: 'endDate'});
   }
 
-  createChangeLogId() {
-    const today = new Date();
-    const year = today.getFullYear().toString().slice(-2);
-    let month = (today.getMonth() + 1).toString();
-    if (month.length === 1) {
-      month = '0' + month;
-    }
-    const day = today.getDate();
-    let lastIndex = this.changeLogInfo.count + 1;
-    if (lastIndex.toString().length === 1) {
-      lastIndex = '0' + lastIndex;
-    }
-    const changeLogId = 'CL' + year + month + day + '-' + lastIndex;
-    this.changeLogInfo.changeLogId = changeLogId;
-  }
+  // createChangeLogId() {
+  //   const today = new Date();
+  //   const year = today.getFullYear().toString().slice(-2);
+  //   let month = (today.getMonth() + 1).toString();
+  //   if (month.length === 1) {
+  //     month = '0' + month;
+  //   }
+  //   const day = today.getDate();
+  //   let lastIndex = this.changeLogInfo.count + 1;
+  //   if (lastIndex.toString().length === 1) {
+  //     lastIndex = '0' + lastIndex;
+  //   }
+  //   const changeLogId = 'CL' + year + month + day + '-' + lastIndex;
+  //   this.changeLogInfo.changeLogId = changeLogId;
+  // }
 
   // onTimeChange() {
   //   let timeSplit = this.startTimeValue.split(':'), hours, minutes, meridian;

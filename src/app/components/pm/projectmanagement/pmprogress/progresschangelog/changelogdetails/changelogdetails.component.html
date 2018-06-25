@@ -7,7 +7,7 @@
 			</div>
 			<div class="project">
 				<span>Project</span>
-				<input [(ngModel)]="changeLogInfo.projectName" disabled>
+				<input [(ngModel)]="changeLogInfo.projectId" disabled>
 			</div>
 		</div>
 		<div class="shipping-address">
@@ -33,11 +33,19 @@
 	<div class="content-right" >
 		<div>
 			<span>Change Log ID</span>
-			<input placeholder="Enter Change Log ID" [(ngModel)]="changeLogInfo.changeLogId">
+			<input placeholder="Enter Change Log ID" [(ngModel)]="changeLogInfo.id">
 		</div>
 		<div>
 			<span>Requested By</span>
-			<input placeholder="Requested By" [(ngModel)]="changeLogInfo.requestedBy" disabled>
+			<!-- select drop down -->
+			<select [(ngModel)]="changeLogInfo.requestedBy" *ngIf="usersList">
+				<option value="user.username" *ngFor="let user of usersList">{{user.firstName}} {{user.lastName}}</option>
+			</select>
+			<!-- Just input -->
+			<!-- <input placeholder="Requested By" [(ngModel)]="changeLogInfo.requestedBy" disabled> -->
+
+
+			<!-- ng completer -->
 			<!-- <div class="text-autocomp">
         <app-ng2completer 
           [itemsList]="customersList" 
