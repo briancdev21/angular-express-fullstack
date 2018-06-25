@@ -32,85 +32,11 @@ export class ProgressOverviewComponent implements OnInit {
 
   donutTimePeriod = 'MONTHLY';
 
-  public morrisLineChartInfo = [
-    {
-      period: 'Jun',
-      revenue: 67000,
-    }, {
-      period: 'JUL',
-      revenue: 54000,
-    }, {
-      period: 'AUG',
-      revenue: 35203,
-    }, {
-      period: 'SEP',
-      revenue: 62652,
-    }, {
-      period: 'OCT',
-      revenue: 802520,
-    }, {
-      period: 'NOV',
-      revenue: 152000,
-    }, {
-      period: 'DEC',
-      revenue: 1520003,
-    },
-    ];
+  public morrisLineChartInfo = [];
+  actualBudgetOverTime = [];
+  estimatedBudgetOverTime = [];
 
-    public areaChartInfo = [{
-      period: 'JAN',
-      Actual: 35000,
-      Estimate: 30000,
-
-  }, {
-      period: 'FEB',
-      Actual: 15000,
-      Estimate: 25000,
-
-  }, {
-      period: 'MAR',
-      Actual: 31000,
-      Estimate: 20000,
-
-  }, {
-      period: 'APR',
-      Actual: 25000,
-      Estimate: 25000,
-
-  }, {
-      period: 'MAY',
-      Actual: 18000,
-      Estimate: 20000,
-
-  }, {
-      period: 'JUN',
-      Actual: 17000,
-      Estimate: 15000,
-  }, {
-      period: 'JUL',
-      Actual: 20000,
-      Estimate: 14000,
-  }, {
-      period: 'AUG',
-      Actual: 32000,
-      Estimate: 30000,
-  }, {
-      period: 'SEP',
-      Actual: 23000,
-      Estimate: 20000,
-  }, {
-      period: 'OCT',
-      Actual: 32000,
-      Estimate: 19000,
-  }, {
-      period: 'NOV',
-      Actual: 20000,
-      Estimate: 34000,
-  }, {
-      period: 'DEC',
-      Actual: 32000,
-      Estimate: 30000,
-  }];
+  public areaChartInfo = [];
 
   activities = [
     {
@@ -157,6 +83,30 @@ export class ProgressOverviewComponent implements OnInit {
       this.morrisDonutInfo.forEach(ele => {
         ele.label = ele.name;
         ele.value = ele.percent;
+      });
+    });
+
+    this.sharedService.getProjectsStatistics(5, 0, 'MONTHLY', 'projectsRevenueOverTime').subscribe(res => {
+      this.morrisLineChartInfo = res.projectsRevenueOverTime;
+      this.morrisLineChartInfo.forEach(ele => {
+        ele.period = ele.frameUnit.toUpperCase().slice(0, 3);
+        ele.revenue = ele.frameValue;
+      });
+    });
+
+    this.sharedService.getProjectsStatistics(11, 0, 'MONTHLY', 'actualProjectBugdetOverTime').subscribe(res => {
+      this.actualBudgetOverTime = res.actualProjectBugdetOverTime;
+      this.sharedService.getProjectsStatistics(11, 0, 'MONTHLY', 'estimatedProjectBugdetOverTime').subscribe(data => {
+        this.estimatedBudgetOverTime = data.estimatedProjectBugdetOverTime;
+        console.log('333333', this.actualBudgetOverTime, this.estimatedBudgetOverTime);
+        for (let i = 0; i < this.estimatedBudgetOverTime.length; i ++) {
+          const combinedData = {
+            period: this.estimatedBudgetOverTime[i].frameUnit.toUpperCase().slice(0, 3),
+            Actual: this.actualBudgetOverTime[i].frameValue,
+            Estimate: this.estimatedBudgetOverTime[i].frameValue
+          };
+          this.areaChartInfo.push(combinedData);
+        }
       });
     });
 

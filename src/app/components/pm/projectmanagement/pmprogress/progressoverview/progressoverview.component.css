@@ -27,6 +27,14 @@
   background: #E66A4D;
 }
 
+.actual-color {
+  background: #4FE3C3;
+}
+
+.estimate-color {
+  background: #F5A622;
+}
+
 span {
   color: #95989A;
 }
@@ -190,7 +198,7 @@ span {
 
 .legend-sec {
   display: flex;
-  width: 280px;
+  width: 150px;
   justify-content: space-between;
   margin-right: 30px;
 }

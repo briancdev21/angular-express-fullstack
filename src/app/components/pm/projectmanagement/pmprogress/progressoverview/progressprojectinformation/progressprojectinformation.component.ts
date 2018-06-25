@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { SharedService } from '../../../../../../services/shared.service';
+import { ProjectsService } from '../../../../../../services/projects.service';
 
 @Component({
   selector: 'app-progressprojectinformation',
@@ -64,7 +66,14 @@ export class ProgressProjectInformationComponent implements OnInit {
       imageUrl: 'assets/users/user2.png',
       name: 'Joseph'
     }],
-    contactAssociation: '',
+    contactAssociation: [{
+      imageUrl: 'assets/users/user1.png',
+      name: 'Michael'
+    },
+    {
+      imageUrl: 'assets/users/user2.png',
+      name: 'Joseph'
+    }],
     contactProjectManager: '',
     contactAccountReceivable: '',
     clientNotes: ''
@@ -76,6 +85,7 @@ export class ProgressProjectInformationComponent implements OnInit {
   startMax = '';
   editablePm: boolean;
   editableAm: boolean;
+  editableCa: boolean;
   inputChanged: any = '';
   selectedItem: any = '';
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
@@ -91,36 +101,63 @@ export class ProgressProjectInformationComponent implements OnInit {
     {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
     {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
   ];
+  items4: any[] = [
+    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
+    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
+    {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
+    {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
+  ];
   associationList = ['John Moss', 'Latif', 'Dennis'];
   pmList = ['John Moss', 'Latif', 'Dennis'];
   accountReceivableList = ['John Moss', 'Latif', 'Dennis'];
   isAutocompleteUpdated2 = false;
   isAutocompleteUpdated3 = false;
+  isAutocompleteUpdated4 = false;
   invalidStartDate = false;
   invalidEndDate = false;
   selectAssociation: string;
   selectPmManager: string;
   selectAccountReceivable: string;
+  currentProjectId: any;
+  contactsList = [];
+  projectInfo: any;
 
-  constructor( private router: Router) {
+  constructor( private router: Router, private sharedService: SharedService,
+    private projectsService: ProjectsService, private route: ActivatedRoute) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
+    if (this.currentProjectId !== '') {
+      this.sharedService.getContacts().subscribe(data => {
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+
+          this.projectInfo = res.data;
+          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+          console.log('indi project: ', this.projectInfo);
+        });
+
+      });
+    } else {
+      console.error('product id error');
+    }
   }
 
   ngOnInit() {
-    this.formattedStart = moment(this.projectInformation.startDate).format('MMMM DD, YYYY');
-    this.formattedEnd = moment(this.projectInformation.endDate).format('MMMM DD, YYYY');
+    this.formattedStart = moment(this.projectInfo.startDate).format('MMMM DD, YYYY');
+    this.formattedEnd = moment(this.projectInfo.deliveryDate).format('MMMM DD, YYYY');
     this.startMax = this.projectInformation.endDate;
     this.endMin = this.projectInformation.startDate;
   }
 
   selectStartDate(event) {
     this.formattedStart = moment(event.value).format('MMMM DD, YYYY');
-    console.log('event: ', this.projectInformation.startDate);
-    this.endMin = this.projectInformation.startDate;
+    console.log('event: ', this.projectInfo.startDate);
+    this.endMin = this.projectInfo.startDate;
   }
 
   selectEndDate(event) {
     this.formattedEnd = moment(event.value).format('MMMM DD, YYYY');
-    this.startMax = this.projectInformation.endDate;
+    this.startMax = this.projectInfo.endDate;
   }
 
   onInputChangedEvent(val: string) {
@@ -153,9 +190,25 @@ export class ProgressProjectInformationComponent implements OnInit {
 
   removeAccountManager(i: number) {
     const item = this.projectInformation.accountManager[i];
-    this.items3.push({id: this.items3.length, label: item.name, imageUrl: item.imageUrl});
+    this.items4.push({id: this.items4.length, label: item.name, imageUrl: item.imageUrl});
     this.projectInformation.accountManager.splice(i, 1);
     this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
+
+  }
+
+  onSelectContactAssociation(item: any) {
+    this.selectedItem = item;
+    this.items4 = this.items4.filter(function( obj ) {
+      return obj.label !== item.label;
+    });
+    this.projectInformation.contactAssociation.push({name: item.label, imageUrl: item.imageUrl });
+  }
+
+  removeContactAssociation(i: number) {
+    const item = this.projectInformation.contactAssociation[i];
+    this.items3.push({id: this.items3.length, label: item.name, imageUrl: item.imageUrl});
+    this.projectInformation.contactAssociation.splice(i, 1);
+    this.isAutocompleteUpdated4 = !this.isAutocompleteUpdated4;
 
   }
 
@@ -165,6 +218,10 @@ export class ProgressProjectInformationComponent implements OnInit {
 
   closeAmEditableModal() {
     this.editableAm = false;
+  }
+
+  closeCaEditableModal() {
+    this.editableCa = false;
   }
 
   toProjectScope() {
@@ -185,6 +242,23 @@ export class ProgressProjectInformationComponent implements OnInit {
 
   onSelectAccountReceivable(event) {
     this.projectInformation.contactAccountReceivable = event;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    console.log('selected: ', id, selectedContact, this.contactsList);
+    return selectedContact.name;
   }
 
 }
