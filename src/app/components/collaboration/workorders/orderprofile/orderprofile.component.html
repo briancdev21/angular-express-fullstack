@@ -1,4 +1,4 @@
-<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" *ngIf="orderProfileInfo"> 
   <div class="title-bar">
     <app-titlebar [orderProfileInfo]="orderProfileInfo" [(showAvailabilityModal)]="showAvailabilityModal"></app-titlebar>
   </div>
@@ -44,7 +44,7 @@
         <span>WORK ORDER DESCRIPTION</span>
         <textarea 
           placeholder="Enter Description here..." 
-          [(ngModel)]="workOrderDescription"  
+          [(ngModel)]="orderProfileInfo.description"  
           (clickOutside)="clickOutsideDesc(workOrderDescription)">
         </textarea>
       </div>
@@ -61,21 +61,21 @@
         <span>INTERNAL NOTES</span>
         <textarea 
           placeholder="Enter internal notes here..." 
-          [(ngModel)]="internalNotes"
+          [(ngModel)]="orderProfileInfo.note"
           (clickOutside)="clickOutsideNotes(internalNotes)">
         </textarea>
         <div class="followers-section">
           <div class="followers"> 
             <span>Followers</span>
-            <div class="follower" *ngFor="let user of orderProfileInfo.followers; let i = index" (click)='editable=true;$event.stopPropagation();'>
-              <a [title]='user.name' ><img [src]='user.imageUrl'/></a>
+            <div class="follower" *ngFor="let user of orderProfileInfo.followersDetails; let i = index" (click)='editable=true;$event.stopPropagation();'>
+              <a [title]='user.name' ><img [src]="user.imageUrl"></a>
             </div> 
             <div class="follower add-follower" >
               <a title='user.name' (click)="editable=true;$event.stopPropagation()" ><img src='assets/images/Add-Button.svg'/></a>
             </div> 
             <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
               <ul>
-                <li *ngFor="let user of orderProfileInfo.followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                <li *ngFor="let user of orderProfileInfo.followersDetails; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                 <li style="background: none; width: 100%; margin: 0;">
                   <ng-select *ngIf="isAutocompleteUpdated" [items]="items2"
                     bindLabel="config2.sourceField"
@@ -96,7 +96,7 @@
     </div>
   </div>
   <div class="work-order-settings">
-    <app-ordersettings></app-ordersettings>
+    <app-ordersettings [orderProfileInfo]="orderProfileInfo"></app-ordersettings>
   </div>
 
   <div class="availability-modal-wrapper" *ngIf="showAvailabilityModal" ></div>

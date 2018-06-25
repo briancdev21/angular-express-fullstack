@@ -11,7 +11,7 @@ import * as moment from 'moment';
   templateUrl: './availability.component.html',
   styleUrls: [
     './availability.component.css',
-    '../../../../../node_modules/fullcalendar/dist/fullcalendar.min.css'
+    '../../../../../../../node_modules/fullcalendar/dist/fullcalendar.min.css'
   ]
 })
 export class AvailabilityComponent implements OnInit, AfterViewInit {

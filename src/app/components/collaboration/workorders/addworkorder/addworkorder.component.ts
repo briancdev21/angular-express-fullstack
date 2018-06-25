@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import * as moment from 'moment';
-import { AvailabilityComponent } from '../../../orderprofile/availability/availability.component';
+import { AvailabilityComponent } from '../orderprofile/availability/availability.component';
 
 @Component({
   selector: 'app-addworkorder',

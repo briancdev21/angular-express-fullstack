@@ -12,7 +12,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import {CalendarModule} from 'ap-angular2-fullcalendar';
 import {CalendarComponent} from 'ap-angular2-fullcalendar';
 
-import { ProfileCmpModule } from '../profile/profile.module';
+import { ProfileCmpModule } from '../../../profile/profile.module';
 
 import { OrderService } from './order.service';
 

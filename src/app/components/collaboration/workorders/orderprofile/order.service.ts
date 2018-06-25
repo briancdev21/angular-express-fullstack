@@ -10,6 +10,7 @@ export class OrderService {
 	private timelineData = new BehaviorSubject<any>({});
 	private availableStaff = new BehaviorSubject<any>({});
 	private removedStaff = new BehaviorSubject<any>({});
+	saveWorkOrder: BehaviorSubject<object> = new BehaviorSubject({});
 
 	openModal = this.openAvailabilityModal.asObservable();
 	getTimelineData = this.timelineData.asObservable();

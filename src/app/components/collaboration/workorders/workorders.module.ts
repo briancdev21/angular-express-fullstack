@@ -19,7 +19,7 @@ import { ClickOutsideModule } from 'ng4-click-outside';
 
 import { ProfileCmpModule } from '../../profile/profile.module';
 import { CommonCmpModule } from '../../common/common.module';
-import { OrderProfileCmpModule } from '../../orderprofile/orderprofile.module';
+import { OrderProfileCmpModule } from './orderprofile/orderprofile.module';
 import { SharedPipesModule } from '../../../pipes/sharedpipes.module';
 
 @NgModule({
