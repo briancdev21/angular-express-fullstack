@@ -158,5 +158,9 @@ export class ChangeLogsTableComponent implements OnInit {
     return selectedUser.name;
   }
 
+  addChangeLog() {
+    this.router.navigate(['./pm/pm-details/pm-progress/pm-log-add/']);
+  }
+
 }
 
