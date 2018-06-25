@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { ProjectsService } from '../../../../../../services/projects.service';
 
 @Component({
   selector: 'app-changeloglisttable',
@@ -16,13 +17,29 @@ import * as moment from 'moment';
 export class ChangeLogListTableComponent implements OnInit {
 
   @Input() changeLogList;
+  @Input() set changeLogInfo(val) {
+    this._changeLogInfo = val;
+    if (this._changeLogInfo.workOrderIds) {
+      this._changeLogInfo.workOrderIds.forEach(element => {
+        this.projectsService.getIndividualProjectWorkOrder(this.currentProjectId, element).subscribe(data => {
+          // comment for now
+          console.log('work order list: ', data);
+          this.changeLogList.push(data.results);
+        });
+      });
+    }
+  }
   public barInfo: any;
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
   dateNow = new Date();
   aweekLater = new Date();
-  constructor( private pmService: ProjectManagementService, private router: Router ) {
+  _changeLogInfo: any;
+  currentProjectId: any;
+
+  constructor( private pmService: ProjectManagementService, private router: Router, private projectsService: ProjectsService ) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
   }
 
   ngOnInit() {

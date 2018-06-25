@@ -1,10 +1,10 @@
 <div class="work-order-settings" [ngClass]="{'work-order-settings-origin-collapsed': !settingsCollapsed}">
   <span (click)="settingsCollapsed = !settingsCollapsed">Settings</span>
   <div class="btn-section" >
-    <button class="cancel-btn" >
+    <button class="cancel-btn" (click)="cancelChangeLog()">
       Cancel
     </button>
-    <button class="save-btn">
+    <button class="save-btn" (click)="saveChangeLog()">
       Save
     </button>
   </div>
@@ -34,8 +34,8 @@
           </div>
         </div>
         <div class="switch">
-          <img src="assets/images/switch.png" *ngIf="switchOn" (click)="switchOn = !switchOn">
-          <img src="assets/images/switch-off.png" *ngIf="!switchOn" (click)="switchOn = !switchOn">
+          <img src="assets/images/switch.png" *ngIf="switchOn" (click)="onClickSendCustomer()">
+          <img src="assets/images/switch-off.png" *ngIf="!switchOn" (click)="onClickSendCustomer()">
         </div>
       </div>
     </div>

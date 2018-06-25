@@ -84,6 +84,12 @@ export class ChangeLogProfileComponent implements OnInit {
       this.currentProjectId = localStorage.getItem('project_id');
       this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
 
+      this.pmService.saveChangeLog.subscribe(data => {
+        if (data['sendSaveData']) {
+          console.log('save is clicked');
+        }
+      });
+
       console.log('project_id: ', this.currentProjectId, this.currentChangeLogId);
       this.sharedService.getUsers().subscribe(data => {
         this.usersList = data;

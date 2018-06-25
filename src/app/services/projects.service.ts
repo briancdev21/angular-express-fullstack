@@ -69,4 +69,24 @@ export class ProjectsService {
     return this.http.put(url, body);
   }
 
+  getProjectWorkOrders (id): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/work-orders`;
+    return this.http.get(url);
+  }
+
+  getIndividualProjectWorkOrder(id, orderId): Observable<any>  {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/work-orders/${orderId}`;
+    return this.http.get(url);
+  }
+
+  createProjectWorkOrder (id, body): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/work-orders`;
+    return this.http.post(url, body, this.options);
+  }
+
+  updateIndividualWorkOrder (id, orderId, body): Observable<any> {
+    const url = `${apiUrl}inventory/suppliers/${id}/work-orders/${orderId}`;
+    return this.http.put(url, body);
+  }
+
 }
