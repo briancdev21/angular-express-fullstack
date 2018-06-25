@@ -4,27 +4,34 @@ import { ProjectManagementService } from '../../../projectmanagement.service';
 import { SharedService } from '../../../../../../services/shared.service';
 
 @Component({
-  selector: 'app-changelogdetails',
-  templateUrl: './changelogdetails.component.html',
+  selector: 'app-addchangelogdetails',
+  templateUrl: './addchangelogdetails.component.html',
   styleUrls: [
-    './changelogdetails.component.css'
+    './addchangelogdetails.component.css'
   ]
 })
-export class ChangeLogDetailsComponent implements OnInit {
+export class AddChangeLogDetailsComponent implements OnInit {
 
-  @Input() changeLogList;
-  @Input() changeLogInfo;
+  changeLogInfo: any;
   switchIconAddress = false;
   switchIconPm = false;
-  street = '';
+  address = '';
   city = '';
-  state = '';
+  province = '';
   country = '';
-  zipcode = '';
+  postalCode = '';
   public endMin;
   public startMax;
   contactsList = [];
   usersList = [];
+  customerName = '';
+  projectId = '';
+  logId = '';
+  requestedBy = '';
+  ccContact = '';
+  createdAt: any;
+  updatedAt: any;
+  updatePm = false;
 
   constructor( private pmService: ProjectManagementService, private sharedService: SharedService ) {
     this.sharedService.getContacts().subscribe(data => {
@@ -60,15 +67,15 @@ export class ChangeLogDetailsComponent implements OnInit {
 
   clickIconShipping() {
     this.switchIconAddress = !this.switchIconAddress;
-    this.changeLogInfo.shippingAddress.address = (this.switchIconAddress) ? this.street :
+    this.changeLogInfo.shippingAddress.address = (this.switchIconAddress) ? this.address :
     this.changeLogInfo.selectedContact.shippingAddress.city;
     this.changeLogInfo.shippingAddress.city = (this.switchIconAddress) ? this.city :
     this.changeLogInfo.selectedContact.shippingAddress.city;
-    this.changeLogInfo.shippingAddress.province = (this.switchIconAddress) ? this.state :
+    this.changeLogInfo.shippingAddress.province = (this.switchIconAddress) ? this.province :
     this.changeLogInfo.selectedContact.shippingAddress.province;
     this.changeLogInfo.shippingAddress.country = (this.switchIconAddress) ? this.country :
     this.changeLogInfo.selectedContact.shippingAddress.country;
-    this.changeLogInfo.shippingAddress.postalCode = (this.switchIconAddress) ? this.zipcode :
+    this.changeLogInfo.shippingAddress.postalCode = (this.switchIconAddress) ? this.postalCode :
     this.changeLogInfo.selectedContact.shippingAddress.postalCode;
     this.switchIconAddress = !this.switchIconAddress;
   }
@@ -126,6 +133,11 @@ export class ChangeLogDetailsComponent implements OnInit {
       }
     });
     return data;
+  }
+
+  updatePmProfile() {
+    this.switchIconPm = !this.switchIconPm;
+    this.updatePm = this.switchIconPm;
   }
 
 }

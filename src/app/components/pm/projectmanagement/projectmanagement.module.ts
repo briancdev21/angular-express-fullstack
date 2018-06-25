@@ -21,6 +21,10 @@ import { ChangeLogProfileComponent } from './pmprogress/progresschangelog/change
 import { ChangeLogDetailsComponent } from './pmprogress/progresschangelog/changelogdetails/changelogdetails.component';
 import { ChangeLogListTableComponent } from './pmprogress/progresschangelog/changeloglisttable/changeloglisttable.component';
 import { ChangeLogSettingsComponent } from './pmprogress/progresschangelog/changelogsettings/changelogsettings.component';
+import { AddChangeLogProfileComponent } from './pmprogress/addchangelog/addchangelogprofile/addchangelogprofile.component';
+import { AddChangeLogDetailsComponent } from './pmprogress/addchangelog/addchangelogdetails/addchangelogdetails.component';
+import { AddChangeLogListTableComponent } from './pmprogress/addchangelog/addchangeloglisttable/addchangeloglisttable.component';
+import { AddChangeLogSettingsComponent } from './pmprogress/addchangelog/addchangelogsettings/addchangelogsettings.component';
 import { ChangeLogsTableComponent } from './pmprogress/progresschangelog/changelogstable/changelogstable.component';
 import { ProgressOverviewComponent } from './pmprogress/progressoverview/progressoverview.component';
 import {
@@ -73,6 +77,10 @@ export const MY_NATIVE_FORMATS = {
     ChangeLogDetailsComponent,
     ChangeLogListTableComponent,
     ChangeLogSettingsComponent,
+    AddChangeLogProfileComponent,
+    AddChangeLogDetailsComponent,
+    AddChangeLogListTableComponent,
+    AddChangeLogSettingsComponent,
     ChangeLogsTableComponent,
     TaskStableMapToKeysPipe,
     ProgressOverviewComponent,

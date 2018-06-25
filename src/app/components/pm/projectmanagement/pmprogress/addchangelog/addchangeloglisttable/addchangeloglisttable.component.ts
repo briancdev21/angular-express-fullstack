@@ -6,17 +6,17 @@ import * as moment from 'moment';
 import { ProjectsService } from '../../../../../../services/projects.service';
 
 @Component({
-  selector: 'app-changeloglisttable',
-  templateUrl: './changeloglisttable.component.html',
+  selector: 'app-addchangeloglisttable',
+  templateUrl: './addchangeloglisttable.component.html',
   styleUrls: [
-    './changeloglisttable.component.css',
+    './addchangeloglisttable.component.css',
   ],
 })
 
 
-export class ChangeLogListTableComponent implements OnInit {
+export class AddChangeLogListTableComponent implements OnInit {
 
-  @Input() changeLogList;
+  changeLogList: any;
   @Input() set changeLogInfo(val) {
     this._changeLogInfo = val;
     if (this._changeLogInfo.workOrderIds) {
@@ -46,12 +46,6 @@ export class ChangeLogListTableComponent implements OnInit {
     // get a week later date
     this.aweekLater.setDate(this.aweekLater.getDate() + 7);
 
-    // Change date format
-    this.changeLogList.map( l => {
-      l.dateCreated = moment(l.dateCreated).format('MMMM DD, YYYY');
-      l.lastUpdated = moment(l.lastUpdated).format('MMMM DD, YYYY');
-      l.dateApproved = moment(l.dateApproved).format('MMMM DD, YYYY');
-    });
   }
 
   getStatus() {

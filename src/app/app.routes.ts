@@ -25,6 +25,9 @@ import {
     ChangeLogProfileComponent
   } from './components/pm/projectmanagement/pmprogress/progresschangelog/changelogprofile/changelogprofile.component';
 import {
+  AddChangeLogProfileComponent
+  } from './components/pm/projectmanagement/pmprogress/addchangelog/addchangelogprofile/addchangelogprofile.component';
+import {
     ChangeLogsTableComponent
   } from './components/pm/projectmanagement/pmprogress/progresschangelog/changelogstable/changelogstable.component';
 import { PurchaseOrderListComponent } from './components/inventory/purchaseorderlist/purchaseorderlist.component';
@@ -133,6 +136,7 @@ export const routes: Routes = [
               { path: '', redirectTo: 'pm-logs-table', pathMatch: 'full' },
               { path: 'pm-logs-table', component: ChangeLogsTableComponent },
               { path: 'pm-log-details', component: ChangeLogProfileComponent },
+              { path: 'pm-log-add', component: AddChangeLogProfileComponent }
             ]
           },
           { path: 'pm-files', component: PmFilesComponent },

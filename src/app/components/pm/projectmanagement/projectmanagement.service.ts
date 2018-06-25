@@ -11,6 +11,7 @@ export class ProjectManagementService {
   private deleteTask = new BehaviorSubject<any>([]);
   private updateChart = new BehaviorSubject<any>([]);
   private subject = new Subject<any>();
+  saveChangeLog: BehaviorSubject<object> = new BehaviorSubject({});
 
   closeTaskModal = this.closeDetailedTaskModal.asObservable();
   deleteOpenedTask = this.deleteTask.asObservable();

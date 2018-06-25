@@ -6,7 +6,7 @@
     </div>
     <div class="info-down">
       <span class="change-log">Change Logs</span>
-      <div class="add-btn">Add Change Log</div>
+      <div class="add-btn" (click)="addChangeLog()">Add Change Log</div>
     </div>
   </div>
   <table>
@@ -21,7 +21,7 @@
       <th (click)="sortCreateDateArray('lastUpdated')">LAST UPDATED</th>
       <th (click)="sortCreateDateArray('dateApproved')">DATE APPROVED</th>
     </tr>
-    <tr *ngFor="let log of changelogListInfo; let i = index" (click)="redirectTo()">
+    <tr *ngFor="let log of changelogListInfo; let i = index" (click)="redirectTo(id)">
       <td>{{log.logId}}</td>
       <td>{{log.logName}}</td>
       <td>Level {{log.priority}}</td>

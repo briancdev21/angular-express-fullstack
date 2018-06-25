@@ -3,11 +3,11 @@
 		<div class="customer-project">
 			<div class="customer-name">
 				<span>Customer name</span>
-				<input [(ngModel)]="changeLogInfo.customerName" disabled>
+				<input [(ngModel)]="customerName" disabled>
 			</div>
 			<div class="project">
 				<span>Project</span>
-				<input [(ngModel)]="changeLogInfo.projectId" disabled>
+				<input [(ngModel)]="projectId" disabled>
 			</div>
 		</div>
 		<div class="shipping-address">
@@ -19,26 +19,26 @@
 					<span>Use customer address</span>
 				</div>
 			</div>
-			<input placeholder="Enter Project Address" class="address" [(ngModel)]="changeLogInfo.address">
+			<input placeholder="Enter Project Address" class="address" [(ngModel)]="address">
 			<div class="city-state">
-				<input placeholder="Enter City" [(ngModel)]="changeLogInfo.city">
-				<input placeholder="Enter State" [(ngModel)]="changeLogInfo.province">
+				<input placeholder="Enter City" [(ngModel)]="city">
+				<input placeholder="Enter State" [(ngModel)]="province">
 			</div>
 			<div class="country-zip">
-				<input placeholder="Enter Country" [(ngModel)]="changeLogInfo.country">
-				<input placeholder="Enter Zipcode" [(ngModel)]="changeLogInfo.postalCode">
+				<input placeholder="Enter Country" [(ngModel)]="country">
+				<input placeholder="Enter Zipcode" [(ngModel)]="postalCode">
 			</div>
 		</div>
 	</div>
 	<div class="content-right" >
 		<div>
 			<span>Change Log ID</span>
-			<input placeholder="Enter Change Log ID" [(ngModel)]="changeLogInfo.id">
+			<input placeholder="Enter Change Log ID" [(ngModel)]="logId">
 		</div>
 		<div>
 			<span>Requested By</span>
 			<!-- select drop down -->
-			<select [(ngModel)]="changeLogInfo.requestedBy" *ngIf="usersList">
+			<select [(ngModel)]="requestedBy" *ngIf="usersList">
 				<option value="user.username" *ngFor="let user of usersList">{{user.firstName}} {{user.lastName}}</option>
 			</select>
 			<!-- Just input -->
@@ -57,27 +57,27 @@
 		</div>
 		<div>
 			<span>CC Contact</span>
-			<select [(ngModel)]="changeLogInfo.ccContact" *ngIf="contactsList">
+			<select [(ngModel)]="ccContact" *ngIf="contactsList">
 				<option value="contact.id" *ngFor="let contact of contactsList">{{contact.name}}</option>
 			</select>
 		</div>
 		<div class="start-date">
 			<span>Created on</span>
 			<div>
-				<input [owlDateTimeTrigger]="startDate" [owlDateTime]="startDate"  (dateTimeChange)="onCreatedDate($event)" [(ngModel)]="changeLogInfo.createdOn" dateA11yLabel>
+				<input [owlDateTimeTrigger]="startDate" [owlDateTime]="startDate"  (dateTimeChange)="onCreatedDate($event)" [(ngModel)]="createdAt" dateA11yLabel>
 				<owl-date-time [pickerType]="'calendar'" #startDate ></owl-date-time>
 			</div>
 		</div>
 		<div class="end-date">
 			<span>Last Updated</span>
 			<div>
-				<input [owlDateTimeTrigger]="endDate" [owlDateTime]="endDate" (dateTimeChange)="onUpdatedDate($event)" [(ngModel)]="changeLogInfo.lastUpdated" >
+				<input [owlDateTimeTrigger]="endDate" [owlDateTime]="endDate" (dateTimeChange)="onUpdatedDate($event)" [(ngModel)]="updatedAt" >
 				<owl-date-time [pickerType]="'calendar'" #endDate ></owl-date-time>
 			</div>
 		</div>
 		<div class="switching-icon">
-			<img src="assets/images/switch.png" *ngIf="switchIconPm" (click)="changeLogInfo.updatePm=false; switchIconPm=false">
-			<img src="assets/images/switch-off.png" *ngIf="!switchIconPm" (click)="changeLogInfo.updatePm=true; switchIconPm=true">
+			<img src="assets/images/switch.png" *ngIf="switchIconPm" (click)="updatePmProfile()">
+			<img src="assets/images/switch-off.png" *ngIf="!switchIconPm" (click)="updatePmProfile()">
 			<span class="update-pm">Update Customer's Project Manager Once it is approved</span>
 		</div>
 	</div>

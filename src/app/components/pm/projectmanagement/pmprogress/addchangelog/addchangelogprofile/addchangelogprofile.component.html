@@ -8,7 +8,7 @@
   </select>
 </div>
 <div class="detailed-profile-info">
-  <app-changelogdetails [changeLogList]="changeLogList" [changeLogInfo]="changeLogInfo"></app-changelogdetails>
+  <app-addchangelogdetails></app-addchangelogdetails>
 </div>
 <div class="btn-sec">
   <div class="create-btns" (click)="showConfirmModal=true">CREATE ESTIMATE</div>
@@ -32,11 +32,11 @@
 
 <div class="log-list">
   <div>CHANGE LOG LIST</div>
-  <app-changeloglisttable [changeLogList]="changeLogList" [changeLogInfo]="changeLogInfo"></app-changeloglisttable>
+  <app-addchangeloglisttable [changeLogInfo]="changeLogInfo"></app-addchangeloglisttable>
 </div>
 
 <div>
-  <app-changelogsettings></app-changelogsettings>
+  <app-addchangelogsettings></app-addchangelogsettings>
 </div>
 
 

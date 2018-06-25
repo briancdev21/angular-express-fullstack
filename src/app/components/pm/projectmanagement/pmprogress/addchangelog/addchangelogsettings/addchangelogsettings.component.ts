@@ -3,13 +3,13 @@ import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
 
 @Component({
-  selector: 'app-changelogsettings',
-  templateUrl: './changelogsettings.component.html',
+  selector: 'app-addchangelogsettings',
+  templateUrl: './addchangelogsettings.component.html',
   styleUrls: [
-    './changelogsettings.component.css'
+    './addchangelogsettings.component.css'
   ]
 })
-export class ChangeLogSettingsComponent {
+export class AddChangeLogSettingsComponent {
 
   settingsCollapsed = true;
   showReminderModal = false;

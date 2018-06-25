@@ -5,14 +5,14 @@ import * as moment from 'moment';
 import { SharedService } from '../../../../../../services/shared.service';
 import { ProjectsService } from '../../../../../../services/projects.service';
 @Component({
-  selector: 'app-changelogprofile',
-  templateUrl: './changelogprofile.component.html',
+  selector: 'app-addchangelogprofile',
+  templateUrl: './addchangelogprofile.component.html',
   styleUrls: [
-    './changelogprofile.component.css',
+    './addchangelogprofile.component.css',
   ]
 })
 
-export class ChangeLogProfileComponent implements OnInit {
+export class AddChangeLogProfileComponent implements OnInit {
   changeLogInfo = {
     customerName: 'John Moss',
     projectName: 'Remodel with a Nu Life',
