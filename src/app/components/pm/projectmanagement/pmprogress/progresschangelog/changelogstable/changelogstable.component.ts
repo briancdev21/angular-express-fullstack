@@ -60,7 +60,7 @@ export class ChangeLogsTableComponent implements OnInit {
 
   constructor( private router: Router, private sharedService: SharedService,
     private projectsService: ProjectsService, private route: ActivatedRoute  ) {
-      this.currentProjectId = localStorage.getItem('project_id');
+      this.currentProjectId = localStorage.getItem('current_projectId');
       console.log('project_id: ', this.currentProjectId);
       this.sharedService.getUsers().subscribe(data => {
         this.usersList = data;

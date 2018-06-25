@@ -19,14 +19,14 @@
 					<span>Use customer address</span>
 				</div>
 			</div>
-			<input placeholder="Enter Project Address" class="address" [(ngModel)]="street">
+			<input placeholder="Enter Project Address" class="address" [(ngModel)]="changeLogInfo.address">
 			<div class="city-state">
-				<input placeholder="Enter City" [(ngModel)]="city">
-				<input placeholder="Enter State" [(ngModel)]="state">
+				<input placeholder="Enter City" [(ngModel)]="changeLogInfo.city">
+				<input placeholder="Enter State" [(ngModel)]="changeLogInfo.province">
 			</div>
 			<div class="country-zip">
-				<input placeholder="Enter Country" [(ngModel)]="country">
-				<input placeholder="Enter Zipcode" [(ngModel)]="zipcode">
+				<input placeholder="Enter Country" [(ngModel)]="changeLogInfo.country">
+				<input placeholder="Enter Zipcode" [(ngModel)]="changeLogInfo.postalCode">
 			</div>
 		</div>
 	</div>
@@ -37,14 +37,20 @@
 		</div>
 		<div>
 			<span>Requested By</span>
-			<input placeholder="Requested By" [(ngModel)]="changeLogInfo.requestedBy">
+			<input placeholder="Requested By" [(ngModel)]="changeLogInfo.requestedBy" disabled>
+			<!-- <div class="text-autocomp">
+        <app-ng2completer 
+          [itemsList]="customersList" 
+          (selectedItem)="onSelectRequestCustomer($event)" 
+          class="contact-content-info"
+          [searchStr]="selectAssociation">
+        </app-ng2completer>
+      </div> -->
 		</div>
 		<div>
 			<span>CC Contact</span>
-			<select [(ngModel)]="changeLogInfo.ccContact">
-				<option value="Danny Shibley">Danny Shibley</option>
-				<option value="Steve Jobs">Steve Jobs</option>
-				<option value="Michael">Michael</option>
+			<select [(ngModel)]="changeLogInfo.ccContact" *ngIf="contactsList">
+				<option value="contact.id" *ngFor="let contact of contactsList">{{contact.name}}</option>
 			</select>
 		</div>
 		<div class="start-date">

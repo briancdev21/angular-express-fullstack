@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
+import { SharedService } from '../../../../../../services/shared.service';
 
 @Component({
   selector: 'app-changelogdetails',
@@ -22,8 +23,14 @@ export class ChangeLogDetailsComponent implements OnInit {
   zipcode = '';
   public endMin;
   public startMax;
+  contactsList = [];
 
-  constructor( private pmService: ProjectManagementService ) {
+  constructor( private pmService: ProjectManagementService, private sharedService: SharedService ) {
+    this.sharedService.getContacts().subscribe(data => {
+      this.contactsList = data;
+      this.addContactName(this.contactsList);
+
+    });
 
   }
 
@@ -88,5 +95,16 @@ export class ChangeLogDetailsComponent implements OnInit {
   //   }
   //   this.startTimeValue = (hours + ':' + minutes + ' ' + meridian);
   // }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
 
 }

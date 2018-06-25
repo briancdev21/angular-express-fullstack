@@ -21,7 +21,7 @@
       <th (click)="sortCreateDateArray('lastUpdated')">LAST UPDATED</th>
       <th (click)="sortCreateDateArray('dateApproved')">DATE APPROVED</th>
     </tr>
-    <tr *ngFor="let log of changelogListInfo; let i = index" (click)="redirectTo()">
+    <tr *ngFor="let log of changelogListInfo; let i = index" (click)="redirectTo(id)">
       <td>{{log.logId}}</td>
       <td>{{log.logName}}</td>
       <td>Level {{log.priority}}</td>
