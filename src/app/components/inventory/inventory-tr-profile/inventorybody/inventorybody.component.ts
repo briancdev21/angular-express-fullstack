@@ -20,15 +20,19 @@ export class InventoryBodyComponent {
       this.fromLocation = _trdata.fromLocation;
       this.tr_mock.status = _trdata.status;
       this.tr_mock.internalMemo = _trdata.internalMemo;
-      this.internalMemo = _trdata.internalMemo !== null ? _trdata.internalMemo: '';
+      this.internalMemo = _trdata.internalMemo !== null ? _trdata.internalMemo : '';
       this.transferdate = _trdata.createdAt;
       this.tr_id = `TR-${this.tr_mock.id}`;
       if (this.tr_mock.id !== undefined) {
         this.sharedService.getTransferProducts(this.tr_mock.id).subscribe( productRes => {
           this.productDetails = productRes.results;
-          this.productDetails.forEach(productDetail => {
+          this.productDetails.map(productDetail => {
             productDetail.discount = productDetail.discount !== undefined ? productDetail.discount.value : undefined;
+            productDetail.readonly = true;
+            productDetail.stockcontrolStatus = this.tr_mock.status;
+            return productDetail;
           });
+          console.log('tr - product details:', this.productDetails);
         });
       }
     }

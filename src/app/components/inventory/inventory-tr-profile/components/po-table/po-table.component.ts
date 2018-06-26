@@ -18,6 +18,11 @@ export class POTableComponent implements OnInit {
     console.log('product details: ', val);
     if (val.length !== 0) {
       this.productDetails = val;
+      this.productDetails.map(productDetail => {
+        this.stockcontrolStatus = productDetail.stockcontrolStatus;
+        productDetail.transferProductId = productDetail.id;
+        return productDetail;
+      });
       this.sharedService.getInventoryProducts().subscribe(productsRes => {
         productsRes.results.forEach(product => {
           this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
@@ -69,6 +74,7 @@ export class POTableComponent implements OnInit {
   selectedTaxRateId: number;
   trProductModel: any;
   productDetails = [];
+  stockcontrolStatus = 'OPEN';
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
   }
@@ -77,9 +83,10 @@ export class POTableComponent implements OnInit {
   }
 
   addNewProduct() {
-    console.log('new product added');
+    console.log('new product added', this.stockcontrolStatus);
     const newProduct = new ProductDetailInfo();
     newProduct.taxRateId = this.taxRateOptions[0].id;
+    if (this.stockcontrolStatus !== 'OPEN') { newProduct.readonly = true; }
     this.productDetails.push(newProduct);
   }
 
@@ -115,11 +122,12 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].name = product.name;
       this.productDetails[index].measure = product.unitOfMeasure.quantity;
       this.trProductModel = {
+        sku: item.originalObject.sku,
         taxRateId: this.taxRateOptions[0].id,
         quantity: 1
       };
       this.sharedService.addTransferProduct(this.po_id, this.trProductModel).subscribe(resp => {
-        this.productDetails[index].purchaseOrderProductId = resp.data.id;
+        this.productDetails[index].transferProductId = resp.data.id;
       });
     });
     if (index === this.productDetails.length - 1) {
@@ -145,19 +153,21 @@ export class POTableComponent implements OnInit {
 
   changedTaxRate(index, e) {
     this.selectedTaxRateId =  this.taxRateOptions[e.target.selectedIndex].id;
+    this.productDetails[index].taxRateId = this.taxRateOptions[e.target.selectedIndex].id;
     this.productDetails[index].taxrate = this.taxRateOptions[e.target.selectedIndex].rate;
     this.updatePurchaseOrderProduct(index);
   }
 
   updatePurchaseOrderProduct(index) {
+    console.log('updating product detail:', this.productDetails[index]);
     if (this.productDetails[index].quantity === undefined) {
       this.productDetails[index].quantity = 0;
     }
     this.trProductModel = {
-      taxRateId: this.selectedTaxRateId,
+      taxRateId: this.productDetails[index].taxRateId,
       quantity: parseInt(this.productDetails[index].quantity, 10)
     };
-    this.sharedService.updateTransferProduct(this.trId,
+    this.sharedService.updateTransferProduct(this.po_id,
       this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
         this.productDetails[index].total = res.data.total;
         this.priceChange.emit(null);

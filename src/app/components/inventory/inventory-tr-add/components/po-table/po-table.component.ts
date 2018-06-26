@@ -83,7 +83,7 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].taxrate = this.taxRateOptions[0].rate;
       this.productDetails[index].supplierId = product.supplierId;
       this.productDetails[index].model = product.model;
-      this.productDetails[index].unitprice = item.originalObject.cost;
+      this.productDetails[index].unitPrice = item.originalObject.cost;
       this.productDetails[index].name = product.name;
       this.productDetails[index].measure = product.unitOfMeasure.quantity;
       this.trProductModel = {

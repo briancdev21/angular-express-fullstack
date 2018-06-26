@@ -91,7 +91,7 @@ export class InventoryBodyComponent {
       this.sharedService.getContacts().subscribe(res => {
         res = this.addContactName(res);
         this.contactList = res;
-        this.userList = this.contactList.map((contactUser) => contactUser.person.firstName + ' ' + contactUser.person.lastName);
+        this.userList = this.contactList.map((contactUser) => contactUser['name']);
       });
       this.sharedService.getLocations().subscribe(locationRes => {
         this.locations = locationRes.results;
