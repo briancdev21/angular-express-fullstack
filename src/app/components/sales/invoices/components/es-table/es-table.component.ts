@@ -91,9 +91,7 @@ export class EsTableComponent implements OnInit {
       this._productDetails[index].taxrate = this.taxRateOptions[0].rate;
       this._productDetails[index].supplierId = product.supplierId;
       this._productDetails[index].model = product.model;
-      this._productDetails[index].unitprice = item.originalObject.cost;
       this._productDetails[index].name = product.name;
-      this._productDetails[index].measure = product.unitOfMeasure.quantity;
       this.estimateProductModel = {
         sku: item.originalObject.sku,
         taxRateId: this.taxRateOptions[0].id,
@@ -105,6 +103,7 @@ export class EsTableComponent implements OnInit {
       };
       this.estimatesService.createEstimateProduct(this.estimateId, this.estimateProductModel).subscribe(data => {
         this._productDetails[index].id = data.data.id;
+        this._productDetails[index].unitPrice = data.data.unitPrice;
       });
     });
     if (index === this._productDetails.length - 1) {
