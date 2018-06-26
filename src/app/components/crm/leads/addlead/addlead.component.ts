@@ -68,9 +68,9 @@ export class AddLeadComponent implements OnInit {
   firstName = '';
   lastName = '';
   businessName = '';
-  defaultTerm = '';
-  defaultCurrency = '';
-  defaultPricing = '';
+  defaultTerm = 2;
+  defaultCurrency = 1;
+  defaultPricing = 1;
   primaryNumber = '';
   invalidDefaultTerm = false;
   invalidDefaultCurrency = false;
@@ -129,6 +129,7 @@ export class AddLeadComponent implements OnInit {
 
     this.sharedService.getTerms().subscribe(res => {
       this.termsList = res.results;
+      console.log('termsllist: ', this.termsList);
     });
 
     this.sharedService.getPricingCategories().subscribe (res => {
@@ -185,15 +186,12 @@ export class AddLeadComponent implements OnInit {
   }
 
   onSelectCountry(event) {
-    console.log('country sel: ', event);
     this.selectedCountry = event.originalObject.code;
-    console.log('321: ', provinces, this.selectedCountry);
     const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
     this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
   }
 
   onSelectProvince(event) {
-    console.log('province sel: ', event);
     this.selectedProvince = event.originalObject.short;
     // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
     this.selectedCountry = event.originalObject.country;
@@ -492,9 +490,9 @@ export class AddLeadComponent implements OnInit {
     this.firstName = '';
     this.lastName = '';
     this.businessName = '';
-    this.defaultTerm = '';
-    this.defaultCurrency = '';
-    this.defaultPricing = '';
+    this.defaultTerm = 2;
+    this.defaultCurrency = 1;
+    this.defaultPricing = 1;
     this.primaryNumber = '';
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
@@ -530,10 +528,10 @@ export class AddLeadComponent implements OnInit {
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
       if (this.businessType === 'PERSON') {
         this.newLead = {
-          'currencyId': parseInt(this.defaultCurrency, 10),
-          'termId': parseInt(this.defaultTerm, 10),
+          'currencyId': this.defaultCurrency,
+          'termId': this.defaultTerm,
           'sourceId': parseInt(this.selectedSourceId, 10),
-          'pricingCategoryId': parseInt(this.defaultPricing, 10),
+          'pricingCategoryId': this.defaultPricing,
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -577,10 +575,10 @@ export class AddLeadComponent implements OnInit {
         };
       } else {
         this.newLead = {
-          'currencyId': parseInt(this.defaultCurrency, 10),
-          'termId': parseInt(this.defaultTerm, 10),
+          'currencyId': this.defaultCurrency,
+          'termId': this.defaultTerm,
           'sourceId': parseInt(this.selectedSourceId, 10),
-          'pricingCategoryId': parseInt(this.defaultPricing, 10),
+          'pricingCategoryId': this.defaultPricing,
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
