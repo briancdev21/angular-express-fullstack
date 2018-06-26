@@ -56,7 +56,6 @@ export class InventoryPoAddComponent implements OnInit {
           contacts = this.addContactName(contacts);
           po_create_mock.contactId = contacts[0].id;
           _.assign(po_create_mock, mockCreateData);
-          console.log('po mock:', po_create_mock);
           this.sharedService.createPurchaseOrder(po_create_mock).subscribe(po_res => {
             this.po_mock = po_create_mock;
             this.po_mock.id = po_res.data.id;

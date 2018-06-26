@@ -20,6 +20,11 @@ export class POTableComponent implements OnInit {
     console.log('product details: ', val);
     if (val.length !== 0) {
       this.productDetails = val;
+      this.productDetails.map(productDetail => {
+        this.stockcontrolStatus = productDetail.stockcontrolStatus;
+        productDetail.transferProductId = productDetail.id;
+        return productDetail;
+      });
       this.sharedService.getInventoryProducts().subscribe(productsRes => {
         productsRes.results.forEach(product => {
           this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
@@ -73,6 +78,7 @@ export class POTableComponent implements OnInit {
   selectedTaxRateId: number;
   trProductModel: any;
   productDetails = [];
+  stockcontrolStatus = 'OPEN';
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
   }
@@ -83,6 +89,7 @@ export class POTableComponent implements OnInit {
   addNewProduct() {
     const newProduct = new ProductDetailInfo();
     newProduct.taxRateId = this.taxRateOptions[0].id;
+    if (this.stockcontrolStatus !== 'OPEN') { newProduct.readonly = true; }
     this.productDetails.push(newProduct);
   }
 
@@ -114,7 +121,7 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].taxrate = this.taxRateOptions[0].rate;
       this.productDetails[index].supplierId = product.supplierId;
       this.productDetails[index].model = product.model;
-      this.productDetails[index].unitprice = item.originalObject.cost;
+      this.productDetails[index].unitPrice = item.originalObject.cost;
       this.productDetails[index].name = product.name;
       this.productDetails[index].measure = product.unitOfMeasure.quantity;
       this.trProductModel = {

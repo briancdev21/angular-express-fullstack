@@ -25,65 +25,82 @@ export class PurchaseOrderListComponent implements OnInit {
   savedFiltersArr = [];
   filterAvaliableTo: any;
   filterName = '';
+  contactList = [];
 
   constructor( private filterService: FilterService, private sharedService: SharedService ) {
     this.filterAvaliableTo = 'everyone';
-    this.sharedService.getPurchaseOrders().subscribe(res => {
-      console.log('purchase orders:', res.results);
-      res.results.forEach(ele => {
-        const purchaseOrdersInfoItem = {
-          projectNumber: ele.id,
-          purchaseOrderNumber: `PO${ele.id}`,
-          source: 'Alliance Video Audio Distribution',
-          type: 'Purchase Order',
-          status: ele.status,
-          quantity: ele.quantity,
-          received: ele.recieved,
-          totalCost: ele.total,
-          dueDate: this.formatDate(new Date(ele.dueDate)),
-          lastUpdated: this.formatDate(new Date(ele.updatedAt))
-        };
-        this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+    this.sharedService.getContacts().subscribe(contactRes => {
+      contactRes = this.addContactName(contactRes);
+      this.contactList = contactRes;
+
+      this.sharedService.getPurchaseOrders().subscribe(res => {
+        console.log('purchase orders:', res.results);
+        res.results.forEach(ele => {
+          let contactName = '';
+          if (ele.contactId) {
+            const contactId = parseInt(ele.contactId.split('-').pop(), 10);
+            contactName = this.contactList[contactId].name;
+          } else {
+            contactName = '';
+          }
+          const purchaseOrdersInfoItem = {
+            itemType: 'PO',
+            projectNumber: ele.id,
+            purchaseOrderNumber: `PO${ele.id}`,
+            source: contactName,
+            type: 'Purchase Order',
+            status: ele.status,
+            quantity: ele.quantity,
+            received: ele.recieved,
+            totalCost: ele.total,
+            dueDate: this.formatDate(new Date(ele.dueDate)),
+            lastUpdated: this.formatDate(new Date(ele.updatedAt))
+          };
+          this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+        });
+        this.sortArray('purchaseOrderNumber');
       });
-      this.sortArray('purchaseOrderNumber');
-    });
-    this.sharedService.getTransfers().subscribe(res => {
-      console.log('transfers:', res.results);
-      res.results.forEach(ele => {
-        const purchaseOrdersInfoItem = {
-          projectNumber: ele.id,
-          purchaseOrderNumber: `TR${ele.id}`,
-          source: '',
-          type: 'Stock Control',
-          status: ele.status,
-          quantity: ele.quantity,
-          received: ele.recieved,
-          totalCost: ele.total,
-          dueDate: '',
-          lastUpdated: this.formatDate(new Date(ele.updatedAt))
-        };
-        this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+      this.sharedService.getTransfers().subscribe(res => {
+        console.log('transfers:', res.results);
+        res.results.forEach(ele => {
+
+          const purchaseOrdersInfoItem = {
+            itemType: 'TR',
+            projectNumber: ele.id,
+            purchaseOrderNumber: `TR${ele.id}`,
+            source: '',
+            type: 'Stock Control',
+            status: ele.status,
+            quantity: ele.quantity,
+            received: ele.recieved,
+            totalCost: ele.total,
+            dueDate: '',
+            lastUpdated: this.formatDate(new Date(ele.updatedAt))
+          };
+          this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+        });
+        this.sortArray('purchaseOrderNumber');
       });
-      this.sortArray('purchaseOrderNumber');
-    });
-    this.sharedService.getInventoryAdjustments().subscribe(res => {
-      console.log('adjustments:', res.results);
-      res.results.forEach(ele => {
-        const purchaseOrdersInfoItem = {
-          projectNumber: ele.id,
-          purchaseOrderNumber: `AD${ele.id}`,
-          source: '',
-          type: 'Stock Control',
-          status: ele.status,
-          quantity: ele.quantity,
-          received: ele.recieved,
-          totalCost: ele.total,
-          dueDate: '',
-          lastUpdated: this.formatDate(new Date(ele.updatedAt))
-        };
-        this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+      this.sharedService.getInventoryAdjustments().subscribe(res => {
+        console.log('adjustments:', res.results);
+        res.results.forEach(ele => {
+          const purchaseOrdersInfoItem = {
+            itemType: 'AD',
+            projectNumber: ele.id,
+            purchaseOrderNumber: `AD${ele.id}`,
+            source: '',
+            type: 'Stock Control',
+            status: ele.status,
+            quantity: ele.quantity,
+            received: ele.recieved,
+            totalCost: ele.total,
+            dueDate: '',
+            lastUpdated: this.formatDate(new Date(ele.updatedAt))
+          };
+          this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+        });
+        this.sortArray('purchaseOrderNumber');
       });
-      this.sortArray('purchaseOrderNumber');
     });
   }
 
@@ -256,14 +273,39 @@ export class PurchaseOrderListComponent implements OnInit {
     return monthNames[monthIndex] + ' ' + day + ', ' + year;
   }
   sortArray(field) {
-    this.purchaseOrdersInfo.sort( function(name1, name2) {
-      if ( name1[field] < name2[field] ) {
-        return -1;
-      } else if ( name1[field] > name2[field]) {
-        return 1;
+    if (field === 'purchaseOrderNumber') {
+
+      this.purchaseOrdersInfo.sort( function(name1, name2) {
+        const aSize = name1.itemType;
+        const bSize = name2.itemType;
+        const aLow = name1.projectNumber;
+        const bLow = name2.projectNumber;
+        if (aSize === bSize) {
+            return (aLow < bLow) ? -1 : (aLow > bLow) ? 1 : 0;
+        } else {
+            return (aSize < bSize) ? -1 : 1;
+        }
+      });
+    } else {
+      this.purchaseOrdersInfo.sort( function(name1, name2) {
+        if ( name1[field] < name2[field] ) {
+          return -1;
+        } else if ( name1[field] > name2[field]) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    }
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
       } else {
-        return 0;
+        element.name = element.business.name;
       }
     });
+    return data;
   }
 }

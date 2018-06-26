@@ -39,9 +39,11 @@ export class InventoryBodyComponent implements OnDestroy {
       this.internalMemo = _addata.internalMemo;
       this.sharedService.getInventoryAdjustmentProducts(this.ad_mock.id).subscribe( productRes => {
         this.productDetails = productRes.results;
-        this.productDetails.forEach(productDetail => {
+        this.productDetails.map(productDetail => {
           productDetail.readonly = true;
           productDetail.discount = productDetail.discount !== undefined ? productDetail.discount.value : undefined;
+          productDetail.stockcontrolStatus = this.ad_mock.status;
+          return productDetail;
         });
       });
     }

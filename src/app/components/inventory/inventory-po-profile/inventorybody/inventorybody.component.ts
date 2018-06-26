@@ -42,7 +42,8 @@ export class InventoryBodyComponent {
       this.sharedService.getPurchaseOrderProducts(this.po_mock.id).subscribe( productRes => {
         this.productDetails = productRes.results;
         this.productDetails.forEach(productDetail => {
-          productDetail.discount = productDetail.discount.value;
+          productDetail.readonly = true;
+          productDetail.discount = productDetail.discount !== undefined ? productDetail.discount.value : undefined;
         });
       });
     }
@@ -121,7 +122,7 @@ export class InventoryBodyComponent {
       }
       this.userList = this.contactList.map((contactUser, index) => {
         return {
-          'name': contactUser.person.firstName + ' ' + contactUser.person.lastName,
+          'name': contactUser['name'],
           'index': index,
           'id': contactUser.id
         };

@@ -31,7 +31,7 @@
       <div class="bill-count" >
           <app-po-subtotalproducts [subtotalproducts]="po_mock.subTotal" ></app-po-subtotalproducts>
           <app-po-discount [discountTypeIn]="po_mock.discount.unit" [discountamount]="po_mock.discount.value" (discountChange)="onTotalPriceChange($event)" ></app-po-discount>
-          <app-po-freightcosts [(freightcosts)]="po_mock.freightCost" (freightcostsChange)="onTotalPriceChange($event)" ></app-po-freightcosts>
+          <app-po-freightcosts [freightcosts]="po_mock.freightCost" (freightcostsChange)="onTotalPriceChange($event)" ></app-po-freightcosts>
           <app-po-taxes [taxes]="po_mock.totalTax" ></app-po-taxes>
           <app-po-totalamountdue [totalamountdue]="po_mock.total" ></app-po-totalamountdue>
       </div>
