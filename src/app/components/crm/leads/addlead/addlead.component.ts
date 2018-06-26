@@ -7,7 +7,9 @@ import { CrmService } from '../../../../services/crm.service';
 import * as moment from 'moment';
 import { LeadModel } from '../../../../models/lead.model';
 import { FilterService } from '../filter.service';
-
+import * as countryList from 'country-list';
+import { countries } from '../../../../../assets/json/countries';
+import { provinces } from '../../../../../assets/json/provinces';
 @Component({
   selector: 'app-addlead',
   templateUrl: './addlead.component.html',
@@ -26,6 +28,8 @@ export class AddLeadComponent implements OnInit {
   captain: string;
   captainSource: string;
   dataService: CompleterData;
+  countriesSource: CompleterData;
+  provincesSource: CompleterData;
   searchData = [
     { color: 'red', value: '#f00' },
     { color: 'green', value: '#0f0' },
@@ -104,12 +108,18 @@ export class AddLeadComponent implements OnInit {
   newLead: any;
   invalidContactEmail = false;
   wrongEmailFormat = false;
+  selectedCountry: any;
+  selectedProvince: any;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
     private filterService: FilterService ) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
+    this.countriesSource = completerService.local(countries, 'name', 'name');
+    this.provincesSource = completerService.local(provinces, 'name', 'name');
     this.keywords = [];
     this.contactAssociation = ['Danny Shibley', 'John Stephen'];
+    // this.countriesList = countries;
+    // console.log('coutnries: ', countries);
   }
 
   ngOnInit() {
@@ -140,127 +150,6 @@ export class AddLeadComponent implements OnInit {
       this.sourcesNameList = res.results.map(n => n.source);
     });
 
-    this.sharedService.getTerms().subscribe(res => {
-      this.termsList = res.results;
-    });
-
-    this.sharedService.getPricingCategories().subscribe (res => {
-      this.pricingCategoriesList = res.results;
-    });
-
-    this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res;
-    });
-
-    this.sharedService.getUsers().subscribe(res => {
-      this.usersList = res;
-    });
-
-    this.sharedService.getSources().subscribe(res => {
-      this.sourcesList = res.results;
-      this.sourcesNameList = res.results.map(n => n.source);
-    });
-
-    this.sharedService.getTerms().subscribe(res => {
-      this.termsList = res.results;
-    });
-
-    this.sharedService.getPricingCategories().subscribe (res => {
-      this.pricingCategoriesList = res.results;
-    });
-
-    this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res;
-    });
-
-    this.sharedService.getUsers().subscribe(res => {
-      this.usersList = res;
-    });
-
-    this.sharedService.getSources().subscribe(res => {
-      this.sourcesList = res.results;
-      this.sourcesNameList = res.results.map(n => n.source);
-    });
-
-    this.sharedService.getTerms().subscribe(res => {
-      this.termsList = res.results;
-    });
-
-    this.sharedService.getPricingCategories().subscribe (res => {
-      this.pricingCategoriesList = res.results;
-    });
-
-    this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res;
-    });
-
-    this.sharedService.getUsers().subscribe(res => {
-      this.usersList = res;
-    });
-
-    this.sharedService.getSources().subscribe(res => {
-      this.sourcesList = res.results;
-      this.sourcesNameList = res.results.map(n => n.source);
-    });
-
-    this.sharedService.getTerms().subscribe(res => {
-      this.termsList = res.results;
-    });
-
-    this.sharedService.getPricingCategories().subscribe (res => {
-      this.pricingCategoriesList = res.results;
-    });
-
-    this.sharedService.getTerms().subscribe(res => {
-      this.termsList = res.results;
-    });
-
-    this.sharedService.getPricingCategories().subscribe (res => {
-      this.pricingCategoriesList = res.results;
-    });
-
-    this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res.results;
-    });
-
-    this.sharedService.getUsers().subscribe(res => {
-      this.usersList = res.results;
-    });
-
-    this.sharedService.getSources().subscribe(res => {
-      this.sourcesList = res.results;
-    });
-
-    this.sharedService.getTerms().subscribe(res => {
-      this.termsList = res.results;
-    });
-
-    this.sharedService.getPricingCategories().subscribe (res => {
-      this.pricingCategoriesList = res.results;
-    });
-
-    this.sharedService.getTerms().subscribe(res => {
-      this.termsList = res.results;
-    });
-
-    this.sharedService.getPricingCategories().subscribe (res => {
-      this.pricingCategoriesList = res.results;
-    });
-
-    this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res.results;
-      console.log('contacts: ', res);
-    });
-
-    this.sharedService.getUsers().subscribe(res => {
-      this.usersList = res.results;
-      console.log('users: ', res);
-    });
-
-    this.sharedService.getSources().subscribe(res => {
-      this.sourcesList = res.results;
-      console.log('sources: ', res.results);
-    });
   }
 
   onAccountTypeChange(event) {
@@ -295,10 +184,26 @@ export class AddLeadComponent implements OnInit {
     this.selectedSourceId = this.sourcesList[pos].id;
   }
 
+  onSelectCountry(event) {
+    console.log('country sel: ', event);
+    this.selectedCountry = event.originalObject.code;
+    console.log('321: ', provinces, this.selectedCountry);
+    const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
+    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+  }
+
+  onSelectProvince(event) {
+    console.log('province sel: ', event);
+    this.selectedProvince = event.originalObject.short;
+    // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
+    this.selectedCountry = event.originalObject.country;
+    this.country = countries.filter(c => c.code === this.selectedCountry)[0].name;
+  }
+
   getKeywords(event) {
     this.keywordsIdList = event.map(k => k.id);
   }
-  
+
   clickNext() {
     this.invalidFirstname = false;
     this.invalidLastname = false;
