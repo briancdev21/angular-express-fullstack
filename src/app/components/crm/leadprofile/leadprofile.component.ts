@@ -220,7 +220,7 @@ export class LeadProfileComponent implements OnInit {
       this.currentLead = res.data;
       // Update userInfo
       this.userInfo = {
-        name: res.data.person.firstName + ' ' + res.data.person.lastName,
+        name: res.data.person ? res.data.person.firstName + ' ' + res.data.person.lastName : res.data.business.name,
         profileLink: res.data.pictureURI,
         email: res.data.email,
         primaryphone: res.data.phoneNumbers.primary,
