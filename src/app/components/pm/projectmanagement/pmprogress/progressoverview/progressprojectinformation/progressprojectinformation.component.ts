@@ -109,7 +109,7 @@ export class ProgressProjectInformationComponent implements OnInit {
   ];
   associationList = ['John Moss', 'Latif', 'Dennis'];
   pmList = ['John Moss', 'Latif', 'Dennis'];
-  accountReceivableList = ['John Moss', 'Latif', 'Dennis'];
+  accountReceivableList: CompleterData;
   isAutocompleteUpdated2 = false;
   isAutocompleteUpdated3 = false;
   isAutocompleteUpdated4 = false;
@@ -121,21 +121,37 @@ export class ProgressProjectInformationComponent implements OnInit {
   currentProjectId: any;
   contactsList = [];
   projectInfo: any;
+  usersList = [];
 
   constructor( private router: Router, private sharedService: SharedService,
-    private projectsService: ProjectsService, private route: ActivatedRoute) {
+    private projectsService: ProjectsService, private route: ActivatedRoute, private completerService: CompleterService) {
     this.currentProjectId = localStorage.getItem('current_projectId');
+
     if (this.currentProjectId !== '') {
-      this.sharedService.getContacts().subscribe(data => {
-        this.contactsList = data;
-        this.addContactName(this.contactsList);
-        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+      this.sharedService.getUsers().subscribe(response => {
+        this.usersList = response;
 
-          this.projectInfo = res.data;
-          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
-          console.log('indi project: ', this.projectInfo);
+        this.sharedService.getContacts().subscribe(data => {
+          this.contactsList = data;
+          this.addContactName(this.contactsList);
+          this.accountReceivableList = completerService.local(this.contactsList, 'name', 'name');
+          this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+
+            this.projectInfo = res.data;
+            this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+            console.log('indi project: ', this.projectInfo);
+            this.formattedStart = moment(this.projectInfo.startDate).format('MMMM DD, YYYY');
+            this.formattedEnd = moment(this.projectInfo.deliveryDate).format('MMMM DD, YYYY');
+            this.startMax = this.projectInfo.endDate;
+            this.endMin = this.projectInfo.startDate;
+            // one for display data, one for saving data
+            this.selectAccountReceivable = this.contactsList.filter(c =>
+              c.id === this.changeContactIdFormat(this.projectInfo.accountReceivableId))[0].name;
+            this.projectInfo.contactAccountReceivable = this.contactsList.filter(c =>
+              c.id === this.changeContactIdFormat(this.projectInfo.accountReceivableId))[0].id;
+          });
+
         });
-
       });
     } else {
       console.error('product id error');
@@ -143,10 +159,7 @@ export class ProgressProjectInformationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.formattedStart = moment(this.projectInfo.startDate).format('MMMM DD, YYYY');
-    this.formattedEnd = moment(this.projectInfo.deliveryDate).format('MMMM DD, YYYY');
-    this.startMax = this.projectInformation.endDate;
-    this.endMin = this.projectInformation.startDate;
+
   }
 
   selectStartDate(event) {
@@ -241,7 +254,8 @@ export class ProgressProjectInformationComponent implements OnInit {
   }
 
   onSelectAccountReceivable(event) {
-    this.projectInformation.contactAccountReceivable = event;
+    console.log('selectedAr: ', event);
+    this.projectInformation.contactAccountReceivable = event.originalObject.id;
   }
 
   addContactName(data) {
@@ -261,4 +275,9 @@ export class ProgressProjectInformationComponent implements OnInit {
     return selectedContact.name;
   }
 
+  changeContactIdFormat(id) {
+    const idNumber = id.slice(-1);
+    console.log('id number: ', idNumber);
+    return parseInt(idNumber, 10);
+  }
 }

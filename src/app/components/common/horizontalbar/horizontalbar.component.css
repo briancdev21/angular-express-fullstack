@@ -12,6 +12,7 @@ span.progress-title {
   margin-top: 5px;
   color: #95989A;
   font-weight: 300;
+  width: 200px;
 }
 
 .progress-bar {

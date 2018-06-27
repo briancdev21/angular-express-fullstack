@@ -116,7 +116,7 @@
 
     <div class="account-manager">
       <span class="title">Account Manager</span>
-      <div class="content-info">
+      <div *ngIf="projectInfo" class="content-info" [ngClass]="{invalidAm: projectInfo.assignees.projectManager.length === 0}">
         <div class="followers"  (click)="editableAm=true;$event.stopPropagation()" *ngIf="projectInformation.accountManager" (clickOutside)="closeAmEditableModal()"> 
           <div class="follower" *ngFor="let user of projectInformation.accountManager; let i = index" >
             <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editableAm=true;$event.stopPropagation()"/></a>
@@ -203,12 +203,13 @@
     <div>
       <span class="title">Contact Account Receivable</span>
       <div class="text-autocomp">
-        <app-ng2completer 
-          [itemsList]="accountReceivableList" 
-          (selectedItem)="onSelectAccountReceivable($event)" 
+        <ng2-completer 
+          [datasource]="accountReceivableList" 
+          (selected)="onSelectAccountReceivable($event)" 
           class="contact-content-info"
-          [searchStr]="selectAccountReceivable">
-        </app-ng2completer>
+          [(ngModel)]="selectAccountReceivable"
+          [minSearchLength]="0">
+        </ng2-completer>
       </div>
     </div>
   </div>
