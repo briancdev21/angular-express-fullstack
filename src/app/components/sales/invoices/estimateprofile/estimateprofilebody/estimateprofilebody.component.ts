@@ -50,7 +50,7 @@ export class EstimateProfileBodyComponent implements OnInit {
   terms = [];
   selectedTerm = '';
   dueDate: any;
-  productDetails = [];
+  productDetails: any;
   internalMemo = undefined;
   subtotalproducts = undefined;
   discountType: string;
@@ -121,6 +121,7 @@ export class EstimateProfileBodyComponent implements OnInit {
   currentInvoiceId: number;
   saveInvoiceData: any;
   currentOwner: string;
+  estimateStatus = 'NEW';
 
   constructor(private sharedService: SharedService, private estimatesService: EstimatesService, private invoicesServices: InvoicesService,
     private route: ActivatedRoute, private filterService: FilterService, private router: Router) {
@@ -129,7 +130,7 @@ export class EstimateProfileBodyComponent implements OnInit {
     //
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.estimatesService.getIndividualEstimate(this.currentInvoiceId).subscribe(res => {
-
+      this.estimateStatus = res.data.status;
       this.sharedService.getContacts()
       .subscribe(data => {
         data = this.addContactName(data);
@@ -178,11 +179,17 @@ export class EstimateProfileBodyComponent implements OnInit {
     });
     this.estimatesService.getEstimatesProducts(this.currentInvoiceId).subscribe(res => {
       console.log('estimates productsS:', res.results);
-      this.productDetails = res.results;
-      this.productDetails.map(product => { 
-        product.discountvalue = product.discount.value;
-        return product;
+      const estimateProducts = res.results;
+      estimateProducts.map(i => {
+        i['unitprice'] = i.unitPrice;
+        i['discountvalue'] = i.discount.value;
+        i['readonly'] = true;
+        return i;
       });
+      this.productDetails = {
+        products: estimateProducts,
+        status: this.estimateStatus
+      };
     });
   }
 
@@ -275,18 +282,43 @@ export class EstimateProfileBodyComponent implements OnInit {
   }
 
   onPriceChanged() {
-
+    this.saveInvoice();
   }
 
   onTotalPriceChange(data) {
-  
+    if (data.type) {
+      this.saveInvoiceData.discount.unit = data.type;
+      this.saveInvoiceData.discount.value = data.amount;
+    } else {
+      this.saveInvoiceData.deposit = data.depositsAmount;
+    }
+    this.saveInvoice();
   }
 
   saveInvoice() {
     if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
       this.saveInvoiceData.deposit = 0;
     }
+    if (this.saveInvoiceData.recurring === null) {
+      this.saveInvoiceData.recurring = [];
+    }
+    if (this.saveInvoiceData.terms === null) {
+      this.saveInvoiceData.terms = '';
+    }
+    if (this.saveInvoiceData.internalNote === null) {
+      this.saveInvoiceData.internalNote = '';
+    }
+    if (this.saveInvoiceData.customerNote === null) {
+      this.saveInvoiceData.customerNote = '';
+    }
+    if (this.saveInvoiceData.reminder === null) {
+      this.saveInvoiceData.reminder = [];
+    }
     this.estimatesService.updateEstimate(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
+      this.taxes = res.data.taxTotal;
+      this.totalamountdue = res.data.total;
+      this.subtotalServices = res.data.serviceSubTotal;
+      this.subtotalproducts = res.data.productSubTotal;
     });
   }
 

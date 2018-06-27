@@ -163,7 +163,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
         invoiceProducts.map( i => {
           if (this.invoiceStatus !== 'NEW') { i['readonly'] = true; }
           i['unitprice'] = i.unitPrice;
-          i['discount'] = i.discount.value;
+          i['discountvalue'] = i.discount.value;
           return i;
         });
         this.productDetails = {
