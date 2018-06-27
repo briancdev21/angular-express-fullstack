@@ -117,4 +117,29 @@ export class CollaboratorsService {
     return this.http.delete(url);
   }
 
+  getWorkOrderProducts (id): Observable<any> {
+    const url = `${environment.apiUrl}/collaborators/work-orders/${id}/products`;
+    return this.http.get(url);
+  }
+
+  createWorkOrderProduct (id, body): Observable<any> {
+    const url = `${environment.apiUrl}/collaborators/work-orders/${id}/products`;
+    return this.http.post<any>(url, body);
+  }
+
+  updateIndividualWorkOrderProduct (id, productId, body): Observable<any> {
+    const url = `${environment.apiUrl}/collaborators/work-orders/${id}/products/${productId}`;
+    return this.http.put<any>(url, body);
+  }
+
+  getIndividualWorkOrderProduct (id, productId): Observable<any>  {
+    const url = `${environment.apiUrl}/collaborators/work-orders/${id}/products/${productId}`;
+    return this.http.get(url);
+  }
+
+  deleteIndividualWorkOrderProduct (id, productId): Observable<any>  {
+    const url = `${environment.apiUrl}/collaborators/work-orders/${id}/products/${productId}`;
+    return this.http.delete(url);
+  }
+
 }
