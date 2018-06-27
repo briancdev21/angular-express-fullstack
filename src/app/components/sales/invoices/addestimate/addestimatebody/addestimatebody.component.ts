@@ -245,6 +245,13 @@ export class AddEstimateBodyComponent implements OnInit {
   }
 
   onTotalPriceChange(data) {
+    console.log('deposit and discount:', data);
+    if (data.type) {
+      this.saveInvoiceData.discount.unit = data.type;
+      this.saveInvoiceData.discount.value = data.amount;
+    } else {
+      this.saveInvoiceData.deposit = data.depositsAmount;
+    }
     this.updateEstimate();
   }
 

@@ -64,7 +64,7 @@ export class EsTableComponent implements OnInit {
 
   removeProduct(index) {
     // Add sku of removing item to skus service
-    const addingItem = this.originSkus.filter(sku => sku.sku == this._productDetails[index].sku);
+    const addingItem = this.originSkus.filter(sku => sku.sku === this._productDetails[index].sku);
     this.skus = this.skus.concat(addingItem);
 
     this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
@@ -79,7 +79,7 @@ export class EsTableComponent implements OnInit {
     this.sharedService.getInventoryProduct(item.originalObject.productId).subscribe(res => {
 
       // Remove selected Sku from SkuService (Autocomplete service for skus)
-      this.skus = this.skus.filter((sku) => sku.sku != item.originalObject.sku);
+      this.skus = this.skus.filter((sku) => sku.sku !== item.originalObject.sku);
       this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
 
 
@@ -104,6 +104,7 @@ export class EsTableComponent implements OnInit {
       this.estimatesService.createEstimateProduct(this.estimateId, this.estimateProductModel).subscribe(data => {
         this._productDetails[index].id = data.data.id;
         this._productDetails[index].unitPrice = data.data.unitPrice;
+        this._productDetails[index].quantity = data.data.quantity;
       });
     });
     if (index === this._productDetails.length - 1) {

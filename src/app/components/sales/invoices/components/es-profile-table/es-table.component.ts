@@ -20,8 +20,11 @@ import * as moment from 'moment';
 
 export class EsProfileTableComponent implements OnInit {
   @Input() set productDetails(val) {
-    this._productDetails = val;
-    this.addNewProduct();
+    if (val !== undefined) {
+      this._productDetails = val.products;
+      this.estimateStatus = val.status;
+      this.addNewProduct();
+    }
   }
   @Input() estimateId;
   @Output() priceChange: EventEmitter<any> = new EventEmitter();
@@ -37,6 +40,7 @@ export class EsProfileTableComponent implements OnInit {
   estimateProductModel: any;
   _productDetails = [];
   serviceDate: any;
+  estimateStatus = 'NEW';
 
   constructor(private completerService: CompleterService, private sharedService: SharedService,
     private estimatesService: EstimatesService) {
@@ -59,13 +63,13 @@ export class EsProfileTableComponent implements OnInit {
   addNewProduct() {
     const newProduct = new ProductDetailInfo();
     // newProduct.taxRateId = this.taxRateOptions[0].id;
-    newProduct.readonly = true;
+    if (this.estimateStatus !== 'NEW') { newProduct.readonly = true; }
     this._productDetails.push(newProduct);
   }
 
   removeProduct(index) {
     // Add sku of removing item to skus service
-    const addingItem = this.originSkus.filter(sku => sku.sku == this._productDetails[index].sku);
+    const addingItem = this.originSkus.filter(sku => sku.sku === this._productDetails[index].sku);
     this.skus = this.skus.concat(addingItem);
 
     this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
@@ -80,7 +84,7 @@ export class EsProfileTableComponent implements OnInit {
     this.sharedService.getInventoryProduct(item.originalObject.productId).subscribe(res => {
 
       // Remove selected Sku from SkuService (Autocomplete service for skus)
-      this.skus = this.skus.filter((sku) => sku.sku != item.originalObject.sku);
+      this.skus = this.skus.filter((sku) => sku.sku !== item.originalObject.sku);
       this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
 
 
@@ -106,6 +110,8 @@ export class EsProfileTableComponent implements OnInit {
       };
       this.estimatesService.createEstimateProduct(this.estimateId, this.estimateProductModel).subscribe(data => {
         this._productDetails[index].id = data.data.id;
+        this._productDetails[index].unitprice = data.data.unitPrice;
+        this._productDetails[index].quantity = data.data.quantity;
       });
     });
     if (index === this._productDetails.length - 1) {
@@ -155,7 +161,7 @@ export class EsProfileTableComponent implements OnInit {
         sku: this._productDetails[index].sku,
         taxRateId: parseInt(this._productDetails[index].taxRateId, 10),
         discount: {
-          value: this._productDetails[index].discount ? this._productDetails[index].discount : 0,
+          value: this._productDetails[index].discountvalue ? this._productDetails[index].discountvalue : 0,
           unit: 'PERCENT'
         },
         received: 0,
