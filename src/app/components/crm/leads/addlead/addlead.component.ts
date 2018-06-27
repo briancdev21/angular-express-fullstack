@@ -30,6 +30,8 @@ export class AddLeadComponent implements OnInit {
   dataService: CompleterData;
   countriesSource: CompleterData;
   provincesSource: CompleterData;
+  billingCountriesSource: CompleterData;
+  billingProvincesSource: CompleterData;
   searchData = [
     { color: 'red', value: '#f00' },
     { color: 'green', value: '#0f0' },
@@ -68,9 +70,9 @@ export class AddLeadComponent implements OnInit {
   firstName = '';
   lastName = '';
   businessName = '';
-  defaultTerm = '';
-  defaultCurrency = '';
-  defaultPricing = '';
+  defaultTerm = 2;
+  defaultCurrency = 1;
+  defaultPricing = 1;
   primaryNumber = '';
   invalidDefaultTerm = false;
   invalidDefaultCurrency = false;
@@ -110,6 +112,8 @@ export class AddLeadComponent implements OnInit {
   wrongEmailFormat = false;
   selectedCountry: any;
   selectedProvince: any;
+  billingSelectedCountry: any;
+  billingSelectedProvince: any;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
     private filterService: FilterService ) {
@@ -129,6 +133,7 @@ export class AddLeadComponent implements OnInit {
 
     this.sharedService.getTerms().subscribe(res => {
       this.termsList = res.results;
+      console.log('termsllist: ', this.termsList);
     });
 
     this.sharedService.getPricingCategories().subscribe (res => {
@@ -163,6 +168,8 @@ export class AddLeadComponent implements OnInit {
     this.invalidCountry = false;
     this.invalidPostalCode = false;
     if (event === 'PERSON') {
+      this.typeAccountTypeChange = false;
+    } else if (event === 'BUSINESS') {
       this.typeAccountTypeChange = true;
     }
   }
@@ -185,19 +192,29 @@ export class AddLeadComponent implements OnInit {
   }
 
   onSelectCountry(event) {
-    console.log('country sel: ', event);
     this.selectedCountry = event.originalObject.code;
-    console.log('321: ', provinces, this.selectedCountry);
     const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
     this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
   }
 
   onSelectProvince(event) {
-    console.log('province sel: ', event);
     this.selectedProvince = event.originalObject.short;
     // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
     this.selectedCountry = event.originalObject.country;
     this.country = countries.filter(c => c.code === this.selectedCountry)[0].name;
+  }
+
+  onSelectBillingCountry(event) {
+    this.billingSelectedCountry = event.originalObject.code;
+    const provincesSourceList = provinces.filter(p => p.country === this.billingSelectedCountry);
+    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+  }
+
+  onSelectBillingProvince(event) {
+    this.billingSelectedProvince = event.originalObject.short;
+    // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
+    this.billingSelectedCountry = event.originalObject.country;
+    this.billingCountry = countries.filter(c => c.code === this.selectedCountry)[0].name;
   }
 
   getKeywords(event) {
@@ -492,9 +509,9 @@ export class AddLeadComponent implements OnInit {
     this.firstName = '';
     this.lastName = '';
     this.businessName = '';
-    this.defaultTerm = '';
-    this.defaultCurrency = '';
-    this.defaultPricing = '';
+    this.defaultTerm = 2;
+    this.defaultCurrency = 1;
+    this.defaultPricing = 1;
     this.primaryNumber = '';
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
@@ -530,10 +547,10 @@ export class AddLeadComponent implements OnInit {
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
       if (this.businessType === 'PERSON') {
         this.newLead = {
-          'currencyId': parseInt(this.defaultCurrency, 10),
-          'termId': parseInt(this.defaultTerm, 10),
+          'currencyId': this.defaultCurrency,
+          'termId': this.defaultTerm,
           'sourceId': parseInt(this.selectedSourceId, 10),
-          'pricingCategoryId': parseInt(this.defaultPricing, 10),
+          'pricingCategoryId': this.defaultPricing,
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -550,16 +567,16 @@ export class AddLeadComponent implements OnInit {
           'shippingAddress': {
             'address': this.address,
             'city': this.city,
-            'province': this.province,
+            'province': this.selectedProvince,
             'postalCode': this.postalCode,
-            'country': this.country
+            'country': this.selectedCountry
           },
           'billingAddress': {
             'address': this.switchIconShipping ? this.address : this.billingAddress,
             'city': this.switchIconShipping ? this.city : this.billingCity,
-            'province': this.switchIconShipping ? this.province : this.billingProvince,
+            'province': this.switchIconShipping ? this.selectedProvince : this.billingSelectedProvince,
             'postalCode': this.switchIconShipping ? this.postalCode : this.billingPostalCode,
-            'country': this.switchIconShipping ? this.country : this.billingCountry
+            'country': this.switchIconShipping ? this.selectedCountry : this.billingSelectedCountry
           },
           'email':  this.email,
           'socialMediaUrl': {
@@ -577,10 +594,10 @@ export class AddLeadComponent implements OnInit {
         };
       } else {
         this.newLead = {
-          'currencyId': parseInt(this.defaultCurrency, 10),
-          'termId': parseInt(this.defaultTerm, 10),
+          'currencyId': this.defaultCurrency,
+          'termId': this.defaultTerm,
           'sourceId': parseInt(this.selectedSourceId, 10),
-          'pricingCategoryId': parseInt(this.defaultPricing, 10),
+          'pricingCategoryId': this.defaultPricing,
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -610,9 +627,9 @@ export class AddLeadComponent implements OnInit {
           'billingAddress': {
             'address': this.switchIconShipping ? this.address : this.billingAddress,
             'city': this.switchIconShipping ? this.city : this.billingCity,
-            'province': this.switchIconShipping ? this.province : this.billingProvince,
+            'province': this.switchIconShipping ? this.selectedProvince : this.billingSelectedProvince,
             'postalCode': this.switchIconShipping ? this.postalCode : this.billingPostalCode,
-            'country': this.switchIconShipping ? this.country : this.billingCountry
+            'country': this.switchIconShipping ? this.selectedCountry : this.billingSelectedCountry
           },
           'email':  this.email,
           'socialMediaUrl': {

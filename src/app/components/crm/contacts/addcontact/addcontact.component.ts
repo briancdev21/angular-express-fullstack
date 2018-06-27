@@ -6,6 +6,9 @@ import { CrmService } from '../../../../services/crm.service';
 import * as moment from 'moment';
 import { SharedService } from '../../../../services/shared.service';
 import { FilterService } from '../filter.service';
+import { countries } from '../../../../../assets/json/countries';
+import { provinces } from '../../../../../assets/json/provinces';
+import * as countryList from 'country-list';
 
 @Component({
   selector: 'app-addcontact',
@@ -26,6 +29,10 @@ export class AddContactComponent implements OnInit {
   captain = '';
   captainSource: string;
   dataService: CompleterData;
+  countriesSource: CompleterData;
+  provincesSource: CompleterData;
+  billingCountriesSource: CompleterData;
+  billingProvincesSource: CompleterData;
   searchData = [
     { color: 'red', value: '#f00' },
     { color: 'green', value: '#0f0' },
@@ -45,7 +52,7 @@ export class AddContactComponent implements OnInit {
   city = '';
   province = '';
   postalCode = '';
-  country: '';
+  country: any;
   typeAccountTypeChange = false;
   keywords: any;
   contactAssociation: any;
@@ -60,9 +67,9 @@ export class AddContactComponent implements OnInit {
   firstName = '';
   lastName = '';
   businessName = '';
-  defaultTerm = '';
-  defaultCurrency = '';
-  defaultPricing = '';
+  defaultTerm = 2;
+  defaultCurrency = 1;
+  defaultPricing = 1;
   primaryNumber = '';
   invalidDefaultTerm = false;
   invalidDefaultCurrency = false;
@@ -77,18 +84,7 @@ export class AddContactComponent implements OnInit {
   newEmail = '';
   newAddress = '';
   selectOwner = '';
-  newCity: any;
-  newState: any;
-  newCountry: any;
-  newZipcode: any;
-  family: any;
-  royalty: any;
-  retail: any;
-  euro: any;
-  cad: any;
-  usd: any;
-  Test1: any;
-  Test2: any;
+
   currencyList = [];
   keywordsIdList = [];
   headContact = '';
@@ -103,7 +99,7 @@ export class AddContactComponent implements OnInit {
   secondaryNumber = '';
   termsList = [];
   pricingCategoriesList = [];
-  contactsList = [];
+  contactsList: any;
   usersList = [];
   sourcesList = [];
   sourcesNameList = [];
@@ -111,15 +107,19 @@ export class AddContactComponent implements OnInit {
   businessAssociation = '';
   newContact: any;
   wrongEmailFormat = false;
+  selectedCountry: any;
+  selectedProvince: any;
+  billingSelectedCountry: any;
+  billingSelectedProvince: any;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService
     , private filterService: FilterService ) {
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.keywords = [];
     this.contactAssociation = ['Danny Shibley', 'John Stephen'];
-  }
+    this.countriesSource = completerService.local(countries, 'name', 'name');
+    this.provincesSource = completerService.local(provinces, 'name', 'name');
 
-  ngOnInit() {
     this.sharedService.getCurrencies().subscribe(data => {
       this.currencyList = data.results;
     });
@@ -134,6 +134,8 @@ export class AddContactComponent implements OnInit {
 
     this.sharedService.getContacts().subscribe(res => {
       this.contactsList = res;
+      console.log('contactslist: ', this.contactsList);
+      this.addContactName(this.contactsList);
     });
 
     this.sharedService.getUsers().subscribe(res => {
@@ -144,6 +146,10 @@ export class AddContactComponent implements OnInit {
       this.sourcesList = res.results;
       this.sourcesNameList = res.results.map(n => n.source);
     });
+  }
+
+  ngOnInit() {
+
   }
 
   onAccountTypeChange(event) {
@@ -180,6 +186,32 @@ export class AddContactComponent implements OnInit {
     }
     const pos = this.sourcesNameList.indexOf(event.title);
     this.selectedSourceId = this.sourcesList[pos].id;
+  }
+
+  onSelectCountry(event) {
+    this.selectedCountry = event.originalObject.code;
+    const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
+    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+  }
+
+  onSelectProvince(event) {
+    this.selectedProvince = event.originalObject.short;
+    // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
+    this.selectedCountry = event.originalObject.country;
+    this.country = countries.filter(c => c.code === this.selectedCountry)[0].name;
+  }
+
+  onSelectBillingCountry(event) {
+    this.billingSelectedCountry = event.originalObject.code;
+    const provincesSourceList = provinces.filter(p => p.country === this.billingSelectedCountry);
+    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+  }
+
+  onSelectBillingProvince(event) {
+    this.billingSelectedProvince = event.originalObject.short;
+    // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
+    this.billingSelectedCountry = event.originalObject.country;
+    this.billingCountry = countries.filter(c => c.code === this.selectedCountry)[0].name;
   }
 
   getKeywords(event) {
@@ -451,6 +483,22 @@ export class AddContactComponent implements OnInit {
     return re.test(String(email).toLowerCase());
   }
 
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
   clearInputs() {
     this.address = '';
     this.city = '';
@@ -470,9 +518,9 @@ export class AddContactComponent implements OnInit {
     this.firstName = '';
     this.lastName = '';
     this.businessName = '';
-    this.defaultTerm = '';
-    this.defaultCurrency = '';
-    this.defaultPricing = '';
+    this.defaultTerm = 2;
+    this.defaultCurrency = 1;
+    this.defaultPricing = 1;
     this.primaryNumber = '';
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
@@ -517,10 +565,10 @@ export class AddContactComponent implements OnInit {
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
       if (this.businessType === 'PERSON') {
         this.newContact = {
-          'currencyId': parseInt(this.defaultCurrency, 10),
-          'termId': parseInt(this.defaultTerm, 10),
+          'currencyId': this.defaultCurrency,
+          'termId': this.defaultTerm,
           'sourceId': parseInt(this.selectedSourceId, 10),
-          'pricingCategoryId': parseInt(this.defaultPricing, 10),
+          'pricingCategoryId': this.defaultPricing,
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -537,16 +585,16 @@ export class AddContactComponent implements OnInit {
           'shippingAddress': {
             'address': this.address,
             'city': this.city,
-            'province': this.province,
+            'province': this.selectedProvince,
             'postalCode': this.postalCode,
-            'country': this.country
+            'country': this.selectedCountry
           },
           'billingAddress': {
             'address': this.switchIconShipping ? this.address : this.billingAddress,
             'city': this.switchIconShipping ? this.city : this.billingCity,
-            'province': this.switchIconShipping ? this.province : this.billingProvince,
+            'province': this.switchIconShipping ? this.selectedProvince : this.billingSelectedProvince,
             'postalCode': this.switchIconShipping ? this.postalCode : this.billingPostalCode,
-            'country': this.switchIconShipping ? this.country : this.billingCountry
+            'country': this.switchIconShipping ? this.selectedCountry : this.billingSelectedCountry
           },
           'email':  this.email,
           'socialMediaUrl': {
@@ -564,10 +612,10 @@ export class AddContactComponent implements OnInit {
         };
       } else {
         this.newContact = {
-          'currencyId': parseInt(this.defaultCurrency, 10),
-          'termId': parseInt(this.defaultTerm, 10),
+          'currencyId': this.defaultCurrency,
+          'termId': this.defaultTerm,
           'sourceId': parseInt(this.selectedSourceId, 10),
-          'pricingCategoryId': parseInt(this.defaultPricing, 10),
+          'pricingCategoryId': this.defaultPricing,
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -597,9 +645,9 @@ export class AddContactComponent implements OnInit {
           'billingAddress': {
             'address': this.switchIconShipping ? this.address : this.billingAddress,
             'city': this.switchIconShipping ? this.city : this.billingCity,
-            'province': this.switchIconShipping ? this.province : this.billingProvince,
+            'province': this.switchIconShipping ? this.selectedProvince : this.billingSelectedProvince,
             'postalCode': this.switchIconShipping ? this.postalCode : this.billingPostalCode,
-            'country': this.switchIconShipping ? this.country : this.billingCountry
+            'country': this.switchIconShipping ? this.selectedCountry : this.billingSelectedCountry
           },
           'email':  this.email,
           'socialMediaUrl': {

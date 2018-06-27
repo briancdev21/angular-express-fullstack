@@ -291,3 +291,7 @@ app-multikeywordselect {
 .account-type select {
 	color: #646464;
 }
+
+:host ::ng-deep ng2-completer .completer-holder input::placeholder {
+	color: #d3d3d3;
+}
