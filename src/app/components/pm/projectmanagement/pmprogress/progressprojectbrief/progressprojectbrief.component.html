@@ -1,20 +1,22 @@
-<div class="top-btns">
-  <span>John Moss</span>
-  <span>NU8802-0159</span>
-</div>
-
-<div class="text-editor-sec">
-  <div class="scope-description-change">
-    <div class="editor-title">SCOPE OF WORK</div>
-    <quill-editor [(ngModel)]="projectScope.workScope">
-    </quill-editor>
+<div *ngIf="projectInfo">
+  <div class="top-btns">
+    <span>{{projectInfo.contactName}}</span>
+    <span>{{projectInfo.id}}</span>
   </div>
-</div>
 
-<div class="text-editor-sec">
-  <div class="scope-description-change">
-    <div class="editor-title">INTERNAL NOTES</div>
-    <quill-editor [(ngModel)]="projectScope.internalNotes">
-    </quill-editor>
+  <div class="text-editor-sec">
+    <div class="scope-description-change">
+      <div class="editor-title">SCOPE OF WORK</div>
+      <quill-editor [(ngModel)]="projectInfo.scopeOfWork">
+      </quill-editor>
+    </div>
+  </div>
+
+  <div class="text-editor-sec">
+    <div class="scope-description-change">
+      <div class="editor-title">INTERNAL NOTES</div>
+      <quill-editor [(ngModel)]="projectInfo.internalNote" (ngModelChange)="onChangeInternalNotes($event)">
+      </quill-editor>
+    </div>
   </div>
 </div>
