@@ -260,7 +260,14 @@ export class AddInvoiceBodyComponent implements OnInit {
     this.updateInvoice();
   }
 
-  onTotalPriceChange() {
+  onTotalPriceChange(data) {
+    console.log('deposits:', data);
+    if (data.type) {
+      this.saveInvoiceData.discount.unit = data.type;
+      this.saveInvoiceData.discount.value = data.amount;
+    } else {
+      this.saveInvoiceData.deposit = data.depositsAmount;
+    }
     this.updateInvoice();
   }
 
