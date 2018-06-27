@@ -56,6 +56,11 @@ span {
 	border: 1px solid red !important;
 }
 
+.name-col ng2-completer { 
+	display: block;
+	margin-top: 4px;
+}
+
 .hide-modal {
 	top: -100%;
 	visibility: hidden;
@@ -179,7 +184,8 @@ tab input, tab select {
 	height: 34px;
 	margin-top: 4px;
 	color: #646464;
-	font-weight: 300;
+	font-weight: 400;
+	font-size: 13px;
 }
 
 tab select {
@@ -200,7 +206,7 @@ tab select {
 	height: 20px;
 }
 
-input::placeholder {
+input::placeholder, textarea::placeholder {
 	font-size: 13px;
 	color: #95989a;
 }
@@ -937,6 +943,7 @@ app-schedulemultikeyword {
 .dependency-description, .priority-description {
 	border-bottom: 1px solid #f5f5f5;
 	min-width: 70px;
+	font-size: 13px;
 }
 
 .dependency-description:hover {

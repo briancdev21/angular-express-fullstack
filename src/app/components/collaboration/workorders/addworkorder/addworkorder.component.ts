@@ -4,6 +4,8 @@ import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect
 import { CompleterService, CompleterData } from 'ng2-completer';
 import * as moment from 'moment';
 import { AvailabilityComponent } from '../orderprofile/availability/availability.component';
+import { SharedService } from '../../../../services/shared.service';
+import { CollaboratorsService } from '../../../../services/collaborators.service';
 
 @Component({
   selector: 'app-addworkorder',
@@ -171,7 +173,7 @@ export class AddWorkOrderComponent implements OnInit {
 
   workorderDetails = {
     projectId: '',
-    contactName : '',
+    contactId : '',
     selectedProject: 0,
     workorderNumber: '',
     startDate: '',
@@ -187,7 +189,7 @@ export class AddWorkOrderComponent implements OnInit {
   };
 
   addWorkorderModalCollapsed = true;
-  customerList = ['John Moss', 'Latif', 'Dennis'];
+  customerList: CompleterData;
   projectManagerList = ['Manager1', 'Manager2', 'Manager3'];
   accountReceivableList = ['Account Receivable 1', 'Account Receivable 2', 'Account Receivable 3'];
   associationList = ['Associatioin 1', 'Associatioin 2', 'Associatioin 3'];
@@ -271,11 +273,20 @@ export class AddWorkOrderComponent implements OnInit {
   topTimeEstimationModal = false;
   queryString: any;
   isAutocompleteUpdated = false;
+  contactsList: any;
 
-  constructor(private completerService: CompleterService) {
+  constructor(private completerService: CompleterService, private sharedService: SharedService,
+    private collaboratorsService: CollaboratorsService) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
+    });
+
+    this.sharedService.getContacts().subscribe(data => {
+      this.contactsList = data;
+      this.addContactName(this.contactsList);
+      console.log('contacts: ', this.contactsList);
+      this.customerList = completerService.local(this.contactsList, 'name', 'name');
     });
   }
 
@@ -287,7 +298,8 @@ export class AddWorkOrderComponent implements OnInit {
   }
 
   onSelectCustomer(event) {
-    this.workorderDetails.contactName = event;
+    console.log('selected customer: ', event);
+    this.workorderDetails.contactId = event.originalObject.id;
     this.openProjects = this.usersProjects.filter( p => p.owner === event);
   }
 
@@ -364,14 +376,11 @@ export class AddWorkOrderComponent implements OnInit {
     if (pos === 'tab-one') {
       this.invalidCustomerName = false;
       this.invalidStartTime = this.invalidStartDate = this.invalidEndDate = this.invalidEndTime = false;
-      if (this.workorderDetails.contactName && this.workorderDetails.startTime &&
+      if (this.workorderDetails.contactId && this.workorderDetails.startTime &&
           this.workorderDetails.startDate && this.workorderDetails.endDate && this.workorderDetails.endTime)  {
-            this.tabActiveSecond = true;
-            this.tabActiveFirst = false;
-            this.tabActiveThird = false;
-            this.visibleAvail = true;
+            this.createNewWorkOrder();
       } else {
-        if (!this.workorderDetails.contactName) {
+        if (!this.workorderDetails.contactId) {
           this.invalidCustomerName = true;
         }
         if (!this.workorderDetails.endDate) {
@@ -423,6 +432,32 @@ export class AddWorkOrderComponent implements OnInit {
     }
   }
 
+  createNewWorkOrder() {
+    const timeStart = moment(this.workorderDetails.startTime).format('hh:mm:ss');
+    const timeAddedStart = this.workorderDetails.startDate + 'T' + timeStart;
+    const isoFormatStart = new Date (timeAddedStart).toISOString();
+
+    const timeEnd = moment(this.workorderDetails.endTime).format('hh:mm:ss');
+    const timeAddedEnd = this.workorderDetails.startDate + 'T' + timeEnd;
+    const isoFormatEnd = new Date (timeAddedEnd).toISOString();
+    const savingWorkOrderData = {
+      contactId: this.workorderDetails.contactId,
+      name: this.workorderDetails.workorderName,
+      startDate: isoFormatStart,
+      endDate: isoFormatEnd
+    };
+
+    this.collaboratorsService.createWorkOrder(savingWorkOrderData).subscribe(res => {
+      if (res.error) {
+      } else {
+        this.tabActiveSecond = true;
+        this.tabActiveFirst = false;
+        this.tabActiveThird = false;
+        this.visibleAvail = true;
+      }
+    });
+  }
+
   openAddWorkorderModal() {
     this.tabActiveFirst = true;
     this.tabActiveSecond = false;
@@ -443,10 +478,12 @@ export class AddWorkOrderComponent implements OnInit {
   }
 
   selectStartDate(start) {
+    this.workorderDetails.startDate = moment(start.value).format('YYYY-MM-DD');
     this.formattedStartDate = moment(start.value).format('MMMM DD, YYYY');
   }
 
   selectEndDate(end) {
+    this.workorderDetails.endDate = moment(end.value).format('YYYY-MM-DD');
     this.formattedEndDate = moment(end.value).format('MMMM DD, YYYY');
   }
 
@@ -602,4 +639,19 @@ export class AddWorkOrderComponent implements OnInit {
     this.topPriorityModal = false;
   }
 
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
 }

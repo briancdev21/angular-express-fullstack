@@ -16,12 +16,14 @@
           <div class="name-col tab-row">
             <div>
               <span>Customer Name (*required)</span>
-              <app-ng2completer 
-                [itemsList]="customerList" 
-                (selectedItem)="onSelectCustomer($event)" 
+              <ng2-completer
+                [dataService]="customerList" 
+                (selected)="onSelectCustomer($event)" 
                 [ngClass]="{'validation-required-name': invalidCustomerName}" 
-                [searchStr]="selectName">
-              </app-ng2completer>
+                [(ngModel)]="selectName"
+                [minSearchLength]="0"
+                *ngIf="contactsList">
+              </ng2-completer>
             </div>
             <div class="workorder-project">
               <span>Project</span>
