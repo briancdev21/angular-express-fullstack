@@ -30,6 +30,8 @@ export class AddLeadComponent implements OnInit {
   dataService: CompleterData;
   countriesSource: CompleterData;
   provincesSource: CompleterData;
+  billingCountriesSource: CompleterData;
+  billingProvincesSource: CompleterData;
   searchData = [
     { color: 'red', value: '#f00' },
     { color: 'green', value: '#0f0' },
@@ -110,6 +112,8 @@ export class AddLeadComponent implements OnInit {
   wrongEmailFormat = false;
   selectedCountry: any;
   selectedProvince: any;
+  billingSelectedCountry: any;
+  billingSelectedProvince: any;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
     private filterService: FilterService ) {
@@ -164,6 +168,8 @@ export class AddLeadComponent implements OnInit {
     this.invalidCountry = false;
     this.invalidPostalCode = false;
     if (event === 'PERSON') {
+      this.typeAccountTypeChange = false;
+    } else if (event === 'BUSINESS') {
       this.typeAccountTypeChange = true;
     }
   }
@@ -196,6 +202,19 @@ export class AddLeadComponent implements OnInit {
     // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
     this.selectedCountry = event.originalObject.country;
     this.country = countries.filter(c => c.code === this.selectedCountry)[0].name;
+  }
+
+  onSelectBillingCountry(event) {
+    this.billingSelectedCountry = event.originalObject.code;
+    const provincesSourceList = provinces.filter(p => p.country === this.billingSelectedCountry);
+    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+  }
+
+  onSelectBillingProvince(event) {
+    this.billingSelectedProvince = event.originalObject.short;
+    // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
+    this.billingSelectedCountry = event.originalObject.country;
+    this.billingCountry = countries.filter(c => c.code === this.selectedCountry)[0].name;
   }
 
   getKeywords(event) {
@@ -548,16 +567,16 @@ export class AddLeadComponent implements OnInit {
           'shippingAddress': {
             'address': this.address,
             'city': this.city,
-            'province': this.province,
+            'province': this.selectedProvince,
             'postalCode': this.postalCode,
-            'country': this.country
+            'country': this.selectedCountry
           },
           'billingAddress': {
             'address': this.switchIconShipping ? this.address : this.billingAddress,
             'city': this.switchIconShipping ? this.city : this.billingCity,
-            'province': this.switchIconShipping ? this.province : this.billingProvince,
+            'province': this.switchIconShipping ? this.selectedProvince : this.billingSelectedProvince,
             'postalCode': this.switchIconShipping ? this.postalCode : this.billingPostalCode,
-            'country': this.switchIconShipping ? this.country : this.billingCountry
+            'country': this.switchIconShipping ? this.selectedCountry : this.billingSelectedCountry
           },
           'email':  this.email,
           'socialMediaUrl': {
@@ -608,9 +627,9 @@ export class AddLeadComponent implements OnInit {
           'billingAddress': {
             'address': this.switchIconShipping ? this.address : this.billingAddress,
             'city': this.switchIconShipping ? this.city : this.billingCity,
-            'province': this.switchIconShipping ? this.province : this.billingProvince,
+            'province': this.switchIconShipping ? this.selectedProvince : this.billingSelectedProvince,
             'postalCode': this.switchIconShipping ? this.postalCode : this.billingPostalCode,
-            'country': this.switchIconShipping ? this.country : this.billingCountry
+            'country': this.switchIconShipping ? this.selectedCountry : this.billingSelectedCountry
           },
           'email':  this.email,
           'socialMediaUrl': {
