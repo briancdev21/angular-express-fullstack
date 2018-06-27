@@ -71,6 +71,7 @@ input::placeholder {
   border-bottom: 1px solid #D3D3D3;
   margin: 15px 0;
   width: 100%;
+  font-size: 13px;
 }
 
 :host ::ng-deep .calendar-view .fc-event {
