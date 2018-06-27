@@ -8,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { InvoiceModel } from '../../../../../models/invoice.model';
 import { FilterService } from '../../filter.service';
 import * as moment from 'moment';
+import { RecurseVisitor } from '@angular/compiler/src/i18n/i18n_ast';
 
 @Component({
   selector: 'app-invoiceprofilebody',
@@ -50,7 +51,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
   terms = [];
   selectedTerm = '';
   dueDate: any;
-  productDetails = [];
+  productDetails: any;
   internalMemo = undefined;
   subtotalproducts = undefined;
   discountType: string;
@@ -121,13 +122,14 @@ export class InvoiceProfileBodyComponent implements OnInit {
   currentInvoiceId: number;
   saveInvoiceData: any;
   currentOwner: string;
+  invoiceStatus = 'NEW';
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
               private route: ActivatedRoute, private filterService: FilterService) {
 
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
-
+      this.invoiceStatus = res.data.status;
       this.sharedService.getContacts()
       .subscribe(data => {
         data = this.addContactName(data);
@@ -158,13 +160,16 @@ export class InvoiceProfileBodyComponent implements OnInit {
 
       this.invoicesService.getInvoiceProducts(this.currentInvoiceId).subscribe(data => {
         const invoiceProducts = data.results;
-
-        invoiceProducts.forEach(i => {
-          i['serviceDate'] = moment(i.updatedAt).format('YYYY-MM-DD');
+        invoiceProducts.map( i => {
+          if (this.invoiceStatus !== 'NEW') { i['readonly'] = true; }
           i['unitprice'] = i.unitPrice;
           i['discount'] = i.discount.value;
+          return i;
         });
-        this.productDetails = invoiceProducts;
+        this.productDetails = {
+          products: invoiceProducts,
+          status: this.invoiceStatus
+        };
       });
 
       this.saveInvoiceData = res.data;
@@ -189,6 +194,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
       this.currentTermId = res.data.termId;
       this.emailAddresses = res.data.emails;
       this.shippingAddress = res.data.shippingAddress;
+      this.depositsAmount = res.data.deposit;
     });
 
     this.saveInvoiceData = new InvoiceModel();
@@ -280,40 +286,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
   }
 
   onPriceChanged() {
-    this.subtotalproducts = 0;
-    this.subtotalServices = 0;
-    this.taxes = 0;
-    this.taxrate = 0;
-    this.productDetails.forEach( product => {
-      let taxrate;
-      switch (product.taxrate) {
-        case 'GST': taxrate = 5; break;
-        case 'PST': taxrate = 7; break;
-        case undefined: taxrate = 0; break;
-        default: {
-          taxrate = parseInt(product.taxrate, 10);
-        }
-      }
-      if (product.type === 'service') {
-        if (product.total !== undefined) {
-          this.subtotalServices += product.total;
-          if (taxrate !== 0) { this.taxes += product.total * taxrate / 100; this.taxrate = taxrate; }
-          this.subtotalServices = Math.round(this.subtotalServices * 100) / 100 ;
-          this.taxes = Math.round(this.taxes * 100) / 100 ;
-          this.origin_taxes = this.taxes;
-        }
-      } else {
-        if (product.total !== undefined) {
-          this.subtotalproducts += product.total;
-          if (taxrate !== 0) { this.taxes += product.total * taxrate / 100; this.taxrate = taxrate; }
-          this.subtotalproducts = Math.round(this.subtotalproducts * 100) / 100 ;
-          this.taxes = Math.round(this.taxes * 100) / 100 ;
-          this.origin_taxes = this.taxes;
-        }
-      }
-    });
-    this.onTotalPriceChange(this);
-
+    this.saveInvoice();
   }
 
   onTotalPriceChange(data) {
@@ -323,45 +296,34 @@ export class InvoiceProfileBodyComponent implements OnInit {
     } else {
       this.saveInvoiceData.deposit = data.depositsAmount;
     }
-    this.saveInvoiceData.deposit = data;
-    let depositsAmount;
-    let discountAmount;
-    this.taxes = this.origin_taxes;
-
-    if (data.amount !== undefined) { this.discountAmount = data.amount; }
-    if (data.discountType !== this.discountType && data.type) { this.discountType = data.type; }
-    if (data.depositsAmount !== undefined) { this.depositsAmount = data.depositsAmount; }
-    depositsAmount = this.depositsAmount;
-    discountAmount = this.discountAmount;
-    if (depositsAmount === undefined) { depositsAmount = 0; }
-    if (discountAmount === 0) { discountAmount = 0; this.discountAmount  = undefined; }
-    let subtotalServices = this.subtotalServices;
-    if (this.subtotalServices === undefined) { subtotalServices = 0; }
-    if (depositsAmount !== undefined && this.subtotalproducts !== undefined) {
-      if (discountAmount === undefined) { discountAmount = 0; }
-      const totalprice = this.subtotalproducts + subtotalServices;
-      switch (this.discountType) {
-        case 'percent': {
-          this.taxes = this.taxes * (1 - discountAmount / 100);
-          this.totalamountdue = totalprice * (100 - discountAmount) / 100 - depositsAmount + this.taxes;
-        }
-        break;
-        case 'dollar': {
-          this.taxes -= discountAmount * this.taxrate / 100;
-          this.totalamountdue = totalprice - discountAmount - depositsAmount + this.taxes;
-        }
-        break;
-      }
-      this.totalamountdue =  Math.round(this.totalamountdue * 100) / 100;
-    }
+    this.saveInvoice();
   }
 
   saveInvoice() {
     if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
       this.saveInvoiceData.deposit = 0;
     }
+    if (this.saveInvoiceData.recurring === null) {
+      this.saveInvoiceData.recurring = [];
+    }
+    if (this.saveInvoiceData.terms === null) {
+      this.saveInvoiceData.terms = '';
+    }
+    if (this.saveInvoiceData.internalNote === null) {
+      this.saveInvoiceData.internalNote = '';
+    }
+    if (this.saveInvoiceData.customerNote === null) {
+      this.saveInvoiceData.customerNote = '';
+    }
+    if (this.saveInvoiceData.reminder === null) {
+      this.saveInvoiceData.reminder = [];
+    }
     this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
       console.log('saved invoice: ', res);
+      this.taxes = res.data.taxTotal;
+      this.totalamountdue = res.data.total;
+      this.subtotalServices = res.data.serviceSubTotal;
+      this.subtotalproducts = res.data.productSubTotal;
     });
   }
   addContactName(data) {

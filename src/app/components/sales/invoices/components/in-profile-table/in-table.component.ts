@@ -19,8 +19,11 @@ import * as moment from 'moment';
 
 export class InProfileTableComponent implements OnInit {
   @Input() set productDetails(val) {
-    this._productDetails = val;
-    this.addNewProduct();
+    if (val !== undefined) {
+      this.productStatus = val.status;
+      this._productDetails = val.products;
+      this.addNewProduct();
+    }
   }
   @Input() invoiceId;
   @Output() priceChange: EventEmitter<any> = new EventEmitter();
@@ -36,6 +39,7 @@ export class InProfileTableComponent implements OnInit {
   invoiceProductModel: any;
   _productDetails = [];
   serviceDate: any;
+  productStatus = 'NEW';
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private invoicesService: InvoicesService) {
     this.sharedService.getTaxRates().subscribe(taxRateRes => {
@@ -57,13 +61,15 @@ export class InProfileTableComponent implements OnInit {
   addNewProduct() {
     const newProduct = new ProductDetailInfo();
     // newProduct.taxRateId = this.taxRateOptions[0].id;
-    newProduct.readonly = true;
+    if (this.productStatus !== 'NEW') {
+      newProduct.readonly = true;
+    }
     this._productDetails.push(newProduct);
   }
 
   removeProduct(index) {
     // Add sku of removing item to skus service
-    const addingItem = this.originSkus.filter(sku => sku.sku == this._productDetails[index].sku);
+    const addingItem = this.originSkus.filter(sku => sku.sku === this._productDetails[index].sku);
     this.skus = this.skus.concat(addingItem);
 
     this.skuService = this.completerService.local(this.skus, 'sku', 'sku');
@@ -90,7 +96,6 @@ export class InProfileTableComponent implements OnInit {
       this._productDetails[index].taxrate = this.taxRateOptions[0].rate;
       this._productDetails[index].supplierId = product.supplierId;
       this._productDetails[index].model = product.model;
-      this._productDetails[index].unitprice = item.originalObject.cost;
       this._productDetails[index].name = product.name;
       this._productDetails[index].measure = product.unitOfMeasure.quantity;
       this.invoiceProductModel = {
@@ -104,6 +109,8 @@ export class InProfileTableComponent implements OnInit {
       };
       this.invoicesService.addInvoiceProduct(this.invoiceId, this.invoiceProductModel).subscribe(data => {
         this._productDetails[index].id = data.data.id;
+        this._productDetails[index].unitprice = data.data.unitPrice;
+        this._productDetails[index].quantity = data.data.quantity;
       });
     });
     if (index === this._productDetails.length - 1) {
