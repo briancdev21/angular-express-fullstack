@@ -44,6 +44,7 @@ import { FormsModule } from '@angular/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { QuillModule } from 'ngx-quill';
 import { DpDatePickerModule } from 'ng2-date-picker';
+import { Ng2CompleterModule } from 'ng2-completer';
 
 import { ProjectManagementService } from './projectmanagement.service';
 import { TaskStableMapToKeysPipe } from './pmschedule/pmtaskstable/map-to-keys.pipe';
@@ -102,7 +103,8 @@ export const MY_NATIVE_FORMATS = {
     DragulaModule,
     QuillModule,
     ProgressProductLogCmpModule,
-    DpDatePickerModule
+    DpDatePickerModule,
+    Ng2CompleterModule
   ],
   exports: [
     PmBreadcrumbBarComponent,
