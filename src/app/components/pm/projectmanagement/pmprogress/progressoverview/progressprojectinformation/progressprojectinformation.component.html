@@ -77,7 +77,7 @@
           [owlDateTime]="endDate" 
           placeholder="Choose a end date" 
           (dateTimeChange)="selectEndDate($event)" 
-          [(ngModel)]="projectInfo.deliveryDate"
+          [(ngModel)]="projectInfo.endDate"
           [min]="endMin" >
         <owl-date-time [pickerType]="'calendar'" #endDate></owl-date-time>
       </div>
@@ -87,23 +87,22 @@
       <span class="title">Project Manager</span>
       <div class="content-info">
         <div class="followers"  (click)="editablePm=true;$event.stopPropagation()" *ngIf="projectInformation.projectManager" (clickOutside)="closePmEditableModal()"> 
-          <div class="follower" *ngFor="let user of projectInformation.projectManager; let i = index" >
-            <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editablePm=true;$event.stopPropagation()"/></a>
-          </div> 
-          <div class="edit-followers" *ngIf="editablePm" (click)="editablePm=true;$event.stopPropagation()" >
+          
+            <a [title]='projectManagerData.username' ><img [src]='projectManagerData.pictureURI'  (click)="editablePm=true;$event.stopPropagation()"/></a>
+          <div class="edit-followers" *ngIf="editablePm" (click)="editablePm=true; editableAm=false; $event.stopPropagation()" >
             <ul>
-              <li *ngFor="let user of projectInformation.projectManager; let i = index">{{user.name}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+              
               <li style="background: none; width: 100%; margin: 0;">
                 <!-- <input autocomplete [config]="config2" [items]="items2"
                   (inputChangedEvent)="onInputChangedEvent($event)"
                   (selectEvent)="onSelectProjectManager($event)"> -->
-                <ng-select *ngIf="isAutocompleteUpdated2" [items]="items2"
-                  bindLabel="config2.sourceField"
+                <ng-select *ngIf="isAutocompleteUpdated2" [items]="items3"
+                  bindLabel="config3.sourceField"
                   [clearSearchOnAdd]="false"
                   (add)="onSelectProjectManager($event)" >
                 </ng-select>
-                <ng-select *ngIf="!isAutocompleteUpdated2" [items]="items2"
-                  bindLabel="config2.sourceField"
+                <ng-select *ngIf="!isAutocompleteUpdated2" [items]="items3"
+                  bindLabel="config3.sourceField"
                   [clearSearchOnAdd]="false"
                   (add)="onSelectProjectManager($event)">
                 </ng-select>
@@ -116,25 +115,26 @@
 
     <div class="account-manager">
       <span class="title">Account Manager</span>
-      <div *ngIf="projectInfo" class="content-info" [ngClass]="{invalidAm: projectInfo.assignees.projectManager.length === 0}">
+      <div *ngIf="accountManagerData" class="content-info" [ngClass]="{invalidAm: projectInfo.projectManager.length === 0}">
         <div class="followers"  (click)="editableAm=true;$event.stopPropagation()" *ngIf="projectInformation.accountManager" (clickOutside)="closeAmEditableModal()"> 
-          <div class="follower" *ngFor="let user of projectInformation.accountManager; let i = index" >
-            <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editableAm=true;$event.stopPropagation()"/></a>
+          <div class="follower" >
+            <a [title]='accountManagerData.firstName + " " + accountManagerData.lastName'>
+              <img [src]='accountManagerData.pictureURI'  (click)="editableAm=true; $event.stopPropagation(); editablePm=false"/>
+            </a>
           </div> 
-          <div class="edit-followers" *ngIf="editableAm" (click)="editableAm=true;$event.stopPropagation()" >
+          <div class="edit-followers" *ngIf="editableAm" (click)="editableAm=true; editablePm=false; $event.stopPropagation()" >
             <ul>
-              <li *ngFor="let user of projectInformation.accountManager; let i = index">{{user.name}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
               <li style="background: none; width: 100%; margin: 0;">
                 <!-- <input autocomplete [config]="config2" [items]="items2"
                   (inputChangedEvent)="onInputChangedEvent($event)"
                   (selectEvent)="onSelectAccountManager($event)"> -->
-                <ng-select *ngIf="isAutocompleteUpdated3" [items]="items2"
-                  bindLabel="config2.sourceField"
+                <ng-select *ngIf="isAutocompleteUpdated3" [items]="items3"
+                  bindLabel="config3.sourceField"
                   [clearSearchOnAdd]="false"
                   (add)="onSelectAccountManager($event)" >
                 </ng-select>
-                <ng-select *ngIf="!isAutocompleteUpdated3" [items]="items2"
-                  bindLabel="config2.sourceField"
+                <ng-select *ngIf="!isAutocompleteUpdated3" [items]="items3"
+                  bindLabel="config3.sourceField"
                   [clearSearchOnAdd]="false"
                   (add)="onSelectAccountManager($event)">
                 </ng-select>
@@ -148,23 +148,23 @@
     <div class="account-manager">
       <span class="title">Contact Association</span>
       <div class="content-info">
-        <div class="followers"  (click)="editableCa=true;$event.stopPropagation()" *ngIf="projectInformation.accountManager" (clickOutside)="closeCaEditableModal()"> 
-          <div class="follower" *ngFor="let user of projectInformation.contactAssociation; let i = index" >
-            <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editableCa=true;$event.stopPropagation()"/></a>
+        <div class="followers"  (click)="editableCa=true;$event.stopPropagation()" (clickOutside)="closeCaEditableModal()"> 
+          <div class="follower" *ngFor="let user of associationsData; let i = index" >
+            <a [title]='user.name' ><img [src]='user.pictureURI'  (click)="editableCa=true;$event.stopPropagation()"/></a>
           </div> 
           <div class="edit-followers" *ngIf="editableCa" (click)="editableCa=true;$event.stopPropagation()" >
             <ul>
-              <li *ngFor="let user of projectInformation.contactAssociation; let i = index">{{user.name}}<span (click)="removeContactAssociation(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+              <li *ngFor="let user of associationsData; let i = index">{{user.name}}<span (click)="removeContactAssociation(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
               <li style="background: none; width: 100%; margin: 0;">
                 <!-- <input autocomplete [config]="config2" [items]="items2"
                   (inputChangedEvent)="onInputChangedEvent($event)"
                   (selectEvent)="onSelectAccountManager($event)"> -->
-                <ng-select *ngIf="isAutocompleteUpdated4" [items]="items2"
+                <ng-select *ngIf="isAutocompleteUpdated4" [items]="items4"
                   bindLabel="config2.sourceField"
                   [clearSearchOnAdd]="false"
                   (add)="onSelectContactAssociation($event)" >
                 </ng-select>
-                <ng-select *ngIf="!isAutocompleteUpdated4" [items]="items2"
+                <ng-select *ngIf="!isAutocompleteUpdated4" [items]="items4"
                   bindLabel="config2.sourceField"
                   [clearSearchOnAdd]="false"
                   (add)="onSelectContactAssociation($event)">
@@ -191,12 +191,13 @@
     <div>
       <span class="title">Contact Project Manager</span>
       <div class="text-autocomp">
-        <app-ng2completer 
-          [itemsList]="pmList" 
-          (selectedItem)="onSelectPmManager($event)" 
+        <ng2-completer 
+          [datasource]="availContactsList" 
+          (selected)="onSelectPmManager($event)" 
           class="contact-content-info"
-          [searchStr]="selectPmManager">
-        </app-ng2completer>
+          [(ngModel)]="selectPmManager"
+          [minSearchLength]="0">
+        </ng2-completer>
       </div>
     </div>
 
@@ -204,7 +205,7 @@
       <span class="title">Contact Account Receivable</span>
       <div class="text-autocomp">
         <ng2-completer 
-          [datasource]="accountReceivableList" 
+          [datasource]="availContactsList" 
           (selected)="onSelectAccountReceivable($event)" 
           class="contact-content-info"
           [(ngModel)]="selectAccountReceivable"
