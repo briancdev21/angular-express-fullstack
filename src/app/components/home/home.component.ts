@@ -268,6 +268,15 @@ export class HomeComponent implements OnInit {
       margin: 50,
     }];
 
+  constructor ( ) {
+    const m = localStorage.getItem('menu_collapsed');
+    if (m === 'true') {
+      this.menuCollapsed = true;
+    } else {
+      this.menuCollapsed = false;
+    }
+  }
+
 
   ngOnInit() {
     if (this.currentHr < 4) {

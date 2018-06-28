@@ -18,6 +18,13 @@ export class CrmComponent implements OnInit {
   mRotateMenu = true;
   constructor(private crmService: CrmService, private router: Router) {
 
+    const m = localStorage.getItem('menu_collapsed');
+    if (m === 'true') {
+      this.menuCollapsed = true;
+    } else {
+      this.menuCollapsed = false;
+    }
+
     router.events.pairwise().subscribe((event) => {
     });
   }

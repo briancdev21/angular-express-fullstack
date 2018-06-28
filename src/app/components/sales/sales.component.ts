@@ -20,10 +20,17 @@ export class SalesComponent implements OnInit {
   notProposalDetails = true;
 
   constructor( private router: Router) {
+
+    const m = localStorage.getItem('menu_collapsed');
+    if (m === 'true') {
+      this.menuCollapsed = true;
+    } else {
+      this.menuCollapsed = false;
+    }
+
     router.events
       .filter(event => event instanceof NavigationEnd)
       .subscribe((val) => {
-        console.log('router: ', val);
         if (val['url'].includes('/sales/proposal-details') ) {
           this.notProposalDetails = false;
         } else {

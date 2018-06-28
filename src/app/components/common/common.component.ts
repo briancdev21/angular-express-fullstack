@@ -13,6 +13,16 @@ export class CommonComponent {
   mAlertOpened = false;
   mNotificationOpened = false;
 
+  constructor () {
+    const m = localStorage.getItem('menu_collapsed');
+    if (m === 'true') {
+      this.mRotateMenu = true;
+    } else {
+      this.mRotateMenu = false;
+    }
+    this.expandSidebar.emit(!this.mRotateMenu);
+  }
+
   @Output() expandSidebar = new EventEmitter<boolean>();
   @HostListener('window:click', ['$event'])
   handleClick( event: any ): void {
@@ -25,6 +35,7 @@ export class CommonComponent {
 
   toggleMenuRotate(): void {
     this.mRotateMenu = !this.mRotateMenu;
+    localStorage.setItem( 'menu_collapsed', this.mRotateMenu.toString() );
     this.expandSidebar.emit(this.mRotateMenu);
   }
 

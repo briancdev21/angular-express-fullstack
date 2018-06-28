@@ -54,7 +54,7 @@ export class BreadcrumbBarComponent implements AfterViewInit {
       this.editable = false;
       this._userInfo.followers.forEach(element => {
         this.items2 = this.items2.filter(function( obj ) {
-          return obj.payload.label !== element.name;
+          return obj.label !== element.name;
         });
       });
 
