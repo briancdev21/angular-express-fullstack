@@ -95,8 +95,9 @@ html,body {
 }
 
 .logo-horizontal {
-  width: 90%;
-  height: 68px;
+  width: 85%;
+  height: 50px;
+  margin-top: 9px;
 }
 
 .title {
