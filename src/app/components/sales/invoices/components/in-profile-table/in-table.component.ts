@@ -111,6 +111,8 @@ export class InProfileTableComponent implements OnInit {
         this._productDetails[index].id = data.data.id;
         this._productDetails[index].unitprice = data.data.unitPrice;
         this._productDetails[index].quantity = data.data.quantity;
+        this._productDetails[index].discountvalue = data.data.discount.value;
+
       });
     });
     if (index === this._productDetails.length - 1) {
@@ -160,7 +162,7 @@ export class InProfileTableComponent implements OnInit {
         sku: this._productDetails[index].sku,
         taxRateId: parseInt(this._productDetails[index].taxRateId, 10),
         discount: {
-          value: this._productDetails[index].discount ? this._productDetails[index].discount : 0,
+          value: this._productDetails[index].discountvalue ? this._productDetails[index].discountvalue : 0,
           unit: 'PERCENT'
         },
         received: 0,
