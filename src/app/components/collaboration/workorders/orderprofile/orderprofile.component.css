@@ -93,7 +93,6 @@ span.progress-title {
 }
 
 .product-delivery table {
-  border: 1px solid #D3D3D3;
   color: #656565;
   width: 100%;
 }
@@ -105,6 +104,10 @@ span.progress-title {
   text-align: left;
   font-size: 13px;
   color: #656565;
+}
+
+.product-delivery th:first-child {
+  border-left: none
 }
 
 .product-delivery tr {
@@ -124,6 +127,7 @@ span.progress-title {
 .table-content {
   height: 270px;
   overflow: auto;
+  border: 1px solid #d3d3d3;
 }
 
 .work-order-delivery, .internal-notes {

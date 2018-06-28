@@ -91,8 +91,11 @@ export class OrderProfileComponent implements OnInit {
           this.originalWorkOrderDesc = this.orderProfileInfo.description;
         });
       });
+
+      this.getDeliveryData();
     });
   }
+
 
   public timelineData: Array<Object> = [
     {
@@ -244,48 +247,6 @@ export class OrderProfileComponent implements OnInit {
   ];
 
   public productDelivery: Array<object> = [
-    {
-      sku: 8802111,
-      model: 'C4-HC800',
-      productName: 'Home Controller 800',
-      quantity: 1,
-      delivery: 1
-    },
-    {
-      sku: 8802118,
-      model: 'C4-SR260',
-      productName: 'Control4 Romote System Controller',
-      quantity: 4,
-      delivery: 4,
-    },
-    {
-      sku: 8802123,
-      model: 'C4-AMP8',
-      productName: '8 Zone Switchable Matrix',
-      quantity: 1,
-      delivery: 0
-    },
-    {
-      sku: 8802117,
-      model: 'SM-UN55EH6300',
-      productName: '55" Smart LED TV',
-      quantity: 4,
-      delivery: 4,
-    },
-    {
-      sku: 8802113,
-      model: 'C4-HC832',
-      productName: 'Home Controller 600',
-      quantity: 4,
-      delivery: 2
-    },
-    {
-      sku: 8802141,
-      model: 'SM-HC800',
-      productName: 'Controller 800',
-      quantity: 1,
-      delivery: 1
-    }
   ];
 
   ngOnInit() {
@@ -437,8 +398,18 @@ export class OrderProfileComponent implements OnInit {
     this.menuCollapsed  = data;
   }
 
+
+  getDeliveryData() {
+    this.collaboratorsService.getWorkOrderProducts(this.currentWorkOrderId).subscribe(data => {
+      this.productDelivery = data.results;
+    });
+  }
+
   getColor(product) {
-    if (product.quantity == product.delivery) {
+    const quantity = parseInt(product.quantity, 10);
+    const delivered = parseInt(product.delivered, 10);
+
+    if (quantity === delivered) {
       return 'green';
     } else {
       return 'red';
@@ -486,9 +457,26 @@ export class OrderProfileComponent implements OnInit {
   }
 
   checkDelivered(product) {
-    if (product.delivery == product.quantity ) {
+    const quantity = parseInt(product.quantity, 10);
+    let delivered = parseInt(product.delivered, 10);
+    if (delivered === quantity ) {
       this.orderService.postTimelineData({title: product.productName, type: 'delivered'});
     }
+
+    if (quantity < delivered) {
+      delivered = 0;
+    }
+
+    const savingData = {
+      'sku': product.sku,
+      'quantity': quantity,
+      'delivered': delivered
+    };
+
+    this.collaboratorsService.updateIndividualWorkOrderProduct(this.currentWorkOrderId, product.id, savingData).subscribe(res => {
+    });
+    this.getDeliveryData();
+
   }
 
   getContactNameFromId(id) {
