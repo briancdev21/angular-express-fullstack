@@ -142,6 +142,7 @@ export class AddLeadComponent implements OnInit {
 
     this.sharedService.getContacts().subscribe(res => {
       this.contactsList = res;
+      this.addContactName(this.contactsList);
       console.log('contacts list2:', res);
     });
 
@@ -219,6 +220,22 @@ export class AddLeadComponent implements OnInit {
 
   getKeywords(event) {
     this.keywordsIdList = event.map(k => k.id);
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
   clickNext() {
