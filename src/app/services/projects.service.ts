@@ -28,6 +28,11 @@ export class ProjectsService {
     return this.http.get(url);
   }
 
+  updateIndividualProject(id, body): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}`;
+    return this.http.put(url, body);
+  }
+
   getIndividualProject(id): Observable<any>  {
     const url = `${environment.apiUrl}/project-management/projects/${id}`;
     return this.http.get(url);
