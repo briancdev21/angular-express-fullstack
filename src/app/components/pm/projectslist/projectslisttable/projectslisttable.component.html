@@ -4,7 +4,7 @@
       <th (click)="sortArray('projectNumber')">PROJECT #</th>
       <th (click)="sortArray('projectName')">NAME OF PROJECT</th>
       <th (click)="sortArray('contactId')">CUSTOMER NAME</th>
-      <th (click)="sortCreateDateArray('deliveryDate')">DELIVERY DATE</th> 
+      <th (click)="sortCreateDateArray('endDate')">DELIVERY DATE</th> 
       <th (click)="sortArray('total')">PROJECT TOTAL</th>
       <th (click)="sortArray('projectHealth')">WORK ORDER COMPLETION</th>
     </tr>
@@ -12,7 +12,7 @@
       <td>{{projectslist.id}}</td>
       <td>{{projectslist.projectName}}</td>
       <td><span *ngIf="projectslist.contactId">{{getContactName(projectslist.contactId)}}</span></td>
-      <td>{{projectslist.deliveryDate}}</td>
+      <td>{{projectslist.endDate}}</td>
       <td>$ {{projectslist.total | number: '1.2-2'}}</td>
       <td class="work-order-completion"><app-horizontalbar [barInfo]="projectslist.barInfo"></app-horizontalbar></td> 
     </tr>

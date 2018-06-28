@@ -52,7 +52,7 @@ export class ProjectsListComponent implements OnInit {
     //   projectNumber: 'NU8802-0159',
     //   projectName: 'Remodel with your Nu Life',
     //   customerName: 'John Moss',
-    //   deliveryDate: 'November 20, 2017',
+    //   endDate: 'November 20, 2017',
     //   projectHealth: 33,
     //   total: 22323.67,
     //   collaborators: [

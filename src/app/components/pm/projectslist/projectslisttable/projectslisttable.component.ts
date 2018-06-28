@@ -35,7 +35,7 @@ export class ProjectsListTableComponent implements OnInit {
       this.projectsService.getProjectsList().subscribe(res => {
         this.projectsListInfo = res.results;
         this.projectsListInfo.forEach(element => {
-          element.deliveryDate = moment(element.deliveryDate).format('MMMM DD, YYYY');
+          element.endDate = moment(element.endDate).format('MMMM DD, YYYY');
           element.barInfo = {
             title: element.health + '%',
             completeness: element.health
