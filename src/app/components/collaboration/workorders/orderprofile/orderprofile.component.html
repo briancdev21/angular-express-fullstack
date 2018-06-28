@@ -22,7 +22,7 @@
       <div class="product-delivery">
         <span>PRODUCT DELIVERY</span>
         <div class="table-content">
-          <table>
+          <table *ngIf="productDelivery">
             <tr>
               <th>SKU</th>
               <th>MODEL</th>
@@ -33,9 +33,9 @@
             <tr *ngFor="let product of productDelivery" [ngClass]="getColor(product)">
               <td>{{product.sku}}</td>
               <td>{{product.model}}</td>
-              <td>{{product.productName}}</td>
+              <td>{{product.name}}</td>
               <td><input [(ngModel)]="product.quantity" (input)="checkDelivered(product)"></td>
-              <td><input [(ngModel)]="product.delivery" (input)="checkDelivered(product)"></td>
+              <td><input [(ngModel)]="product.delivered" (input)="checkDelivered(product)"></td>
             </tr>
           </table>
         </div>
