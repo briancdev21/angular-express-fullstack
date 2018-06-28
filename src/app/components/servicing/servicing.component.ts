@@ -17,6 +17,12 @@ export class ServicingComponent implements OnInit {
   mRotateMenu = false;
 
   constructor() {
+    const m = localStorage.getItem('menu_collapsed');
+    if (m === 'true') {
+      this.menuCollapsed = true;
+    } else {
+      this.menuCollapsed = false;
+    }
   }
 
   ngOnInit() {

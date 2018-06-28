@@ -20,11 +20,18 @@ export class PmComponent implements OnInit {
   notPmDetails = true;
 
   constructor( private router: Router, private activatedRoute: ActivatedRoute) {
+
+    const m = localStorage.getItem('menu_collapsed');
+    if (m === 'true') {
+      this.menuCollapsed = true;
+    } else {
+      this.menuCollapsed = false;
+    }
+
     router.events
       .filter(event => event instanceof NavigationEnd)
     // activatedRoute.url
       .subscribe(val => {
-        console.log('router: ', val);
         if (val['urlAfterRedirects'].includes('/pm/pm-details') || val['urlAfterRedirects'].includes('/pm/pending-project/')) {
           this.notPmDetails = false;
         } else {

@@ -18,6 +18,12 @@ import { Router } from '@angular/router';
 export class ReportsComponent implements OnInit {
   menuCollapsed = true;
   constructor(private router: Router) {
+    const m = localStorage.getItem('menu_collapsed');
+    if (m === 'true') {
+      this.menuCollapsed = true;
+    } else {
+      this.menuCollapsed = false;
+    }
   }
 
   ngOnInit() {
