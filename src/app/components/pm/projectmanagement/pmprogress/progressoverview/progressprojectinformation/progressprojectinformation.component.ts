@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { SharedService } from '../../../../../../services/shared.service';
 import { ProjectsService } from '../../../../../../services/projects.service';
+import { ProjectManagementService } from '../../../projectmanagement.service';
 
 @Component({
   selector: 'app-progressprojectinformation',
@@ -88,28 +89,17 @@ export class ProgressProjectInformationComponent implements OnInit {
   editableCa: boolean;
   inputChanged: any = '';
   selectedItem: any = '';
-  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'name'};
+  config3: any = {'placeholder': 'Type here', 'sourceField': 'username'};
   items2: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
-    {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
   ];
   items3: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
-    {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
   ];
   items4: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
-    {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
   ];
   associationList = ['John Moss', 'Latif', 'Dennis'];
   pmList = ['John Moss', 'Latif', 'Dennis'];
-  accountReceivableList: CompleterData;
+  availContactsList: CompleterData;
   isAutocompleteUpdated2 = false;
   isAutocompleteUpdated3 = false;
   isAutocompleteUpdated4 = false;
@@ -122,33 +112,63 @@ export class ProgressProjectInformationComponent implements OnInit {
   contactsList = [];
   projectInfo: any;
   usersList = [];
+  internalNote = '';
+  associationsData = [];
+  projectManagerData: any;
+  accountManagerData: any;
 
-  constructor( private router: Router, private sharedService: SharedService,
+  constructor( private router: Router, private sharedService: SharedService, private projectManagementService: ProjectManagementService,
     private projectsService: ProjectsService, private route: ActivatedRoute, private completerService: CompleterService) {
     this.currentProjectId = localStorage.getItem('current_projectId');
 
     if (this.currentProjectId !== '') {
       this.sharedService.getUsers().subscribe(response => {
         this.usersList = response;
+        this.items3 = this.items2 = response;
 
         this.sharedService.getContacts().subscribe(data => {
           this.contactsList = data;
           this.addContactName(this.contactsList);
-          this.accountReceivableList = completerService.local(this.contactsList, 'name', 'name');
+          this.availContactsList = completerService.local(this.contactsList, 'name', 'name');
           this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
 
             this.projectInfo = res.data;
             this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
             console.log('indi project: ', this.projectInfo);
             this.formattedStart = moment(this.projectInfo.startDate).format('MMMM DD, YYYY');
-            this.formattedEnd = moment(this.projectInfo.deliveryDate).format('MMMM DD, YYYY');
+            this.formattedEnd = moment(this.projectInfo.endDate).format('MMMM DD, YYYY');
             this.startMax = this.projectInfo.endDate;
             this.endMin = this.projectInfo.startDate;
-            // one for display data, one for saving data
+
+            this.internalNote = this.projectInfo.internalNote;
+            // one for display data, one for saving data for account receivable
             this.selectAccountReceivable = this.contactsList.filter(c =>
               c.id === this.changeContactIdFormat(this.projectInfo.accountReceivableId))[0].name;
             this.projectInfo.contactAccountReceivable = this.contactsList.filter(c =>
               c.id === this.changeContactIdFormat(this.projectInfo.accountReceivableId))[0].id;
+
+            // one for display data, one for saving data for account receivable
+            this.selectPmManager = this.contactsList.filter(c =>
+              c.id === this.changeContactIdFormat(this.projectInfo.clientProjectManagerId))[0].name;
+            this.projectInfo.contactProjectManager = this.contactsList.filter(c =>
+              c.id === this.changeContactIdFormat(this.projectInfo.clientProjectManagerId))[0].id;
+
+            // Contact association
+            this.items4 = this.contactsList;
+            if (this.projectInfo.contactAssociationIds !== null) {
+              this.projectInfo.contactAssociationIds.forEach(element => {
+                const contactData = this.contactsList.filter(c => c.id === element)[0];
+                this.associationsData.push(contactData);
+              });
+            } else {
+              this.projectInfo.contactAssociationIds = [];
+            }
+
+            // project manager
+            this.projectManagerData = this.usersList.filter(u => u.username === this.projectInfo.projectManager)[0];
+            console.log('project manager: ', this.projectManagerData);
+            // account manager
+            this.accountManagerData = this.usersList.filter(u => u.username === this.projectInfo.accountManager)[0];
           });
 
         });
@@ -156,6 +176,12 @@ export class ProgressProjectInformationComponent implements OnInit {
     } else {
       console.error('product id error');
     }
+
+    this.projectManagementService.progressInternalNoteChange.subscribe(data => {
+      if (data !== null) {
+        this.internalNote = data;
+      }
+    });
   }
 
   ngOnInit() {
@@ -180,47 +206,51 @@ export class ProgressProjectInformationComponent implements OnInit {
   onSelectProjectManager(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.username !== item.username;
     });
-    this.projectInformation.projectManager.push({name: item.label, imageUrl: item.imageUrl });
+    this.projectInfo.projectManager = item.username;
+    this.projectManagerData = item;
+    console.log('pm selected: ', this.projectInfo, this.projectManagerData);
   }
 
-  removeProjectManager(i: number) {
-    const item = this.projectInformation.projectManager[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
-    this.projectInformation.projectManager.splice(i, 1);
-    this.isAutocompleteUpdated2 = !this.isAutocompleteUpdated2;
-
-  }
+  // removeProjectManager(i: number) {
+  //   const item = this.projectInformation.projectManager[i];
+  //   this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
+  //   this.projectInformation.projectManager.splice(i, 1);
+  //   this.isAutocompleteUpdated2 = !this.isAutocompleteUpdated2;
+  // }
 
   onSelectAccountManager(item: any) {
     this.selectedItem = item;
     this.items3 = this.items3.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.username !== item.username;
     });
-    this.projectInformation.accountManager.push({name: item.label, imageUrl: item.imageUrl });
+    this.projectInfo.accountManager = item.username;
+    this.accountManagerData = item;
   }
 
-  removeAccountManager(i: number) {
-    const item = this.projectInformation.accountManager[i];
-    this.items4.push({id: this.items4.length, label: item.name, imageUrl: item.imageUrl});
-    this.projectInformation.accountManager.splice(i, 1);
-    this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
-
-  }
+  // removeAccountManager(i: number) {
+  //   const item = this.projectInformation.accountManager[i];
+  //   this.items4.push({id: this.items4.length, label: item.name, imageUrl: item.imageUrl});
+  //   this.projectInformation.accountManager.splice(i, 1);
+  //   this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
+  // }
 
   onSelectContactAssociation(item: any) {
+    console.log('associ', item);
     this.selectedItem = item;
     this.items4 = this.items4.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.id !== item.id;
     });
-    this.projectInformation.contactAssociation.push({name: item.label, imageUrl: item.imageUrl });
+    this.projectInfo.contactAssociationIds.push(item.id);
+    this.associationsData.push(item);
   }
 
   removeContactAssociation(i: number) {
-    const item = this.projectInformation.contactAssociation[i];
-    this.items3.push({id: this.items3.length, label: item.name, imageUrl: item.imageUrl});
-    this.projectInformation.contactAssociation.splice(i, 1);
+    const item = this.associationsData[i];
+    this.items4.push(item);
+    this.projectInfo.contactAssociationIds.splice(i, 1);
+    this.associationsData.splice(i, 1);
     this.isAutocompleteUpdated4 = !this.isAutocompleteUpdated4;
 
   }
@@ -246,16 +276,17 @@ export class ProgressProjectInformationComponent implements OnInit {
   }
 
   onSelectAssociation(event) {
-    this.projectInformation.contactAssociation = event;
+    this.projectInfo.contactAssociation = event;
   }
 
   onSelectPmManager(event) {
-    this.projectInformation.contactProjectManager = event;
+    this.projectInfo.contactProjectManager = event.originalObject.id;
+    this.updateProject();
   }
 
   onSelectAccountReceivable(event) {
     console.log('selectedAr: ', event);
-    this.projectInformation.contactAccountReceivable = event.originalObject.id;
+    this.projectInfo.contactAccountReceivable = event.originalObject.id;
   }
 
   addContactName(data) {
@@ -271,13 +302,36 @@ export class ProgressProjectInformationComponent implements OnInit {
 
   getContactNameFromId(id) {
     const selectedContact = this.contactsList.filter(c => c.id === id)[0];
-    console.log('selected: ', id, selectedContact, this.contactsList);
     return selectedContact.name;
   }
 
   changeContactIdFormat(id) {
     const idNumber = id.slice(-1);
-    console.log('id number: ', idNumber);
     return parseInt(idNumber, 10);
+  }
+
+  updateProject() {
+    if (this.projectInfo.followers === null) {
+      this.projectInfo.followers = [];
+    }
+
+    if (this.internalNote === null) {
+      this.internalNote = '';
+    }
+
+    const savingData = {
+      'projectManager': this.projectInfo.projectManager,
+      'accountManager': this.projectInfo.accountManager,
+      'clientProjectManagerId': this.projectInfo.contactProjectManager,
+      'accountReceivableId': this.projectInfo.contactAccountReceivable,
+      'followers': this.projectInfo.followers,
+      'status': this.projectInfo.status,
+      'internalNote': this.internalNote
+    };
+
+    this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
+      console.log('project updated', res);
+    });
+
   }
 }

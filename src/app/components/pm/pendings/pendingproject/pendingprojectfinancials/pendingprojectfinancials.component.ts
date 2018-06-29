@@ -79,7 +79,7 @@ export class PendingProjectFinancialsComponent implements OnInit {
           this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
           console.log('indi project: ', this.projectInfo);
           // Initial cost total
-          this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.reservedInventoryCost + this.projectInfo.labourCost;
+          this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.inventoryCost + this.projectInfo.labourCost;
         });
 
       });
@@ -120,7 +120,7 @@ export class PendingProjectFinancialsComponent implements OnInit {
         return prev + cur.value;
       }, 0);
       this.costTotal = costListTotal + this.projectInfo.purchaseOrderTotal +
-                      this.projectInfo.reservedInventoryCost + this.projectInfo.labourCost;
+                      this.projectInfo.inventoryCost + this.projectInfo.labourCost;
       // calc unused budget
       this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
         return prev + cur.value;
@@ -137,7 +137,7 @@ export class PendingProjectFinancialsComponent implements OnInit {
       return prev + cur.value;
     }, 0);
     this.costTotal = costListTotal + this.projectInfo.purchaseOrderTotal +
-                    this.projectInfo.reservedInventoryCost + this.projectInfo.labourCost;
+                    this.projectInfo.inventoryCost + this.projectInfo.labourCost;
     // calc unused budget
     this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
       return prev + cur.value;

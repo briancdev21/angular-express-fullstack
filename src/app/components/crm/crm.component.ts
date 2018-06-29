@@ -21,8 +21,10 @@ export class CrmComponent implements OnInit {
     const m = localStorage.getItem('menu_collapsed');
     if (m === 'true') {
       this.menuCollapsed = true;
-    } else {
+    } else if (m === 'false') {
       this.menuCollapsed = false;
+    } else {
+      this.menuCollapsed = true;
     }
 
     router.events.pairwise().subscribe((event) => {

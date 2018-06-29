@@ -11,7 +11,7 @@
     </div>
     <div class="card-style">
       <div class="card-top">BUDGET USERD</div>
-      <div class="card-content">$ {{(projectInfo.budget - projectInfo.budgetRemaining) | number: '1.2-2'}}</div>
+      <div class="card-content">$ {{(projectInfo.budget - projectInfo.budgetUsed) | number: '1.2-2'}}</div>
     </div>
     <div class="card-style">
       <div class="card-top">BUDGET VS USED</div>
@@ -48,7 +48,7 @@
         </div>
         <div class="cost-default-value">
           <span>Inventory</span>
-          <span>${{projectInfo.reservedInventoryCost | number: '1.2-2'}}</span>
+          <span>${{projectInfo.inventoryCost | number: '1.2-2'}}</span>
         </div>
         <div class="cost-default-value">
           <span>Labour Costs</span>

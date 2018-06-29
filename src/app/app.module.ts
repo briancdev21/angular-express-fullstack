@@ -61,6 +61,7 @@ import { AuthGuard } from './services/authguard.service';
 import { EstimatesService } from './services/estimates.service';
 import { ProposalsService } from './services/proposals.service';
 import { CollaboratorsService } from './services/collaborators.service';
+import { PmTasksService } from './services/pmtasks.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -125,6 +126,7 @@ import { CollaboratorsService } from './services/collaborators.service';
     ProposalsService,
     ProjectsService,
     CollaboratorsService,
+    PmTasksService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

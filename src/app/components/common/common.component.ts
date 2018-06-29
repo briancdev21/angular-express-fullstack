@@ -17,8 +17,10 @@ export class CommonComponent {
     const m = localStorage.getItem('menu_collapsed');
     if (m === 'true') {
       this.mRotateMenu = true;
-    } else {
+    } else if (m === 'false') {
       this.mRotateMenu = false;
+    } else {
+      this.mRotateMenu = true;
     }
     this.expandSidebar.emit(!this.mRotateMenu);
   }

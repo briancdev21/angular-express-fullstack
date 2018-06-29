@@ -68,7 +68,10 @@ export class ChangeLogsTableComponent implements OnInit {
         this.projectsService.getProjectChangeLogs(this.currentProjectId).subscribe(res => {
 
           this.changeLogsInfo = res.data;
-          this.changeLogsInfo.customerName = this.getCustomerNameFromUsername(res.data.contactId);
+          if (res.data) {
+            this.changeLogsInfo.customerName = this.getCustomerNameFromUsername(res.data.contactId);
+          }
+
           console.log('indi project: ', this.changeLogsInfo);
         });
 

@@ -7,6 +7,9 @@ import { Renderer } from '@angular/core';
 import * as _ from 'lodash';
 import {MyTasksModel, TaskModel} from '../../../models/mytasks.model';
 import * as moment from 'moment';
+import { PmTasksService } from '../../../services/pmtasks.service';
+import { SharedService } from '../../../services/shared.service';
+
 @Component({
   selector: 'app-mytasks',
   templateUrl: './mytasks.component.html',
@@ -62,353 +65,357 @@ export class MyTasksComponent implements OnInit {
     },
   ];
 
-  panels = [
-    {
-      title: 'INBOX',
-      color: '',
-      tasks: [
-        {
-          id: 1,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-10-05',
-          duration: 2,
-          dependency: [],
-          like: false,
-          attachment: false,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 2,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-15',
-          duration: 2,
-          dependency: [1],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 3,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [2],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 4,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 5,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 6,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        }
-      ]
-    },
-    {
-      title: 'ORGANIZATION',
-      color: '',
-      tasks: [
-        {
-          id: 1,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 2,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-11-05',
-          duration: 2,
-          dependency: [1, 2],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 3,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [2],
-          like: true,
-          attachment: false,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 4,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-      ]
-    },
-    {
-      title: 'PROJECTS',
-      color: '',
-      tasks: [
-        {
-          id: 1,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 2,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [1],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 3,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [2],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 4,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 5,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 6,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: false,
-          attachmentImg: '',
-          taskPath: ''
-        },
-        {
-          id: 7,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          subTaskCount: 5,
-          subTaskComplete: 2,
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 8,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          dueDate: '2017-12-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        }
-      ]
-    },
-  ] as MyTasksModel[];
+  // panels = [
+  //   {
+  //     title: 'INBOX',
+  //     color: '',
+  //     tasks: [
+  //       {
+  //         id: 1,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-10-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: false,
+  //         attachment: false,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 2,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-15',
+  //         duration: 2,
+  //         dependency: [1],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 3,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [2],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 4,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 5,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 6,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     title: 'ORGANIZATION',
+  //     color: '',
+  //     tasks: [
+  //       {
+  //         id: 1,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 2,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-11-05',
+  //         duration: 2,
+  //         dependency: [1, 2],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 3,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [2],
+  //         like: true,
+  //         attachment: false,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 4,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //     ]
+  //   },
+  //   {
+  //     title: 'PROJECTS',
+  //     color: '',
+  //     tasks: [
+  //       {
+  //         id: 1,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 2,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [1],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 3,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [2],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 4,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 5,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 6,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: false,
+  //         attachmentImg: '',
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 7,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         subTaskCount: 5,
+  //         subTaskComplete: 2,
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 8,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         dueDate: '2017-12-05',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       }
+  //     ]
+  //   },
+  // ] as MyTasksModel[];
 
-  constructor( private dragulaService: DragulaService, private fb: FormBuilder, private renderer: Renderer ) {
+  panels = [];
+  usersList = [];
+
+  constructor( private dragulaService: DragulaService, private fb: FormBuilder, private renderer: Renderer,
+    private pmTasksService: PmTasksService, private sharedService: SharedService ) {
     dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });
@@ -425,11 +432,18 @@ export class MyTasksComponent implements OnInit {
       }
     });
 
+    this.sharedService.getUsers().subscribe(users => {
+      this.usersList = users;
+
+      this.refreshTable();
+    });
+
+
+
   }
 
 
   ngOnInit() {
-    this.panels.map(m => m.color = this.getHeaderColor());
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
     // this.panels.map(m => m.tasks.map(t => t.ownerModalCollapsed = false));
@@ -459,6 +473,16 @@ export class MyTasksComponent implements OnInit {
       element.tasks.map( t => t.maxHeight = 30);
     });
 
+  }
+
+  refreshTable() {
+    this.pmTasksService.getTaskGroups().subscribe(data => {
+      this.panels = data.results;
+      console.log('panels: ', data);
+      for (let i = 0; i < this.panels.length; i++) {
+        this.panels[i].color = this.colors[i];
+      }
+    });
   }
 
   getTaskId (panel, task) {
@@ -494,15 +518,6 @@ export class MyTasksComponent implements OnInit {
     this.menuCollapsed  = data;
   }
 
-  getHeaderColor() {
-    const letters = '0123456789ABCDEF'.split('');
-    let color = '#';
-    for (let i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
-
   addTask(panel) {
     const newTask = {
       id: 1 + panel.tasks.length,
@@ -529,18 +544,20 @@ export class MyTasksComponent implements OnInit {
     if (!this.addPanelClicked) {
       this.addPanelClicked = !this.addPanelClicked;
     }
+
   }
 
   handleKeyDown(event) {
     const newPanel = {
       title: this.newPanelTitle,
-      color: this.colors[this.panels.length],
-      tasks: []
     };
     if (event.key === 'Enter' && this.newPanelTitle ) {
-      this.panels.push(newPanel);
+      // this.panels.push(newPanel);
       this.newPanelTitle = '';
       this.addPanelClicked = !this.addPanelClicked;
+      this.pmTasksService.createTaskGroup(newPanel).subscribe(res => {
+        console.log('new panel created: ', res);
+      });
     }
   }
 
