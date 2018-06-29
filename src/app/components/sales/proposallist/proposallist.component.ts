@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
 import { ProposalsService } from '../../../services/proposals.service';
+import { SalesService } from '../sales.service';
 
 @Component({
   selector: 'app-proposallist',
@@ -28,11 +29,15 @@ export class ProposalListComponent implements OnInit {
   filterName = '';
   proposallistTypes: any;
 
-  constructor( private filterService: FilterService, private proposalsService: ProposalsService ) {
+  constructor( private filterService: FilterService, private proposalsService: ProposalsService, private salesService: SalesService ) {
     this.filterAvaliableTo = 'everyone';
 
-    this.proposalsService.getProposals().subscribe(res => {
-      this.proposalListInfo = res.results;
+    this.retrieveData();
+
+    this.salesService.proposalAdded.subscribe(data => {
+      if (data) {
+        this.retrieveData();
+      }
     });
   }
 
@@ -77,6 +82,11 @@ export class ProposalListComponent implements OnInit {
     this.backUpProposalList = this.proposalListInfo;
   }
 
+  retrieveData() {
+    this.proposalsService.getProposals().subscribe(res => {
+      this.proposalListInfo = res.results;
+    });
+  }
   getFilter(event) {
     this.proposalListInfo = event.filtered;
     this.filterClicked = event.clicked;

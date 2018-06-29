@@ -39,6 +39,7 @@ export class ProposalListTableComponent implements OnInit {
       title: i.completion + '%',
       completeness: i.completion
     });
+
   }
 
   getStatus() {
@@ -80,7 +81,12 @@ export class ProposalListTableComponent implements OnInit {
 
   getContactName(id) {
     const selectedContact = this.contactsList.filter(c => c.id === id)[0];
-    return selectedContact.person.firstName + ' ' + selectedContact.person.lastName ;
+    if (selectedContact.type === 'PERSON') {
+      return selectedContact.person.firstName + ' ' + selectedContact.person.lastName ;
+    } else if (selectedContact.type === 'BUSINESS') {
+      return selectedContact.business.name;
+    }
+
   }
 
   sortCreateDateArray(field) {
