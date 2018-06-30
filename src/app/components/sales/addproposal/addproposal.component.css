@@ -36,7 +36,7 @@
 	border: 1px solid red !important;
 }
 
-:host ::ng-deep .validation-required-name ng2-completer.ng2completer .completer-input {
+:host ::ng-deep  ng2-completer.validation-required-name .completer-input {
 	border: 1px solid red !important;
 }
 
@@ -134,7 +134,7 @@ tab img {
 }
 
 .tab-row:first-child {
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 }
 
 .tab-row>div {
@@ -180,7 +180,7 @@ tab select {
 
 input::placeholder {
 	font-size: 13px;
-	color: #95989a;
+	color: #d3d3d3;
 }
 
 .city-state, .country-zip {
