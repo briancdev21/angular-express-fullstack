@@ -7,6 +7,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class SalesService {
 
   selectedCategory: BehaviorSubject<string> = new BehaviorSubject('');
+  deletedCategory: BehaviorSubject<string> = new BehaviorSubject('');
+  proposalAdded: BehaviorSubject<boolean> = new BehaviorSubject(false);
   constructor() {
   }
 

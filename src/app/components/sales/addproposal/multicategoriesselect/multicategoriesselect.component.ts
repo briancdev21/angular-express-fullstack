@@ -64,7 +64,7 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       const pos = this.categoriesNameList.indexOf(data);
       this.categories.push(this.categoriesList[pos]);
       this.sendCategories.emit(this.categories);
-      this.salesService.selectedCategory.next(this.categoriesList[pos]);
+      this.salesService.selectedCategory.next(this.categoriesList[pos].id);
     }
   }
 
@@ -74,7 +74,7 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       this.sharedService.getCategories().subscribe(data => {
         this.categories = data.results;
       });
-      this.salesService.selectedCategory.next(res.data.id);
+      this.salesService.deletedCategory.next(res.data.id);
     });
   }
 
