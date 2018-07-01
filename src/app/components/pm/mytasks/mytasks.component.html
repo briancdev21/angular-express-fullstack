@@ -10,12 +10,12 @@
             <div class="task-content">
               <img *ngIf="task.attachmentImg" src="attachmentImg">
               <div class="task-title">
-                <label class="custom-checkbox"  (click)="completeTask(i, j)" *ngIf="i != 2">
+                <label class="custom-checkbox"  (click)="completeTask(i, j)" *ngIf="!panel.projectId">
                   <input type="checkbox" [(ngModel)]="task.complete">
                   <span class="checkmark"></span>
                 </label>
                
-                <span *ngIf="i == 2">
+                <span *ngIf="panel.projectId">
                   <!--{{getTaskId(i, j)}}.-->
                   {{task.id}}.
                 </span>
@@ -35,13 +35,13 @@
                 </div>
               </div>
               <div class="task-owner">
-                <img src="{{task.profile.imgUrl}}" *ngIf="task.profile.imgUrl && i == 1" (click)="openOwnerModal(i, j); $event.stopPropagation();">
-                <img *ngIf="!task.profile.imgUrl && i == 1" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();">
-                <span *ngIf="i == 2" class="task-path">{{task.taskPath}}</span>
+                <img src="{{task.assigneeInfo.pictureURI}}" *ngIf="task.assigneeInfo.pictureURI && i == 1" (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                <img *ngIf="!task.assigneeInfo.pictureURI && i == 1" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                <span *ngIf="panel.projectId" class="task-path">{{task.taskPath}}</span>
                 <div class="sub-tasks">
 
                 </div>
-                <span *ngIf="i == 2"><input [(ngModel)]="task.progress" max="100" type="number" maxlength="3" min="0">%</span>
+                <span *ngIf="panel.projectId"><input [(ngModel)]="task.progress" max="100" type="number" maxlength="3" min="0">%</span>
                 <!-- Task owner selection modal-->
                 <div
                   class="owner-modal"
@@ -68,15 +68,15 @@
                   <owl-date-time [pickerType]="'calendar'" #dueDate></owl-date-time>
                   <span [owlDateTimeTrigger]="dueDate" [ngClass]="{'due-date-empty': !task.dueDate, 'overDue': checkOverdue(task.dueDate)}">{{task.dueDate}}</span>
                 </div>
-                <span class="duration" *ngIf="i == 2"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0"> Days</span>
+                <span class="duration" *ngIf="panel.projectId"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0"> Days</span>
                 <div class="task-actions">
-                  <img *ngIf="i == 2" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
-                  <img *ngIf="i != 2 && task.starred == true" src="assets/images/star.png"  (click)="task.starred = !task.starred">
-                  <img *ngIf="i != 2 && task.starred == false" src="assets/images/star-empty.png" (click)="task.starred = !task.starred">
-                  <img *ngIf="i == 2 || i == 1" src="assets/images/alarm.png" [ngClass]="{'blured': !task.like}" (click)="task.like = !task.like">
+                  <img *ngIf="panel.projectId" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
+                  <img *ngIf="!panel.projectId && task.starred == true" src="assets/images/star.png"  (click)="task.starred = !task.starred">
+                  <img *ngIf="!panel.projectId && task.starred == false" src="assets/images/star-empty.png" (click)="task.starred = !task.starred">
+                  <img *ngIf="panel.projectId || i == 1" src="assets/images/alarm.png" [ngClass]="{'blured': !task.like}" (click)="task.like = !task.like">
                   <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
                   <!--Dependency numbers-->
-                  <div *ngIf="i == 2" class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">
+                  <div *ngIf="panel.projectId" class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">
                     <span *ngFor="let dependency of panels[i].tasks[j].dependency; let l = index" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
                       <span *ngIf="l != 0">,</span>
                       {{dependency}}

@@ -413,6 +413,7 @@ export class MyTasksComponent implements OnInit {
 
   panels = [];
   usersList = [];
+  contactsList = [];
 
   constructor( private dragulaService: DragulaService, private fb: FormBuilder, private renderer: Renderer,
     private pmTasksService: PmTasksService, private sharedService: SharedService ) {
@@ -432,12 +433,16 @@ export class MyTasksComponent implements OnInit {
       }
     });
 
-    this.sharedService.getUsers().subscribe(users => {
-      this.usersList = users;
+    this.sharedService.getContacts().subscribe(contacts => {
+      this.contactsList = contacts;
+      this.addContactName(this.contactsList);
 
-      this.refreshTable();
+      this.sharedService.getUsers().subscribe(users => {
+        this.usersList = users;
+
+        this.refreshTable();
+      });
     });
-
 
 
   }
@@ -449,18 +454,18 @@ export class MyTasksComponent implements OnInit {
     // this.panels.map(m => m.tasks.map(t => t.ownerModalCollapsed = false));
 
     for (let i = 0; i < this.panels.length; i++) {
-        this.ownerModalCollapsed[i] = new Array();
-        this.dependencyModalCollapsed[i] = new Array();
+        // this.ownerModalCollapsed[i] = new Array();
+        // this.dependencyModalCollapsed[i] = new Array();
         this.tasksTotalCount += this.panels[i].tasks.length;
         if (i === 2) {
-          this.panels[i].tasks.map(t => t.taskPath = t.profile.name + ' > Remodel with a Nu Life');
+          this.panels[i].tasks.map(t => t.taskPath = t.assigneeInfo.username + ' > Remodel with a Nu Life');
         }
        //  color selection
         const pickColorId = i % 10;
         this.panels[i].color = this.colors[pickColorId];
       for (let j = 0; j < this.panels[i].tasks.length; j++) {
-        this.ownerModalCollapsed[i][j] = false;
-        this.dependencyModalCollapsed[i][j] = false;
+        // this.ownerModalCollapsed[i][j] = false;
+        // this.dependencyModalCollapsed[i][j] = false;
         const date = new Date (this.panels[i].tasks[j].dueDate);
         this.panels[i].tasks[j].dueDate = new Intl.DateTimeFormat('en-US', options).format(date);
       }
@@ -481,7 +486,25 @@ export class MyTasksComponent implements OnInit {
       console.log('panels: ', data);
       for (let i = 0; i < this.panels.length; i++) {
         this.panels[i].color = this.colors[i];
+        this.ownerModalCollapsed[i] = new Array();
+        this.dependencyModalCollapsed[i] = new Array();
+
+        if (this.panels[i].taskIds !== null) {
+          for (let j = 0; j < this.panels[i].taskIds.length; j++) {
+            this.pmTasksService.getTasks(this.panels[i].id).subscribe(taskData => {
+              this.panels[i].tasks = taskData.results;
+
+              this.ownerModalCollapsed[i][j] = false;
+              this.dependencyModalCollapsed[i][j] = false;
+              console.log('tasks data: ', taskData);
+              this.panels[i].tasks.forEach(element => {
+                element.assigneeInfo = this.getUserInfo(element.assignee);
+              });
+            });
+          }
+        }
       }
+      console.log('panels2: ', data);
     });
   }
 
@@ -522,7 +545,7 @@ export class MyTasksComponent implements OnInit {
     const newTask = {
       id: 1 + panel.tasks.length,
       taskTitle: '',
-      profile: {
+      assigneeInfo: {
         name: '',
         imgUrl: '',
         userId: undefined
@@ -536,7 +559,7 @@ export class MyTasksComponent implements OnInit {
       attachmentImg: '',
       taskPath: 'John Moss > Remodel with a Nu Life',
       starred: false
-    } as TaskModel;
+    };
     this.panels.filter(m => m.title === panel.title)[0].tasks.push(newTask);
   }
 
@@ -557,6 +580,7 @@ export class MyTasksComponent implements OnInit {
       this.addPanelClicked = !this.addPanelClicked;
       this.pmTasksService.createTaskGroup(newPanel).subscribe(res => {
         console.log('new panel created: ', res);
+        this.refreshTable();
       });
     }
   }
@@ -570,13 +594,13 @@ export class MyTasksComponent implements OnInit {
   }
 
   onOwnerSelect(event, panel, task ) {
-    this.panels[panel].tasks[task].profile = this.taskOwners[this.selectedOwner - 1];
+    this.panels[panel].tasks[task].assigneeInfo = this.taskOwners[this.selectedOwner - 1];
   }
 
   openOwnerModal(i, j) {
     this.ownerModalCollapsed = this.ownerModalCollapsed.map(m => m.map(t => t = false));
     this.ownerModalCollapsed[i][j] = true;
-    this.selectedOwner = this.panels[i].tasks[j].profile.userId;
+    this.selectedOwner = this.panels[i].tasks[j].assigneeInfo.username;
   }
 
   openDependencyModal(i, j) {
@@ -641,5 +665,26 @@ export class MyTasksComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getUserInfo(username) {
+    const selectedUser = this.usersList.filter(u => u.username === username)[0];
+    return selectedUser;
   }
 }
