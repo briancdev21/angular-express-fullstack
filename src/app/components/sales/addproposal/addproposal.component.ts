@@ -8,6 +8,8 @@ import { SharedService } from '../../../services/shared.service';
 import { ProposalsService } from '../../../services/proposals.service';
 import * as moment from 'moment';
 import { ProposalService } from '../proposal/proposal.service';
+import { ProjectsService } from '../../../services/projects.service';
+import { SalesService } from '../sales.service';
 
 @Component({
   selector: 'app-addproposal',
@@ -43,7 +45,7 @@ export class AddProposalComponent implements OnInit {
   proposalDetails = {
     discount: {
       amount: 0,
-      type: ['$']
+      type: 'AMOUNT'
     },
     contactId : '',
     projectId: '',
@@ -139,6 +141,9 @@ export class AddProposalComponent implements OnInit {
   invalidScopeEditorContent = false;
   invalidClientProjectManager = false;
   invalidAccountReceivable = false;
+  invalidDesigner = false;
+  invalidCategory = false;
+  invalidSubCategory = false;
   selectProject = '';
   selectReceivable = '';
 
@@ -172,10 +177,16 @@ export class AddProposalComponent implements OnInit {
   usersList = [];
   internalNoteContent = '';
   clientNoteContent = '';
+  customersData: CompleterData;
+  projectsData: CompleterData;
+  projectsList: any;
+  projectId = '';
+  proposalsList = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService,
-     private proposalsService: ProposalsService) {
+     private proposalsService: ProposalsService, private projectsService: ProjectsService, private salesService: SalesService) {
     const comp = this;
+
     document.addEventListener('click', function() {
       comp.editable = false;
       comp.accountEditable = false;
@@ -184,18 +195,20 @@ export class AddProposalComponent implements OnInit {
     });
 
     this.sharedService.getContacts()
-    .subscribe(data => {
-      console.log('userlist: ', data);
-      this.customerList = data;
-      // Add collaborators list
-      this.customerList.forEach( ele => {
-        this.items2.push({
-          id: ele.id,
-          label: ele.person.firstName + ' ' + ele.person.lastName,
-          imageUrl: ele.pictureURI
+      .subscribe(data => {
+        console.log('userlist: ', data);
+        this.customerList = data;
+        this.addContactName(this.customerList);
+        this.customersData = this.completerService.local(this.customerList, 'name', 'name');
+        // Add collaborators list
+        this.customerList.forEach( ele => {
+          this.items2.push({
+            id: ele.id,
+            label: name,
+            imageUrl: ele.pictureURI
+          });
         });
       });
-    });
 
     this.sharedService.getUsers().subscribe(res => {
       this.usersList = res;
@@ -203,7 +216,7 @@ export class AddProposalComponent implements OnInit {
         this.items3.push({
           label: ele.firstName + ' ' + ele.lastName,
           imageUrl: ele.pictureURI,
-          userName: ele.username
+          username: ele.username
         });
       });
       this.items4 = this.items5 = this.items3;
@@ -215,6 +228,15 @@ export class AddProposalComponent implements OnInit {
 
     this.sharedService.getProjectTypes().subscribe(res => {
       this.projectTypeList = res.results;
+    });
+
+    this.projectsService.getProjectsList().subscribe(res => {
+      this.projectsList = res.results;
+      this.projectsData = this.completerService.local(this.projectsList, 'id', 'id');
+    });
+
+    this.proposalsService.getProposals().subscribe(res => {
+      this.proposalsList = res.results;
     });
   }
 
@@ -250,16 +272,21 @@ export class AddProposalComponent implements OnInit {
   }
 
   onSelectCustomer(event) {
-    this.proposalDetails.contactId = event;
-    this.selectedCustomer = this.customerList.filter( c => c.id === event)[0];
+    console.log('select customer: ', event);
+    this.proposalDetails.contactId = event.originalObject.id;
+    this.selectedCustomer = this.customerList.filter( c => c.id === event.originalObject.id)[0];
   }
 
   onSelectProjectManagementContact(event) {
-    this.proposalDetails.projectManagementContact = event;
+    this.proposalDetails.projectManagementContact = event.originalObject.id;
   }
 
   onSelectAccountReceivable(event) {
-    this.proposalDetails.accountReceivable = event;
+    this.proposalDetails.accountReceivable = event.originalObject.id;
+  }
+
+  onSelectProjectId(event) {
+    this.proposalDetails.projectName = event.originalObject.id;
   }
 
   onSelectAssociation(event) {
@@ -275,10 +302,11 @@ export class AddProposalComponent implements OnInit {
 
   onSelect(item: any) {
     this.selectedItem = item;
-    this.items2 = this.items2.filter(function( obj ) {
-      return obj.id !== item.id;
+    console.log('item: ', item, this.items3);
+    this.items3 = this.items3.filter(function( obj ) {
+      return obj.username !== item.username;
     });
-    this.proposalDetails.collaborators.push({name: item.label, imageUrl: item.imageUrl, id: item.id });
+    this.proposalDetails.collaborators.push({name: item.label, imageUrl: item.imageUrl, username: item.username });
   }
 
   onSelectAccountManager(item: any) {
@@ -297,15 +325,6 @@ export class AddProposalComponent implements OnInit {
   onSelectDesigner(item: any) {
     this.selectedItem = item;
     this.proposalDetails.designer = item;
-  }
-
-  getContactNameFromId(id) {
-    const selectedContact = this.customerList.filter( c => c.id === id);
-    if (selectedContact.length > 0) {
-      return selectedContact[0].person.firstName + ' ' + selectedContact[0].person.lastName;
-    } else {
-      return '';
-    }
   }
 
   onInputChangedEvent(val: string) {
@@ -345,7 +364,7 @@ export class AddProposalComponent implements OnInit {
     if (this.switchIconAutoId) {
       this.proposalDetails.projectId = this.generateAutoId();
     } else {
-      this.proposalDetails.projectId = '';
+      this.proposalDetails.projectId = undefined;
     }
   }
 
@@ -359,13 +378,15 @@ export class AddProposalComponent implements OnInit {
     let year: any;
     let count: any;
     const today = new Date();
+    // just name is count: it is project ids list
+    this.projectIDCount = this.proposalsList.map(p => p.projectId);
     month = today.getMonth() + 1;
     if (month.toString().length) {
       month = '0' + month;
     }
     year = today.getFullYear().toString().slice(-2);
     if (this.projectIDCount.length > 0) {
-      count = this.projectIDCount[this.projectIDCount.length] + 1;
+      count = this.projectIDCount.length + 1;
     } else {
       count = 1;
     }
@@ -390,8 +411,10 @@ export class AddProposalComponent implements OnInit {
   }
 
   getProjectSubCategories(event) {
+
     const projectSubCategories = event.map( k => k.id);
     this.proposalDetails.projectSubCategoriesAll = projectSubCategories;
+    console.log('subcategories: ', event, this.proposalDetails.projectSubCategoriesAll);
   }
 
   tabChange(event) {
@@ -432,6 +455,7 @@ export class AddProposalComponent implements OnInit {
       this.invalidProjectType = false;
       this.invalidAccountReceivable = false;
       this.invalidClientProjectManager = false;
+      this.invalidDesigner = false;
       if (this.proposalDetails.contactId && this.proposalDetails.collaborators.length
         && this.proposalDetails.projectName && this.proposalDetails.shippingAddress && this.proposalDetails.city
         && this.proposalDetails.state && this.proposalDetails.country && this.proposalDetails.zipcode && this.proposalDetails.projectType) {
@@ -447,7 +471,7 @@ export class AddProposalComponent implements OnInit {
         if (!this.proposalDetails.collaborators.length) {
           this.invalidCollaborators = true;
         }
-        if (!this.proposalDetails.projectName) {
+        if (this.proposalDetails.projectName) {
           this.invalidProjectName = true;
         }
         if (!this.proposalDetails.shippingAddress) {
@@ -485,8 +509,12 @@ export class AddProposalComponent implements OnInit {
       this.invalidSchedule = false;
       this.invalidAccountManager = false;
       this.invalidProjectManager = false;
+      this.invalidDesigner = false;
+      this.invalidSubCategory = false;
+      this.invalidCategory = false;
       if (this.proposalDetails.projectId && (this.scheduleRemain === 0) && this.proposalDetails.accountManager
-        && this.proposalDetails.projectManager) {
+        && this.proposalDetails.projectManager && this.proposalDetails.designer && this.proposalDetails.projectCategoriesAll.length > 0
+        && this.proposalDetails.projectSubCategoriesAll.length > 0) {
           this.tabActiveThird = true;
           this.tabActiveFirst = false;
           this.tabActiveSecond = false;
@@ -499,11 +527,20 @@ export class AddProposalComponent implements OnInit {
         if (this.scheduleRemain !== 0) {
           this.invalidSchedule = true;
         }
-        if (!this.proposalDetails.accountManager.length) {
+        if (!this.proposalDetails.accountManager) {
           this.invalidAccountManager = true;
         }
-        if (!this.proposalDetails.projectManager.length) {
+        if (!this.proposalDetails.projectManager) {
           this.invalidProjectManager = true;
+        }
+        if (!this.proposalDetails.designer) {
+          this.invalidDesigner = true;
+        }
+        if (!this.proposalDetails.projectCategoriesAll.length) {
+          this.invalidCategory = true;
+        }
+        if (!this.proposalDetails.projectSubCategoriesAll.length) {
+          this.invalidSubCategory = true;
         }
         setTimeout(() => {
           this.tabActiveSecond = true;
@@ -542,6 +579,22 @@ export class AddProposalComponent implements OnInit {
     return md.slice(-3);
   }
 
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.customerList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
+
   finishAddProposal() {
     this.invalidScopeEditorContent = false;
     const savingProposalData = {
@@ -550,16 +603,13 @@ export class AddProposalComponent implements OnInit {
       // 'leadId': 0,
       'projectId': this.proposalDetails.projectId,
       'projectTypeId': parseInt(this.proposalDetails.projectType, 10),
-      'pricingCategoryId': this.proposalDetails.pricing,
-      'categories': [
-        {
-          'categoryId': 1,
-        }
-      ],
+      'pricingCategoryId': parseInt(this.proposalDetails.pricing, 10),
+      'categoryIds': this.proposalDetails.projectCategoriesAll,
+      'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
       'assignees': {
-        'accountManager': this.proposalDetails.accountManager.userName,
-        'projectManager': this.proposalDetails.projectManager.userName,
-        'designer': this.proposalDetails.designer ? this.proposalDetails.designer.userName : '',
+        'accountManager': this.proposalDetails.accountManager.username,
+        'projectManager': this.proposalDetails.projectManager.username,
+        'designer': this.proposalDetails.designer.username,
       },
       'clientProjectManager': this.proposalDetails.projectManagementContact,
       'accountReceivable': this.proposalDetails.accountReceivable,
@@ -572,7 +622,7 @@ export class AddProposalComponent implements OnInit {
         'country': this.proposalDetails.country
       },
       'paymentSchedule': this.proposalDetails.paymentSchedule,
-      'scopeOfWork': this.extractStringFromEditor(this.scopeEditorContent),
+      'scopeOfWork': this.scopeEditorContent,
       'clientNote': this.extractStringFromEditor(this.clientNoteContent),
       'internalNote': this.extractStringFromEditor(this.internalNoteContent),
       'completionDate': this.proposalDetails.completionDate,
@@ -586,6 +636,7 @@ export class AddProposalComponent implements OnInit {
       console.log('saving_proposal: ', savingProposalData);
       this.proposalsService.createProposal(JSON.stringify(savingProposalData)).subscribe(res => {
         console.log('created proposal: ', res);
+        this.salesService.proposalAdded.next(true);
       });
       this.tabActiveThird = false;
       this.tabActiveFirst = true;
