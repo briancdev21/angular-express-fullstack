@@ -191,6 +191,9 @@ export class AddEstimateBodyComponent implements OnInit {
     const contactIdList = this.contactList.map(c => c.id);
     const pos = contactIdList.indexOf(selectedIndex);
     this.customerAddress = this.contactList[pos].shippingAddress;
+    this.emailAddresses = [];
+    this.emailAddresses.push(this.contactList[pos].email);
+    this.saveInvoiceData.emails = this.emailAddresses;
     this.saveInvoiceData.contactId = selectedIndex;
     this.newCustomerName = selectedIndex;
   }
