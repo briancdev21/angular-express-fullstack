@@ -22,6 +22,7 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
   subCategoriesNameList = [];
   subCategoriesList = [];
   categoryId: any;
+  categoriesList = [];
 
   constructor(private renderer: Renderer, private sharedService: SharedService, private salesService: SalesService) {
     const comp = this;
@@ -31,46 +32,76 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
 
     this.salesService.selectedCategory.subscribe(res => {
       console.log('receive cate: ', res);
+      this.categoriesList.push(res);
       this.categoryId = res;
+      this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
+        this.subCategoriesList = data.results;
+        this.subCategoriesNameList = data.results.map(r => r.name);
+      });
+    });
+
+    this.salesService.deletedCategory.subscribe(res => {
+      console.log('deleted cate: ', res);
+      this.subCategories = [];
+      const pos = this.categoriesList.indexOf(res);
+      this.categoriesList.splice(pos, -1);
+      this.categoriesList.forEach(ele => {
+        this.sharedService.getSubCategories(ele).subscribe(data => {
+
+          this.subCategories.concat(data.results);
+        });
+      });
     });
   }
 
   ngOnInit() {
     const arr = [];
     this.editable = false;
-    if (this.categoryId) {
-      this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
-        this.subCategoriesList = data.results;
-        this.subCategoriesNameList = data.results.map(k => k.name);
-        // Change subCategories ids to objects
-        this.subCategories.forEach(element => {
-          for (let i = 0; i < this.subCategoriesList.length; i ++) {
-            if (element === this.subCategoriesList[i].id) {
-              arr.push(this.subCategoriesList[i]);
-            }
-          }
-        });
-        this.subCategories = arr;
-      });
-    }
+    // if (this.categoryId) {
+    //   this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
+    //     this.subCategoriesList = data.results;
+    //     this.subCategoriesNameList = data.results.map(k => k.name);
+    //     // Change subCategories ids to objects
+    //     // this.subCategories.forEach(element => {
+    //     //   for (let i = 0; i < this.subCategoriesList.length; i ++) {
+    //     //     if (element === this.subCategoriesList[i].id) {
+    //     //       arr.push(this.subCategoriesList[i]);
+    //     //     }
+    //     //   }
+    //     // });
+    //     this.subCategories = arr;
+    //   });
+    // }
   }
 
   ngAfterViewInit() {
     // this.input.nativeElement.focus();
   }
 
+  checkInSub(data) {
+
+    if (this.subCategoriesNameList.includes(data)) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
   addNewSubCategory(data) {
     this.newSubCategory = '';
-    if (!this.subCategoriesNameList.includes(data)) {
+    if (this.checkInSub(data)) {
+      const pos = this.subCategoriesNameList.indexOf(data);
+      this.subCategories.push(this.subCategoriesList[pos]);
+      this.sendSubCategories.emit(this.subCategories);
+      console.log('sub pos:', pos, this.subCategories);
+
+    } else {
       this.sharedService.createSubCategory(this.categoryId, {'name': data})
       .subscribe((res) => {
         this.subCategories.push(res.data);
         this.sendSubCategories.emit(this.subCategories);
       });
-    } else {
-      const pos = this.subCategoriesNameList.indexOf(data);
-      this.subCategories.push(this.subCategoriesList[pos]);
-      this.sendSubCategories.emit(this.subCategories);
     }
   }
 

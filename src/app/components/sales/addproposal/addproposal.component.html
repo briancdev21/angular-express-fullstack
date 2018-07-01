@@ -16,7 +16,15 @@
           <div class="name-col tab-row">
             <div *ngIf="customerList">
               <span>Customer Name (*required)</span>
-              <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectCustomer($event)" [ngClass]="{'validation-required-name': invalidCustomerName}" [searchStr]="selectName"></app-in-customer-name>
+              <ng2-completer 
+                [dataService]="customersData" 
+                [minSearchLength]="0" 
+                (selected)="onSelectCustomer($event)" 
+                [(ngModel)]="selectName" 
+                class="ng2completer" 
+                [ngClass]="{'validation-required-name': invalidCustomerName}">
+              </ng2-completer>
+              <!-- <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectCustomer($event)" [ngClass]="{'validation-required-name': invalidCustomerName}" [searchStr]="selectName"></app-in-customer-name> -->
             </div>
             <div class="collaborators">
               <span>Collaborators (*required)</span>
@@ -30,12 +38,12 @@
                       <span *ngIf="!proposalDetails.collaborators.length" class="type-here">Type collaborator's name</span>
                       <li *ngFor="let user of proposalDetails.collaborators; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <ng-select *ngIf="isAutocompleteUpdated2" [items]="items2"
+                        <ng-select *ngIf="isAutocompleteUpdated2" [items]="items3"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
                           (add)="onSelect($event)" >
                         </ng-select>
-                        <ng-select *ngIf="!isAutocompleteUpdated2" [items]="items2"
+                        <ng-select *ngIf="!isAutocompleteUpdated2" [items]="items3"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
                           (add)="onSelect($event)">
@@ -58,7 +66,15 @@
                   <span>Same as customer</span>
                 </div>
               </div>
-              <app-in-customer-name [userList]="customerList" [ngClass]="{'validation-required-name': invalidClientProjectManager}" (selectedUser)="onSelectProjectManagementContact($event)" [searchStr]="selectProject"></app-in-customer-name>
+              <ng2-completer 
+                [dataService]="customersData" 
+                [minSearchLength]="0" 
+                (selected)="onSelectProjectManagementContact($event)" 
+                [(ngModel)]="selectProject" 
+                class="ng2completer" 
+                [ngClass]="{'validation-required-name': invalidClientProjectManager}">
+              </ng2-completer>
+              <!-- <app-in-customer-name [userList]="customerList" [ngClass]="{'validation-required-name': invalidClientProjectManager}" (selectedUser)="onSelectProjectManagementContact($event)" [searchStr]="selectProject"></app-in-customer-name> -->
             </div>
 
             <div>
@@ -70,7 +86,15 @@
                   <span>Same as customer</span>
                 </div>
               </div>
-              <app-in-customer-name [userList]="customerList" [ngClass]="{'validation-required-name': invalidAccountReceivable}" (selectedUser)="onSelectAccountReceivable($event)" [searchStr]="selectReceivable"></app-in-customer-name>
+              <ng2-completer 
+                [dataService]="customersData" 
+                [minSearchLength]="0" 
+                (selected)="onSelectAccountReceivable($event)" 
+                [(ngModel)]="selectReceivable" 
+                class="ng2completer" 
+                [ngClass]="{'validation-required-name': invalidAccountReceivable}">
+              </ng2-completer>
+              <!-- <app-in-customer-name [userList]="customerList" [ngClass]="{'validation-required-name': invalidAccountReceivable}" (selectedUser)="onSelectAccountReceivable($event)" [searchStr]="selectReceivable"></app-in-customer-name> -->
             </div>
           </div>
 
@@ -92,6 +116,14 @@
           <div class="name-type tab-row">
             <div>
               <span>Project Name (*required)</span>
+              <!-- <ng2-completer 
+                [dataService]="projectsData" 
+                [minSearchLength]="0" 
+                (selected)="onSelectProjectId($event)" 
+                [(ngModel)]="projectId" 
+                class="ng2completer" 
+                [ngClass]="{'validation-required-name': invalidProjectName}">
+              </ng2-completer> -->
               <input placeholder="Enter Project Name" [(ngModel)]="proposalDetails.projectName" [ngClass]="{'validation-required': invalidProjectName}">
             </div>
             <div>
@@ -165,13 +197,13 @@
           <div class="cate-subcate tab-row">
             <div>
               <span>Project Categories</span>
-              <div class="category-box">
+              <div class="category-box" [ngClass]="{'validation-required': invalidCategory}">
                 <app-multicategoriesselect [categories]="emptyArr" (sendCategories)="getProjectCategories($event)"></app-multicategoriesselect>
               </div>
             </div>
             <div>
               <span>Project Subcategories</span>
-              <div class="subcategory-box">
+              <div class="subcategory-box" [ngClass]="{'validation-required': invalidSubCategory}">
                 <app-multisubcategoriesselect [subCategories]="emptyArr" (sendSubCategories)="getProjectSubCategories($event)"></app-multisubcategoriesselect>
               </div>
             </div>
@@ -257,8 +289,8 @@
 
           <div class="design-custom tab-row">
             <div>
-              <span>Designer</span>
-              <div class="member-container" (click)="designerEditable=true;$event.stopPropagation()">
+              <span>Designer (*required)</span>
+              <div class="member-container" (click)="designerEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidDesinger}">
                 <div class="followers" > 
                   <div class="follower" >
                     <a *ngIf="proposalDetails.designer" [title]='proposalDetails.designer.name' ><img [src]='proposalDetails.designer.imageUrl'  (click)="designerEditable=true;$event.stopPropagation()"/></a>
