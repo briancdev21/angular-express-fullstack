@@ -8,9 +8,9 @@
   </div>
   <div [ngClass]="{ 'editable': editable, 'hidden': !editable }" (click)="editable=true;$event.stopPropagation()" >
     <ul *ngIf="subCategories">
-      <li *ngFor="let keyword of subCategories; let i = index" >{{keyword.name}}<span (click)="deleteKeyword(keyword.id)">&nbsp;&nbsp;x</span></li><br/>
+      <li *ngFor="let keyword of subCategories; let i = index" >{{keyword.name}}<span (click)="deleteSubCategory(keyword.id)">&nbsp;&nbsp;x</span></li><br/>
       <li style="background: none; width: 100%; margin: 0;" >
-        <input placeholder="Type Here..." #box [(ngModel)]="newKeyword" class="add-keyword-input" type="text" (keyup.enter)="addNewKeyword(newKeyword)"/></li>
+        <input placeholder="Type Here..." #box [(ngModel)]="newSubCategory" class="add-keyword-input" type="text" (keyup.enter)="addNewSubCategory(newSubCategory)"/></li>
     </ul>
   </div>
 </div>
