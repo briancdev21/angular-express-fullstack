@@ -85,16 +85,21 @@ export class InvoicesComponent implements OnInit {
           element['isInvoice'] = false;
           return element;
         });
-        console.log('estimatesListInfo:', this.estimatesListInfo);
         this.invoicesListInfo = this.invoicesListInfo.concat(this.estimatesListInfo);
         this.invoicesListInfo.forEach(element => {
           element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
         });
         this.invoicesListInfo = this.sortDateArray('createdAt');
 
-        this.invoicesListInfo.map(i => i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].split('-').pop(), 10)));
+        this.invoicesListInfo.map(i => {
+          if (i['contactId']) {
+            i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].split('-').pop(), 10));
+          } else {
+            i['customerName'] = '';
+          }
+          return i;
+        });
         console.log('invoiceslist: ', this.invoicesListInfo);
-
       });
     });
   }

@@ -135,9 +135,11 @@ export class InvoiceProfileBodyComponent implements OnInit {
         data = this.addContactName(data);
         this.contactList = data;
         this.userList = this.contactList;
-        this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
-        this.currentOwner = this.getCustomerName(this.contactList, res.data.contactId);
-        console.log('current owner:', this.currentOwner);
+        if (res.data.contactId) {
+          this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
+          this.currentOwner = this.getCustomerName(this.contactList, res.data.contactId);
+          console.log('current owner:', this.currentOwner);
+        }
       });
 
       this.sharedService.getTerms().subscribe(data => {
@@ -174,7 +176,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
 
       this.saveInvoiceData = res.data;
       // change contact id to number
-      this.saveInvoiceData.contactId = parseInt(res.data.contactId.slice(-1), 10);
+      this.saveInvoiceData.contactId = res.data.contactId ? parseInt(res.data.contactId.split('-').pop(), 10) : undefined;
 
       this.discountType = res.data.discount.unit;
       this.discountAmount = res.data.discount.value;
@@ -186,8 +188,6 @@ export class InvoiceProfileBodyComponent implements OnInit {
       this.subtotalproducts = res.data.productSubTotal;
       this.subtotalServices = res.data.serviceSubTotal;
       this.taxes = res.data.taxTotal;
-      this.discountType = res.data.discount.unit;
-      this.discountAmount = res.data.discount.value;
       this.totalamountdue = res.data.total;
       this.currentClassId = res.data.classificationId;
       this.currentCategoryId = res.data.categoryId;

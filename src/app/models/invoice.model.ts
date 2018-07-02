@@ -1,19 +1,27 @@
 export class InvoiceModel {
-  currencyId: 1;
+  id: string;
+  currencyId: number;
   contactId: number;
-  pricingCategoryId: 1;
+  pricingCategoryId: number;
   classificationId: number;
   categoryId: number;
+  termId: number;
+  owner: string;
+  recurringInvoiceIds: number[];
   emails: [
     string
   ];
   startDate: string;
-  acceptOnlinePayment: true;
-  chargeLateFee: true;
+  dueDate: string;
+  acceptOnlinePayment: boolean;
+  chargeLateFee: boolean;
   lateFee: {
     value: number;
     unit: string
   };
+  recurring: [
+    string
+  ];
   reminder: [
     string
   ];
@@ -38,5 +46,12 @@ export class InvoiceModel {
     value: number;
     unit: string
   };
+  productSubTotal: number;
+  serviceSubTotal: number;
+  taxTotal: number;
+  total: number;
   deposit: number;
+  balance: number;
+  createdAt: string;
+  updatedAt: string;
 }
