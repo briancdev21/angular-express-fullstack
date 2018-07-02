@@ -131,7 +131,7 @@ export const routes: Routes = [
           { path: 'pm-board', component: PmBoardComponent },
           { path: 'pm-schedule', component: PmScheduleComponent },
           { path: 'pm-financials', component: PmFinancialsComponent },
-          { path: 'pm-log-add', component: AddChangeLogProfileComponent }
+          { path: 'pm-log-add', component: AddChangeLogProfileComponent },
           { path: 'pm-progress', component: PmProgressComponent,
             children: [
               { path: '', redirectTo: 'pm-logs-table', pathMatch: 'full' },
