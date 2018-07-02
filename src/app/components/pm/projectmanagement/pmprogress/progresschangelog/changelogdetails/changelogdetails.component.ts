@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
 import { SharedService } from '../../../../../../services/shared.service';
@@ -10,7 +10,7 @@ import { SharedService } from '../../../../../../services/shared.service';
     './changelogdetails.component.css'
   ]
 })
-export class ChangeLogDetailsComponent implements OnInit {
+export class ChangeLogDetailsComponent implements OnInit, AfterViewInit {
 
   @Input() changeLogList;
   @Input() changeLogInfo;
@@ -25,8 +25,10 @@ export class ChangeLogDetailsComponent implements OnInit {
   public startMax;
   contactsList = [];
   usersList = [];
+  logStatus: any;
+  title = '';
 
-  constructor( private pmService: ProjectManagementService, private sharedService: SharedService ) {
+  constructor( private projectManagementService: ProjectManagementService, private sharedService: SharedService ) {
     this.sharedService.getContacts().subscribe(data => {
       this.contactsList = data;
       this.addContactName(this.contactsList);
@@ -34,6 +36,18 @@ export class ChangeLogDetailsComponent implements OnInit {
 
     this.sharedService.getUsers().subscribe(res => {
       this.usersList = res;
+    });
+
+    this.projectManagementService.logStatusChange.subscribe(data => {
+      if (data) {
+        this.logStatus = data;
+      }
+    });
+
+    this.projectManagementService.logTitleChange.subscribe(data => {
+      if (data) {
+        this.title = data;
+      }
     });
 
   }
@@ -45,11 +59,7 @@ export class ChangeLogDetailsComponent implements OnInit {
 
     // comment for now because it cause some console error. Will reactivate after back end is ready
 
-    // this.street = this.changeLogInfo.shippingAddress.address;
-    // this.city = this.changeLogInfo.shippingAddress.city;
-    // this.state = this.changeLogInfo.shippingAddress.province;
-    // this.country = this.changeLogInfo.shippingAddress.country;
-    // this.zipcode = this.changeLogInfo.shippingAddress.postalCode;
+   
 
 
     // this.startDateValue = new Date(this.changeLogInfo.startDate);
@@ -59,6 +69,7 @@ export class ChangeLogDetailsComponent implements OnInit {
   }
 
   clickIconShipping() {
+
     this.switchIconAddress = !this.switchIconAddress;
     this.changeLogInfo.shippingAddress.address = (this.switchIconAddress) ? this.street :
     this.changeLogInfo.selectedContact.shippingAddress.city;
@@ -128,4 +139,11 @@ export class ChangeLogDetailsComponent implements OnInit {
     return data;
   }
 
+  ngAfterViewInit() {
+    this.street = this.changeLogInfo.shippingAddress.address;
+    this.city = this.changeLogInfo.shippingAddress.city;
+    this.state = this.changeLogInfo.shippingAddress.province;
+    this.country = this.changeLogInfo.shippingAddress.country;
+    this.zipcode = this.changeLogInfo.shippingAddress.postalCode;
+  }
 }
