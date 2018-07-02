@@ -1,14 +1,11 @@
-export class EstimateModel {
-  id: string;
-  changeLogId: string;
+export class EstimateCreateModel {
   currencyId: number;
-  contactId: string;
-  leadId: string;
+  contactId: number;
+  leadId: number;
   pricingCategoryId: number;
   classificationId: number;
   categoryId: number;
   emails: string[];
-  status: string;
   shippingAddress: {
     address: string;
     city: string;
@@ -31,11 +28,5 @@ export class EstimateModel {
     value: number;
     unit: string
   };
-  productSubTotal: number;
-  serviceSubTotal: number;
-  taxTotal: number;
-  total: number;
   deposit: number;
-  createdAt: string;
-  updatedAt: string;
 }

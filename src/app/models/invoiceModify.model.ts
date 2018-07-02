@@ -1,14 +1,19 @@
-export class EstimateModel {
-  id: string;
-  changeLogId: string;
-  currencyId: number;
-  contactId: string;
-  leadId: string;
+export class InvoiceCreateModel {
+  currencyId: number; // required
+  contactId: number;
   pricingCategoryId: number;
-  classificationId: number;
-  categoryId: number;
+  classificationId: number; // required
+  categoryId: number; // required
+  termId: number; // required
   emails: string[];
-  status: string;
+  startDate: string;
+  acceptOnlinePayment: true;
+  chargeLateFee: true;
+  lateFee: {
+    value: number;
+    unit: string
+  };
+  reminder: string[];
   shippingAddress: {
     address: string;
     city: string;
@@ -26,16 +31,9 @@ export class EstimateModel {
   internalNote: string;
   customerNote: string;
   terms: string;
-  expiryDate: string;
   discount: {
     value: number;
     unit: string
   };
-  productSubTotal: number;
-  serviceSubTotal: number;
-  taxTotal: number;
-  total: number;
   deposit: number;
-  createdAt: string;
-  updatedAt: string;
 }

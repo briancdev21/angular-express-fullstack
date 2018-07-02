@@ -45,11 +45,11 @@
         </td>
         <td class="unitprice">
           <div class="dollar">
-            <input type="number" class="unitprice" step="0.01" min="0.00" placeholder="0.00" [(ngModel)]="productDetailInfo.unitprice" (input)="checkValue($event)" (ngModelChange)="calcualteTotalPrice(i)" />
+            <input type="number" class="unitprice" step="0.01" min="0.00" placeholder="0.00" readonly [(ngModel)]="productDetailInfo.unitprice" (input)="checkValue($event)" (ngModelChange)="calcualteTotalPrice(i)" />
           </div>
         </td>
         <td class="discount">
-          <input class="discount" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.discount"  (input)="checkDiscount($event)"  (ngModelChange)="calcualteTotalPrice(i)"  (change)="updatePurchaseOrderProduct(i)" />
+          <input class="discount" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.discountvalue"  (input)="checkDiscount($event)"  (ngModelChange)="calcualteTotalPrice(i)"  (change)="updatePurchaseOrderProduct(i)" />
         </td>
         <td class="total">
           <div class="dollar">
