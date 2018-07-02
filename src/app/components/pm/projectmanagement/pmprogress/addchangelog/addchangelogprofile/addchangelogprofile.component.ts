@@ -71,7 +71,7 @@ export class AddChangeLogProfileComponent implements OnInit {
   ];
 
 
-  changeLogStatus = 'inProgress';
+  changeLogStatus = 'NEW';
   showConfirmModal = false;
   descriptionChange: any;
   detailsChange: any;
@@ -79,27 +79,19 @@ export class AddChangeLogProfileComponent implements OnInit {
   currentProjectId: any;
   currentChangeLogId: any;
 
-  constructor( private pmService: ProjectManagementService, private router: Router, private sharedService: SharedService,
+  constructor( private projectManagementService: ProjectManagementService, private router: Router, private sharedService: SharedService,
     private projectsService: ProjectsService, private route: ActivatedRoute ) {
-      this.currentProjectId = localStorage.getItem('project_id');
+      this.currentProjectId = localStorage.getItem('current_projectId');
       this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
 
-      this.pmService.saveChangeLog.subscribe(data => {
-        if (data['sendSaveData']) {
-          console.log('save is clicked');
-        }
-      });
-
-      console.log('project_id: ', this.currentProjectId, this.currentChangeLogId);
       this.sharedService.getUsers().subscribe(data => {
         this.usersList = data;
         this.addUserRealName(this.usersList);
-        console.log('usersList: ', this.usersList);
-        this.projectsService.getIndividualProjectChangeLog(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
-          this.changeLogInfo = res.results;
-          this.changeLogInfo.customerName = this.getCustomerNameFromUsername(res.data.contactId);
-          console.log('indi project: ', this.changeLogInfo);
-        });
+        // this.projectsService.getIndividualProjectChangeLog(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
+        //   this.changeLogInfo = res.results;
+        //   this.changeLogInfo.customerName = this.getCustomerNameFromUsername(res.data.contactId);
+        //   console.log('indi project: ', this.changeLogInfo);
+        // });
 
       });
   }
@@ -122,6 +114,14 @@ export class AddChangeLogProfileComponent implements OnInit {
   getCustomerNameFromUsername(username) {
     const selectedUser = this.usersList.filter(c => c.username === username)[0];
     return selectedUser.name;
+  }
+
+  onChangeTitle(event) {
+    this.projectManagementService.logTitleChange.next(event);
+  }
+
+  onChangeStatus(event) {
+    this.projectManagementService.logStatusChange.next(event);
   }
 
 }

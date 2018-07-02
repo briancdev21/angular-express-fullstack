@@ -19,6 +19,16 @@
   text-align: right;
 }
 
+.title-sec .title {
+  border: 0;
+  outline: none;
+  width: 300px;
+}
+
+.title::placeholder {
+  color: #D3D3D3;
+}
+
 .btn-sec {
   display: flex;
   align-items: center;
