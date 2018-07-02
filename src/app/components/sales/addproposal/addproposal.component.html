@@ -316,7 +316,12 @@
               </div>
             </div>
             <div>
-              <!-- for right empty space -->
+              <span>Tax Rate (*required)</span>
+              <div>
+                <select [(ngModel)]="proposalDetails.taxRate">
+                  <option [value]="tax.id" *ngFor="let tax of taxRateList">{{tax.name}}</option>
+                </select>
+              </div>
             </div>
           </div>
           <div class="btn-section" >

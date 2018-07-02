@@ -68,7 +68,9 @@ export class AddProposalComponent implements OnInit {
     ],
     accountManager: undefined,
     projectManager: undefined,
-    designer: undefined
+    designer: undefined,
+    taxRate: 1,
+    pricingCategoryId: 1
   };
 
   userInfo = {
@@ -182,6 +184,7 @@ export class AddProposalComponent implements OnInit {
   projectsList: any;
   projectId = '';
   proposalsList = [];
+  taxRateList = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService,
      private proposalsService: ProposalsService, private projectsService: ProjectsService, private salesService: SalesService) {
@@ -237,6 +240,10 @@ export class AddProposalComponent implements OnInit {
 
     this.proposalsService.getProposals().subscribe(res => {
       this.proposalsList = res.results;
+    });
+
+    this.sharedService.getTaxRates().subscribe(res => {
+      this.taxRateList = res.results;
     });
   }
 
@@ -393,7 +400,7 @@ export class AddProposalComponent implements OnInit {
     if (count.toString().length === 1) {
       count = '0' + count;
     }
-    const projectId = 'PR ' + month + year + count;
+    const projectId = 'PR_' + month + year + count;
     return projectId;
   }
 
@@ -606,13 +613,11 @@ export class AddProposalComponent implements OnInit {
       'pricingCategoryId': parseInt(this.proposalDetails.pricing, 10),
       'categoryIds': this.proposalDetails.projectCategoriesAll,
       'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
-      'assignees': {
-        'accountManager': this.proposalDetails.accountManager.username,
-        'projectManager': this.proposalDetails.projectManager.username,
-        'designer': this.proposalDetails.designer.username,
-      },
-      'clientProjectManager': this.proposalDetails.projectManagementContact,
-      'accountReceivable': this.proposalDetails.accountReceivable,
+      'accountManager': this.proposalDetails.accountManager.username,
+      'projectManager': this.proposalDetails.projectManager.username,
+      'designer': this.proposalDetails.designer.username,
+      'clientProjectManagerId': this.proposalDetails.projectManagementContact,
+      'accountReceivableId': this.proposalDetails.accountReceivable,
       'name': this.proposalDetails.projectName,
       'shippingAddress': {
         'address': this.proposalDetails.shippingAddress,
@@ -629,7 +634,8 @@ export class AddProposalComponent implements OnInit {
       'discount': {
         'value': this.proposalDetails.discount.amount,
         'unit': this.proposalDetails.discount.type
-      }
+      },
+      'taxRateId': this.proposalDetails.taxRate
     };
 
     if (this.scopeEditorContent) {
