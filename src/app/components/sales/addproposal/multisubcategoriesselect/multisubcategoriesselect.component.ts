@@ -34,23 +34,26 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
       console.log('receive cate: ', res);
       this.categoriesList.push(res);
       this.categoryId = res;
-      this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
-        this.subCategoriesList = data.results;
-        this.subCategoriesNameList = data.results.map(r => r.name);
-      });
+      if (res) {
+        this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
+          this.subCategoriesList = data.results;
+          this.subCategoriesNameList = data.results.map(r => r.name);
+        });
+      }
     });
 
     this.salesService.deletedCategory.subscribe(res => {
       console.log('deleted cate: ', res);
       this.subCategories = [];
-      const pos = this.categoriesList.indexOf(res);
-      this.categoriesList.splice(pos, -1);
-      this.categoriesList.forEach(ele => {
-        this.sharedService.getSubCategories(ele).subscribe(data => {
-
-          this.subCategories.concat(data.results);
+      if (res) {
+        const pos = this.categoriesList.indexOf(res);
+        this.categoriesList.splice(pos, -1);
+        this.categoriesList.forEach(ele => {
+          this.sharedService.getSubCategories(ele).subscribe(data => {
+            this.subCategories.concat(data.results);
+          });
         });
-      });
+      }
     });
   }
 
