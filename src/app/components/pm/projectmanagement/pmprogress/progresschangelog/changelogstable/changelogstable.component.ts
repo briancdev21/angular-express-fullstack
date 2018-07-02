@@ -61,18 +61,15 @@ export class ChangeLogsTableComponent implements OnInit {
   constructor( private router: Router, private sharedService: SharedService,
     private projectsService: ProjectsService, private route: ActivatedRoute  ) {
       this.currentProjectId = localStorage.getItem('current_projectId');
-      console.log('project_id: ', this.currentProjectId);
       this.sharedService.getUsers().subscribe(data => {
         this.usersList = data;
         this.addUserRealName(this.usersList);
         this.projectsService.getProjectChangeLogs(this.currentProjectId).subscribe(res => {
 
-          this.changeLogsInfo = res.data;
+          this.changeLogsInfo = res.results;
           if (res.data) {
             this.changeLogsInfo.customerName = this.getCustomerNameFromUsername(res.data.contactId);
           }
-
-          console.log('indi project: ', this.changeLogsInfo);
         });
 
       });
@@ -162,7 +159,7 @@ export class ChangeLogsTableComponent implements OnInit {
   }
 
   addChangeLog() {
-    this.router.navigate(['./pm/pm-details/pm-progress/pm-log-add/']);
+    this.router.navigate(['./pm/pm-details/pm-log-add/']);
   }
 
 }
