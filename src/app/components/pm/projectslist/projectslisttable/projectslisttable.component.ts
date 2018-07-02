@@ -41,7 +41,7 @@ export class ProjectsListTableComponent implements OnInit {
             completeness: element.health
           };
         });
-        this.projectsListInfo = this.projectsListInfo.filter(p => p.status === 'OPEN');
+        this.projectsListInfo = this.projectsListInfo.filter(p => p.status === 'IN_PROGRESS');
         console.log('projectslist: ', res);
       });
     });
