@@ -13,6 +13,8 @@ export class ProjectManagementService {
   private subject = new Subject<any>();
   saveChangeLog: BehaviorSubject<object> = new BehaviorSubject({});
   progressInternalNoteChange: BehaviorSubject<string> = new BehaviorSubject('');
+  logTitleChange: BehaviorSubject<string> = new BehaviorSubject('');
+  logStatusChange: BehaviorSubject<string> = new BehaviorSubject('');
 
   closeTaskModal = this.closeDetailedTaskModal.asObservable();
   deleteOpenedTask = this.deleteTask.asObservable();

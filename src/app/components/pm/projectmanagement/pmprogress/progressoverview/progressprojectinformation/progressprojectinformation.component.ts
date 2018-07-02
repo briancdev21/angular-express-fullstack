@@ -124,8 +124,10 @@ export class ProgressProjectInformationComponent implements OnInit {
     if (this.currentProjectId !== '') {
       this.sharedService.getUsers().subscribe(response => {
         this.usersList = response;
-        this.items3 = this.items2 = response;
-
+        this.items2 = response;
+        this.items3 = response;
+        console.log('item3 : ', this.items3);
+        
         this.sharedService.getContacts().subscribe(data => {
           this.contactsList = data;
           this.addContactName(this.contactsList);
@@ -306,7 +308,9 @@ export class ProgressProjectInformationComponent implements OnInit {
   }
 
   changeContactIdFormat(id) {
-    const idNumber = id.slice(-1);
+    // id format is PROJECT-PR-4-C-10 so need to split it to get id number
+    const splitedArr = id.split('-');
+    const idNumber = splitedArr[splitedArr.length - 1];
     return parseInt(idNumber, 10);
   }
 

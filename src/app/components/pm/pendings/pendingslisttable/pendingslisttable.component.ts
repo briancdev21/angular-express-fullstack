@@ -35,7 +35,7 @@ export class PendingsListTableComponent implements OnInit {
           element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
           element.timePassed = this.calcTimePassedDays(element.startDate, element.status);
         });
-        this.pendingsListInfo = this.pendingsListInfo.filter(p => p.status === 'IN_PROGRESS');
+        this.pendingsListInfo = this.pendingsListInfo.filter(p => p.status === 'OPEN');
         console.log('pendingprojectslist: ', this.pendingsListInfo);
       });
     });

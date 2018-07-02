@@ -7,7 +7,7 @@
 			</div>
 			<div class="project">
 				<span>Project</span>
-				<input [(ngModel)]="projectId" disabled>
+				<input [(ngModel)]="projectName" disabled>
 			</div>
 		</div>
 		<div class="shipping-address">
@@ -19,30 +19,30 @@
 					<span>Use customer address</span>
 				</div>
 			</div>
-			<input placeholder="Enter Project Address" class="address" [(ngModel)]="address">
+			<input placeholder="Enter Project Address" class="address" [(ngModel)]="address" disabled>
 			<div class="city-state">
-				<input placeholder="Enter City" [(ngModel)]="city">
-				<input placeholder="Enter State" [(ngModel)]="province">
+				<input placeholder="Enter City" [(ngModel)]="city" disabled>
+				<input placeholder="Enter State" [(ngModel)]="province" disabled>
 			</div>
 			<div class="country-zip">
-				<input placeholder="Enter Country" [(ngModel)]="country">
-				<input placeholder="Enter Zipcode" [(ngModel)]="postalCode">
+				<input placeholder="Enter Country" [(ngModel)]="country" disabled>
+				<input placeholder="Enter Zipcode" [(ngModel)]="postalCode" disabled>
 			</div>
 		</div>
 	</div>
 	<div class="content-right" >
 		<div>
 			<span>Change Log ID</span>
-			<input placeholder="Enter Change Log ID" [(ngModel)]="logId">
+			<input placeholder="Enter Change Log ID" [(ngModel)]="logId" disabled>
 		</div>
 		<div>
 			<span>Requested By</span>
 			<!-- select drop down -->
-			<select [(ngModel)]="requestedBy" *ngIf="usersList">
+			<!-- <select [(ngModel)]="requestedBy" *ngIf="usersList">
 				<option value="user.username" *ngFor="let user of usersList">{{user.firstName}} {{user.lastName}}</option>
-			</select>
+			</select> -->
 			<!-- Just input -->
-			<!-- <input placeholder="Requested By" [(ngModel)]="changeLogInfo.requestedBy" disabled> -->
+			<input placeholder="Requested By" [(ngModel)]="requestedBy" disabled>
 
 
 			<!-- ng completer -->
@@ -63,17 +63,19 @@
 		</div>
 		<div class="start-date">
 			<span>Created on</span>
-			<div>
+			<!-- <div>
 				<input [owlDateTimeTrigger]="startDate" [owlDateTime]="startDate"  (dateTimeChange)="onCreatedDate($event)" [(ngModel)]="createdAt" dateA11yLabel>
 				<owl-date-time [pickerType]="'calendar'" #startDate ></owl-date-time>
-			</div>
+			</div> -->
+			<input [(ngModel)]="createdAt" disabled>
 		</div>
 		<div class="end-date">
 			<span>Last Updated</span>
-			<div>
+			<!-- <div>
 				<input [owlDateTimeTrigger]="endDate" [owlDateTime]="endDate" (dateTimeChange)="onUpdatedDate($event)" [(ngModel)]="updatedAt" >
 				<owl-date-time [pickerType]="'calendar'" #endDate ></owl-date-time>
-			</div>
+			</div> -->
+			<input [(ngModel)]="updatedAt" disabled>
 		</div>
 		<div class="switching-icon">
 			<img src="assets/images/switch.png" *ngIf="switchIconPm" (click)="updatePmProfile()">

@@ -2,7 +2,7 @@
   <table class="work-order-table">
     <tr>
       <th (click)="sortArray('projectNumber')">PROJECT #</th>
-      <th (click)="sortArray('projectName')">NAME OF PROJECT</th>
+      <th (click)="sortArray('name')">NAME OF PROJECT</th>
       <th (click)="sortArray('contactId')">CUSTOMER NAME</th>
       <th (click)="sortCreateDateArray('endDate')">DELIVERY DATE</th> 
       <th (click)="sortArray('total')">PROJECT TOTAL</th>
@@ -10,7 +10,7 @@
     </tr>
     <tr *ngFor="let projectslist of projectsListInfo; let i = index" (click)="redirectTo(projectslist.id)">
       <td>{{projectslist.id}}</td>
-      <td>{{projectslist.projectName}}</td>
+      <td>{{projectslist.name}}</td>
       <td><span *ngIf="projectslist.contactId">{{getContactName(projectslist.contactId)}}</span></td>
       <td>{{projectslist.endDate}}</td>
       <td>$ {{projectslist.total | number: '1.2-2'}}</td>

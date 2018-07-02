@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
 import { SharedService } from '../../../../../../services/shared.service';
+import { ProjectsService } from '../../../../../../services/projects.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-addchangelogdetails',
@@ -25,18 +27,70 @@ export class AddChangeLogDetailsComponent implements OnInit {
   contactsList = [];
   usersList = [];
   customerName = '';
-  projectId = '';
+  currentProjectId = '';
   logId = '';
   requestedBy = '';
   ccContact = '';
   createdAt: any;
   updatedAt: any;
   updatePm = false;
+  projectInfo: any;
+  projectName = '';
+  selectedContact; any;
+  createdChangeLog: any;
+  title = '';
+  logStatus = 'NEW';
 
-  constructor( private pmService: ProjectManagementService, private sharedService: SharedService ) {
+  constructor( private projectManagementService: ProjectManagementService, private sharedService: SharedService,
+    private projectsService: ProjectsService ) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
+    const savingMockData = {
+      title: '',
+      description: '',
+      newScopeOfWork: ''
+    };
+
+    this.projectManagementService.saveChangeLog.subscribe(data => {
+      if (data['sendSaveData']) {
+        console.log('save is clicked');
+      }
+    });
+
+    this.projectManagementService.logStatusChange.subscribe(data => {
+      if (data) {
+        this.logStatus = data;
+      }
+    });
+
+    this.projectManagementService.logTitleChange.subscribe(data => {
+      if (data) {
+        this.title = data;
+      }
+    });
+
+    this.projectsService.createProjectChangeLog(this.currentProjectId, savingMockData).subscribe(data => {
+      this.createdChangeLog = data.data;
+      console.log('createdChangeLog', data);
+    });
+
     this.sharedService.getContacts().subscribe(data => {
       this.contactsList = data;
       this.addContactName(this.contactsList);
+
+      this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+        this.projectInfo = res.data;
+        console.log('project info: ', this.currentProjectId, this.projectInfo);
+        this.customerName = this.getContactNameFromId(this.projectInfo.contactId);
+        this.projectName = this.projectInfo.name;
+        this.address = this.projectInfo.shippingAddress.address;
+        this.city = this.projectInfo.shippingAddress.city;
+        this.province = this.projectInfo.shippingAddress.province;
+        this.country = this.projectInfo.shippingAddress.country;
+        this.postalCode = this.projectInfo.shippingAddress.postalCode;
+        this.requestedBy = this.projectInfo.projectManager;
+        this.createdAt = moment(this.projectInfo.createdAt).format('MMMM DD, YYYY');
+        this.updatedAt = moment(this.projectInfo.updatedAt).format('MMMM DD, YYYY');
+      });
     });
 
     this.sharedService.getUsers().subscribe(res => {
@@ -66,17 +120,17 @@ export class AddChangeLogDetailsComponent implements OnInit {
   }
 
   clickIconShipping() {
-    this.switchIconAddress = !this.switchIconAddress;
-    this.changeLogInfo.shippingAddress.address = (this.switchIconAddress) ? this.address :
-    this.changeLogInfo.selectedContact.shippingAddress.city;
-    this.changeLogInfo.shippingAddress.city = (this.switchIconAddress) ? this.city :
-    this.changeLogInfo.selectedContact.shippingAddress.city;
-    this.changeLogInfo.shippingAddress.province = (this.switchIconAddress) ? this.province :
-    this.changeLogInfo.selectedContact.shippingAddress.province;
-    this.changeLogInfo.shippingAddress.country = (this.switchIconAddress) ? this.country :
-    this.changeLogInfo.selectedContact.shippingAddress.country;
-    this.changeLogInfo.shippingAddress.postalCode = (this.switchIconAddress) ? this.postalCode :
-    this.changeLogInfo.selectedContact.shippingAddress.postalCode;
+    // this.switchIconAddress = !this.switchIconAddress;
+    this.address = (this.switchIconAddress) ? this.projectInfo.shippingAddress.address :
+    this.selectedContact.shippingAddress.city;
+    this.city = (this.switchIconAddress) ? this.projectInfo.shippingAddress.city :
+    this.selectedContact.shippingAddress.city;
+    this.province = (this.switchIconAddress) ? this.projectInfo.shippingAddress.province :
+    this.selectedContact.shippingAddress.province;
+    this.country = (this.switchIconAddress) ? this.projectInfo.shippingAddress.country :
+    this.selectedContact.shippingAddress.country;
+    this.postalCode = (this.switchIconAddress) ? this.projectInfo.shippingAddress.postalCode :
+    this.selectedContact.shippingAddress.postalCode;
     this.switchIconAddress = !this.switchIconAddress;
   }
 
@@ -138,6 +192,16 @@ export class AddChangeLogDetailsComponent implements OnInit {
   updatePmProfile() {
     this.switchIconPm = !this.switchIconPm;
     this.updatePm = this.switchIconPm;
+  }
+
+  getContactNameFromId(id) {
+    this.selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return this.selectedContact.name;
+  }
+
+  getCustomerNameFromUsername(username) {
+    const selectedUser = this.usersList.filter(c => c.username === username)[0];
+    return selectedUser.name;
   }
 
 }

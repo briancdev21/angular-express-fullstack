@@ -86,7 +86,7 @@
     <div class="project-manager">
       <span class="title">Project Manager</span>
       <div class="content-info">
-        <div class="followers"  (click)="editablePm=true;$event.stopPropagation()" *ngIf="projectInformation.projectManager" (clickOutside)="closePmEditableModal()"> 
+        <div class="followers"  (click)="editablePm=true;$event.stopPropagation()" *ngIf="projectManagerData" (clickOutside)="closePmEditableModal()"> 
           
             <a [title]='projectManagerData.username' ><img [src]='projectManagerData.pictureURI'  (click)="editablePm=true;$event.stopPropagation()"/></a>
           <div class="edit-followers" *ngIf="editablePm" (click)="editablePm=true; editableAm=false; $event.stopPropagation()" >
