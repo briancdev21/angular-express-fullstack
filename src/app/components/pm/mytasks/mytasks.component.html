@@ -5,8 +5,8 @@
         <div class="panel-title" [ngStyle]="{'background': panel.color}" style="opacity: .7;">
           <span>{{panel.title | uppercase }}</span>
         </div>
-        <div class="panel-content" [dragula]="'dragTask'" [dragulaModel]='panel.tasks'>
-          <div *ngFor="let task of panel.tasks; let j = index;" class="draggable-task">
+        <div id={{i}} class="panel-content" [dragula]="'dragTask'" [dragulaModel]='panel.taskIds'>
+          <div *ngFor="let task of panel.tasks; let j = index;" class="draggable-task" id={{j}}>
             <div class="task-content" *ngIf="!task.isComplete">
               <img *ngIf="task.attachmentImg" src="attachmentImg">
               <div class="task-title">

@@ -175,7 +175,33 @@ export class MyTasksComponent implements OnInit {
   }
 
   private onDropModel(args) {
+    console.log('drop args: ', args);
     const [el, target, source] = args;
+    console.log(el.id);
+    const taskIndex = parseInt(el.id, 10);
+    const targetPanelIndex = parseInt(target.id, 10);
+    const sourcePanelIndex = parseInt(source.id, 10);
+    // const selectedPanel = this.panels.filter(p => p.id === parseInt(source.id, 10))[0];
+    // const selectedTask = selectedPanel.tasks.filter( t => t.id === parseInt(el.id, 10));
+    const selectedTaskData = this.panels[sourcePanelIndex].tasks[taskIndex];
+    console.log('selected drag data: ', selectedTaskData, this.panels);
+    if (target !== source) {
+      this.panels[targetPanelIndex].tasks.push(selectedTaskData);
+    }
+    this.pmTasksService
+    .deleteIndividualtask(this.panels[sourcePanelIndex].id, this.panels[sourcePanelIndex].tasks[taskIndex].id).subscribe(res => {
+      console.log('task deleted: ', res);
+    });
+    const savingData = {
+      'assignee': selectedTaskData.assigneeInfo ? selectedTaskData.assigneeInfo.username : selectedTaskData.assignee,
+      'title': selectedTaskData.taskTitle ? selectedTaskData.taskTitle : selectedTaskData.title,
+      'isImportant': selectedTaskData.isImportant,
+      'isComplete': selectedTaskData.isComplete,
+      'startDate': moment(selectedTaskData.startDate).format('YYYY-MM-DD'),
+    };
+    this.pmTasksService.createTask(this.panels[targetPanelIndex].id, savingData).subscribe(res => {
+      console.log('task created: ', res);
+    });
   }
 
   toggleMenubar(data: boolean) {
