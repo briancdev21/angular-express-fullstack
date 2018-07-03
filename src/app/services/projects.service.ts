@@ -70,7 +70,7 @@ export class ProjectsService {
   }
 
   updateIndividualChangeLog(id, logId, body): Observable<any> {
-    const url = `${apiUrl}inventory/suppliers/${id}/change-logs/${logId}`;
+    const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs/${logId}`;
     return this.http.put(url, body);
   }
 

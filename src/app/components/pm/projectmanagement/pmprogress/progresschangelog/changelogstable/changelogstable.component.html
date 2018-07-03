@@ -21,9 +21,9 @@
       <th (click)="sortCreateDateArray('lastUpdated')">LAST UPDATED</th>
       <th (click)="sortCreateDateArray('dateApproved')">DATE APPROVED</th>
     </tr>
-    <tr *ngFor="let log of changelogListInfo; let i = index" (click)="redirectTo(id)">
-      <td>{{log.logId}}</td>
-      <td>{{log.logName}}</td>
+    <tr *ngFor="let log of changeLogsInfo; let i = index" (click)="redirectTo(id)">
+      <td>{{log.id}}</td>
+      <td>{{log.title}}</td>
       <td>Level {{log.priority}}</td>
       <td>{{log.requestedBy}}</td>
       <td [ngClass]="getBudgetColor(log.budgetImpact)">$ {{getAbs(log.budgetImpact) | number: '1.2-2'}}</td>

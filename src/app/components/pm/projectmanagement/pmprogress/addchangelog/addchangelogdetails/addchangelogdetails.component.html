@@ -58,7 +58,7 @@
 		<div>
 			<span>CC Contact</span>
 			<select [(ngModel)]="ccContact" *ngIf="contactsList">
-				<option value="contact.id" *ngFor="let contact of contactsList">{{contact.name}}</option>
+				<option [value]="contact.id" *ngFor="let contact of contactsList">{{contact.name}}</option>
 			</select>
 		</div>
 		<div class="start-date">

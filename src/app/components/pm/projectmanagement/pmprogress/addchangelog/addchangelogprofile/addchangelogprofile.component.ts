@@ -71,7 +71,7 @@ export class AddChangeLogProfileComponent implements OnInit {
   ];
 
 
-  changeLogStatus = 'NEW';
+  changeLogStatus = 'IN_PROGRESS';
   showConfirmModal = false;
   descriptionChange: any;
   detailsChange: any;
