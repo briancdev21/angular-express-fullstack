@@ -7,11 +7,11 @@
         </div>
         <div class="panel-content" [dragula]="'dragTask'" [dragulaModel]='panel.tasks'>
           <div *ngFor="let task of panel.tasks; let j = index;" class="draggable-task">
-            <div class="task-content">
+            <div class="task-content" *ngIf="!task.isComplete">
               <img *ngIf="task.attachmentImg" src="attachmentImg">
               <div class="task-title">
-                <label class="custom-checkbox"  (click)="completeTask(i, j)" *ngIf="!panel.projectId">
-                  <input type="checkbox" [(ngModel)]="task.complete">
+                <label class="custom-checkbox"  (click)="task.isComplete=!task.isComplete; completeTask(i, j)" *ngIf="!panel.projectId">
+                  <input type="checkbox" [(ngModel)]="task.isComplete">
                   <span class="checkmark"></span>
                 </label>
                
@@ -27,16 +27,16 @@
                   autosize 
                   [minHeight]="30" 
                   [maxHeight]="task.maxHeight"
-                  (keydown.enter)="task.inputShow=false; false" 
-                  (clickOutside)="task.inputShow=false;">
+                  (keydown.enter)="task.inputShow=false; false; updateInfo(i, j);" 
+                  (clickOutside)="task.inputShow=false; updateInfo(i, j);">
                 </textarea>
                 <div (click)="task.inputShow=true; task.maxHeight = 30;  $event.stopPropagation();" *ngIf="!task.inputShow" class="task-title-show">
                   {{task.taskTitle}}
                 </div>
               </div>
               <div class="task-owner">
-                <img src="{{task.assigneeInfo.pictureURI}}" *ngIf="task.assigneeInfo.pictureURI && i == 1" (click)="openOwnerModal(i, j); $event.stopPropagation();">
-                <img *ngIf="!task.assigneeInfo.pictureURI && i == 1" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                <img src="{{task.assigneeInfo.pictureURI}}" *ngIf="task.assigneeInfo.pictureURI && panel.projectId === null" (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                <img *ngIf="!task.assigneeInfo.pictureURI && panel.projectId === null" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();">
                 <span *ngIf="panel.projectId" class="task-path">{{task.taskPath}}</span>
                 <div class="sub-tasks">
 
@@ -51,8 +51,7 @@
                 >
                   <div class="owner-mdl-content">
                     <select [(ngModel)]="selectedOwner" (ngModelChange)="onOwnerSelect($event, i, j)" >
-                      <option [value]="0">Select Task Owner</option>
-                      <option *ngFor="let owner of taskOwners;" [value]="owner.userId">{{owner.name}}</option>
+                      <option *ngFor="let owner of taskOwners;" [value]="owner.username">{{owner.username}}</option>
                     </select>
                   </div>
                 </div>
@@ -60,20 +59,20 @@
               <div class="task-bottom">
                 <div class="due-date" > 
                   <input 
-                    [owlDateTime]="dueDate" 
-                    [owlDateTimeTrigger]="dueDate" 
-                    (dateTimeChange)="selectDueDate($event, i, j)" 
-                    [(ngModel)]="task.dueDate" 
+                    [owlDateTime]="startDate" 
+                    [owlDateTimeTrigger]="startDate" 
+                    (dateTimeChange)="selectStartDate($event, i, j)" 
+                    [(ngModel)]="task.startDate" 
                   >
-                  <owl-date-time [pickerType]="'calendar'" #dueDate></owl-date-time>
-                  <span [owlDateTimeTrigger]="dueDate" [ngClass]="{'due-date-empty': !task.dueDate, 'overDue': checkOverdue(task.dueDate)}">{{task.dueDate}}</span>
+                  <owl-date-time [pickerType]="'calendar'" #startDate></owl-date-time>
+                  <span [owlDateTimeTrigger]="startDate" [ngClass]="{'due-date-empty': !task.startDate, 'overDue': checkOverdue(task.startDate)}">{{task.startDate}}</span>
                 </div>
                 <span class="duration" *ngIf="panel.projectId"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0"> Days</span>
                 <div class="task-actions">
                   <img *ngIf="panel.projectId" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
-                  <img *ngIf="!panel.projectId && task.starred == true" src="assets/images/star.png"  (click)="task.starred = !task.starred">
-                  <img *ngIf="!panel.projectId && task.starred == false" src="assets/images/star-empty.png" (click)="task.starred = !task.starred">
-                  <img *ngIf="panel.projectId || i == 1" src="assets/images/alarm.png" [ngClass]="{'blured': !task.like}" (click)="task.like = !task.like">
+                  <img *ngIf="!panel.projectId && task.isImportant == true" src="assets/images/star.png"  (click)="task.isImportant = !task.isImportant; updateInfo(i, j);">
+                  <img *ngIf="!panel.projectId && task.isImportant == false" src="assets/images/star-empty.png" (click)="task.isImportant = !task.isImportant; updateInfo(i, j);">
+                  <img *ngIf="panel.projectId || panel.projectId === null" src="assets/images/alarm.png" [ngClass]="{'blured': !task.like}" (click)="task.like = !task.like">
                   <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
                   <!--Dependency numbers-->
                   <div *ngIf="panel.projectId" class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">

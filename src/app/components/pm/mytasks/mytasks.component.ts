@@ -48,372 +48,12 @@ export class MyTasksComponent implements OnInit {
     imgUrl: ''
   };
   taskOwners = [
-    {
-      name: 'John Moss',
-      imgUrl: 'assets/users/user1.png',
-      userId: 1
-    },
-    {
-      name: 'Michael',
-      imgUrl: 'assets/users/user3.png',
-      userId: 2
-    },
-    {
-      name: 'Joseph',
-      imgUrl: 'assets/users/user2.png',
-      userId: 3
-    },
   ];
-
-  // panels = [
-  //   {
-  //     title: 'INBOX',
-  //     color: '',
-  //     tasks: [
-  //       {
-  //         id: 1,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-10-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: false,
-  //         attachment: false,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 2,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-15',
-  //         duration: 2,
-  //         dependency: [1],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 3,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [2],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 4,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 5,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 6,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     title: 'ORGANIZATION',
-  //     color: '',
-  //     tasks: [
-  //       {
-  //         id: 1,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 2,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-11-05',
-  //         duration: 2,
-  //         dependency: [1, 2],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 3,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [2],
-  //         like: true,
-  //         attachment: false,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 4,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //     ]
-  //   },
-  //   {
-  //     title: 'PROJECTS',
-  //     color: '',
-  //     tasks: [
-  //       {
-  //         id: 1,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 2,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [1],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 3,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [2],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 4,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 5,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 6,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: false,
-  //         attachmentImg: '',
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 7,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         subTaskCount: 5,
-  //         subTaskComplete: 2,
-  //         starred: false,
-  //         taskPath: ''
-  //       },
-  //       {
-  //         id: 8,
-  //         taskTitle: ' Task title goes here',
-  //         profile: {
-  //           name: 'John Moss',
-  //           imgUrl: 'assets/users/user1.png',
-  //           userId: 1
-  //         },
-  //         progress: 100,
-  //         dueDate: '2017-12-05',
-  //         duration: 2,
-  //         dependency: [],
-  //         like: true,
-  //         attachment: true,
-  //         attachmentImg: '',
-  //         starred: false,
-  //         taskPath: ''
-  //       }
-  //     ]
-  //   },
-  // ] as MyTasksModel[];
 
   panels = [];
   usersList = [];
   contactsList = [];
+  addedNewTask: any;
 
   constructor( private dragulaService: DragulaService, private fb: FormBuilder, private renderer: Renderer,
     private pmTasksService: PmTasksService, private sharedService: SharedService ) {
@@ -439,7 +79,7 @@ export class MyTasksComponent implements OnInit {
 
       this.sharedService.getUsers().subscribe(users => {
         this.usersList = users;
-
+        this.taskOwners = users;
         this.refreshTable();
       });
     });
@@ -466,8 +106,8 @@ export class MyTasksComponent implements OnInit {
       for (let j = 0; j < this.panels[i].tasks.length; j++) {
         // this.ownerModalCollapsed[i][j] = false;
         // this.dependencyModalCollapsed[i][j] = false;
-        const date = new Date (this.panels[i].tasks[j].dueDate);
-        this.panels[i].tasks[j].dueDate = new Intl.DateTimeFormat('en-US', options).format(date);
+        const date = new Date (this.panels[i].tasks[j].startDate);
+        this.panels[i].tasks[j].startDate = moment(date).format('MMMM DD, YYYY');
       }
     }
     this.selectedOwner = 0;
@@ -483,7 +123,6 @@ export class MyTasksComponent implements OnInit {
   refreshTable() {
     this.pmTasksService.getTaskGroups().subscribe(data => {
       this.panels = data.results;
-      console.log('panels: ', data);
       for (let i = 0; i < this.panels.length; i++) {
         this.panels[i].color = this.colors[i];
         this.ownerModalCollapsed[i] = new Array();
@@ -496,9 +135,10 @@ export class MyTasksComponent implements OnInit {
 
               this.ownerModalCollapsed[i][j] = false;
               this.dependencyModalCollapsed[i][j] = false;
-              console.log('tasks data: ', taskData);
               this.panels[i].tasks.forEach(element => {
                 element.assigneeInfo = this.getUserInfo(element.assignee);
+                element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+                element.taskTitle = element.title;
               });
             });
           }
@@ -524,12 +164,13 @@ export class MyTasksComponent implements OnInit {
     return foreTaskCount + this.panels[panel].tasks[task].id;
   }
 
-  selectDueDate(event, i, j) {
+  selectStartDate(event, i, j) {
+    this.updateInfo(i, j);
     // this.dDate = event.value;
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const dDate = new Intl.DateTimeFormat('en-US', options).format(event.value);
     // Add dDate field to panel info and update it with formatted date.
-    this.panels[i].tasks[j].dueDate = dDate;
+    this.panels[i].tasks[j].startDate = dDate;
 
   }
 
@@ -542,25 +183,12 @@ export class MyTasksComponent implements OnInit {
   }
 
   addTask(panel) {
-    const newTask = {
-      id: 1 + panel.tasks.length,
-      taskTitle: '',
-      assigneeInfo: {
-        name: '',
-        imgUrl: '',
-        userId: undefined
-      },
-      progress: 0,
-      dueDate: '',
-      duration: 0,
-      dependency: [],
-      like: false,
-      attachment: false,
-      attachmentImg: '',
-      taskPath: 'John Moss > Remodel with a Nu Life',
-      starred: false
+    const newMockTask = {
+      title: ''
     };
-    this.panels.filter(m => m.title === panel.title)[0].tasks.push(newTask);
+    this.pmTasksService.createTask(panel.id, newMockTask).subscribe(res => {
+      this.refreshTable();
+    });
   }
 
   addNewPanel() {
@@ -579,7 +207,6 @@ export class MyTasksComponent implements OnInit {
       this.newPanelTitle = '';
       this.addPanelClicked = !this.addPanelClicked;
       this.pmTasksService.createTaskGroup(newPanel).subscribe(res => {
-        console.log('new panel created: ', res);
         this.refreshTable();
       });
     }
@@ -594,7 +221,9 @@ export class MyTasksComponent implements OnInit {
   }
 
   onOwnerSelect(event, panel, task ) {
-    this.panels[panel].tasks[task].assigneeInfo = this.taskOwners[this.selectedOwner - 1];
+    const selectedUser = this.usersList.filter(u => u.username === event)[0];
+    this.panels[panel].tasks[task].assigneeInfo = selectedUser;
+    this.updateIndividualTask(this.panels[panel].id, this.panels[panel].tasks[task].id);
   }
 
   openOwnerModal(i, j) {
@@ -641,17 +270,22 @@ export class MyTasksComponent implements OnInit {
   completeTask (i, j) {
     // add item to completed list
     this.completedTasksList.push(this.panels[i].tasks[j]);
+    this.updateIndividualTask(this.panels[i].id, this.panels[i].tasks[j].id);
     // remove item from column
     this.panels[i].tasks.splice(j, 1);
   }
 
   checkInput(i, j, event, title) {
-    console.log('8888', event.target.offsetWidth, title.length);
+    // console.log('8888', event.target.offsetWidth, title.length);
     if (title.length * 8 - event.target.offsetWidth > 0) {
       this.panels[i].tasks[j].maxHeight = 54;
     } else {
       this.panels[i].tasks[j].maxHeight = 30;
     }
+  }
+
+  updateInfo(i, j) {
+    this.updateIndividualTask(this.panels[i].id, this.panels[i].tasks[j].id);
   }
 
   removeFocus(event) {
@@ -686,5 +320,20 @@ export class MyTasksComponent implements OnInit {
   getUserInfo(username) {
     const selectedUser = this.usersList.filter(u => u.username === username)[0];
     return selectedUser;
+  }
+
+  updateIndividualTask(panelId, taskId) {
+    const selectedPanel = this.panels.filter(p => p.id === panelId)[0];
+    const selectedTask = selectedPanel.tasks.filter(t => t.id === taskId)[0];
+    const savingData = {
+      'assignee': selectedTask.assigneeInfo ? selectedTask.assigneeInfo.username : selectedTask.assignee,
+      'title': selectedTask.taskTitle ? selectedTask.taskTitle : selectedTask.title,
+      'isImportant': selectedTask.isImportant,
+      'isComplete': selectedTask.isComplete,
+      'startDate': moment(selectedTask.startDate).format('YYYY-MM-DD'),
+    };
+    this.pmTasksService.updateIndividualTask(panelId, taskId, savingData).subscribe(res => {
+      console.log('task updated: ', res);
+    });
   }
 }
