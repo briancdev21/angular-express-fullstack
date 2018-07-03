@@ -14,6 +14,8 @@ import * as moment from 'moment';
 })
 export class AddChangeLogDetailsComponent implements OnInit {
 
+  @Input() descriptionChange;
+  @Input() detailsChange;
   changeLogInfo: any;
   switchIconAddress = false;
   switchIconPm = false;
@@ -39,7 +41,7 @@ export class AddChangeLogDetailsComponent implements OnInit {
   selectedContact; any;
   createdChangeLog: any;
   title = '';
-  logStatus = 'NEW';
+  logStatus = 'IN_PROGRESS';
 
   constructor( private projectManagementService: ProjectManagementService, private sharedService: SharedService,
     private projectsService: ProjectsService ) {
@@ -51,8 +53,25 @@ export class AddChangeLogDetailsComponent implements OnInit {
     };
 
     this.projectManagementService.saveChangeLog.subscribe(data => {
+
       if (data['sendSaveData']) {
+        let savingData = {
+          'additionalContactId': this.ccContact ? parseInt(this.ccContact, 10) : this.createdChangeLog.contactId,
+          'title': this.title,
+          'useContactAddress': this.switchIconAddress,
+          'updateProjectManager': this.switchIconPm,
+          'description': this.descriptionChange ? this.descriptionChange : this.createdChangeLog.description,
+          'newScopeOfWork': this.detailsChange ? this.detailsChange : this.createdChangeLog.newScopeOfWork,
+          'status': this.logStatus
+        };
+
+        // savingData.keys(obj).forEach(k => (!obj[k] && obj[k] !== undefined) && delete obj[k]);
+        savingData = JSON.parse(JSON.stringify(savingData));
         console.log('save is clicked');
+        this.projectsService.updateIndividualChangeLog(this.currentProjectId, this.createdChangeLog.id, savingData)
+          .subscribe(res => {
+            console.log('updated : ', res);
+          });
       }
     });
 

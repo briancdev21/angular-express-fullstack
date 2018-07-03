@@ -71,13 +71,14 @@ export class AddChangeLogProfileComponent implements OnInit {
   ];
 
 
-  changeLogStatus = 'NEW';
+  changeLogStatus = 'IN_PROGRESS';
   showConfirmModal = false;
   descriptionChange: any;
   detailsChange: any;
   usersList = [];
   currentProjectId: any;
   currentChangeLogId: any;
+  title: string;
 
   constructor( private projectManagementService: ProjectManagementService, private router: Router, private sharedService: SharedService,
     private projectsService: ProjectsService, private route: ActivatedRoute ) {

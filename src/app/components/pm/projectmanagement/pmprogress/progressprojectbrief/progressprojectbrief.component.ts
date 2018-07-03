@@ -27,7 +27,6 @@ export class ProgressProjectBriefComponent implements OnInit {
       this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
         this.projectInfo = res.data;
         this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
-        console.log('indi project: ', this.projectInfo);
       });
     });
   }
@@ -53,7 +52,6 @@ export class ProgressProjectBriefComponent implements OnInit {
   }
 
   onChangeInternalNotes(event) {
-    console.log('internal notes: ', event);
     this.projectManagementService.progressInternalNoteChange.next(event);
   }
 }

@@ -98,7 +98,6 @@ export class ProgressOverviewComponent implements OnInit {
       this.actualBudgetOverTime = res.actualProjectBugdetOverTime;
       this.sharedService.getProjectsStatistics(11, 0, 'MONTHLY', 'estimatedProjectBugdetOverTime').subscribe(data => {
         this.estimatedBudgetOverTime = data.estimatedProjectBugdetOverTime;
-        console.log('333333', this.actualBudgetOverTime, this.estimatedBudgetOverTime);
         for (let i = 0; i < this.estimatedBudgetOverTime.length; i ++) {
           const combinedData = {
             period: this.estimatedBudgetOverTime[i].frameUnit.toUpperCase().slice(0, 3),
@@ -112,7 +111,6 @@ export class ProgressOverviewComponent implements OnInit {
 
     this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'projectTasksDueToday').subscribe(res => {
       this.dueToday = res.projectTasksDueToday;
-      console.log('duetoday: ', res);
     });
 
     this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'projectTasksDueThisWeek').subscribe(res => {
@@ -140,7 +138,6 @@ export class ProgressOverviewComponent implements OnInit {
             title: 'Project health is at ' + this.projectInfo.health + '%',
             completeness: this.projectInfo.health,
           };
-          console.log('indi project: ', this.projectInfo);
         });
 
       });

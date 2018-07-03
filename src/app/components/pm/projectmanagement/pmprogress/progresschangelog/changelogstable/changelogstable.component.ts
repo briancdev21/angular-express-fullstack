@@ -17,39 +17,6 @@ import { ProjectsService } from '../../../../../../services/projects.service';
 export class ChangeLogsTableComponent implements OnInit {
 
   changelogListInfo: Array<Object> = [
-    {
-      logId: 'CL0159-01',
-      logName: 'Changing of the TV location in Living Room',
-      priority: 1,
-      requestedBy: 'Sepehr Shoarinejad',
-      budgetImpact: 2000,
-      scheduleImpact: -14,
-      dateCreated: 'November 20, 2016',
-      lastUpdated: 'January 20, 2017',
-      dateApproved: 'January 20, 2017',
-    },
-    {
-      logId: 'CL0159-02',
-      logName: 'Customer constantly changing his mind',
-      priority: 1,
-      requestedBy: 'Sepehr Shoarinejad',
-      budgetImpact: -2000,
-      scheduleImpact: 2,
-      dateCreated: 'December 15, 2016',
-      lastUpdated: 'March 20, 2017',
-      dateApproved: 'April 20, 2017',
-    },
-    {
-      logId: 'CL0159-03',
-      logName: 'I don\'t know what to do anymore',
-      priority: 1,
-      requestedBy: 'Tyler Labonte',
-      budgetImpact: 3500,
-      scheduleImpact: 4,
-      dateCreated: 'January 20, 2016',
-      lastUpdated: 'June 20, 2017',
-      dateApproved: 'June 20, 2017',
-    },
   ];
   sortClicked = true;
   clicked = false;
@@ -65,8 +32,12 @@ export class ChangeLogsTableComponent implements OnInit {
         this.usersList = data;
         this.addUserRealName(this.usersList);
         this.projectsService.getProjectChangeLogs(this.currentProjectId).subscribe(res => {
-
           this.changeLogsInfo = res.results;
+          this.changeLogsInfo.forEach(ele => {
+            ele['dateCreated'] = moment(ele['createdAt']).format('MMMM DD, YYYY');
+            ele['lastUpdated'] = moment(ele['updatedAt']).format('MMMM DD, YYYY');
+            ele['dateApproved'] = ele['approvedAt'] ? moment(ele['createdAt']).format('MMMM DD, YYYY') : '';
+          });
           if (res.data) {
             this.changeLogsInfo.customerName = this.getCustomerNameFromUsername(res.data.contactId);
           }
