@@ -1,14 +1,13 @@
 <div class="title-sec">
-  <span class="title">Changing of the TV location in Living Room</span>
-  <select [(ngModel)]="changeLogStatus">
-    <option value="NEW">NEW</option>
+  <input class="title" [(ngModel)]="title" (ngModelChange)="onChangeTitle($event)" placeholder="Type Change log title here">
+  <select [(ngModel)]="changeLogStatus" (ngModelChange)="onChangeStatus($event)">
     <option value="IN_PROGRESS">IN PROGRESS</option>
     <option value="REJECTED">NOT APPROVED</option>
     <option value="APPROVED">APPROVED</option>
   </select>
 </div>
 <div class="detailed-profile-info">
-  <app-changelogdetails [changeLogList]="changeLogList" [changeLogInfo]="changeLogInfo"></app-changelogdetails>
+  <app-changelogdetails [descriptionChange]="descriptionChange" [detailsChange]="detailsChange"></app-changelogdetails>
 </div>
 <div class="btn-sec">
   <div class="create-btns" (click)="showConfirmModal=true">CREATE ESTIMATE</div>
@@ -30,7 +29,7 @@
   </div>
 </div>
 
-<div class="log-list">
+<div class="log-list" *ngIf="changeLogList">
   <div>CHANGE LOG LIST</div>
   <app-changeloglisttable [changeLogList]="changeLogList" [changeLogInfo]="changeLogInfo"></app-changeloglisttable>
 </div>

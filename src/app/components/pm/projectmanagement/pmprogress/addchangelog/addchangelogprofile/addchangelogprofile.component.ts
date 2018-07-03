@@ -78,6 +78,7 @@ export class AddChangeLogProfileComponent implements OnInit {
   usersList = [];
   currentProjectId: any;
   currentChangeLogId: any;
+  title: string;
 
   constructor( private projectManagementService: ProjectManagementService, private router: Router, private sharedService: SharedService,
     private projectsService: ProjectsService, private route: ActivatedRoute ) {

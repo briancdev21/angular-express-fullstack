@@ -37,23 +37,10 @@
 		</div>
 		<div>
 			<span>Requested By</span>
-			<!-- select drop down -->
-			<!-- <select [(ngModel)]="requestedBy" *ngIf="usersList">
-				<option value="user.username" *ngFor="let user of usersList">{{user.firstName}} {{user.lastName}}</option>
-			</select> -->
+
 			<!-- Just input -->
 			<input placeholder="Requested By" [(ngModel)]="requestedBy" disabled>
 
-
-			<!-- ng completer -->
-			<!-- <div class="text-autocomp">
-        <app-ng2completer 
-          [itemsList]="customersList" 
-          (selectedItem)="onSelectRequestCustomer($event)" 
-          class="contact-content-info"
-          [searchStr]="selectAssociation">
-        </app-ng2completer>
-      </div> -->
 		</div>
 		<div>
 			<span>CC Contact</span>
@@ -63,10 +50,7 @@
 		</div>
 		<div class="start-date">
 			<span>Created on</span>
-			<!-- <div>
-				<input [owlDateTimeTrigger]="startDate" [owlDateTime]="startDate"  (dateTimeChange)="onCreatedDate($event)" [(ngModel)]="createdAt" dateA11yLabel>
-				<owl-date-time [pickerType]="'calendar'" #startDate ></owl-date-time>
-			</div> -->
+
 			<input [(ngModel)]="createdAt" disabled>
 		</div>
 		<div class="end-date">

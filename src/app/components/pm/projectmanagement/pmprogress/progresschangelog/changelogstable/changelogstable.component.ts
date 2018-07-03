@@ -32,7 +32,6 @@ export class ChangeLogsTableComponent implements OnInit {
         this.usersList = data;
         this.addUserRealName(this.usersList);
         this.projectsService.getProjectChangeLogs(this.currentProjectId).subscribe(res => {
-          console.log('change log list: ', res);
           this.changeLogsInfo = res.results;
           this.changeLogsInfo.forEach(ele => {
             ele['dateCreated'] = moment(ele['createdAt']).format('MMMM DD, YYYY');

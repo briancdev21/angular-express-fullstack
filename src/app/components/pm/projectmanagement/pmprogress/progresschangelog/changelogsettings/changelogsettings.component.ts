@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
+import { ProjectsService } from '../../../../../../services/projects.service';
 
 @Component({
   selector: 'app-changelogsettings',
@@ -14,8 +15,13 @@ export class ChangeLogSettingsComponent {
   settingsCollapsed = true;
   showReminderModal = false;
   switchOn = false;
+  currentProjectId: any;
+  currentChangeLogId: any;
 
-  constructor(private router: Router, private projectManagementService: ProjectManagementService) {
+  constructor(private router: Router, private projectManagementService: ProjectManagementService, private route: ActivatedRoute,
+    private projectsService: ProjectsService) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
+    this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
   }
 
   saveChangeLog() {
@@ -33,5 +39,10 @@ export class ChangeLogSettingsComponent {
 
   onClickSendCustomer() {
     this.switchOn = !this.switchOn;
+    if (this.switchOn) {
+      this.projectsService.sendChangeLogEmail(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
+        console.log('email sent: ', res);
+      });
+    }
   }
 }

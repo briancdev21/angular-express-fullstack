@@ -94,4 +94,8 @@ export class ProjectsService {
     return this.http.put(url, body);
   }
 
+  sendChangeLogEmail(id, logId): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs/${logId}/email`;
+    return this.http.get(url);
+  }
 }
