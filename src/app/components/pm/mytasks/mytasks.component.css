@@ -484,7 +484,7 @@
   outline: none;
 }
 
-.task-title textarea:placeholder {
+.task-title textarea::placeholder {
   color: #D3D3D3;
 } 
 
@@ -498,6 +498,7 @@
   text-align: left;
   color: #95989a;
   height: 25px;
+  /* border-bottom: 1px solid lightgray; */
 }
 
 .overDue {
