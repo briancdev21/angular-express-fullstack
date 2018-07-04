@@ -139,6 +139,7 @@ export class MyTasksComponent implements OnInit {
                 element.assigneeInfo = this.getUserInfo(element.assignee);
                 element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
                 element.taskTitle = element.title;
+                element.dependency = element.dependencyIds ? element.dependencyIds : [];
               });
             });
           }
