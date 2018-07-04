@@ -38,7 +38,7 @@ export class PmFinancialsComponent implements OnInit {
     },
   ];
 
-  costType = 'amount';
+  costType = 'AMOUNT';
   additionalCosts = [];
   budgetList = [];
   checkOverdue = [];
@@ -58,6 +58,7 @@ export class PmFinancialsComponent implements OnInit {
   currentProjectId: any;
   projectInfo: any;
   contactsList: any;
+  summaryInfo: any;
 
   constructor( private pmService: PmService, private router: Router, private sharedService: SharedService,
     private projectsService: ProjectsService, private route: ActivatedRoute ) {
@@ -74,8 +75,30 @@ export class PmFinancialsComponent implements OnInit {
           // Initial cost total
           this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.inventoryCost + this.projectInfo.labourCost;
           console.log('indi project: ', this.projectInfo);
-        });
+          this.projectsService.getProjectCostSummary(this.currentProjectId).subscribe( response => {
+            this.summaryInfo = response.results;
+            this.projectInfo.purchaseOrderTotal = this.summaryInfo[0].amount;
+            console.log('cost summary: ', response);
+          });
 
+          this.projectsService.getProjectBudget(this.currentProjectId).subscribe( response => {
+            this.budgetList = response.results;
+            this.budgetList.forEach(element => {
+              element.date = moment(element.createdAt).format('MMMM, YYYY');
+            });
+            console.log('budget: ', response);
+          });
+
+          this.projectsService.getProjectPaymentSchedule(this.currentProjectId).subscribe( response => {
+            const paymentScheduleData = response.results;
+            paymentScheduleData.forEach(element => {
+              if (element.date) {
+                element.date = moment(element.createdAt).format('MMMM, YYYY');
+              }
+            });
+            console.log('budget: ', response);
+          });
+        });
       });
     } else {
       console.error('product id error');
@@ -97,7 +120,7 @@ export class PmFinancialsComponent implements OnInit {
 
   addCost(costTitle, costType, costAmount) {
     if (costTitle && costType && costAmount) {
-      if (costType === 'percent') {
+      if (costType === 'PERCENT') {
         costAmount = this.projectInfo.totalBudget * costAmount / 100;
         this.additionalCosts.push({
           'title': costTitle,
@@ -109,6 +132,17 @@ export class PmFinancialsComponent implements OnInit {
           'value': costAmount
         });
       }
+
+      const savingCostData = {
+        'name': costTitle,
+        'value': costAmount,
+        'unit': costType
+      };
+
+      this.projectsService.createProjectCostSummary(this.currentProjectId, savingCostData).subscribe(res => {
+        console.log('new cost summary: ', res);
+      });
+
       // calc cost total
       const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
         return prev + cur.value;
@@ -126,6 +160,9 @@ export class PmFinancialsComponent implements OnInit {
   }
 
   removeAddtional(index) {
+    this.projectsService.deleteIndividualProjectCostSummary(this.currentProjectId, this.additionalCosts[index].id).subscribe(res => {
+      console.log('budgetdeleted : ', res);
+    });
     this.additionalCosts.splice(index, 1);
     const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
       return prev + cur.value;
@@ -146,7 +183,14 @@ export class PmFinancialsComponent implements OnInit {
       if (budgetDate && budgetAmount) {
         this.budgetList.push({
           'date': budgetDate,
-          'value': budgetAmount
+          'amount': budgetAmount
+        });
+        const savingData = {
+          'date': moment(budgetDate).format('YYYY-MM-DD'),
+          'amount': budgetAmount
+        };
+        this.projectsService.createProjectBudget(this.currentProjectId, savingData).subscribe(res => {
+          console.log('budgetCreated : ', res);
         });
         // calc unused budget
         this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
@@ -169,10 +213,13 @@ export class PmFinancialsComponent implements OnInit {
   }
 
   removeBudget(index) {
+    this.projectsService.deleteIndividualProjectBudget(this.currentProjectId, this.budgetList[index].id).subscribe(res => {
+      console.log('budgetdeleted : ', res);
+    });
     this.budgetList.splice(index, 1);
     // calc unused budget
     this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
-      return prev + cur.value;
+      return prev + cur.amount;
     }, 0);
   }
 

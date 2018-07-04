@@ -82,7 +82,7 @@
         <div *ngFor="let budget of budgetList; let i = index" class="addtianal-schedule">
           <div class="cost-default-value">
             <span>{{budget.date}}</span>
-            <span>${{budget.value | number: '1.2-2'}}</span>
+            <span>${{budget.amount | number: '1.2-2'}}</span>
           </div>
           <img src="assets/images/error.png" (click)="removeBudget(i)">
         </div>
