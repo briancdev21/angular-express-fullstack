@@ -50,7 +50,7 @@
     <img class="close-btn" src="assets/images/x-sign-red.png" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false" />
   </div>
 
-  <div class="content" >
+  <div class="content" *ngIf="proposalInfo">
     <tabs>
       <tab tabTitle="CLIENT DETAILS" [(active)]="tabActiveFirst">
         <div class="tab-one">

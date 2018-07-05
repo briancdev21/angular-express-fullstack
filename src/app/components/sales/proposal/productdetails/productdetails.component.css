@@ -157,6 +157,11 @@ th:last-child {
 	background: transparent;
 }
 
+.products-table {
+	height: 500px;
+	overflow: auto;
+}
+
 .btn-insert-project {
 	width: 100%;
 	color: #646464;
@@ -266,7 +271,7 @@ span {
 	width: 95px;
 	outline: none;
 	box-shadow: inset #99f3db 0 0 1px 1px;
-	margin: 5px;
+	margin: 20px;
 	color: gray;
 }
 
@@ -280,6 +285,7 @@ span {
 	outline: none;
 	margin: 5px;
 	color: gray;
+	margin-top: 20px;
 }
 
 .done-btn:focus {
@@ -401,6 +407,7 @@ span {
 	border: 0;
 	padding: 0;
 	margin: 0;
+	outline: none;
 }
 
 .check-box {
