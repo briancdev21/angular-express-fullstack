@@ -45,13 +45,9 @@ export class AddEstimateFooterComponent {
 
     }
 
-    cancelInvoice() {
-      const invoiceId = this.createdInvoice.id;
-      this.estimatesService.deleteIndividualEstimate(invoiceId).subscribe(res => {
-        console.log('delete success:', res);
-        this.router.navigate(['./sales/invoices']);
-      });
-    }
+  cancelInvoice() {
+    this.router.navigate(['./sales/invoices']);
+  }
 
   saveInvoice() {
     const chargeFeeData = {
