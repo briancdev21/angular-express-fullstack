@@ -70,16 +70,15 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService, private sharedService: SharedService ) {
     this.selectedData = this.productsInfoAll || [];
-    this.searchableList = ['productName', 'model'];
+    this.searchableList = ['name', 'model'];
     this.onSelect('all');
-    this.productsService.getProductsList().subscribe(res => {
-      console.log('123', res);
+    this.productsService.getProductCatalog().subscribe(res => {
+      console.log('catalog items', res);
       this.productsInfoAll = res.results;
     });
 
     this.sharedService.getProductTypes().subscribe(res => {
       this.productType = res.results;
-      console.log('product types:', res);
     });
   }
 
@@ -122,13 +121,11 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onSelect(val) {
-    console.log('select val', val);
     if (val === 'all') {
       this.selectedData = this.productsInfoAll;
     } else {
       this.selectedData = this.productsInfoAll.filter(x => x.productTypeId == val);
     }
-    console.log('select val', this.selectedData);
   }
 
   ngOnInit() {
@@ -190,35 +187,36 @@ export class ProductDetailsComponent implements OnInit {
 
   addToAccessories(product) {
     if (!this.addedAccList.map(a => a.skuNumber).includes(product.sku)) {
-      this.addedAcc = {
-        skuNumber: product.sku,
-        productName: product.productName,
-        modelNumber: product.model,
-        brand: product.brand,
-        qty: product.qty,
-        friendPrice: product.total,
-        optionType: product.option
-      };
-      this.addedAccList.push(this.addedAcc);
+      // this.addedAcc = {
+      //   sku: product.sku,
+      //   name: product.name,
+      //   model: product.model,
+      //   brand: product.brand,
+      //   qty: product.qty,
+      //   price: product.price,
+      //   optionType: product.option
+      // };
+      product.option = 'OPTIONAL';
+      this.addedAccList.push(product);
     }
   }
 
   addToAlternatives(product) {
     if (!this.addedAlterList.map(a => a.skuNumber).includes(product.sku)) {
-      this.addedAlter = {
-        skuNumber: product.sku,
-        productName: product.productName,
-        modelNumber: product.model,
-        brand: product.brand,
-        qty: product.qty,
-        friendPrice: product.total
-      };
-      this.addedAlterList.push(this.addedAlter);
+      // this.addedAlter = {
+      //   sku: product.sku,
+      //   name: product.name,
+      //   model: product.model,
+      //   brand: product.brand,
+      //   qty: product.qty,
+      //   price: product.price
+      // };
+      this.addedAlterList.push(product);
     }
   }
 
   getSkuCheckColor(acc) {
-    if (acc.optionType === 'Optional') {
+    if (acc.option === 'OPTIONAL') {
       return 'gray';
     } else {
       return 'green';
