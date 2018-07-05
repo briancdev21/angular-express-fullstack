@@ -18,24 +18,6 @@ export class PmFinancialsComponent implements OnInit {
   menuCollapsed: any;
 
   paymentSchedule = [
-    {
-      id: 1,
-      date: '2016-12-12',
-      percent: 50,
-      amount: 10000
-    },
-    {
-      id: 2,
-      date: '2018-5-12',
-      percent: 30,
-      amount: 6500
-    },
-    {
-      id: 3,
-      date: '2018-12-5',
-      percent: 20,
-      amount: 3500
-    },
   ];
 
   costType = 'AMOUNT';
@@ -90,10 +72,13 @@ export class PmFinancialsComponent implements OnInit {
           });
 
           this.projectsService.getProjectPaymentSchedule(this.currentProjectId).subscribe( response => {
-            const paymentScheduleData = response.results;
-            paymentScheduleData.forEach(element => {
+            this.paymentSchedule = response.results;
+            console.log('budget: ', response);
+            this.paymentSchedule.forEach(element => {
               if (element.date) {
-                element.date = moment(element.createdAt).format('MMMM, YYYY');
+                element.date = moment(element.date).format('MMMM DD, YYYY');
+              } else {
+                element.date = 'set due date';
               }
             });
             console.log('budget: ', response);
@@ -236,10 +221,13 @@ export class PmFinancialsComponent implements OnInit {
     this.costAmount = undefined;
   }
 
-  selectScheduleDate(event, pos) {
+  selectScheduleDate(event, pos, schedule) {
     const updatedDate = moment(event.value).format('YYYY-MM-DD');
-    this.scheduleDateList[pos] = moment(event.value).format('MMMM DD, YYYY');
+    // this.scheduleDateList[pos] = moment(event.value).format('MMMM DD, YYYY');
     this.paymentSchedule[pos].date = updatedDate;
+    this.projectsService.updateProjectPaymentSchedule(this.currentProjectId, schedule.id, updatedDate).subscribe(res => {
+      console.log('updated schedule : ', res);
+    });
   }
 
   startProject() {

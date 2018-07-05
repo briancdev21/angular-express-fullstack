@@ -97,16 +97,18 @@
         <div *ngFor="let schedule of paymentSchedule; let i = index" class="addtianal-schedule">
           <div class="cost-default-value">
             <div>
-              <input 
-                [owlDateTime]="scheduleDate" 
-                [owlDateTimeTrigger]="scheduleDate" 
-                (dateTimeChange)="selectScheduleDate($event, i)"
-                [disabled]="checkOverdue[i]"
-                [min]="today"
-              >
-              <owl-date-time [pickerType]="'calendar'" #scheduleDate [disabled]="checkOverdue[i]"></owl-date-time>
-              <span *ngIf="checkOverdue" [owlDateTimeTrigger]="scheduleDate" class="schedule-date">{{scheduleDateList[i]}}</span>
-              <span class="schedule-percent">{{schedule.percent}}% of Proposal</span>
+              <div>
+                <input 
+                  [owlDateTime]="scheduleDate" 
+                  [owlDateTimeTrigger]="scheduleDate" 
+                  (dateTimeChange)="selectScheduleDate($event, i, schedule)"
+                  [disabled]="checkOverdue[i]"
+                  [min]="today"
+                >
+                <owl-date-time [pickerType]="'calendar'" #scheduleDate [disabled]="checkOverdue[i]"></owl-date-time>
+              </div>
+              <span *ngIf="checkOverdue" [owlDateTimeTrigger]="scheduleDate" class="schedule-date">{{schedule.date}}</span>
+              <span class="schedule-percent">{{schedule.revenuePercent}}% of Proposal</span>
             </div>
             <span>${{schedule.amount | number: '1.2-2'}}</span>
           </div>

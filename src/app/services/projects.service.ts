@@ -89,7 +89,7 @@ export class ProjectsService {
 
   updateProjectPaymentSchedule (id, scheduleId, body): Observable<any> {
     const url = `${environment.apiUrl}/project-management/projects/${id}/payment-schedule/${scheduleId}`;
-    return this.http.post(url, body, this.options)
+    return this.http.put(url, body, this.options)
       .map((res) => res);
   }
 
