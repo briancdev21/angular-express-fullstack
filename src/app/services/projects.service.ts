@@ -38,6 +38,8 @@ export class ProjectsService {
     return this.http.get(url);
   }
 
+// Financials start
+
   getProjectCostSummary (id): Observable<any> {
     const url = `${environment.apiUrl}/project-management/projects/${id}/cost-summaries`;
     return this.http.get(url);
@@ -53,6 +55,50 @@ export class ProjectsService {
     const url = `${environment.apiUrl}/project-management/projects/${id}/cost-summaries/${summaryId}`;
     return this.http.delete(url);
   }
+
+  getProjectIndividualCostSummary (id, summaryId): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/cost-summaries/${summaryId}`;
+    return this.http.get(url);
+  }
+
+  getProjectBudget (id): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/budgets`;
+    return this.http.get(url);
+  }
+
+  createProjectBudget (id, body): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/budgets`;
+    return this.http.post(url, body, this.options)
+      .map((res) => res);
+  }
+
+  deleteIndividualProjectBudget(id, budgetId): Observable<any>  {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/budgets/${budgetId}`;
+    return this.http.delete(url);
+  }
+
+  getProjectIndividualBudget (id, budgetId): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/budgets/${budgetId}`;
+    return this.http.get(url);
+  }
+
+  getProjectPaymentSchedule (id): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/payment-schedule`;
+    return this.http.get(url);
+  }
+
+  updateProjectPaymentSchedule (id, scheduleId, body): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/payment-schedule/${scheduleId}`;
+    return this.http.put(url, body, this.options)
+      .map((res) => res);
+  }
+
+  getProjectIndividualPaymentSchedule (id, scheduleId): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/payment-schedule/${scheduleId}`;
+    return this.http.get(url);
+  }
+
+// financials end
 
   getProjectChangeLogs (id): Observable<any> {
     const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs`;

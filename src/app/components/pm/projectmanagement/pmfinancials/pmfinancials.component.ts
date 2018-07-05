@@ -18,27 +18,9 @@ export class PmFinancialsComponent implements OnInit {
   menuCollapsed: any;
 
   paymentSchedule = [
-    {
-      id: 1,
-      date: '2016-12-12',
-      percent: 50,
-      amount: 10000
-    },
-    {
-      id: 2,
-      date: '2018-5-12',
-      percent: 30,
-      amount: 6500
-    },
-    {
-      id: 3,
-      date: '2018-12-5',
-      percent: 20,
-      amount: 3500
-    },
   ];
 
-  costType = 'amount';
+  costType = 'AMOUNT';
   additionalCosts = [];
   budgetList = [];
   checkOverdue = [];
@@ -58,6 +40,7 @@ export class PmFinancialsComponent implements OnInit {
   currentProjectId: any;
   projectInfo: any;
   contactsList: any;
+  summaryInfo: any;
 
   constructor( private pmService: PmService, private router: Router, private sharedService: SharedService,
     private projectsService: ProjectsService, private route: ActivatedRoute ) {
@@ -74,8 +57,33 @@ export class PmFinancialsComponent implements OnInit {
           // Initial cost total
           this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.inventoryCost + this.projectInfo.labourCost;
           console.log('indi project: ', this.projectInfo);
-        });
+          this.projectsService.getProjectCostSummary(this.currentProjectId).subscribe( response => {
+            this.summaryInfo = response.results;
+            this.projectInfo.purchaseOrderTotal = this.summaryInfo[0].amount;
+            console.log('cost summary: ', response);
+          });
 
+          this.projectsService.getProjectBudget(this.currentProjectId).subscribe( response => {
+            this.budgetList = response.results;
+            this.budgetList.forEach(element => {
+              element.date = moment(element.createdAt).format('MMMM, YYYY');
+            });
+            console.log('budget: ', response);
+          });
+
+          this.projectsService.getProjectPaymentSchedule(this.currentProjectId).subscribe( response => {
+            this.paymentSchedule = response.results;
+            console.log('budget: ', response);
+            this.paymentSchedule.forEach(element => {
+              if (element.date) {
+                element.date = moment(element.date).format('MMMM DD, YYYY');
+              } else {
+                element.date = 'set due date';
+              }
+            });
+            console.log('budget: ', response);
+          });
+        });
       });
     } else {
       console.error('product id error');
@@ -97,7 +105,7 @@ export class PmFinancialsComponent implements OnInit {
 
   addCost(costTitle, costType, costAmount) {
     if (costTitle && costType && costAmount) {
-      if (costType === 'percent') {
+      if (costType === 'PERCENT') {
         costAmount = this.projectInfo.totalBudget * costAmount / 100;
         this.additionalCosts.push({
           'title': costTitle,
@@ -109,6 +117,17 @@ export class PmFinancialsComponent implements OnInit {
           'value': costAmount
         });
       }
+
+      const savingCostData = {
+        'name': costTitle,
+        'value': costAmount,
+        'unit': costType
+      };
+
+      this.projectsService.createProjectCostSummary(this.currentProjectId, savingCostData).subscribe(res => {
+        console.log('new cost summary: ', res);
+      });
+
       // calc cost total
       const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
         return prev + cur.value;
@@ -126,6 +145,9 @@ export class PmFinancialsComponent implements OnInit {
   }
 
   removeAddtional(index) {
+    this.projectsService.deleteIndividualProjectCostSummary(this.currentProjectId, this.additionalCosts[index].id).subscribe(res => {
+      console.log('budgetdeleted : ', res);
+    });
     this.additionalCosts.splice(index, 1);
     const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
       return prev + cur.value;
@@ -146,7 +168,14 @@ export class PmFinancialsComponent implements OnInit {
       if (budgetDate && budgetAmount) {
         this.budgetList.push({
           'date': budgetDate,
-          'value': budgetAmount
+          'amount': budgetAmount
+        });
+        const savingData = {
+          'date': moment(budgetDate).format('YYYY-MM-DD'),
+          'amount': budgetAmount
+        };
+        this.projectsService.createProjectBudget(this.currentProjectId, savingData).subscribe(res => {
+          console.log('budgetCreated : ', res);
         });
         // calc unused budget
         this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
@@ -169,10 +198,13 @@ export class PmFinancialsComponent implements OnInit {
   }
 
   removeBudget(index) {
+    this.projectsService.deleteIndividualProjectBudget(this.currentProjectId, this.budgetList[index].id).subscribe(res => {
+      console.log('budgetdeleted : ', res);
+    });
     this.budgetList.splice(index, 1);
     // calc unused budget
     this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
-      return prev + cur.value;
+      return prev + cur.amount;
     }, 0);
   }
 
@@ -189,10 +221,16 @@ export class PmFinancialsComponent implements OnInit {
     this.costAmount = undefined;
   }
 
-  selectScheduleDate(event, pos) {
+  selectScheduleDate(event, pos, schedule) {
     const updatedDate = moment(event.value).format('YYYY-MM-DD');
-    this.scheduleDateList[pos] = moment(event.value).format('MMMM DD, YYYY');
+    // this.scheduleDateList[pos] = moment(event.value).format('MMMM DD, YYYY');
     this.paymentSchedule[pos].date = updatedDate;
+    const savingData = {
+      'date': updatedDate
+    };
+    this.projectsService.updateProjectPaymentSchedule(this.currentProjectId, schedule.id, savingData).subscribe(res => {
+      console.log('updated schedule : ', res);
+    });
   }
 
   startProject() {
