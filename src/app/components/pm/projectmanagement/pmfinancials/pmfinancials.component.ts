@@ -225,7 +225,10 @@ export class PmFinancialsComponent implements OnInit {
     const updatedDate = moment(event.value).format('YYYY-MM-DD');
     // this.scheduleDateList[pos] = moment(event.value).format('MMMM DD, YYYY');
     this.paymentSchedule[pos].date = updatedDate;
-    this.projectsService.updateProjectPaymentSchedule(this.currentProjectId, schedule.id, updatedDate).subscribe(res => {
+    const savingData = {
+      'date': updatedDate
+    };
+    this.projectsService.updateProjectPaymentSchedule(this.currentProjectId, schedule.id, savingData).subscribe(res => {
       console.log('updated schedule : ', res);
     });
   }
