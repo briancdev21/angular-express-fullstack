@@ -1,11 +1,13 @@
 import { Component, Input, ViewChild, ElementRef, OnInit, EventEmitter, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
 import { Ng2TimelineComponent } from '../../../profile/ng2-timeline/ng2timeline.component';
 import { ProposalService } from '../proposal.service';
 import { ScheduleMultiKeywordComponent } from '../schedulemultikeyword/schedulemultikeyword.component';
-
-
+import { ProductsService } from '../../../../services/inventory/products.service';
+import { SharedService } from '../../../../services/shared.service';
+import { ProposalsService } from '../../../../services/proposals.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-projectdetails',
@@ -17,13 +19,10 @@ import { ScheduleMultiKeywordComponent } from '../schedulemultikeyword/schedulem
 
 export class ProjectDetailsComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
-  @Input() projectCategory;
-  @Input() projectSubCategory;
-  @Input() proposalInfo;
-  @Input() projectDetails;
-  @Output() sendUpdatedCategories: EventEmitter<any> = new EventEmitter;
-  @Output() sendUpdatedSubCategories: EventEmitter<any> = new EventEmitter;
 
+  @Input() projectDetails;
+  
+  proposalInfo: any;
   sidebarCollapsed = true;
   ProposalInfoModalCollapsed = true;
   tabActiveFirst = true;
@@ -167,7 +166,36 @@ export class ProjectDetailsComponent implements OnInit {
     }
   ];
 
-  constructor( private proposalService: ProposalService ) {
+  proposalId: any;
+  contactsList = [];
+  constructor( private proposalService: ProposalService, private route: ActivatedRoute, private sharedService: SharedService
+    , private proposalsService: ProposalsService ) {
+    this.proposalId = this.route.snapshot.paramMap.get('id');
+    this.sharedService.getContacts().subscribe(data => {
+      this.contactsList = data;
+      this.proposalsService.getIndividualProposal(this.proposalId).subscribe(res => {
+        console.log('project details service: ', res);
+        this.proposalInfo = res.data;
+        // {
+        //   proposalId : res.data.id,
+        //   contactName : this.getContactNameFromId(res.data.contactId),
+        //   projectName: res.data.name,
+        //   projectType: 'New Construction',
+        //   proposalAmount: res.data.total,
+        //   dealStatus: res.data.status,
+        //   revision: res.data.revision,
+        //   createdDate: moment(res.data.updatedAt).format('MMMM DD, YYYY'),
+        //   owner: [
+        //     {
+        //     imageUrl: 'assets/users/user1.png',
+        //     profileLink: 'crm/contacts/michael',
+        //     name: 'Michael'
+        //     }
+        //   ],
+        // };
+      });
+    });
+    console.log('proposals info: ', this.proposalInfo);
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
@@ -197,15 +225,15 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.projectManager = this.proposalInfo.contactName;
-    this.receivable = this.proposalInfo.contactName;
-    this.projectDetails.customerName = this.proposalInfo.customerName;
-    this.projectDetails.projectName = this.proposalInfo.projectName;
-    this.projectDetails.shippingAddress = this.userInfo.shippingaddress.address;
-    this.projectDetails.city = this.userInfo.shippingaddress.city;
-    this.projectDetails.state = this.userInfo.shippingaddress.state;
-    this.projectDetails.country = this.userInfo.shippingaddress.country;
-    this.projectDetails.zipcode = this.userInfo.shippingaddress.zipcode;
+    // this.projectManager = this.proposalInfo.contactName;
+    // this.receivable = this.proposalInfo.contactName;
+    // this.projectDetails.customerName = this.proposalInfo.customerName;
+    // this.projectDetails.projectName = this.proposalInfo.projectName;
+    // this.projectDetails.shippingAddress = this.userInfo.shippingaddress.address;
+    // this.projectDetails.city = this.userInfo.shippingaddress.city;
+    // this.projectDetails.state = this.userInfo.shippingaddress.state;
+    // this.projectDetails.country = this.userInfo.shippingaddress.country;
+    // this.projectDetails.zipcode = this.userInfo.shippingaddress.zipcode;
 
     this.editable = false;
     this.userInfo.followers.forEach(element => {
@@ -215,7 +243,7 @@ export class ProjectDetailsComponent implements OnInit {
     });
 
     // Update project id field with proposal info.
-    this.projectDetails.projectId = this.proposalInfo.proposalId;
+    // this.projectDetails.projectId = this.proposalInfo.proposalId;
   }
 
   getSchduleRemain(event) {
@@ -288,11 +316,11 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   getCategories(data) {
-    this.sendUpdatedCategories.emit(data);
+    console.log('category: ', data);
   }
 
   getSubCategories(data) {
-    this.sendUpdatedSubCategories.emit(data);
+    console.log('subcategory: ', data);
   }
 
   // saveProjectDetails() {
@@ -312,6 +340,16 @@ export class ProjectDetailsComponent implements OnInit {
   //     );
   //   }
   // }
+
+  getContactNameFromId(id) {
+    const idCroped = id.slice(-1);
+    const selectedContact = this.contactsList.filter(c => c.id.toString() === idCroped)[0];
+    if (selectedContact.type === 'PERSON') {
+      return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      return selectedContact.business.name;
+    }
+  }
 
   saveProjectDetails() {
     this.invalidProjectId = false;

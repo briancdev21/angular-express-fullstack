@@ -122,6 +122,10 @@
 	float: right;
 }
 
+:host ::ng-deep .project-details-sidebar .content-box ul li.add-keyword img{
+	margin-top: 3px !important;
+}
+
 :host ::ng-deep .project-details-sidebar .content-box ul {
 	display: block;
 	padding: 1px;
