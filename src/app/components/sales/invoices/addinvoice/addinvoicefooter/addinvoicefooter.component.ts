@@ -47,11 +47,7 @@ export class AddInvoiceFooterComponent {
   }
 
   cancelInvoice() {
-    const invoiceId = this.createdInvoice.id;
-    this.invoicesService.deleteIndividualInvoice(invoiceId).subscribe( res => {
-      console.log('invoice deleted');
-      this.router.navigate(['./sales/invoices']);
-    });
+    this.router.navigate(['./sales/invoices']);
   }
 
   saveInvoice() {

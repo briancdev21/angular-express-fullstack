@@ -3,7 +3,7 @@
     <div class="main__info flex" >
       <div class="left-sidebar">
         <div class="flex aligntop" >
-          <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" [searchStr]="selectItem"></app-in-customer-name>
+          <app-es-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" [searchStr]="selectItem"></app-es-customer-name>
           <div class="email-address">
             <span>Email address</span>
             <app-multiemailselect [keywords]="emailAddresses" (multiEmails)="getMultiEmails($event)"></app-multiemailselect>
@@ -74,6 +74,26 @@
     </div>
     <div class="center-btn-section" >
       <button class="done-btn" (click)="showModal=false" >
+        OK
+      </button>
+    </div>
+  </div>
+</div>  
+
+
+<!-- Estimate Contact Select Modal -->
+<div class="confirm-modal-wrapper" *ngIf="showEstimateCreateModal" ></div>
+<div [ngClass]="{'confirm-modal': showEstimateCreateModal, 'confirm-modal-hide': !showEstimateCreateModal }">
+  <div class="header">
+      <h4>
+        Please select customer name
+      </h4>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showEstimateCreateModal=false" />
+  </div>
+  <div class="content" >
+    <app-es-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectCustomerBeforeCreate($event)" [searchStr]="selectItem" ></app-es-customer-name>
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="createEstimate(); showEstimateCreateModal=false;" >
         OK
       </button>
     </div>

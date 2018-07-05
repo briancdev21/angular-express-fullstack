@@ -8,7 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { EstimateModel } from '../../../../../models/estimate.model';
 import { FilterService } from '../../filter.service';
 import { EstimatesService } from '../../../../../services/estimates.service';
-
+import { CrmService } from '../../../../../services/crm.service';
 @Component({
   selector: 'app-addestimatebody',
   templateUrl: './addestimatebody.component.html',
@@ -22,7 +22,6 @@ export class AddEstimateBodyComponent implements OnInit {
       this.saveInvoiceData = _createdInvoice;
       console.log('saved estimate: ', this.saveInvoiceData);
       this.currentInvoiceId = this.invoice_mock.id;
-      this.in_id = 'ES - ' + this.currentInvoiceId;
     }
   }
 
@@ -76,7 +75,7 @@ export class AddEstimateBodyComponent implements OnInit {
 
   emailAddresses = [];
   termsOfInvoice = '';
-  contactList: any;
+  contactList = [];
   noteToSupplier: string;
   emails: any;
   showModal = false;
@@ -93,6 +92,8 @@ export class AddEstimateBodyComponent implements OnInit {
   newCustomerNote = '';
   newTerms = '';
   newExpiryDate: string;
+  showEstimateCreateModal = true;
+
 
   public timelineData: Array<Object> = [
     {
@@ -141,17 +142,24 @@ export class AddEstimateBodyComponent implements OnInit {
   currentInvoiceId: number;
   saveInvoiceData: any;
 
-  constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
-    private route: ActivatedRoute, private filterService: FilterService, private estimatesService: EstimatesService) {
+  constructor(private sharedService: SharedService, private crmService: CrmService,
+    private invoicesService: InvoicesService, private router: Router,
+     private route: ActivatedRoute, private filterService: FilterService, private estimatesService: EstimatesService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
-    this.sharedService.getContacts()
-      .subscribe(data => {
-        console.log('userlist: ', data);
-        data = this.addContactName(data);
-        this.contactList = data;
-        this.userList = this.contactList;
-      });
+    this.crmService.getLeadsList().subscribe( leadsRes => {
+      const leadList = this.addContactName(leadsRes.results, 'lead');
+      this.contactList = this.contactList.concat(leadList);
+      this.sharedService.getContacts()
+        .subscribe(data => {
+          console.log('userlist: ', data);
+          data = this.addContactName(data);
+          this.contactList = this.contactList.concat(data);
+          this.userList = this.contactList;
+          console.log('lead list: ', leadsRes.results, this.contactList);
+        });
+    });
+
 
     this.sharedService.getTerms().subscribe(res => {
       this.terms = res.results;
@@ -176,7 +184,7 @@ export class AddEstimateBodyComponent implements OnInit {
         this.saveInvoiceData.lateFee.unit = data.unit;
       }
     });
-
+    this.filterService.saveClicked.next( false );
     this.filterService.saveClicked.subscribe(data => {
       if (data) {
         this.saveEstimate();
@@ -187,15 +195,21 @@ export class AddEstimateBodyComponent implements OnInit {
   onCustomerSelected(user) {
   }
 
-  onSelectUser(selectedIndex: any) {
-    const contactIdList = this.contactList.map(c => c.id);
-    const pos = contactIdList.indexOf(selectedIndex);
-    this.customerAddress = this.contactList[pos].shippingAddress;
+  onSelectUser(selectedItem: any) {
+    const contactIdNumber = parseInt(selectedItem.value, 10);
+    let contactList = this.contactList;
+    if (selectedItem.contactType === 'contact') {
+      contactList = contactList.filter(ele => ele.contactType === 'contact');
+    } else {
+      contactList = contactList.filter(ele => ele.contactType === 'lead');
+    }
+    const contactIdList = contactList.map(c => c.id);
+    const pos = contactIdList.indexOf(contactIdNumber);
     this.emailAddresses = [];
     this.emailAddresses.push(this.contactList[pos].email);
     this.saveInvoiceData.emails = this.emailAddresses;
-    this.saveInvoiceData.contactId = selectedIndex;
-    this.newCustomerName = selectedIndex;
+    this.selectItem = this.contactList[pos].name;
+    this.customerAddress = this.contactList[pos].shippingAddress;
   }
 
   onSelectClass(val) {
@@ -276,8 +290,9 @@ export class AddEstimateBodyComponent implements OnInit {
       this.showModal = true;
     }
   }
-  addContactName(data) {
+  addContactName(data, contactType = 'contact') {
     data.forEach(element => {
+      element.contactType = contactType;
       if (element.type === 'PERSON') {
         element.name = element.person.firstName + ' ' + element.person.lastName;
       } else {
@@ -296,6 +311,45 @@ export class AddEstimateBodyComponent implements OnInit {
       this.taxes = res.data.taxTotal;
       this.subtotalServices = res.data.serviceSubTotal;
       this.subtotalproducts = res.data.productSubTotal;
+    });
+  }
+  onSelectCustomerBeforeCreate(selectedItem: any) {
+    this.saveInvoiceData = {};
+    if (selectedItem.contactType === 'lead') {
+      this.saveInvoiceData.leadId = selectedItem.value;
+    } else {
+      this.saveInvoiceData.contactId = selectedItem.value;
+    }
+  }
+  createEstimate() {
+    this.estimatesService.createEstimate(this.saveInvoiceData).subscribe (res => {
+      this.saveInvoiceData  = res.data;
+      this.invoice_mock = res.data;
+      this.currentInvoiceId = this.saveInvoiceData.id;
+      this.discountType = this.saveInvoiceData.discount.unit;
+      this.discountAmount = this.saveInvoiceData.discount.value;
+      this.internalMemo = this.saveInvoiceData.internalNote;
+      this.noteToSupplier = this.saveInvoiceData.customerNote;
+      this.termsOfInvoice = this.saveInvoiceData.terms;
+      this.in_id = 'ES - ' + this.currentInvoiceId;
+
+      // Customer Name and Email, customer address
+      let contactIdNumber;
+      let contactList = this.contactList;
+      if (this.saveInvoiceData.contactId) {
+        contactIdNumber = parseInt(this.saveInvoiceData.contactId.split('-').pop(), 10);
+        contactList = contactList.filter(ele => ele.contactType === 'contact');
+      } else {
+        contactIdNumber = parseInt(this.saveInvoiceData.leadId.split('-').pop(), 10);
+        contactList = contactList.filter(ele => ele.contactType === 'lead');
+      }
+      const contactIdList = contactList.map(c => c.id);
+      const pos = contactIdList.indexOf(contactIdNumber);
+      this.emailAddresses = [];
+      this.emailAddresses.push(this.contactList[pos].email);
+      this.saveInvoiceData.emails = this.emailAddresses;
+      this.selectItem = this.contactList[pos].name;
+      this.customerAddress = this.contactList[pos].shippingAddress;
     });
   }
 }
