@@ -184,7 +184,7 @@ export class AddEstimateBodyComponent implements OnInit {
         this.saveInvoiceData.lateFee.unit = data.unit;
       }
     });
-
+    this.filterService.saveClicked.next( false );
     this.filterService.saveClicked.subscribe(data => {
       if (data) {
         this.saveEstimate();
