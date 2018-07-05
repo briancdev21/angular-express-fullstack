@@ -19,6 +19,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 
 import { InCustomerNameComponent } from './components/in-customer-name/in-customer-name.component';
+import { EsCustomerNameComponent } from './components/es-customer-name/es-customer-name.component';
+
 import { InProjectSelectorComponent } from './components/in-project-selector/in-project-selector.component';
 import { InSwitcherComponent } from './components/in-switcher/in-switcher.component';
 import { ShippingAddressComponent } from './components/shippingaddress/shippingaddress.component';
@@ -107,7 +109,8 @@ import { EsProfileTableComponent } from './components/es-profile-table/es-table.
     EstimateProfileHeaderComponent,
     EstimateProfileFooterComponent,
     InProfileTableComponent,
-    EsProfileTableComponent
+    EsProfileTableComponent,
+    EsCustomerNameComponent
   ],
   imports: [
     BrowserModule,
@@ -156,7 +159,8 @@ import { EsProfileTableComponent } from './components/es-profile-table/es-table.
     MultiEmailSelectComponent,
     EsTableComponent,
     InProfileTableComponent,
-    EsProfileTableComponent
+    EsProfileTableComponent,
+    EsCustomerNameComponent
   ],
   providers: [FilterService]
 })
