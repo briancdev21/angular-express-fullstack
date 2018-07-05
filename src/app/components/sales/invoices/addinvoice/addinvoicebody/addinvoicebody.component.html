@@ -84,3 +84,22 @@
     </div>
   </div>
 </div>  
+
+<!-- Invoice Contact Select Modal -->
+<div class="confirm-modal-wrapper" *ngIf="showInvoiceCreateModal" ></div>
+<div [ngClass]="{'confirm-modal': showInvoiceCreateModal, 'confirm-modal-hide': !showInvoiceCreateModal }">
+  <div class="header">
+      <h4>
+        Please select customer name
+      </h4>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showInvoiceCreateModal=false" />
+  </div>
+  <div class="content" >
+    <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectCustomerBeforeCreate($event)" [searchStr]="selectItem" ></app-in-customer-name>
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="createInvoice(); showInvoiceCreateModal=false;" >
+        OK
+      </button>
+    </div>
+  </div>
+</div>  

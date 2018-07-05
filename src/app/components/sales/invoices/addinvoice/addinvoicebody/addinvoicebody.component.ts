@@ -27,7 +27,6 @@ export class AddInvoiceBodyComponent implements OnInit {
       this.internalMemo = this.invoice_mock.internalNote;
       this.noteToSupplier = this.invoice_mock.customerNote;
       this.termsOfInvoice = this.invoice_mock.terms;
-      this.in_id = 'IN - ' + this.currentInvoiceId;
     }
   }
 
@@ -96,6 +95,7 @@ export class AddInvoiceBodyComponent implements OnInit {
   newExpiryDate: string;
   newTermId: any;
   showModal = false;
+  showInvoiceCreateModal = true;
 
   public timelineData: Array<Object> = [
     {
@@ -154,16 +154,14 @@ export class AddInvoiceBodyComponent implements OnInit {
         console.log('userlist: ', data);
       });
 
-    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-    this.in_id = 'IN - ' + this.currentInvoiceId;
-    this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
-      console.log('getIndividualInvoice: ', res);
-      this.discountType = res.data.discount.unit;
-      this.discountAmount = res.data.discount.value;
-      this.internalMemo = res.data.internalNote;
-      this.noteToSupplier = res.data.customerNote;
-      this.termsOfInvoice = res.data.terms;
-    });
+    // this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+    //   console.log('getIndividualInvoice: ', res);
+    //   this.discountType = res.data.discount.unit;
+    //   this.discountAmount = res.data.discount.value;
+    //   this.internalMemo = res.data.internalNote;
+    //   this.noteToSupplier = res.data.customerNote;
+    //   this.termsOfInvoice = res.data.terms;
+    // });
 
     this.sharedService.getTerms().subscribe(res => {
       this.terms = res.results;
@@ -314,6 +312,34 @@ export class AddInvoiceBodyComponent implements OnInit {
       this.taxes = res.data.taxTotal;
       this.subtotalServices = res.data.serviceSubTotal;
       this.subtotalproducts = res.data.productSubTotal;
+    });
+  }
+
+  onSelectCustomerBeforeCreate(selectedIndex: any) {
+    this.saveInvoiceData = {};
+    this.saveInvoiceData.contactId = selectedIndex;
+  }
+  createInvoice() {
+    this.invoicesService.createInvoice(this.saveInvoiceData).subscribe (res => {
+      this.saveInvoiceData  = res.data;
+      this.invoice_mock = res.data;
+      this.currentInvoiceId = this.saveInvoiceData.id;
+      this.discountType = this.saveInvoiceData.discount.unit;
+      this.discountAmount = this.saveInvoiceData.discount.value;
+      this.internalMemo = this.saveInvoiceData.internalNote;
+      this.noteToSupplier = this.saveInvoiceData.customerNote;
+      this.termsOfInvoice = this.saveInvoiceData.terms;
+      this.in_id = 'IN - ' + this.currentInvoiceId;
+
+      // Customer Name and Email, customer address
+      const contactIdNumber = parseInt(this.saveInvoiceData.contactId.split('-').pop(), 10);
+      const contactIdList = this.contactList.map(c => c.id);
+      const pos = contactIdList.indexOf(contactIdNumber);
+      this.emailAddresses = [];
+      this.emailAddresses.push(this.contactList[pos].email);
+      this.saveInvoiceData.emails = this.emailAddresses;
+      this.selectItem = this.contactList[pos].name;
+      this.customerAddress = this.contactList[pos].shippingAddress;
     });
   }
 }

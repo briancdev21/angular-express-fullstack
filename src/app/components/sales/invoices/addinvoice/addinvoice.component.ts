@@ -23,57 +23,7 @@ export class AddInvoiceComponent implements OnInit {
   public createdInvoice;
 
   constructor( private invoicesService: InvoicesService, private router: Router, private route: ActivatedRoute ) {
-    this.newInvoice = {
-      'currencyId': 1,
-      'contactId': 1,
-      'pricingCategoryId': 1,
-      'classificationId': 1,
-      'categoryId': 1,
-      'termId': 1,
-      'emails': [
-        'test@test.com'
-      ],
-      'startDate': this.today,
-      'acceptOnlinePayment': true,
-      'chargeLateFee': true,
-      'lateFee': {
-        'value': 0,
-        'unit': 'AMOUNT'
-      },
-      'recurring': [
-        'RRULE:FREQ=MONTHLY;COUNT=1;DTSTART=20180201T023000Z'
-      ],
-      'reminder': [
-        'Reminder'
-      ],
-      'shippingAddress': {
-        'address': '',
-        'city': '',
-        'province': 'ON',
-        'postalCode': '',
-        'country': 'CA'
-      },
-      'billingAddress': {
-        'address': '',
-        'city': '',
-        'province': 'ON',
-        'postalCode': '',
-        'country': 'CA'
-      },
-      'internalNote': '',
-      'customerNote': '',
-      'terms': '',
-      'discount': {
-        'value': 0,
-        'unit': 'AMOUNT'
-      }
-    };
 
-    if (!this.route.snapshot.paramMap.get('id')) {
-      this.invoicesService.createInvoice(this.newInvoice).subscribe (res => {
-        this.createdInvoice = res.data;
-      });
-    }
   }
 
   ngOnInit() {
