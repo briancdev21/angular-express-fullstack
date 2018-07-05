@@ -563,7 +563,6 @@ export class ProposalComponent implements OnInit {
     } else {
       return selectedContact.business.name;
     }
-    
   }
 
   getProductTypeNameFromId(id) {
