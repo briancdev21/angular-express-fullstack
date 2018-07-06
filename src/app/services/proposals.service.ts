@@ -54,4 +54,8 @@ export class ProposalsService {
     const url = `${apiUrl}sales/proposals/${id}`;
     return this.http.get(url);
   }
+  updateIndividualProposal(id, proposalData): Observable<any>  {
+    const url = `${apiUrl}sales/proposals/${id}`;
+    return this.http.put(url, proposalData);
+  }
 }
