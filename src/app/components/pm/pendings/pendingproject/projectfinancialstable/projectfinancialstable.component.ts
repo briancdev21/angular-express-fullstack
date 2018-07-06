@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonComponent } from '../../../../common/common.component';
 import { FilterService } from './filter.service';
+import { PendingProjectService } from '../pendingproject.service';
+
 @Component({
   selector: 'app-projectfinancialstable',
   templateUrl: './projectfinancialstable.component.html',
@@ -14,6 +16,7 @@ import { FilterService } from './filter.service';
 })
 export class ProjectFinancialsTableComponent implements OnInit {
 
+  @Input() reservedInventoryList;
   menuCollapsed = true;
   saveFilterModalCollapsed = true;
   showSaveFilterModal = false;
@@ -24,9 +27,17 @@ export class ProjectFinancialsTableComponent implements OnInit {
   savedFiltersArr = [];
   filterAvaliableTo: any;
   filterName = '';
+  currentProjectId: any;
 
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private pendingProjectsService: PendingProjectService) {
+
     this.filterAvaliableTo = 'everyone';
+    this.currentProjectId = localStorage.getItem('current_pending_projectId');
+
+    this.pendingProjectsService.getProductsList(this.currentProjectId).subscribe(res => {
+      this.reservedInventoryList = res.results;
+      console.log('reservedInventoryList: ', this.reservedInventoryList);
+    });
   }
 
   public filters  = {
@@ -69,48 +80,48 @@ export class ProjectFinancialsTableComponent implements OnInit {
     }
   ];
 
-  public reservedInventoryList: Array<Object> = [
-    {
-      id: 0,
-      imgUrl: 'assets/images/tickets.png',
-      productName: '55" Smart LED TV',
-      modelNumber: 'Best Buy',
-      brand: 'Samsung',
-      sku: '88021117',
-      qty: 1,
-      status: 'Reserved'
-    },
-    {
-      id: 1,
-      imgUrl: 'assets/images/tickets.png',
-      productName: '2 Year Warranty',
-      modelNumber: 'Service',
-      brand: 'Nu Automations',
-      sku: '88020001',
-      qty: 3,
-      status: 'Reserved'
-    },
-    {
-      id: 2,
-      imgUrl: 'assets/images/tickets.png',
-      productName: 'Adaptive Phase Dimmer 120V',
-      modelNumber: 'Control4',
-      brand: 'Control4',
-      sku: '88021113',
-      qty: 2,
-      status: 'Reserved'
-    },
-    {
-      id: 3,
-      imgUrl: 'assets/images/tickets.png',
-      productName: 'Home Controller 800',
-      modelNumber: 'Control4',
-      brand: 'Control4',
-      sku: '88021111',
-      qty: 5,
-      status: 'Reserved'
-    },
-  ];
+  // public reservedInventoryList: Array<Object> = [
+  //   {
+  //     id: 0,
+  //     imgUrl: 'assets/images/tickets.png',
+  //     productName: '55" Smart LED TV',
+  //     modelNumber: 'Best Buy',
+  //     brand: 'Samsung',
+  //     sku: '88021117',
+  //     qty: 1,
+  //     status: 'Reserved'
+  //   },
+  //   {
+  //     id: 1,
+  //     imgUrl: 'assets/images/tickets.png',
+  //     productName: '2 Year Warranty',
+  //     modelNumber: 'Service',
+  //     brand: 'Nu Automations',
+  //     sku: '88020001',
+  //     qty: 3,
+  //     status: 'Reserved'
+  //   },
+  //   {
+  //     id: 2,
+  //     imgUrl: 'assets/images/tickets.png',
+  //     productName: 'Adaptive Phase Dimmer 120V',
+  //     modelNumber: 'Control4',
+  //     brand: 'Control4',
+  //     sku: '88021113',
+  //     qty: 2,
+  //     status: 'Reserved'
+  //   },
+  //   {
+  //     id: 3,
+  //     imgUrl: 'assets/images/tickets.png',
+  //     productName: 'Home Controller 800',
+  //     modelNumber: 'Control4',
+  //     brand: 'Control4',
+  //     sku: '88021111',
+  //     qty: 5,
+  //     status: 'Reserved'
+  //   },
+  // ];
 
   public productNameList = [
     'Home Controller 800', 'Home Controller 250', 'Low-Voltage Wired Keypad', '55" Smart LED TV',

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
+import { SharedService } from '../../../../../../services/shared.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -35,6 +36,7 @@ export class PfProductsListTableComponent implements OnInit {
   deletingList = [];
   swappingList = [];
   showSwapConfirmModal = false;
+  brandsList: any;
 
   activity: {
     title: string;
@@ -50,13 +52,22 @@ export class PfProductsListTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService,  private sharedService: SharedService ) {
+    this.sharedService.getBrands().subscribe(res => {
+      this.brandsList = res.results;
+      console.log('brandslist: ', res);
+    });
   }
 
   ngOnInit() {
   }
 
   selectedFilterEventHandler(filteredList) {
+  }
+
+  getBrandName(id) {
+    const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
+    return selectedBrand.name;
   }
 
   getScoreColor(score) {

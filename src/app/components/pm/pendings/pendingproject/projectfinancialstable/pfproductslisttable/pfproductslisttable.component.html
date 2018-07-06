@@ -3,7 +3,7 @@
     <tr>
       <th class="img-cell"></th>
       <th (click)="sortArray('productName', purchaseOrdersList)">PRODUCT NAME</th>
-      <th (click)="sortArray('supplier', purchaseOrdersList)">SUPPLIER</th> 
+      <th (click)="sortArray('supplier', purchaseOrdersList)">SUPPLIER</th>
       <th (click)="sortArray('brand', purchaseOrdersList)">BRAND</th>
       <th (click)="sortArray('sku', purchaseOrdersList)">SKU</th>
       <th (click)="sortArray('orderNumber', purchaseOrdersList)">ORDER #</th>
@@ -14,32 +14,32 @@
       <td><img [src]="order.imgUrl"></td>
       <td>{{order.productName}}</td>
       <td>{{order.supplier}}</td>
-      <td>{{order.brand}}</td> 
-      <td>{{order.sku}}</td> 
-      <td>{{order.orderNumber}}</td> 
-      <td class="order-status">{{order.qty}}</td> 
+      <td>{{order.brand}}</td>
+      <td>{{order.sku}}</td>
+      <td>{{order.orderNumber}}</td>
+      <td class="order-status">{{order.qty}}</td>
       <td>
-        <span class="order-status">{{order.status}}</span> 
+        <span class="order-status">{{order.status}}</span>
         <img src="assets/images/three-dots.png" (click)="openOrderModal(i)" style="cursor: pointer;">
-        <div 
-          class="order-expand-modal-wrapper" 
-          *ngIf="orderModalInfoCollapsed[i]" 
+        <div
+          class="order-expand-modal-wrapper"
+          *ngIf="orderModalInfoCollapsed[i]"
           (click)="orderModalInfoCollapsed[i]=false; showOrderModalInfo=false">
         </div>
         <!-- Start Small Dialog when clicking three dot icom -->
-        <div 
-          class="order-expand-modal"  
+        <div
+          class="order-expand-modal"
           [ngClass]="{'show-order-modal': orderModalInfoCollapsed[i], 'hide-order-modal': !orderModalInfoCollapsed[i] }">
           <div class="dots-icon"><img src="assets/images/three-dots.png"></div>
-          <div>
+          <!-- <div>
             <div (click)="swapRow(i, purchaseOrdersList)"><img src="assets/images/Convert.png"><span>Swap</span></div>
-          </div>
+          </div> -->
           <div>
             <div (click)="deleteRow(i, purchaseOrdersList)"><img src="assets/images/Delete.png"><span>Delete</span></div>
           </div>
         </div>
         <!-- End Small Dialog when clicking three dot icom -->
-      </td> 
+      </td>
     </tr>
   </table>
   <div class="reserved-inventory-title">
@@ -50,41 +50,41 @@
     <tr>
       <th></th>
       <th (click)="sortArray('productName', reservedInventoryList)">PRODUCT NAME</th>
-      <th (click)="sortArray('modelNumber', reservedInventoryList)">MODEL NUMBER</th> 
+      <th (click)="sortArray('modelNumber', reservedInventoryList)">MODEL NUMBER</th>
       <th (click)="sortArray('brand', reservedInventoryList)">BRAND</th>
       <th (click)="sortArray('sku', reservedInventoryList)">SKU</th>
-      <th (click)="sortArray('qty', reservedInventoryList)">QTY</th> 
+      <th (click)="sortArray('qty', reservedInventoryList)">QTY</th>
       <th (click)="sortArray('status', reservedInventoryList)">STATUS</th>
     </tr>
     <tr *ngFor="let inventory of reservedInventoryList; let i = index">
       <td><img [src]="inventory.imgUrl"></td>
-      <td>{{inventory.productName}}</td>
-      <td>{{inventory.modelNumber}}</td>
-      <td>{{inventory.brand}}</td> 
-      <td>{{inventory.sku}}</td> 
-      <td class="inventory-status">{{inventory.qty}}</td>
+      <td>{{inventory.name}}</td>
+      <td>{{inventory.model}}</td>
+      <td>{{getBrandName(inventory.brandId)}}</td>
+      <td>{{inventory.sku}}</td>
+      <td class="inventory-status">{{inventory.reservedQuantity}}</td>
       <td>
-        <span class="inventory-status">{{inventory.status}}</span> 
+        <span class="inventory-status">Reserved</span>
         <img src="assets/images/three-dots.png" (click)="openInventoryModal(i)" style="cursor: pointer;">
-        <div 
-          class="order-expand-modal-wrapper" 
-          *ngIf="inventoryModalInfoCollapsed[i]" 
+        <div
+          class="order-expand-modal-wrapper"
+          *ngIf="inventoryModalInfoCollapsed[i]"
           (click)="inventoryModalInfoCollapsed[i]=false; showOrderModalInfo=false">
         </div>
         <!-- Start Small Dialog when clicking three dot icom -->
-        <div 
-          class="order-expand-modal"  
+        <div
+          class="order-expand-modal"
           [ngClass]="{'show-order-modal': inventoryModalInfoCollapsed[i], 'hide-order-modal': !inventoryModalInfoCollapsed[i] }">
           <div class="dots-icon"><img src="assets/images/three-dots.png"></div>
-          <div>
+          <!-- <div>
             <div (click)="swapRow(i, reservedInventoryList)"><img src="assets/images/Convert.png"><span>Swap</span></div>
-          </div>
+          </div> -->
           <div>
             <div (click)="deleteRow(i, reservedInventoryList)"><img src="assets/images/Delete.png"><span>Delete</span></div>
           </div>
         </div>
         <!-- End Small Dialog when clicking three dot icom -->
-      </td> 
+      </td>
     </tr>
   </table>
 </div>
@@ -109,7 +109,7 @@
       </button>
     </div>
   </div>
-</div> 
+</div>
 
 <!-- Confirm Delete Alert Box -->
 <div class="confirm-delete-modal-wrapper" *ngIf="showDeleteConfirmModal" ></div>
@@ -131,4 +131,4 @@
       </button>
     </div>
   </div>
-</div> 
+</div>
