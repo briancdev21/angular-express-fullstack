@@ -5,19 +5,19 @@
         <div class="milestone-title" [ngStyle]="{'background': milestone.color}" style="opacity: .7;">
           <span>{{milestone.title | uppercase }}</span>
         </div>
-        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks'>
+        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="milestone.tasks">
           <div *ngFor="let task of milestone.tasks; let j = index;" class="draggable-task">
             <div class="task-content" (dblclick)="openDetailedModal(task, i, j)">
               <img *ngIf="task.attachmentImg" src="attachmentImg">
-              <div class="task-title">
+              <div class="task-title" >
                 <span>
                   {{getTaskId(i, j)}}.
                 </span>
                 <input placeholder="Enter task here" [(ngModel)]="task.taskTitle">
               </div>
               <div class="task-owner">
-                <img src="{{task.profile.imgUrl}}" *ngIf="task.profile.imgUrl" (click)="openOwnerModal(i, j); $event.stopPropagation();">
-                <img *ngIf="!task.profile.imgUrl" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                <img src="{{task.assigneeInfo.pictureURI}}" *ngIf="task.assigneeInfo.pictureURI" (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                <img *ngIf="!task.assigneeInfo.pictureURI" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();">
                 <div class="sub-tasks">
 
                 </div>
@@ -32,7 +32,7 @@
                   <div class="owner-mdl-content">
                     <select [(ngModel)]="selectedOwner" (ngModelChange)="onOwnerSelect($event, i, j)" >
                       <option [value]="0">Select Task Owner</option>
-                      <option *ngFor="let owner of taskOwners;" [value]="owner.userId">{{owner.name}}</option>
+                      <option *ngFor="let owner of taskOwners;" [value]="owner.userId">{{owner.username}}</option>
                     </select>
                   </div>
                 </div>
@@ -50,7 +50,7 @@
                 </div>
                 <span class="duration"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0"> Days</span>
                 <div class="task-actions">
-                  <img src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
+                  <img *ngIf="task.dependency" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
                   <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.like}" (click)="task.like = !task.like">
                   <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
                   <!--Dependency numbers-->

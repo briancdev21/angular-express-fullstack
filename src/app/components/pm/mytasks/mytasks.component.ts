@@ -176,9 +176,7 @@ export class MyTasksComponent implements OnInit {
   }
 
   private onDropModel(args) {
-    console.log('drop args: ', args);
     const [el, target, source] = args;
-    console.log(el.id);
     const taskIndex = parseInt(el.id, 10);
     const targetPanelIndex = parseInt(target.id, 10);
     const sourcePanelIndex = parseInt(source.id, 10);
