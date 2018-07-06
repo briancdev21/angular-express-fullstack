@@ -201,7 +201,7 @@ export class AddProposalComponent implements OnInit {
       .subscribe(data => {
         console.log('userlist: ', data);
         this.customerList = data;
-        this.addContactName(this.customerList);
+        this.customerList = this.addContactName(this.customerList);
         this.customersData = this.completerService.local(this.customerList, 'name', 'name');
         // Add collaborators list
         this.customerList.forEach( ele => {

@@ -20,10 +20,31 @@ import * as moment from 'moment';
 export class ProjectDetailsComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
-  @Input() projectDetails;
+  @Input() set projectDetailsData(val) {
+    if (val !== undefined) {
+      this.projectDetails = val;
+      console.log('project details with value:', this.projectDetails);
+      // Get categories and Subcateogries
+      this.categories = this.projectDetails.projectCategoriesAll;
+      this.subCategories = this.projectDetails.projectSubCategoriesAll;
+      this.clientNote = this.projectDetails.clientNote;
+      this.internalNote = this.projectDetails.internalNote;
+      this.customerName = this.projectDetails.name;
+      this.shippingAddress = this.projectDetails.shippingAddress;
+    }
+  }
+
+  projectDetails: any;
+
+// Project Details Properties
+clientNote: string;
+internalNote: string;
+customerName: string;
+shippingAddress: any;
+//
 
   categories = [];
-  subcategories = [];
+  subCategories = [];
   proposalInfo: any;
   sidebarCollapsed = true;
   ProposalInfoModalCollapsed = true;

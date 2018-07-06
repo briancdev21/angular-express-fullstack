@@ -89,7 +89,8 @@
 }
 
 .project-category, .subproject-category {
-	display: flex;
+	display: block;
+	text-align: left;
 	justify-content: space-between;
 	align-items: center;
 	padding: 5px 30px 0 30px;
@@ -453,7 +454,7 @@ input::placeholder {
 .category-box, .subcategory-box {
 	min-height: 100px;
 	border: 1px solid #f5f5f5;
-	padding: 7px;
+	padding: 7px 0;
 	margin-top: 5px;
 }
 

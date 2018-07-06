@@ -16,26 +16,26 @@
     </div>
     <div class="project-category">
       <span>Category</span>
-      <div class="category-box" [ngClass]="{'validation-required': invalidCategory}">
+      <div class="category-box" >
         <app-multicategoriesselect [categories]="categories" (sendCategories)="getProjectCategories($event)"></app-multicategoriesselect>
       </div>
     </div>
 
     <div class="subproject-category">
       <span>Subcategory</span>
-      <div class="subcategory-box" [ngClass]="{'validation-required': invalidSubCategory}">
+      <div class="-subcategorybox" >
         <app-multisubcategoriesselect [subCategories]="subCategories" (sendSubCategories)="getProjectSubCategories($event)"></app-multisubcategoriesselect>
       </div>
     </div>
 
     <div class="client-notes">
       <span>Client Notes</span>
-      <textarea></textarea>
+      <textarea>{{clientNote}}</textarea>
     </div>
 
     <div class="internal-notes">
       <span>Internal Notes</span>
-      <textarea></textarea>
+      <textarea>{{internalNote}}</textarea>
     </div>
 
     <div class="recent-activity">
@@ -61,7 +61,7 @@
           <div class="name-col tab-row">
             <div>
               <span>Customer Name</span>
-              <input placeholder="Enter Customer Name" [(ngModel)]="projectDetails.customerName" [ngClass]="{'validation-required': invalidCustomerName}">
+              <input placeholder="Enter Customer Name" [(ngModel)]="customerName" [ngClass]="{'validation-required': invalidCustomerName}">
             </div>
             <div class="collaborators">
               <span>Collaborators</span>
@@ -165,15 +165,15 @@
                 <span>Same as the customer profile</span>
               </div>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="projectDetails.shippingAddress" [ngClass]="{'validation-required': invalidAddress}" >
+            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="shippingAddress.address" [ngClass]="{'validation-required': invalidAddress}" >
 
             <div class="city-state">
-              <input placeholder="Enter City" [(ngModel)]="projectDetails.city" [ngClass]="{'validation-required': invalidCity}">
-              <input placeholder="Enter State" [(ngModel)]="projectDetails.state" [ngClass]="{'validation-required': invalidState}">
+              <input placeholder="Enter City" [(ngModel)]="shippingAddress.city" [ngClass]="{'validation-required': invalidCity}">
+              <input placeholder="Enter State" [(ngModel)]="shippingAddress.province" [ngClass]="{'validation-required': invalidState}">
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country" [(ngModel)]="projectDetails.country" [ngClass]="{'validation-required': invalidCountry}">
-              <input placeholder="Enter Zipcode" [(ngModel)]="projectDetails.zipcode" [ngClass]="{'validation-required': invalidZipcode}">
+              <input placeholder="Enter Country" [(ngModel)]="shippingAddress.country" [ngClass]="{'validation-required': invalidCountry}">
+              <input placeholder="Enter Zipcode" [(ngModel)]="shippingAddress.postalCode" [ngClass]="{'validation-required': invalidZipcode}">
             </div>
           </div>
           <div class="btn-section" >

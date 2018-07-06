@@ -22,17 +22,23 @@ export class ProposalComponent implements OnInit {
     this.sharedService.getProjectTypes().subscribe(res => {
       this.productTypesList = res;
     });
-
+    this.sharedService.getUsers().subscribe(res => {
+      this.userList = res;
+    });
     this.sharedService.getContacts().subscribe(data => {
+      data = this.addContactName(data);
       this.contactsList = data;
       this.proposalsService.getIndividualProposal(this.proposalId).subscribe(res => {
         console.log('proposals service: ', res);
+        this.getCategoryDetails(res.data.categoryIds);
+        this.proposalDetails = res.data;
         this.proposalInfo = {
           proposalId : res.data.id,
           contactName : this.getContactNameFromId(res.data.contactId),
           projectName: res.data.name,
           projectType: 'New Construction',
           proposalAmount: res.data.total,
+          projectId: res.data.projectId,
           dealStatus: res.data.status,
           revision: res.data.revision,
           createdDate: moment(res.data.updatedAt).format('MMMM DD, YYYY'),
@@ -53,6 +59,10 @@ export class ProposalComponent implements OnInit {
   proposalProductListBackup = [];
   contactsList = [];
   productTypesList = [];
+  proposalDetails = {};
+  categoryDetails = [];
+  subCategoryDetails = [];
+  userList = [];
 
   public proposalInfo: any = {
     proposalId : 0,
@@ -473,45 +483,7 @@ export class ProposalComponent implements OnInit {
     'Lighting System', 'Equipment', 'Automation', 'Video'
   ];
 
-  public projectDetails = {
-    discount: {
-      amount: 0,
-      type: ['$']
-    },
-    projectId: '',
-    projectCategoriesAll: ['Living room', 'Kitchen', 'Master Bedroom', 'Master Bathroom', 'Familiy Room', 'Garage'],
-    projectSubCategoriesAll: ['Lighting System', 'Automation System', 'Networking System', 'Equipment'],
-    completionDate: 'February 12, 2018',
-    paymentSchedule: [50, 30],
-    collaborators: [
-      {
-      imageUrl: 'assets/users/user1.png',
-      Sepher: 'crm/contacts/Sepher',
-      name: 'Michael'
-      }
-    ],
-    accountManager: [
-      {
-      imageUrl: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Michael'
-      }
-    ],
-    projectManager: [
-      {
-      imageUrl: 'assets/users/user3.png',
-      profileLink: 'crm/contacts/Nick',
-      name: 'Nick'
-      }
-    ],
-    designer: [
-      {
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Michael'
-      }
-    ]
-  };
+  public projectDetails: any;
 
   ngOnInit() {
     this.proposalService.getUpdatedProposalProductList.subscribe(
@@ -576,6 +548,97 @@ export class ProposalComponent implements OnInit {
         return obj[key].toString().includes(searchKey);
       });
     });
+  }
+
+  getCategoryDetails(categoryIds) {
+    const categories = [];
+    categoryIds.forEach((categoryId, index) => {
+      this.sharedService.getIndividualCategory(categoryId).subscribe(data => {
+        categories.push(data.data);
+        if (index === categoryIds.length - 1) {
+          this.categoryDetails = categories;
+          this.getSubCategoryDetails(categoryIds);
+        }
+      });
+    });
+  }
+
+  getSubCategoryDetails(categoryIds) {
+    let subcategories = [];
+    categoryIds.forEach((categoryId, index) => {
+      this.sharedService.getSubCategories(categoryId).subscribe(data => {
+        subcategories = subcategories.concat(data.results);
+        if (index === categoryIds.length - 1) {
+          this.subCategoryDetails = subcategories;
+          this.getProjectDetails();
+        }
+      });
+    });
+  }
+
+  getColloboratorDetails(collaborators) {
+    const details = [];
+    const nameList = this.userList.map(contact => contact.username);
+    console.log('nameList:', nameList);
+    collaborators.forEach((collaborator, index) => {
+      if (nameList.indexOf(collaborator) !== -1) {
+        details.push(this.userList[index]);
+      }
+    });
+    return details;
+  }
+
+  getContactInfo(contactName) {
+    const nameList = this.userList.map(contact => contact.username);
+      if (nameList.indexOf(contactName) !== -1) {
+        return this.userList[nameList.indexOf(contactName)];
+      }
+  }
+
+  getProjectDetails() {
+    const projectDetails = {
+      proposalId: this.proposalDetails['id'],
+      discount: {
+        amount: this.proposalDetails['discount'].value,
+        type: this.proposalDetails['discount'].unit === 'AMOUNT' ? ['$'] : ['%']
+      },
+      projectId: this.proposalDetails['projectId'],
+      projectCategoriesAll: this.categoryDetails,
+      projectSubCategoriesAll: this.subCategoryDetails,
+      completionDate: this.proposalDetails['completionDate'],
+      paymentSchedule: this.proposalDetails['paymentSchedule'],
+      collaborators: this.getColloboratorDetails(this.proposalDetails['collaborators']),
+      accountManager: this.getContactInfo(this.proposalDetails['accountManager']),
+      projectManager: this.getContactInfo(this.proposalDetails['projectManager']),
+      designer: this.getContactInfo(this.proposalDetails['designer']),
+      internalNote: this.proposalDetails['internalNote'],
+      clientNote: this.proposalDetails['clientNote'],
+      projectName: this.proposalDetails['projectName'],
+      scopeOfWork: this.proposalDetails['scopeOfWork'],
+      shippingAddress: this.proposalDetails['shippingAddress'],
+      taxRateId: this.proposalDetails['taxRateId'],
+      pricingCategoryId: this.proposalDetails['pricingCategoryId'],
+      projectTypeId: this.proposalDetails['projectTypeId'],
+      contactId: this.proposalDetails['contactId'],
+      currencyId:  this.proposalDetails['currencyId'],
+      leadId:  this.proposalDetails['leadId'],
+      clientProjectManagerId:  this.proposalDetails['clientProjectManagerId'],
+      accountReceivableId:  this.proposalDetails['accountReceivableId'],
+      name:  this.proposalDetails['name'],
+    };
+    // console.log('project details:', projectDetails);
+    this.projectDetails = projectDetails;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }
 
