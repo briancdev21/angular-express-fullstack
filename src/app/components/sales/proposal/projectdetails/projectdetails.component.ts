@@ -21,7 +21,9 @@ export class ProjectDetailsComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
   @Input() projectDetails;
-  
+
+  categories = [];
+  subcategories = [];
   proposalInfo: any;
   sidebarCollapsed = true;
   ProposalInfoModalCollapsed = true;
@@ -36,6 +38,7 @@ export class ProjectDetailsComponent implements OnInit {
   showProposalInfo = false;
   scheduleRemain: any;
   showDialog = false;
+  projectCategory = [];
 
   invalidCustomerName = false;
   invalidCollaborators = false;
@@ -195,6 +198,12 @@ export class ProjectDetailsComponent implements OnInit {
         // };
       });
     });
+    // this.sharedService.getCategories().subscribe(data => {
+    //   this.projectCategory = data.results;
+    // });
+    // this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
+    //   this.subCategories = data.results;
+    // });
     console.log('proposals info: ', this.proposalInfo);
     const comp = this;
     document.addEventListener('click', function() {
@@ -315,12 +324,18 @@ export class ProjectDetailsComponent implements OnInit {
     this.isAutocompleteUpdated5 = !this.isAutocompleteUpdated5;
   }
 
-  getCategories(data) {
-    console.log('category: ', data);
+
+  getProjectCategories(event) {
+    const projectCategories = event.map( k => k.id);
+    this.projectDetails.projectCategoriesAll = projectCategories;
+    console.log('categories: ', event, this.projectDetails.projectCategoriesAll);
   }
 
-  getSubCategories(data) {
-    console.log('subcategory: ', data);
+  getProjectSubCategories(event) {
+
+    const projectSubCategories = event.map( k => k.id);
+    this.projectDetails.projectSubCategoriesAll = projectSubCategories;
+    console.log('subcategories: ', event, this.projectDetails.projectSubCategoriesAll);
   }
 
   // saveProjectDetails() {

@@ -16,12 +16,16 @@
     </div>
     <div class="project-category">
       <span>Category</span>
-      <app-multikeywordselect [keywords]="projectCategory" (sendKeywords)="getCategories($event)"></app-multikeywordselect>
+      <div class="category-box" [ngClass]="{'validation-required': invalidCategory}">
+        <app-multicategoriesselect [categories]="categories" (sendCategories)="getProjectCategories($event)"></app-multicategoriesselect>
+      </div>
     </div>
 
     <div class="subproject-category">
       <span>Subcategory</span>
-      <app-multikeywordselect [keywords]="projectSubCategory" (sendKeywords)="getSubCategories($event)" ></app-multikeywordselect>
+      <div class="subcategory-box" [ngClass]="{'validation-required': invalidSubCategory}">
+        <app-multisubcategoriesselect [subCategories]="subCategories" (sendSubCategories)="getProjectSubCategories($event)"></app-multisubcategoriesselect>
+      </div>
     </div>
 
     <div class="client-notes">

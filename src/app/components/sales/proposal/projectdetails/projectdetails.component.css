@@ -431,6 +431,11 @@ input::placeholder {
 
 /* Tab Project Details CSS */
 
+
+:host ::ng-deep .tab-two .category-box .content-box, :host ::ng-deep .tab-two .subcategory-box .content-box {
+	min-height: 84px;
+}
+
 .discount>div {
 	display: flex;
 }
