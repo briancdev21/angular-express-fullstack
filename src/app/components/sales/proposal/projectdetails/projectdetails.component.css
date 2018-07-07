@@ -22,6 +22,10 @@
 	border: 1px solid red !important;
 }
 
+:host ::ng-deep .completer-label {
+	display: none !important;
+}
+
 /* Modal CSS */
 
 .sidebar-wrapper {

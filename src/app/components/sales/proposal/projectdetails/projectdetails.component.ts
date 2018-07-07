@@ -8,6 +8,7 @@ import { ProductsService } from '../../../../services/inventory/products.service
 import { SharedService } from '../../../../services/shared.service';
 import { ProposalsService } from '../../../../services/proposals.service';
 import * as moment from 'moment';
+import { CompleterService } from 'ng2-completer';
 
 @Component({
   selector: 'app-projectdetails',
@@ -29,9 +30,28 @@ export class ProjectDetailsComponent implements OnInit {
       this.subCategories = this.projectDetails.projectSubCategoriesAll;
       this.clientNote = this.projectDetails.clientNote;
       this.internalNote = this.projectDetails.internalNote;
-      this.customerName = this.projectDetails.name;
       this.shippingAddress = this.projectDetails.shippingAddress;
       this.collaborators = this.projectDetails.collaborators;
+      this.projectManager = this.projectDetails.projectManager.username;
+      // Get client project manager id:
+      // tslint:disable-next-line:max-line-length
+      const clientProjectManagerContact = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.clientProjectManagerId.split('-').pop(), 10));
+      this.clientProjectManager = clientProjectManagerContact[0]['name'];
+
+      // Get client project manager id:
+      // tslint:disable-next-line:max-line-length
+      const accountReceivableData = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.accountReceivableId.split('-').pop(), 10));
+      this.selectReceivable = accountReceivableData[0]['name'];
+
+      // Get customer name:
+      // tslint:disable-next-line:max-line-length
+      const contactData = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.contactId.split('-').pop(), 10));
+      this.customerName = contactData[0].name;
+
+
+      // Get Project Type
+      // tslint:disable-next-line:max-line-length
+      this.projectType = parseInt(this.projectDetails.accountReceivableId.split('-').pop(), 10);
      }
   }
 
@@ -41,6 +61,7 @@ export class ProjectDetailsComponent implements OnInit {
 clientNote: string;
 internalNote: string;
 customerName: string;
+projectType: number;
 
 shippingAddress = {
   address: '',
@@ -51,6 +72,9 @@ shippingAddress = {
 };
 //
 projectDetails = {
+  contactId: undefined,
+  clientProjectManagerId: undefined,
+  accountReceivableId: undefined,
   accountManager: {
     username: '',
     pictureURI: ''
@@ -95,14 +119,16 @@ projectDetails = {
   tabActiveFirst = true;
   tabActiveSecond = false;
   tabActiveThird = false;
-  switchIconManagement = true;
-  switchIconReceivable = true;
+  switchIconManagement = false;
+  switchIconReceivable = false;
   switchIconShipping = true;
   receivable = '';
   showProposalInfo = false;
   scheduleRemain: any;
   showDialog = false;
   projectCategory = [];
+  clientProjectManager: any;
+  selectReceivable: any;
 
   invalidCustomerName = false;
   invalidCollaborators = false;
@@ -120,7 +146,9 @@ projectDetails = {
   isAutocompleteUpdated3 = false;
   isAutocompleteUpdated4 = false;
   isAutocompleteUpdated5 = false;
+  invalidClientProjectManager = false;
 
+  projectManager = '';
   editable: boolean;
   accountEditable: boolean;
   projectEditable: boolean;
@@ -133,6 +161,7 @@ projectDetails = {
   items3 = [];
   items4 = [];
   items5 = [];
+  customersData: any;
 
   userInfo = {
     name: 'John Moss',
@@ -215,11 +244,27 @@ projectDetails = {
 
   proposalId: any;
   contactsList = [];
-  constructor( private proposalService: ProposalService, private route: ActivatedRoute, private sharedService: SharedService
-    , private proposalsService: ProposalsService ) {
+  projectTypeList = [];
+  proposalPricingList = [];
+
+  // tslint:disable-next-line:max-line-length
+  constructor( private proposalService: ProposalService, private route: ActivatedRoute, private sharedService: SharedService, private completerService: CompleterService,
+    private proposalsService: ProposalsService ) {
     this.proposalId = this.route.snapshot.paramMap.get('id');
+
+    this.sharedService.getPricingCategories().subscribe(res => {
+      this.proposalPricingList = res.results;
+    });
+
+    this.sharedService.getProjectTypes().subscribe(res => {
+      this.projectTypeList = res.results;
+    });
+
     this.sharedService.getContacts().subscribe(data => {
+      data = this.addContactName(data);
       this.contactsList = data;
+      this.customersData = this.completerService.local(this.contactsList, 'name', 'name');
+
       this.proposalsService.getIndividualProposal(this.proposalId).subscribe(res => {
         console.log('project details service: ', res);
         this.proposalInfo = res.data;
@@ -335,13 +380,17 @@ projectDetails = {
   }
 
   clickIconManagement() {
+    // tslint:disable-next-line:max-line-length
+    this.proposalDetails.clientProjectManagerId = (this.switchIconManagement) ? this.proposalDetails.contactId : undefined;
     this.switchIconManagement = !this.switchIconManagement;
-    this.projectManager = (this.switchIconManagement) ? this.proposalInfo.contactName : '';
+    this.clientProjectManager = (this.switchIconManagement) ? this.customerName : '';
   }
 
   clickIconReceivable() {
+    // tslint:disable-next-line:max-line-length
+    this.proposalDetails.accountReceivableId = (this.switchIconReceivable) ? this.proposalDetails.contactId : undefined;
+    this.selectReceivable = (!this.switchIconReceivable) ? this.getContactNameFromId( this.proposalDetails.contactId) : '';
     this.switchIconReceivable = !this.switchIconReceivable;
-    this.receivable = (this.switchIconReceivable) ? this.proposalInfo.contactName : '';
   }
 
   ngOnInit() {
@@ -358,6 +407,8 @@ projectDetails = {
 
   getSchduleRemain(event) {
     this.scheduleRemain = event;
+    this.proposalDetails.paymentSchedule = event;
+    this.updateProjectDetails();
   }
 
   onSelect(item: any) {
@@ -368,6 +419,7 @@ projectDetails = {
     });
     this.collaborators.push({username: item.username, pictureURI: item.pictureURI });
     this.proposalDetails.collaborators.push(item.username);
+    this.updateProjectDetails();
   }
 
   onSelectAccountManager(item: any) {
@@ -376,6 +428,8 @@ projectDetails = {
       return obj.username !== item.username;
     });
     this.projectDetails.accountManager = {username: item.username, pictureURI: item.pictureURI };
+    this.proposalDetails.accountManager = item.username;
+    this.updateProjectDetails();
   }
 
   onSelectProjectManager(item: any) {
@@ -384,6 +438,8 @@ projectDetails = {
       return obj.username !== item.username;
     });
     this.projectDetails.projectManager = {username: item.username, pictureURI: item.pictureURI };
+    this.proposalDetails.projectManager = item.username;
+    this.updateProjectDetails();
   }
 
   onSelectDesigner(item: any) {
@@ -392,6 +448,8 @@ projectDetails = {
       return obj.username !== item.username;
     });
     this.projectDetails.designer = {username: item.username, pictureURI: item.pictureURI };
+    this.proposalDetails.designer = item.username;
+    this.updateProjectDetails();
   }
 
 
@@ -432,6 +490,7 @@ projectDetails = {
     const projectCategories = event.map( k => k.id);
     this.projectDetails.projectCategoriesAll = projectCategories;
     console.log('categories: ', event, this.projectDetails.projectCategoriesAll);
+    this.updateProjectDetails();
   }
 
   getProjectSubCategories(event) {
@@ -439,6 +498,7 @@ projectDetails = {
     const projectSubCategories = event.map( k => k.id);
     this.projectDetails.projectSubCategoriesAll = projectSubCategories;
     console.log('subcategories: ', event, this.projectDetails.projectSubCategoriesAll);
+    this.updateProjectDetails();
   }
 
   // saveProjectDetails() {
@@ -467,6 +527,12 @@ projectDetails = {
     } else {
       return selectedContact.business.name;
     }
+  }
+
+  onSelectCustomer(event) {
+    console.log('select customer: ', event);
+    this.proposalDetails.contactId = event.originalObject.id;
+    this.customerName = event.originalObject.name;
   }
 
   saveProjectDetails() {
@@ -550,9 +616,41 @@ projectDetails = {
     this.proposalDetails.name = event.target.value;
     this.updateProjectDetails();
   }
+  onSelectProjectManagementContact(event) {
+    console.log('client project manager id:', event.originalObject);
+    this.proposalDetails.clientProjectManagerId = event.originalObject.id;
+    this.clientProjectManager = event.originalObject.name;
+    this.updateProjectDetails();
+  }
+
+  onSelectAccountReceivable(event) {
+    this.proposalDetails.accountReceivableId = event.originalObject.id;
+    this.selectReceivable = event.originalObject.name;
+    this.updateProjectDetails();
+  }
+
+  onSelectAssociation(event) {
+    this.proposalDetails.association = event.target.value;
+  }
+  onChangePricingCategory(event) {
+    this.updateProjectDetails();
+  }
+  onChangeProjectName(event) {
+    this.proposalDetails.name = event.target.value;
+    this.updateProjectDetails();
+  }
+  onChangeProjectType(event) {
+    this.proposalDetails.projectTypeId = parseInt(event.target.value, 10);
+    this.updateProjectDetails();
+  }
+  onChangeShippingAddress(event, type) {
+    this.proposalDetails.shippingAddress[type] = event.target.value;
+    this.updateProjectDetails();
+  }
 
   updateProjectDetails() {
-    this.proposalDetails.contactId = parseInt(this.proposalDetails.contactId.split('-').pop(), 10);
+    console.log('project details are updating:', this.proposalDetails);
+    this.proposalDetails.contactId = parseInt(this.proposalDetails.toString().split('-').pop(), 10);
     this.proposalDetails.clientProjectManagerId = parseInt(this.proposalDetails.clientProjectManagerId.split('-').pop(), 10);
     this.proposalDetails.accountReceivableId = parseInt(this.proposalDetails.accountReceivableId.split('-').pop(), 10);
     this.proposalDetails.clientNote = this.proposalDetails.clientNote ?  this.proposalDetails.clientNote : '';
@@ -560,5 +658,16 @@ projectDetails = {
     this.proposalsService.updateIndividualProposal(this.proposalId, this.proposalDetails).subscribe(res => {
       console.log('proposal updated');
     });
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

@@ -59,9 +59,17 @@
       <tab tabTitle="CLIENT DETAILS" [(active)]="tabActiveFirst">
         <div class="tab-one">
           <div class="name-col tab-row">
-            <div>
-              <span>Customer Name</span>
-              <input placeholder="Enter Customer Name" [(ngModel)]="customerName" (change)="onChangeCustomerName($event)" [ngClass]="{'validation-required': invalidCustomerName}">
+            <div >
+              <span>Customer Name (*required)</span>
+              <ng2-completer 
+                [dataService]="customersData" 
+                [minSearchLength]="0" 
+                (selected)="onSelectCustomer($event)" 
+                [(ngModel)]="customerName" 
+                class="ng2completer" 
+                [ngClass]="{'validation-required-name': invalidCustomerName}">
+              </ng2-completer>
+              <!-- <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectCustomer($event)" [ngClass]="{'validation-required-name': invalidCustomerName}" [searchStr]="selectName"></app-in-customer-name> -->
             </div>
             <div class="collaborators">
               <span>Collaborators</span>
@@ -107,37 +115,51 @@
               <div class="desc">
                 <span>Project Management</span>
                 <div>
-                  <img src="assets/images/switch.png" *ngIf="switchIconManagement" (click)="clickIconManagement()">
                   <img src="assets/images/switch-off.png" *ngIf="!switchIconManagement" (click)="clickIconManagement()">
+                  <img src="assets/images/switch.png" *ngIf="switchIconManagement" (click)="clickIconManagement()">
                   <span>Same as customer</span>
                 </div>
               </div>
-              <input placeholder="Enter Project Manager" [value]="projectManager">
+              <ng2-completer 
+                [dataService]="customersData" 
+                [minSearchLength]="0" 
+                (selected)="onSelectProjectManagementContact($event)" 
+                [(ngModel)]="clientProjectManager" 
+                class="ng2completer" 
+                [ngClass]="{'validation-required-name': invalidClientProjectManager}">
+              </ng2-completer>
             </div>
 
             <div>
               <div class="desc">
                 <span>Account Receivable</span>
                 <div>
-                  <img src="assets/images/switch.png" *ngIf="switchIconReceivable" (click)="clickIconReceivable()">
                   <img src="assets/images/switch-off.png" *ngIf="!switchIconReceivable" (click)="clickIconReceivable()">
+                  <img src="assets/images/switch.png" *ngIf="switchIconReceivable" (click)="clickIconReceivable()">
                   <span>Same as customer</span>
                 </div>
               </div>
-              <input placeholder="Enter Name" [value]="receivable">
+              <ng2-completer 
+                [dataService]="customersData" 
+                [minSearchLength]="0" 
+                (selected)="onSelectAccountReceivable($event)" 
+                [(ngModel)]="selectReceivable" 
+                class="ng2completer" 
+                [ngClass]="{'validation-required-name': invalidAccountReceivable}">
+              </ng2-completer>
             </div>
           </div>
 
           <div class="other-pri tab-row">
-            <div>
+            <div class="other-association" >
               <span>Other Associations</span>
-              <input placeholder="Enter Customer Name">
+              <app-in-customer-name [userList]="contactsList" (selectedUser)="onSelectAssociation($event)" [searchStr]="selectAssociation"></app-in-customer-name>
             </div>
             <div>
               <span>Proposal Pricing</span>
               <div>
-                <select>
-                  <option value="test">Friends and Family</option>
+                <select [(ngModel)]="proposalDetails.pricingCategoryId" (change)="onChangePricingCategory($event)" [ngClass]="{'validation-required': invalidPricing}">
+                  <option *ngFor="let price of proposalPricingList" [value]="price.id">{{price.name}}</option>
                 </select>
               </div>
             </div>
@@ -146,12 +168,15 @@
           <div class="name-type tab-row">
             <div>
               <span>Project Name</span>
-              <input placeholder="Enter Project Name" [(ngModel)]="projectDetails.projectName" [ngClass]="{'validation-required': invalidProjectName}">
+              <input placeholder="Enter Project Name" [(ngModel)]="projectDetails.name" (change)="onChangeProjectName($event)" [ngClass]="{'validation-required': invalidProjectName}">
             </div>
             <div>
               <span>Project Type</span>
               <div>
-                <input placeholder="Enter Project Type" [(ngModel)]="proposalInfo.projectType">
+                <select [(ngModel)]="projectType" (change)="onChangeProjectType($event)" [ngClass]="{'validation-required': invalidProjectType}">
+                  <option value="" disabled>Choose Project Type</option>
+                  <option *ngFor="let project of projectTypeList" [value]="project.id">{{project.name}}</option>
+                </select>
               </div>
             </div>
           </div>
@@ -165,15 +190,15 @@
                 <span>Same as the customer profile</span>
               </div>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="shippingAddress.address" [ngClass]="{'validation-required': invalidAddress}" >
+            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="shippingAddress.address" [ngClass]="{'validation-required': invalidAddress}" (change)="onChangeShippingAddress($event, 'address')" >
 
             <div class="city-state">
-              <input placeholder="Enter City" [(ngModel)]="shippingAddress.city" [ngClass]="{'validation-required': invalidCity}">
-              <input placeholder="Enter State" [(ngModel)]="shippingAddress.province" [ngClass]="{'validation-required': invalidState}">
+              <input placeholder="Enter City" [(ngModel)]="shippingAddress.city" (change)="onChangeShippingAddress($event, 'city')" [ngClass]="{'validation-required': invalidCity}">
+              <input placeholder="Enter State" [(ngModel)]="shippingAddress.province" (change)="onChangeShippingAddress($event, 'postalprovinceCode')" [ngClass]="{'validation-required': invalidState}">
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country" [(ngModel)]="shippingAddress.country" [ngClass]="{'validation-required': invalidCountry}">
-              <input placeholder="Enter Zipcode" [(ngModel)]="shippingAddress.postalCode" [ngClass]="{'validation-required': invalidZipcode}">
+              <input placeholder="Enter Country" [(ngModel)]="shippingAddress.country" (change)="onChangeShippingAddress($event, 'country')" [ngClass]="{'validation-required': invalidCountry}">
+              <input placeholder="Enter Zipcode" [(ngModel)]="shippingAddress.postalCode" (change)="onChangeShippingAddress($event, 'postalCode')" [ngClass]="{'validation-required': invalidZipcode}">
             </div>
           </div>
           <div class="btn-section" >
@@ -192,29 +217,30 @@
             <div class="discount">
               <span>Discount</span>
               <div>
-                <select [(ngModel)]="projectDetails.discount.type">
-                  <option *ngFor="let type of ['$', '%']">{{type}}</option>
+                <select [(ngModel)]="proposalDetails.discount.type" (change)="updateProjectDetails()">
+                  <option value="AMOUNT">$</option>
+                  <option value="PERCENT">%</option>
                 </select>
-                <input [(ngModel)]="projectDetails.discount.amount">
+                <input [(ngModel)]="proposalDetails.discount.amount" (change)="updateProjectDetails()" type="number">
               </div>
             </div>
             <div>
               <span>Project ID</span>
-              <input [(ngModel)]="projectDetails.projectId" [ngClass]="{'validation-required': invalidProjectId}">
+              <input [(ngModel)]="projectDetails.projectId" (change)="updateProjectDetails()" [ngClass]="{'validation-required': invalidProjectId}">
             </div>
           </div>
 
           <div class="cate-subcate tab-row">
             <div>
               <span>Project Categories</span>
-              <div class="category-box">
-                <app-multikeywordselect [keywords]="projectDetails.projectCategoriesAll"></app-multikeywordselect>
+              <div class="category-box" [ngClass]="{'validation-required': invalidCategory}">
+                <app-multicategoriesselect [categories]="categories" (sendCategories)="getProjectCategories($event)"></app-multicategoriesselect>
               </div>
             </div>
             <div>
               <span>Project Subcategories</span>
-              <div class="subcategory-box">
-                <app-multikeywordselect [keywords]="projectDetails.projectSubCategoriesAll"></app-multikeywordselect>
+              <div class="subcategory-box" [ngClass]="{'validation-required': invalidSubCategory}">
+                <app-multisubcategoriesselect [subCategories]="subCategories" (sendSubCategories)="getProjectSubCategories($event)"></app-multisubcategoriesselect>
               </div>
             </div>
           </div>
@@ -222,10 +248,7 @@
           <div class="comp-sche tab-row">
             <div class="completion">
               <span>Completion Date</span>
-              <div>
-                <input value="{{projectDetails.completionDate}}">
-                <img src="assets/images/calendar-plain.png" alt="">
-              </div>
+              <app-in-createddatefield [(createdDate)]="proposalDetails.completionDate" ></app-in-createddatefield>
             </div>
             <div class="schedule">
               <div class="schedule-title">
