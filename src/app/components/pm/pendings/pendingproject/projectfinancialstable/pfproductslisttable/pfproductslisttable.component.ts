@@ -37,6 +37,7 @@ export class PfProductsListTableComponent implements OnInit {
   swappingList = [];
   showSwapConfirmModal = false;
   brandsList: any;
+  supplierList: any;
 
   activity: {
     title: string;
@@ -57,6 +58,11 @@ export class PfProductsListTableComponent implements OnInit {
       this.brandsList = res.results;
       console.log('brandslist: ', res);
     });
+
+    this.sharedService.getSuppliers().subscribe(res => {
+      this.supplierList = res.results;
+      console.log('supplierList: ', res);
+    });
   }
 
   ngOnInit() {
@@ -68,6 +74,11 @@ export class PfProductsListTableComponent implements OnInit {
   getBrandName(id) {
     const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
     return selectedBrand.name;
+  }
+
+  getSupplierName(id) {
+    const selectedSupplier = this.supplierList.filter(b => b.id === id)[0];
+    return selectedSupplier.name;
   }
 
   getScoreColor(score) {

@@ -12,12 +12,12 @@
     </tr>
     <tr *ngFor="let order of purchaseOrdersList; let i = index">
       <td><img [src]="order.imgUrl"></td>
-      <td>{{order.productName}}</td>
-      <td>{{order.supplier}}</td>
+      <td>{{order.name}}</td>
+      <td>{{getSupplierName(order.supplierId)}}</td>
       <td>{{order.brand}}</td>
       <td>{{order.sku}}</td>
       <td>{{order.orderNumber}}</td>
-      <td class="order-status">{{order.qty}}</td>
+      <td class="order-status">{{order.quantity}}</td>
       <td>
         <span class="order-status">{{order.status}}</span>
         <img src="assets/images/three-dots.png" (click)="openOrderModal(i)" style="cursor: pointer;">

@@ -15,14 +15,15 @@ import { apiHeaders, apiUrl } from '../../../../config';
 @Injectable()
 
 export class PendingProjectService {
-
+    /*
     options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
 
     constructor( private http: HttpClient) {
     }
 
-    getProductsList (projectId): Observable<any> {
-        const url = `${environment.apiUrl}/project-management/projects/${projectId}/products`;
+    getProductsList (projectId: string, limit: number = 50, offset: number = 0): Observable<any> {
+        const url = `${environment.apiUrl}/project-management/projects/${projectId}/products/?limit=${limit}&offset=${offset}`;
         return this.http.get(url);
     }
+    */
 }
