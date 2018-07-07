@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectManagementService } from '../projectmanagement.service';
+import { PmTasksService } from '../../../../services/pmtasks.service';
+import * as moment from 'moment';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-pmboard',
@@ -18,23 +21,7 @@ export class PmBoardComponent implements OnInit {
 
   ];
 
-  public taskOwners = [
-    {
-      name: 'John Moss',
-      imgUrl: 'assets/users/user1.png',
-      userId: 1
-    },
-    {
-      name: 'Tyler Labonte',
-      imgUrl: 'assets/users/user2.png',
-      userId: 2
-    },
-    {
-      name: 'Michael Yue',
-      imgUrl: 'assets/users/user3.png',
-      userId: 3
-    }
-  ];
+  public taskOwners = [];
 
   public projectInfo = {
     projectOwner: {
@@ -73,449 +60,354 @@ export class PmBoardComponent implements OnInit {
   };
 
   public pmBoardTableData = [
-    {
-      title: 'PLANNING',
-      color: '',
-      tasks: [
-        {
-          id: 1,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          start: '2018-02-15',
-          dueDate: '2018-03-05',
-          duration: 7,
-          dependency: [],
-          like: false,
-          attachment: false,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 2,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 80,
-          start: '2018-02-17',
-          dueDate: '2018-03-15',
-          duration: 5,
-          dependency: [1],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 3,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 0,
-          start: '2018-02-15',
-          dueDate: '2018-03-03',
-          duration: 2,
-          dependency: [2],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 4,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'Tyler Labonte',
-            imgUrl: 'assets/users/user2.png',
-            userId: 2
-          },
-          progress: 0,
-          start: '2018-02-15',
-          dueDate: '2018-03-05',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 5,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'Tyler Labonte',
-            imgUrl: 'assets/users/user2.png',
-            userId: 2
-          },
-          progress: 50,
-          start: '2018-02-15',
-          dueDate: '2018-03-07',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 6,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'Tyler Labonte',
-            imgUrl: 'assets/users/user2.png',
-            userId: 2
-          },
-          progress: 0,
-          start: '2018-02-18',
-          dueDate: '2018-03-04',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        }
-      ]
-    },
-    {
-      title: 'IMPLEMENTATION',
-      color: '',
-      tasks: [
-        {
-          id: 1,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          start: '2018-03-17',
-          dueDate: '2018-04-02',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 2,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'Tyler Labonte',
-            imgUrl: 'assets/users/user2.png',
-            userId: 2
-          },
-          progress: 0,
-          start: '2018-03-18',
-          dueDate: '2018-04-03',
-          duration: 1,
-          dependency: [1, 2],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 3,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'Michael Yue',
-            imgUrl: 'assets/users/user3.png',
-            userId: 3
-          },
-          progress: 0,
-          start: '2018-03-17',
-          dueDate: '2018-04-04',
-          duration: 2,
-          dependency: [2],
-          like: true,
-          attachment: false,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 4,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 100,
-          start: '2018-03-17',
-          dueDate: '2018-04-02',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-      ]
-    },
-    {
-      title: 'INSTALLATIOIN',
-      color: '',
-      tasks: [
-        {
-          id: 1,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 0,
-          start: '2018-04-10',
-          dueDate: '2018-04-20',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 2,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'Michael Yue',
-            imgUrl: 'assets/users/user3.png',
-            userId: 3
-          },
-          progress: 0,
-          start: '2018-04-19',
-          dueDate: '2018-04-21',
-          duration: 2,
-          dependency: [1],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 3,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 0,
-          start: '2018-04-10',
-          dueDate: '2018-04-20',
-          duration: 2,
-          dependency: [2],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 4,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'Michael Yue',
-            imgUrl: 'assets/users/user3.png',
-            userId: 3
-          },
-          progress: 0,
-          start: '2018-04-10',
-          dueDate: '2018-04-20',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 5,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'Tyler Labonte',
-            imgUrl: 'assets/users/user2.png',
-            userId: 2
-          },
-          progress: 0,
-          start: '2018-04-10',
-          dueDate: '2018-04-20',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 6,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'Tyler Labonte',
-            imgUrl: 'assets/users/user2.png',
-            userId: 2
-          },
-          progress: 0,
-          start: '2018-04-10',
-          dueDate: '2018-04-20',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: false,
-          attachmentImg: '',
-          taskPath: ''
-        },
-        {
-          id: 7,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 0,
-          start: '2018-04-10',
-          dueDate: '2018-04-20',
-          duration: 2,
-          dependency: [1, 2, 3 ],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          subTaskCount: 5,
-          subTaskComplete: 2,
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 8,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 0,
-          start: '2018-04-10',
-          dueDate: '2018-04-20',
-          duration: 2,
-          dependency: [],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        }
-      ]
-    },
-    {
-      title: 'PROJECT COMPLETION',
-      color: '',
-      tasks: [
-        {
-          id: 1,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 0,
-          start: '2018-04-25',
-          dueDate: '2018-05-01',
-          duration: 7,
-          dependency: [2, 4],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 2,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'Tyler Labonte',
-            imgUrl: 'assets/users/user2.png',
-            userId: 2
-          },
-          progress: 0,
-          start: '2018-04-24',
-          dueDate: '2018-05-03',
-          duration: 2,
-          dependency: [1, 2],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 3,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 0,
-          start: '2018-04-24',
-          dueDate: '2018-05-03',
-          duration: 2,
-          dependency: [2],
-          like: true,
-          attachment: false,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-        {
-          id: 4,
-          taskTitle: ' Task title goes here',
-          profile: {
-            name: 'John Moss',
-            imgUrl: 'assets/users/user1.png',
-            userId: 1
-          },
-          progress: 0,
-          start: '2018-04-24',
-          dueDate: '2018-05-19',
-          duration: 2,
-          dependency: [5],
-          like: true,
-          attachment: true,
-          attachmentImg: '',
-          starred: false,
-          taskPath: ''
-        },
-      ]
-    },
+    // {
+    //   title: 'PLANNING',
+    //   color: '',
+    //   tasks: [
+    //     {
+    //       id: 1,
+    //       taskTitle: ' Task title goes here',
+    //       profile: {
+    //         name: 'John Moss',
+    //         imgUrl: 'assets/users/user1.png',
+    //         userId: 1
+    //       },
+    //       progress: 100,
+    //       start: '2018-02-15',
+    //       dueDate: '2018-03-05',
+    //       duration: 7,
+    //       dependency: [],
+    //       like: false,
+    //       attachment: false,
+    //       attachmentImg: '',
+    //       starred: false,
+    //       taskPath: ''
+    //     }
+    //   ]
+    // },
+  //   {
+  //     title: 'IMPLEMENTATION',
+  //     color: '',
+  //     tasks: [
+  //       {
+  //         id: 1,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         start: '2018-03-17',
+  //         dueDate: '2018-04-02',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 2,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'Tyler Labonte',
+  //           imgUrl: 'assets/users/user2.png',
+  //           userId: 2
+  //         },
+  //         progress: 0,
+  //         start: '2018-03-18',
+  //         dueDate: '2018-04-03',
+  //         duration: 1,
+  //         dependency: [1, 2],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 3,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'Michael Yue',
+  //           imgUrl: 'assets/users/user3.png',
+  //           userId: 3
+  //         },
+  //         progress: 0,
+  //         start: '2018-03-17',
+  //         dueDate: '2018-04-04',
+  //         duration: 2,
+  //         dependency: [2],
+  //         like: true,
+  //         attachment: false,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 4,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 100,
+  //         start: '2018-03-17',
+  //         dueDate: '2018-04-02',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //     ]
+  //   },
+  //   {
+  //     title: 'INSTALLATIOIN',
+  //     color: '',
+  //     tasks: [
+  //       {
+  //         id: 1,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-10',
+  //         dueDate: '2018-04-20',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 2,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'Michael Yue',
+  //           imgUrl: 'assets/users/user3.png',
+  //           userId: 3
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-19',
+  //         dueDate: '2018-04-21',
+  //         duration: 2,
+  //         dependency: [1],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 3,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-10',
+  //         dueDate: '2018-04-20',
+  //         duration: 2,
+  //         dependency: [2],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 4,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'Michael Yue',
+  //           imgUrl: 'assets/users/user3.png',
+  //           userId: 3
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-10',
+  //         dueDate: '2018-04-20',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 5,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'Tyler Labonte',
+  //           imgUrl: 'assets/users/user2.png',
+  //           userId: 2
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-10',
+  //         dueDate: '2018-04-20',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 6,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'Tyler Labonte',
+  //           imgUrl: 'assets/users/user2.png',
+  //           userId: 2
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-10',
+  //         dueDate: '2018-04-20',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: false,
+  //         attachmentImg: '',
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 7,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-10',
+  //         dueDate: '2018-04-20',
+  //         duration: 2,
+  //         dependency: [1, 2, 3 ],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         subTaskCount: 5,
+  //         subTaskComplete: 2,
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 8,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-10',
+  //         dueDate: '2018-04-20',
+  //         duration: 2,
+  //         dependency: [],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     title: 'PROJECT COMPLETION',
+  //     color: '',
+  //     tasks: [
+  //       {
+  //         id: 1,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-25',
+  //         dueDate: '2018-05-01',
+  //         duration: 7,
+  //         dependency: [2, 4],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 2,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'Tyler Labonte',
+  //           imgUrl: 'assets/users/user2.png',
+  //           userId: 2
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-24',
+  //         dueDate: '2018-05-03',
+  //         duration: 2,
+  //         dependency: [1, 2],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 3,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-24',
+  //         dueDate: '2018-05-03',
+  //         duration: 2,
+  //         dependency: [2],
+  //         like: true,
+  //         attachment: false,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //       {
+  //         id: 4,
+  //         taskTitle: ' Task title goes here',
+  //         profile: {
+  //           name: 'John Moss',
+  //           imgUrl: 'assets/users/user1.png',
+  //           userId: 1
+  //         },
+  //         progress: 0,
+  //         start: '2018-04-24',
+  //         dueDate: '2018-05-19',
+  //         duration: 2,
+  //         dependency: [5],
+  //         like: true,
+  //         attachment: true,
+  //         attachmentImg: '',
+  //         starred: false,
+  //         taskPath: ''
+  //       },
+  //     ]
+  //   },
   ];
 
   public financialTableData = [
@@ -590,12 +482,17 @@ export class PmBoardComponent implements OnInit {
       buttonClickEventHandlerName: 'downloadDoc'
     }
   ];
+  usersList = [];
 
   public barInfo = {
     title: 'Project health is at ' + this.projectInfo.projectHealth + '%',
     completeness: this.projectInfo.projectHealth,
   };
-  constructor( private pmService: ProjectManagementService ) {
+  constructor(private sharedService: SharedService, private pmService: ProjectManagementService,  private pmTasksService: PmTasksService ) {
+    this.sharedService.getUsers().subscribe(users => {
+      this.usersList = users;
+    });
+    this.getPmBoardTableData();
   }
 
   ngOnInit() {
@@ -610,6 +507,41 @@ export class PmBoardComponent implements OnInit {
       this.tasks.push(midTk);
     }
   }
+
+  getPmBoardTableData() {
+    this.pmTasksService.getTaskGroups().subscribe(data => {
+      const panels = data.results;
+      for (let i = 0; i < panels.length; i++) {
+        panels[i].color = '';
+        if (panels[i].taskIds !== null) {
+          const tasksByAssignee = {};
+          for (let j = 0; j < panels[i].taskIds.length; j++) {
+            this.pmTasksService.getTasks(panels[i].id).subscribe(taskData => {
+              panels[i].tasks = taskData.results;
+               panels[i].tasks.forEach(element => {
+                element.assigneeInfo = this.getUserInfo(element.assignee);
+                const taskOwners = this.taskOwners.filter(owner => owner.username === element.assignee);
+                if (taskOwners.length === 0) {
+                  this.taskOwners.push(element.assigneeInfo);
+                }
+                element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+                element.taskTitle = element.title;
+                element.dependency = element.dependencyIds ? element.dependencyIds : [];
+              });
+            });
+          }
+        }
+      }
+      console.log('pm board table data:', panels);
+      this.pmBoardTableData = panels;
+    });
+  }
+
+  getUserInfo(username) {
+    const selectedUser = this.usersList.filter(u => u.username === username)[0];
+    return selectedUser;
+  }
+
 
   getUpdatedPmData(eventData) {
     this.pmBoardTableData = eventData;

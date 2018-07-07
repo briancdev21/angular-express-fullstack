@@ -10,7 +10,7 @@
 <div class="main-content">
   <div class="content-left">
     <div class="pm-table">
-      <app-pmboardtable [pmBoardTableData]="pmBoardTableData" [taskOwners]="taskOwners" (updatePmData)="getUpdatedPmData($event)"></app-pmboardtable>
+      <app-pmboardtable [pmBoardTableInfo]="pmBoardTableData" [taskOwners]="taskOwners" (updatePmData)="getUpdatedPmData($event)"></app-pmboardtable>
     </div>
     <div class="project-finances">
       <app-projectfinance [projectInfo]="projectInfo" [financialTableData]="financialTableData"></app-projectfinance>

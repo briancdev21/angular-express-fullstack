@@ -2,19 +2,17 @@
   <div class="slide-left-btn" (click)="onPreviousSearchPosition()"><i class="fa fa-angle-left" [ngClass]="{'end-reached': leftReached}"></i></div>
   <div class="slide-right-btn" (click)="onNextSearchPosition()"><i class="fa fa-angle-right" [ngClass]="{'end-reached': rightReached}"></i></div>
   <div>
-    <div class="main-table-content">
+    <div class="main-table-content" *ngIf="dataReady" >
       <div *ngFor="let project of pmBoardTableData; let i = index;" class="table-column">
-        <div class="title" [ngStyle]="{'background': project.color}">
-          {{project.title}}
-        </div>
+        <div class="title" [ngStyle]="{'background': project.color}">{{project.title}}</div>
         <div class="add-btn" (click)="showDetailedTaskModal=true; temp=i">+</div>
         <div class="personal-project-cards">
           <div *ngFor="let owner of taskOwners" >
             <div class="personal-card" *ngIf="getTasksCount(owner, project) > 0">
               <div class="card-top">
                 <div>
-                  <img [src]="owner.imgUrl">
-                  <span>{{owner.name}}</span>
+                  <img [src]="owner.pictureURI">
+                  <span>{{owner.username}}</span>
                 </div>
                 <span class="tasks-completion" >{{getTasksCompletion(owner, project) | number: '1.0-0'}}%</span>
               </div>
@@ -38,7 +36,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> 
       </div>
     </div>
   </div>

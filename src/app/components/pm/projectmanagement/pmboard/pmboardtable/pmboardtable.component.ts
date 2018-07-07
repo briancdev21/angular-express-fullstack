@@ -13,7 +13,18 @@ import { ProjectManagementService } from '../../projectmanagement.service';
 export class PmBoardTableComponent implements OnInit {
   @ViewChild('panel', { read: ElementRef }) public panel: ElementRef;
 
-  @Input() pmBoardTableData;
+  @Input() set pmBoardTableInfo(val) {
+    this.pmBoardTableData = [];
+    if (val !== undefined && val.length !== 0) {
+      this.dataReady = true;
+      this.pmBoardTableData = val;
+      for (let i = 0; i < this.pmBoardTableData.length; i++) {
+        //  color selection
+        const pickColorId = i % 10;
+        this.pmBoardTableData[i].color = this.colors[pickColorId];
+     }
+    }
+  }
   @Input() taskOwners;
   @Output() updatePmData: EventEmitter<any> = new EventEmitter;
   showDetailedTaskModal = false;
@@ -21,6 +32,8 @@ export class PmBoardTableComponent implements OnInit {
   temp: number;
   leftReached = true;
   rightReached = false;
+  pmBoardTableData: any;
+  dataReady = false;
 
   constructor( private pmService: ProjectManagementService ) {
 
@@ -35,24 +48,16 @@ export class PmBoardTableComponent implements OnInit {
   colors = ['#FFE5CC', '#EDF3BF', '#FFD7D7', '#CBE0ED', '#E0BBCC', '#C4BBE0', '#BBC0E0', '#BBE0CC', '#E0BBBB', '#E8E3A7'];
 
   ngOnInit() {
-
-    for (let i = 0; i < this.pmBoardTableData.length; i++) {
-       //  color selection
-       const pickColorId = i % 10;
-       this.pmBoardTableData[i].color = this.colors[pickColorId];
-    }
-
-
   }
 
   getTasksCount(owner, project) {
-    const count = project.tasks.filter(t => t.profile.userId === owner.userId).length;
+    const count = project.tasks.filter(t => t.assignee === owner.username).length;
     return count;
   }
 
   getTasksCompletion(owner, project) {
     let total = 0;
-    const newArr = project.tasks.filter(t => t.profile.userId === owner.userId);
+    const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
       total = total + newArr[i].progress;
     }
@@ -62,7 +67,7 @@ export class PmBoardTableComponent implements OnInit {
   getDuration(owner, project) {
     let totalDuration = 0;
     // if total duration is smaller than 7 days, it will show by days and over 1 week, it will show by weeks
-    const newArr = project.tasks.filter(t => t.profile.userId === owner.userId);
+    const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
       totalDuration = totalDuration + newArr[i].duration;
     }
@@ -84,7 +89,7 @@ export class PmBoardTableComponent implements OnInit {
 
   getDependenciesCount(owner, project) {
     let total = 0;
-    const newArr = project.tasks.filter(t => t.profile.userId === owner.userId);
+    const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
       total = total + newArr[i].dependency.length;
     }
@@ -98,7 +103,7 @@ export class PmBoardTableComponent implements OnInit {
   getOverDueTasksCount(owner, project) {
     let total = 0;
     const today = new Date();
-    const newArr = project.tasks.filter(t => t.profile.userId === owner.userId);
+    const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
       if (new Date(newArr[i].dueDate) < today) {
         total ++;
@@ -109,7 +114,7 @@ export class PmBoardTableComponent implements OnInit {
 
   getCompletedTasksCount(owner, project) {
     let total = 0;
-    const newArr = project.tasks.filter(t => t.profile.userId === owner.userId);
+    const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
       if (newArr[i].progress === 100) {
         total ++;
