@@ -215,20 +215,24 @@ export class AddEstimateBodyComponent implements OnInit {
   onSelectClass(val) {
     this.saveInvoiceData.classificationId = val;
     this.newClass = val;
+    this.updateEstimate();
   }
 
   onSelectCategory(val) {
     this.saveInvoiceData.categoryId = val;
     this.newCategory = val;
+    this.updateEstimate();
   }
 
   changedDueDate(event) {
     this.saveInvoiceData.expiryDate = event;
+    this.updateEstimate();
   }
 
   onChangedMemo(event) {
     this.saveInvoiceData.internalNote = event;
     this.newInternalMemo = event;
+    this.updateEstimate();
   }
 
   onChangedNote(event) {
@@ -239,19 +243,23 @@ export class AddEstimateBodyComponent implements OnInit {
   onChangedTermsOfInvoice(event) {
     this.saveInvoiceData.terms = event;
     this.newTerms = event;
+    this.updateEstimate();
   }
 
   getMultiEmails(event) {
     this.saveInvoiceData.emails = event;
     this.newEmail = event;
+    this.updateEstimate();
   }
 
   onDepositChange(event) {
     this.saveInvoiceData.deposit = parseInt(event, 10);
+    this.updateEstimate();
   }
 
   getShippingAddress(event) {
     this.saveInvoiceData.shippingAddress = event.data;
+    this.updateEstimate();
   }
 
   changedCreatedDate(event) {
@@ -315,6 +323,9 @@ export class AddEstimateBodyComponent implements OnInit {
   }
   onSelectCustomerBeforeCreate(selectedItem: any) {
     this.saveInvoiceData = {};
+    this.saveInvoiceData.customerNote = '';
+    this.saveInvoiceData.terms = '';
+    this.saveInvoiceData.internalNote = '';
     if (selectedItem.contactType === 'lead') {
       this.saveInvoiceData.leadId = selectedItem.value;
     } else {
@@ -326,11 +337,6 @@ export class AddEstimateBodyComponent implements OnInit {
       this.saveInvoiceData  = res.data;
       this.invoice_mock = res.data;
       this.currentInvoiceId = this.saveInvoiceData.id;
-      this.discountType = this.saveInvoiceData.discount.unit;
-      this.discountAmount = this.saveInvoiceData.discount.value;
-      this.internalMemo = this.saveInvoiceData.internalNote;
-      this.noteToSupplier = this.saveInvoiceData.customerNote;
-      this.termsOfInvoice = this.saveInvoiceData.terms;
       this.in_id = 'ES - ' + this.currentInvoiceId;
 
       // Customer Name and Email, customer address
@@ -338,10 +344,12 @@ export class AddEstimateBodyComponent implements OnInit {
       let contactList = this.contactList;
       if (this.saveInvoiceData.contactId) {
         contactIdNumber = parseInt(this.saveInvoiceData.contactId.split('-').pop(), 10);
+        this.saveInvoiceData.contactId = contactIdNumber;
         contactList = contactList.filter(ele => ele.contactType === 'contact');
       } else {
         contactIdNumber = parseInt(this.saveInvoiceData.leadId.split('-').pop(), 10);
         contactList = contactList.filter(ele => ele.contactType === 'lead');
+        this.saveInvoiceData.leadId = contactIdNumber;
       }
       const contactIdList = contactList.map(c => c.id);
       const pos = contactIdList.indexOf(contactIdNumber);
@@ -350,6 +358,10 @@ export class AddEstimateBodyComponent implements OnInit {
       this.saveInvoiceData.emails = this.emailAddresses;
       this.selectItem = this.contactList[pos].name;
       this.customerAddress = this.contactList[pos].shippingAddress;
+
+      // Default expiry Date
+      this.saveInvoiceData.expiryDate = new Date().toISOString().slice(0, 10);
+      this.saveInvoiceData.categoryId = 0;
     });
   }
 }
