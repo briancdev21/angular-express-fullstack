@@ -19,6 +19,7 @@ export class InvoicesListTableComponent implements OnInit {
 
   @Input() set invoicesListInfoData(val) {
     this.invoicesListInfo = val;
+    console.log('list info invocies:', this.invoicesListInfo);
   }
   invoicesListInfo = [];
   sortClicked = true;
@@ -41,7 +42,7 @@ export class InvoicesListTableComponent implements OnInit {
   }
 
   redirectTo(data) {
-    const contactId = data.contactId.slice(0, 7);
+    const contactId = data.contactId ? data.contactId.slice(0, 7) : data.leadId.slice(0, 7) ;
     console.log('contactid..: ', contactId, data);
     if (contactId === 'INVOICE') {
       this.router.navigate([`invoice-profile/${data.id}`]);

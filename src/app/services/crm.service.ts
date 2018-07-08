@@ -28,7 +28,6 @@ export class CrmService {
   getLeadsList (limit: number = 50, offset: number = 0): Observable<any> {
     const url = `${environment.apiUrl}/crm/leads/?limit=${limit}&offset=${offset}`;
     // const url = `${environment.apiUrl}/crm/leads/`;
-    console.log('id_token', apiHeaders());
     return this.http.get(url);
   }
 
