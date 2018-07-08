@@ -1,7 +1,7 @@
 <div class="header">
   <div class="task-owner">
-    <img src="{{currentTaskOwner.imageUrl}}" *ngIf="currentTaskOwner.imageUrl" (click)="openOwnerModal(); $event.stopPropagation();">
-    <img *ngIf="!currentTaskOwner.imageUrl" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(); $event.stopPropagation();">
+    <img src="{{currentTaskOwner.pictureURI}}" *ngIf="currentTaskOwner.pictureURI" (click)="openOwnerModal(); $event.stopPropagation();">
+    <img *ngIf="!currentTaskOwner.pictureURI" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(); $event.stopPropagation();">
     <!-- Task owner selection modal-->
     <div
       class="owner-modal"
@@ -12,7 +12,7 @@
       <div class="owner-mdl-content">
         <select [(ngModel)]="selectedOwner" (ngModelChange)="onOwnerSelect($event)" >
           <option [value]="undefined">Select Task Owner</option>
-          <option *ngFor="let owner of taskOwners; let i = index" [value]="i">{{owner.name}}</option>
+          <option *ngFor="let owner of taskOwners; let i = index" [value]="i">{{owner.username}}</option>
         </select>
       </div>
     </div>
@@ -128,14 +128,14 @@
     <div class="followers"> 
       <span>Followers</span>
       <div class="follower" *ngFor="let user of followers; let i = index" (click)='editable=true;$event.stopPropagation();'>
-        <a [title]='user.name' ><img [src]='user.imageUrl'/></a>
+        <a [title]='user.username' ><img [src]='user.pictureURI'/></a>
       </div> 
       <div class="follower add-follower" >
-        <a title='user.name' (click)="editable=true;$event.stopPropagation()" ><img src='assets/images/Add-Button.svg'/></a>
+        <a title='user.username' (click)="editable=true;$event.stopPropagation()" ><img src='assets/images/Add-Button.svg'/></a>
       </div> 
       <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
         <ul>
-          <li *ngFor="let user of followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li *ngFor="let user of followers; let i = index">{{user.username}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;">
               <ng-select *ngIf="isAutocompleteUpdated3" [items]="items2"
                 [bindLabel]="config2.sourceField"

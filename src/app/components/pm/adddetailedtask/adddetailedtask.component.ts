@@ -57,7 +57,7 @@ export class AddDetailedTaskComponent implements OnInit {
   dependencyConfig: any = {'placeholder': 'Type here', 'sourceField': 'title'};
 
   items2: any[] = [];
-  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'username'};
   subscription: any;
   duration = 0;
   updatingInProgress = false;
@@ -75,23 +75,21 @@ export class AddDetailedTaskComponent implements OnInit {
     });
 
     this.sharedService.getUsers().subscribe(users => {
-      this.followers = users;
       this.taskOwners = users;
       this.items2 = users;
     });
 
     this.pmTasksService.getTaskGroupsWithParams({projectId: this.projectId}).subscribe(res => {
-      const taskGroupIds = res.results.map(taskGroup => taskGroup.id);
-      taskGroupIds.forEach(groupId => {
-        this.pmTasksService.getIndividualTaskGroup(groupId).subscribe( data => {
-          for (let i = 0; i < data.taskIds.length; i++) {
-            const taskId = data.taskIds[i];
-            this.pmTasksService.getIndividualTask(groupId, taskId).subscribe(taskRes => {
-              this.dependencyData.push({title: taskRes.title, id: taskId});
+      const taskgroups = res.results;
+      taskgroups.forEach(group => {
+          for (let i = 0; i < group.taskIds.length; i++) {
+            const taskId = group.taskIds[i];
+            this.pmTasksService.getIndividualTask(group.id, taskId).subscribe(taskRes => {
+              this.dependencyData.push({title: taskRes.data.title, id: taskId});
+              console.log('dependency data:', this.dependencyData);
             });
           }
         });
-      });
     });
 
     this.subscription = this.pmService.openDetailedTaskModal().subscribe(data => {
@@ -101,7 +99,7 @@ export class AddDetailedTaskComponent implements OnInit {
       this.updatingInProgress = true;
       this.selectedDependencies = data.task.dependency;
       this.currentTaskOwner = data.task.profile;
-      this.currentTaskOwner.imageUrl = data.task.profile.imgUrl;
+      this.currentTaskOwner.pictureURI = data.task.profile.imgUrl;
       this.dDate = data.task.dueDate;
       // change format from 'mmmm dd, yyyy' to 'YYYY-MM-DD'
       this.dateDue = moment(data.task.dueDate).format('YYYY-MM-DD').toString();
@@ -194,19 +192,19 @@ export class AddDetailedTaskComponent implements OnInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.username !== item.username;
     });
-    const checkAvail = this.followers.filter( d => d.name === item.label).length;
+    const checkAvail = this.followers.filter( d => d.name === item.username).length;
     if (checkAvail) {
       return;
     } else {
-      this.followers.push({name: item.label, imageUrl: item.imageUrl, userId: item.userId });
+      this.followers.push({username: item.username, pictureURI: item.pictureURI});
     }
   }
 
   removeUser(i: number) {
     const item = this.followers[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl, userId: item.userId});
+    this.items2.push({username: item.name, pictureURI: item.pictureURI});
     this.followers.splice(i, 1);
     this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
   }
@@ -276,26 +274,23 @@ export class AddDetailedTaskComponent implements OnInit {
     const formattedDueDate = moment(this.dateDue).format('YYYY-MM-DD');
     const dependency = this.selectedDependencies.map(d => d = d.id);
     const newAddedTask = {
-      id: 0,
-      taskTitle: this.projectName,
-      profile: {
-        name: this.currentTaskOwner.name,
-        imgUrl: this.currentTaskOwner.imageUrl,
-        userId: this.currentTaskOwner.userId
-      },
+      title: this.mainTitle,
+      assignee: this.currentTaskOwner.username,
       progress: this.completeness,
-      dueDate: formattedDueDate,
-      start: formattedToday,
+      startDate: formattedToday,
       duration: duration,
-      dependency: dependency,
-      like: false,
+      dependencyIds: dependency,
+      isImportant: false,
+      isComplete: this.completeness === 100 ? true : false,
       attachment: false,
       starred: false,
       taskPath: '',
       subTasks: this.subTasks,
-      internalNotes: this.internalNotes,
+      note: this.internalNotes,
       mainTitle: this.mainTitle,
       mainContent: this.mainContent,
+      keywordIds: [],
+      followers: this.followers
     };
     this.addNewTaskToTable.emit(newAddedTask);
     // return to empty after closing modal

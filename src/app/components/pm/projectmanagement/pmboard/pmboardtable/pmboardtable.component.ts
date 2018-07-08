@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../projectmanagement.service';
+import { PmTasksService } from '../../../../../services/pmtasks.service';
 
 @Component({
   selector: 'app-pmboardtable',
@@ -35,7 +36,7 @@ export class PmBoardTableComponent implements OnInit {
   pmBoardTableData: any;
   dataReady = false;
 
-  constructor( private pmService: ProjectManagementService ) {
+  constructor( private pmService: ProjectManagementService, private pmTasksService: PmTasksService ) {
 
     // close detailed task modal
     this.pmService.closeTaskModal.subscribe(
@@ -161,9 +162,16 @@ export class PmBoardTableComponent implements OnInit {
 
   getNewTask(event) {
     this.newAddedTask = event;
+    console.log('new task', event);
+
+    this.pmTasksService.createTask(this.temp, event).subscribe(res => {
+      for (let i = 0; i < event.subTasks.length; i++) {
+        this.pmTasksService.createSubTask(this.temp, res.data.id, event.subTasks[i]).subscribe();
+      }
+    });
     // assign new id to new task
-    event.id = this.pmBoardTableData[this.temp].tasks.length + 1;
-    this.pmBoardTableData[this.temp].tasks.push(event);
-    this.updatePmData.emit(this.pmBoardTableData);
+    // event.id = this.pmBoardTableData[this.temp].tasks.length + 1;
+    // this.pmBoardTableData[this.temp].tasks.push(event);
+    // this.updatePmData.emit(this.pmBoardTableData);
   }
 }

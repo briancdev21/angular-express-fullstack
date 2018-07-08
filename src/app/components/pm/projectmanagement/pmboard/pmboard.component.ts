@@ -544,19 +544,7 @@ export class PmBoardComponent implements OnInit {
 
 
   getUpdatedPmData(eventData) {
-    this.pmBoardTableData = eventData;
-    // for updating progress bar in gantt chart
-    this.tasks = [];
-    for (let i = 0; i < this.pmBoardTableData.length; i ++) {
-      const midTk = {
-        id: i,
-        title: this.pmBoardTableData[i].title,
-        start_date: this.minDate(this.pmBoardTableData[i].tasks.map(t => t.start)),
-        end_date: this.maxDate(this.pmBoardTableData[i].tasks.map(t => t.dueDate)),
-        progress: this.getMilestoneProgress(this.pmBoardTableData[i].tasks)
-      };
-      this.tasks.push(midTk);
-    }
+    this.getPmBoardTableData();
   }
 
   toggleMenubar(data: boolean) {
