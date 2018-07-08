@@ -12,8 +12,11 @@
         <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [shippingAddress]="shippingAddress" (updateAddress)="getShippingAddress($event)" ></app-shippingaddress>
         <div class="project-log">
           <app-in-project-selector class="flex1 mr-15" [projects]="projects"  (changedProject)="onChangeProject($event)"  ></app-in-project-selector>
-          <div class="log-number">
-            <input placeholder="Enter the change log number here" type="number" [(ngModel)]="logNumber">
+          <div class="log-number" (change)="onChooseChangeLog($event)" >
+            <select >
+              <option selected disabled>Enter the change log number here</option>
+              <option *ngFor="let logNumber of changeLogNumbers" [value]="logNumber.id">{{logNumber.title}}</option>
+            </select>
           </div>
         </div>
       </div>

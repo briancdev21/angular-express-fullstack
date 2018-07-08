@@ -36,7 +36,7 @@ export class AddInvoiceBodyComponent implements OnInit {
   classList = [];
   categoryList = [];
   projects = [];
-  changeLogNumbers = ['Number 1', 'Number 2', 'Number 3' ];
+  changeLogNumbers = [];
   labelText = 'Use customer address';
   title = 'Terms of the Invoice';
   dueDateTitle = 'Due Date';
@@ -179,7 +179,6 @@ export class AddInvoiceBodyComponent implements OnInit {
     this.projectsService.getProjectsList().subscribe(res => {
       this.projects = res.results.map(project => project.id);
     });
-
   }
 
   ngOnInit() {
@@ -240,6 +239,14 @@ export class AddInvoiceBodyComponent implements OnInit {
 
   onChangeProject(event) {
     this.saveInvoiceData.projectId = event;
+    this.projectsService.getProjectChangeLogs(event).subscribe(res => {
+      this.changeLogNumbers = res.results;
+      console.log('changeLog numbers:', this.changeLogNumbers);
+    });
+  }
+
+  onChooseChangeLog(event) {
+    this.saveInvoiceData.changeLog = event.target.value;
   }
 
   onChangedTermsOfInvoice(event) {

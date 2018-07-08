@@ -94,7 +94,7 @@ export class AddEstimateBodyComponent implements OnInit {
   newTerms = '';
   newExpiryDate: string;
   showEstimateCreateModal = true;
-
+  changeLogNumbers = [];
 
   public timelineData: Array<Object> = [
     {
@@ -247,6 +247,14 @@ export class AddEstimateBodyComponent implements OnInit {
 
   onChangeProject(event) {
     this.saveInvoiceData.projectId = event;
+    this.projectsService.getProjectChangeLogs(event).subscribe(res => {
+      this.changeLogNumbers = res.results;
+      console.log('changeLog numbers:', this.changeLogNumbers);
+    });
+  }
+
+  onChooseChangeLog(event) {
+    this.saveInvoiceData.changeLog = event.target.value;
   }
 
   onChangedTermsOfInvoice(event) {
@@ -307,6 +315,7 @@ export class AddEstimateBodyComponent implements OnInit {
       this.showModal = true;
     }
   }
+
   addContactName(data, contactType = 'contact') {
     data.forEach(element => {
       element.contactType = contactType;

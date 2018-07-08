@@ -292,6 +292,14 @@ export class InvoiceProfileBodyComponent implements OnInit {
 
   onChangeProject(event) {
     this.saveInvoiceData.projectId = event;
+    this.projectsService.getProjectChangeLogs(event).subscribe(res => {
+      this.changeLogNumbers = res.results;
+      console.log('changeLog numbers:', this.changeLogNumbers);
+    });
+  }
+
+  onChooseChangeLog(event) {
+    this.saveInvoiceData.changeLog = event.target.value;
   }
 
   onPriceChanged() {
