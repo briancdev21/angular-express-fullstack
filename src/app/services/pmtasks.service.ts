@@ -27,6 +27,11 @@ export class PmTasksService {
     return this.http.get(url);
   }
 
+  getTaskGroupsWithParams (params): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/task-groups`;
+    return this.http.get(url, {params: params});
+  }
+
   createTaskGroup (body): Observable<any> {
     const url = `${environment.apiUrl}/project-management/task-groups`;
     return this.http.post<any>(url, body);

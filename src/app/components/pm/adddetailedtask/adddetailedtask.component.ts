@@ -3,6 +3,9 @@ import { SubTasksManagementComponent } from './subtasksmanagement/subtasksmanage
 import { MultiKeywordSelectComponent } from './../../profile/multikeywordselect/multikeywordselect.component';
 import { ProjectManagementService } from '../projectmanagement/projectmanagement.service';
 import * as moment from 'moment';
+import { SharedService } from '../../../services/shared.service';
+import { ProjectsService } from '../../../services/projects.service';
+import { PmTasksService } from '../../../services/pmtasks.service';
 
 @Component({
   selector: 'app-adddetailedtask',
@@ -27,7 +30,7 @@ export class AddDetailedTaskComponent implements OnInit {
   selectedDependency: any = '';
   selectedItem: any = '';
   inputChanged: any = '';
-  projectName = 'Remodel with a Nu life';
+  projectName = '';
   projectTags = ['test'];
   showSettingsModal = false;
   today = new Date();
@@ -43,67 +46,52 @@ export class AddDetailedTaskComponent implements OnInit {
   isAutocompleteUpdated2 = false;
   isAutocompleteUpdated3 = false;
 
-  private taskOwners = [
-    {
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'John Moss',
-      userId: 1
-
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Tyler Labonte',
-      userId: 2
-    },
-    {
-      imageUrl: 'assets/users/user3.png',
-      profileLink: 'crm/contacts/joseph',
-      name: 'Michael Yue',
-      userId: 3
-    }];
-
-  followers = [
-    {
-      imageUrl: 'assets/users/user1.png',
-      name: 'John Moss',
-      userId: 1
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      name: 'Tyler Labonte',
-      userId: 2
-    }
-  ];
+  taskOwners = [];
+  projectId: any;
+  followers = [];
 
   selectedDependencies = [];
   currentTaskOwner: any;
 
-  dependencyData: any[] = [
-    {id: 0, title: 'Task 0'},
-    {id: 1, title: 'Task 1'},
-    {id: 2, title: 'Task 2'},
-    {id: 3, title: 'Task 3'},
-  ];
+  dependencyData: any[] = [ ];
   dependencyConfig: any = {'placeholder': 'Type here', 'sourceField': 'title'};
 
-  items2: any[] = [
-    {id: 0, label: 'John Moss', imageUrl: 'assets/users/user1.png', userId: 1},
-    {id: 1, label: 'Tyler Labonte', imageUrl: 'assets/users/user2.png', userId: 2},
-    {id: 2, label: 'Michael Yue', imageUrl: 'assets/users/user3.png', userId: 3},
-    {id: 3, label: 'Sepehr', imageUrl: 'assets/users/man.png', userId: 4},
-  ];
+  items2: any[] = [];
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   subscription: any;
   duration = 0;
   updatingInProgress = false;
 
-  constructor( private pmService: ProjectManagementService ) {
+  constructor( private sharedService: SharedService, private pmService: ProjectManagementService,
+    private projectsService: ProjectsService, private pmTasksService: PmTasksService ) {
     const comp = this;
+    this.projectId = localStorage.getItem('current_projectId');
+    this.projectsService.getIndividualProject(this.projectId).subscribe(res => {
+      this.projectName = res.data.name;
+    });
     document.addEventListener('click', function() {
       comp.editable = false;
       comp.dependencyEditable = false;
+    });
+
+    this.sharedService.getUsers().subscribe(users => {
+      this.followers = users;
+      this.taskOwners = users;
+      this.items2 = users;
+    });
+
+    this.pmTasksService.getTaskGroupsWithParams({projectId: this.projectId}).subscribe(res => {
+      const taskGroupIds = res.results.map(taskGroup => taskGroup.id);
+      taskGroupIds.forEach(groupId => {
+        this.pmTasksService.getIndividualTaskGroup(groupId).subscribe( data => {
+          for (let i = 0; i < data.taskIds.length; i++) {
+            const taskId = data.taskIds[i];
+            this.pmTasksService.getIndividualTask(groupId, taskId).subscribe(taskRes => {
+              this.dependencyData.push({title: taskRes.title, id: taskId});
+            });
+          }
+        });
+      });
     });
 
     this.subscription = this.pmService.openDetailedTaskModal().subscribe(data => {
