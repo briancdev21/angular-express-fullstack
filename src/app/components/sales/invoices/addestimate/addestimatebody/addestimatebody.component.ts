@@ -308,9 +308,10 @@ export class AddEstimateBodyComponent implements OnInit {
       if (typeof(this.saveInvoiceData.contactId) !== 'string') {
         this.estimatesService.updateEstimate(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
           console.log('saved invoice: ', res);
+          this.estimatesService.sendEmail(this.currentInvoiceId).subscribe();
+          this.router.navigate(['./sales/invoices']);
         });
       }
-      this.router.navigate(['./sales/invoices']);
     } else {
       this.showModal = true;
     }

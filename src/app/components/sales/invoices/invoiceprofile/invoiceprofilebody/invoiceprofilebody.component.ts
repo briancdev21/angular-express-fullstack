@@ -341,6 +341,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
       this.totalamountdue = res.data.total;
       this.subtotalServices = res.data.serviceSubTotal;
       this.subtotalproducts = res.data.productSubTotal;
+      this.invoicesService.sendEmail(this.currentInvoiceId).subscribe();
     });
   }
   addContactName(data) {

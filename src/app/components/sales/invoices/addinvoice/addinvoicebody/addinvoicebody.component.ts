@@ -299,8 +299,10 @@ export class AddInvoiceBodyComponent implements OnInit {
       }
       if (typeof(this.saveInvoiceData.contactId) !== 'string') {
         console.log('save invoice true case', this.saveInvoiceData);
+        this.saveInvoiceData.reminder = [];
         this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
           console.log('saved invoice: ', res);
+          this.invoicesService.sendEmail(this.currentInvoiceId).subscribe();
           this.router.navigate(['./sales/invoices']);
         });
       }

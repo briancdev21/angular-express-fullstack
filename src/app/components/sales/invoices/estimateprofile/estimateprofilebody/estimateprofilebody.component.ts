@@ -336,6 +336,7 @@ export class EstimateProfileBodyComponent implements OnInit {
       this.totalamountdue = res.data.total;
       this.subtotalServices = res.data.serviceSubTotal;
       this.subtotalproducts = res.data.productSubTotal;
+      this.estimatesService.sendEmail(this.currentInvoiceId).subscribe();
     });
   }
 
