@@ -9,6 +9,7 @@ import { EstimateModel } from '../../../../../models/estimate.model';
 import { FilterService } from '../../filter.service';
 import { EstimatesService } from '../../../../../services/estimates.service';
 import { CrmService } from '../../../../../services/crm.service';
+import { ProjectsService } from '../../../../../services/projects.service';
 @Component({
   selector: 'app-addestimatebody',
   templateUrl: './addestimatebody.component.html',
@@ -29,7 +30,7 @@ export class AddEstimateBodyComponent implements OnInit {
   userList = [];
   classList = [];
   categoryList = [];
-  projects = ['task1', 'task2', 'task3'];
+  projects = [];
   labelText = 'Same address for the billing address';
   title = 'Terms of the Estimate';
   dueDateTitle = 'Expiry date';
@@ -144,7 +145,8 @@ export class AddEstimateBodyComponent implements OnInit {
 
   constructor(private sharedService: SharedService, private crmService: CrmService,
     private invoicesService: InvoicesService, private router: Router,
-     private route: ActivatedRoute, private filterService: FilterService, private estimatesService: EstimatesService) {
+     private route: ActivatedRoute, private filterService: FilterService, private estimatesService: EstimatesService,
+     private projectsService: ProjectsService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
     this.crmService.getLeadsList().subscribe( leadsRes => {
@@ -173,6 +175,9 @@ export class AddEstimateBodyComponent implements OnInit {
       this.categoryList = res.results;
     });
 
+    this.projectsService.getProjectsList().subscribe(res => {
+      this.projects = res.results.map(project => project.id);
+    });
   }
 
   ngOnInit() {
@@ -238,6 +243,10 @@ export class AddEstimateBodyComponent implements OnInit {
   onChangedNote(event) {
     this.saveInvoiceData.customerNote = event;
     this.newCustomerNote = event;
+  }
+
+  onChangeProject(event) {
+    this.saveInvoiceData.projectId = event;
   }
 
   onChangedTermsOfInvoice(event) {

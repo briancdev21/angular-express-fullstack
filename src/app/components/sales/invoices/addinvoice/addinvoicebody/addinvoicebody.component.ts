@@ -7,6 +7,7 @@ import { InvoicesService } from '../../../../../services/invoices.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InvoiceModel } from '../../../../../models/invoice.model';
 import { FilterService } from '../../filter.service';
+import { ProjectsService } from '../../../../../services/projects.service';
 
 @Component({
   selector: 'app-addinvoicebody',
@@ -34,7 +35,7 @@ export class AddInvoiceBodyComponent implements OnInit {
   userList = [];
   classList = [];
   categoryList = [];
-  projects = ['task1', 'task2', 'task3'];
+  projects = [];
   changeLogNumbers = ['Number 1', 'Number 2', 'Number 3' ];
   labelText = 'Use customer address';
   title = 'Terms of the Invoice';
@@ -143,7 +144,7 @@ export class AddInvoiceBodyComponent implements OnInit {
   saveInvoiceData: any;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
-    private route: ActivatedRoute, private filterService: FilterService) {
+    private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
     this.sharedService.getContacts()
@@ -173,6 +174,10 @@ export class AddInvoiceBodyComponent implements OnInit {
 
     this.sharedService.getCategories().subscribe(res => {
       this.categoryList = res.results;
+    });
+
+    this.projectsService.getProjectsList().subscribe(res => {
+      this.projects = res.results.map(project => project.id);
     });
 
   }
@@ -231,6 +236,10 @@ export class AddInvoiceBodyComponent implements OnInit {
   onChangedNote(event) {
     this.saveInvoiceData.customerNote = event;
     this.newCustomerNote = event;
+  }
+
+  onChangeProject(event) {
+    this.saveInvoiceData.projectId = event;
   }
 
   onChangedTermsOfInvoice(event) {

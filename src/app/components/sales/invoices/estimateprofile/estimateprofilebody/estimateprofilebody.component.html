@@ -11,7 +11,7 @@
         </div>
         <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" (updateAddress)="getUpdatedShippiingAddress($event)" (updateAddress)="getShippingAddress($event)"></app-shippingaddress>
         <div class="project-log">
-          <app-in-project-selector class="flex1 mr-15" [projects]="projects" ></app-in-project-selector>
+          <app-in-project-selector class="flex1 mr-15" [projects]="projects" (changedProject)="onChangeProject($event)" ></app-in-project-selector>
           <div class="log-number">
             <select >
               <option selected disabled>Enter the change log number here</option>

@@ -9,6 +9,7 @@ import { InvoiceModel } from '../../../../../models/invoice.model';
 import { FilterService } from '../../filter.service';
 import { EstimatesService } from '../../../../../services/estimates.service';
 import * as moment from 'moment';
+import { ProjectsService } from '../../../../../services/projects.service';
 
 @Component({
   selector: 'app-estimateprofilebody',
@@ -25,7 +26,7 @@ export class EstimateProfileBodyComponent implements OnInit {
   userList = [];
   classList = [];
   categoryList = [];
-  projects = ['task1', 'task2', 'task3'];
+  projects = [];
   changeLogNumbers = ['Number 1', 'Number 2', 'Number 3' ];
   labelText = 'Use customer address';
   title = 'Terms of the Estimate';
@@ -124,7 +125,7 @@ export class EstimateProfileBodyComponent implements OnInit {
   estimateStatus = 'NEW';
 
   constructor(private sharedService: SharedService, private estimatesService: EstimatesService, private invoicesServices: InvoicesService,
-    private route: ActivatedRoute, private filterService: FilterService, private router: Router) {
+    private route: ActivatedRoute, private filterService: FilterService, private router: Router, private projectsService: ProjectsService) {
     this.createdDate = new Date().toJSON();
 
     //
@@ -190,6 +191,10 @@ export class EstimateProfileBodyComponent implements OnInit {
         products: estimateProducts,
         status: this.estimateStatus
       };
+    });
+
+    this.projectsService.getProjectsList().subscribe(res => {
+      this.projects = res.results.map(project => project.id);
     });
   }
 
@@ -264,6 +269,10 @@ export class EstimateProfileBodyComponent implements OnInit {
 
   onChangedTermsOfInvoice(event) {
     this.saveInvoiceData.terms = event;
+  }
+
+  onChangeProject(event) {
+    this.saveInvoiceData.projectId = event;
   }
 
   getMultiEmails(event) {
