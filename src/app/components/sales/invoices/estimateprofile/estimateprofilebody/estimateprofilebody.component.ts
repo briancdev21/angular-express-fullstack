@@ -158,7 +158,8 @@ export class EstimateProfileBodyComponent implements OnInit {
 
       this.saveInvoiceData = res.data;
       // change contact id to number
-      this.saveInvoiceData.contactId = parseInt(res.data.contactId.slice(-1), 10);
+      // tslint:disable-next-line:max-line-length
+      this.saveInvoiceData.contactId = res.data.contactId ? parseInt(res.data.contactId.split('-').pop(), 10) : parseInt(res.data.leadId.split('-').pop(), 10);
       this.discountType = res.data.discount.unit;
       this.discountAmount = res.data.discount.value;
       this.internalMemo = res.data.internalNote;
@@ -313,7 +314,7 @@ export class EstimateProfileBodyComponent implements OnInit {
   }
 
   saveInvoice() {
-    if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
+    if (!this.saveInvoiceData.deposit) {
       this.saveInvoiceData.deposit = 0;
     }
     if (this.saveInvoiceData.recurring === null) {
