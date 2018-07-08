@@ -76,11 +76,11 @@
               <div>
                 <div class="followers" (click)="editable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidCollaborators}"> 
                   <div class="follower" *ngFor="let user of collaborators; let i = index">
-                    <a [title]='user.username' ><img [src]='user.pictureURI'  (click)="editable=true;$event.stopPropagation()"/></a>
+                    <a [title]='user.name' ><img [src]='user.pictureURI'  (click)="editable=true;$event.stopPropagation()"/></a>
                   </div> 
                   <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
                     <ul>
-                      <li *ngFor="let user of collaborators; let i = index">{{user.username}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li *ngFor="let user of collaborators; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
                         <!-- <input autocomplete [config]="config2" [items]="items2"
                           (inputChangedEvent)="onInputChangedEvent($event)"
@@ -164,7 +164,7 @@
               </div>
             </div>
           </div>
-
+<!-- 
           <div class="name-type tab-row">
             <div>
               <span>Project Name</span>
@@ -210,7 +210,7 @@
             </button>
           </div>
         </div>
-      </tab>
+      </tab> -->
       <tab tabTitle="PROJECT DETAILS" class="tab-won" [(active)]="tabActiveSecond">
         <div class="tab-two">
           <div class="dis-id tab-row">

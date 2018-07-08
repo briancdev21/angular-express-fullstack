@@ -45,8 +45,8 @@ import { MultiCategoriesSelectComponent } from '../addproposal/multicategoriesse
     AddProposalTaskComponent,
     SearchProjectComponent,
     MultiVariantsSelectComponent,
-    MultiCategoriesSelectComponent,
-    MultiSubCategoriesSelectComponent
+    // MultiCategoriesSelectComponent,
+    // MultiSubCategoriesSelectComponent
   ],
   imports: [
     BrowserModule,
@@ -71,8 +71,8 @@ import { MultiCategoriesSelectComponent } from '../addproposal/multicategoriesse
     ScheduleMultiKeywordComponent,
     AddProposalTaskComponent,
     SearchProjectComponent,
-    MultiSubCategoriesSelectComponent,
-    MultiCategoriesSelectComponent,
+    // MultiSubCategoriesSelectComponent,
+    // MultiCategoriesSelectComponent,
   ],
   providers: [ProposalService]
 })
