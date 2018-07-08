@@ -9,6 +9,7 @@ import { InvoiceModel } from '../../../../../models/invoice.model';
 import { FilterService } from '../../filter.service';
 import * as moment from 'moment';
 import { RecurseVisitor } from '@angular/compiler/src/i18n/i18n_ast';
+import { ProjectsService } from '../../../../../services/projects.service';
 
 @Component({
   selector: 'app-invoiceprofilebody',
@@ -26,7 +27,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
   userList = [];
   classList = [];
   categoryList = [];
-  projects = ['task1', 'task2', 'task3'];
+  projects = [];
   changeLogNumbers = ['Number 1', 'Number 2', 'Number 3' ];
   labelText = 'Use customer address';
   title = 'Terms of the Invoice';
@@ -125,7 +126,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
   invoiceStatus = 'NEW';
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService,
-              private route: ActivatedRoute, private filterService: FilterService) {
+              private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService) {
 
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
@@ -200,6 +201,10 @@ export class InvoiceProfileBodyComponent implements OnInit {
     this.saveInvoiceData = new InvoiceModel();
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
+
+    this.projectsService.getProjectsList().subscribe(res => {
+      this.projects = res.results.map(project => project.id);
+    });
   }
 
   ngOnInit() {
@@ -285,6 +290,18 @@ export class InvoiceProfileBodyComponent implements OnInit {
     this.saveInvoiceData.shippingAddress = event.data;
   }
 
+  onChangeProject(event) {
+    this.saveInvoiceData.projectId = event;
+    this.projectsService.getProjectChangeLogs(event).subscribe(res => {
+      this.changeLogNumbers = res.results;
+      console.log('changeLog numbers:', this.changeLogNumbers);
+    });
+  }
+
+  onChooseChangeLog(event) {
+    this.saveInvoiceData.changeLog = event.target.value;
+  }
+
   onPriceChanged() {
     this.saveInvoice();
   }
@@ -324,6 +341,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
       this.totalamountdue = res.data.total;
       this.subtotalServices = res.data.serviceSubTotal;
       this.subtotalproducts = res.data.productSubTotal;
+      this.invoicesService.sendEmail(this.currentInvoiceId).subscribe();
     });
   }
   addContactName(data) {

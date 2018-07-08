@@ -114,4 +114,9 @@ export class InvoicesService {
   updateGantt(value) {
     this.updateChart.next(value);
   }
+
+  sendEmail(invoiceId) {
+    const url = `${apiUrl}sales/invoices/${invoiceId}/email`;
+    return this.http.get<any>(url);
+  }
 }

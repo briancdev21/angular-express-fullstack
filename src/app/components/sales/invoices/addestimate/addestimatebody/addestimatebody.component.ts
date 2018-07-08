@@ -9,6 +9,7 @@ import { EstimateModel } from '../../../../../models/estimate.model';
 import { FilterService } from '../../filter.service';
 import { EstimatesService } from '../../../../../services/estimates.service';
 import { CrmService } from '../../../../../services/crm.service';
+import { ProjectsService } from '../../../../../services/projects.service';
 @Component({
   selector: 'app-addestimatebody',
   templateUrl: './addestimatebody.component.html',
@@ -29,7 +30,7 @@ export class AddEstimateBodyComponent implements OnInit {
   userList = [];
   classList = [];
   categoryList = [];
-  projects = ['task1', 'task2', 'task3'];
+  projects = [];
   labelText = 'Same address for the billing address';
   title = 'Terms of the Estimate';
   dueDateTitle = 'Expiry date';
@@ -93,7 +94,7 @@ export class AddEstimateBodyComponent implements OnInit {
   newTerms = '';
   newExpiryDate: string;
   showEstimateCreateModal = true;
-
+  changeLogNumbers = [];
 
   public timelineData: Array<Object> = [
     {
@@ -144,7 +145,8 @@ export class AddEstimateBodyComponent implements OnInit {
 
   constructor(private sharedService: SharedService, private crmService: CrmService,
     private invoicesService: InvoicesService, private router: Router,
-     private route: ActivatedRoute, private filterService: FilterService, private estimatesService: EstimatesService) {
+     private route: ActivatedRoute, private filterService: FilterService, private estimatesService: EstimatesService,
+     private projectsService: ProjectsService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
     this.crmService.getLeadsList().subscribe( leadsRes => {
@@ -173,6 +175,9 @@ export class AddEstimateBodyComponent implements OnInit {
       this.categoryList = res.results;
     });
 
+    this.projectsService.getProjectsList().subscribe(res => {
+      this.projects = res.results.map(project => project.id);
+    });
   }
 
   ngOnInit() {
@@ -215,20 +220,24 @@ export class AddEstimateBodyComponent implements OnInit {
   onSelectClass(val) {
     this.saveInvoiceData.classificationId = val;
     this.newClass = val;
+    this.updateEstimate();
   }
 
   onSelectCategory(val) {
     this.saveInvoiceData.categoryId = val;
     this.newCategory = val;
+    this.updateEstimate();
   }
 
   changedDueDate(event) {
     this.saveInvoiceData.expiryDate = event;
+    this.updateEstimate();
   }
 
   onChangedMemo(event) {
     this.saveInvoiceData.internalNote = event;
     this.newInternalMemo = event;
+    this.updateEstimate();
   }
 
   onChangedNote(event) {
@@ -236,22 +245,38 @@ export class AddEstimateBodyComponent implements OnInit {
     this.newCustomerNote = event;
   }
 
+  onChangeProject(event) {
+    this.saveInvoiceData.projectId = event;
+    this.projectsService.getProjectChangeLogs(event).subscribe(res => {
+      this.changeLogNumbers = res.results;
+      console.log('changeLog numbers:', this.changeLogNumbers);
+    });
+  }
+
+  onChooseChangeLog(event) {
+    this.saveInvoiceData.changeLog = event.target.value;
+  }
+
   onChangedTermsOfInvoice(event) {
     this.saveInvoiceData.terms = event;
     this.newTerms = event;
+    this.updateEstimate();
   }
 
   getMultiEmails(event) {
     this.saveInvoiceData.emails = event;
     this.newEmail = event;
+    this.updateEstimate();
   }
 
   onDepositChange(event) {
     this.saveInvoiceData.deposit = parseInt(event, 10);
+    this.updateEstimate();
   }
 
   getShippingAddress(event) {
     this.saveInvoiceData.shippingAddress = event.data;
+    this.updateEstimate();
   }
 
   changedCreatedDate(event) {
@@ -283,13 +308,15 @@ export class AddEstimateBodyComponent implements OnInit {
       if (typeof(this.saveInvoiceData.contactId) !== 'string') {
         this.estimatesService.updateEstimate(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
           console.log('saved invoice: ', res);
+          this.estimatesService.sendEmail(this.currentInvoiceId).subscribe();
+          this.router.navigate(['./sales/invoices']);
         });
       }
-      this.router.navigate(['./sales/invoices']);
     } else {
       this.showModal = true;
     }
   }
+
   addContactName(data, contactType = 'contact') {
     data.forEach(element => {
       element.contactType = contactType;
@@ -315,6 +342,9 @@ export class AddEstimateBodyComponent implements OnInit {
   }
   onSelectCustomerBeforeCreate(selectedItem: any) {
     this.saveInvoiceData = {};
+    this.saveInvoiceData.customerNote = '';
+    this.saveInvoiceData.terms = '';
+    this.saveInvoiceData.internalNote = '';
     if (selectedItem.contactType === 'lead') {
       this.saveInvoiceData.leadId = selectedItem.value;
     } else {
@@ -326,11 +356,6 @@ export class AddEstimateBodyComponent implements OnInit {
       this.saveInvoiceData  = res.data;
       this.invoice_mock = res.data;
       this.currentInvoiceId = this.saveInvoiceData.id;
-      this.discountType = this.saveInvoiceData.discount.unit;
-      this.discountAmount = this.saveInvoiceData.discount.value;
-      this.internalMemo = this.saveInvoiceData.internalNote;
-      this.noteToSupplier = this.saveInvoiceData.customerNote;
-      this.termsOfInvoice = this.saveInvoiceData.terms;
       this.in_id = 'ES - ' + this.currentInvoiceId;
 
       // Customer Name and Email, customer address
@@ -338,10 +363,12 @@ export class AddEstimateBodyComponent implements OnInit {
       let contactList = this.contactList;
       if (this.saveInvoiceData.contactId) {
         contactIdNumber = parseInt(this.saveInvoiceData.contactId.split('-').pop(), 10);
+        this.saveInvoiceData.contactId = contactIdNumber;
         contactList = contactList.filter(ele => ele.contactType === 'contact');
       } else {
         contactIdNumber = parseInt(this.saveInvoiceData.leadId.split('-').pop(), 10);
         contactList = contactList.filter(ele => ele.contactType === 'lead');
+        this.saveInvoiceData.leadId = contactIdNumber;
       }
       const contactIdList = contactList.map(c => c.id);
       const pos = contactIdList.indexOf(contactIdNumber);
@@ -350,6 +377,10 @@ export class AddEstimateBodyComponent implements OnInit {
       this.saveInvoiceData.emails = this.emailAddresses;
       this.selectItem = this.contactList[pos].name;
       this.customerAddress = this.contactList[pos].shippingAddress;
+
+      // Default expiry Date
+      this.saveInvoiceData.expiryDate = new Date().toISOString().slice(0, 10);
+      this.saveInvoiceData.categoryId = 0;
     });
   }
 }

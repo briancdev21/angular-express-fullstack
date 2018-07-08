@@ -115,6 +115,38 @@ app-in-discount {
   flex: 1;
 }
 
+.log-number select {
+  background: none;
+	-webkit-appearance: none;
+	background: url(/assets/images/down-arrow.png) no-repeat;
+	background-position: right 10px center;
+  background-size: 10px;
+  height: 32px;
+	font-size: 12px;
+  border-radius: 0;
+  border: 1px solid #f5f5f5;
+  padding-left: 1em;
+  padding-right: 50px;
+  width: 100%;
+  color: #95989a;
+}
+
+.log-number select:invalid {
+  color: #d3d3d3;
+}
+
+.log-number select option:first {
+  color: #f5f5f5;
+}
+
+.log-number .selector-label {
+  color: #95989A;
+  padding: 0;
+  font-size: 12px;
+  margin: 3px 0;
+  display: inline-block;
+}
+
 input::placeholder {
   font-weight: 300;
   font-size: 12px;

@@ -104,6 +104,9 @@ export class InTableComponent implements OnInit {
         this._productDetails[index].id = data.data.id;
         this._productDetails[index].unitPrice = data.data.unitPrice;
         this._productDetails[index].quantity = data.data.quantity;
+        this._productDetails[index].total = data.data.total;
+        console.log('invoice product added:');
+        this.priceChange.emit(null);
       });
     });
     if (index === this._productDetails.length - 1) {

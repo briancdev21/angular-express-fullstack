@@ -70,4 +70,9 @@ export class EstimatesService {
     const url = `${apiUrl}sales/estimates/${id}/products/${productId}`;
     return this.http.delete<any>(url);
   }
+
+  sendEmail(estimateId) {
+    const url = `${apiUrl}sales/estimates/${estimateId}/email`;
+    return this.http.get<any>(url);
+  }
 }

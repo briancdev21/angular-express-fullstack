@@ -1,6 +1,6 @@
 <div class="text-align-left" >
   <div>
-    <select (ngModelChange)="onChooseProject($event)" >
+    <select (change)="onChooseProject($event)" >
       <option value="default" default disabled >Enter the project name here</option>
       <option *ngFor="let pn of projectnames" [ngValue]="pn">{{pn}}</option>
     </select>

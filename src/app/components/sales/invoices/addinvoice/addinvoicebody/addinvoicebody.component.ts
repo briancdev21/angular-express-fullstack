@@ -7,6 +7,7 @@ import { InvoicesService } from '../../../../../services/invoices.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InvoiceModel } from '../../../../../models/invoice.model';
 import { FilterService } from '../../filter.service';
+import { ProjectsService } from '../../../../../services/projects.service';
 
 @Component({
   selector: 'app-addinvoicebody',
@@ -34,8 +35,8 @@ export class AddInvoiceBodyComponent implements OnInit {
   userList = [];
   classList = [];
   categoryList = [];
-  projects = ['task1', 'task2', 'task3'];
-  changeLogNumbers = ['Number 1', 'Number 2', 'Number 3' ];
+  projects = [];
+  changeLogNumbers = [];
   labelText = 'Use customer address';
   title = 'Terms of the Invoice';
   dueDateTitle = 'Due Date';
@@ -143,7 +144,7 @@ export class AddInvoiceBodyComponent implements OnInit {
   saveInvoiceData: any;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
-    private route: ActivatedRoute, private filterService: FilterService) {
+    private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
     this.sharedService.getContacts()
@@ -175,6 +176,9 @@ export class AddInvoiceBodyComponent implements OnInit {
       this.categoryList = res.results;
     });
 
+    this.projectsService.getProjectsList().subscribe(res => {
+      this.projects = res.results.map(project => project.id);
+    });
   }
 
   ngOnInit() {
@@ -233,6 +237,18 @@ export class AddInvoiceBodyComponent implements OnInit {
     this.newCustomerNote = event;
   }
 
+  onChangeProject(event) {
+    this.saveInvoiceData.projectId = event;
+    this.projectsService.getProjectChangeLogs(event).subscribe(res => {
+      this.changeLogNumbers = res.results;
+      console.log('changeLog numbers:', this.changeLogNumbers);
+    });
+  }
+
+  onChooseChangeLog(event) {
+    this.saveInvoiceData.changeLog = event.target.value;
+  }
+
   onChangedTermsOfInvoice(event) {
     this.saveInvoiceData.terms = event;
     this.newTerms = event;
@@ -283,8 +299,10 @@ export class AddInvoiceBodyComponent implements OnInit {
       }
       if (typeof(this.saveInvoiceData.contactId) !== 'string') {
         console.log('save invoice true case', this.saveInvoiceData);
+        this.saveInvoiceData.reminder = [];
         this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
           console.log('saved invoice: ', res);
+          this.invoicesService.sendEmail(this.currentInvoiceId).subscribe();
           this.router.navigate(['./sales/invoices']);
         });
       }

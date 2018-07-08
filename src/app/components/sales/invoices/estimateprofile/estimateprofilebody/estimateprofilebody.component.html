@@ -11,11 +11,11 @@
         </div>
         <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" (updateAddress)="getUpdatedShippiingAddress($event)" (updateAddress)="getShippingAddress($event)"></app-shippingaddress>
         <div class="project-log">
-          <app-in-project-selector class="flex1 mr-15" [projects]="projects" ></app-in-project-selector>
-          <div class="log-number">
+          <app-in-project-selector class="flex1 mr-15" [projects]="projects" (changedProject)="onChangeProject($event)" ></app-in-project-selector>
+          <div class="log-number" (change)="onChooseChangeLog($event)" >
             <select >
               <option selected disabled>Enter the change log number here</option>
-              <option *ngFor="let logNumber of changeLogNumbers" [value]="logNumber">{{logNumber}}</option>
+              <option *ngFor="let logNumber of changeLogNumbers" [value]="logNumber.id">{{logNumber.title}}</option>
             </select>
           </div>
         </div>
@@ -44,9 +44,9 @@
               <app-in-terms-of-invoice [(termsOfInvoice)]="termsOfInvoice" [(title)]="title" (changedTerm)="onChangedTermsOfInvoice($event)"></app-in-terms-of-invoice>
           </div>
         </div>
-        <div class="timeline-activity">
+        <!-- <div class="timeline-activity">
           <app-ng2timeline [timelineData]="timelineData" [oneSide]="true"></app-ng2timeline>
-        </div>
+        </div> -->
       </div>
       <div class="bill-count" >
           <app-in-subtotalproducts [subtotalproducts]="subtotalproducts" ></app-in-subtotalproducts>

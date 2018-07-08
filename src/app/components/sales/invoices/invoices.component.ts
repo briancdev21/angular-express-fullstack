@@ -7,6 +7,7 @@ import { InvoicesService } from '../../../services/invoices.service';
 import { EstimatesService } from '../../../services/estimates.service';
 import { EstimateModel } from '../../../models/estimate.model';
 import { SharedService } from '../../../services/shared.service';
+import { CrmService } from '../../../services/crm.service';
 
 @Component({
   selector: 'app-invoices',
@@ -51,6 +52,7 @@ export class InvoicesComponent implements OnInit {
 
   public invoicesListInfo: Array<Object> = [];
   public estimatesListInfo: Array<Object> = [];
+  leadsList = [];
 
   newInvoice = {};
   newEstimate = {};
@@ -60,13 +62,20 @@ export class InvoicesComponent implements OnInit {
     private router: Router,
     private invoicesService: InvoicesService,
     private estimatesService: EstimatesService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private crmService: CrmService
   ) {
     this.sharedService.getContacts()
     .subscribe(data => {
       data = this.addContactName(data);
       console.log('userlist: ', data);
       this.contactsList = data;
+    });
+    this.crmService.getLeadsList()
+    .subscribe(data => {
+      data = data.results;
+      data = this.addContactName(data);
+      this.leadsList = data;
     });
 
     this.filterAvaliableTo = 'everyone';
@@ -95,7 +104,7 @@ export class InvoicesComponent implements OnInit {
           if (i['contactId']) {
             i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].split('-').pop(), 10));
           } else {
-            i['customerName'] = '';
+            i['customerName'] = this.getCustomerName(this.leadsList, parseInt(i['leadId'].split('-').pop(), 10));
           }
           return i;
         });

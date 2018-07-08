@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-in-project-selector',
@@ -7,14 +7,16 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class InProjectSelectorComponent implements OnInit {
 
-  @Input() projects;
-  projectnames = ['john', 'smith'];
+  @Input() set projects(val) {
+    this.projectnames = val;
+  }
+  @Output() changedProject: EventEmitter<any> = new EventEmitter();
+  projectnames = [];
 
   ngOnInit() {
-    this.projectnames = this.projects;
   }
 
-  onChooseProject(val) {
-    console.log(val);
+  onChooseProject(event) {
+    this.changedProject.emit(event.target.value);
   }
 }
