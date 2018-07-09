@@ -27,6 +27,7 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
     document.addEventListener('click', function() {
       comp.editable = false;
     });
+    console.log('after create categories list:', this.categories);
   }
 
   ngOnInit() {
@@ -36,6 +37,7 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       this.categoriesList = data.results;
       this.categoriesNameList = data.results.map(k => k.name);
       // Change categories ids to objects
+
       this.categories.forEach(element => {
         for (let i = 0; i < this.categoriesList.length; i ++) {
           if (element === this.categoriesList[i].id) {
@@ -45,6 +47,7 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       });
       this.categories = arr;
     });
+    
   }
 
   ngAfterViewInit() {
@@ -66,6 +69,7 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       this.sendCategories.emit(this.categories);
       this.salesService.selectedCategory.next(this.categoriesList[pos].id);
     }
+    console.log('categories list:', this.categories, this.sendCategories);
   }
 
   deleteCategory(id) {
@@ -76,6 +80,7 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       });
       this.salesService.deletedCategory.next(res.data.id);
     });
+    console.log('categories list:', this.categories, this.sendCategories);
   }
 
 }
