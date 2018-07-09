@@ -268,17 +268,17 @@ export class AddDetailedTaskComponent implements OnInit {
   closeModal() {
     this.pmService.hideDetailedTaskModal(true);
     const today = new Date();
-    const formattedToday = today.getFullYear().toString() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    const formattedToday = today.toISOString().slice(0, 10);
     const duration = this.duration ? this.duration : Math.floor((Date.parse(this.dateDue) - today.getTime()) / (60 * 60 * 24 * 1000)) + 1;
-
+    const followers = this.followers.map(follower => follower.username);
     const formattedDueDate = moment(this.dateDue).format('YYYY-MM-DD');
     const dependency = this.selectedDependencies.map(d => d = d.id);
     const newAddedTask = {
       title: this.mainTitle,
       assignee: this.currentTaskOwner.username,
-      progress: this.completeness,
+      completion: this.completeness,
       startDate: formattedToday,
-      duration: duration,
+      duration: parseInt(duration.toString(), 10),
       dependencyIds: dependency,
       isImportant: false,
       isComplete: this.completeness === 100 ? true : false,
@@ -287,10 +287,8 @@ export class AddDetailedTaskComponent implements OnInit {
       taskPath: '',
       subTasks: this.subTasks,
       note: this.internalNotes,
-      mainTitle: this.mainTitle,
-      mainContent: this.mainContent,
       keywordIds: [],
-      followers: this.followers
+      followers: followers
     };
     this.addNewTaskToTable.emit(newAddedTask);
     // return to empty after closing modal
