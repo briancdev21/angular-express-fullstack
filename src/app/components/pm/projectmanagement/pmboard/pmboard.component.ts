@@ -491,6 +491,7 @@ export class PmBoardComponent implements OnInit {
   constructor(private sharedService: SharedService, private pmService: ProjectManagementService,  private pmTasksService: PmTasksService ) {
     this.sharedService.getUsers().subscribe(users => {
       this.usersList = users;
+      this.taskOwners = users;
     });
     this.getPmBoardTableData();
   }
@@ -510,20 +511,16 @@ export class PmBoardComponent implements OnInit {
 
   getPmBoardTableData() {
     this.pmTasksService.getTaskGroups().subscribe(data => {
-      const panels = data.results;
-      for (let i = 0; i < panels.length; i++) {
-        panels[i].color = '';
-        if (panels[i].taskIds !== null) {
-          const tasksByAssignee = {};
-          for (let j = 0; j < panels[i].taskIds.length; j++) {
-            this.pmTasksService.getTasks(panels[i].id).subscribe(taskData => {
-              panels[i].tasks = taskData.results;
-               panels[i].tasks.forEach(element => {
+      this.pmBoardTableData = data.results;
+      for (let i = 0; i < this.pmBoardTableData.length; i++) {
+        this.pmBoardTableData[i].color = '';
+
+        if (this.pmBoardTableData[i].taskIds !== null) {
+          for (let j = 0; j < this.pmBoardTableData[i].taskIds.length; j++) {
+            this.pmTasksService.getTasks(this.pmBoardTableData[i].id).subscribe(taskData => {
+              this.pmBoardTableData[i].tasks = taskData.results;
+              this.pmBoardTableData[i].tasks.forEach(element => {
                 element.assigneeInfo = this.getUserInfo(element.assignee);
-                const taskOwners = this.taskOwners.filter(owner => owner.username === element.assignee);
-                if (taskOwners.length === 0) {
-                  this.taskOwners.push(element.assigneeInfo);
-                }
                 element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
                 element.taskTitle = element.title;
                 element.dependency = element.dependencyIds ? element.dependencyIds : [];
@@ -532,8 +529,8 @@ export class PmBoardComponent implements OnInit {
           }
         }
       }
-      console.log('pm board table data:', panels);
-      this.pmBoardTableData = panels;
+      console.log('pmBoardTableData: ', this.pmBoardTableData);
+
     });
   }
 
