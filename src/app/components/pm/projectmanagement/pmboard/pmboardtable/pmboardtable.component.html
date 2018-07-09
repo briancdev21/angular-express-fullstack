@@ -5,7 +5,7 @@
     <div class="main-table-content" *ngIf="dataReady" >
       <div *ngFor="let project of pmBoardTableData; let i = index;" class="table-column">
         <div class="title" [ngStyle]="{'background': project.color}">{{project.title}}</div>
-        <div class="add-btn" (click)="showDetailedTaskModal=true; temp=i">+</div>
+        <div class="add-btn" (click)="showDetailedTaskModal=true; temp=project.id">+</div>
         <div class="personal-project-cards">
           <div *ngFor="let owner of taskOwners" >
             <div class="personal-card" *ngIf="getTasksCount(owner, project) > 0">

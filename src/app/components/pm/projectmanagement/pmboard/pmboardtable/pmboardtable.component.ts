@@ -52,21 +52,24 @@ export class PmBoardTableComponent implements OnInit {
   }
 
   getTasksCount(owner, project) {
+    if (project.tasks === undefined) { project.tasks = []; }
     const count = project.tasks.filter(t => t.assignee === owner.username).length;
     return count;
   }
 
   getTasksCompletion(owner, project) {
     let total = 0;
+    if (project.tasks === undefined) { project.tasks = []; }
     const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
-      total = total + newArr[i].progress;
+      total = total + newArr[i].completion;
     }
     return total / newArr.length;
   }
 
   getDuration(owner, project) {
     let totalDuration = 0;
+    if (project.tasks === undefined) { project.tasks = []; }
     // if total duration is smaller than 7 days, it will show by days and over 1 week, it will show by weeks
     const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
@@ -90,6 +93,7 @@ export class PmBoardTableComponent implements OnInit {
 
   getDependenciesCount(owner, project) {
     let total = 0;
+    if (project.tasks === undefined) { project.tasks = []; }
     const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
       total = total + newArr[i].dependency.length;
@@ -104,20 +108,30 @@ export class PmBoardTableComponent implements OnInit {
   getOverDueTasksCount(owner, project) {
     let total = 0;
     const today = new Date();
+    if (project.tasks === undefined) { project.tasks = []; }
     const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
-      if (new Date(newArr[i].dueDate) < today) {
+      if (this.calcualteDateDiff(newArr[i].startDate) > newArr[i].duration) {
         total ++;
       }
     }
     return total;
   }
 
+  calcualteDateDiff( startDateStr ) {
+    const today = new Date();
+    const startDate = new Date(startDateStr);
+    const timeDiff = Math.abs(today.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return diffDays;
+  }
+
   getCompletedTasksCount(owner, project) {
     let total = 0;
+    if (project.tasks === undefined) { project.tasks = []; }
     const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
-      if (newArr[i].progress === 100) {
+      if (newArr[i].isComplete === true) {
         total ++;
       }
     }
@@ -168,10 +182,10 @@ export class PmBoardTableComponent implements OnInit {
       for (let i = 0; i < event.subTasks.length; i++) {
         this.pmTasksService.createSubTask(this.temp, res.data.id, event.subTasks[i]).subscribe();
       }
+      this.updatePmData.emit(null);
     });
     // assign new id to new task
     // event.id = this.pmBoardTableData[this.temp].tasks.length + 1;
     // this.pmBoardTableData[this.temp].tasks.push(event);
-    // this.updatePmData.emit(this.pmBoardTableData);
   }
 }
