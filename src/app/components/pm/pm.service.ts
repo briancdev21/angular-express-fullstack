@@ -38,4 +38,9 @@ export class PmService {
         return this.http.get(url);
     }
 
+    getInvoices (limit: number = 50, offset: number = 0): Observable<any> {
+        const url = `${environment.apiUrl}/sales/invoices?limit=${limit}&offset=${offset}`;
+        return this.http.get<any>(url);
+    }
+
 }

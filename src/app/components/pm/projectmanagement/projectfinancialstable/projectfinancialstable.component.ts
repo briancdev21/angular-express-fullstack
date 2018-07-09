@@ -18,8 +18,8 @@ import { PmService } from '../../pm.service';
 })
 export class ProjectFinancialsTableComponent implements OnInit {
 
-  @Input() reservedInventoryList;
   @Input() purchaseOrdersList = [];
+  @Input() invoicesList;
   menuCollapsed = true;
   saveFilterModalCollapsed = true;
   showSaveFilterModal = false;
@@ -31,35 +31,29 @@ export class ProjectFinancialsTableComponent implements OnInit {
   filterAvaliableTo: any;
   filterName = '';
   currentProjectId: any;
-  purchaseOrders: any;
 
   constructor( private filterService: FilterService, private pmService: PmService) {
 
     this.filterAvaliableTo = 'everyone';
     this.currentProjectId = localStorage.getItem('current_pending_projectId');
 
-    this.pmService.getProductsList(this.currentProjectId).subscribe(res => {
-      this.reservedInventoryList = res.results;
-      console.log('reservedInventoryList: ', this.reservedInventoryList);
+    this.pmService.getPurchaseOrders(this.currentProjectId)
+    .subscribe(res => {
+      this.purchaseOrdersList = res.results;
+      console.log('purchaseOrdersList: ', this.purchaseOrdersList);
     });
 
-    this.pmService.getPurchaseOrders(this.currentProjectId)
-    .finally(() => this.getProducts())
+    this.pmService.getInvoices()
+    .finally(() => this.getInvoices(this.currentProjectId))
     .subscribe(res => {
-      this.purchaseOrders = res.results;
-      console.log('purchaseOrders: ', this.purchaseOrders);
+      this.invoicesList = res.results;
+      console.log('invoicesList: ', this.invoicesList);
     });
   }
 
-  getProducts() {
-    for(let i = 0; i < this.purchaseOrders.length; i++) {
-      this.pmService.getProductsListInPurchaseOrder(this.purchaseOrders[i].id).subscribe(res => {
-        if(res.results.length) {
-          this.purchaseOrdersList = this.purchaseOrdersList.concat(res.results);
-          console.log('purchaseOrdersList: ', this.purchaseOrdersList);
-        }
-      });
-    }
+  getInvoices(id) {
+    this.invoicesList = this.invoicesList.filter(b => b.projectId === id);
+    return this.invoicesList;
   }
 
   public filters  = {
@@ -96,7 +90,7 @@ export class ProjectFinancialsTableComponent implements OnInit {
 
   getFilteredLists(val) {
     this.purchaseOrdersList = val.filteredOrders;
-    this.reservedInventoryList = val.filteredInventories;
+    this.invoicesList = val.filteredInventories;
   }
 
   closeModal() {

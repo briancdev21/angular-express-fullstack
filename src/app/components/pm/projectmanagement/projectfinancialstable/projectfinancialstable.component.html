@@ -1,8 +1,7 @@
 <div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
-  <span class="purchase-order-title">PURCHASE ORDERS</span>
   <div class="main-content-box">
     <div class="leads-table">
-      <app-pfproductslisttable [(reservedInventoryList)]="reservedInventoryList" [purchaseOrdersList]="purchaseOrdersList"></app-pfproductslisttable>
+      <app-pffinancialtable [purchaseOrdersList]="purchaseOrdersList" [invoicesList]="invoicesList"></app-pffinancialtable>
     </div>
     <div class="leads-filter">
       <app-pftablefilter

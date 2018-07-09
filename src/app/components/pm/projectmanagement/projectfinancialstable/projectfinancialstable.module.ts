@@ -13,7 +13,7 @@ import { CommonCmpModule } from '../../../common/common.module';
 
 import { FilterService } from './filter.service';
 import { ProjectFinancialsTableComponent } from './projectfinancialstable.component';
-import { PfProductsListTableComponent } from './pfproductslisttable/pfproductslisttable.component';
+import { PfFinancialTableComponent } from './pffinancialtable/pffinancialtable.component';
 import { PfTableFilterComponent } from './pftablefilter/pftablefilter.component';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -23,7 +23,7 @@ import { ClickOutsideModule } from 'ng4-click-outside';
 
 @NgModule({
   declarations: [
-    PfProductsListTableComponent,
+    PfFinancialTableComponent,
     PfTableFilterComponent,
     ProjectFinancialsTableComponent
   ],
