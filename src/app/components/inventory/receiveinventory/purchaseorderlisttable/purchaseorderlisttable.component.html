@@ -1,0 +1,25 @@
+<div class="content">
+  <table class="purchase-order-table">
+    <tr>
+      <th (click)="sortArray('purchaseOrderNumber')">ORDER #</th>
+      <th (click)="sortArray('source')">SOURCE</th>
+      <th (click)="sortArray('type')">TYPE</th>
+      <th (click)="sortArray('status')">STATUS</th>
+      <th (click)="sortArray('quantity')">QUANTITY</th>
+      <th (click)="sortArray('received')">RECEIVED</th> 
+      <th (click)="sortDateArray('dueDate')">DUE DATE</th>
+      <th (click)="sortDateArray('lastUpdated')">LAST UPDATED</th>
+    </tr>
+    <tr *ngFor="let purchaseorder of purchaseOrdersInfo; let itemorder = index;" (click)="redirectTo(itemorder)">
+      <td [ngClass]="{'empty-data': purchaseorder.fakeData}" >{{purchaseorder.purchaseOrderNumber}}</td>
+      <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.source}}</td>
+      <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.type}}</td>
+      <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.status}}</td>
+      <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.quantity}}</td>
+      <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.received}}</td>
+      <td [ngClass]="{'empty-data': purchaseorder.fakeData}" [ngClass]="getDateColor(purchaseorder)">{{purchaseorder.dueDate}}</td>
+      <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.lastUpdated}}</td>
+    </tr>
+  </table>
+</div>
+
