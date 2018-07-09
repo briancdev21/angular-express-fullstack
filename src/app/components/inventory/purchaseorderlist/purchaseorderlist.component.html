@@ -19,7 +19,7 @@
       <img *ngIf="filterClicked" src="assets/images/Checkmark Green.png" (click)="saveFilterModalCollapsed = false; showSaveFilterModal = true;">
     </div>
     <div class="purchaseorderlist-btn-group">
-      <div class="purchaseorderlist-btn">Receive Inventory</div>
+      <div class="purchaseorderlist-btn" routerLink="./received-inventory">Receive Inventory</div>
       <div class="purchaseorderlist-btn" routerLink="./add-purchase-order" >Add Purchase Order</div>
       <div class="purchaseorderlist-btn" routerLink="./add-transfer"  >Add Transfer</div>
       <div class="purchaseorderlist-btn" routerLink="./add-adjustment"  >Add Adjustment</div>
