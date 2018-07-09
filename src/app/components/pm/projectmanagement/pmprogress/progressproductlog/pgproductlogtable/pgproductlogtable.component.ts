@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
+import { SharedService } from '../../../../../../services/shared.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -35,6 +36,8 @@ export class PgProductLogTableComponent implements OnInit {
   deletingList = [];
   swappingList = [];
   showSwapConfirmModal = false;
+  brandsList: any;
+  supplierList: any;
 
   activity: {
     title: string;
@@ -50,13 +53,32 @@ export class PgProductLogTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private sharedService: SharedService ) {
+    this.sharedService.getBrands().subscribe(res => {
+      this.brandsList = res.results;
+      console.log('brandslist: ', res);
+    });
+
+    this.sharedService.getSuppliers().subscribe(res => {
+      this.supplierList = res.results;
+      console.log('supplierList: ', res);
+    });
   }
 
   ngOnInit() {
   }
 
   selectedFilterEventHandler(filteredList) {
+  }
+
+  getBrandName(id) {
+    const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
+    return selectedBrand.name;
+  }
+
+  getSupplierName(id) {
+    const selectedSupplier = this.supplierList.filter(b => b.id === id)[0];
+    return selectedSupplier.name;
   }
 
   getScoreColor(score) {
@@ -125,17 +147,6 @@ export class PgProductLogTableComponent implements OnInit {
   //   }
   // }
 
-  swapRow(index, list) {
-    // if (list[0].status === 'Place order') {
-    //   this.swappingList = this.purchaseOrdersList;
-
-    // }
-    // this.clonedRowIndex = index;
-    // this.orderModalInfoCollapsed[index] = false;
-    // this.showOrderModalInfo = false;
-    // this.showCloneConfirmModal = true;
-  }
-
   deleteRow(index, list) {
     if (list[0].status === 'Place order') {
       this.deletingList = this.purchaseOrdersList;
@@ -147,10 +158,6 @@ export class PgProductLogTableComponent implements OnInit {
       this.deletingRowIndex = index;
     }
     this.showDeleteConfirmModal = true;
-  }
-
-  confirmSwap() {
-    // this.swappingList.splice(this.clonedRowIndex, 0, this.clonedRow);
   }
 
   confirmDelete() {
