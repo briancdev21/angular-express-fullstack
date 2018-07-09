@@ -37,7 +37,6 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       this.categoriesList = data.results;
       this.categoriesNameList = data.results.map(k => k.name);
       // Change categories ids to objects
-
       this.categories.forEach(element => {
         for (let i = 0; i < this.categoriesList.length; i ++) {
           if (element === this.categoriesList[i].id) {
@@ -47,11 +46,13 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       });
       this.categories = arr;
     });
-    
   }
 
   ngAfterViewInit() {
     // this.input.nativeElement.focus();
+    this.categoriesNameList = this.categories;
+    this.categoriesList = this.categories;
+    console.log('categories:', this.categories);
   }
 
   addNewCategory(data) {
@@ -69,7 +70,6 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       this.sendCategories.emit(this.categories);
       this.salesService.selectedCategory.next(this.categoriesList[pos].id);
     }
-    console.log('categories list:', this.categories, this.sendCategories);
   }
 
   deleteCategory(id) {
