@@ -159,7 +159,7 @@ export class ProductDetailsComponent implements OnInit {
 
   updateIndividualProduct(product) {
     this.openAttachmentModal(product);
-    this.sharedService.insertToTable([[product]]);
+    this.insertToTable([[product]]);
     console.log('insert to table');
   }
   openAddProductModal() {
@@ -286,18 +286,21 @@ export class ProductDetailsComponent implements OnInit {
     this.sidebarCollapsed = true;
     this.proposalService.insertToTable([[this.selectedProduct]]);
 
-        if (!this.selectedProduct.addedAccList) {
-          this.selectedProduct.addedAccList = this.addedAccList;
-        } else {
-          this.selectedProduct.addedAccList.concat(this.addedAccList);
-        }
-    
-        if (!this.selectedProduct.addedAlterList) {
-          this.selectedProduct.addedAlterList = this.addedAlterList;
-        } else {
-          this.selectedProduct.addedAlterList.concat(this.addedAlterList);
-        }
-    
+    if (!this.selectedProduct.addedAccList) {
+      this.selectedProduct.addedAccList = this.addedAccList;
+    } else {
+      this.selectedProduct.addedAccList.concat(this.addedAccList);
+    }
+    if (!this.selectedProduct.addedAlterList) {
+      this.selectedProduct.addedAlterList = this.addedAlterList;
+    } else {
+      this.selectedProduct.addedAlterList.concat(this.addedAlterList);
+    }
 
-      }
+  }
+  insertToTable(products) {
+    // inssert product to table
+    console.log('insert products to table');
+    this.productsInfoAll = products;
+  }
 }

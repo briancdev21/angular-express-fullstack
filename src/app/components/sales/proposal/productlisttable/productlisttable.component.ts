@@ -42,17 +42,18 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   max = undefined;
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService) {
-    this.productsService.getProductAccessoriesList().subscribe(res => {
+    const productId = localStorage.getItem('productId');
+    this.productsService.getProductAccessoriesList(productId).subscribe(res => {
       console.log('product list', res.results);
-      // product list 
+      // product list
     });
-    this.productsService.getProductAlternativesList().subscribe(res => {
+    this.productsService.getProductAlternativesList(productId).subscribe(res => {
       console.log('product list', res.results);
-      // product list 
+      // product list
       const alternativesList = res.results;
-      listIds = alternativesList.filter(item => item.id);
+      const listIds = alternativesList.filter(item => item.id);
     });
-    this.productsService.getProductList().subscribe(res => {
+    this.productsService.getProductsList().subscribe(res => {
       console.log('product list', res.results);
     });
   }
@@ -494,12 +495,11 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     return removableParent;
   }
 
-  updateProductsList (productId) {
+  updateProductsList (productId, categoryId, data) {
     this.proposalProductList = [];
-    this.productsService.updateProductIndividualCategory(productId).subscribe(res => {
+    this.productsService.updateProductIndividualCategory(categoryId, productId, data).subscribe(res => {
       console.log('update product', this.proposalProductList);
-      // update products 
+      // update products
     });
-   
   }
 }
