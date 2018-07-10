@@ -43,29 +43,29 @@ export class ProductDetailsComponent implements OnInit {
   selected: any;
   measure: any;
   newProductMock = {
-    // 'brandId': 1,
-    // 'productTypeId': 1,
-    // 'supplierId': 1,
-    // 'currencyId': 1,
-    // 'keywordIds': [
-    //   1
-    // ],
-    // 'model': 'model1',
-    // 'name': 'product1',
-    // 'description': 'prod-desc',
-    // 'inventoryType': 'STOCKABLE',
-    // 'unitOfMeasure': {
-    //   'quantity': 1,
-    //   'unit': 'PER_UNIT'
-    // },
-    // 'expiration': {
-    //   'duration': 10,
-    //   'unit': 'HOURS'
-    // },
-    // 'leadTime': {
-    //   'duration': 1,
-    //   'unit': 'HOURS'
-    // }
+    'brandId': 1,
+    'productTypeId': 1,
+    'supplierId': 1,
+    'currencyId': 1,
+    'keywordIds': [
+      1
+    ],
+    'model': 'model1',
+    'name': 'product1',
+    'description': 'prod-desc',
+    'inventoryType': 'STOCKABLE',
+    'unitOfMeasure': {
+      'quantity': 1,
+      'unit': 'PER_UNIT'
+    },
+    'expiration': {
+      'duration': 10,
+      'unit': 'HOURS'
+    },
+    'leadTime': {
+      'duration': 1,
+      'unit': 'HOURS'
+    }
   };
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService, private sharedService: SharedService ) {
@@ -125,7 +125,7 @@ export class ProductDetailsComponent implements OnInit {
     if (val === 'all') {
       this.selectedData = this.productsInfoAll;
     } else {
-      this.selectedData = this.productsInfoAll.filter(x => x.productTypeId == val);
+      this.selectedData = this.productsInfoAll.filter(x => x.productTypeId === val);
     }
   }
 
@@ -285,7 +285,7 @@ export class ProductDetailsComponent implements OnInit {
     this.addAttachmentModalCollapsed = true;
     this.sidebarCollapsed = true;
     this.proposalService.insertToTable([[this.selectedProduct]]);
-    
+
         if (!this.selectedProduct.addedAccList) {
           this.selectedProduct.addedAccList = this.addedAccList;
         } else {
