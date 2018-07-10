@@ -35,6 +35,11 @@ export class PmBoardTableComponent implements OnInit {
   rightReached = false;
   pmBoardTableData: any;
   dataReady = false;
+  //  private temp: number;
+  //  private leftReached = true;
+  //  private rightReached = false;
+  //  private pmBoardTableData: any;
+  //  private dataReady = false;
 
   constructor( private pmService: ProjectManagementService, private pmTasksService: PmTasksService ) {
 
@@ -115,6 +120,8 @@ export class PmBoardTableComponent implements OnInit {
         total ++;
       }
     }
+    console.log('pmdata:', this.updatePmData, total);
+
     return total;
   }
 
@@ -172,6 +179,8 @@ export class PmBoardTableComponent implements OnInit {
         this.rightReached = true;
       }
     }, 1);
+    console.log('pmdata:', this.updatePmData);
+
   }
 
   getNewTask(event) {
@@ -187,5 +196,6 @@ export class PmBoardTableComponent implements OnInit {
     // assign new id to new task
     // event.id = this.pmBoardTableData[this.temp].tasks.length + 1;
     // this.pmBoardTableData[this.temp].tasks.push(event);
+    console.log('pmdata:', this.updatePmData);
   }
 }

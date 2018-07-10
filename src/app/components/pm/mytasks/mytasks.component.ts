@@ -361,4 +361,36 @@ export class MyTasksComponent implements OnInit {
       console.log('task updated: ', res);
     });
   }
+
+   updateTaskId (panel, task) {
+    let foreTaskCount;
+    if (panel !== 0 ) {
+      for (let i = 0; i <= panel - 1; i++) {
+        if (i !== 0 ) {
+          foreTaskCount = foreTaskCount + this.panels[i].tasks.length;
+        } else {
+          foreTaskCount = this.panels[0].tasks.length;
+        }
+      }
+    } else {
+      foreTaskCount = 0;
+    }
+    return foreTaskCount + this.panels[panel].tasks[task].id;
+  }
+
+  removeTaskIdList (panel, task) {
+    let foreTaskCount;
+    if (panel !== 0 ) {
+      for (let i = 0; i <= panel - 1; i++) {
+        if (i !== 0 ) {
+          foreTaskCount = foreTaskCount + this.panels[i].tasks.length;
+        } else {
+          foreTaskCount = this.panels[0].tasks.length;
+        }
+      }
+    } else {
+      foreTaskCount = 0;
+    }
+    return foreTaskCount + this.panels[panel].tasks[task].id;
+  }
 }
