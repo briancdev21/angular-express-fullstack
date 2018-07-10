@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 import { ProposalService } from '../proposal.service';
 import * as moment from 'moment';
 import { forEach } from '@angular/router/src/utils/collection';
+import { PmTasksService } from '../../../../services/pmtasks.service';
+import { ProductsService } from '../../../../services/inventory/products.service';
 
 @Component({
   selector: 'app-productlisttable',
@@ -39,7 +41,20 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   proposalProductList = [];
   max = undefined;
 
-  constructor( private proposalService: ProposalService ) {
+  constructor( private proposalService: ProposalService, private productsService: ProductsService) {
+    this.productsService.getProductAccessoriesList().subscribe(res => {
+      console.log('product list', res.results);
+      // product list 
+    });
+    this.productsService.getProductAlternativesList().subscribe(res => {
+      console.log('product list', res.results);
+      // product list 
+      const alternativesList = res.results;
+      listIds = alternativesList.filter(item => item.id);
+    });
+    this.productsService.getProductList().subscribe(res => {
+      console.log('product list', res.results);
+    });
   }
 
   ngOnDestroy() {
@@ -479,5 +494,12 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     return removableParent;
   }
 
-
+  updateProductsList (productId) {
+    this.proposalProductList = [];
+    this.productsService.updateProductIndividualCategory(productId).subscribe(res => {
+      console.log('update product', this.proposalProductList);
+      // update products 
+    });
+   
+  }
 }
