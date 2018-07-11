@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../projectmanagement.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { AUTOCOMPLETE_OPTION_HEIGHT } from '@angular/material';
 // import {GanttComponent, GanttConfiguration, GanttTaskItem, GanttTaskLink, GanttEvents } from 'gantt-ui-component';
 
 @Component({
@@ -266,7 +267,71 @@ export class GanttChartComponent implements OnInit {
     }
   }
 
-  updateService() {
-    // update service for Gantt chat
+  updateService(data) {
+    // update service for Gantt chart
+    // Data model for Chart
+    const {  endDate, startDate } = data;
+    let nextMonth;
+    let lastMonth;
+    if (this.displayMonthes.length ===  2) {
+      if (endDate.getMonth() === 11) {
+        nextMonth = new Date(endDate.getFullYear() + 1, 0, 1);
+      } else {
+        nextMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
+      }
+      this.displayMonthes = this.monthDiff(startDate, nextMonth);
+    }
+    if (this.displayMonthes.length ===  1) {
+      if (endDate.getMonth() === 11) {
+        nextMonth = new Date(endDate.getFullYear() + 1, 0, 1);
+      } else {
+        nextMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
+      }
+      if (startDate.getMonth() === 1) {
+        lastMonth = new Date(startDate.getFullYear() - 1, 0, 1);
+      } else {
+        lastMonth = new Date(startDate.getFullYear(), startDate.getMonth() - 1, 1);
+      }
+
+      this.displayMonthes = this.monthDiff(lastMonth, nextMonth);
+    }
+
+    _.forEach(this.displayMonthes, month => {
+      const dayCount = {
+        dateSubArr: [],
+        isWeekendArr: [],
+        isFirstArr: [],
+        isLastArr: [],
+        isLastActiveArr: [],
+        getBgColorArr: [],
+        getTodayLineArr: []
+      };
+      dayCount.dateSubArr = this.getDayCount(month.month, month.year);
+
+      for (let i = 0; i < this._tasks.length; i ++) {
+        const isWeekendSubArr = [];
+        const getTodayLineSubArr = [];
+        const isFirstSubArr = [];
+        const isLastSubArr = [];
+        const isLastActiveSubArr = [];
+        const getBgColorSubArr = [];
+
+        _.forEach(dayCount.dateSubArr, date => {
+          isWeekendSubArr.push(this.isWeekend(month.year, month.month, date));
+          getTodayLineSubArr.push(this.getTodayLine(month.year, month.month, date));
+          isFirstSubArr.push(this.isFirst(month.year, month.month, date, this._tasks[i], i));
+          isLastSubArr.push(this.isLast(month.year, month.month, date, this._tasks[i], i));
+          isLastActiveSubArr.push(this.isLastActive(month.year, month.month, date + 1, this._tasks[i], i));
+          getBgColorSubArr.push(this.getBgColor(month.year, month.month, date, this._tasks[i], i));
+        });
+        dayCount.isWeekendArr.push(isWeekendSubArr);
+        dayCount.getTodayLineArr.push(getTodayLineSubArr);
+        dayCount.isFirstArr.push(isFirstSubArr);
+        dayCount.isLastArr.push(isLastSubArr);
+        dayCount.isLastActiveArr.push(isLastActiveSubArr);
+        dayCount.getBgColorArr.push(getBgColorSubArr);
+      }
+    });
+    // API Call
   }
 }

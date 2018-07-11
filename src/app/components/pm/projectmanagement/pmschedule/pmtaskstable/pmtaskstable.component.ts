@@ -361,4 +361,43 @@ export class PmTasksTableComponent implements OnInit {
     const selectedUser = this.usersList.filter(u => u.username === username)[0];
     return selectedUser;
   }
+
+  updateInfoTask (task) {
+        // const newTask = {
+    //   id: 1 + milestone.tasks.length,
+    //   taskTitle: '',
+    //   profile: {
+    //     name: '',
+    //     imgUrl: '',
+    //     userId: undefined
+    //   },
+    //   progress: 0,
+    //   dueDate: '',
+    //   duration: 0,
+    //   dependency: [],
+    //   like: false,
+    //   attachment: false,
+    //   attachmentImg: '',
+    // };
+    // this.milestones.filter(m => m.title === milestone.title)[0].tasks.push(newTask);
+  }
+
+  checkValidation() {
+    console.log('validatioan checking');
+    // Model
+    //   id: 1 + milestone.tasks.length,
+    //   taskTitle: '',
+    //   profile: {
+    //     name: '',
+    //     imgUrl: '',
+    //     userId: undefined
+    //   },
+    //   progress: 0,
+    //   dueDate: '',
+    //   duration: 0,
+    //   dependency: [],
+    //   like: false,
+    //   attachment: false,
+    //   attachmentImg: '',
+  }
 }
