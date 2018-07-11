@@ -16,11 +16,7 @@
       <td>{{order.status}}</td>
       <td>{{getFormatedDate(order.createdAt)}}</td>
       <td>{{getFormatedDate(order.updatedAt)}}</td>
-      <td>
-        <div class="collaborators-div" *ngFor="let person of collaboratorsList; let i = index">
-          <img [src]="person.imgUrl" alt="" />
-        </div>
-      </td>
+      <td>{{order.owner}}</td>
     </tr>
     <tr *ngFor="let invoice of invoicesList; let i = index">
       <td>IN {{invoice.id}}</td>
@@ -29,11 +25,7 @@
       <td>{{invoice.status}}</td>
       <td>{{getFormatedDate(invoice.createdAt)}}</td>
       <td>{{getFormatedDate(invoice.updatedAt)}}</td>
-      <td>
-        <div class="collaborators-div" *ngFor="let person of collaboratorsList; let i = index">
-          <img [src]="person.imgUrl" alt="" />
-        </div>
-    </td>
+      <td>{{invoice.owner}}</td>
     </tr>
   </table>
 </div>
