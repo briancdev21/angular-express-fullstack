@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, HostListener } from '@angular/core';
+import { Component, Input, Output, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import { SharedService } from '../../../../../../services/shared.service';
+import { ProductsService } from '../../../../../../services/inventory/products.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -18,6 +19,7 @@ export class PfProductsListTableComponent implements OnInit {
 
   @Input() reservedInventoryList;
   @Input() purchaseOrdersList;
+
   addLogModalCollapsed = true;
   showAddLogModal = false;
   showOrderModalInfo = false;
@@ -39,6 +41,17 @@ export class PfProductsListTableComponent implements OnInit {
   brandsList: any;
   supplierList: any;
 
+  addProduct = false;
+  allProductList = [];
+  productNameList = [];
+  modelNumberList = [];
+  brandNameList = [];
+  skuList = [];
+
+  selectProductName = '';
+  selectModelNumber = '';
+  selectBrandName = '';
+
   activity: {
     title: string;
     subject: string;
@@ -53,7 +66,14 @@ export class PfProductsListTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
-  constructor( private filterService: FilterService,  private sharedService: SharedService ) {
+  constructor( private filterService: FilterService,
+    private sharedService: SharedService,
+    private productService: ProductsService,
+    private cdr: ChangeDetectorRef ) {
+
+  }
+
+  ngOnInit() {
     this.sharedService.getBrands().subscribe(res => {
       this.brandsList = res.results;
       console.log('brandslist: ', res);
@@ -63,9 +83,8 @@ export class PfProductsListTableComponent implements OnInit {
       this.supplierList = res.results;
       console.log('supplierList: ', res);
     });
-  }
 
-  ngOnInit() {
+    this.getProductNameList();
   }
 
   selectedFilterEventHandler(filteredList) {
@@ -115,6 +134,68 @@ export class PfProductsListTableComponent implements OnInit {
     }
   }
 
+  getProductPicture() {
+
+  }
+
+  getProductNameList() {
+    this.productService.getProductsList().subscribe(res => {
+      this.allProductList = res.results;
+      console.log('allProductList: ', this.allProductList);
+      if(res.results.length) {
+        for(let i = 0; i < res.results.length; i++) {
+          this.productNameList = this.productNameList.concat(res.results[i].name);
+          console.log('productNameList: ', this.productNameList);
+        }
+        this.productNameList = Array.from(new Set(this.productNameList));
+        console.log('removed duplicated element in productNameList: ', this.productNameList);
+      }
+    });
+  }
+
+  getModelNumberList() {
+    this.modelNumberList = [];
+    if(this.selectProductName != '') {
+      this.allProductList.forEach((item, index) => {
+        if(item.name == this.selectProductName) {
+          this.modelNumberList = this.modelNumberList.concat(item.model);
+        }
+      });
+      this.modelNumberList = Array.from(new Set(this.modelNumberList));
+      console.log('removed duplicated element in modelNumberList: ', this.modelNumberList);
+      this.cdr.detectChanges();
+    }
+  }
+
+  getBrandNameList() {
+    this.brandNameList = [];
+    if(this.selectProductName != '') {
+      this.allProductList.forEach((item, index) => {
+        if(item.name == this.selectProductName) {
+          this.brandNameList = this.brandNameList.concat(this.getBrandName(item.brandId));
+        }
+      });
+      this.brandNameList = Array.from(new Set(this.brandNameList));
+      console.log('removed duplicated element in brandNameList: ', this.brandNameList);
+      this.cdr.detectChanges();
+    }
+  }
+
+  onSelectProductName(event) {
+    this.selectProductName = event;
+    this.getModelNumberList();
+    this.getBrandNameList();
+  }
+
+  onSelectModelNumber(event) {
+    this.selectModelNumber = event;
+    console.log('selectModelNumber ', this.selectModelNumber);
+  }
+
+  onSelectBrandName(event) {
+    this.selectBrandName = event;
+    console.log('selectBrandName ', this.selectBrandName);
+  }
   // addNewTimelineItem() {
   //   const date = new Date();
   //   const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;

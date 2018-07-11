@@ -44,7 +44,7 @@
   </table>
   <div class="reserved-inventory-title">
     <span>RESERVED INVENTORY</span>
-    <div class="save-btn">Add product</div>
+    <button class="save-btn" (click)="addProduct=true">Add product</button>
   </div>
   <table class="reserved-inventory-table">
     <tr>
@@ -85,6 +85,39 @@
         </div>
         <!-- End Small Dialog when clicking three dot icom -->
       </td>
+    </tr>
+    <tr *ngIf="addProduct" class="reserved-inventory-table add-new">
+      <td><img [src]="getProductPicture()"></td>
+      <td>
+        <app-ng2completer
+          [itemsList]="productNameList"
+          (selectedItem)="onSelectProductName($event)"
+          [searchStr]="selectProductName">
+        </app-ng2completer>
+      </td>
+      <td>
+        <app-ng2completer
+          [itemsList]="modelNumberList"
+          (selectedItem)="onSelectModelNumber($event)"
+          [searchStr]="selectModelNumber">
+        </app-ng2completer>
+      </td>
+      <td>
+        <app-ng2completer
+          [itemsList]="brandNameList"
+          (selectedItem)="onSelectBrandName($event)"
+          [searchStr]="selectBrandName">
+        </app-ng2completer>
+      </td>
+      <td>
+        <!-- <app-ng2completer
+          [itemsList]="skuList"
+          (selectedItem)="onSelectSKU($event)"
+          [searchStr]="selectSKU">
+        </app-ng2completer> -->
+      </td>
+      <td>1</td>
+      <td>NEW</td>
     </tr>
   </table>
 </div>
