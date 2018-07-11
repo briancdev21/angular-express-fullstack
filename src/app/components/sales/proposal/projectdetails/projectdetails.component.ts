@@ -32,7 +32,7 @@ export class ProjectDetailsComponent implements OnInit {
       this.internalNote = this.projectDetails.internalNote;
       this.shippingAddress = this.projectDetails.shippingAddress;
       this.collaborators = this.projectDetails.collaborators;
-      this.projectManager = this.projectDetails.projectManager.name;
+      this.projectManager = this.projectDetails.projectManager.username;
       // Get client project manager id:
       // tslint:disable-next-line:max-line-length
       const clientProjectManagerContact = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.clientProjectManagerId.split('-').pop(), 10));
@@ -46,7 +46,7 @@ export class ProjectDetailsComponent implements OnInit {
       // Get customer name:
       // tslint:disable-next-line:max-line-length
       const contactData = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.contactId.split('-').pop(), 10));
-      this.customerName = contactData[0].name;
+      this.customerName = contactData[0].username;
 
 
       // Get Project Type
@@ -76,15 +76,15 @@ projectDetails = {
   clientProjectManagerId: undefined,
   accountReceivableId: undefined,
   accountManager: {
-    name: '',
+    username: '',
     pictureURI: ''
   },
   projectManager: {
-    name: '',
+    username: '',
     pictureURI: ''
   },
   designer: {
-    name: '',
+    username: '',
     pictureURI: ''
   },
   discount: {
@@ -191,12 +191,12 @@ projectDetails = {
     followers: [{
       pictureURI: 'assets/users/user1.png',
       profileLink: 'crm/contacts/michael',
-      name: 'Michael'
+      username: 'Michael'
     },
     {
       pictureURI: 'assets/users/user2.png',
       profileLink: 'crm/contacts/joseph',
-      name: 'Joseph'
+      username: 'Joseph'
     }]
   };
 
@@ -271,7 +271,7 @@ projectDetails = {
         // {
         //   proposalId : res.data.id,
         //   contactName : this.getContactNameFromId(res.data.contactId),
-        //   projectName: res.data.name,
+        //   projectName: res.data.username,
         //   projectType: 'New Construction',
         //   proposalAmount: res.data.total,
         //   dealStatus: res.data.status,
@@ -307,7 +307,7 @@ projectDetails = {
       const details = [];
       const nameList = res.map(contact => {
         return {
-          name: contact.name,
+          name: contact.username,
           pictureURI: contact.pictureURI
         };
       });
@@ -317,7 +317,7 @@ projectDetails = {
       this.items2.map(contact => {
         let hasSameValue = false;
         for (let i = 0; i < this.collaborators.length; i++) {
-          if (contact.name === this.collaborators[i].name) {
+          if (contact.username === this.collaborators[i].username) {
             hasSameValue = true;
             break;
           }
@@ -332,7 +332,7 @@ projectDetails = {
       const accountManagerList = [];
       this.items3.map(contact => {
         let hasSameValue = false;
-        if (contact.name === this.projectDetails.accountManager.name) {
+        if (contact.username === this.projectDetails.accountManager.username) {
           hasSameValue = true;
         }
         if (!hasSameValue) {
@@ -346,7 +346,7 @@ projectDetails = {
       const projectManagerList = [];
       this.items4.map(contact => {
         let hasSameValue = false;
-          if (contact.name === this.projectDetails.projectManager.name) {
+          if (contact.username === this.projectDetails.projectManager.username) {
             hasSameValue = true;
           }
         if (!hasSameValue) {
@@ -359,7 +359,7 @@ projectDetails = {
       const designerList = [];
       this.items5.map(contact => {
         let hasSameValue = false;
-          if (contact.name === this.projectDetails.designer.name) {
+          if (contact.username === this.projectDetails.designer.username) {
             hasSameValue = true;
           }
         if (!hasSameValue) {
@@ -397,7 +397,7 @@ projectDetails = {
     this.editable = false;
     this.userInfo.followers.forEach(element => {
       this.items2 = this.items2.filter(function( obj ) {
-        return obj.name !== element.name;
+        return obj.username !== element.username;
       });
     });
 
@@ -415,40 +415,40 @@ projectDetails = {
     console.log('selected user:', item);
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.name !== item.name;
+      return obj.username !== item.username;
     });
-    this.collaborators.push({name: item.name, pictureURI: item.pictureURI });
-    this.proposalDetails.collaborators.push(item.name);
+    this.collaborators.push({username: item.username, pictureURI: item.pictureURI });
+    this.proposalDetails.collaborators.push(item.username);
     this.updateProjectDetails();
   }
 
   onSelectAccountManager(item: any) {
     this.selectedItem = item;
     this.items3 = this.items3.filter(function( obj ) {
-      return obj.name !== item.name;
+      return obj.username !== item.username;
     });
-    this.projectDetails.accountManager = {name: item.name, pictureURI: item.pictureURI };
-    this.proposalDetails.accountManager = item.name;
+    this.projectDetails.accountManager = {username: item.username, pictureURI: item.pictureURI };
+    this.proposalDetails.accountManager = item.username;
     this.updateProjectDetails();
   }
 
   onSelectProjectManager(item: any) {
     this.selectedItem = item;
     this.items4 = this.items4.filter(function( obj ) {
-      return obj.name !== item.name;
+      return obj.username !== item.username;
     });
-    this.projectDetails.projectManager = {name: item.name, pictureURI: item.pictureURI };
-    this.proposalDetails.projectManager = item.name;
+    this.projectDetails.projectManager = {username: item.username, pictureURI: item.pictureURI };
+    this.proposalDetails.projectManager = item.username;
     this.updateProjectDetails();
   }
 
   onSelectDesigner(item: any) {
     this.selectedItem = item;
     this.items5 = this.items5.filter(function( obj ) {
-      return obj.name !== item.name;
+      return obj.username !== item.username;
     });
-    this.projectDetails.designer = {name: item.name, pictureURI: item.pictureURI };
-    this.proposalDetails.designer = item.name;
+    this.projectDetails.designer = {username: item.username, pictureURI: item.pictureURI };
+    this.proposalDetails.designer = item.username;
     this.updateProjectDetails();
   }
 
@@ -459,28 +459,28 @@ projectDetails = {
 
   removeUser(i: number) {
     const item = this.projectDetails.collaborators[i];
-    this.items2.push({id: this.items2.length, name: item.name, pictureURI: item.pictureURI});
+    this.items2.push({id: this.items2.length, name: item.username, pictureURI: item.pictureURI});
     this.projectDetails.collaborators.splice(i, 1);
     this.isAutocompleteUpdated2 = !this.isAutocompleteUpdated2;
   }
 
   removeAccountManager(i: number) {
     const item = this.projectDetails.accountManager;
-    this.items2.push({id: this.items2.length, name: item.name, pictureURI: item.pictureURI});
+    this.items2.push({id: this.items2.length, name: item.username, pictureURI: item.pictureURI});
     this.projectDetails.accountManager = undefined;
     this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
   }
 
   removeProjectManager (i: number) {
     const item = this.projectDetails.projectManager;
-    this.items2.push({id: this.items2.length, name: item.name, pictureURI: item.pictureURI});
+    this.items2.push({id: this.items2.length, name: item.username, pictureURI: item.pictureURI});
     this.projectDetails.projectManager = undefined;
     this.isAutocompleteUpdated4 = !this.isAutocompleteUpdated4;
   }
 
   removeDesigner (i: number) {
     const item = this.projectDetails.designer;
-    this.items2.push({id: this.items2.length, name: item.name, pictureURI: item.pictureURI});
+    this.items2.push({id: this.items2.length, name: item.username, pictureURI: item.pictureURI});
     this.projectDetails.designer = undefined;
     this.isAutocompleteUpdated5 = !this.isAutocompleteUpdated5;
   }
@@ -525,14 +525,14 @@ projectDetails = {
     if (selectedContact.type === 'PERSON') {
       return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
     } else {
-      return selectedContact.business.name;
+      return selectedContact.business.username;
     }
   }
 
   onSelectCustomer(event) {
     console.log('select customer: ', event);
     this.proposalDetails.contactId = event.originalObject.id;
-    this.customerName = event.originalObject.name;
+    this.customerName = event.originalObject.username;
   }
 
   saveProjectDetails() {
@@ -613,19 +613,19 @@ projectDetails = {
     this.updateProjectDetails();
   }
   onChangeCustomerName(event) {
-    this.proposalDetails.name = event.target.value;
+    this.proposalDetails.username = event.target.value;
     this.updateProjectDetails();
   }
   onSelectProjectManagementContact(event) {
     console.log('client project manager id:', event.originalObject);
     this.proposalDetails.clientProjectManagerId = event.originalObject.id;
-    this.clientProjectManager = event.originalObject.name;
+    this.clientProjectManager = event.originalObject.username;
     this.updateProjectDetails();
   }
 
   onSelectAccountReceivable(event) {
     this.proposalDetails.accountReceivableId = event.originalObject.id;
-    this.selectReceivable = event.originalObject.name;
+    this.selectReceivable = event.originalObject.username;
     this.updateProjectDetails();
   }
 
@@ -636,7 +636,7 @@ projectDetails = {
     this.updateProjectDetails();
   }
   onChangeProjectName(event) {
-    this.proposalDetails.name = event.target.value;
+    this.proposalDetails.username = event.target.value;
     this.updateProjectDetails();
   }
   onChangeProjectType(event) {
@@ -663,9 +663,9 @@ projectDetails = {
   addContactName(data) {
     data.forEach(element => {
       if (element.type === 'PERSON') {
-        element.name = element.person.firstName + ' ' + element.person.lastName;
+        element.username = element.person.firstName + ' ' + element.person.lastName;
       } else {
-        element.name = element.business.name;
+        element.username = element.business.username;
       }
     });
     return data;

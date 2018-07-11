@@ -106,14 +106,14 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
                 // set parent ID for each added acc product
                 midValue[i].addedAccList[j].parentId = midValue[i].id;
                 // Add missing field
-                // midValue[i].addedAccList[j].sku = midValue[i].addedAccList[j].skuNumber;
-                // midValue[i].addedAccList[j].model = midValue[i].addedAccList[j].modelNumber;
-                // midValue[i].addedAccList[j].productType = midValue[i].productType;
-                // midValue[i].addedAccList[j].unitPrice = midValue[i].addedAccList[j].friendPrice;
-                // midValue[i].addedAccList[j].discount = 0;
-                // midValue[i].addedAccList[j].total = midValue[i].addedAccList[j].unitPrice * midValue[i].addedAccList[j].qty *
-                //                                       (100 - midValue[i].addedAccList[j].discount) / 100;
-                // midValue[i].addedAccList[j].taxRate = midValue[i].taxRate;
+                midValue[i].addedAccList[j].sku = midValue[i].addedAccList[j].skuNumber;
+                midValue[i].addedAccList[j].model = midValue[i].addedAccList[j].modelNumber;
+                midValue[i].addedAccList[j].productType = midValue[i].productType;
+                midValue[i].addedAccList[j].unitPrice = midValue[i].addedAccList[j].friendPrice;
+                midValue[i].addedAccList[j].discount = 0;
+                midValue[i].addedAccList[j].total = midValue[i].addedAccList[j].unitPrice * midValue[i].addedAccList[j].qty *
+                                                      (100 - midValue[i].addedAccList[j].discount) / 100;
+                midValue[i].addedAccList[j].taxRate = midValue[i].taxRate;
                 // add added acc products to inserted array
                 insertedArr.push(midValue[i].addedAccList[j]);
               }
@@ -121,18 +121,18 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
             if (midValue[i].addedAlterList.length > 0) {
               for (let j = 0; j <= midValue[i].addedAlterList.length - 1; j++) {
                 this.addedIndex += 1;
-                // midValue[i].addedAlterList[j].id = this.addedIndex;
-                // midValue[i].addedAlterList[j].option = 'alter';
-                // midValue[i].addedAlterList[j].parentId = midValue[i].id;
-                // midValue[i].addedAlterList[j].sku = midValue[i].addedAlterList[j].skuNumber;
-                // midValue[i].addedAlterList[j].model = midValue[i].addedAlterList[j].modelNumber;
-                // midValue[i].addedAlterList[j].productType = midValue[i].productType;
-                // midValue[i].addedAlterList[j].unitPrice = midValue[i].addedAlterList[j].friendPrice;
-                // midValue[i].addedAlterList[j].discount = 0;
-                // midValue[i].addedAlterList[j].total = midValue[i].addedAlterList[j].unitPrice * midValue[i].addedAlterList[j].qty *
-                //                                       (100 - midValue[i].addedAlterList[j].discount) / 100;
-                // midValue[i].addedAlterList[j].taxRate = midValue[i].taxRate;
-                // insertedArr.push(midValue[i].addedAlterList[j]);
+                midValue[i].addedAlterList[j].id = this.addedIndex;
+                midValue[i].addedAlterList[j].option = 'alter';
+                midValue[i].addedAlterList[j].parentId = midValue[i].id;
+                midValue[i].addedAlterList[j].sku = midValue[i].addedAlterList[j].skuNumber;
+                midValue[i].addedAlterList[j].model = midValue[i].addedAlterList[j].modelNumber;
+                midValue[i].addedAlterList[j].productType = midValue[i].productType;
+                midValue[i].addedAlterList[j].unitPrice = midValue[i].addedAlterList[j].friendPrice;
+                midValue[i].addedAlterList[j].discount = 0;
+                midValue[i].addedAlterList[j].total = midValue[i].addedAlterList[j].unitPrice * midValue[i].addedAlterList[j].qty *
+                                                      (100 - midValue[i].addedAlterList[j].discount) / 100;
+                midValue[i].addedAlterList[j].taxRate = midValue[i].taxRate;
+                insertedArr.push(midValue[i].addedAlterList[j]);
               }
             }
           }
