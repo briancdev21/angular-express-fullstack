@@ -49,10 +49,10 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    // this.input.nativeElement.focus();
-    this.categoriesNameList = this.categories;
-    this.categoriesList = this.categories;
-    console.log('categories:', this.categories);
+    // // this.input.nativeElement.focus();
+    // this.categoriesNameList = this.categories;
+    // this.categoriesList = this.categories;
+    // console.log('categories:', this.categories);
   }
 
   addNewCategory(data) {

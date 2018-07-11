@@ -168,7 +168,7 @@
           <div class="name-type tab-row">
             <div>
               <span>Project Name</span>
-              <input placeholder="Enter Project Name" [(ngModel)]="projectDetails.name" (change)="onChangeProjectName($event)" [ngClass]="{'validation-required': invalidProjectName}">
+              <input placeholder="Enter Project Name" [(ngModel)]="projectDetails.username" (change)="onChangeProjectName($event)" [ngClass]="{'validation-required': invalidProjectName}">
             </div>
             <div>
               <span>Project Type</span>
@@ -267,11 +267,11 @@
               <div class="member-container">
                 <div class="followers" (click)="accountEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidAccountManager}"> 
                   <div class="follower" >
-                    <a [title]='projectDetails.accountManager.name' ><img [src]='projectDetails.accountManager.imageUrl'  (click)="accountEditable=true;$event.stopPropagation()"/></a>
+                    <a [title]='projectDetails.accountManager.username' ><img [src]='projectDetails.accountManager.pictureURI'  (click)="accountEditable=true;$event.stopPropagation()"/></a>
                   </div> 
                   <div class="edit-followers" *ngIf="accountEditable" (click)="accountEditable=true;$event.stopPropagation()" >
                     <ul>
-                      <li >{{projectDetails.accountManager.name}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li >{{projectDetails.accountManager.username}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
                         <!-- <input autocomplete [config]="config2" [items]="items3"
                           (inputChangedEvent)="onInputChangedEvent($event)"
@@ -304,11 +304,11 @@
               <div class="member-container">
                 <div class="followers" (click)="projectEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidProjectManager}"> 
                   <div class="follower">
-                    <a [title]='projectDetails.projectManager.name' ><img [src]='projectDetails.projectManager.imageUrl'  (click)="projectEditable=true;$event.stopPropagation()"/></a>
+                    <a [title]='projectDetails.projectManager.username' ><img [src]='projectDetails.projectManager.pictureURI'  (click)="projectEditable=true;$event.stopPropagation()"/></a>
                   </div> 
                   <div class="edit-followers" *ngIf="projectEditable" (click)="projectEditable=true;$event.stopPropagation()" >
                     <ul>
-                      <li>{{projectDetails.projectManager.name}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li>{{projectDetails.projectManager.username}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
                         <!-- <input autocomplete [config]="config2" [items]="items4"
                           (inputChangedEvent)="onInputChangedEvent($event)"
@@ -344,11 +344,11 @@
               <div class="member-container">
                 <div class="followers" > 
                   <div class="follower">
-                    <a [title]='projectDetails.designer.name' ><img [src]='projectDetails.designer.imageUrl'  (click)="designerEditable=true;$event.stopPropagation()"/></a>
+                    <a [title]='projectDetails.designer.username' ><img [src]='projectDetails.designer.pictureURI'  (click)="designerEditable=true;$event.stopPropagation()"/></a>
                   </div> 
                   <div class="edit-followers" *ngIf="designerEditable" (click)="designerEditable=true;$event.stopPropagation()" >
                     <ul>
-                      <li >{{projectDetails.designer.name}}<span (click)="removeDesigner(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li >{{projectDetails.designer.username}}<span (click)="removeDesigner(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
                         <!-- <input autocomplete [config]="config2" [items]="items5"
                           (inputChangedEvent)="onInputChangedEvent($event)"
