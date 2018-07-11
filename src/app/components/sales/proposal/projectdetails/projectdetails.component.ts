@@ -8,6 +8,7 @@ import { ProductsService } from '../../../../services/inventory/products.service
 import { SharedService } from '../../../../services/shared.service';
 import { ProposalsService } from '../../../../services/proposals.service';
 import * as moment from 'moment';
+import { CompleterService } from 'ng2-completer';
 
 @Component({
   selector: 'app-projectdetails',
@@ -20,22 +21,114 @@ import * as moment from 'moment';
 export class ProjectDetailsComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
-  @Input() projectDetails;
-  
+  @Input() set projectDetailsData(val) {
+    if (val !== undefined) {
+      this.projectDetails = val;
+      console.log('project details with value:', this.projectDetails);
+      // Get categories and Subcateogries
+      this.categories = this.projectDetails.projectCategoriesAll;
+      this.subCategories = this.projectDetails.projectSubCategoriesAll;
+      this.clientNote = this.projectDetails.clientNote;
+      this.internalNote = this.projectDetails.internalNote;
+      this.shippingAddress = this.projectDetails.shippingAddress;
+      this.collaborators = this.projectDetails.collaborators;
+      this.projectManager = this.projectDetails.projectManager.name;
+      // Get client project manager id:
+      // tslint:disable-next-line:max-line-length
+      const clientProjectManagerContact = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.clientProjectManagerId.split('-').pop(), 10));
+      this.clientProjectManager = clientProjectManagerContact[0]['name'];
+
+      // Get client project manager id:
+      // tslint:disable-next-line:max-line-length
+      const accountReceivableData = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.accountReceivableId.split('-').pop(), 10));
+      this.selectReceivable = accountReceivableData[0]['name'];
+
+      // Get customer name:
+      // tslint:disable-next-line:max-line-length
+      const contactData = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.contactId.split('-').pop(), 10));
+      this.customerName = contactData[0].name;
+
+
+      // Get Project Type
+      // tslint:disable-next-line:max-line-length
+      this.projectType = parseInt(this.projectDetails.accountReceivableId.split('-').pop(), 10);
+     }
+  }
+
+  @Input() proposalDetails;
+
+// Project Details Properties
+clientNote: string;
+internalNote: string;
+customerName: string;
+projectType: number;
+
+shippingAddress = {
+  address: '',
+  city: '',
+  province: '',
+  country: '',
+  postalCode: '',
+};
+//
+projectDetails = {
+  contactId: undefined,
+  clientProjectManagerId: undefined,
+  accountReceivableId: undefined,
+  accountManager: {
+    name: '',
+    pictureURI: ''
+  },
+  projectManager: {
+    name: '',
+    pictureURI: ''
+  },
+  designer: {
+    name: '',
+    pictureURI: ''
+  },
+  discount: {
+    type: '',
+    amount: ''
+  },
+  projectCategoriesAll: undefined,
+  projectSubCategoriesAll: undefined,
+  name: '',
+  internalNote: '',
+  clientNote: '',
+  shippingAddress: {
+    address: '',
+    city: '',
+    province: '',
+    country: '',
+    postalCode: '',
+  },
+  collaborators: [],
+  customerName: '',
+  projectName: '',
+  projectId: undefined,
+  paymentSchedule: []
+};
+
+  collaborators  = [];
+  categories = [];
+  subCategories = [];
   proposalInfo: any;
   sidebarCollapsed = true;
   ProposalInfoModalCollapsed = true;
   tabActiveFirst = true;
   tabActiveSecond = false;
   tabActiveThird = false;
-  switchIconManagement: boolean = true;
-  switchIconReceivable: boolean = true;
-  switchIconShipping: boolean = true;
-  projectManager: string = '';
-  receivable: string = '';
+  switchIconManagement = false;
+  switchIconReceivable = false;
+  switchIconShipping = true;
+  receivable = '';
   showProposalInfo = false;
   scheduleRemain: any;
   showDialog = false;
+  projectCategory = [];
+  clientProjectManager: any;
+  selectReceivable: any;
 
   invalidCustomerName = false;
   invalidCollaborators = false;
@@ -53,7 +146,9 @@ export class ProjectDetailsComponent implements OnInit {
   isAutocompleteUpdated3 = false;
   isAutocompleteUpdated4 = false;
   isAutocompleteUpdated5 = false;
+  invalidClientProjectManager = false;
 
+  projectManager = '';
   editable: boolean;
   accountEditable: boolean;
   projectEditable: boolean;
@@ -61,31 +156,12 @@ export class ProjectDetailsComponent implements OnInit {
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
-  items2: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
-  ];
+  items2 = [];
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
-  items3: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
-  ];
-  items4: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
-  ];
-  items5: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
-  ];
+  items3 = [];
+  items4 = [];
+  items5 = [];
+  customersData: any;
 
   userInfo = {
     name: 'John Moss',
@@ -113,12 +189,12 @@ export class ProjectDetailsComponent implements OnInit {
       'John Stephen'
     ],
     followers: [{
-      imageUrl: 'assets/users/user1.png',
+      pictureURI: 'assets/users/user1.png',
       profileLink: 'crm/contacts/michael',
       name: 'Michael'
     },
     {
-      imageUrl: 'assets/users/user2.png',
+      pictureURI: 'assets/users/user2.png',
       profileLink: 'crm/contacts/joseph',
       name: 'Joseph'
     }]
@@ -168,11 +244,27 @@ export class ProjectDetailsComponent implements OnInit {
 
   proposalId: any;
   contactsList = [];
-  constructor( private proposalService: ProposalService, private route: ActivatedRoute, private sharedService: SharedService
-    , private proposalsService: ProposalsService ) {
+  projectTypeList = [];
+  proposalPricingList = [];
+
+  // tslint:disable-next-line:max-line-length
+  constructor( private proposalService: ProposalService, private route: ActivatedRoute, private sharedService: SharedService, private completerService: CompleterService,
+    private proposalsService: ProposalsService ) {
     this.proposalId = this.route.snapshot.paramMap.get('id');
+
+    this.sharedService.getPricingCategories().subscribe(res => {
+      this.proposalPricingList = res.results;
+    });
+
+    this.sharedService.getProjectTypes().subscribe(res => {
+      this.projectTypeList = res.results;
+    });
+
     this.sharedService.getContacts().subscribe(data => {
+      data = this.addContactName(data);
       this.contactsList = data;
+      this.customersData = this.completerService.local(this.contactsList, 'name', 'name');
+
       this.proposalsService.getIndividualProposal(this.proposalId).subscribe(res => {
         console.log('project details service: ', res);
         this.proposalInfo = res.data;
@@ -187,7 +279,7 @@ export class ProjectDetailsComponent implements OnInit {
         //   createdDate: moment(res.data.updatedAt).format('MMMM DD, YYYY'),
         //   owner: [
         //     {
-        //     imageUrl: 'assets/users/user1.png',
+        //     pictureURI: 'assets/users/user1.png',
         //     profileLink: 'crm/contacts/michael',
         //     name: 'Michael'
         //     }
@@ -195,6 +287,12 @@ export class ProjectDetailsComponent implements OnInit {
         // };
       });
     });
+    // this.sharedService.getCategories().subscribe(data => {
+    //   this.projectCategory = data.results;
+    // });
+    // this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
+    //   this.subCategories = data.results;
+    // });
     console.log('proposals info: ', this.proposalInfo);
     const comp = this;
     document.addEventListener('click', function() {
@@ -203,42 +301,103 @@ export class ProjectDetailsComponent implements OnInit {
       comp.projectEditable = false;
       comp.designerEditable = false;
     });
+
+    this.sharedService.getUsers().subscribe(res => {
+      // this.userList = res;
+      const details = [];
+      const nameList = res.map(contact => {
+        return {
+          name: contact.name,
+          pictureURI: contact.pictureURI
+        };
+      });
+      console.log('nameList:', nameList);
+      this.items2 = nameList;
+      const itemList = [];
+      this.items2.map(contact => {
+        let hasSameValue = false;
+        for (let i = 0; i < this.collaborators.length; i++) {
+          if (contact.name === this.collaborators[i].name) {
+            hasSameValue = true;
+            break;
+          }
+        }
+        if (!hasSameValue) {
+          itemList.push(contact);
+        }
+      });
+      this.items2 = itemList;
+// Get AccountManagerList
+      this.items3 = nameList;
+      const accountManagerList = [];
+      this.items3.map(contact => {
+        let hasSameValue = false;
+        if (contact.name === this.projectDetails.accountManager.name) {
+          hasSameValue = true;
+        }
+        if (!hasSameValue) {
+          accountManagerList.push(contact);
+        }
+      });
+      this.items3 = accountManagerList;
+
+    // Get projectManagerlist
+      this.items4 = nameList;
+      const projectManagerList = [];
+      this.items4.map(contact => {
+        let hasSameValue = false;
+          if (contact.name === this.projectDetails.projectManager.name) {
+            hasSameValue = true;
+          }
+        if (!hasSameValue) {
+          projectManagerList.push(contact);
+        }
+      });
+      this.items4 = projectManagerList;
+    // Get Designer List
+      this.items5 = nameList;
+      const designerList = [];
+      this.items5.map(contact => {
+        let hasSameValue = false;
+          if (contact.name === this.projectDetails.designer.name) {
+            hasSameValue = true;
+          }
+        if (!hasSameValue) {
+          designerList.push(contact);
+        }
+      });
+      this.items5 = designerList;
+    });
   }
 
   clickIconShipping() {
     this.switchIconShipping = !this.switchIconShipping;
-    this.projectDetails.shippingAddress = (this.switchIconShipping) ? this.userInfo.shippingaddress.address : '';
-    this.projectDetails.city = (this.switchIconShipping) ? this.userInfo.shippingaddress.city : '';
-    this.projectDetails.state = (this.switchIconShipping) ? this.userInfo.shippingaddress.state : '';
-    this.projectDetails.country = (this.switchIconShipping) ? this.userInfo.shippingaddress.country : '';
-    this.projectDetails.zipcode = (this.switchIconShipping) ? this.userInfo.shippingaddress.zipcode : '';
+    this.projectDetails.shippingAddress.address = (this.switchIconShipping) ? this.userInfo.shippingaddress.address : '';
+    this.projectDetails.shippingAddress.city = (this.switchIconShipping) ? this.userInfo.shippingaddress.city : '';
+    this.projectDetails.shippingAddress.province = (this.switchIconShipping) ? this.userInfo.shippingaddress.state : '';
+    this.projectDetails.shippingAddress.country = (this.switchIconShipping) ? this.userInfo.shippingaddress.country : '';
+    this.projectDetails.shippingAddress.postalCode = (this.switchIconShipping) ? this.userInfo.shippingaddress.zipcode : '';
   }
 
   clickIconManagement() {
+    // tslint:disable-next-line:max-line-length
+    this.proposalDetails.clientProjectManagerId = (this.switchIconManagement) ? this.proposalDetails.contactId : undefined;
     this.switchIconManagement = !this.switchIconManagement;
-    this.projectManager = (this.switchIconManagement) ? this.proposalInfo.contactName : '';
+    this.clientProjectManager = (this.switchIconManagement) ? this.customerName : '';
   }
 
   clickIconReceivable() {
+    // tslint:disable-next-line:max-line-length
+    this.proposalDetails.accountReceivableId = (this.switchIconReceivable) ? this.proposalDetails.contactId : undefined;
+    this.selectReceivable = (!this.switchIconReceivable) ? this.getContactNameFromId( this.proposalDetails.contactId) : '';
     this.switchIconReceivable = !this.switchIconReceivable;
-    this.receivable = (this.switchIconReceivable) ? this.proposalInfo.contactName : '';
   }
 
   ngOnInit() {
-    // this.projectManager = this.proposalInfo.contactName;
-    // this.receivable = this.proposalInfo.contactName;
-    // this.projectDetails.customerName = this.proposalInfo.customerName;
-    // this.projectDetails.projectName = this.proposalInfo.projectName;
-    // this.projectDetails.shippingAddress = this.userInfo.shippingaddress.address;
-    // this.projectDetails.city = this.userInfo.shippingaddress.city;
-    // this.projectDetails.state = this.userInfo.shippingaddress.state;
-    // this.projectDetails.country = this.userInfo.shippingaddress.country;
-    // this.projectDetails.zipcode = this.userInfo.shippingaddress.zipcode;
-
     this.editable = false;
     this.userInfo.followers.forEach(element => {
       this.items2 = this.items2.filter(function( obj ) {
-        return obj.label !== element.name;
+        return obj.name !== element.name;
       });
     });
 
@@ -248,38 +407,49 @@ export class ProjectDetailsComponent implements OnInit {
 
   getSchduleRemain(event) {
     this.scheduleRemain = event;
+    this.proposalDetails.paymentSchedule = event;
+    this.updateProjectDetails();
   }
 
   onSelect(item: any) {
+    console.log('selected user:', item);
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.name !== item.name;
     });
-    this.projectDetails.collaborators.push({name: item.label, imageUrl: item.imageUrl });
+    this.collaborators.push({name: item.name, pictureURI: item.pictureURI });
+    this.proposalDetails.collaborators.push(item.name);
+    this.updateProjectDetails();
   }
 
   onSelectAccountManager(item: any) {
     this.selectedItem = item;
     this.items3 = this.items3.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.name !== item.name;
     });
-    this.projectDetails.accountManager.push({name: item.label, imageUrl: item.imageUrl });
+    this.projectDetails.accountManager = {name: item.name, pictureURI: item.pictureURI };
+    this.proposalDetails.accountManager = item.name;
+    this.updateProjectDetails();
   }
 
   onSelectProjectManager(item: any) {
     this.selectedItem = item;
     this.items4 = this.items4.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.name !== item.name;
     });
-    this.projectDetails.projectManager.push({name: item.label, imageUrl: item.imageUrl });
+    this.projectDetails.projectManager = {name: item.name, pictureURI: item.pictureURI };
+    this.proposalDetails.projectManager = item.name;
+    this.updateProjectDetails();
   }
 
   onSelectDesigner(item: any) {
     this.selectedItem = item;
     this.items5 = this.items5.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.name !== item.name;
     });
-    this.projectDetails.designer.push({name: item.label, imageUrl: item.imageUrl });
+    this.projectDetails.designer = {name: item.name, pictureURI: item.pictureURI };
+    this.proposalDetails.designer = item.name;
+    this.updateProjectDetails();
   }
 
 
@@ -289,38 +459,46 @@ export class ProjectDetailsComponent implements OnInit {
 
   removeUser(i: number) {
     const item = this.projectDetails.collaborators[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
+    this.items2.push({id: this.items2.length, name: item.name, pictureURI: item.pictureURI});
     this.projectDetails.collaborators.splice(i, 1);
     this.isAutocompleteUpdated2 = !this.isAutocompleteUpdated2;
   }
 
   removeAccountManager(i: number) {
-    const item = this.projectDetails.accountManager[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
-    this.projectDetails.accountManager.splice(i, 1);
+    const item = this.projectDetails.accountManager;
+    this.items2.push({id: this.items2.length, name: item.name, pictureURI: item.pictureURI});
+    this.projectDetails.accountManager = undefined;
     this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
   }
 
   removeProjectManager (i: number) {
-    const item = this.projectDetails.projectManager[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
-    this.projectDetails.projectManager.splice(i, 1);
+    const item = this.projectDetails.projectManager;
+    this.items2.push({id: this.items2.length, name: item.name, pictureURI: item.pictureURI});
+    this.projectDetails.projectManager = undefined;
     this.isAutocompleteUpdated4 = !this.isAutocompleteUpdated4;
   }
 
   removeDesigner (i: number) {
-    const item = this.projectDetails.designer[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
-    this.projectDetails.designer.splice(i, 1);
+    const item = this.projectDetails.designer;
+    this.items2.push({id: this.items2.length, name: item.name, pictureURI: item.pictureURI});
+    this.projectDetails.designer = undefined;
     this.isAutocompleteUpdated5 = !this.isAutocompleteUpdated5;
   }
 
-  getCategories(data) {
-    console.log('category: ', data);
+
+  getProjectCategories(event) {
+    const projectCategories = event.map( k => k.id);
+    this.projectDetails.projectCategoriesAll = projectCategories;
+    console.log('categories: ', event, this.projectDetails.projectCategoriesAll);
+    this.updateProjectDetails();
   }
 
-  getSubCategories(data) {
-    console.log('subcategory: ', data);
+  getProjectSubCategories(event) {
+
+    const projectSubCategories = event.map( k => k.id);
+    this.projectDetails.projectSubCategoriesAll = projectSubCategories;
+    console.log('subcategories: ', event, this.projectDetails.projectSubCategoriesAll);
+    this.updateProjectDetails();
   }
 
   // saveProjectDetails() {
@@ -351,13 +529,19 @@ export class ProjectDetailsComponent implements OnInit {
     }
   }
 
+  onSelectCustomer(event) {
+    console.log('select customer: ', event);
+    this.proposalDetails.contactId = event.originalObject.id;
+    this.customerName = event.originalObject.name;
+  }
+
   saveProjectDetails() {
     this.invalidProjectId = false;
     this.invalidSchedule = false;
     this.invalidAccountManager = false;
     this.invalidProjectManager = false;
-    if (this.projectDetails.projectId && (this.scheduleRemain === 0) && this.projectDetails.accountManager.length
-      && this.projectDetails.projectManager.length) {
+    if (this.projectDetails.projectId && (this.scheduleRemain === 0) && this.projectDetails.accountManager
+      && this.projectDetails.projectManager) {
         this.ProposalInfoModalCollapsed = true;
         this.showProposalInfo = false;
     } else {
@@ -367,10 +551,10 @@ export class ProjectDetailsComponent implements OnInit {
       if (this.scheduleRemain !== 0) {
         this.invalidSchedule = true;
       }
-      if (!this.projectDetails.accountManager.length) {
+      if (!this.projectDetails.accountManager) {
         this.invalidAccountManager = true;
       }
-      if (!this.projectDetails.projectManager.length) {
+      if (!this.projectDetails.projectManager) {
         this.invalidProjectManager = true;
       }
     }
@@ -386,8 +570,10 @@ export class ProjectDetailsComponent implements OnInit {
     this.invalidCountry = false;
     this.invalidZipcode = false;
     if (this.projectDetails.customerName && this.projectDetails.collaborators.length
-      && this.projectDetails.projectName && this.projectDetails.shippingAddress && this.projectDetails.city
-      && this.projectDetails.state && this.projectDetails.country && this.projectDetails.zipcode) {
+      && this.projectDetails.projectName && this.projectDetails.shippingAddress && this.projectDetails.shippingAddress.city
+      && this.projectDetails.shippingAddress.province
+      && this.projectDetails.shippingAddress.country &&
+      this.projectDetails.shippingAddress.postalCode) {
         this.ProposalInfoModalCollapsed = true;
         this.showProposalInfo = false;
     } else {
@@ -403,18 +589,85 @@ export class ProjectDetailsComponent implements OnInit {
       if (!this.projectDetails.shippingAddress) {
         this.invalidAddress = true;
       }
-      if (!this.projectDetails.city) {
+      if (!this.projectDetails.shippingAddress.city) {
         this.invalidCity = true;
       }
-      if (!this.projectDetails.state) {
+      if (!this.projectDetails.shippingAddress.province) {
         this.invalidState = true;
       }
-      if (!this.projectDetails.country) {
+      if (!this.projectDetails.shippingAddress.country) {
         this.invalidCountry = true;
       }
-      if (!this.projectDetails.zipcode) {
+      if (!this.projectDetails.shippingAddress.postalCode) {
         this.invalidZipcode = true;
       }
     }
+  }
+
+  onChangeInternalNote(event) {
+    this.proposalDetails.internalNote = event.target.value;
+    this.updateProjectDetails();
+  }
+  onChangeClientNote(event) {
+    this.proposalDetails.clientNote = event.target.value;
+    this.updateProjectDetails();
+  }
+  onChangeCustomerName(event) {
+    this.proposalDetails.name = event.target.value;
+    this.updateProjectDetails();
+  }
+  onSelectProjectManagementContact(event) {
+    console.log('client project manager id:', event.originalObject);
+    this.proposalDetails.clientProjectManagerId = event.originalObject.id;
+    this.clientProjectManager = event.originalObject.name;
+    this.updateProjectDetails();
+  }
+
+  onSelectAccountReceivable(event) {
+    this.proposalDetails.accountReceivableId = event.originalObject.id;
+    this.selectReceivable = event.originalObject.name;
+    this.updateProjectDetails();
+  }
+
+  onSelectAssociation(event) {
+    this.proposalDetails.association = event.target.value;
+  }
+  onChangePricingCategory(event) {
+    this.updateProjectDetails();
+  }
+  onChangeProjectName(event) {
+    this.proposalDetails.name = event.target.value;
+    this.updateProjectDetails();
+  }
+  onChangeProjectType(event) {
+    this.proposalDetails.projectTypeId = parseInt(event.target.value, 10);
+    this.updateProjectDetails();
+  }
+  onChangeShippingAddress(event, type) {
+    this.proposalDetails.shippingAddress[type] = event.target.value;
+    this.updateProjectDetails();
+  }
+
+  updateProjectDetails() {
+    console.log('project details are updating:', this.proposalDetails);
+    this.proposalDetails.contactId = parseInt(this.proposalDetails.toString().split('-').pop(), 10);
+    this.proposalDetails.clientProjectManagerId = parseInt(this.proposalDetails.clientProjectManagerId.split('-').pop(), 10);
+    this.proposalDetails.accountReceivableId = parseInt(this.proposalDetails.accountReceivableId.split('-').pop(), 10);
+    this.proposalDetails.clientNote = this.proposalDetails.clientNote ?  this.proposalDetails.clientNote : '';
+    this.proposalDetails.internalNote = this.proposalDetails.internalNote ? this.proposalDetails.internalNote : '';
+    this.proposalsService.updateIndividualProposal(this.proposalId, this.proposalDetails).subscribe(res => {
+      console.log('proposal updated');
+    });
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

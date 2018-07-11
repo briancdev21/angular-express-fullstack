@@ -41,8 +41,6 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     SalesDashboardComponent,
     RevenueAreaChartComponent,
     AddProposalComponent,
-    MultiCategoriesSelectComponent,
-    MultiSubCategoriesSelectComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +73,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     MatButtonModule,
     MatButtonToggleModule,
     MatCheckboxModule,
-    AddProposalComponent
+    AddProposalComponent,
   ],
   providers: [SalesService]
 })

@@ -29,8 +29,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { AddProposalTaskComponent } from './addproposaltask/addproposaltask.component';
 import { SearchProjectComponent } from './searchproject/searchproject.component';
 import { InvoicesCmpModule } from '../invoices/invoices.module';
-
-
+import { MultiSubCategoriesSelectComponent } from '../addproposal/multisubcategoriesselect/multisubcategoriesselect.component';
+import { MultiCategoriesSelectComponent } from '../addproposal/multicategoriesselect/multicategoriesselect.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,9 @@ import { InvoicesCmpModule } from '../invoices/invoices.module';
     SearchPipe,
     AddProposalTaskComponent,
     SearchProjectComponent,
-    MultiVariantsSelectComponent
+    MultiVariantsSelectComponent,
+    MultiCategoriesSelectComponent,
+    MultiSubCategoriesSelectComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +60,7 @@ import { InvoicesCmpModule } from '../invoices/invoices.module';
     ClickOutsideModule,
     Ng2CompleterModule,
     ImageUploadModule.forRoot(),
-    InvoicesCmpModule
+    InvoicesCmpModule,
   ],
   exports: [
     ProductDetailsComponent,
@@ -68,7 +70,9 @@ import { InvoicesCmpModule } from '../invoices/invoices.module';
     AddProductModalComponent,
     ScheduleMultiKeywordComponent,
     AddProposalTaskComponent,
-    SearchProjectComponent
+    SearchProjectComponent,
+    MultiSubCategoriesSelectComponent,
+    MultiCategoriesSelectComponent,
   ],
   providers: [ProposalService]
 })

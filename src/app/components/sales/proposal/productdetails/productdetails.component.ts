@@ -114,6 +114,7 @@ export class ProductDetailsComponent implements OnInit {
       this.selectedRows = [product.sku];
     }
     window.localStorage.setItem('selectedProducts', JSON.stringify(this.selectedRows) );
+    // Add Mock data
   }
 
   onClickedOutside(event) {
@@ -124,7 +125,7 @@ export class ProductDetailsComponent implements OnInit {
     if (val === 'all') {
       this.selectedData = this.productsInfoAll;
     } else {
-      this.selectedData = this.productsInfoAll.filter(x => x.productTypeId == val);
+      this.selectedData = this.productsInfoAll.filter(x => x.productTypeId === val);
     }
   }
 
@@ -156,6 +157,11 @@ export class ProductDetailsComponent implements OnInit {
     // this.sharedService.insertToTable([[product]]);
   }
 
+  updateIndividualProduct(product) {
+    this.openAttachmentModal(product);
+    this.insertToTable([[product]]);
+    console.log('insert to table');
+  }
   openAddProductModal() {
     this.showAddProductModal = true;
     this.addProductModalCollapsed = false;
@@ -269,5 +275,32 @@ export class ProductDetailsComponent implements OnInit {
     this.addAttachmentModalCollapsed = true;
     this.sidebarCollapsed = true;
     this.proposalService.insertToTable([[this.selectedProduct]]);
+  }
+
+  updateAttachmentModal() {
+    // Modal for update attachment
+
+    this.accQueryString = '';
+    this.alterQueryString = '';
+    this.addAttachmentModalCollapsed = true;
+    this.sidebarCollapsed = true;
+    this.proposalService.insertToTable([[this.selectedProduct]]);
+
+    if (!this.selectedProduct.addedAccList) {
+      this.selectedProduct.addedAccList = this.addedAccList;
+    } else {
+      this.selectedProduct.addedAccList.concat(this.addedAccList);
+    }
+    if (!this.selectedProduct.addedAlterList) {
+      this.selectedProduct.addedAlterList = this.addedAlterList;
+    } else {
+      this.selectedProduct.addedAlterList.concat(this.addedAlterList);
+    }
+
+  }
+  insertToTable(products) {
+    // inssert product to table
+    console.log('insert products to table');
+    this.productsInfoAll = products;
   }
 }

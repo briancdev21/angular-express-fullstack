@@ -22,6 +22,10 @@
 	border: 1px solid red !important;
 }
 
+:host ::ng-deep .completer-label {
+	display: none !important;
+}
+
 /* Modal CSS */
 
 .sidebar-wrapper {
@@ -89,7 +93,8 @@
 }
 
 .project-category, .subproject-category {
-	display: flex;
+	display: block;
+	text-align: left;
 	justify-content: space-between;
 	align-items: center;
 	padding: 5px 30px 0 30px;
@@ -431,6 +436,11 @@ input::placeholder {
 
 /* Tab Project Details CSS */
 
+
+:host ::ng-deep .tab-two .category-box .content-box, :host ::ng-deep .tab-two .subcategory-box .content-box {
+	min-height: 84px;
+}
+
 .discount>div {
 	display: flex;
 }
@@ -448,7 +458,7 @@ input::placeholder {
 .category-box, .subcategory-box {
 	min-height: 100px;
 	border: 1px solid #f5f5f5;
-	padding: 7px;
+	padding: 7px 0;
 	margin-top: 5px;
 }
 

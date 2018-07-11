@@ -201,7 +201,7 @@ export class AddProposalComponent implements OnInit {
       .subscribe(data => {
         console.log('userlist: ', data);
         this.customerList = data;
-        this.addContactName(this.customerList);
+        this.customerList = this.addContactName(this.customerList);
         this.customersData = this.completerService.local(this.customerList, 'name', 'name');
         // Add collaborators list
         this.customerList.forEach( ele => {
@@ -604,6 +604,7 @@ export class AddProposalComponent implements OnInit {
 
   finishAddProposal() {
     this.invalidScopeEditorContent = false;
+    const collaborators = this.proposalDetails.collaborators.map(collaborator => collaborator.username);
     const savingProposalData = {
       'currencyId': 1,
       'contactId': this.proposalDetails.contactId,
@@ -635,12 +636,13 @@ export class AddProposalComponent implements OnInit {
         'value': this.proposalDetails.discount.amount,
         'unit': this.proposalDetails.discount.type
       },
-      'taxRateId': this.proposalDetails.taxRate
+      'collaborators': collaborators,
+      'taxRateId': parseInt(this.proposalDetails.taxRate.toString(), 10)
     };
 
     if (this.scopeEditorContent) {
       console.log('saving_proposal: ', savingProposalData);
-      this.proposalsService.createProposal(JSON.stringify(savingProposalData)).subscribe(res => {
+      this.proposalsService.createProposal(savingProposalData).subscribe(res => {
         console.log('created proposal: ', res);
         this.salesService.proposalAdded.next(true);
       });

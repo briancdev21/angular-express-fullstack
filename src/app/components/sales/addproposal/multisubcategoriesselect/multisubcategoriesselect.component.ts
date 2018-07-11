@@ -31,7 +31,6 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
     });
 
     this.salesService.selectedCategory.subscribe(res => {
-      console.log('receive cate: ', res);
       this.categoriesList.push(res);
       this.categoryId = res;
       if (res) {
@@ -43,7 +42,6 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
     });
 
     this.salesService.deletedCategory.subscribe(res => {
-      console.log('deleted cate: ', res);
       this.subCategories = [];
       if (res) {
         const pos = this.categoriesList.indexOf(res);
@@ -104,6 +102,7 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
       .subscribe((res) => {
         this.subCategories.push(res.data);
         this.sendSubCategories.emit(this.subCategories);
+        console.log('subcategories:', this.sendSubCategories, this.subCategories);
       });
     }
   }
@@ -113,6 +112,7 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
     .subscribe(res => {
       this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
         this.subCategories = data.results;
+        console.log('subCategories list :', this.subCategories);
       });
     });
   }

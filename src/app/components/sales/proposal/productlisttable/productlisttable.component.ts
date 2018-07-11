@@ -4,6 +4,8 @@ import * as _ from 'lodash';
 import { ProposalService } from '../proposal.service';
 import * as moment from 'moment';
 import { forEach } from '@angular/router/src/utils/collection';
+import { PmTasksService } from '../../../../services/pmtasks.service';
+import { ProductsService } from '../../../../services/inventory/products.service';
 
 @Component({
   selector: 'app-productlisttable',
@@ -39,7 +41,21 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   proposalProductList = [];
   max = undefined;
 
-  constructor( private proposalService: ProposalService ) {
+  constructor( private proposalService: ProposalService, private productsService: ProductsService) {
+    const productId = localStorage.getItem('productId');
+    this.productsService.getProductAccessoriesList(productId).subscribe(res => {
+      console.log('product list', res.results);
+      // product list
+    });
+    this.productsService.getProductAlternativesList(productId).subscribe(res => {
+      console.log('product list', res.results);
+      // product list
+      const alternativesList = res.results;
+      const listIds = alternativesList.filter(item => item.id);
+    });
+    this.productsService.getProductsList().subscribe(res => {
+      console.log('product list', res.results);
+    });
   }
 
   ngOnDestroy() {
@@ -90,14 +106,14 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
                 // set parent ID for each added acc product
                 midValue[i].addedAccList[j].parentId = midValue[i].id;
                 // Add missing field
-                midValue[i].addedAccList[j].sku = midValue[i].addedAccList[j].skuNumber;
-                midValue[i].addedAccList[j].model = midValue[i].addedAccList[j].modelNumber;
-                midValue[i].addedAccList[j].productType = midValue[i].productType;
-                midValue[i].addedAccList[j].unitPrice = midValue[i].addedAccList[j].friendPrice;
-                midValue[i].addedAccList[j].discount = 0;
-                midValue[i].addedAccList[j].total = midValue[i].addedAccList[j].unitPrice * midValue[i].addedAccList[j].qty *
-                                                      (100 - midValue[i].addedAccList[j].discount) / 100;
-                midValue[i].addedAccList[j].taxRate = midValue[i].taxRate;
+                // midValue[i].addedAccList[j].sku = midValue[i].addedAccList[j].skuNumber;
+                // midValue[i].addedAccList[j].model = midValue[i].addedAccList[j].modelNumber;
+                // midValue[i].addedAccList[j].productType = midValue[i].productType;
+                // midValue[i].addedAccList[j].unitPrice = midValue[i].addedAccList[j].friendPrice;
+                // midValue[i].addedAccList[j].discount = 0;
+                // midValue[i].addedAccList[j].total = midValue[i].addedAccList[j].unitPrice * midValue[i].addedAccList[j].qty *
+                //                                       (100 - midValue[i].addedAccList[j].discount) / 100;
+                // midValue[i].addedAccList[j].taxRate = midValue[i].taxRate;
                 // add added acc products to inserted array
                 insertedArr.push(midValue[i].addedAccList[j]);
               }
@@ -105,18 +121,18 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
             if (midValue[i].addedAlterList.length > 0) {
               for (let j = 0; j <= midValue[i].addedAlterList.length - 1; j++) {
                 this.addedIndex += 1;
-                midValue[i].addedAlterList[j].id = this.addedIndex;
-                midValue[i].addedAlterList[j].option = 'alter';
-                midValue[i].addedAlterList[j].parentId = midValue[i].id;
-                midValue[i].addedAlterList[j].sku = midValue[i].addedAlterList[j].skuNumber;
-                midValue[i].addedAlterList[j].model = midValue[i].addedAlterList[j].modelNumber;
-                midValue[i].addedAlterList[j].productType = midValue[i].productType;
-                midValue[i].addedAlterList[j].unitPrice = midValue[i].addedAlterList[j].friendPrice;
-                midValue[i].addedAlterList[j].discount = 0;
-                midValue[i].addedAlterList[j].total = midValue[i].addedAlterList[j].unitPrice * midValue[i].addedAlterList[j].qty *
-                                                      (100 - midValue[i].addedAlterList[j].discount) / 100;
-                midValue[i].addedAlterList[j].taxRate = midValue[i].taxRate;
-                insertedArr.push(midValue[i].addedAlterList[j]);
+                // midValue[i].addedAlterList[j].id = this.addedIndex;
+                // midValue[i].addedAlterList[j].option = 'alter';
+                // midValue[i].addedAlterList[j].parentId = midValue[i].id;
+                // midValue[i].addedAlterList[j].sku = midValue[i].addedAlterList[j].skuNumber;
+                // midValue[i].addedAlterList[j].model = midValue[i].addedAlterList[j].modelNumber;
+                // midValue[i].addedAlterList[j].productType = midValue[i].productType;
+                // midValue[i].addedAlterList[j].unitPrice = midValue[i].addedAlterList[j].friendPrice;
+                // midValue[i].addedAlterList[j].discount = 0;
+                // midValue[i].addedAlterList[j].total = midValue[i].addedAlterList[j].unitPrice * midValue[i].addedAlterList[j].qty *
+                //                                       (100 - midValue[i].addedAlterList[j].discount) / 100;
+                // midValue[i].addedAlterList[j].taxRate = midValue[i].taxRate;
+                // insertedArr.push(midValue[i].addedAlterList[j]);
               }
             }
           }
@@ -430,5 +446,60 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
     });
     return parents;
+  }
+
+  removeParents() {
+    // Remove parents from list
+    const parents = [];
+    const parentsOnly = this.proposalProductList.filter (p => p.option === undefined);
+    this.getParentSkuList().forEach(element => {
+      const a = parentsOnly.filter( p => p.sku === element);
+        parents.push(this.createNewParent(a));
+
+    });
+    return parentsOnly;
+  }
+
+  updateParentSkuList() {
+    // SkuList duplicates
+    let skuList = this.proposalProductList.filter( p => p.option === undefined ).map( p => p.sku);
+    // remove duplicates
+    skuList = skuList.filter(function(item, pos) {
+      return skuList.indexOf(item) === pos;
+    });
+    return skuList;
+  }
+
+  removeParent(arr) {
+    // tslint:disable-next-line:prefer-const
+    let removableParent = {};
+    Object.assign(removableParent, arr[0]);
+    if (this.max === undefined) {
+      let max = 0;
+      _.forEach(this.proposalProductList, element => {
+        if (max < element.id) {
+          max = element.id;
+        }
+      });
+      this.max = max;
+    }
+    this.max ++;
+    if (arr.length > 1) {
+      removableParent['id'] = this.max;
+    }
+
+    removableParent['qty'] = arr.length;
+    // calculate sum of child products total price
+    removableParent['total'] = arr.filter( a => a.total).reduce((a, b) => a + b, 0);
+
+    return removableParent;
+  }
+
+  updateProductsList (productId, categoryId, data) {
+    this.proposalProductList = [];
+    this.productsService.updateProductIndividualCategory(categoryId, productId, data).subscribe(res => {
+      console.log('update product', this.proposalProductList);
+      // update products
+    });
   }
 }
