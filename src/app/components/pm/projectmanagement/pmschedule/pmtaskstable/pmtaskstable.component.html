@@ -114,4 +114,47 @@
     </div>
   </div>
 </div>
+<!-- <div class="task-actions-modal modal">
+  <img *ngIf="task.dependency" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
+  <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.like}" (click)="task.like = !task.like">
+  <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
+  Dependency numbers-->
+  <!-- <div class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">
+    <span *ngFor="let dependency of milestones[i].tasks[j].dependency; let l = index" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
+      <span *ngIf="l != 0">,</span>
+      {{dependency}}
+    </span>
+  </div> -->
+  <!-- dependecy selection modal-->
+  <!-- <div
+    class="dependency-modal"
+    (clickOutside)="closeDependencyModal(i, j)"
+    *ngIf="dependencyModalCollapsed[i][j]"
+  >
+    <div class="dependency-mdl-content">
+      <div class="followers">
+        <div class="follower add-follower" >
+          <a (click)="editable=true;$event.stopPropagation()" ></a>
+        </div> 
+        <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+          <ul>
+            <li *ngFor="let task of milestones[i].tasks[j].dependency; let k = index">{{task}}<span (click)="removeDependency(i, j, k)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+            <li style="background: none; width: 100%; margin: 0;">
+                <ng-select *ngIf="isAutocompleteUpdated" [items]="allTasks"
+                  bindLabel="config2.sourceField"
+                  [clearSearchOnAdd]="false"
+                  (add)="onSelect(i, j, $event)" >
+                </ng-select>
+                <ng-select *ngIf="!isAutocompleteUpdated" [items]="allTasks"
+                  bindLabel="config2.sourceField"
+                  [clearSearchOnAdd]="false"
+                  (add)="onSelect(i, j, $event)">
+                </ng-select>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div> -->
 
+<!-- </div> -->

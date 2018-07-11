@@ -19,6 +19,18 @@ export class GanttChartComponent implements OnInit {
     this.calculate();
   }
 
+  // @Input() set projectInfo(_data) {
+  //   this._projectInfo = _data;
+  //   this.calculate();
+  //   console.log('details tasks:. ', this._projectInfo);
+  // }
+
+  // @Input() set detailsTasks(_data) {
+  //   this._detailsTasks = _data;
+  //   this.calculate();
+  //   console.log('details tasks:. ', this._detailsTasks);
+  // }
+
   _tasks = [];
   FebNumberOfDays: any;
   dateNow: Date;
@@ -58,93 +70,93 @@ export class GanttChartComponent implements OnInit {
     this.displayMonthes = [];
     this.dayCountArr = [];
     // Determing if February (28,or 29)
-    // if (this.month === 1) {
-    //   if ( (this.year % 100 !== 0) && (this.year % 4 === 0) || (this.year % 400 === 0)) {
-    //     this.FebNumberOfDays = 29;
-    //   } else {
-    //     this.FebNumberOfDays = 28;
-    //   }
-    // }
-    // // get min and max date from data to set the range of table
-    // let minDate = this.dateNow;
-    // let maxDate = this.dateNow;
-    // let nextMonth = new Date();
-    // let lastMonth = new Date();
-    // this._tasks.forEach(element => {
-    //   if (new Date (element.start_date) < new Date(minDate)) {
-    //     minDate = element.start_date;
-    //   }
-    //   if (new Date (element.end_date) > new Date (maxDate)) {
-    //     maxDate = element.end_date;
-    //   }
-    // });
+    if (this.month === 1) {
+      if ( (this.year % 100 !== 0) && (this.year % 4 === 0) || (this.year % 400 === 0)) {
+        this.FebNumberOfDays = 29;
+      } else {
+        this.FebNumberOfDays = 28;
+      }
+    }
+    // get min and max date from data to set the range of table
+    let minDate = this.dateNow;
+    let maxDate = this.dateNow;
+    let nextMonth = new Date();
+    let lastMonth = new Date();
+    this._tasks.forEach(element => {
+      if (new Date (element.start_date) < new Date(minDate)) {
+        minDate = element.start_date;
+      }
+      if (new Date (element.end_date) > new Date (maxDate)) {
+        maxDate = element.end_date;
+      }
+    });
 
-    // // compare the min and max with current date to set range
-    // const startDate = (new Date(minDate) < this.dateNow) ? new Date(minDate) : this.dateNow;
-    // const endDate = (new Date (maxDate) > this.dateNow) ? new Date (maxDate) : this.dateNow;
-    // this.displayMonthes = this.monthDiff(startDate, endDate);
+    // compare the min and max with current date to set range
+    const startDate = (new Date(minDate) < this.dateNow) ? new Date(minDate) : this.dateNow;
+    const endDate = (new Date (maxDate) > this.dateNow) ? new Date (maxDate) : this.dateNow;
+    this.displayMonthes = this.monthDiff(startDate, endDate);
 
-    // // if timeline shows only one or two months, should add 2 or 1 months forward and backward
-    // if (this.displayMonthes.length ===  2) {
-    //   if (endDate.getMonth() === 11) {
-    //     nextMonth = new Date(endDate.getFullYear() + 1, 0, 1);
-    //   } else {
-    //     nextMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
-    //   }
-    //   this.displayMonthes = this.monthDiff(startDate, nextMonth);
-    // }
-    // if (this.displayMonthes.length ===  1) {
-    //   if (endDate.getMonth() === 11) {
-    //     nextMonth = new Date(endDate.getFullYear() + 1, 0, 1);
-    //   } else {
-    //     nextMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
-    //   }
-    //   if (startDate.getMonth() === 1) {
-    //     lastMonth = new Date(startDate.getFullYear() - 1, 0, 1);
-    //   } else {
-    //     lastMonth = new Date(startDate.getFullYear(), startDate.getMonth() - 1, 1);
-    //   }
+    // if timeline shows only one or two months, should add 2 or 1 months forward and backward
+    if (this.displayMonthes.length ===  2) {
+      if (endDate.getMonth() === 11) {
+        nextMonth = new Date(endDate.getFullYear() + 1, 0, 1);
+      } else {
+        nextMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
+      }
+      this.displayMonthes = this.monthDiff(startDate, nextMonth);
+    }
+    if (this.displayMonthes.length ===  1) {
+      if (endDate.getMonth() === 11) {
+        nextMonth = new Date(endDate.getFullYear() + 1, 0, 1);
+      } else {
+        nextMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
+      }
+      if (startDate.getMonth() === 1) {
+        lastMonth = new Date(startDate.getFullYear() - 1, 0, 1);
+      } else {
+        lastMonth = new Date(startDate.getFullYear(), startDate.getMonth() - 1, 1);
+      }
 
-    //   this.displayMonthes = this.monthDiff(lastMonth, nextMonth);
-    // }
+      this.displayMonthes = this.monthDiff(lastMonth, nextMonth);
+    }
 
-    // _.forEach(this.displayMonthes, month => {
-    //   const dayCount = {
-    //     dateSubArr: [],
-    //     isWeekendArr: [],
-    //     isFirstArr: [],
-    //     isLastArr: [],
-    //     isLastActiveArr: [],
-    //     getBgColorArr: [],
-    //     getTodayLineArr: []
-    //   };
-    //   dayCount.dateSubArr = this.getDayCount(month.month, month.year);
+    _.forEach(this.displayMonthes, month => {
+      const dayCount = {
+        dateSubArr: [],
+        isWeekendArr: [],
+        isFirstArr: [],
+        isLastArr: [],
+        isLastActiveArr: [],
+        getBgColorArr: [],
+        getTodayLineArr: []
+      };
+      dayCount.dateSubArr = this.getDayCount(month.month, month.year);
 
-    //   for (let i = 0; i < this._tasks.length; i ++) {
-    //     const isWeekendSubArr = [];
-    //     const getTodayLineSubArr = [];
-    //     const isFirstSubArr = [];
-    //     const isLastSubArr = [];
-    //     const isLastActiveSubArr = [];
-    //     const getBgColorSubArr = [];
+      for (let i = 0; i < this._tasks.length; i ++) {
+        const isWeekendSubArr = [];
+        const getTodayLineSubArr = [];
+        const isFirstSubArr = [];
+        const isLastSubArr = [];
+        const isLastActiveSubArr = [];
+        const getBgColorSubArr = [];
 
-    //     _.forEach(dayCount.dateSubArr, date => {
-    //       isWeekendSubArr.push(this.isWeekend(month.year, month.month, date));
-    //       getTodayLineSubArr.push(this.getTodayLine(month.year, month.month, date));
-    //       isFirstSubArr.push(this.isFirst(month.year, month.month, date, this._tasks[i], i));
-    //       isLastSubArr.push(this.isLast(month.year, month.month, date, this._tasks[i], i));
-    //       isLastActiveSubArr.push(this.isLastActive(month.year, month.month, date + 1, this._tasks[i], i));
-    //       getBgColorSubArr.push(this.getBgColor(month.year, month.month, date, this._tasks[i], i));
-    //     });
-    //     dayCount.isWeekendArr.push(isWeekendSubArr);
-    //     dayCount.getTodayLineArr.push(getTodayLineSubArr);
-    //     dayCount.isFirstArr.push(isFirstSubArr);
-    //     dayCount.isLastArr.push(isLastSubArr);
-    //     dayCount.isLastActiveArr.push(isLastActiveSubArr);
-    //     dayCount.getBgColorArr.push(getBgColorSubArr);
-    //   }
-    //   this.dayCountArr.push(dayCount);
-    // });
+        _.forEach(dayCount.dateSubArr, date => {
+          isWeekendSubArr.push(this.isWeekend(month.year, month.month, date));
+          getTodayLineSubArr.push(this.getTodayLine(month.year, month.month, date));
+          isFirstSubArr.push(this.isFirst(month.year, month.month, date, this._tasks[i], i));
+          isLastSubArr.push(this.isLast(month.year, month.month, date, this._tasks[i], i));
+          isLastActiveSubArr.push(this.isLastActive(month.year, month.month, date + 1, this._tasks[i], i));
+          getBgColorSubArr.push(this.getBgColor(month.year, month.month, date, this._tasks[i], i));
+        });
+        dayCount.isWeekendArr.push(isWeekendSubArr);
+        dayCount.getTodayLineArr.push(getTodayLineSubArr);
+        dayCount.isFirstArr.push(isFirstSubArr);
+        dayCount.isLastArr.push(isLastSubArr);
+        dayCount.isLastActiveArr.push(isLastActiveSubArr);
+        dayCount.getBgColorArr.push(getBgColorSubArr);
+      }
+      this.dayCountArr.push(dayCount);
+    });
   }
 
   // tslint:disable-next-line:no-shadowed-variable
@@ -252,5 +264,9 @@ export class GanttChartComponent implements OnInit {
       ) {
       return true;
     }
+  }
+
+  updateService() {
+    // update service for Gantt chat
   }
 }
