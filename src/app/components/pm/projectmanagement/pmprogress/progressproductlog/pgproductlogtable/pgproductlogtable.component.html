@@ -2,25 +2,25 @@
   <table>
     <tr>
       <th class="img-cell"></th>
-      <th (click)="sortArray('productName', purchaseOrdersList)">PRODUCT NAME</th>
-      <th (click)="sortArray('supplier', purchaseOrdersList)">SUPPLIER</th> 
+      <th (click)="sortArray('name', purchaseOrdersList)">PRODUCT NAME</th>
+      <th (click)="sortArray('supplier', purchaseOrdersList)">SUPPLIER</th>
       <th (click)="sortArray('brand', purchaseOrdersList)">BRAND</th>
       <th (click)="sortArray('sku', purchaseOrdersList)">SKU</th>
-      <th (click)="sortArray('orderNumber', purchaseOrdersList)">ORDER #</th>
-      <th (click)="sortArray('qty', purchaseOrdersList)">QTY</th>
+      <th (click)="sortArray('purchaseOrderId', purchaseOrdersList)">ORDER #</th>
+      <th (click)="sortArray('quantity', purchaseOrdersList)">QTY</th>
       <th (click)="sortArray('status', purchaseOrdersList)">STATUS</th>
     </tr>
     <tr *ngFor="let order of purchaseOrdersList; let i = index">
       <td><img [src]="order.imgUrl"></td>
-      <td>{{order.productName}}</td>
-      <td>{{order.supplier}}</td>
-      <td>{{order.brand}}</td> 
-      <td>{{order.sku}}</td> 
-      <td>{{order.orderNumber}}</td> 
-      <td class="order-status">{{order.qty}}</td> 
+      <td>{{order.name}}</td>
+      <td>{{getSupplierName(order.supplierId)}}</td>
+      <td>{{order.brand}}</td>
+      <td>{{order.sku}}</td>
+      <td>{{order.purchaseOrderId}}</td>
+      <td class="order-status">{{order.quantity}}</td>
       <td>
         <span class="order-status">{{order.status}}</span>
-      </td> 
+      </td>
     </tr>
   </table>
   <div class="reserved-inventory-title">
@@ -30,67 +30,42 @@
   <table class="reserved-inventory-table">
     <tr>
       <th></th>
-      <th (click)="sortArray('productName', reservedInventoryList)">PRODUCT NAME</th>
-      <th (click)="sortArray('modelNumber', reservedInventoryList)">MODEL NUMBER</th> 
+      <th (click)="sortArray('name', reservedInventoryList)">PRODUCT NAME</th>
+      <th (click)="sortArray('model', reservedInventoryList)">MODEL NUMBER</th>
       <th (click)="sortArray('brand', reservedInventoryList)">BRAND</th>
       <th (click)="sortArray('sku', reservedInventoryList)">SKU</th>
-      <th (click)="sortArray('qty', reservedInventoryList)">QTY</th> 
+      <th (click)="sortArray('reservedQuantity', reservedInventoryList)">QTY</th>
       <th (click)="sortArray('status', reservedInventoryList)">STATUS</th>
     </tr>
     <tr *ngFor="let inventory of reservedInventoryList; let i = index">
       <td><img [src]="inventory.imgUrl"></td>
-      <td>{{inventory.productName}}</td>
-      <td>{{inventory.modelNumber}}</td>
-      <td>{{inventory.brand}}</td> 
-      <td>{{inventory.sku}}</td> 
-      <td class="inventory-status">{{inventory.qty}}</td>
+      <td>{{inventory.name}}</td>
+      <td>{{inventory.model}}</td>
+      <td>{{getBrandName(inventory.brandId)}}</td>
+      <td>{{inventory.sku}}</td>
+      <td class="inventory-status">{{inventory.reservedQuantity}}</td>
       <td>
-        <span class="inventory-status">{{inventory.status}}</span> 
+        <span class="inventory-status">Reserved</span>
         <img src="assets/images/three-dots.png" (click)="openInventoryModal(i)" style="cursor: pointer;">
-        <div 
-          class="order-expand-modal-wrapper" 
-          *ngIf="inventoryModalInfoCollapsed[i]" 
+        <div
+          class="order-expand-modal-wrapper"
+          *ngIf="inventoryModalInfoCollapsed[i]"
           (click)="inventoryModalInfoCollapsed[i]=false; showOrderModalInfo=false">
         </div>
         <!-- Start Small Dialog when clicking three dot icom -->
-        <div 
-          class="order-expand-modal"  
+        <div
+          class="order-expand-modal"
           [ngClass]="{'show-order-modal': inventoryModalInfoCollapsed[i], 'hide-order-modal': !inventoryModalInfoCollapsed[i] }">
           <div class="dots-icon"><img src="assets/images/three-dots.png"></div>
-          <div>
-            <div (click)="swapRow(i, reservedInventoryList)"><img src="assets/images/Convert.png"><span>Swap</span></div>
-          </div>
           <div>
             <div (click)="deleteRow(i, reservedInventoryList)"><img src="assets/images/Delete.png"><span>Delete</span></div>
           </div>
         </div>
         <!-- End Small Dialog when clicking three dot icom -->
-      </td> 
+      </td>
     </tr>
   </table>
 </div>
-
-<!-- Confirm Swap Alert Box -->
-<div class="confirm-swap-modal-wrapper" *ngIf="showSwapConfirmModal" ></div>
-<div [ngClass]="{'confirm-modal': showSwapConfirmModal, 'confirm-modal-hide': !showSwapConfirmModal }">
-  <div class="header">
-    <span>Confirm Swap</span>
-    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showSwapConfirmModal=false" />
-  </div>
-  <div class="content" >
-    <div class="confirm-que">
-      Do you really want to swap?
-    </div>
-    <div class="center-btn-section" >
-      <button class="confirm-btn" (click)="confirmSwap();showSwapConfirmModal=false" >
-        Confirm
-      </button>
-      <button class="cancel-btn" (click)="showSwapConfirmModal=false" >
-        Cancel
-      </button>
-    </div>
-  </div>
-</div> 
 
 <!-- Confirm Delete Alert Box -->
 <div class="confirm-delete-modal-wrapper" *ngIf="showDeleteConfirmModal" ></div>
@@ -112,4 +87,4 @@
       </button>
     </div>
   </div>
-</div> 
+</div>

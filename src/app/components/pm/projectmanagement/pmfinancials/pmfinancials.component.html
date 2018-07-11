@@ -98,9 +98,9 @@
           <div class="cost-default-value">
             <div>
               <div>
-                <input 
-                  [owlDateTime]="scheduleDate" 
-                  [owlDateTimeTrigger]="scheduleDate" 
+                <input
+                  [owlDateTime]="scheduleDate"
+                  [owlDateTimeTrigger]="scheduleDate"
                   (dateTimeChange)="selectScheduleDate($event, i, schedule)"
                   [disabled]="checkOverdue[i]"
                   [min]="today"
@@ -118,7 +118,7 @@
   </div>
 
   <div class="table-sec">
-    <!-- <app-projectfinancialstable></app-projectfinancialstable> -->
+    <app-projectfinancialstable></app-projectfinancialstable>
   </div>
 
   <div class="bottom-btns">

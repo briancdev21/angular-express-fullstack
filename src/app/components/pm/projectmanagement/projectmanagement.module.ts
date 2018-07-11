@@ -12,6 +12,7 @@ import { PmFilesComponent } from './pmfiles/pmfiles.component';
 import { PmBoardTopInfoComponent } from './pmboard/pmboardtopinfo/pmboardtopinfo.component';
 import { BoardPanelRightComponent } from './pmboard/boardpanelright/boardpanelright.component';
 import { ProjectFinanceComponent } from './pmboard/projectfinance/projectfinance.component';
+import { ProjectFinancialsTableCmpModule } from './projectfinancialstable/projectfinancialstable.module';
 import { PmBoardTableComponent } from './pmboard/pmboardtable/pmboardtable.component';
 import { AddDetailedTaskComponent } from '../adddetailedtask/adddetailedtask.component';
 import { SubTasksManagementComponent } from '../adddetailedtask/subtasksmanagement/subtasksmanagement.component';
@@ -104,7 +105,8 @@ export const MY_NATIVE_FORMATS = {
     QuillModule,
     ProgressProductLogCmpModule,
     DpDatePickerModule,
-    Ng2CompleterModule
+    Ng2CompleterModule,
+    ProjectFinancialsTableCmpModule
   ],
   exports: [
     PmBreadcrumbBarComponent,
