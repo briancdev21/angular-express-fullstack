@@ -594,3 +594,11 @@ input::placeholder {
   top: 0;
   left: 0;
 }
+
+
+/* ng2-completer modal overflow */
+/deep/ .completer-dropdown {
+  background: red;
+  height: 150px !important;
+  overflow-y: auto !important;
+}
