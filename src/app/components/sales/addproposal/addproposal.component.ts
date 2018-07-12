@@ -478,7 +478,7 @@ export class AddProposalComponent implements OnInit {
         if (!this.proposalDetails.collaborators.length) {
           this.invalidCollaborators = true;
         }
-        if (this.proposalDetails.projectName) {
+        if (!this.proposalDetails.projectName) {
           this.invalidProjectName = true;
         }
         if (!this.proposalDetails.shippingAddress) {
