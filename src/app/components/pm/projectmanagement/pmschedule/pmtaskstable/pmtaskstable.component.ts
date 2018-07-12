@@ -38,6 +38,7 @@ export class PmTasksTableComponent implements OnInit {
   inputChanged: any;
   selectedItem: any;
   isAutocompleteUpdated = false;
+  tasksTemp = [];
 
   config2: any = {'placeholder': 'Type here', 'sourceField': ''};
   colors = ['#F0D7BD', '#DFE5B0', '#F0C9C9', '#CBE0ED', '#E0BBCC', '#C4BBE0', '#BBC0E0', '#BBE0CC', '#E0BBBB', '#E8E3A7'];
@@ -234,12 +235,19 @@ export class PmTasksTableComponent implements OnInit {
                 element.taskTitle = element.title;
                 element.dependency = element.dependencyIds ? element.dependencyIds : [];
               });
+              this.addTasksFromPmBoardData(this.milestones[i], i);
             });
           }
         }
       }
-      console.log('milestones2: ', data);
     });
+  }
+
+  addTasksFromPmBoardData(tableDataAtIndex: any, i) {
+    this.tasksTemp[i] = tableDataAtIndex;
+      if (this.tasksTemp.length === this.milestones.length) {
+        this.updatedGanttData.emit({'data': this.tasksTemp});
+      }
   }
 
   clickOutside() {
