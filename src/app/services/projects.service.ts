@@ -144,4 +144,14 @@ export class ProjectsService {
     const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs/${logId}/email`;
     return this.http.get(url);
   }
+
+  createProjectProduct (id, body): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/products`;
+    return this.http.post(url, body, this.options);
+  }
+
+  updateIndividualProjectProduct (id, orderId, body): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/products/${orderId}`;
+    return this.http.put(url, body);
+  }
 }
