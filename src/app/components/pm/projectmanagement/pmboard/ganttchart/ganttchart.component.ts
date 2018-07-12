@@ -17,6 +17,17 @@ import { AUTOCOMPLETE_OPTION_HEIGHT } from '@angular/material';
 export class GanttChartComponent implements OnInit {
   @Input() set tasks(_data) {
     this._tasks = _data;
+    while (this._tasks.length < 4) {
+      const emptyArr = {
+        id: this._tasks.length,
+        title: '',
+        start_date: moment().format('YYYY-MM-DD'),
+        end_date: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+        progress: undefined
+      };
+      this._tasks.push(emptyArr);
+    }
+    // console.log('tasks gantt chart:', _data);
     this.calculate();
   }
 

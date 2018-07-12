@@ -483,6 +483,7 @@ export class PmBoardComponent implements OnInit {
     }
   ];
   usersList = [];
+  tasksTemp = [];
 
   public barInfo = {
     title: 'Project health is at ' + this.projectInfo.projectHealth + '%',
@@ -497,16 +498,7 @@ export class PmBoardComponent implements OnInit {
   }
 
   ngOnInit() {
-    for (let i = 0; i < this.pmBoardTableData.length; i ++) {
-      const midTk = {
-        id: i,
-        title: this.pmBoardTableData[i].title,
-        start_date: this.minDate(this.pmBoardTableData[i].tasks.map(t => t.start)),
-        end_date: this.maxDate(this.pmBoardTableData[i].tasks.map(t => t.dueDate)),
-        progress: this.getMilestoneProgress(this.pmBoardTableData[i].tasks)
-      };
-      this.tasks.push(midTk);
-    }
+
   }
 
   getPmBoardTableData() {
@@ -516,21 +508,20 @@ export class PmBoardComponent implements OnInit {
         this.pmBoardTableData[i].color = '';
 
         if (this.pmBoardTableData[i].taskIds !== null) {
-          for (let j = 0; j < this.pmBoardTableData[i].taskIds.length; j++) {
             this.pmTasksService.getTasks(this.pmBoardTableData[i].id).subscribe(taskData => {
               this.pmBoardTableData[i].tasks = taskData.results;
               this.pmBoardTableData[i].tasks.forEach(element => {
                 element.assigneeInfo = this.getUserInfo(element.assignee);
-                element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+                element.startDate = moment(element.startDate).format('YYYY-MM-DD');
+                element.dueDate = moment(element.startDate).add(element.duration, 'days').format('YYYY-MM-DD');
                 element.taskTitle = element.title;
                 element.dependency = element.dependencyIds ? element.dependencyIds : [];
               });
+              this.addTasksFromPmBoardData(this.pmBoardTableData[i], i);
             });
-          }
         }
       }
       console.log('pmBoardTableData: ', this.pmBoardTableData);
-
     });
   }
 
@@ -538,7 +529,20 @@ export class PmBoardComponent implements OnInit {
     const selectedUser = this.usersList.filter(u => u.username === username)[0];
     return selectedUser;
   }
-
+  addTasksFromPmBoardData(tableDataAtIndex: any, i) {
+    console.log('tableDataAtIndex', tableDataAtIndex, i);
+      const midTk = {
+        id: i,
+        title: tableDataAtIndex.title,
+        start_date: this.minDate(tableDataAtIndex.tasks.map(t => t.startDate)),
+        end_date: this.maxDate(tableDataAtIndex.tasks.map(t => t.dueDate)),
+        progress: this.getMilestoneProgress(tableDataAtIndex.tasks)
+      };
+      this.tasksTemp.push(midTk);
+      if (this.tasksTemp.length === this.pmBoardTableData.length) {
+        this.tasks = this.tasksTemp;
+      }
+  }
 
   getUpdatedPmData(eventData) {
     this.getPmBoardTableData();
@@ -571,7 +575,7 @@ export class PmBoardComponent implements OnInit {
   getMilestoneProgress(arr) {
     let progressSum = 0;
     arr.forEach(element => {
-      progressSum += element.progress;
+      progressSum += element.completion;
     });
     return progressSum / (arr.length * 100);
   }

@@ -32,30 +32,6 @@ export class ProjectFinancialsTableComponent implements OnInit {
   filterName = '';
   currentProjectId: any;
 
-  constructor( private filterService: FilterService, private pmService: PmService) {
-
-    this.filterAvaliableTo = 'everyone';
-    this.currentProjectId = localStorage.getItem('current_pending_projectId');
-
-    this.pmService.getPurchaseOrders(this.currentProjectId)
-    .subscribe(res => {
-      this.purchaseOrdersList = res.results;
-      console.log('purchaseOrdersList: ', this.purchaseOrdersList);
-    });
-
-    this.pmService.getInvoices()
-    .finally(() => this.getInvoices(this.currentProjectId))
-    .subscribe(res => {
-      this.invoicesList = res.results;
-      console.log('invoicesList: ', this.invoicesList);
-    });
-  }
-
-  getInvoices(id) {
-    this.invoicesList = this.invoicesList.filter(b => b.projectId === id);
-    return this.invoicesList;
-  }
-
   public filters  = {
 
   };
@@ -79,6 +55,30 @@ export class ProjectFinancialsTableComponent implements OnInit {
 
   tagsList = [
   ];
+
+  constructor( private filterService: FilterService, private pmService: PmService) {
+
+    this.filterAvaliableTo = 'everyone';
+    this.currentProjectId = localStorage.getItem('current_pending_projectId');
+
+    this.pmService.getPurchaseOrders(this.currentProjectId)
+    .subscribe(res => {
+      this.purchaseOrdersList = res.results;
+      console.log('purchaseOrdersList: ', this.purchaseOrdersList);
+    });
+
+    this.pmService.getInvoices()
+    .finally(() => this.getInvoices(this.currentProjectId))
+    .subscribe(res => {
+      this.invoicesList = res.results;
+      console.log('invoicesList: ', this.invoicesList);
+    });
+  }
+
+  getInvoices(id) {
+    this.invoicesList = this.invoicesList.filter(b => b.projectId === id);
+    return this.invoicesList;
+  }
 
   ngOnInit() {
     // this.backUpLeads = this.leadsListInfo;

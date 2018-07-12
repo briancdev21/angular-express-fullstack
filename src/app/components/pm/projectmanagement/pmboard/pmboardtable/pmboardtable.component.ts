@@ -120,7 +120,7 @@ export class PmBoardTableComponent implements OnInit {
         total ++;
       }
     }
-    console.log('pmdata:', this.updatePmData, total);
+    // console.log('pmdata:', this.updatePmData, total);
 
     return total;
   }
