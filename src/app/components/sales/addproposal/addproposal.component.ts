@@ -611,7 +611,7 @@ export class AddProposalComponent implements OnInit {
       // 'leadId': 0,
       'projectId': this.proposalDetails.projectId,
       'projectTypeId': parseInt(this.proposalDetails.projectType, 10),
-      'pricingCategoryId': parseInt(this.proposalDetails.pricing, 10),
+      'pricingCategoryId': this.proposalDetails.pricing ? parseInt(this.proposalDetails.pricing, 10) : undefined,
       'categoryIds': this.proposalDetails.projectCategoriesAll,
       'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
       'accountManager': this.proposalDetails.accountManager.username,
