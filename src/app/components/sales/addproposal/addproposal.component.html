@@ -196,13 +196,13 @@
 
           <div class="cate-subcate tab-row">
             <div>
-              <span>Project Categories</span>
+              <span>Project Categories (*required)</span>
               <div class="category-box" [ngClass]="{'validation-required': invalidCategory}">
                 <app-multicategoriesselect [categories]="emptyArr" (sendCategories)="getProjectCategories($event)"></app-multicategoriesselect>
               </div>
             </div>
             <div>
-              <span>Project Subcategories</span>
+              <span>Project Subcategories (*required)</span>
               <div class="subcategory-box" [ngClass]="{'validation-required': invalidSubCategory}">
                 <app-multisubcategoriesselect [subCategories]="emptyArr" (sendSubCategories)="getProjectSubCategories($event)"></app-multisubcategoriesselect>
               </div>
@@ -236,7 +236,7 @@
                   <div class="edit-followers" *ngIf="accountEditable" (click)="accountEditable=true;$event.stopPropagation()" >
                     <ul>
                       <span *ngIf="!proposalDetails.accountManager" class="type-here">Type User's name</span>
-                      <!-- <li *ngFor="let user of proposalDetails.accountManager; let i = index">{{user.name}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/> -->
+                      <li *ngIf="proposalDetails.accountManager">{{proposalDetails.accountManager.username}}</li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
                         <ng-select *ngIf="isAutocompleteUpdated3" [items]="items3"
                           bindLabel="config2.sourceField"
@@ -268,6 +268,7 @@
                   <div class="edit-followers" *ngIf="projectEditable" (click)="projectEditable=true;$event.stopPropagation()" >
                     <ul>
                       <span *ngIf="!proposalDetails.projectManager" class="type-here">Type User's name</span>
+                      <li *ngIf="proposalDetails.projectManager">{{proposalDetails.projectManager.username}}</li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
                         <ng-select *ngIf="isAutocompleteUpdated4" [items]="items3"
                           bindLabel="config2.sourceField"
@@ -290,7 +291,7 @@
           <div class="design-custom tab-row">
             <div>
               <span>Designer (*required)</span>
-              <div class="member-container" (click)="designerEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidDesinger}">
+              <div class="member-container" (click)="designerEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidDesigner}">
                 <div class="followers" > 
                   <div class="follower" >
                     <a *ngIf="proposalDetails.designer" [title]='proposalDetails.designer.name' ><img [src]='proposalDetails.designer.imageUrl'  (click)="designerEditable=true;$event.stopPropagation()"/></a>
@@ -298,6 +299,7 @@
                   <div class="edit-followers" *ngIf="designerEditable" (click)="designerEditable=true;$event.stopPropagation()" >
                     <ul>
                       <span *ngIf="!proposalDetails.designer" class="type-here">Type User's name</span>
+                      <li *ngIf="proposalDetails.designer">{{proposalDetails.designer.username}}</li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
                         <ng-select *ngIf="isAutocompleteUpdated5" [items]="items3"
                           bindLabel="config2.sourceField"
