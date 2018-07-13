@@ -63,12 +63,12 @@ export class PendingProjectFinancialsComponent implements OnInit {
           console.log('indi project: ', this.projectInfo);
           // Initial cost total
           this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.inventoryCost + this.projectInfo.labourCost;
-        });
 
-        this.projectsService.getProjectCostSummary(this.currentProjectId).subscribe( response => {
-          this.summaryInfo = response.results;
-          this.projectInfo.purchaseOrderTotal = this.summaryInfo[0].amount;
-          console.log('cost summary: ', response);
+          this.projectsService.getProjectCostSummary(this.currentProjectId).subscribe( response => {
+            this.summaryInfo = response.results;
+            console.log('cost summary: ', response);
+            this.projectInfo['purchaseOrderTotal'] = this.summaryInfo[0].amount;
+          });
         });
 
         this.projectsService.getProjectBudget(this.currentProjectId).subscribe( response => {

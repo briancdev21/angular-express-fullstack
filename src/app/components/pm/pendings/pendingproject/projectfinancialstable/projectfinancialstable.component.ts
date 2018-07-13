@@ -4,6 +4,8 @@ import 'rxjs/add/operator/finally';
 import { CommonComponent } from '../../../../common/common.component';
 import { FilterService } from './filter.service';
 import { PmService } from '../../../pm.service';
+import { SharedService } from '../../../../../services/shared.service';
+import { ProductsService } from '../../../../../services/inventory/products.service';
 
 @Component({
   selector: 'app-projectfinancialstable',
@@ -33,38 +35,68 @@ export class ProjectFinancialsTableComponent implements OnInit {
   currentProjectId: any;
   purchaseOrders: any;
 
-  constructor( private filterService: FilterService, private pmService: PmService) {
+  public productNameList = [
+    'Home Controller 800', 'Home Controller 250', 'Low-Voltage Wired Keypad', '55" Smart LED TV',
+    '2 Year Warranty', 'Adaptive Phase Dimmer 120V'
+  ];
+
+  public supplierList = [
+    'Control4', 'supplier test'
+  ];
+
+  statusList = [
+    'Place order', 'Reserved'
+  ];
+
+  brandsList = [
+    'Control4', 'Samsung', 'Nu Automation',
+  ];
+
+  tagsList = [];
+  public filters  = {};
+  catalogsList: any;
+
+  constructor( private filterService: FilterService, private pmService: PmService, private sharedService: SharedService,
+    private productsService: ProductsService) {
 
     this.filterAvaliableTo = 'everyone';
     this.currentProjectId = localStorage.getItem('current_pending_projectId');
 
-    this.pmService.getProductsList(this.currentProjectId).subscribe(res => {
-      this.reservedInventoryList = res.results;
-      console.log('reservedInventoryList: ', this.reservedInventoryList);
+    this.productsService.getProductCatalog().subscribe(data => {
+      this.catalogsList = data.results;
+      this.pmService.getProductsList(this.currentProjectId).subscribe(res => {
+        this.reservedInventoryList = res.results;
+        this.reservedInventoryList.forEach(element => {
+          const matchElement = this.catalogsList.filter(c => c.sku === element.sku)[0];
+          element.imgUrl = matchElement.pictureUri;
+        });
+        console.log('reservedInventoryList11: ', this.reservedInventoryList, this.catalogsList);
+      });
+
+      this.pmService.getPurchaseOrders(this.currentProjectId)
+      .finally(() => this.getProducts())
+      .subscribe(res => {
+        this.purchaseOrders = res.results;
+        console.log('purchaseOrders: ', this.purchaseOrders);
+      });
     });
 
-    this.pmService.getPurchaseOrders(this.currentProjectId)
-    .finally(() => this.getProducts())
-    .subscribe(res => {
-      this.purchaseOrders = res.results;
-      console.log('purchaseOrders: ', this.purchaseOrders);
-    });
   }
 
   getProducts() {
-    for(let i = 0; i < this.purchaseOrders.length; i++) {
+    for (let i = 0; i < this.purchaseOrders.length; i++) {
       this.pmService.getProductsListInPurchaseOrder(this.purchaseOrders[i].id).subscribe(res => {
-        if(res.results.length) {
+        if (res.results.length) {
           this.purchaseOrdersList = this.purchaseOrdersList.concat(res.results);
           console.log('purchaseOrdersList: ', this.purchaseOrdersList);
+          this.purchaseOrdersList.forEach(element => {
+            const matchElement = this.catalogsList.filter(c => c.sku === element.sku)[0];
+            element.imgUrl = matchElement.pictureUri;
+          });
         }
       });
     }
   }
-
-  public filters  = {
-
-  };
 
   // public purchaseOrdersList: Array<Object> = [
   //   {
@@ -144,26 +176,6 @@ export class ProjectFinancialsTableComponent implements OnInit {
   //     status: 'Reserved'
   //   },
   // ];
-
-  public productNameList = [
-    'Home Controller 800', 'Home Controller 250', 'Low-Voltage Wired Keypad', '55" Smart LED TV',
-    '2 Year Warranty', 'Adaptive Phase Dimmer 120V'
-  ];
-
-  public supplierList = [
-    'Control4', 'supplier test'
-  ];
-
-  statusList = [
-    'Place order', 'Reserved'
-  ];
-
-  brandsList = [
-    'Control4', 'Samsung', 'Nu Automation',
-  ];
-
-  tagsList = [
-  ];
 
   ngOnInit() {
     // this.backUpLeads = this.leadsListInfo;

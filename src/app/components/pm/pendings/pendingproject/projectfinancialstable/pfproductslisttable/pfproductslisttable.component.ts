@@ -3,7 +3,10 @@ import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import { SharedService } from '../../../../../../services/shared.service';
 import { ProductsService } from '../../../../../../services/inventory/products.service';
+import { ProjectsService } from '../../../../../../services/projects.service';
+import { CompleterService, CompleterData } from 'ng2-completer';
 import * as _ from 'lodash';
+import { PmService } from '../../../../pm.service';
 
 @Component({
   selector: 'app-pfproductslisttable',
@@ -47,6 +50,7 @@ export class PfProductsListTableComponent implements OnInit {
   modelNumberList = [];
   brandNameList = [];
   skuList = [];
+  skuListCd: CompleterData;
 
   selectProductName = '';
   selectModelNumber = '';
@@ -66,11 +70,26 @@ export class PfProductsListTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
+  productNameListCd: CompleterData;
+  modelNumberListCd: CompleterData;
+  selectProduct: any;
+  selectModel: any;
+  selectBrand: any;
+  selectSku: any;
+  selectSkuName: any;
+  selectPic: any;
+  currentProjectId: any;
+  inventoryQuantity: number;
+  deletingItem: any;
+
   constructor( private filterService: FilterService,
     private sharedService: SharedService,
     private productService: ProductsService,
-    private cdr: ChangeDetectorRef ) {
-
+    private cdr: ChangeDetectorRef,
+    private completerService: CompleterService,
+    private projectsService: ProjectsService,
+    private pmService: PmService ) {
+      this.currentProjectId = localStorage.getItem('current_pending_projectId');
   }
 
   ngOnInit() {
@@ -85,6 +104,7 @@ export class PfProductsListTableComponent implements OnInit {
     });
 
     this.getProductNameList();
+    this.getBrandNameList();
   }
 
   selectedFilterEventHandler(filteredList) {
@@ -139,25 +159,31 @@ export class PfProductsListTableComponent implements OnInit {
   }
 
   getProductNameList() {
-    this.productService.getProductsList().subscribe(res => {
+    // this.productService.getProductsList().subscribe(res => {
+    //   this.allProductList = res.results;
+    //   console.log('allProductList: ', this.allProductList);
+    //   if (res.results.length) {
+    //     for (let i = 0; i < res.results.length; i++) {
+    //       this.productNameList = this.productNameList.concat(res.results[i].name);
+    //     }
+    //     this.productNameList = Array.from(new Set(this.productNameList));
+    //     this.productNameListCd = this.completerService.local(this.productNameList, 'name', 'name');
+    //     console.log('removed duplicated element in productNameList: ', this.productNameList);
+    //   }
+    // });
+    this.productService.getProductCatalog().subscribe(res => {
       this.allProductList = res.results;
-      console.log('allProductList: ', this.allProductList);
-      if(res.results.length) {
-        for(let i = 0; i < res.results.length; i++) {
-          this.productNameList = this.productNameList.concat(res.results[i].name);
-          console.log('productNameList: ', this.productNameList);
-        }
-        this.productNameList = Array.from(new Set(this.productNameList));
-        console.log('removed duplicated element in productNameList: ', this.productNameList);
-      }
+      this.productNameListCd = this.completerService.local(this.allProductList, 'name', 'name');
+      this.modelNumberListCd = this.completerService.local(this.allProductList, 'model', 'model');
+      this.skuListCd = this.completerService.local(this.allProductList, 'sku', 'sku');
     });
   }
 
   getModelNumberList() {
     this.modelNumberList = [];
-    if(this.selectProductName != '') {
+    if (this.selectProductName != '') {
       this.allProductList.forEach((item, index) => {
-        if(item.name == this.selectProductName) {
+        if (item.name === this.selectProductName) {
           this.modelNumberList = this.modelNumberList.concat(item.model);
         }
       });
@@ -169,64 +195,79 @@ export class PfProductsListTableComponent implements OnInit {
 
   getBrandNameList() {
     this.brandNameList = [];
-    if(this.selectProductName != '') {
-      this.allProductList.forEach((item, index) => {
-        if(item.name == this.selectProductName) {
-          this.brandNameList = this.brandNameList.concat(this.getBrandName(item.brandId));
-        }
-      });
-      this.brandNameList = Array.from(new Set(this.brandNameList));
-      console.log('removed duplicated element in brandNameList: ', this.brandNameList);
-      this.cdr.detectChanges();
-    }
+    this.sharedService.getBrands().subscribe(res => {
+      this.brandNameList = res.results.map(b => b.name);
+    });
   }
 
   onSelectProductName(event) {
-    this.selectProductName = event;
-    this.getModelNumberList();
-    this.getBrandNameList();
+    this.selectProduct = event.originalObject;
+    let limitedProducts = this.allProductList.filter(p => p.name === this.selectProduct.name);
+    const existingSkuList = this.reservedInventoryList.map(i => i.sku);
+    limitedProducts = limitedProducts.filter(p => !existingSkuList.include(event.originalObject.sku));
+    this.skuListCd = this.completerService.local(limitedProducts, 'sku', 'sku');
+    // this.getModelNumberList();
+    // this.getBrandNameList();
   }
 
   onSelectModelNumber(event) {
-    this.selectModelNumber = event;
-    console.log('selectModelNumber ', this.selectModelNumber);
+    this.selectModel = event.originalObject;
   }
 
   onSelectBrandName(event) {
-    this.selectBrandName = event;
-    console.log('selectBrandName ', this.selectBrandName);
+    this.selectBrand = event.originalObject;
   }
-  // addNewTimelineItem() {
-  //   const date = new Date();
-  //   const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
-  //   const nitem = {
-  //     title: this.activity.title,
-  //     content: this.activity.content,
-  //     icon: 'fa fa-home',
-  //     timelineBtnColor: 'green-btn',
-  //     buttontitle: 'More Info',
-  //     date: today,
-  //     buttonClickEventHandlerName: 'getMoreInfo',
-  //     subject: this.activity.subject,
-  //     contact: this.activity.contact
-  //   };
+  onSelectSku(event) {
+    this.selectSku = event.originalObject;
+    this.selectProductName = event.originalObject.name;
+    this.selectModelNumber = event.originalObject.model;
+    const selectedProduct = this.getProductFromProductId(event.originalObject.productId);
+    if (this.inventoryQuantity) {
+      const savingData = {
+        sku: event.originalObject.sku,
+        quantity: this.inventoryQuantity
+      };
+      this.projectsService.createProjectProduct(this.currentProjectId, savingData).subscribe(res => {
+        console.log('res: ', res);
+        this.pmService.getProductsList(this.currentProjectId).subscribe(data => {
+          this.reservedInventoryList = data.results;
+          console.log('reservedInventoryList: ', this.reservedInventoryList);
+        });
+        this.addProduct = false;
+      });
+    }
 
-  //   switch (nitem.title) {
-  //     case 'Notes':
-  //       nitem.icon = 'fa-file-text-o';
-  //       break;
-  //     case 'Email':
-  //       nitem.icon = 'fa fa-envelope-o';
-  //     break;
-  //     case 'Call':
-  //       nitem.icon = 'fa fa-phone';
-  //     break;
-  //     default:
-  //       nitem.icon = 'fa fa-home';
-  //       break;
-  //   }
-  // }
+  }
+
+  saveInventory(qty) {
+    if (this.selectSku) {
+      const savingData = {
+        sku: this.selectSku.sku,
+        quantity: qty
+      };
+      this.projectsService.createProjectProduct(this.currentProjectId, savingData).subscribe(res => {
+        console.log('res: ', res);
+        this.pmService.getProductsList(this.currentProjectId).subscribe(data => {
+          this.reservedInventoryList = data.results;
+          console.log('reservedInventoryList: ', this.reservedInventoryList);
+        });
+        this.addProduct = false;
+      });
+    }
+  }
+
+  getProductFromProductId(id) {
+    let selected: any;
+    this.productService.getProductsList().subscribe(res => {
+      const allProd = res.results;
+      selected =  allProd.filter(p => p.id === id)[0];
+      console.log('res: ', selected);
+      this.selectBrandName = this.getBrandName(selected.brandId);
+      this.selectPic = selected.pictureURI;
+    });
+    return selected;
+  }
 
   swapRow(index, list) {
     // if (list[0].status === 'Place order') {
@@ -239,7 +280,8 @@ export class PfProductsListTableComponent implements OnInit {
     // this.showCloneConfirmModal = true;
   }
 
-  deleteRow(index, list) {
+  deleteRow(index, list, item) {
+    this.deletingItem = item;
     if (list[0].status === 'Place order') {
       this.deletingList = this.purchaseOrdersList;
       this.orderModalInfoCollapsed[index] = false;
@@ -260,8 +302,25 @@ export class PfProductsListTableComponent implements OnInit {
     if (this.deletingList[0].status === 'Place order') {
       this.purchaseOrdersList.splice(this.deletingRowIndex, 1);
     } else {
-      this.reservedInventoryList.splice(this.deletingRowIndex, 1);
+      // this.reservedInventoryList.splice(this.deletingRowIndex, 1);
+      this.projectsService.deleteIndividualProjectProduct(this.currentProjectId, this.deletingItem.id).subscribe(res => {
+        console.log('deleted: ', res);
+        this.pmService.getProductsList(this.currentProjectId).subscribe(data => {
+          this.reservedInventoryList = data.results;
+          console.log('reservedInventoryList: ', this.reservedInventoryList);
+        });
+      });
     }
+
+  }
+
+  updateInventoryQuantity(product) {
+    const updatingQty = {
+      quantity: product.reservedQuantity
+    };
+    this.projectsService.updateIndividualProjectProduct(this.currentProjectId, product.id, updatingQty).subscribe(res => {
+      console.log('updated: ', res);
+    });
   }
 }
 

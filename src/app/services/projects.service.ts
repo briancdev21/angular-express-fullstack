@@ -83,18 +83,18 @@ export class ProjectsService {
   }
 
   getProjectPaymentSchedule (id): Observable<any> {
-    const url = `${environment.apiUrl}/project-management/projects/${id}/payment-schedule`;
+    const url = `${environment.apiUrl}/project-management/projects/${id}/payment-schedules`;
     return this.http.get(url);
   }
 
   updateProjectPaymentSchedule (id, scheduleId, body): Observable<any> {
-    const url = `${environment.apiUrl}/project-management/projects/${id}/payment-schedule/${scheduleId}`;
+    const url = `${environment.apiUrl}/project-management/projects/${id}/payment-schedules/${scheduleId}`;
     return this.http.put(url, body, this.options)
       .map((res) => res);
   }
 
   getProjectIndividualPaymentSchedule (id, scheduleId): Observable<any> {
-    const url = `${environment.apiUrl}/project-management/projects/${id}/payment-schedule/${scheduleId}`;
+    const url = `${environment.apiUrl}/project-management/projects/${id}/payment-schedules/${scheduleId}`;
     return this.http.get(url);
   }
 
@@ -143,5 +143,20 @@ export class ProjectsService {
   sendChangeLogEmail(id, logId): Observable<any> {
     const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs/${logId}/email`;
     return this.http.get(url);
+  }
+
+  createProjectProduct (id, body): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/products`;
+    return this.http.post(url, body, this.options);
+  }
+
+  updateIndividualProjectProduct (id, productId, body): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/products/${productId}`;
+    return this.http.put(url, body);
+  }
+
+  deleteIndividualProjectProduct (id, productId): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/products/${productId}`;
+    return this.http.delete(url);
   }
 }
