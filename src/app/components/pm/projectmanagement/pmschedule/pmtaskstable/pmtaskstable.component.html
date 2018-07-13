@@ -2,8 +2,9 @@
   <div class="milestone-table">
     <div class="milestone-row" [dragula]="'dragMilestone'" [dragulaModel]='milestones'>
       <div *ngFor="let milestone of milestones; let i = index;"  class="draggable-column">
-        <div class="milestone-title" [ngStyle]="{'background': milestone.color}" style="opacity: .7;">
-          <span>{{milestone.title | uppercase }}</span>
+        <div class="milestone-title" [ngStyle]="{'background': milestone.color}" style="opacity: .7;"   >
+          <div *ngIf="!milestone.editTitle" (click)="milestone.editTitle = true; $event.stopPropagation();">{{milestone.title | uppercase }}</div>
+          <input *ngIf="milestone.editTitle" placeholder="Enter title here..." [(ngModel)]="milestone.title" (keydown)="updateMilestoneTitle(i, $event)" >
         </div>
         <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="milestone.tasks">
           <div *ngFor="let task of milestone.tasks; let j = index;" class="draggable-task">

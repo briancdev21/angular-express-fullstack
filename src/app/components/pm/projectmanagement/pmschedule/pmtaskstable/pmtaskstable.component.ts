@@ -219,6 +219,7 @@ export class PmTasksTableComponent implements OnInit {
       this.milestones = data.results;
       for (let i = 0; i < this.milestones.length; i++) {
         this.milestones[i].color = this.colors[i];
+        this.milestones[i].editTitle = false;
         this.ownerModalCollapsed[i] = new Array();
         this.dependencyModalCollapsed[i] = new Array();
 
@@ -407,5 +408,18 @@ export class PmTasksTableComponent implements OnInit {
     //   like: false,
     //   attachment: false,
     //   attachmentImg: '',
+  }
+  updateMilestoneTitle(index, event) {
+    console.log('milestone index,', index);
+    if (event.key === 'Enter') {
+      this.milestones[index].editTitle = false;
+      const body =  {
+        owner: this.milestones[index].owner,
+        title: this.milestones[index].title
+      };
+      this.pmTasksService.updateIndividualTaskGroup(this.milestones[index].id, body).subscribe(res => {
+        this.refreshTable();
+      });
+    }
   }
 }
