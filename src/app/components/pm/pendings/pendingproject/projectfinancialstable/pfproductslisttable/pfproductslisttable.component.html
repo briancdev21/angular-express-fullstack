@@ -35,7 +35,7 @@
             <div (click)="swapRow(i, purchaseOrdersList)"><img src="assets/images/Convert.png"><span>Swap</span></div>
           </div> -->
           <div>
-            <div (click)="deleteRow(i, purchaseOrdersList)"><img src="assets/images/Delete.png"><span>Delete</span></div>
+            <div (click)="deleteRow(i, purchaseOrdersList, order)"><img src="assets/images/Delete.png"><span>Delete</span></div>
           </div>
         </div>
         <!-- End Small Dialog when clicking three dot icom -->
@@ -46,7 +46,7 @@
     <span>RESERVED INVENTORY</span>
     <button class="save-btn" (click)="addProduct=true">Add product</button>
   </div>
-  <table class="reserved-inventory-table">
+  <table class="reserved-inventory-table" *ngIf="brandsList">
     <tr>
       <th></th>
       <th (click)="sortArray('name', reservedInventoryList)">PRODUCT NAME</th>
@@ -80,27 +80,41 @@
             <div (click)="swapRow(i, reservedInventoryList)"><img src="assets/images/Convert.png"><span>Swap</span></div>
           </div> -->
           <div>
-            <div (click)="deleteRow(i, reservedInventoryList)"><img src="assets/images/Delete.png"><span>Delete</span></div>
+            <div (click)="deleteRow(i, reservedInventoryList, inventory)"><img src="assets/images/Delete.png"><span>Delete</span></div>
           </div>
         </div>
         <!-- End Small Dialog when clicking three dot icom -->
       </td>
     </tr>
     <tr *ngIf="addProduct" class="reserved-inventory-table add-new">
-      <td><img [src]="getProductPicture()"></td>
+      <td><img [src]="selectPic"></td>
       <td>
-        <app-ng2completer
+        <!-- <app-ng2completer
           [itemsList]="productNameList"
           (selectedItem)="onSelectProductName($event)"
           [searchStr]="selectProductName">
-        </app-ng2completer>
+        </app-ng2completer> -->
+        <ng2-completer 
+          [dataService]="productNameListCd" 
+          [minSearchLength]="0" 
+          (selected)="onSelectProductName($event)" 
+          [(ngModel)]="selectProductName" 
+          class="ng2completer" >
+        </ng2-completer>
       </td>
       <td>
-        <app-ng2completer
+        <!-- <app-ng2completer
           [itemsList]="modelNumberList"
           (selectedItem)="onSelectModelNumber($event)"
           [searchStr]="selectModelNumber">
-        </app-ng2completer>
+        </app-ng2completer> -->
+        <ng2-completer 
+          [dataService]="modelNumberListCd" 
+          [minSearchLength]="0" 
+          (selected)="onSelectModelNumber($event)" 
+          [(ngModel)]="selectModelNumber" 
+          class="ng2completer" >
+        </ng2-completer>
       </td>
       <td>
         <app-ng2completer
@@ -115,9 +129,16 @@
           (selectedItem)="onSelectSKU($event)"
           [searchStr]="selectSKU">
         </app-ng2completer> -->
+        <ng2-completer 
+          [dataService]="skuListCd" 
+          [minSearchLength]="0" 
+          (selected)="onSelectSku($event)" 
+          [(ngModel)]="selectSkuName" 
+          class="ng2completer" >
+        </ng2-completer>
       </td>
-      <td>1</td>
-      <td>NEW</td>
+      <td><input [(ngModel)]="inventoryQuantity" type="number" class="inventory-quantity" (keydown.enter)="saveInventory(inventoryQuantity)"></td>
+      <td></td>
     </tr>
   </table>
 </div>

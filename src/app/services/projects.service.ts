@@ -150,8 +150,13 @@ export class ProjectsService {
     return this.http.post(url, body, this.options);
   }
 
-  updateIndividualProjectProduct (id, orderId, body): Observable<any> {
-    const url = `${environment.apiUrl}/project-management/projects/${id}/products/${orderId}`;
+  updateIndividualProjectProduct (id, productId, body): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/products/${productId}`;
     return this.http.put(url, body);
+  }
+
+  deleteIndividualProjectProduct (id, productId): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/products/${productId}`;
+    return this.http.delete(url);
   }
 }

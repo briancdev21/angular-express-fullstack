@@ -595,6 +595,11 @@ input::placeholder {
   left: 0;
 }
 
+.inventory-quantity {
+  width: 50px;
+  height: 32px;
+  border: 1px solid #f5f5f5;
+}
 
 /* ng2-completer modal overflow */
 /deep/ .completer-dropdown {
