@@ -381,6 +381,8 @@ export class AddEstimateBodyComponent implements OnInit {
       // Default expiry Date
       this.saveInvoiceData.expiryDate = new Date().toISOString().slice(0, 10);
       this.saveInvoiceData.categoryId = 0;
+      this.newCustomerName = contactIdNumber;
+      this.newEmail = this.emailAddresses;
     });
   }
 }
