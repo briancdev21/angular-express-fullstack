@@ -1,11 +1,13 @@
 import { Component, Input, OnInit, HostListener, EventEmitter, Output, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { ProposalService } from '../proposal.service';
 import * as moment from 'moment';
 import { forEach } from '@angular/router/src/utils/collection';
 import { PmTasksService } from '../../../../services/pmtasks.service';
 import { ProductsService } from '../../../../services/inventory/products.service';
+import { ProposalsService } from '../../../../services/proposals.service';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-productlisttable',
@@ -40,22 +42,80 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   childNodesForParents = [];
   proposalProductList = [];
   max = undefined;
+  proposalId: any;
+  brandsList: any;
+  productTypesList: any;
+  taxRatesList: any;
+  proposalProductOrdered = [];
+  expandedAll = false;
 
-  constructor( private proposalService: ProposalService, private productsService: ProductsService) {
+  constructor( private proposalService: ProposalService, private productsService: ProductsService,
+  private proposalsService: ProposalsService, private route: ActivatedRoute, private sharedService: SharedService) {
     const productId = localStorage.getItem('productId');
-    this.productsService.getProductAccessoriesList(productId).subscribe(res => {
-      console.log('product list', res.results);
-      // product list
-    });
-    this.productsService.getProductAlternativesList(productId).subscribe(res => {
-      console.log('product list', res.results);
-      // product list
-      const alternativesList = res.results;
-      const listIds = alternativesList.filter(item => item.id);
-    });
+    this.proposalId = this.route.snapshot.paramMap.get('id');
+    if (productId) {
+      this.productsService.getProductAccessoriesList(productId).subscribe(res => {
+        console.log('product list', res.results);
+        // product list
+      });
+      this.productsService.getProductAlternativesList(productId).subscribe(res => {
+        console.log('product list', res.results);
+        // product list
+        const alternativesList = res.results;
+        const listIds = alternativesList.filter(item => item.id);
+      });
+    }
+
     this.productsService.getProductsList().subscribe(res => {
       console.log('product list', res.results);
     });
+
+    this.sharedService.getTaxRates().subscribe(tax => {
+      this.taxRatesList = tax.results;
+
+      this.sharedService.getBrands().subscribe(brand => {
+        this.brandsList = brand.results;
+        this.sharedService.getProductTypes().subscribe(pType => {
+          this.productTypesList = pType.results;
+          this.sharedService.getCategories().subscribe(res => {
+            this.proposalCategoryList = res.results;
+
+            this.proposalsService.getProposalProducts(this.proposalId).subscribe(response => {
+              console.log('proposal Product List: ', response);
+              this.originProposalProductList = response.results;
+              this.originProposalProductList.forEach(ele => {
+                ele.brand = this.getBrandNameFromId(ele.brandId);
+                ele.productType = this.getProductTypeFromId(ele.productTypeId);
+                ele.taxRate = this.getTaxRateNameFromId(ele.taxRateId);
+              });
+              this.parents = this.originProposalProductList.filter(p => p.type === 'PRODUCT');
+              this.parents.forEach(ele => {
+                ele.expand = true;
+                this.proposalProductOrdered = this.proposalProductOrdered.concat(ele);
+                ele.accessories.forEach(element => {
+                  const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+                  this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
+                });
+                ele.alternatives.forEach(element => {
+                  const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+                  this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
+                });
+              });
+
+            });
+
+            this.proposalCategoryList.forEach(ele => {
+              this.sharedService.getSubCategories(ele.id).subscribe(data => {
+                const subCategory = data.results;
+                this.proposalSubCategoryList = this.proposalSubCategoryList.concat(subCategory);
+              });
+            });
+          });
+        });
+      });
+    });
+
+
   }
 
   ngOnDestroy() {
@@ -73,7 +133,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         }
         if (data) {
           // this.proposalProductList =  JSON.parse(localStorage.getItem('originProposalProductList'));
-          this.expandAll(data);
+          this.expandedAll = !this.expandedAll;
+          this.expandAll(this.expandedAll);
+          console.log('expand: ', this.expandedAll);
         } else {
             // if (!localStorage.getItem('originProposalProductList')) {
             //   localStorage.setItem('originProposalProductList', JSON.stringify(this.originProposalProductList));
@@ -310,36 +372,48 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
 
   expandAll(expanded) {
-    const parents = this.parents;
-    for (let i = 0; i < parents.length; i++) {
-      const parentProduct  = parents[i];
-      parentProduct.expanded = true;
-      if (parentProduct.category !== 'Multi Category') {
-        const skusList = {};
-        const childProducts = [];
-        this.childNodesForParents[i].map(product => {
-          product.expanded = true;
-          childProducts.push(product);
-        });
-        this.childNodesForParents[i] = childProducts;
-      } else {
-        const skusList = {};
-        this.childNodesForParents[i].map(product => {
-          if (product.sku !== parentProduct.sku) {
-            if (skusList[product.sku] === undefined) {
-              skusList[product.sku] = product;
-            } else {
-              skusList[product.sku].qty++;
-            }
-          }
-        });
-        const childProducts = [];
-        Object.keys(skusList).map(function(key, index) {
-          skusList[key].expanded = true;
-          childProducts.push(skusList[key]);
-        });
-        this.childNodesForParents[i] = childProducts;
-      }
+    // Disable it for now because multi category is not supported yet on back end.
+    // const parents = this.parents;
+    // for (let i = 0; i < parents.length; i++) {
+    //   const parentProduct  = parents[i];
+    //   parentProduct.expanded = true;
+    //   if (parentProduct.category !== 'Multi Category') {
+    //     const skusList = {};
+    //     const childProducts = [];
+    //     this.childNodesForParents[i].map(product => {
+    //       product.expanded = true;
+    //       childProducts.push(product);
+    //     });
+    //     this.childNodesForParents[i] = childProducts;
+    //   } else {
+    //     const skusList = {};
+    //     this.childNodesForParents[i].map(product => {
+    //       if (product.sku !== parentProduct.sku) {
+    //         if (skusList[product.sku] === undefined) {
+    //           skusList[product.sku] = product;
+    //         } else {
+    //           skusList[product.sku].qty++;
+    //         }
+    //       }
+    //     });
+    //     const childProducts = [];
+    //     Object.keys(skusList).map(function(key, index) {
+    //       skusList[key].expanded = true;
+    //       childProducts.push(skusList[key]);
+    //     });
+    //     this.childNodesForParents[i] = childProducts;
+    //   }
+    // }
+    if (expanded) {
+      this.proposalProductOrdered.forEach(ele => {
+        ele.expand = true;
+      });
+    } else {
+      this.proposalProductOrdered.forEach(ele => {
+        if (ele.type !== 'PRODUCT') {
+          ele.expand = false;
+        }
+      });
     }
   }
 
@@ -375,12 +449,12 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  getIconImgResource(child) {
-    if (child.option === 'automaticAcc') {
+  getIconImgResource(product) {
+    if (product.type === 'ACCESSORY' && product.useProductInProject === true) {
       return 'assets/images/right-arrow (1).svg';
-    } else if (child.option === 'optionalAcc') {
+    } else if (product.type === 'ACCESSORY' && product.useProductInProject === false) {
       return 'assets/images/right-arrow copy.svg';
-    } else if (child.option === 'alter') {
+    } else if (product.type === 'ALTERNATIVE') {
       return 'assets/images/shuffle.svg';
     }
     return '';
@@ -501,5 +575,30 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
       console.log('update product', this.proposalProductList);
       // update products
     });
+  }
+
+  getBrandNameFromId(id) {
+      const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
+      return selectedBrand.name;
+  }
+
+  getProductTypeFromId(id) {
+    const  productType = this.productTypesList.filter(p => p.id === id)[0];
+    return productType.type;
+  }
+
+  getCategoryFromId(id) {
+    const  category = this.proposalCategoryList.filter(c => c.id === id)[0];
+    return category.name;
+  }
+
+  getSubCategoryFromId(id) {
+    const subCategory = this.proposalSubCategoryList.filter(s => s.id === id)[0];
+    return subCategory.name;
+  }
+
+  getTaxRateNameFromId(id) {
+    const taxRate = this.taxRatesList.filter(s => s.id === id)[0];
+    return taxRate.name;
   }
 }
