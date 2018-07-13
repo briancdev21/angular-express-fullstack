@@ -31,34 +31,6 @@ export class ProgressProductLogComponent implements OnInit {
   currentProjectId: any;
   purchaseOrders: any;
 
-  constructor( private filterService: FilterService, private pmService: PmService ) {
-    this.filterAvaliableTo = 'everyone';
-    this.currentProjectId = localStorage.getItem('current_pending_projectId');
-
-    this.pmService.getProductsList(this.currentProjectId).subscribe(res => {
-      this.reservedInventoryList = res.results;
-      console.log('reservedInventoryList: ', this.reservedInventoryList);
-    });
-
-    this.pmService.getPurchaseOrders(this.currentProjectId)
-    .finally(() => this.getProducts())
-    .subscribe(res => {
-      this.purchaseOrders = res.results;
-      console.log('purchaseOrders: ', this.purchaseOrders);
-    });
-  }
-
-  getProducts() {
-    for(let i = 0; i < this.purchaseOrders.length; i++) {
-      this.pmService.getProductsListInPurchaseOrder(this.purchaseOrders[i].id).subscribe(res => {
-        if(res.results.length) {
-          this.purchaseOrdersList = this.purchaseOrdersList.concat(res.results);
-          console.log('purchaseOrdersList: ', this.purchaseOrdersList);
-        }
-      });
-    }
-  }
-
   public filters  = {
 
   };
@@ -82,6 +54,34 @@ export class ProgressProductLogComponent implements OnInit {
 
   tagsList = [
   ];
+
+  constructor( private filterService: FilterService, private pmService: PmService ) {
+    this.filterAvaliableTo = 'everyone';
+    this.currentProjectId = localStorage.getItem('current_projectId');
+
+    this.pmService.getProductsList(this.currentProjectId).subscribe(res => {
+      this.reservedInventoryList = res.results;
+      console.log('reservedInventoryList: ', this.reservedInventoryList);
+    });
+
+    this.pmService.getPurchaseOrders(this.currentProjectId)
+    .finally(() => this.getProducts())
+    .subscribe(res => {
+      this.purchaseOrders = res.results;
+      console.log('purchaseOrders: ', this.purchaseOrders);
+    });
+  }
+
+  getProducts() {
+    for (let i = 0; i < this.purchaseOrders.length; i++) {
+      this.pmService.getProductsListInPurchaseOrder(this.purchaseOrders[i].id).subscribe(res => {
+        if (res.results.length) {
+          this.purchaseOrdersList = this.purchaseOrdersList.concat(res.results);
+          console.log('purchaseOrdersList: ', this.purchaseOrdersList);
+        }
+      });
+    }
+  }
 
   ngOnInit() {
     // this.backUpLeads = this.leadsListInfo;
