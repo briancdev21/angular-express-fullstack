@@ -68,7 +68,7 @@ export class ProjectFinancialsTableComponent implements OnInit {
         this.reservedInventoryList = res.results;
         this.reservedInventoryList.forEach(element => {
           const matchElement = this.catalogsList.filter(c => c.sku === element.sku)[0];
-          element.imgUrl = matchElement.pictureUri;
+          element.imgUrl = matchElement.pictureURI;
         });
         console.log('reservedInventoryList11: ', this.reservedInventoryList, this.catalogsList);
       });
@@ -91,7 +91,7 @@ export class ProjectFinancialsTableComponent implements OnInit {
           console.log('purchaseOrdersList: ', this.purchaseOrdersList);
           this.purchaseOrdersList.forEach(element => {
             const matchElement = this.catalogsList.filter(c => c.sku === element.sku)[0];
-            element.imgUrl = matchElement.pictureUri;
+            element.imgUrl = matchElement.pictureURI;
           });
         }
       });

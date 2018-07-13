@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CommonComponent } from '../../../../common/common.component';
 import { FilterService } from './filter.service';
 import { PmService } from '../../../pm.service';
+import { ProductsService } from '../../../../../services/inventory/products.service';
 
 @Component({
   selector: 'app-progressproductlog',
@@ -30,6 +31,7 @@ export class ProgressProductLogComponent implements OnInit {
   filterName = '';
   currentProjectId: any;
   purchaseOrders: any;
+  catalogsList: any;
 
   public filters  = {
 
@@ -55,20 +57,27 @@ export class ProgressProductLogComponent implements OnInit {
   tagsList = [
   ];
 
-  constructor( private filterService: FilterService, private pmService: PmService ) {
+  constructor( private filterService: FilterService, private pmService: PmService, private productsService: ProductsService ) {
     this.filterAvaliableTo = 'everyone';
     this.currentProjectId = localStorage.getItem('current_projectId');
 
-    this.pmService.getProductsList(this.currentProjectId).subscribe(res => {
-      this.reservedInventoryList = res.results;
-      console.log('reservedInventoryList: ', this.reservedInventoryList);
-    });
+    this.productsService.getProductCatalog().subscribe(data => {
+      this.catalogsList = data.results;
+      this.pmService.getProductsList(this.currentProjectId).subscribe(res => {
+        this.reservedInventoryList = res.results;
+        this.reservedInventoryList.forEach(element => {
+          const matchElement = this.catalogsList.filter(c => c.sku === element.sku)[0];
+          element.imgUrl = matchElement.pictureURI;
+        });
+        console.log('reservedInventoryList11: ', this.reservedInventoryList, this.catalogsList);
+      });
 
-    this.pmService.getPurchaseOrders(this.currentProjectId)
-    .finally(() => this.getProducts())
-    .subscribe(res => {
-      this.purchaseOrders = res.results;
-      console.log('purchaseOrders: ', this.purchaseOrders);
+      this.pmService.getPurchaseOrders(this.currentProjectId)
+      .finally(() => this.getProducts())
+      .subscribe(res => {
+        this.purchaseOrders = res.results;
+        console.log('purchaseOrders: ', this.purchaseOrders);
+      });
     });
   }
 
