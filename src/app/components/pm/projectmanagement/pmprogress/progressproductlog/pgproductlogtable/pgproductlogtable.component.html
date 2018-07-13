@@ -43,7 +43,9 @@
       <td>{{inventory.model}}</td>
       <td>{{getBrandName(inventory.brandId)}}</td>
       <td>{{inventory.sku}}</td>
-      <td class="inventory-status">{{inventory.reservedQuantity}}</td>
+      <td class="inventory-status">
+        <input [(ngModel)]="inventory.reservedQuantity" (keydown.enter)="updateInventoryQuantity(inventory)" type="number">
+      </td>
       <td>
         <span class="inventory-status">Reserved</span>
         <img src="assets/images/three-dots.png" (click)="openInventoryModal(i)" style="cursor: pointer;">
@@ -58,7 +60,7 @@
           [ngClass]="{'show-order-modal': inventoryModalInfoCollapsed[i], 'hide-order-modal': !inventoryModalInfoCollapsed[i] }">
           <div class="dots-icon"><img src="assets/images/three-dots.png"></div>
           <div>
-            <div (click)="deleteRow(i, reservedInventoryList)"><img src="assets/images/Delete.png"><span>Delete</span></div>
+            <div (click)="deleteRow(i, reservedInventoryList, inventory)"><img src="assets/images/Delete.png"><span>Delete</span></div>
           </div>
         </div>
         <!-- End Small Dialog when clicking three dot icom -->

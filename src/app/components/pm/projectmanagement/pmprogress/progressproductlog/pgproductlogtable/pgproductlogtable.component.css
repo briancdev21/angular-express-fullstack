@@ -594,3 +594,8 @@ input::placeholder {
   top: 0;
   left: 0;
 }
+
+.inventory-status input{
+  width: 50px;
+  border: 0;
+}

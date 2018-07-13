@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FilterService } from '../filter.service';
 import { SharedService } from '../../../../../../services/shared.service';
 import * as _ from 'lodash';
+import { ProjectsService } from '../../../../../../services/projects.service';
+import { PmService } from '../../../../pm.service';
 
 @Component({
   selector: 'app-pgproductlogtable',
@@ -38,6 +40,7 @@ export class PgProductLogTableComponent implements OnInit {
   showSwapConfirmModal = false;
   brandsList: any;
   supplierList: any;
+  deletingItem: any;
 
   activity: {
     title: string;
@@ -53,7 +56,10 @@ export class PgProductLogTableComponent implements OnInit {
     end: '11:00 AM',
     duration: '1 hr, 30 min'
   };
-  constructor( private filterService: FilterService, private sharedService: SharedService ) {
+  currentProjectId: any;
+  constructor( private filterService: FilterService, private sharedService: SharedService, private projectsService: ProjectsService,
+    private pmService: PmService ) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
     this.sharedService.getBrands().subscribe(res => {
       this.brandsList = res.results;
       console.log('brandslist: ', res);
@@ -147,7 +153,8 @@ export class PgProductLogTableComponent implements OnInit {
   //   }
   // }
 
-  deleteRow(index, list) {
+  deleteRow(index, list, item) {
+    this.deletingItem = item;
     if (list[0].status === 'Place order') {
       this.deletingList = this.purchaseOrdersList;
       this.orderModalInfoCollapsed[index] = false;
@@ -164,8 +171,24 @@ export class PgProductLogTableComponent implements OnInit {
     if (this.deletingList[0].status === 'Place order') {
       this.purchaseOrdersList.splice(this.deletingRowIndex, 1);
     } else {
-      this.reservedInventoryList.splice(this.deletingRowIndex, 1);
+      // this.reservedInventoryList.splice(this.deletingRowIndex, 1);
+      this.projectsService.deleteIndividualProjectProduct(this.currentProjectId, this.deletingItem.id).subscribe(res => {
+        console.log('deleted: ', res);
+        this.pmService.getProductsList(this.currentProjectId).subscribe(data => {
+          this.reservedInventoryList = data.results;
+          console.log('reservedInventoryList: ', this.reservedInventoryList);
+        });
+      });
     }
+  }
+
+  updateInventoryQuantity(product) {
+    const updatingQty = {
+      quantity: product.reservedQuantity
+    };
+    this.projectsService.updateIndividualProjectProduct(this.currentProjectId, product.id, updatingQty).subscribe(res => {
+      console.log('updated: ', res);
+    });
   }
 }
 
