@@ -601,6 +601,11 @@ input::placeholder {
   border: 1px solid #f5f5f5;
 }
 
+.inventory-status input{
+  width: 50px;
+  border: 0;
+}
+
 /* ng2-completer modal overflow */
 /deep/ .completer-dropdown {
   background: red;

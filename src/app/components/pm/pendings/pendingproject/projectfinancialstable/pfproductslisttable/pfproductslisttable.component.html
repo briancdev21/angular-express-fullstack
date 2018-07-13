@@ -62,7 +62,9 @@
       <td>{{inventory.model}}</td>
       <td>{{getBrandName(inventory.brandId)}}</td>
       <td>{{inventory.sku}}</td>
-      <td class="inventory-status">{{inventory.reservedQuantity}}</td>
+      <td class="inventory-status">
+        <input [(ngModel)]="inventory.reservedQuantity" (keydown.enter)="updateInventoryQuantity(inventory)" type="number">
+      </td>
       <td>
         <span class="inventory-status">Reserved</span>
         <img src="assets/images/three-dots.png" (click)="openInventoryModal(i)" style="cursor: pointer;">

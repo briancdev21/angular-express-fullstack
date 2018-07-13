@@ -81,7 +81,7 @@ export class PfProductsListTableComponent implements OnInit {
   currentProjectId: any;
   inventoryQuantity: number;
   deletingItem: any;
-  
+
   constructor( private filterService: FilterService,
     private sharedService: SharedService,
     private productService: ProductsService,
@@ -312,6 +312,15 @@ export class PfProductsListTableComponent implements OnInit {
       });
     }
 
+  }
+
+  updateInventoryQuantity(product) {
+    const updatingQty = {
+      quantity: product.reservedQuantity
+    };
+    this.projectsService.updateIndividualProjectProduct(this.currentProjectId, product.id, updatingQty).subscribe(res => {
+      console.log('updated: ', res);
+    });
   }
 }
 
