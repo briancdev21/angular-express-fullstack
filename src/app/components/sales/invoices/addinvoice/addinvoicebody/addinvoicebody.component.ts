@@ -21,7 +21,6 @@ export class AddInvoiceBodyComponent implements OnInit {
     this.invoice_mock = _createdInvoice;
     if (_createdInvoice) {
       this.saveInvoiceData = _createdInvoice;
-      console.log('saved invoice: ', this.saveInvoiceData);
       this.currentInvoiceId = this.invoice_mock.id;
       this.discountType = this.invoice_mock.discount.unit;
       this.discountAmount = this.invoice_mock.discount.value;
@@ -152,11 +151,9 @@ export class AddInvoiceBodyComponent implements OnInit {
         data = this.addContactName(data);
         this.contactList = data;
         this.userList = this.contactList;
-        console.log('userlist: ', data);
       });
 
     // this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
-    //   console.log('getIndividualInvoice: ', res);
     //   this.discountType = res.data.discount.unit;
     //   this.discountAmount = res.data.discount.value;
     //   this.internalMemo = res.data.internalNote;
@@ -203,7 +200,6 @@ export class AddInvoiceBodyComponent implements OnInit {
 
   onSelectUser(selectedIndex: any) {
     const contactIdList = this.contactList.map(c => c.id);
-    console.log('selected user: ', contactIdList, selectedIndex);
     const pos = contactIdList.indexOf(selectedIndex);
     this.customerAddress = this.contactList[pos].shippingAddress;
     this.emailAddresses = [];
@@ -211,6 +207,7 @@ export class AddInvoiceBodyComponent implements OnInit {
     this.saveInvoiceData.emails = this.emailAddresses;
     this.saveInvoiceData.contactId = selectedIndex;
     this.newCustomerName = selectedIndex;
+    this.newEmail = this.emailAddresses;
   }
 
   onSelectClass(val) {
@@ -241,7 +238,6 @@ export class AddInvoiceBodyComponent implements OnInit {
     this.saveInvoiceData.projectId = event;
     this.projectsService.getProjectChangeLogs(event).subscribe(res => {
       this.changeLogNumbers = res.results;
-      console.log('changeLog numbers:', this.changeLogNumbers);
     });
   }
 
@@ -278,7 +274,6 @@ export class AddInvoiceBodyComponent implements OnInit {
   }
 
   onTotalPriceChange(data) {
-    console.log('deposits:', data);
     if (data.type) {
       this.saveInvoiceData.discount.unit = data.type;
       this.saveInvoiceData.discount.value = data.amount;
@@ -298,10 +293,8 @@ export class AddInvoiceBodyComponent implements OnInit {
         this.saveInvoiceData.classificationId = 1;
       }
       if (typeof(this.saveInvoiceData.contactId) !== 'string') {
-        console.log('save invoice true case', this.saveInvoiceData);
         this.saveInvoiceData.reminder = [];
         this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
-          console.log('saved invoice: ', res);
           this.invoicesService.sendEmail(this.currentInvoiceId).subscribe();
           this.router.navigate(['./sales/invoices']);
         });
@@ -358,6 +351,11 @@ export class AddInvoiceBodyComponent implements OnInit {
       this.saveInvoiceData.emails = this.emailAddresses;
       this.selectItem = this.contactList[pos].name;
       this.customerAddress = this.contactList[pos].shippingAddress;
+      this.newCustomerName = contactIdNumber;
+      this.newEmail = this.emailAddresses;
     });
+  }
+  navigateToInvoiceList() {
+    this.router.navigate(['./sales/invoices']);
   }
 }
