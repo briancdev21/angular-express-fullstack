@@ -23,32 +23,40 @@
         <td>
           <img src="assets/images/right-arrow.png" *ngIf="!parentProduct.expanded && parentProduct.type == 'PRODUCT'" (click)="checkExpand(parentProduct)">
           <img src="assets/images/arrow-down.png" *ngIf="parentProduct.expanded && parentProduct.type == 'PRODUCT'" (click)="checkExpand(parentProduct)">
-          <img [src]=getIconImgResource(parentProduct) *ngIf="parentProduct.type !== 'PRODUCT'">
+          <img [src]=getIconImgResource(parentProduct) *ngIf="parentProduct.type !== 'PRODUCT'" (click)="updateOptional(parentProduct)">
           {{parentProduct.sku}}
         </td>
         <td>{{parentProduct.brand}}</td> 
         <td>{{parentProduct.model}}</td>
         <td>{{parentProduct.name}}</td>
         <td>{{parentProduct.productType}}</td> 
-        <td><input [(ngModel)]="parentProduct.quantity" (input)="getParentTotalPrice(parentProduct)" (blur)="onBlur()" (focus)="onFocus()"></td>
         <td>
-          $ <input [(ngModel)]="parentProduct.unitPrice" *ngIf="unitPriceEditable" (blur)="unitPriceEditable = false; onBlur();" (input)="getParentTotalPrice(parentProduct)"  (focus)="onFocus()">
+          <input 
+            [(ngModel)]="parentProduct.quantity" 
+            (input)="getParentTotalPrice(parentProduct)" 
+            (blur)="onBlur(parentProduct)" 
+            (focus)="onFocus()" 
+            (keyup.enter)="updateProposalProduct(parentProduct)" 
+            type="number">
+          </td>
+        <td>
+          $ <input [(ngModel)]="parentProduct.unitPrice" *ngIf="unitPriceEditable" (blur)="unitPriceEditable = false; onBlur(parentProduct);" (input)="getParentTotalPrice(parentProduct)"  (focus)="onFocus()">
           <span *ngIf="!unitPriceEditable" (click)="unitPriceEditable = true;">{{parentProduct.unitPrice | number: '1.2-2'}}</span>
         </td>
-        <td><input [(ngModel)]="parentProduct.discount.value" (blur)="onBlur()" (focus)="onFocus()"></td> 
+        <td><input [(ngModel)]="parentProduct.discount.value" (blur)="onBlur(parentProduct)" (focus)="onFocus()"></td> 
         <td>$ {{parentProduct.total | number:'2.2-2'}}</td>
         <td>
-          <select [(ngModel)]="parentProduct.taxRateId">
+          <select [(ngModel)]="parentProduct.taxRateId" (ngModelChange)="updateProposalProduct(parentProduct)">
             <option *ngFor = "let tax of taxRatesList" [value]="tax.id">{{tax.name}}</option>
           </select>
         </td>
         <td>
-          <select [(ngModel)]="parentProduct.categoryId">
+          <select [(ngModel)]="parentProduct.categoryId" (ngModelChange)="updateProposalProduct(parentProduct)">
             <option *ngFor="let category of proposalCategoryList" [value]="category.id" >{{category.name}}</option>
           </select>
         </td>
         <td>
-          <select [(ngModel)]="parentProduct.subcategoryId">
+          <select [(ngModel)]="parentProduct.subcategoryId" (ngModelChange)="updateProposalProduct(parentProduct)">
             <option *ngFor="let subcategory of proposalSubCategoryList" [value]="subcategory.id" >{{subcategory.name}}</option>
           </select>
         </td>

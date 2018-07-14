@@ -47,24 +47,21 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   productTypesList: any;
   taxRatesList: any;
   proposalProductOrdered = [];
-  expandedAll = false;
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService,
   private proposalsService: ProposalsService, private route: ActivatedRoute, private sharedService: SharedService) {
     const productId = localStorage.getItem('productId');
     this.proposalId = this.route.snapshot.paramMap.get('id');
-    if (productId) {
-      this.productsService.getProductAccessoriesList(productId).subscribe(res => {
-        console.log('product list', res.results);
-        // product list
-      });
-      this.productsService.getProductAlternativesList(productId).subscribe(res => {
-        console.log('product list', res.results);
-        // product list
-        const alternativesList = res.results;
-        const listIds = alternativesList.filter(item => item.id);
-      });
-    }
+    // if (productId) {
+    //   this.productsService.getProductAccessoriesList(productId).subscribe(res => {
+    //     // product list
+    //   });
+    //   this.productsService.getProductAlternativesList(productId).subscribe(res => {
+    //     // product list
+    //     const alternativesList = res.results;
+    //     const listIds = alternativesList.filter(item => item.id);
+    //   });
+    // }
 
     this.productsService.getProductsList().subscribe(res => {
       console.log('product list', res.results);
@@ -80,29 +77,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
           this.sharedService.getCategories().subscribe(res => {
             this.proposalCategoryList = res.results;
 
-            this.proposalsService.getProposalProducts(this.proposalId).subscribe(response => {
-              console.log('proposal Product List: ', response);
-              this.originProposalProductList = response.results;
-              this.originProposalProductList.forEach(ele => {
-                ele.brand = this.getBrandNameFromId(ele.brandId);
-                ele.productType = this.getProductTypeFromId(ele.productTypeId);
-                ele.taxRate = this.getTaxRateNameFromId(ele.taxRateId);
-              });
-              this.parents = this.originProposalProductList.filter(p => p.type === 'PRODUCT');
-              this.parents.forEach(ele => {
-                ele.expand = true;
-                this.proposalProductOrdered = this.proposalProductOrdered.concat(ele);
-                ele.accessories.forEach(element => {
-                  const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
-                  this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
-                });
-                ele.alternatives.forEach(element => {
-                  const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
-                  this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
-                });
-              });
-
-            });
+            this.getProposalProductData();
 
             this.proposalCategoryList.forEach(ele => {
               this.sharedService.getSubCategories(ele.id).subscribe(data => {
@@ -114,8 +89,58 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         });
       });
     });
+  }
 
+  getProposalProductData() {
+    let index = 0;
+    this.proposalsService.getProposalProducts(this.proposalId).subscribe(response => {
+      console.log('proposal Product List: ', response);
+      this.originProposalProductList = response.results;
+      this.originProposalProductList.forEach(ele => {
+        index = index + 1;
+        ele.brand = this.getBrandNameFromId(ele.brandId);
+        ele.productType = this.getProductTypeFromId(ele.productTypeId);
+        ele.taxRate = this.getTaxRateNameFromId(ele.taxRateId);
+        ele.index = index;
+      });
+      this.parents = this.originProposalProductList.filter(p => p.type === 'PRODUCT');
+      this.parents.forEach(ele => {
+        ele.expand = true;
+        this.proposalProductOrdered = this.proposalProductOrdered.concat(ele);
+        ele.accessories.forEach(element => {
+          const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+          this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
+        });
+        ele.alternatives.forEach(element => {
+          const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+          this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
+        });
+      });
 
+    });
+  }
+
+  updateProposalProduct(product) {
+    console.log('parent Product: ', product);
+    const updatingData = {
+      'categoryId': product.categoryId,
+      'subcategoryId': product.subCategoryId,
+      'pricingCategoryId': product.pricingCategoryId,
+      'priceAdjustment': {
+        'value': product.priceAdjustment.value,
+        'unit': product.priceAdjustment.unit
+      },
+      'discount': {
+        'value': product.discount.value,
+        'unit': 'AMOUNT'
+      },
+      'quantity': product.quantity,
+      'useProductInProject': product.useProductInProject
+    };
+    this.proposalsService.updateIndividualProposalProduct(this.proposalId, product.id, updatingData).subscribe(res => {
+      console.log('updated: ', res);
+      this.getProposalProductData();
+    });
   }
 
   ngOnDestroy() {
@@ -126,6 +151,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     this.proposalProductList = this.originProposalProductList;
     this.proposalService.tableExpanded.subscribe(
       data => {
+        this.expandAll(data);
         this.proposalProductList.map(product => product.expanded = false);
         this.parents = this.getParentNode(this.proposalProductList);
         for (let i = 0; i < this.parents.length; i++) {
@@ -133,9 +159,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         }
         if (data) {
           // this.proposalProductList =  JSON.parse(localStorage.getItem('originProposalProductList'));
-          this.expandedAll = !this.expandedAll;
-          this.expandAll(this.expandedAll);
-          console.log('expand: ', this.expandedAll);
         } else {
             // if (!localStorage.getItem('originProposalProductList')) {
             //   localStorage.setItem('originProposalProductList', JSON.stringify(this.originProposalProductList));
@@ -300,8 +323,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     window.localStorage.setItem('selectedRows', JSON.stringify(this.selectedRows) );
   }
   // Avoid opening delete product modal while deleting input value
-  onBlur() {
+  onBlur(product) {
     this.isFocus = false;
+    this.updateProposalProduct(product);
   }
 
   // Avoid opening delete product modal while deleting input value
@@ -310,12 +334,17 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
 
   deleteProduct() {
+    console.log('deleting rows: ', this.selectedRows);
     for (let i = 0; i < this.selectedRows.length; i++) {
-      this.proposalProductList = this.proposalProductList.filter(p => p.id !== this.selectedRows[i]);
-      this.parents = this.getParentNode(this.proposalProductList);
+      // this.proposalProductList = this.proposalProductList.filter(p => p.id !== this.selectedRows[i]);
+      // this.parents = this.getParentNode(this.proposalProductList);
       // if () {
       //   this.getParentTotalPrice();
       // }
+      this.proposalsService.deleteIndividualProposalProduct(this.proposalId, this.selectedRows[i]).subscribe(res => {
+        console.log('deleted: ', res);
+        this.getProposalProductData();
+      });
     }
     this.deleteModalCollapsed = true;
   }
@@ -361,10 +390,21 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   checkExpand(parentProduct) {
     parentProduct.expanded = !parentProduct.expanded;
-    // if (!parentProduct.expanded) {
-    //   const childProductSkus = parentProduct.children.map(c => c.sku);
-    //   this.selectedRows = this.selectedRows.filter(sku => !childProductSkus.includes(sku));
-    // }
+    const childs = parentProduct.alternatives.concat(parentProduct.accessories);
+    childs.forEach(element => {
+      this.proposalProductOrdered.forEach(ele => {
+        if (element === ele.id) {
+          ele.expand = !ele.expand;
+        }
+      });
+    });
+  }
+
+  updateOptional(product) {
+    if (product.type === 'accessories' && product.useProductInProject === false) {
+      product.useProductInProject = !product.useProductInProject;
+      this.updateProposalProduct(product);
+    }
   }
 
   onClickedOutside(event) {
