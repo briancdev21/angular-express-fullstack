@@ -3,6 +3,9 @@ import { SubTasksManagementComponent } from './subtasksmanagement/subtasksmanage
 import { MultiKeywordSelectComponent } from './../../profile/multikeywordselect/multikeywordselect.component';
 import { ProjectManagementService } from '../projectmanagement/projectmanagement.service';
 import * as moment from 'moment';
+import { SharedService } from '../../../services/shared.service';
+import { ProjectsService } from '../../../services/projects.service';
+import { PmTasksService } from '../../../services/pmtasks.service';
 
 @Component({
   selector: 'app-adddetailedtask',
@@ -27,7 +30,7 @@ export class AddDetailedTaskComponent implements OnInit {
   selectedDependency: any = '';
   selectedItem: any = '';
   inputChanged: any = '';
-  projectName = 'Remodel with a Nu life';
+  projectName = '';
   projectTags = ['test'];
   showSettingsModal = false;
   today = new Date();
@@ -43,67 +46,50 @@ export class AddDetailedTaskComponent implements OnInit {
   isAutocompleteUpdated2 = false;
   isAutocompleteUpdated3 = false;
 
-  private taskOwners = [
-    {
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'John Moss',
-      userId: 1
-
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Tyler Labonte',
-      userId: 2
-    },
-    {
-      imageUrl: 'assets/users/user3.png',
-      profileLink: 'crm/contacts/joseph',
-      name: 'Michael Yue',
-      userId: 3
-    }];
-
-  followers = [
-    {
-      imageUrl: 'assets/users/user1.png',
-      name: 'John Moss',
-      userId: 1
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      name: 'Tyler Labonte',
-      userId: 2
-    }
-  ];
+  taskOwners = [];
+  projectId: any;
+  followers = [];
 
   selectedDependencies = [];
   currentTaskOwner: any;
 
-  dependencyData: any[] = [
-    {id: 0, title: 'Task 0'},
-    {id: 1, title: 'Task 1'},
-    {id: 2, title: 'Task 2'},
-    {id: 3, title: 'Task 3'},
-  ];
+  dependencyData: any[] = [ ];
   dependencyConfig: any = {'placeholder': 'Type here', 'sourceField': 'title'};
 
-  items2: any[] = [
-    {id: 0, label: 'John Moss', imageUrl: 'assets/users/user1.png', userId: 1},
-    {id: 1, label: 'Tyler Labonte', imageUrl: 'assets/users/user2.png', userId: 2},
-    {id: 2, label: 'Michael Yue', imageUrl: 'assets/users/user3.png', userId: 3},
-    {id: 3, label: 'Sepehr', imageUrl: 'assets/users/man.png', userId: 4},
-  ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
+  items2: any[] = [];
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'username'};
   subscription: any;
   duration = 0;
   updatingInProgress = false;
 
-  constructor( private pmService: ProjectManagementService ) {
+  constructor( private sharedService: SharedService, private pmService: ProjectManagementService,
+    private projectsService: ProjectsService, private pmTasksService: PmTasksService ) {
     const comp = this;
+    this.projectId = localStorage.getItem('current_projectId');
+    this.projectsService.getIndividualProject(this.projectId).subscribe(res => {
+      this.projectName = res.data.name;
+    });
     document.addEventListener('click', function() {
       comp.editable = false;
       comp.dependencyEditable = false;
+    });
+
+    this.sharedService.getUsers().subscribe(users => {
+      this.taskOwners = users;
+      this.items2 = users;
+    });
+
+    this.pmTasksService.getTaskGroupsWithParams({projectId: this.projectId}).subscribe(res => {
+      const taskgroups = res.results;
+      taskgroups.forEach(group => {
+          for (let i = 0; i < group.taskIds.length; i++) {
+            const taskId = group.taskIds[i];
+            this.pmTasksService.getIndividualTask(group.id, taskId).subscribe(taskRes => {
+              this.dependencyData.push({title: taskRes.data.title, id: taskId});
+              console.log('dependency data:', this.dependencyData);
+            });
+          }
+        });
     });
 
     this.subscription = this.pmService.openDetailedTaskModal().subscribe(data => {
@@ -113,7 +99,7 @@ export class AddDetailedTaskComponent implements OnInit {
       this.updatingInProgress = true;
       this.selectedDependencies = data.task.dependency;
       this.currentTaskOwner = data.task.profile;
-      this.currentTaskOwner.imageUrl = data.task.profile.imgUrl;
+      this.currentTaskOwner.pictureURI = data.task.profile.imgUrl;
       this.dDate = data.task.dueDate;
       // change format from 'mmmm dd, yyyy' to 'YYYY-MM-DD'
       this.dateDue = moment(data.task.dueDate).format('YYYY-MM-DD').toString();
@@ -206,19 +192,19 @@ export class AddDetailedTaskComponent implements OnInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.username !== item.username;
     });
-    const checkAvail = this.followers.filter( d => d.name === item.label).length;
+    const checkAvail = this.followers.filter( d => d.name === item.username).length;
     if (checkAvail) {
       return;
     } else {
-      this.followers.push({name: item.label, imageUrl: item.imageUrl, userId: item.userId });
+      this.followers.push({username: item.username, pictureURI: item.pictureURI});
     }
   }
 
   removeUser(i: number) {
     const item = this.followers[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl, userId: item.userId});
+    this.items2.push({username: item.name, pictureURI: item.pictureURI});
     this.followers.splice(i, 1);
     this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
   }
@@ -282,32 +268,27 @@ export class AddDetailedTaskComponent implements OnInit {
   closeModal() {
     this.pmService.hideDetailedTaskModal(true);
     const today = new Date();
-    const formattedToday = today.getFullYear().toString() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    const formattedToday = today.toISOString().slice(0, 10);
     const duration = this.duration ? this.duration : Math.floor((Date.parse(this.dateDue) - today.getTime()) / (60 * 60 * 24 * 1000)) + 1;
-
+    const followers = this.followers.map(follower => follower.username);
     const formattedDueDate = moment(this.dateDue).format('YYYY-MM-DD');
     const dependency = this.selectedDependencies.map(d => d = d.id);
     const newAddedTask = {
-      id: 0,
-      taskTitle: this.projectName,
-      profile: {
-        name: this.currentTaskOwner.name,
-        imgUrl: this.currentTaskOwner.imageUrl,
-        userId: this.currentTaskOwner.userId
-      },
-      progress: this.completeness,
-      dueDate: formattedDueDate,
-      start: formattedToday,
-      duration: duration,
-      dependency: dependency,
-      like: false,
+      title: this.mainTitle,
+      assignee: this.currentTaskOwner.username,
+      completion: this.completeness,
+      startDate: formattedToday,
+      duration: parseInt(duration.toString(), 10),
+      dependencyIds: dependency,
+      isImportant: false,
+      isComplete: this.completeness === 100 ? true : false,
       attachment: false,
       starred: false,
       taskPath: '',
       subTasks: this.subTasks,
-      internalNotes: this.internalNotes,
-      mainTitle: this.mainTitle,
-      mainContent: this.mainContent,
+      note: this.internalNotes,
+      keywordIds: [],
+      followers: followers
     };
     this.addNewTaskToTable.emit(newAddedTask);
     // return to empty after closing modal

@@ -176,9 +176,7 @@ export class MyTasksComponent implements OnInit {
   }
 
   private onDropModel(args) {
-    console.log('drop args: ', args);
     const [el, target, source] = args;
-    console.log(el.id);
     const taskIndex = parseInt(el.id, 10);
     const targetPanelIndex = parseInt(target.id, 10);
     const sourcePanelIndex = parseInt(source.id, 10);
@@ -362,5 +360,37 @@ export class MyTasksComponent implements OnInit {
     this.pmTasksService.updateIndividualTask(panelId, taskId, savingData).subscribe(res => {
       console.log('task updated: ', res);
     });
+  }
+
+   updateTaskId (panel, task) {
+    let foreTaskCount;
+    if (panel !== 0 ) {
+      for (let i = 0; i <= panel - 1; i++) {
+        if (i !== 0 ) {
+          foreTaskCount = foreTaskCount + this.panels[i].tasks.length;
+        } else {
+          foreTaskCount = this.panels[0].tasks.length;
+        }
+      }
+    } else {
+      foreTaskCount = 0;
+    }
+    return foreTaskCount + this.panels[panel].tasks[task].id;
+  }
+
+  removeTaskIdList (panel, task) {
+    let foreTaskCount;
+    if (panel !== 0 ) {
+      for (let i = 0; i <= panel - 1; i++) {
+        if (i !== 0 ) {
+          foreTaskCount = foreTaskCount + this.panels[i].tasks.length;
+        } else {
+          foreTaskCount = this.panels[0].tasks.length;
+        }
+      }
+    } else {
+      foreTaskCount = 0;
+    }
+    return foreTaskCount + this.panels[panel].tasks[task].id;
   }
 }

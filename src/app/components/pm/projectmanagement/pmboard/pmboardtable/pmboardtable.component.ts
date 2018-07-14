@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../projectmanagement.service';
+import { PmTasksService } from '../../../../../services/pmtasks.service';
 
 @Component({
   selector: 'app-pmboardtable',
@@ -13,7 +14,18 @@ import { ProjectManagementService } from '../../projectmanagement.service';
 export class PmBoardTableComponent implements OnInit {
   @ViewChild('panel', { read: ElementRef }) public panel: ElementRef;
 
-  @Input() pmBoardTableData;
+  @Input() set pmBoardTableInfo(val) {
+    this.pmBoardTableData = [];
+    if (val !== undefined && val.length !== 0) {
+      this.dataReady = true;
+      this.pmBoardTableData = val;
+      for (let i = 0; i < this.pmBoardTableData.length; i++) {
+        //  color selection
+        const pickColorId = i % 10;
+        this.pmBoardTableData[i].color = this.colors[pickColorId];
+     }
+    }
+  }
   @Input() taskOwners;
   @Output() updatePmData: EventEmitter<any> = new EventEmitter;
   showDetailedTaskModal = false;
@@ -21,8 +33,15 @@ export class PmBoardTableComponent implements OnInit {
   temp: number;
   leftReached = true;
   rightReached = false;
+  pmBoardTableData: any;
+  dataReady = false;
+  //  private temp: number;
+  //  private leftReached = true;
+  //  private rightReached = false;
+  //  private pmBoardTableData: any;
+  //  private dataReady = false;
 
-  constructor( private pmService: ProjectManagementService ) {
+  constructor( private pmService: ProjectManagementService, private pmTasksService: PmTasksService ) {
 
     // close detailed task modal
     this.pmService.closeTaskModal.subscribe(
@@ -35,34 +54,29 @@ export class PmBoardTableComponent implements OnInit {
   colors = ['#FFE5CC', '#EDF3BF', '#FFD7D7', '#CBE0ED', '#E0BBCC', '#C4BBE0', '#BBC0E0', '#BBE0CC', '#E0BBBB', '#E8E3A7'];
 
   ngOnInit() {
-
-    for (let i = 0; i < this.pmBoardTableData.length; i++) {
-       //  color selection
-       const pickColorId = i % 10;
-       this.pmBoardTableData[i].color = this.colors[pickColorId];
-    }
-
-
   }
 
   getTasksCount(owner, project) {
-    const count = project.tasks.filter(t => t.profile.userId === owner.userId).length;
+    if (project.tasks === undefined) { project.tasks = []; }
+    const count = project.tasks.filter(t => t.assignee === owner.username).length;
     return count;
   }
 
   getTasksCompletion(owner, project) {
     let total = 0;
-    const newArr = project.tasks.filter(t => t.profile.userId === owner.userId);
+    if (project.tasks === undefined) { project.tasks = []; }
+    const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
-      total = total + newArr[i].progress;
+      total = total + newArr[i].completion;
     }
     return total / newArr.length;
   }
 
   getDuration(owner, project) {
     let totalDuration = 0;
+    if (project.tasks === undefined) { project.tasks = []; }
     // if total duration is smaller than 7 days, it will show by days and over 1 week, it will show by weeks
-    const newArr = project.tasks.filter(t => t.profile.userId === owner.userId);
+    const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
       totalDuration = totalDuration + newArr[i].duration;
     }
@@ -84,7 +98,8 @@ export class PmBoardTableComponent implements OnInit {
 
   getDependenciesCount(owner, project) {
     let total = 0;
-    const newArr = project.tasks.filter(t => t.profile.userId === owner.userId);
+    if (project.tasks === undefined) { project.tasks = []; }
+    const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
       total = total + newArr[i].dependency.length;
     }
@@ -98,20 +113,32 @@ export class PmBoardTableComponent implements OnInit {
   getOverDueTasksCount(owner, project) {
     let total = 0;
     const today = new Date();
-    const newArr = project.tasks.filter(t => t.profile.userId === owner.userId);
+    if (project.tasks === undefined) { project.tasks = []; }
+    const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
-      if (new Date(newArr[i].dueDate) < today) {
+      if (this.calcualteDateDiff(newArr[i].startDate) > newArr[i].duration) {
         total ++;
       }
     }
+    // console.log('pmdata:', this.updatePmData, total);
+
     return total;
+  }
+
+  calcualteDateDiff( startDateStr ) {
+    const today = new Date();
+    const startDate = new Date(startDateStr);
+    const timeDiff = Math.abs(today.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return diffDays;
   }
 
   getCompletedTasksCount(owner, project) {
     let total = 0;
-    const newArr = project.tasks.filter(t => t.profile.userId === owner.userId);
+    if (project.tasks === undefined) { project.tasks = []; }
+    const newArr = project.tasks.filter(t => t.assignee === owner.username);
     for (let i = 0; i < newArr.length; i++) {
-      if (newArr[i].progress === 100) {
+      if (newArr[i].isComplete === true) {
         total ++;
       }
     }
@@ -152,13 +179,23 @@ export class PmBoardTableComponent implements OnInit {
         this.rightReached = true;
       }
     }, 1);
+    console.log('pmdata:', this.updatePmData);
+
   }
 
   getNewTask(event) {
     this.newAddedTask = event;
+    console.log('new task', event);
+
+    this.pmTasksService.createTask(this.temp, event).subscribe(res => {
+      for (let i = 0; i < event.subTasks.length; i++) {
+        this.pmTasksService.createSubTask(this.temp, res.data.id, event.subTasks[i]).subscribe();
+      }
+      this.updatePmData.emit(null);
+    });
     // assign new id to new task
-    event.id = this.pmBoardTableData[this.temp].tasks.length + 1;
-    this.pmBoardTableData[this.temp].tasks.push(event);
-    this.updatePmData.emit(this.pmBoardTableData);
+    // event.id = this.pmBoardTableData[this.temp].tasks.length + 1;
+    // this.pmBoardTableData[this.temp].tasks.push(event);
+    console.log('pmdata:', this.updatePmData);
   }
 }

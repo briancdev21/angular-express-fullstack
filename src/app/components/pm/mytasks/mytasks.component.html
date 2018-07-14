@@ -35,8 +35,8 @@
                 </div>
               </div>
               <div class="task-owner">
-                <img src="{{task.assigneeInfo.pictureURI}}" *ngIf="task.assigneeInfo.pictureURI && panel.projectId === null" (click)="openOwnerModal(i, j); $event.stopPropagation();">
-                <img *ngIf="!task.assigneeInfo.pictureURI && panel.projectId === null" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                <img src="{{task.assigneeInfo == undefined ? 'assets/users/man.png' : task.assigneeInfo.pictureURI}}"  (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                <!-- <img *ngIf="!task.assigneeInfo.pictureURI && panel.projectId === null" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();"> -->
                 <span *ngIf="panel.projectId" class="task-path">{{task.taskPath}}</span>
                 <div class="sub-tasks">
 

@@ -7,6 +7,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {TaskStableMapToKeysPipe} from './map-to-keys.pipe';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { PmTasksService } from '../../../../../services/pmtasks.service';
+import { SharedService } from '../../../../../services/shared.service';
 @Component({
   selector: 'app-pmtaskstable',
   templateUrl: './pmtaskstable.component.html',
@@ -19,9 +21,10 @@ import * as moment from 'moment';
   ],
 })
 export class PmTasksTableComponent implements OnInit {
-  @Input() milestones;
+
   @Output() updatedGanttData = new EventEmitter;
 
+  milestones = [];
   menuCollapsed = true;
   newMilestoneTitle = '';
   addMilestoneClicked = false;
@@ -35,6 +38,7 @@ export class PmTasksTableComponent implements OnInit {
   inputChanged: any;
   selectedItem: any;
   isAutocompleteUpdated = false;
+  tasksTemp = [];
 
   config2: any = {'placeholder': 'Type here', 'sourceField': ''};
   colors = ['#F0D7BD', '#DFE5B0', '#F0C9C9', '#CBE0ED', '#E0BBCC', '#C4BBE0', '#BBC0E0', '#BBE0CC', '#E0BBBB', '#E8E3A7'];
@@ -44,24 +48,15 @@ export class PmTasksTableComponent implements OnInit {
     imgUrl: ''
   };
   taskOwners = [
-    {
-      name: 'John Moss',
-      imgUrl: 'assets/users/user1.png',
-      userId: 1
-    },
-    {
-      name: 'Michael',
-      imgUrl: 'assets/users/user3.png',
-      userId: 2
-    },
-    {
-      name: 'Joseph',
-      imgUrl: 'assets/users/user2.png',
-      userId: 3
-    },
   ];
 
-  constructor( private dragulaService: DragulaService, private pmService: ProjectManagementService, private fb: FormBuilder ) {
+  currentProjectId: any;
+  usersList = [];
+  contactsList = [];
+
+  constructor( private dragulaService: DragulaService, private projectManagementService: ProjectManagementService,
+     private fb: FormBuilder, private sharedService: SharedService, private pmTasksService: PmTasksService ) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
     dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });
@@ -71,10 +66,22 @@ export class PmTasksTableComponent implements OnInit {
     if (bag !== undefined ) {
       this.dragulaService.destroy('dragMilestone');
     }
+
     dragulaService.setOptions('dragMilestone', {
       moves: function (el, container, handle) {
         return handle.className.includes('milestone-title');
       }
+    });
+
+    this.sharedService.getContacts().subscribe(contacts => {
+      this.contactsList = contacts;
+      this.addContactName(this.contactsList);
+
+      this.sharedService.getUsers().subscribe(users => {
+        this.usersList = users;
+        this.taskOwners = users;
+        this.refreshTable();
+      });
     });
   }
 
@@ -118,7 +125,7 @@ export class PmTasksTableComponent implements OnInit {
     } else {
       foreTaskCount = 0;
     }
-    return foreTaskCount + task + 1;
+    return foreTaskCount + this.milestones[milestone].tasks[task].id;
   }
 
   selectStartDate(event, i, j) {
@@ -130,6 +137,30 @@ export class PmTasksTableComponent implements OnInit {
 
   private onDropModel(args) {
     const [el, target, source] = args;
+    const taskIndex = parseInt(el.id, 10);
+    const targetPanelIndex = parseInt(target.id, 10);
+    const sourcePanelIndex = parseInt(source.id, 10);
+    // const selectedPanel = this.panels.filter(p => p.id === parseInt(source.id, 10))[0];
+    // const selectedTask = selectedPanel.tasks.filter( t => t.id === parseInt(el.id, 10));
+    const selectedTaskData = this.milestones[sourcePanelIndex].tasks[taskIndex];
+    console.log('selected drag data: ', selectedTaskData, this.milestones);
+    if (target !== source) {
+      this.milestones[targetPanelIndex].tasks.push(selectedTaskData);
+    }
+    this.pmTasksService
+    .deleteIndividualtask(this.milestones[sourcePanelIndex].id, this.milestones[sourcePanelIndex].tasks[taskIndex].id).subscribe(res => {
+      console.log('task deleted: ', res);
+    });
+    const savingData = {
+      'assignee': selectedTaskData.assigneeInfo ? selectedTaskData.assigneeInfo.username : selectedTaskData.assignee,
+      'title': selectedTaskData.taskTitle ? selectedTaskData.taskTitle : selectedTaskData.title,
+      'isImportant': selectedTaskData.isImportant,
+      'isComplete': selectedTaskData.isComplete,
+      'startDate': moment(selectedTaskData.startDate).format('YYYY-MM-DD'),
+    };
+    this.pmTasksService.createTask(this.milestones[targetPanelIndex].id, savingData).subscribe(res => {
+      console.log('task created: ', res);
+    });
   }
 
   toggleMenubar(data: boolean) {
@@ -137,23 +168,29 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   addTask(milestone) {
-    const newTask = {
-      id: 1 + milestone.tasks.length,
-      taskTitle: '',
-      profile: {
-        name: '',
-        imgUrl: '',
-        userId: undefined
-      },
-      progress: 0,
-      dueDate: '',
-      duration: 0,
-      dependency: [],
-      like: false,
-      attachment: false,
-      attachmentImg: '',
+    // const newTask = {
+    //   id: 1 + milestone.tasks.length,
+    //   taskTitle: '',
+    //   profile: {
+    //     name: '',
+    //     imgUrl: '',
+    //     userId: undefined
+    //   },
+    //   progress: 0,
+    //   dueDate: '',
+    //   duration: 0,
+    //   dependency: [],
+    //   like: false,
+    //   attachment: false,
+    //   attachmentImg: '',
+    // };
+    // this.milestones.filter(m => m.title === milestone.title)[0].tasks.push(newTask);
+    const newMockTask = {
+      title: ''
     };
-    this.milestones.filter(m => m.title === milestone.title)[0].tasks.push(newTask);
+    this.pmTasksService.createTask(milestone.id, newMockTask).subscribe(res => {
+      this.refreshTable();
+    });
   }
 
   addNewMilestone() {
@@ -165,14 +202,52 @@ export class PmTasksTableComponent implements OnInit {
   handleKeyDown(event) {
     const newMilestone = {
       title: this.newMilestoneTitle,
-      color: this.colors[this.milestones.length],
-      tasks: []
+      projectId: this.currentProjectId
     };
     if (event.key === 'Enter' && this.newMilestoneTitle ) {
       this.milestones.push(newMilestone);
       this.newMilestoneTitle = '';
       this.addMilestoneClicked = !this.addMilestoneClicked;
+      this.pmTasksService.createTaskGroup(newMilestone).subscribe(res => {
+        this.refreshTable();
+      });
     }
+  }
+
+  refreshTable() {
+    this.pmTasksService.getTaskGroups().subscribe(data => {
+      this.milestones = data.results;
+      for (let i = 0; i < this.milestones.length; i++) {
+        this.milestones[i].color = this.colors[i];
+        this.ownerModalCollapsed[i] = new Array();
+        this.dependencyModalCollapsed[i] = new Array();
+
+        if (this.milestones[i].taskIds !== null) {
+          for (let j = 0; j < this.milestones[i].taskIds.length; j++) {
+            this.pmTasksService.getTasks(this.milestones[i].id).subscribe(taskData => {
+              this.milestones[i].tasks = taskData.results;
+
+              this.ownerModalCollapsed[i][j] = false;
+              this.dependencyModalCollapsed[i][j] = false;
+              this.milestones[i].tasks.forEach(element => {
+                element.assigneeInfo = this.getUserInfo(element.assignee);
+                element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+                element.taskTitle = element.title;
+                element.dependency = element.dependencyIds ? element.dependencyIds : [];
+              });
+              this.addTasksFromPmBoardData(this.milestones[i], i);
+            });
+          }
+        }
+      }
+    });
+  }
+
+  addTasksFromPmBoardData(tableDataAtIndex: any, i) {
+    this.tasksTemp[i] = tableDataAtIndex;
+      if (this.tasksTemp.length === this.milestones.length) {
+        this.updatedGanttData.emit({'data': this.tasksTemp});
+      }
   }
 
   clickOutside() {
@@ -190,7 +265,7 @@ export class PmTasksTableComponent implements OnInit {
   openOwnerModal(i, j) {
     this.ownerModalCollapsed = this.ownerModalCollapsed.map(m => m.map(t => t = false));
     this.ownerModalCollapsed[i][j] = true;
-    this.selectedOwner = this.milestones[i].tasks[j].profile.userId;
+    this.selectedOwner = this.milestones[i].tasks[j].assigneeInfo.username;
   }
 
   openDependencyModal(i, j) {
@@ -229,7 +304,7 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   openDetailedModal(task, i, j) {
-    this.pmService.sendTaskData(
+    this.projectManagementService.sendTaskData(
       {
         'task': task,
         'milestone': [i, j],
@@ -272,5 +347,65 @@ export class PmTasksTableComponent implements OnInit {
     this.milestones[panel][task] = parseInt(percent, 10);
     // send changed data to parent to update gantt chart
     this.updatedGanttData.emit({'data': this.milestones});
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getUserInfo(username) {
+    const selectedUser = this.usersList.filter(u => u.username === username)[0];
+    return selectedUser;
+  }
+
+  updateInfoTask (task) {
+        // const newTask = {
+    //   id: 1 + milestone.tasks.length,
+    //   taskTitle: '',
+    //   profile: {
+    //     name: '',
+    //     imgUrl: '',
+    //     userId: undefined
+    //   },
+    //   progress: 0,
+    //   dueDate: '',
+    //   duration: 0,
+    //   dependency: [],
+    //   like: false,
+    //   attachment: false,
+    //   attachmentImg: '',
+    // };
+    // this.milestones.filter(m => m.title === milestone.title)[0].tasks.push(newTask);
+  }
+
+  checkValidation() {
+    console.log('validatioan checking');
+    // Model
+    //   id: 1 + milestone.tasks.length,
+    //   taskTitle: '',
+    //   profile: {
+    //     name: '',
+    //     imgUrl: '',
+    //     userId: undefined
+    //   },
+    //   progress: 0,
+    //   dueDate: '',
+    //   duration: 0,
+    //   dependency: [],
+    //   like: false,
+    //   attachment: false,
+    //   attachmentImg: '',
   }
 }

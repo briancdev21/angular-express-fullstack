@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../projectmanagement.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { AUTOCOMPLETE_OPTION_HEIGHT } from '@angular/material';
 // import {GanttComponent, GanttConfiguration, GanttTaskItem, GanttTaskLink, GanttEvents } from 'gantt-ui-component';
 
 @Component({
@@ -16,8 +17,31 @@ import * as _ from 'lodash';
 export class GanttChartComponent implements OnInit {
   @Input() set tasks(_data) {
     this._tasks = _data;
+    while (this._tasks.length < 4) {
+      const emptyArr = {
+        id: this._tasks.length,
+        title: '',
+        start_date: moment().format('YYYY-MM-DD'),
+        end_date: moment().subtract(1, 'days').format('YYYY-MM-DD'),
+        progress: undefined
+      };
+      this._tasks.push(emptyArr);
+    }
+    // console.log('tasks gantt chart:', _data);
     this.calculate();
   }
+
+  // @Input() set projectInfo(_data) {
+  //   this._projectInfo = _data;
+  //   this.calculate();
+  //   console.log('details tasks:. ', this._projectInfo);
+  // }
+
+  // @Input() set detailsTasks(_data) {
+  //   this._detailsTasks = _data;
+  //   this.calculate();
+  //   console.log('details tasks:. ', this._detailsTasks);
+  // }
 
   _tasks = [];
   FebNumberOfDays: any;
@@ -39,14 +63,14 @@ export class GanttChartComponent implements OnInit {
   ngOnInit() {
     console.log('thistask: ', this._tasks);
     // using service to update gantt chart
-    // this.pmService.ganttUpdated.subscribe(data => {
-    //   if (data.length > 0) {
-    //     this.tasks = data;
-    //   }
-    //   console.log('in gantt: ', this.tasks);
-    //   this.calculate();
-    // });
-    // this.calculate();
+    this.pmService.ganttUpdated.subscribe(data => {
+      if (data.length > 0) {
+        this.tasks = data;
+      }
+      console.log('in gantt: ', this.tasks);
+      this.calculate();
+    });
+    this.calculate();
   }
 
   calculate() {
@@ -252,5 +276,73 @@ export class GanttChartComponent implements OnInit {
       ) {
       return true;
     }
+  }
+
+  updateService(data) {
+    // update service for Gantt chart
+    // Data model for Chart
+    const {  endDate, startDate } = data;
+    let nextMonth;
+    let lastMonth;
+    if (this.displayMonthes.length ===  2) {
+      if (endDate.getMonth() === 11) {
+        nextMonth = new Date(endDate.getFullYear() + 1, 0, 1);
+      } else {
+        nextMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
+      }
+      this.displayMonthes = this.monthDiff(startDate, nextMonth);
+    }
+    if (this.displayMonthes.length ===  1) {
+      if (endDate.getMonth() === 11) {
+        nextMonth = new Date(endDate.getFullYear() + 1, 0, 1);
+      } else {
+        nextMonth = new Date(endDate.getFullYear(), endDate.getMonth() + 1, 1);
+      }
+      if (startDate.getMonth() === 1) {
+        lastMonth = new Date(startDate.getFullYear() - 1, 0, 1);
+      } else {
+        lastMonth = new Date(startDate.getFullYear(), startDate.getMonth() - 1, 1);
+      }
+
+      this.displayMonthes = this.monthDiff(lastMonth, nextMonth);
+    }
+
+    _.forEach(this.displayMonthes, month => {
+      const dayCount = {
+        dateSubArr: [],
+        isWeekendArr: [],
+        isFirstArr: [],
+        isLastArr: [],
+        isLastActiveArr: [],
+        getBgColorArr: [],
+        getTodayLineArr: []
+      };
+      dayCount.dateSubArr = this.getDayCount(month.month, month.year);
+
+      for (let i = 0; i < this._tasks.length; i ++) {
+        const isWeekendSubArr = [];
+        const getTodayLineSubArr = [];
+        const isFirstSubArr = [];
+        const isLastSubArr = [];
+        const isLastActiveSubArr = [];
+        const getBgColorSubArr = [];
+
+        _.forEach(dayCount.dateSubArr, date => {
+          isWeekendSubArr.push(this.isWeekend(month.year, month.month, date));
+          getTodayLineSubArr.push(this.getTodayLine(month.year, month.month, date));
+          isFirstSubArr.push(this.isFirst(month.year, month.month, date, this._tasks[i], i));
+          isLastSubArr.push(this.isLast(month.year, month.month, date, this._tasks[i], i));
+          isLastActiveSubArr.push(this.isLastActive(month.year, month.month, date + 1, this._tasks[i], i));
+          getBgColorSubArr.push(this.getBgColor(month.year, month.month, date, this._tasks[i], i));
+        });
+        dayCount.isWeekendArr.push(isWeekendSubArr);
+        dayCount.getTodayLineArr.push(getTodayLineSubArr);
+        dayCount.isFirstArr.push(isFirstSubArr);
+        dayCount.isLastArr.push(isLastSubArr);
+        dayCount.isLastActiveArr.push(isLastActiveSubArr);
+        dayCount.getBgColorArr.push(getBgColorSubArr);
+      }
+    });
+    // API Call
   }
 }
