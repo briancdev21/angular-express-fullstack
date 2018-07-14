@@ -15,7 +15,7 @@
     </div>
     <div class="card-style">
       <div class="card-top">RESERVED INVENTORY</div>
-      <div class="card-content">$ {{projectInfo.inventoryCost | number: '1.2-2'}}</div>
+      <div class="card-content" *ngIf="summaryInfo">$ {{summaryInfo[1].amount | number: '1.2-2'}}</div>
     </div>
     <div class="card-style">
       <div class="card-top">LABOUR COSTS</div>
@@ -32,7 +32,7 @@
       <div class="panel-top">
         <span>COST SUMMARY</span>
       </div>
-      <div class="cost-summary-content">
+      <div class="cost-summary-content" *ngIf="summaryInfo">
         <div class="input-sec">
           <input placeholder="Type title of cost assocated with project here..." [(ngModel)]="costTitle">
           <select [(ngModel)]="costType" (ngModelChange)="costTypeChange()">
@@ -44,20 +44,20 @@
         </div>
         <div class="cost-default-value">
           <span>Purchase Orders</span>
-          <span>${{projectInfo.purchaseOrderTotal | number: '1.2-2'}}</span>
+          <span>${{summaryInfo[0].amount | number: '1.2-2'}}</span>
         </div>
         <div class="cost-default-value">
           <span>Inventory</span>
-          <span>${{projectInfo.inventoryCost | number: '1.2-2'}}</span>
+          <span>${{summaryInfo[1].amount | number: '1.2-2'}}</span>
         </div>
         <div class="cost-default-value">
           <span>Labour Costs</span>
-          <span>${{projectInfo.labourCost | number: '1.2-2'}}</span>
+          <span>${{summaryInfo[2].amount | number: '1.2-2'}}</span>
         </div>
         <div *ngFor="let cost of additionalCosts; let i = index" class="addtianal-schedule">
           <div class="cost-default-value">
-            <span>{{cost.title}}</span>
-            <span>${{cost.value | number: '1.2-2'}}</span>
+            <span>{{cost.name}}</span>
+            <span>${{cost.amount | number: '1.2-2'}}</span>
           </div>
           <img src="assets/images/error.png" (click)="removeAddtional(i)">
         </div>
