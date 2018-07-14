@@ -23,6 +23,7 @@ export class PmBoardTableComponent implements OnInit {
         //  color selection
         const pickColorId = i % 10;
         this.pmBoardTableData[i].color = this.colors[pickColorId];
+        this.pmBoardTableData[i].editTitle = false;
      }
     }
   }
@@ -197,5 +198,17 @@ export class PmBoardTableComponent implements OnInit {
     // event.id = this.pmBoardTableData[this.temp].tasks.length + 1;
     // this.pmBoardTableData[this.temp].tasks.push(event);
     console.log('pmdata:', this.updatePmData);
+  }
+  updateProjectTitle(index, event) {
+    if (event.key === 'Enter') {
+      this.pmBoardTableData[index].editTitle = false;
+      const body =  {
+        owner: this.pmBoardTableData[index].owner,
+        title: this.pmBoardTableData[index].title
+      };
+      this.pmTasksService.updateIndividualTaskGroup(this.pmBoardTableData[index].id, body).subscribe(res => {
+        this.updatePmData.emit(null);
+      });
+    }
   }
 }

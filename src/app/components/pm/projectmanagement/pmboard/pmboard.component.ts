@@ -530,6 +530,7 @@ export class PmBoardComponent implements OnInit {
     return selectedUser;
   }
   addTasksFromPmBoardData(tableDataAtIndex: any, i) {
+    this.tasksTemp = [];
     console.log('tableDataAtIndex', tableDataAtIndex, i);
       const midTk = {
         id: i,
