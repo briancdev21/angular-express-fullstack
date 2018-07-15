@@ -93,30 +93,38 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   getProposalProductData() {
     let index = 0;
+    this.parents = [];
+    this.proposalProductOrdered = [];
     this.proposalsService.getProposalProducts(this.proposalId).subscribe(response => {
-      console.log('proposal Product List: ', response);
       this.originProposalProductList = response.results;
       this.originProposalProductList.forEach(ele => {
-        index = index + 1;
         ele.brand = this.getBrandNameFromId(ele.brandId);
         ele.productType = this.getProductTypeFromId(ele.productTypeId);
         ele.taxRate = this.getTaxRateNameFromId(ele.taxRateId);
-        ele.index = index;
       });
       this.parents = this.originProposalProductList.filter(p => p.type === 'PRODUCT');
       this.parents.forEach(ele => {
         ele.expand = true;
         this.proposalProductOrdered = this.proposalProductOrdered.concat(ele);
-        ele.accessories.forEach(element => {
-          const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
-          this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
-        });
-        ele.alternatives.forEach(element => {
-          const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
-          this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
-        });
-      });
+        if (ele.accessories) {
+          ele.accessories.forEach(element => {
+            const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+            this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
+          });
+        }
 
+        if (ele.alternatives) {
+          ele.alternatives.forEach(element => {
+            const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+            this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
+          });
+        }
+      });
+      this.proposalProductOrdered.forEach(element => {
+        element.index = index;
+        index = index + 1;
+      });
+      console.log('ordered Product List: ', this.proposalProductOrdered);
     });
   }
 
@@ -139,7 +147,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     };
     this.proposalsService.updateIndividualProposalProduct(this.proposalId, product.id, updatingData).subscribe(res => {
       console.log('updated: ', res);
-      this.getProposalProductData();
+      if (res) {
+        this.getProposalProductData();
+      }
     });
   }
 
@@ -166,65 +176,71 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
             // this.proposalProductList = JSON.parse(localStorage.getItem('originProposalProductList'));
           }
       });
-
+    // commented for now
     // Insert data from product details to table
     this.proposalService.insertedProducts.subscribe(
       data => {
-        const insertedArr = [];
-        this.addedIndex = this.proposalProductList.length;
-        const midValue = data.map(p => p[0]);
-        for (let i = 0; i <= midValue.length - 1; i += 1) {
-          if (!this.proposalProductList.includes(midValue[i])) {
-            this.addedIndex += 1;
-            midValue[i].id = this.addedIndex;
-            insertedArr.push(midValue[i]);
-            if (midValue[i].addedAccList.length > 0) {
-              for (let j = 0; j <= midValue[i].addedAccList.length - 1; j++) {
-                this.addedIndex += 1;
-                midValue[i].addedAccList[j].id = this.addedIndex;
-                // set option value for each added acc product
-                if (midValue[i].addedAccList[j].optionType === 'Optional') {
-                  midValue[i].addedAccList[j].option = 'optionalAcc';
-                } else if (midValue[i].addedAccList[j].optionType === 'Automatic') {
-                  midValue[i].addedAccList[j].option = 'automaticAcc';
-                }
-                // set parent ID for each added acc product
-                midValue[i].addedAccList[j].parentId = midValue[i].id;
-                // Add missing field
-                midValue[i].addedAccList[j].sku = midValue[i].addedAccList[j].skuNumber;
-                midValue[i].addedAccList[j].model = midValue[i].addedAccList[j].modelNumber;
-                midValue[i].addedAccList[j].productType = midValue[i].productType;
-                midValue[i].addedAccList[j].unitPrice = midValue[i].addedAccList[j].friendPrice;
-                midValue[i].addedAccList[j].discount = 0;
-                midValue[i].addedAccList[j].total = midValue[i].addedAccList[j].unitPrice * midValue[i].addedAccList[j].qty *
-                                                      (100 - midValue[i].addedAccList[j].discount) / 100;
-                midValue[i].addedAccList[j].taxRate = midValue[i].taxRate;
-                // add added acc products to inserted array
-                insertedArr.push(midValue[i].addedAccList[j]);
-              }
-            }
-            if (midValue[i].addedAlterList.length > 0) {
-              for (let j = 0; j <= midValue[i].addedAlterList.length - 1; j++) {
-                this.addedIndex += 1;
-                midValue[i].addedAlterList[j].id = this.addedIndex;
-                midValue[i].addedAlterList[j].option = 'alter';
-                midValue[i].addedAlterList[j].parentId = midValue[i].id;
-                midValue[i].addedAlterList[j].sku = midValue[i].addedAlterList[j].skuNumber;
-                midValue[i].addedAlterList[j].model = midValue[i].addedAlterList[j].modelNumber;
-                midValue[i].addedAlterList[j].productType = midValue[i].productType;
-                midValue[i].addedAlterList[j].unitPrice = midValue[i].addedAlterList[j].friendPrice;
-                midValue[i].addedAlterList[j].discount = 0;
-                midValue[i].addedAlterList[j].total = midValue[i].addedAlterList[j].unitPrice * midValue[i].addedAlterList[j].qty *
-                                                      (100 - midValue[i].addedAlterList[j].discount) / 100;
-                midValue[i].addedAlterList[j].taxRate = midValue[i].taxRate;
-                insertedArr.push(midValue[i].addedAlterList[j]);
-              }
-            }
-          }
+        console.log('check ', data);
+        if (data.length > 0) {
+          this.getProposalProductData();
         }
-        this.proposalProductList = this.proposalProductList.concat(insertedArr);
-        this.proposalService.postUpdatedProposalProductList(this.proposalProductList);
+    //     console.log('inserted Data: ', data);
+    //     const insertedArr = [];
+    //     this.addedIndex = this.proposalProductList.length;
+    //     const midValue = data.map(p => p[0]);
+    //     for (let i = 0; i <= midValue.length - 1; i += 1) {
+    //       if (!this.proposalProductList.includes(midValue[i])) {
+    //         this.addedIndex += 1;
+    //         midValue[i].id = this.addedIndex;
+    //         insertedArr.push(midValue[i]);
+    //         if (midValue[i].addedAccList.length > 0) {
+    //           for (let j = 0; j <= midValue[i].addedAccList.length - 1; j++) {
+    //             this.addedIndex += 1;
+    //             midValue[i].addedAccList[j].id = this.addedIndex;
+    //             // set option value for each added acc product
+    //             if (midValue[i].addedAccList[j].optionType === 'Optional') {
+    //               midValue[i].addedAccList[j].option = 'optionalAcc';
+    //             } else if (midValue[i].addedAccList[j].optionType === 'Automatic') {
+    //               midValue[i].addedAccList[j].option = 'automaticAcc';
+    //             }
+    //             // set parent ID for each added acc product
+    //             midValue[i].addedAccList[j].parentId = midValue[i].id;
+    //             // Add missing field
+    //             midValue[i].addedAccList[j].sku = midValue[i].addedAccList[j].skuNumber;
+    //             midValue[i].addedAccList[j].model = midValue[i].addedAccList[j].modelNumber;
+    //             midValue[i].addedAccList[j].productType = midValue[i].productType;
+    //             midValue[i].addedAccList[j].unitPrice = midValue[i].addedAccList[j].friendPrice;
+    //             midValue[i].addedAccList[j].discount = 0;
+    //             midValue[i].addedAccList[j].total = midValue[i].addedAccList[j].unitPrice * midValue[i].addedAccList[j].qty *
+    //                                                   (100 - midValue[i].addedAccList[j].discount) / 100;
+    //             midValue[i].addedAccList[j].taxRate = midValue[i].taxRate;
+    //             // add added acc products to inserted array
+    //             insertedArr.push(midValue[i].addedAccList[j]);
+    //           }
+    //         }
+    //         if (midValue[i].addedAlterList.length > 0) {
+    //           for (let j = 0; j <= midValue[i].addedAlterList.length - 1; j++) {
+    //             this.addedIndex += 1;
+    //             midValue[i].addedAlterList[j].id = this.addedIndex;
+    //             midValue[i].addedAlterList[j].option = 'alter';
+    //             midValue[i].addedAlterList[j].parentId = midValue[i].id;
+    //             midValue[i].addedAlterList[j].sku = midValue[i].addedAlterList[j].skuNumber;
+    //             midValue[i].addedAlterList[j].model = midValue[i].addedAlterList[j].modelNumber;
+    //             midValue[i].addedAlterList[j].productType = midValue[i].productType;
+    //             midValue[i].addedAlterList[j].unitPrice = midValue[i].addedAlterList[j].friendPrice;
+    //             midValue[i].addedAlterList[j].discount = 0;
+    //             midValue[i].addedAlterList[j].total = midValue[i].addedAlterList[j].unitPrice * midValue[i].addedAlterList[j].qty *
+    //                                                   (100 - midValue[i].addedAlterList[j].discount) / 100;
+    //             midValue[i].addedAlterList[j].taxRate = midValue[i].taxRate;
+    //             insertedArr.push(midValue[i].addedAlterList[j]);
+    //           }
+    //         }
+    //       }
+    //     }
+    //     this.proposalProductList = this.proposalProductList.concat(insertedArr);
+    //     this.proposalService.postUpdatedProposalProductList(this.proposalProductList);
       });
+    // comment end here
 
     // calculate the sum of all products price
     const cmp = this;
@@ -295,33 +311,34 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         this.selectedRows.push(product.id);
       }
     } else if  ( this.isShift && this.selectedRows.length > 0) {
-      const from = this.proposalProductList.filter( p => p.id === this.selectedRows[0])[0].index;
+      const from = this.proposalProductOrdered.filter( p => p.id === this.selectedRows[0])[0].index;
       const to = product.index;
-      this.selectedRows = this.proposalProductList.slice(Math.min(from, to), Math.max(from, to) + 1).map(p => p.id);
+      this.selectedRows = this.proposalProductOrdered.slice(Math.min(from, to), Math.max(from, to) + 1).map(p => p.id);
     } else {
       this.selectedRows = [product.id];
     }
+    console.log('seleted rows: ', this.selectedRows);
     window.localStorage.setItem('selectedRows', JSON.stringify(this.selectedRows) );
   }
 
-  onChildRowSelect(product, event) {
-    event.stopPropagation();
-    if (this.isCtrl) {
-      const index = this.selectedRows.indexOf(product.id);
-      if (index !== -1) {
-        this.selectedRows.splice(index, 1);
-      } else {
-        this.selectedRows.push(product.id);
-      }
-    } else if (this.isShift && this.selectedRows.length > 0) {
-      const from = this.proposalProductList.filter( p => p.id === this.selectedRows[0])[0].index;
-      const to = product.index;
-      this.selectedRows = this.proposalProductList.slice(Math.min(from, to), Math.max(from, to) + 1).map(p => p.id);
-    } else {
-      this.selectedRows = [product.id];
-    }
-    window.localStorage.setItem('selectedRows', JSON.stringify(this.selectedRows) );
-  }
+  // onChildRowSelect(product, event) {
+  //   event.stopPropagation();
+  //   if (this.isCtrl) {
+  //     const index = this.selectedRows.indexOf(product.id);
+  //     if (index !== -1) {
+  //       this.selectedRows.splice(index, 1);
+  //     } else {
+  //       this.selectedRows.push(product.id);
+  //     }
+  //   } else if (this.isShift && this.selectedRows.length > 0) {
+  //     const from = this.proposalProductList.filter( p => p.id === this.selectedRows[0])[0].index;
+  //     const to = product.index;
+  //     this.selectedRows = this.proposalProductList.slice(Math.min(from, to), Math.max(from, to) + 1).map(p => p.id);
+  //   } else {
+  //     this.selectedRows = [product.id];
+  //   }
+  //   window.localStorage.setItem('selectedRows', JSON.stringify(this.selectedRows) );
+  // }
   // Avoid opening delete product modal while deleting input value
   onBlur(product) {
     this.isFocus = false;
@@ -618,8 +635,8 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
 
   getBrandNameFromId(id) {
-      const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
-      return selectedBrand.name;
+    const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
+    return selectedBrand.name;
   }
 
   getProductTypeFromId(id) {
