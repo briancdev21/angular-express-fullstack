@@ -82,5 +82,8 @@ export class ProposalsService {
     const url = `${environment.apiUrl}/sales/proposals/${id}/products/${productId}`;
     return this.http.delete(url);
   }
-
+  generateProposalPdf (proposalId): Observable<any>  {
+    const url = `${environment.apiUrl}/sales/proposals/${proposalId}/export`;
+    return this.http.get(url);
+  }
 }
