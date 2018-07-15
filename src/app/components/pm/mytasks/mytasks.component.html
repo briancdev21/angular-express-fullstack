@@ -3,7 +3,8 @@
     <div class="panel-row" [dragula]="'dragPanel'" [dragulaModel]='panels'>
       <div *ngFor="let panel of panels; let i = index;"  class="draggable-column">
         <div class="panel-title" [ngStyle]="{'background': panel.color}" style="opacity: .7;">
-          <span>{{panel.title | uppercase }}</span>
+            <div *ngIf="!panel.editTitle" (click)="panel.editTitle = true; $event.stopPropagation();">{{panel.title | uppercase }}</div>
+            <input *ngIf="panel.editTitle" placeholder="Enter title here..." [(ngModel)]="panel.title" (keydown)="updatePanelTitle(i, $event)" >
         </div>
         <div id={{i}} class="panel-content" [dragula]="'dragTask'" [dragulaModel]='panel.taskIds'>
           <div *ngFor="let task of panel.tasks; let j = index;" class="draggable-task" id={{j}}>
