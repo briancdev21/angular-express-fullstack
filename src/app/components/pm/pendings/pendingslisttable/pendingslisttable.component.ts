@@ -29,6 +29,7 @@ export class PendingsListTableComponent implements OnInit {
     this.sharedService.getContacts().subscribe(data => {
       console.log('contactslist: ', data);
       this.contactsList = data;
+      this.addContactName(this.contactsList);
       this.projectsService.getProjectsList().subscribe(res => {
         this.pendingsListInfo = res.results;
         this.pendingsListInfo.forEach(element => {
@@ -108,7 +109,18 @@ export class PendingsListTableComponent implements OnInit {
 
   getContactName(id) {
     const selectedContact = this.contactsList.filter(c => c.id === id)[0];
-    return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    return selectedContact.name;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
 }
