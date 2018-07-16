@@ -60,7 +60,8 @@ export class PmFinancialsComponent implements OnInit {
           this.projectsService.getProjectCostSummary(this.currentProjectId).subscribe( response => {
             this.summaryInfo = response.results;
             this.projectInfo.purchaseOrderTotal = this.summaryInfo[0].amount;
-            console.log('cost summary: ', response);
+            this.additionalCosts = this.summaryInfo.slice(3);
+            console.log('cost summary: ', response, this.additionalCosts);
           });
 
           this.projectsService.getProjectBudget(this.currentProjectId).subscribe( response => {
@@ -105,18 +106,18 @@ export class PmFinancialsComponent implements OnInit {
 
   addCost(costTitle, costType, costAmount) {
     if (costTitle && costType && costAmount) {
-      if (costType === 'PERCENT') {
-        costAmount = this.projectInfo.totalBudget * costAmount / 100;
-        this.additionalCosts.push({
-          'title': costTitle,
-          'value': costAmount
-        });
-      } else {
-        this.additionalCosts.push({
-          'title': costTitle,
-          'value': costAmount
-        });
-      }
+      // if (costType === 'PERCENT') {
+      //   costAmount = this.projectInfo.budget * costAmount / 100;
+      //   this.additionalCosts.push({
+      //     'name': costTitle,
+      //     'amount': costAmount
+      //   });
+      // } else {
+      //   this.additionalCosts.push({
+      //     'name': costTitle,
+      //     'amount': costAmount
+      //   });
+      // }
 
       const savingCostData = {
         'name': costTitle,
@@ -126,18 +127,30 @@ export class PmFinancialsComponent implements OnInit {
 
       this.projectsService.createProjectCostSummary(this.currentProjectId, savingCostData).subscribe(res => {
         console.log('new cost summary: ', res);
+        this.additionalCosts.push({
+          'name': res.data.name,
+          'amount': res.data.amount,
+          'id': res.data.id
+        });
+
+
+        // calc cost total
+        const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
+          return prev + cur.amount;
+        }, 0);
+        console.log('cost total : ', costListTotal);
+        this.costTotal = costListTotal + this.projectInfo.purchaseOrderTotal +
+                        this.projectInfo.inventoryCost + this.projectInfo.labourCost;
+        // calc unused budget
+        this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
+          return prev + cur.amount;
+        }, 0);
+
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
+          this.projectInfo = data.data;
+        });
       });
 
-      // calc cost total
-      const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
-        return prev + cur.value;
-      }, 0);
-      this.costTotal = costListTotal + this.projectInfo.purchaseOrderTotal +
-                      this.projectInfo.inventoryCost + this.projectInfo.labourCost;
-      // calc unused budget
-      this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
-        return prev + cur.value;
-      }, 0);
       // refresh input
       this.costAmount = undefined;
       this.costTitle = '';
@@ -147,16 +160,20 @@ export class PmFinancialsComponent implements OnInit {
   removeAddtional(index) {
     this.projectsService.deleteIndividualProjectCostSummary(this.currentProjectId, this.additionalCosts[index].id).subscribe(res => {
       console.log('budgetdeleted : ', res);
+      this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
+        this.projectInfo = data.data;
+      });
     });
     this.additionalCosts.splice(index, 1);
     const costListTotal = this.additionalCosts.reduce(function(prev, cur) {
-      return prev + cur.value;
+      return prev + cur.amount;
     }, 0);
+    console.log('cost total : ', this.additionalCosts, costListTotal);
     this.costTotal = costListTotal + this.projectInfo.purchaseOrderTotal +
                     this.projectInfo.inventoryCost + this.projectInfo.labourCost;
     // calc unused budget
     this.unusedBudget = this.costTotal - this.budgetList.reduce(function(prev, cur) {
-      return prev + cur.value;
+      return prev + cur.amount;
     }, 0);
   }
 

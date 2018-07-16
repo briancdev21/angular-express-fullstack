@@ -109,6 +109,7 @@ export class AddChangeLogDetailsComponent implements OnInit {
         this.requestedBy = this.projectInfo.projectManager;
         this.createdAt = moment(this.projectInfo.createdAt).format('MMMM DD, YYYY');
         this.updatedAt = moment(this.projectInfo.updatedAt).format('MMMM DD, YYYY');
+        this.logId = this.createdChangeLog.id;
       });
     });
 
