@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProposalService } from '../proposal.service';
 import { ProductsService } from '../../../../services/inventory/products.service';
 import { SharedService } from '../../../../services/shared.service';
+import { ProposalsService } from '../../../../services/proposals.service';
 
 @Component({
   selector: 'app-productdetails',
@@ -67,9 +68,12 @@ export class ProductDetailsComponent implements OnInit {
       'unit': 'HOURS'
     }
   };
+  proposalId: any;
 
-  constructor( private proposalService: ProposalService, private productsService: ProductsService, private sharedService: SharedService ) {
+  constructor( private proposalService: ProposalService, private productsService: ProductsService, private sharedService: SharedService,
+    private route: ActivatedRoute, private proposalsService: ProposalsService ) {
     this.selectedData = this.productsInfoAll || [];
+    this.proposalId = this.route.snapshot.paramMap.get('id');
     this.searchableList = ['name', 'model'];
     this.onSelect('all');
     this.productsService.getProductCatalog().subscribe(res => {
@@ -141,15 +145,24 @@ export class ProductDetailsComponent implements OnInit {
   sendProducts() {
     const sendData = [];
     for (let i = 0; i <= this.selectedRows.length - 1; i += 1) {
-      sendData.push(this.productsInfoAll.filter(p => p.sku === this.selectedRows[i]));
+      sendData.push(this.productsInfoAll.filter(p => p.sku === this.selectedRows[i])[0]);
     }
     if (sendData.length === 1) {
       this.sendIndividualProduct(sendData[0][0]);
     } else {
       // set option field as undefined for resolving conflice when expand table
-      sendData.map( s => s[0].option = undefined );
-      this.proposalService.insertToTable(sendData);
+      // sendData.map( s => s[0].option = undefined );
+      // this.proposalService.insertToTable(sendData);
     }
+    sendData.forEach(ele => {
+      ele.categoryId = 1;
+      ele.subcategoryId = 1;
+      ele.quantity = parseInt(ele.quantity, 10);
+      this.proposalsService.createProposalProduct(this.proposalId, ele).subscribe(res => {
+        console.log('inserted: ', res);
+      });
+    });
+    console.log('inserted products: ', sendData);
   }
 
   sendIndividualProduct(product) {
@@ -274,6 +287,11 @@ export class ProductDetailsComponent implements OnInit {
     this.alterQueryString = '';
     this.addAttachmentModalCollapsed = true;
     this.sidebarCollapsed = true;
+    console.log('inserted proudcts: ', this.selectedProduct);
+    this.selectedProduct.quantity = parseInt(this.selectedProduct.quantity, 10);
+    this.proposalsService.createProposalProduct(this.proposalId, this.selectedProduct).subscribe(res => {
+      console.log('inserted product : ', res);
+    });
     this.proposalService.insertToTable([[this.selectedProduct]]);
   }
 
