@@ -15,45 +15,54 @@
       <th>SUBCATEGORY</th>
     </tr>
     <tbody
-      *ngFor="let parentProduct of parents; let parentI = index; "
+      *ngFor="let parentProduct of proposalProductOrdered; let parentI = index; "
       [ngStyle]="{'background-color': selectedRows.includes(parentProduct.id) ? '#dcdbdb':'white'}"
       (click)="onParentRowSelect(parentProduct)"
     >
-      <tr >
+      <tr *ngIf="parentProduct.expand">
         <td>
-          <img src="assets/images/right-arrow.png" *ngIf="!parentProduct.expanded" (click)="checkExpand(parentProduct)">
-          <img src="assets/images/arrow-down.png" *ngIf="parentProduct.expanded" (click)="checkExpand(parentProduct)">
+          <img src="assets/images/right-arrow.png" *ngIf="!parentProduct.expanded && parentProduct.type == 'PRODUCT'" (click)="checkExpand(parentProduct)">
+          <img src="assets/images/arrow-down.png" *ngIf="parentProduct.expanded && parentProduct.type == 'PRODUCT'" (click)="checkExpand(parentProduct)">
+          <img [src]=getIconImgResource(parentProduct) *ngIf="parentProduct.type !== 'PRODUCT'" (click)="updateOptional(parentProduct)">
           {{parentProduct.sku}}
         </td>
         <td>{{parentProduct.brand}}</td> 
         <td>{{parentProduct.model}}</td>
-        <td>{{parentProduct.productName}}</td>
+        <td>{{parentProduct.name}}</td>
         <td>{{parentProduct.productType}}</td> 
-        <td><input [(ngModel)]="parentProduct.qty" (input)="getParentTotalPrice(parentProduct)" (blur)="onBlur()" (focus)="onFocus()"></td>
         <td>
-          $ <input [(ngModel)]="parentProduct.unitPrice" *ngIf="unitPriceEditable" (blur)="unitPriceEditable = false; onBlur();" (input)="getParentTotalPrice(parentProduct)"  (focus)="onFocus()">
+          <input 
+            [(ngModel)]="parentProduct.quantity" 
+            (input)="getParentTotalPrice(parentProduct)" 
+            (blur)="onBlur(parentProduct)" 
+            (focus)="onFocus()" 
+            (keyup.enter)="updateProposalProduct(parentProduct)" 
+            type="number">
+          </td>
+        <td>
+          $ <input [(ngModel)]="parentProduct.unitPrice" *ngIf="unitPriceEditable" (blur)="unitPriceEditable = false; onBlur(parentProduct);" (input)="getParentTotalPrice(parentProduct)"  (focus)="onFocus()">
           <span *ngIf="!unitPriceEditable" (click)="unitPriceEditable = true;">{{parentProduct.unitPrice | number: '1.2-2'}}</span>
         </td>
-        <td><input [(ngModel)]="parentProduct.discount" (blur)="onBlur()" (focus)="onFocus()"></td> 
-        <td>$ {{parentProduct.proposalTotal | number:'2.2-2'}}</td>
+        <td><input [(ngModel)]="parentProduct.discount.value" (blur)="onBlur(parentProduct)" (focus)="onFocus()"></td> 
+        <td>$ {{parentProduct.total | number:'2.2-2'}}</td>
         <td>
-          <select [(ngModel)]="parentProduct.taxRate">
-            <option value="GST" selected>GST</option>
-            <option value="PST">PST</option>
+          <select [(ngModel)]="parentProduct.taxRateId" (ngModelChange)="updateProposalProduct(parentProduct)">
+            <option *ngFor = "let tax of taxRatesList" [value]="tax.id">{{tax.name}}</option>
           </select>
         </td>
         <td>
-          <select [(ngModel)]="parentProduct.category">
-            <option *ngFor="let category of proposalCategoryList" [ngValue]="category" >{{category}}</option>
+          <select [(ngModel)]="parentProduct.categoryId" (ngModelChange)="updateProposalProduct(parentProduct)">
+            <option *ngFor="let category of proposalCategoryList" [value]="category.id" >{{category.name}}</option>
           </select>
         </td>
         <td>
-          <select [(ngModel)]="parentProduct.subcategory">
-            <option *ngFor="let subcategory of proposalSubCategoryList" [ngValue]="subcategory" >{{subcategory}}</option>
+          <select [(ngModel)]="parentProduct.subcategoryId" (ngModelChange)="updateProposalProduct(parentProduct)">
+            <option *ngFor="let subcategory of proposalSubCategoryList" [value]="subcategory.id" >{{subcategory.name}}</option>
           </select>
         </td>
       </tr>
-      <ng-container *ngIf = "parentProduct.expanded">
+      <!-- Disabled for now because current back end does not support multi category products expanding function (2018/07/13) -->
+      <!-- <ng-container *ngIf = "parentProduct.expanded">
         <tr
           [ngClass]="{'selected-row': selectedRows.includes(childProduct.id), 'unselected-child-row': !selectedRows.includes(childProduct.id), 'no-image-row': !getIconImgResource(childProduct)}"
           *ngFor="let childProduct of childNodesForParents[parentI]; let i = index;"
@@ -88,7 +97,7 @@
             </select>
           </td>
         </tr>
-      </ng-container>
+      </ng-container> -->
   </tbody>
   </table>
 </div>

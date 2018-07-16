@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProposalService } from '../proposal.service';
+import { ProposalsService } from '../../../../services/proposals.service';
 
 @Component({
   selector: 'app-massedit',
@@ -37,8 +38,10 @@ export class MassEditComponent implements OnInit {
   changeCategorySelect= '';
   changeSubCategorySelect = '';
   expanded = false;
+  proposalId: any;
 
-  constructor( private proposalService: ProposalService ) {
+  constructor( private proposalService: ProposalService, private route: ActivatedRoute, private proposalsService: ProposalsService ) {
+    this.proposalId = this.route.snapshot.paramMap.get('id');
   }
 
 
@@ -46,6 +49,12 @@ export class MassEditComponent implements OnInit {
     this.onPriceSelectionChange('amountPrice');
     this.onPriceIncreaseSelect('increase');
 
+  }
+
+  generatePdf() {
+    this.proposalsService.generateProposalPdf(this.proposalId).subscribe(res => {
+      console.log('pdf generated: ', res);
+    });
   }
 
   onPriceSelectionChange(value) {
