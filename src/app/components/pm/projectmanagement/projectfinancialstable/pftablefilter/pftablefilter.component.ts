@@ -16,7 +16,7 @@ import { FilterService } from '../filter.service';
 
 export class PfTableFilterComponent implements OnInit {
 
-  @Input() reservedInventoryList;
+  @Input() invoicesList;
   @Input() purchaseOrdersList;
   @Input() productNameList;
   @Input() supplierList;
@@ -49,8 +49,8 @@ export class PfTableFilterComponent implements OnInit {
   ngOnInit() {
     this.filteredOrdersList = this.purchaseOrdersList;
     this.backUpOrdersList = this.purchaseOrdersList;
-    this.filteredInventoryList = this.reservedInventoryList;
-    this.backUpInventoryList = this.reservedInventoryList;
+    this.filteredInventoryList = this.invoicesList;
+    this.backUpInventoryList = this.invoicesList;
   }
 
   onInputChangedEvent(val: string) {
@@ -101,7 +101,7 @@ export class PfTableFilterComponent implements OnInit {
     this.selectProductName = this.selectBrand = this.selectStatus = this.selectSupplier = '';
     this.tagsList = [];
     this.purchaseOrdersList = this.backUpOrdersList;
-    this.reservedInventoryList = this.backUpInventoryList;
+    this.invoicesList = this.backUpInventoryList;
     this.ref.detectChanges();
   }
 
