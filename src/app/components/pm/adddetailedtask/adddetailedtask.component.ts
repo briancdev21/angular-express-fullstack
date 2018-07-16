@@ -86,7 +86,6 @@ export class AddDetailedTaskComponent implements OnInit {
             const taskId = group.taskIds[i];
             this.pmTasksService.getIndividualTask(group.id, taskId).subscribe(taskRes => {
               this.dependencyData.push({title: taskRes.data.title, id: taskId});
-              console.log('dependency data:', this.dependencyData);
             });
           }
         });

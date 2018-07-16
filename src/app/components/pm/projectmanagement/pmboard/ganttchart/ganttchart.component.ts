@@ -188,7 +188,8 @@ export class GanttChartComponent implements OnInit {
     const m = this.monthNames.indexOf(month) + 1; // get months index
     const monthCount = new Date(year, m, 0).getDate(); // get day counts for each months
     const weekDay = new Date(year, m, 0);
-    const daysArr = Array.from(new Array(monthCount), (val, index) => index + 1); // create array filed with sequential numbers
+    let daysArr = Array.from(new Array(monthCount), (val, index) => index + 1); // create array filed with sequential numbers
+    if (daysArr === undefined) { daysArr = []; }
     return daysArr;
   }
 

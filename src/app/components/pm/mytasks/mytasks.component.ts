@@ -125,6 +125,7 @@ export class MyTasksComponent implements OnInit {
       this.panels = data.results;
       for (let i = 0; i < this.panels.length; i++) {
         this.panels[i].color = this.colors[i];
+        this.panels[i].editTitle = false;
         this.ownerModalCollapsed[i] = new Array();
         this.dependencyModalCollapsed[i] = new Array();
 
@@ -132,7 +133,6 @@ export class MyTasksComponent implements OnInit {
           for (let j = 0; j < this.panels[i].taskIds.length; j++) {
             this.pmTasksService.getTasks(this.panels[i].id).subscribe(taskData => {
               this.panels[i].tasks = taskData.results;
-
               this.ownerModalCollapsed[i][j] = false;
               this.dependencyModalCollapsed[i][j] = false;
               this.panels[i].tasks.forEach(element => {
@@ -392,5 +392,17 @@ export class MyTasksComponent implements OnInit {
       foreTaskCount = 0;
     }
     return foreTaskCount + this.panels[panel].tasks[task].id;
+  }
+  updatePanelTitle(index, event) {
+    if (event.key === 'Enter') {
+      this.panels[index].editTitle = false;
+      const body =  {
+        owner: this.panels[index].owner,
+        title: this.panels[index].title
+      };
+      this.pmTasksService.updateIndividualTaskGroup(this.panels[index].id, body).subscribe(res => {
+        this.refreshTable();
+      });
+    }
   }
 }

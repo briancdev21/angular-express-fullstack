@@ -1,4 +1,4 @@
-<div class="top-project-info-section">
+<div class="top-project-info-section" *ngIf="projectInfo">
   <app-pmboardtopinfo></app-pmboardtopinfo>
   <div class="horizontal-bar">
     <app-horizontalbar [barInfo]="barInfo"></app-horizontalbar>
@@ -20,6 +20,6 @@
     </div>
   </div>
   <div class="content-right">
-    <app-boardpanelright [projectInfo]="projectInfo" [pmBoardTableData]="pmBoardTableData"></app-boardpanelright>
+    <!-- <app-boardpanelright [projectInfo]="projectInfo" [pmBoardTableData]="pmBoardTableData"></app-boardpanelright> -->
   </div>
 </div>
