@@ -1,8 +1,8 @@
 <span class="title">PROJECT FINANCES</span>
-<div class="budget-section">
+<div class="budget-section" *ngIf="projectInfo">
   <div class="card">
     <span class="card-title">PROJECT BUDGET</span>
-    <span class="card-value">$ {{projectInfo.projectBudget | number: '1.2-2'}}</span>
+    <span class="card-value">$ {{projectInfo.budget | number: '1.2-2'}}</span>
   </div>
   <div class="card">
     <span class="card-title">BUDGET USED</span>
@@ -10,7 +10,7 @@
   </div>
   <div class="card">
     <span class="card-title">BUDGET VS USED</span>
-    <span class="card-value green">{{100 * projectInfo.budgetUsed / projectInfo.projectBudget | number: '1.1-1'}} %</span>
+    <span class="card-value green">{{projectInfo.budgetUsedRatio | number: '1.1-1'}} %</span>
   </div>
   <div class="card">
     <span class="card-title">REVENUE</span>
@@ -18,7 +18,7 @@
   </div>
   <div class="card">
     <span class="card-title">LABOR</span>
-    <span class="card-value">$ {{projectInfo.labor | number: '1.2-2'}}</span>
+    <span class="card-value">$ {{projectInfo.labourCost | number: '1.2-2'}}</span>
   </div>
 </div>
 <div class="finances-table">

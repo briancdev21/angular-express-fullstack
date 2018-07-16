@@ -154,7 +154,7 @@ export class PmBoardComponent implements OnInit {
         this.contactsList = data;
         this.addContactName(this.contactsList);
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
-          console.log('Individual project: ', res.results);
+          console.log('Individual project: ', res);
           this.projectInfo = res.data;
           this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
           this.barInfo = {
