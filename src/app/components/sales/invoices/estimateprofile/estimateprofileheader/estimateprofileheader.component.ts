@@ -24,6 +24,9 @@ export class EstimateProfileHeaderComponent implements OnInit {
   }
 
   clickConvertButton() {
-    this.filterService.convertClicked.next(true);
+    console.log('convert started:');
+    this.estimatesService.convertEstimateToInvoice(this.invoiceId).subscribe(res => {
+      console.log('converted:');
+    });
   }
 }

@@ -75,4 +75,8 @@ export class EstimatesService {
     const url = `${apiUrl}sales/estimates/${estimateId}/email`;
     return this.http.get<any>(url);
   }
+  convertEstimateToInvoice(id): Observable<any>  {
+    const url = `${apiUrl}sales/estimates/${id}/invoice-convert`;
+    return this.http.get(url);
+  }
 }
