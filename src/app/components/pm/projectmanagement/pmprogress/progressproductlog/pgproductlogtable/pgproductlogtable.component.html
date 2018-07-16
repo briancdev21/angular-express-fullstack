@@ -27,7 +27,7 @@
     <span>RESERVED INVENTORY</span>
     <div class="save-btn">Add product</div>
   </div>
-  <table class="reserved-inventory-table">
+  <table class="reserved-inventory-table" *ngIf="brandsList">
     <tr>
       <th></th>
       <th (click)="sortArray('name', reservedInventoryList)">PRODUCT NAME</th>
