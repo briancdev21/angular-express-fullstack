@@ -72,16 +72,18 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
       this.sharedService.getBrands().subscribe(brand => {
         this.brandsList = brand.results;
+
         this.sharedService.getProductTypes().subscribe(pType => {
           this.productTypesList = pType.results;
+
           this.sharedService.getCategories().subscribe(res => {
             this.proposalCategoryList = res.results;
-
-            this.getProposalProductData();
 
             this.sharedService.getSubCategories().subscribe(data => {
               const subCategory = data.results;
               this.proposalSubCategoryList = data.results;
+
+              this.getProposalProductData();
             });
           });
         });
@@ -99,6 +101,8 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         ele.brand = this.getBrandNameFromId(ele.brandId);
         ele.productType = this.getProductTypeFromId(ele.productTypeId);
         ele.taxRate = this.getTaxRateNameFromId(ele.taxRateId);
+        ele.categoryId = ele.categoryId ? ele.categoryId : 0;
+        ele.subcategoryId = ele.subcategoryId ? ele.subcategoryId : 0;
       });
       this.parents = this.originProposalProductList.filter(p => p.type === 'PRODUCT');
       this.parents.forEach(ele => {
@@ -128,27 +132,29 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   updateProposalProduct(product) {
     console.log('parent Product: ', product);
-    const updatingData = {
-      'categoryId': parseInt(product.categoryId, 10),
-      'subcategoryId': parseInt(product.subCategoryId, 10),
-      'pricingCategoryId': parseInt(product.pricingCategoryId, 10),
-      'priceAdjustment': {
-        'value': product.priceAdjustment.value,
-        'unit': product.priceAdjustment.unit
-      },
-      'discount': {
-        'value': product.discount.value,
-        'unit': 'AMOUNT'
-      },
-      'quantity': product.quantity,
-      'useProductInProject': product.useProductInProject
-    };
-    this.proposalsService.updateIndividualProposalProduct(this.proposalId, product.id, updatingData).subscribe(res => {
-      console.log('updated: ', res);
-      if (res) {
-        this.getProposalProductData();
-      }
-    });
+    if (product.categoryId && product.subcategoryId && product.quantity && (product.discount.value !== null)) {
+      const updatingData = {
+        'categoryId': parseInt(product.categoryId, 10),
+        'subcategoryId': parseInt(product.subcategoryId, 10),
+        'pricingCategoryId': parseInt(product.pricingCategoryId, 10),
+        'priceAdjustment': {
+          'value': product.priceAdjustment.value,
+          'unit': product.priceAdjustment.unit
+        },
+        'discount': {
+          'value': product.discount.value,
+          'unit': 'AMOUNT'
+        },
+        'quantity': product.quantity,
+        'useProductInProject': product.useProductInProject
+      };
+      this.proposalsService.updateIndividualProposalProduct(this.proposalId, product.id, updatingData).subscribe(res => {
+        console.log('updated: ', res);
+        if (res) {
+          this.getProposalProductData();
+        }
+      });
+    }
   }
 
   ngOnDestroy() {
@@ -405,6 +411,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   checkExpand(parentProduct) {
     parentProduct.expanded = !parentProduct.expanded;
+    console.log('saving : ', parentProduct);
     const childs = parentProduct.alternatives.concat(parentProduct.accessories);
     childs.forEach(element => {
       this.proposalProductOrdered.forEach(ele => {

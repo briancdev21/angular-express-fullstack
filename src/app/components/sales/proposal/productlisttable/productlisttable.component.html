@@ -41,7 +41,8 @@
           </td>
         <td>
           $ <input [(ngModel)]="parentProduct.unitPrice" *ngIf="unitPriceEditable" (blur)="unitPriceEditable = false; onBlur(parentProduct);" (input)="getParentTotalPrice(parentProduct)"  (focus)="onFocus()">
-          <span *ngIf="!unitPriceEditable" (click)="unitPriceEditable = true;">{{parentProduct.unitPrice | number: '1.2-2'}}</span>
+          <!-- <span *ngIf="!unitPriceEditable" (click)="unitPriceEditable = true;">{{parentProduct.unitPrice | number: '1.2-2'}}</span> -->
+          <span *ngIf="!unitPriceEditable">{{parentProduct.unitPrice | number: '1.2-2'}}</span>
         </td>
         <td><input [(ngModel)]="parentProduct.discount.value" (blur)="onBlur(parentProduct)" (focus)="onFocus()"></td> 
         <td>$ {{parentProduct.total | number:'2.2-2'}}</td>
@@ -52,11 +53,13 @@
         </td>
         <td>
           <select [(ngModel)]="parentProduct.categoryId" (ngModelChange)="updateProposalProduct(parentProduct)">
+            <option value="0">Select Category</option>
             <option *ngFor="let category of proposalCategoryList" [value]="category.id" >{{category.name}}</option>
           </select>
         </td>
         <td>
           <select [(ngModel)]="parentProduct.subcategoryId" (ngModelChange)="updateProposalProduct(parentProduct)">
+            <option value="0">Select Sub Category</option>
             <option *ngFor="let subcategory of proposalSubCategoryList" [value]="subcategory.id" >{{subcategory.name}}</option>
           </select>
         </td>
