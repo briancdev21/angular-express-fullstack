@@ -39,6 +39,7 @@ export class PmTasksTableComponent implements OnInit {
   selectedItem: any;
   isAutocompleteUpdated = false;
   tasksTemp = [];
+  dependencyList = [];
 
   config2: any = {'placeholder': 'Type here', 'sourceField': ''};
   colors = ['#F0D7BD', '#DFE5B0', '#F0C9C9', '#CBE0ED', '#E0BBCC', '#C4BBE0', '#BBC0E0', '#BBE0CC', '#E0BBBB', '#E8E3A7'];
@@ -104,12 +105,12 @@ export class PmTasksTableComponent implements OnInit {
       for (let j = 0; j < this.milestones[i].tasks.length; j++) {
         this.ownerModalCollapsed[i][j] = false;
         this.dependencyModalCollapsed[i][j] = false;
-        const date = new Date (this.milestones[i].tasks[j].start);
-        this.milestones[i].tasks[j].start = moment(this.milestones[i].tasks[j].start).format('MMMM DD, YYYY');
+        const date = new Date (this.milestones[i].tasks[j].startDate);
+        this.milestones[i].tasks[j].startDate = moment(this.milestones[i].tasks[j].startDate).format('MMMM DD, YYYY');
       }
     }
     this.selectedOwner = 0;
-    this.allTasks = _.range(1, this.tasksTotalCount + 1).map(t => t.toString());
+    // this.allTasks = _.range(1, this.tasksTotalCount + 1).map(t => t.toString());
   }
 
   getTaskId (milestone, task) {
@@ -117,9 +118,10 @@ export class PmTasksTableComponent implements OnInit {
     if (milestone !== 0 ) {
       for (let i = 0; i <= milestone - 1; i++) {
         if (i !== 0 ) {
-          foreTaskCount = foreTaskCount + this.milestones[i].tasks.length;
+          this.milestones[i].tasks = this.milestones[i].tasks === undefined ? [] : this.milestones[i].tasks;
+          foreTaskCount = foreTaskCount +  this.milestones[i].tasks.length;
         } else {
-          foreTaskCount = this.milestones[0].tasks.length;
+          foreTaskCount = this.milestones[0].tasks === undefined ? 0 : this.milestones[0].tasks.length;
         }
       }
     } else {
@@ -128,11 +130,12 @@ export class PmTasksTableComponent implements OnInit {
     return foreTaskCount + this.milestones[milestone].tasks[task].id;
   }
 
-  selectStartDate(event, i, j) {
+  selectStartDate(event, milestoneId, taskId, task) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const dDate = new Intl.DateTimeFormat('en-US', options).format(event.value);
     // Add dDate field to panel info and update it with formatted date.
-    this.milestones[i].tasks[j].start = dDate;
+    task.startDate = dDate;
+    this.updateTask(milestoneId, taskId, task);
   }
 
   private onDropModel(args) {
@@ -215,6 +218,7 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   refreshTable() {
+    console.log('refresh table:');
     this.pmTasksService.getTaskGroupsWithParams({projectId: this.currentProjectId}).subscribe(data => {
       this.milestones = data.results;
       for (let i = 0; i < this.milestones.length; i++) {
@@ -227,7 +231,7 @@ export class PmTasksTableComponent implements OnInit {
           for (let j = 0; j < this.milestones[i].taskIds.length; j++) {
             this.pmTasksService.getTasks(this.milestones[i].id).subscribe(taskData => {
               this.milestones[i].tasks = taskData.results;
-
+              this.dependencyList.concat(taskData.results);
               this.ownerModalCollapsed[i][j] = false;
               this.dependencyModalCollapsed[i][j] = false;
               this.milestones[i].tasks.forEach(element => {
@@ -239,6 +243,9 @@ export class PmTasksTableComponent implements OnInit {
               this.addTasksFromPmBoardData(this.milestones[i], i);
             });
           }
+        } else {
+          this.milestones[i].taskIds = [];
+          this.addTasksFromPmBoardData(this.milestones[i], i);
         }
       }
     });
@@ -248,8 +255,14 @@ export class PmTasksTableComponent implements OnInit {
     this.tasksTemp[i] = tableDataAtIndex;
       if (this.tasksTemp.length === this.milestones.length) {
         console.log('test: milestones length:', this.tasksTemp);
-        this.updatedGanttData.emit({'data': this.tasksTemp});
+        this.allTasks = this.dependencyList.map(dependency => dependency.id);
+        console.log('all tasks:', this.allTasks);
+        this.updatedGanttData.emit({'data': this.sortById(this.tasksTemp)});
       }
+  }
+
+  sortById(arr) {
+    return arr.sort((a, b) => a.id - b.id);
   }
 
   clickOutside() {
@@ -260,8 +273,9 @@ export class PmTasksTableComponent implements OnInit {
     this.ownerModalCollapsed[i][j] = false;
   }
 
-  onOwnerSelect(event, milestone, task ) {
-    this.milestones[milestone].tasks[task].profile = this.taskOwners[this.selectedOwner - 1];
+  onOwnerSelect(milestoneId, taskId, task ) {
+    task.assignee = this.selectedOwner;
+    this.updateTask(milestoneId, taskId, task);
   }
 
   openOwnerModal(i, j) {
@@ -422,5 +436,26 @@ export class PmTasksTableComponent implements OnInit {
         this.refreshTable();
       });
     }
+  }
+
+  taskTitleChanged(milestoneId, taskId, taskData) {
+    taskData.title = taskData.taskTitle;
+    this.updateTask(milestoneId, taskId, taskData);
+  }
+
+  taskDurationChanged(milestoneId, taskId, taskData) {
+    this.updateTask(milestoneId, taskId, taskData);
+  }
+  updateTask(milestoneId, taskId, taskData) {
+    taskData.startDate = moment(taskData.startDate).format('YYYY-MM-DD');
+    taskData.dependencyIds = taskData.dependency ? taskData.dependency : [];
+    taskData.followers = taskData.followers ? taskData.followers : [];
+    taskData.keywordIds = taskData.keywordIds ? taskData.keywordIds : [];
+    taskData.note = taskData.note ? taskData.note : '';
+
+    this.pmTasksService.updateIndividualTask(milestoneId, taskId, taskData).subscribe(res => {
+      console.log('task updated:');
+      this.refreshTable();
+    });
   }
 }

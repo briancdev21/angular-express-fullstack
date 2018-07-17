@@ -42,6 +42,7 @@
   padding: 20px;
   display: flex;
   overflow: auto;
+  margin-bottom: 40px;
 }
 
 .milestone-row {
