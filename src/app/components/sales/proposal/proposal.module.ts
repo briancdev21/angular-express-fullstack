@@ -29,6 +29,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { AddProposalTaskComponent } from './addproposaltask/addproposaltask.component';
 import { SearchProjectComponent } from './searchproject/searchproject.component';
 import { InvoicesCmpModule } from '../invoices/invoices.module';
+import { CommonCmpModule } from '../../common/common.module';
 import { MultiSubCategoriesSelectComponent } from '../addproposal/multisubcategoriesselect/multisubcategoriesselect.component';
 import { MultiCategoriesSelectComponent } from '../addproposal/multicategoriesselect/multicategoriesselect.component';
 
@@ -61,6 +62,7 @@ import { MultiCategoriesSelectComponent } from '../addproposal/multicategoriesse
     Ng2CompleterModule,
     ImageUploadModule.forRoot(),
     InvoicesCmpModule,
+    CommonCmpModule
   ],
   exports: [
     ProductDetailsComponent,
