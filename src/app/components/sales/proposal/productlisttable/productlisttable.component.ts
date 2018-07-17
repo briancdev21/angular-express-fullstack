@@ -8,6 +8,7 @@ import { PmTasksService } from '../../../../services/pmtasks.service';
 import { ProductsService } from '../../../../services/inventory/products.service';
 import { ProposalsService } from '../../../../services/proposals.service';
 import { SharedService } from '../../../../services/shared.service';
+import { CommonService } from '../../../common/common.service';
 
 @Component({
   selector: 'app-productlisttable',
@@ -24,7 +25,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   @Input() searchQueryString;
   @Input() proposalCategoryList;
   @Input() proposalSubCategoryList;
-  @Output() updatedDate: EventEmitter<any> = new EventEmitter;
+  @Output() updatedData: EventEmitter<any> = new EventEmitter;
 
   productTotal = 0;
   selectedRows = [];
@@ -47,9 +48,11 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   productTypesList: any;
   taxRatesList: any;
   proposalProductOrdered = [];
+  modalContent = 'You cannot change WON project';
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService,
-  private proposalsService: ProposalsService, private route: ActivatedRoute, private sharedService: SharedService) {
+  private proposalsService: ProposalsService, private route: ActivatedRoute, private sharedService: SharedService,
+    private commonService: CommonService) {
     const productId = localStorage.getItem('productId');
     this.proposalId = this.route.snapshot.paramMap.get('id');
     // if (productId) {
@@ -64,7 +67,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     // }
 
     this.productsService.getProductsList().subscribe(res => {
-      console.log('product list', res.results);
     });
 
     this.sharedService.getTaxRates().subscribe(tax => {
@@ -131,30 +133,38 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
 
   updateProposalProduct(product) {
-    console.log('parent Product: ', product);
-    if (product.categoryId && product.subcategoryId && product.quantity && (product.discount.value !== null)) {
-      const updatingData = {
-        'categoryId': parseInt(product.categoryId, 10),
-        'subcategoryId': parseInt(product.subcategoryId, 10),
-        'pricingCategoryId': parseInt(product.pricingCategoryId, 10),
-        'priceAdjustment': {
-          'value': product.priceAdjustment.value,
-          'unit': product.priceAdjustment.unit
-        },
-        'discount': {
-          'value': product.discount.value,
-          'unit': 'AMOUNT'
-        },
-        'quantity': product.quantity,
-        'useProductInProject': product.useProductInProject
-      };
-      this.proposalsService.updateIndividualProposalProduct(this.proposalId, product.id, updatingData).subscribe(res => {
-        console.log('updated: ', res);
-        if (res) {
-          this.getProposalProductData();
-        }
-      });
+    if ( this.proposalInfo.dealStatus === 'WON') {
+      console.log('prposal -------------: ', this.proposalInfo);
+      this.commonService.showAlertModal.next(true);
+      this.getProposalProductData();
+    } else {
+      console.log('parent Product: ', product);
+      if (product.categoryId && product.subcategoryId && product.quantity && (product.discount.value !== null)) {
+        const updatingData = {
+          'categoryId': parseInt(product.categoryId, 10),
+          'subcategoryId': parseInt(product.subcategoryId, 10),
+          'pricingCategoryId': parseInt(product.pricingCategoryId, 10),
+          'priceAdjustment': {
+            'value': product.priceAdjustment.value,
+            'unit': product.priceAdjustment.unit
+          },
+          'discount': {
+            'value': product.discount.value,
+            'unit': 'AMOUNT'
+          },
+          'quantity': product.quantity,
+          'useProductInProject': product.useProductInProject
+        };
+        this.proposalsService.updateIndividualProposalProduct(this.proposalId, product.id, updatingData).subscribe(res => {
+          console.log('updated: ', res);
+          if (res) {
+            this.getProposalProductData();
+            this.updatedData.emit(true);
+          }
+        });
+      }
     }
+
   }
 
   ngOnDestroy() {
@@ -184,7 +194,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     // Insert data from product details to table
     this.proposalService.insertedProducts.subscribe(
       data => {
-        console.log('check ', data);
         if (data.length > 0) {
           this.getProposalProductData();
         }
@@ -268,9 +277,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
     // Update table data after mass edited
     this.proposalService.massEditedData.subscribe( data => {
-      console.log('data', data);
       if (data.length) {
-        console.log('data1', data);
         this.proposalProductList = data;
       }
     });
@@ -346,7 +353,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   // Avoid opening delete product modal while deleting input value
   onBlur(product) {
     this.isFocus = false;
-    this.updateProposalProduct(product);
+    if (product) {
+      this.updateProposalProduct(product);
+    }
   }
 
   // Avoid opening delete product modal while deleting input value
@@ -381,18 +390,18 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
   // calculate certain parnent price total when editing child/parent product price/qty/discount
   getParentTotalPrice(parent) {
-    parent.proposalTotal = parent.unitPrice * parent.qty * (100 - parent.discount) / 100 + this.getChildPriceTotal(parent);
-    // send updated date
-    const updated = new Date();
-    this.updatedDate.emit({updated: moment(updated).format('MMMM DD, YYYY')});
+    // parent.proposalTotal = parent.unitPrice * parent.qty * (100 - parent.discount) / 100 + this.getChildPriceTotal(parent);
+    // // send updated date
+    // const updated = new Date();
+    // this.updatedDate.emit({updated: moment(updated).format('MMMM DD, YYYY')});
 
-    // calculate the sum of all products price
-    const cmp = this;
-    cmp.productTotal = 0;
-    this.proposalProductList.forEach(product => {
-      cmp.productTotal += product.unitPrice * product.qty * (100 - product.discount) / 100;
-    });
-    cmp.proposalInfo.proposalAmount = cmp.productTotal;
+    // // calculate the sum of all products price
+    // const cmp = this;
+    // cmp.productTotal = 0;
+    // this.proposalProductList.forEach(product => {
+    //   cmp.productTotal += product.unitPrice * product.qty * (100 - product.discount) / 100;
+    // });
+    // cmp.proposalInfo.proposalAmount = cmp.productTotal;
   }
 
   // get child price total for each parent

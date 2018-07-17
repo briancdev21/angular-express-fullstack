@@ -33,7 +33,6 @@
         <td>
           <input 
             [(ngModel)]="parentProduct.quantity" 
-            (input)="getParentTotalPrice(parentProduct)" 
             (blur)="onBlur(parentProduct)" 
             (focus)="onFocus()" 
             (keyup.enter)="updateProposalProduct(parentProduct)" 
@@ -125,4 +124,8 @@
       </button>
     </div>
   </div>
+</div>
+
+<div>
+  <app-alertmodal [(modalContent)]="modalContent"></app-alertmodal>
 </div>
