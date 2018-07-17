@@ -202,9 +202,8 @@ export class PfProductsListTableComponent implements OnInit {
 
   onSelectProductName(event) {
     this.selectProduct = event.originalObject;
-    let limitedProducts = this.allProductList.filter(p => p.name === this.selectProduct.name);
+    const limitedProducts = this.allProductList.filter(p => p.name === this.selectProduct.name);
     const existingSkuList = this.reservedInventoryList.map(i => i.sku);
-    limitedProducts = limitedProducts.filter(p => !existingSkuList.include(event.originalObject.sku));
     this.skuListCd = this.completerService.local(limitedProducts, 'sku', 'sku');
     // this.getModelNumberList();
     // this.getBrandNameList();

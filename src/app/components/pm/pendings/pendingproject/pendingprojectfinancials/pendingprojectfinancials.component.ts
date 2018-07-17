@@ -4,6 +4,7 @@ import { PendingProjectService } from '../pendingproject.service';
 import * as moment from 'moment';
 import { SharedService } from '../../../../../services/shared.service';
 import { ProjectsService } from '../../../../../services/projects.service';
+import { CommonService } from '../../../../common/common.service';
 
 @Component({
   selector: 'app-pendingprojectfinancials',
@@ -47,9 +48,11 @@ export class PendingProjectFinancialsComponent implements OnInit {
   projectInfo: any;
   contactsList: any;
   summaryInfo: any;
+  allScheduleFilled = true;
+  modalContent = 'You Should Fill in All Schedule Date First!';
 
   constructor( private pendingProjectService: PendingProjectService, private router: Router, private sharedService: SharedService,
-    private projectsService: ProjectsService) {
+    private projectsService: ProjectsService, private commonService: CommonService) {
     this.currentProjectId = localStorage.getItem('current_pending_projectId');
 
     if (this.currentProjectId !== '') {
@@ -245,7 +248,34 @@ export class PendingProjectFinancialsComponent implements OnInit {
   }
 
   startProject() {
-    this.router.navigate(['./pm/pending-projects']);
+
+    console.log('project details: ', this.projectInfo);
+    const savingData = {
+      'projectManager': this.projectInfo.projectManager,
+      'accountManager': this.projectInfo.accountManager,
+      'clientProjectManagerId': this.getContactIdFromString(this.projectInfo.clientProjectManagerId),
+      'accountReceivableId': this.getContactIdFromString(this.projectInfo.accountReceivableId),
+      'followers': this.projectInfo.followers ? this.projectInfo.followers : [],
+      'status': 'IN_PROGRESS',
+      'internalNote': this.projectInfo.internalNote ? this.projectInfo.internalNote : ''
+    };
+    this.projectsService.getProjectPaymentSchedule(this.currentProjectId).subscribe( response => {
+      const scheduleData = response.results;
+      scheduleData.forEach(element => {
+        console.log('p222s: ', element);
+        if (!element.date) {
+          this.allScheduleFilled = false;
+        }
+      });
+      if (this.allScheduleFilled) {
+        this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
+          console.log('project details: ', res);
+          this.router.navigate(['./pm/pending-projects']);
+        });
+      } else {
+        this.commonService.showAlertModal.next(true);
+      }
+    });
   }
 
   toProjectTasks() {
@@ -266,6 +296,10 @@ export class PendingProjectFinancialsComponent implements OnInit {
       }
     });
     return data;
+  }
+
+  getContactIdFromString(str) {
+    return parseInt(str.slice(-1), 10);
   }
 
 }
