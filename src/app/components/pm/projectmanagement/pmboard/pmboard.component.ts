@@ -176,7 +176,8 @@ export class PmBoardComponent implements OnInit {
   }
 
   getPmBoardTableData() {
-    this.pmTasksService.getTaskGroups().subscribe(data => {
+    this.tasksTemp = [];
+    this.pmTasksService.getTaskGroupsWithParams({projectId: this.currentProjectId}).subscribe(data => {
       this.pmBoardTableData = data.results;
       for (let i = 0; i < this.pmBoardTableData.length; i++) {
         this.pmBoardTableData[i].color = '';
@@ -204,19 +205,22 @@ export class PmBoardComponent implements OnInit {
     return selectedUser;
   }
   addTasksFromPmBoardData(tableDataAtIndex: any, i) {
-    this.tasksTemp = [];
-    console.log('tableDataAtIndex', tableDataAtIndex, i);
       const midTk = {
-        id: i,
+        id: tableDataAtIndex.id,
         title: tableDataAtIndex.title,
         start_date: this.minDate(tableDataAtIndex.tasks.map(t => t.startDate)),
         end_date: this.maxDate(tableDataAtIndex.tasks.map(t => t.dueDate)),
         progress: this.getMilestoneProgress(tableDataAtIndex.tasks)
       };
       this.tasksTemp.push(midTk);
+
       if (this.tasksTemp.length === this.pmBoardTableData.length) {
-        this.tasks = this.tasksTemp;
+        this.tasks = this.sortById(this.tasksTemp);
       }
+  }
+
+  sortById(arr) {
+    return arr.sort((a, b) => a.id - b.id);
   }
 
   getUpdatedPmData(eventData) {

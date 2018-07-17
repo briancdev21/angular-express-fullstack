@@ -102,16 +102,18 @@ export class PmScheduleComponent implements OnInit {
   getUpdatedGanttData(event) {
     const tasks = [];
     for (let i = 0; i < event.data.length; i ++) {
-      const panelTasks = event.data[i].tasks !== undefined ? event.data[i].tasks : [];
-      const midTk = {
-        id: i,
-        title: event.data[i].title,
-        start_date: moment(this.minDate(panelTasks.map(t => t.startDate))).format('YYYY-MM-DD'),
-        // tslint:disable-next-line:max-line-length
-        end_date: moment(this.maxDate(panelTasks.map(t => moment(t.startDate).add(t.duration, 'days').format('YYYY-MM-DD')))).format('YYYY-MM-DD'),
-        progress: this.getMilestoneProgress(panelTasks)
-      };
-      tasks.push(midTk);
+      if (event.data[i] !== undefined) {
+        const panelTasks = event.data[i].tasks !== undefined ? event.data[i].tasks : [];
+        const midTk = {
+          id: i,
+          title: event.data[i].title,
+          start_date: moment(this.minDate(panelTasks.map(t => t.startDate))).format('YYYY-MM-DD'),
+          // tslint:disable-next-line:max-line-length
+          end_date: moment(this.maxDate(panelTasks.map(t => moment(t.startDate).add(t.duration, 'days').format('YYYY-MM-DD')))).format('YYYY-MM-DD'),
+          progress: this.getMilestoneProgress(panelTasks)
+        };
+        tasks.push(midTk);
+      }
     }
     this.tasks = tasks;
   }

@@ -278,3 +278,7 @@ app-ng2completer {
   cursor: pointer;
   user-select: none;
 }
+
+.bottom-padding-section {
+	margin-bottom: 40px;
+}
