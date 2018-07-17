@@ -155,8 +155,6 @@ export class ProductDetailsComponent implements OnInit {
       // this.proposalService.insertToTable(sendData);
     }
     sendData.forEach(ele => {
-      ele.categoryId = 1;
-      ele.subcategoryId = 1;
       ele.quantity = parseInt(ele.quantity, 10);
       this.proposalsService.createProposalProduct(this.proposalId, ele).subscribe(res => {
         console.log('inserted: ', res);
@@ -291,8 +289,8 @@ export class ProductDetailsComponent implements OnInit {
     this.selectedProduct.quantity = parseInt(this.selectedProduct.quantity, 10);
     this.proposalsService.createProposalProduct(this.proposalId, this.selectedProduct).subscribe(res => {
       console.log('inserted product : ', res);
+      this.proposalService.insertToTable([[this.selectedProduct]]);
     });
-    this.proposalService.insertToTable([[this.selectedProduct]]);
   }
 
   updateAttachmentModal() {

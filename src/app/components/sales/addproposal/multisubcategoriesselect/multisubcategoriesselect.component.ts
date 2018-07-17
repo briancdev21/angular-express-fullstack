@@ -34,7 +34,7 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
       this.categoriesList.push(res);
       this.categoryId = res;
       if (res) {
-        this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
+        this.sharedService.getSubCategories().subscribe(data => {
           this.subCategoriesList = data.results;
           this.subCategoriesNameList = data.results.map(r => r.name);
         });
@@ -47,7 +47,7 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
         const pos = this.categoriesList.indexOf(res);
         this.categoriesList.splice(pos, -1);
         this.categoriesList.forEach(ele => {
-          this.sharedService.getSubCategories(ele).subscribe(data => {
+          this.sharedService.getSubCategories().subscribe(data => {
             this.subCategories.concat(data.results);
           });
         });
@@ -98,7 +98,7 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
       console.log('sub pos:', pos, this.subCategories);
 
     } else {
-      this.sharedService.createSubCategory(this.categoryId, {'name': data})
+      this.sharedService.createSubCategory({'name': data})
       .subscribe((res) => {
         this.subCategories.push(res.data);
         this.sendSubCategories.emit(this.subCategories);
@@ -108,9 +108,9 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
   }
 
   deleteSubCategory(id) {
-    this.sharedService.deleteIndividualSubCategory(this.categoryId, id)
+    this.sharedService.deleteIndividualSubCategory(id)
     .subscribe(res => {
-      this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
+      this.sharedService.getSubCategories().subscribe(data => {
         this.subCategories = data.results;
         console.log('subCategories list :', this.subCategories);
       });

@@ -547,8 +547,8 @@ export class ProposalComponent implements OnInit {
   getSubCategoryDetails(categoryIds) {
     let subcategories = [];
     categoryIds.forEach((categoryId, index) => {
-      this.sharedService.getSubCategories(categoryId).subscribe(data => {
-        subcategories = subcategories.concat(data.results);
+      this.sharedService.getSubCategories().subscribe(data => {
+        subcategories = data.results;
         if (index === categoryIds.length - 1) {
           this.subCategoryDetails = subcategories;
           this.getProjectDetails();
