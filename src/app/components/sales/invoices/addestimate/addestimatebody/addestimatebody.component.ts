@@ -195,6 +195,12 @@ export class AddEstimateBodyComponent implements OnInit {
         this.saveEstimate();
       }
     });
+    this.filterService.deleteClicked.next( false );
+    this.filterService.deleteClicked.subscribe(data => {
+      if (data) {
+        this.deleteEstimate();
+      }
+    });
   }
 
   onCustomerSelected(user) {
@@ -383,6 +389,16 @@ export class AddEstimateBodyComponent implements OnInit {
       this.saveInvoiceData.categoryId = 0;
       this.newCustomerName = contactIdNumber;
       this.newEmail = this.emailAddresses;
+    });
+  }
+
+  navigateToInvoiceList() {
+    this.router.navigate(['./sales/invoices']);
+  }
+
+  deleteEstimate() {
+    this.estimatesService.deleteIndividualEstimate(this.currentInvoiceId).subscribe( res => {
+      this.navigateToInvoiceList();
     });
   }
 }

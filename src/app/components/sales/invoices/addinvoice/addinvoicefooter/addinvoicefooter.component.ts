@@ -61,6 +61,10 @@ export class AddInvoiceFooterComponent {
     this.filterService.saveClicked.next( true );
   }
 
+  deleteInvoice() {
+    this.filterService.deleteClicked.next( true );
+  }
+
   onSwitchChanged(val) {
 
   }

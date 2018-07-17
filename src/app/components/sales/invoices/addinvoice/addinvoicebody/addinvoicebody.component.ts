@@ -358,4 +358,10 @@ export class AddInvoiceBodyComponent implements OnInit {
   navigateToInvoiceList() {
     this.router.navigate(['./sales/invoices']);
   }
+
+  deleteInvoice() {
+    this.invoicesService.deleteIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      this.navigateToInvoiceList();
+    });
+  }
 }
