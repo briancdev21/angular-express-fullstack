@@ -13,8 +13,10 @@ import { MorrisBarChartComponent } from './morrisbarchart/morrisbarchart.compone
 import { AgendaBoxComponent } from './agendabox/agendabox.component';
 import { TasksBoxComponent } from './tasksbox/tasksbox.component';
 import { ActivitiesBoxComponent } from './activitiesbox/activitiesbox.component';
+import { AlertModalComponent } from './alertmodal/alertmodal.component';
 import { MatInputModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModule } from '@angular/material';
 
+import { CommonService } from './common.service';
 @NgModule({
   declarations: [
     CommonComponent,
@@ -26,7 +28,8 @@ import { MatInputModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModu
     MorrisBarChartComponent,
     AgendaBoxComponent,
     TasksBoxComponent,
-    ActivitiesBoxComponent
+    ActivitiesBoxComponent,
+    AlertModalComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,11 @@ import { MatInputModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModu
     MorrisBarChartComponent,
     AgendaBoxComponent,
     TasksBoxComponent,
-    ActivitiesBoxComponent
+    ActivitiesBoxComponent,
+    AlertModalComponent
+  ],
+  providers: [
+    CommonService
   ]
 })
 export class CommonCmpModule { }
