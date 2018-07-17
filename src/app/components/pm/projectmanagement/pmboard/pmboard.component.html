@@ -12,14 +12,16 @@
     <div class="pm-table">
       <app-pmboardtable [pmBoardTableInfo]="pmBoardTableData" [taskOwners]="taskOwners" (updatePmData)="getUpdatedPmData($event)"></app-pmboardtable>
     </div>
-    <div class="project-finances">
+    <div class="project-finances" *ngIf="projectInfo">
       <app-projectfinance [projectInfo]="projectInfo" [financialTableData]="financialTableData"></app-projectfinance>
     </div>
-    <div class="activity-timeline">
+    <!-- 
+      commented for now because back end is not ready
+      <div class="activity-timeline">
       <app-ng2timeline [timelineData]="timelineData"></app-ng2timeline>
-    </div>
+    </div> -->
   </div>
   <div class="content-right">
-    <!-- <app-boardpanelright [projectInfo]="projectInfo" [pmBoardTableData]="pmBoardTableData"></app-boardpanelright> -->
+    <app-boardpanelright [projectInfo]="projectInfo" [pmBoardTableData]="pmBoardTableData"></app-boardpanelright>
   </div>
 </div>
