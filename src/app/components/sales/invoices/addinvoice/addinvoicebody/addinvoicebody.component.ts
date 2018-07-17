@@ -193,6 +193,12 @@ export class AddInvoiceBodyComponent implements OnInit {
         this.saveInvoice();
       }
     });
+    this.filterService.deleteClicked.next(false);
+    this.filterService.deleteClicked.subscribe(data => {
+      if (data) {
+        this.deleteInvoice();
+      }
+    });
   }
 
   onCustomerSelected(user) {

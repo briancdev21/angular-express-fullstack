@@ -91,7 +91,7 @@
       <h4>
         Please select customer name
       </h4>
-    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showEstimateCreateModal=false" />
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showEstimateCreateModal=false; navigateToInvoiceList();" />
   </div>
   <div class="content" >
     <app-es-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectCustomerBeforeCreate($event)" [searchStr]="selectItem" ></app-es-customer-name>
