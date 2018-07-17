@@ -234,55 +234,45 @@ export class SharedService {
     return this.http.put(url, body);
   }
 
-  //  Category
+  //  proposal Category
   getCategories(): Observable<any> {
-    const url = `${environment.apiUrl}/organization/categories`;
+    const url = `${environment.apiUrl}/organization/proposal-categories`;
     return this.http.get(url);
   }
 
   createCategory (body): Observable<any> {
-    const url = `${environment.apiUrl}/organization/categories`;
+    const url = `${environment.apiUrl}/organization/proposal-categories`;
     return this.http.post<any>(url, body);
   }
 
   getIndividualCategory(id): Observable<any>  {
-    const url = `${environment.apiUrl}/organization/categories/${id}`;
+    const url = `${environment.apiUrl}/organization/proposal-categories/${id}`;
     return this.http.get(url);
-  }
-
-  updateIndividualCategory(id, body): Observable<any>  {
-    const url = `${environment.apiUrl}/organization/categories/${id}`;
-    return this.http.put(url, body);
   }
 
   deleteIndividualCategory (id): Observable<any> {
-    const url = `${environment.apiUrl}/organization/categories/${id}`;
+    const url = `${environment.apiUrl}/organization/proposal-categories/${id}`;
     return this.http.delete<any>(url);
   }
 
-  //  SubCategory
-  getSubCategories(categoryId): Observable<any> {
-    const url = `${environment.apiUrl}/organization/categories/${categoryId}/subcategories`;
+  //  proposal SubCategory
+  getSubCategories(): Observable<any> {
+    const url = `${environment.apiUrl}/organization/proposal-subcategories`;
     return this.http.get(url);
   }
 
-  createSubCategory (categoryId, body): Observable<any> {
-    const url = `${environment.apiUrl}/organization/categories/${categoryId}/subcategories`;
+  createSubCategory (body): Observable<any> {
+    const url = `${environment.apiUrl}/organization/proposal-subcategories`;
     return this.http.post<any>(url, body);
   }
 
-  getIndividualSubCategory(categoryId, subId): Observable<any>  {
-    const url = `${environment.apiUrl}/organization/categories/${categoryId}/subcategories/${subId}`;
+  getIndividualSubCategory(subId): Observable<any>  {
+    const url = `${environment.apiUrl}/organization/proposal-subcategories/${subId}`;
     return this.http.get(url);
   }
 
-  updateIndividualSubCategory(categoryId, subId, body): Observable<any>  {
-    const url = `${environment.apiUrl}/organization/categories/${categoryId}/subcategories/${subId}`;
-    return this.http.put(url, body);
-  }
-
-  deleteIndividualSubCategory (categoryId, subId): Observable<any> {
-    const url = `${environment.apiUrl}/organization/categories/${categoryId}/subcategories/${subId}`;
+  deleteIndividualSubCategory (subId): Observable<any> {
+    const url = `${environment.apiUrl}/organization/proposal-subcategories/${subId}`;
     return this.http.delete<any>(url);
   }
 

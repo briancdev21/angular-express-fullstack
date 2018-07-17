@@ -79,11 +79,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
             this.getProposalProductData();
 
-            this.proposalCategoryList.forEach(ele => {
-              this.sharedService.getSubCategories(ele.id).subscribe(data => {
-                const subCategory = data.results;
-                this.proposalSubCategoryList = this.proposalSubCategoryList.concat(subCategory);
-              });
+            this.sharedService.getSubCategories().subscribe(data => {
+              const subCategory = data.results;
+              this.proposalSubCategoryList = data.results;
             });
           });
         });
@@ -131,9 +129,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   updateProposalProduct(product) {
     console.log('parent Product: ', product);
     const updatingData = {
-      'categoryId': product.categoryId,
-      'subcategoryId': product.subCategoryId,
-      'pricingCategoryId': product.pricingCategoryId,
+      'categoryId': parseInt(product.categoryId, 10),
+      'subcategoryId': parseInt(product.subCategoryId, 10),
+      'pricingCategoryId': parseInt(product.pricingCategoryId, 10),
       'priceAdjustment': {
         'value': product.priceAdjustment.value,
         'unit': product.priceAdjustment.unit
