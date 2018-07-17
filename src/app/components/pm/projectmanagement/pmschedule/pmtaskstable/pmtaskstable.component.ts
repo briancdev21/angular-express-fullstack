@@ -215,7 +215,7 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   refreshTable() {
-    this.pmTasksService.getTaskGroups().subscribe(data => {
+    this.pmTasksService.getTaskGroupsWithParams({projectId: this.currentProjectId}).subscribe(data => {
       this.milestones = data.results;
       for (let i = 0; i < this.milestones.length; i++) {
         this.milestones[i].color = this.colors[i];
@@ -247,6 +247,7 @@ export class PmTasksTableComponent implements OnInit {
   addTasksFromPmBoardData(tableDataAtIndex: any, i) {
     this.tasksTemp[i] = tableDataAtIndex;
       if (this.tasksTemp.length === this.milestones.length) {
+        console.log('test: milestones length:', this.tasksTemp);
         this.updatedGanttData.emit({'data': this.tasksTemp});
       }
   }

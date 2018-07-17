@@ -176,7 +176,7 @@ export class PmBoardComponent implements OnInit {
   }
 
   getPmBoardTableData() {
-    this.pmTasksService.getTaskGroups().subscribe(data => {
+    this.pmTasksService.getTaskGroupsWithParams({projectId: this.currentProjectId}).subscribe(data => {
       this.pmBoardTableData = data.results;
       for (let i = 0; i < this.pmBoardTableData.length; i++) {
         this.pmBoardTableData[i].color = '';
