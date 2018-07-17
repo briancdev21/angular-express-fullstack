@@ -86,6 +86,15 @@ export class InvoicesComponent implements OnInit {
         return element;
       });
       this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
+      // this.invoicesListInfo.map(i => {
+      //   if (i['contactId']) {
+      //     i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].split('-').pop(), 10));
+      //   } else {
+      //     i['customerName'] = this.getCustomerName(this.leadsList, parseInt(i['leadId'].split('-').pop(), 10));
+      //   }
+      //   return i;
+      // });
+
       this.estimatesService.getEstimates().subscribe(data => {
         this.estimatesListInfo = data.results;
         this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['expiryDate'], i['status']));
@@ -108,8 +117,9 @@ export class InvoicesComponent implements OnInit {
           }
           return i;
         });
-        console.log('invoiceslist: ', this.invoicesListInfo);
       });
+            console.log('invoiceslist: ', this.invoicesListInfo);
+
     });
   }
 
