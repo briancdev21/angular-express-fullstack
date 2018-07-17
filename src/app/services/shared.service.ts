@@ -579,4 +579,8 @@ export class SharedService {
     const url = `${environment.apiUrl}/organization/statistics/projects`;
     return this.http.get(url, {params: params});
   }
+  getInvoiceCategories(): Observable<any> {
+    const url = `${environment.apiUrl}/organization/invoice-categories`;
+    return this.http.get(url);
+  }
 }

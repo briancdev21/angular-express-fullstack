@@ -150,7 +150,7 @@ export class EstimateProfileBodyComponent implements OnInit {
         this.currentClass = this.classList[classPos].name;
       });
 
-      this.sharedService.getCategories().subscribe(data => {
+      this.sharedService.getInvoiceCategories().subscribe(data => {
         this.categoryList = data.results;
         const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
         this.currentCategory = this.categoryList[categoryPos].name;
