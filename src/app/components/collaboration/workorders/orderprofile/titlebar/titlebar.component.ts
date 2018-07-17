@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderService } from '../order.service';
 
@@ -9,7 +9,7 @@ import { OrderService } from '../order.service';
     './titlebar.component.css'
   ]
 })
-export class TitleBarComponent {
+export class TitleBarComponent implements OnInit {
 
   @Input() orderProfileInfo;
   @Input() showAvailabilityModal;
@@ -34,11 +34,14 @@ export class TitleBarComponent {
   }
 
   ngOnInit() {
-    this.orderProfileInfo.followers.forEach(element => {
-      this.items2 = this.items2.filter(function( obj ) {
-        return obj.payload.label !== element.name;
+    if (this.orderProfileInfo.followers) {
+      this.orderProfileInfo.followers.forEach(element => {
+        this.items2 = this.items2.filter(function( obj ) {
+          return obj.payload.label !== element.name;
+        });
       });
-    });
+    }
+
     this.titleOrigin = this.orderTitle;
     this.orderService.getAvailableStaff.subscribe(
       data => {
