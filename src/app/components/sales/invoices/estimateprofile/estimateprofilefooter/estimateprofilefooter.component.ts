@@ -90,4 +90,8 @@ export class EstimateProfileFooterComponent implements OnInit {
       this.showEndAfter = true;
     }
   }
+
+  deleteInvoice() {
+    this.filterService.deleteClicked.next( true );
+  }
 }
