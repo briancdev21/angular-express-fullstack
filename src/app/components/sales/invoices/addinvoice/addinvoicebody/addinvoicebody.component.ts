@@ -169,7 +169,7 @@ export class AddInvoiceBodyComponent implements OnInit {
       this.classList = res.results;
     });
 
-    this.sharedService.getCategories().subscribe(res => {
+    this.sharedService.getInvoiceCategories().subscribe(res => {
       this.categoryList = res.results;
     });
 
@@ -191,6 +191,12 @@ export class AddInvoiceBodyComponent implements OnInit {
     this.filterService.saveClicked.subscribe(data => {
       if (data) {
         this.saveInvoice();
+      }
+    });
+    this.filterService.deleteClicked.next(false);
+    this.filterService.deleteClicked.subscribe(data => {
+      if (data) {
+        this.deleteInvoice();
       }
     });
   }
@@ -357,5 +363,11 @@ export class AddInvoiceBodyComponent implements OnInit {
   }
   navigateToInvoiceList() {
     this.router.navigate(['./sales/invoices']);
+  }
+
+  deleteInvoice() {
+    this.invoicesService.deleteIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      this.navigateToInvoiceList();
+    });
   }
 }

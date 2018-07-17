@@ -171,7 +171,7 @@ export class AddEstimateBodyComponent implements OnInit {
       this.classList = res.results;
     });
 
-    this.sharedService.getCategories().subscribe(res => {
+    this.sharedService.getInvoiceCategories().subscribe(res => {
       this.categoryList = res.results;
     });
 
@@ -193,6 +193,12 @@ export class AddEstimateBodyComponent implements OnInit {
     this.filterService.saveClicked.subscribe(data => {
       if (data) {
         this.saveEstimate();
+      }
+    });
+    this.filterService.deleteClicked.next( false );
+    this.filterService.deleteClicked.subscribe(data => {
+      if (data) {
+        this.deleteEstimate();
       }
     });
   }
@@ -383,6 +389,16 @@ export class AddEstimateBodyComponent implements OnInit {
       this.saveInvoiceData.categoryId = 0;
       this.newCustomerName = contactIdNumber;
       this.newEmail = this.emailAddresses;
+    });
+  }
+
+  navigateToInvoiceList() {
+    this.router.navigate(['./sales/invoices']);
+  }
+
+  deleteEstimate() {
+    this.estimatesService.deleteIndividualEstimate(this.currentInvoiceId).subscribe( res => {
+      this.navigateToInvoiceList();
     });
   }
 }

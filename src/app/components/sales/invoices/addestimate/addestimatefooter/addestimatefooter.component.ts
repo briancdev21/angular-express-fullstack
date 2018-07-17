@@ -60,6 +60,10 @@ export class AddEstimateFooterComponent {
       this.filterService.saveClicked.next( true );
     }
 
+  deleteInvoice() {
+    this.filterService.deleteClicked.next( true );
+  }
+
   onSwitchChanged(val) {
 
   }

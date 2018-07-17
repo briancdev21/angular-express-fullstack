@@ -150,7 +150,7 @@ export class EstimateProfileBodyComponent implements OnInit {
         this.currentClass = this.classList[classPos].name;
       });
 
-      this.sharedService.getCategories().subscribe(data => {
+      this.sharedService.getInvoiceCategories().subscribe(data => {
         this.categoryList = data.results;
         const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
         this.currentCategory = this.categoryList[categoryPos].name;
@@ -210,13 +210,19 @@ export class EstimateProfileBodyComponent implements OnInit {
         this.saveInvoiceData.lateFee.unit = data.unit;
       }
     });
-
+    this.filterService.saveClicked.next(false);
     this.filterService.saveClicked.subscribe(data => {
       if (data) {
         this.saveInvoice();
       }
     });
-
+    this.filterService.deleteClicked.next(false);
+    this.filterService.deleteClicked.subscribe(data => {
+      if (data) {
+        this.deleteInvoice();
+      }
+    });
+    this.filterService.convertClicked.next(false);
     this.filterService.convertClicked.subscribe(data => {
       if (data) {
         this.convertInvoice();
@@ -364,5 +370,10 @@ export class EstimateProfileBodyComponent implements OnInit {
       }
     });
     return data;
+  }
+  deleteInvoice() {
+    this.estimatesService.deleteIndividualEstimate(this.currentInvoiceId).subscribe( res => {
+      this.router.navigate(['./sales/invoices']);
+    });
   }
 }
