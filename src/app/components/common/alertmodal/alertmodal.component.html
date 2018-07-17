@@ -1,0 +1,20 @@
+<div class="confirm-delete-modal-wrapper" *ngIf="showAlertModal" ></div>
+<div [ngClass]="{'confirm-modal': showAlertModal, 'confirm-modal-hide': !showAlertModal }">
+  <div class="header">
+    <span class="alert-text">ALERT</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showAlertModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      {{modalContent}}
+    </div>
+    <div class="center-btn-section" >
+      <!-- <button class="confirm-btn" (click)="confirmDeleteMainTask()" >
+        Confirm
+      </button> -->
+      <button class="cancel-btn" (click)="showAlertModal=false" >
+        OK
+      </button>
+    </div>
+  </div>
+</div> 
