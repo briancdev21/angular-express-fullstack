@@ -3,6 +3,7 @@ import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
 import { ProposalsService } from '../../../services/proposals.service';
 import { SalesService } from '../sales.service';
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
   selector: 'app-proposallist',
@@ -28,11 +29,15 @@ export class ProposalListComponent implements OnInit {
   filterAvaliableTo: any;
   filterName = '';
   proposallistTypes: any;
+  contactsList = [];
 
-  constructor( private filterService: FilterService, private proposalsService: ProposalsService, private salesService: SalesService ) {
+  constructor( private filterService: FilterService, private proposalsService: ProposalsService, private salesService: SalesService,
+    private sharedService: SharedService ) {
     this.filterAvaliableTo = 'everyone';
-
-    this.retrieveData();
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res;
+      this.retrieveData();
+    });
 
     this.salesService.proposalAdded.subscribe(data => {
       if (data) {
@@ -58,24 +63,7 @@ export class ProposalListComponent implements OnInit {
     'NEW', 'FOLLOW_UP', 'SEEN', 'DEMO', 'NEGOTIOTION', 'WON', 'LOST'
   ];
 
-  public proposalListInfo: Array<Object> = [
-    // {
-    //   proposalId: '123465',
-    //   contactName: 'Diana Llic',
-    //   projectName: 'Live your Nu Life',
-    //   proposalAmount: 24202.37,
-    //   createdDate: 'November 20, 2017',
-    //   updatedDate: 'December 15, 2017',
-    //   completionDate: 'March 20, 2018',
-    //   dealStatus: 'New',
-    //   revision: 0,
-    //   owners: [
-    //     {
-    //       name: 'John Moss',
-    //       imgUrl: 'assets/users/user1.png'
-    //     }
-    //   ]
-    // },
+  public proposalListInfo = [
   ];
 
   ngOnInit() {
@@ -85,6 +73,10 @@ export class ProposalListComponent implements OnInit {
   retrieveData() {
     this.proposalsService.getProposals().subscribe(res => {
       this.proposalListInfo = res.results;
+      console.log('proposals : ', res, this.contactsList);
+      this.proposalListInfo.forEach(ele => {
+        ele['contactName'] = this.getContactName(this.getContactIdFromString(ele.contactId));
+      });
     });
   }
   getFilter(event) {
@@ -154,5 +146,19 @@ export class ProposalListComponent implements OnInit {
     this.proposalListInfo = this.backUpProposalList;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
+  }
+
+  getContactName(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    if (selectedContact.type === 'PERSON') {
+      return selectedContact.person.firstName + ' ' + selectedContact.person.lastName ;
+    } else if (selectedContact.type === 'BUSINESS') {
+      return selectedContact.business.name;
+    }
+  }
+
+  getContactIdFromString(str) {
+    const strArr = str.split('-');
+    return parseInt(strArr[strArr.length - 1], 10);
   }
 }
