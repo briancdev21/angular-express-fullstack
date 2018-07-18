@@ -68,21 +68,25 @@ export class OrderProfileComponent implements OnInit {
         this.contactsList = data;
         this.addContactName(this.contactsList);
         this.collaboratorsService.getIndividualWorkOrder(this.currentWorkOrderId).subscribe(response => {
+          console.log('work order details: ', response.data);
           this.orderProfileInfo = response.data;
           this.orderProfileInfo.contactName = this.getContactNameFromId(response.data.contactId);
           this.orderProfileInfo.selectedContact = this.selectedContact;
           // remove selected users from list
-          this.orderProfileInfo.followers.forEach(element => {
-            this.items2 = this.items2.filter(function( obj ) {
-              return obj.username !== element.username;
+
+          if (this.orderProfileInfo.followers) {
+            this.orderProfileInfo.followers.forEach(element => {
+              this.items2 = this.items2.filter(function( obj ) {
+                return obj.username !== element.username;
+              });
+              const selectedUser = this.usersList.filter(u => u.username === element)[0];
+              this.followersDetails.push({
+                name: selectedUser.firstName + ' ' + selectedUser.lastName,
+                imageUrl: selectedUser.pictureURI,
+                userName: selectedUser.username
+              });
             });
-            const selectedUser = this.usersList.filter(u => u.username === element)[0];
-            this.followersDetails.push({
-              name: selectedUser.firstName + ' ' + selectedUser.lastName,
-              imageUrl: selectedUser.pictureURI,
-              userName: selectedUser.username
-            });
-          });
+          }
 
           this.orderProfileInfo.followersDetails = this.followersDetails;
           console.log('followers details: ', this.orderProfileInfo);
