@@ -27,6 +27,8 @@ export class OrderDetailsComponent implements OnInit {
   startTimeValue: any;
   endTimeValue: any;
   currentWorkOrderId: any;
+  showStartTime = true;
+  showEndTime = true;
 
   constructor( private orderService: OrderService, private router: Router, private collaboratorsService: CollaboratorsService,
     private route: ActivatedRoute ) {
@@ -49,7 +51,7 @@ export class OrderDetailsComponent implements OnInit {
     console.log('order info: ', this.orderProfileInfo);
     this.startDateValue = new Date(this.orderProfileInfo.startDate);
     this.endDateValue = new Date(this.orderProfileInfo.endDate);
-    this.startTimeValue = new Date (moment(this.orderProfileInfo.startDate).format('hh:mm:ss a'));
+    this.startTimeValue = moment(this.orderProfileInfo.startDate).format('hh:mm:ss a');
     this.endTimeValue = moment(this.orderProfileInfo.endDate).format('hh:mm:ss a');
     this.street = this.orderProfileInfo.shippingAddress.address;
     this.city = this.orderProfileInfo.shippingAddress.city;
@@ -86,13 +88,13 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   onStartTime(event) {
-    this.startTimeValue = event.value;
-    this.orderService.postTimelineData({title: this.startTimeValue.toTimeString(), type: 'startTime'});
+    this.startTimeValue = moment(event.value).format('hh:mm:ss a');
+    this.orderService.postTimelineData({title: this.startTimeValue, type: 'startTime'});
   }
 
   onEndTime(event) {
-    this.endTimeValue = event.value;
-    this.orderService.postTimelineData({title: this.endTimeValue.toTimeString(), type: 'endTime'});
+    this.endTimeValue = moment(event.value).format('hh:mm:ss a');
+    this.orderService.postTimelineData({title: this.endTimeValue, type: 'endTime'});
   }
 
   checkValidation() {

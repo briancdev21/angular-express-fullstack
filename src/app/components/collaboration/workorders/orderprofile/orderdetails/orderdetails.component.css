@@ -99,3 +99,11 @@ img {
   background-position: right 8px center;
   background-size: 6%;
 }
+
+.time-holder {
+  border: 1px solid #d3d3d3;
+  color: #646464;
+  font-weight: 300;
+  text-align: left;
+  padding: 5px;
+}
