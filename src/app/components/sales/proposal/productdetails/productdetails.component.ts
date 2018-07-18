@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, HostListener } from '@angular/core';
+import { Component, Input, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProposalService } from '../proposal.service';
 import { ProductsService } from '../../../../services/inventory/products.service';
 import { SharedService } from '../../../../services/shared.service';
 import { ProposalsService } from '../../../../services/proposals.service';
+import { CommonService } from '../../../common/common.service';
 
 @Component({
   selector: 'app-productdetails',
@@ -13,9 +14,10 @@ import { ProposalsService } from '../../../../services/proposals.service';
   ]
 })
 
-export class ProductDetailsComponent implements OnInit {
+export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   // @Input() productType;
+  @Input() proposalInfo;
   productsInfoAll: any;
   productType: any;
   public showAddProductModal = false;
@@ -71,7 +73,7 @@ export class ProductDetailsComponent implements OnInit {
   proposalId: any;
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService, private sharedService: SharedService,
-    private route: ActivatedRoute, private proposalsService: ProposalsService ) {
+    private route: ActivatedRoute, private proposalsService: ProposalsService, private commonService: CommonService ) {
     this.selectedData = this.productsInfoAll || [];
     this.proposalId = this.route.snapshot.paramMap.get('id');
     this.searchableList = ['name', 'model'];
@@ -79,6 +81,9 @@ export class ProductDetailsComponent implements OnInit {
     this.productsService.getProductCatalog().subscribe(res => {
       console.log('catalog items', res);
       this.productsInfoAll = res.results;
+      this.productsInfoAll.forEach(element => {
+        element.addingQty = 1;
+      });
     });
 
     this.sharedService.getProductTypes().subscribe(res => {
@@ -129,7 +134,7 @@ export class ProductDetailsComponent implements OnInit {
     if (val === 'all') {
       this.selectedData = this.productsInfoAll;
     } else {
-      this.selectedData = this.productsInfoAll.filter(x => x.productTypeId === val);
+      this.selectedData = this.productsInfoAll.filter(x => x.productTypeId === parseInt(val, 10));
     }
   }
 
@@ -156,15 +161,26 @@ export class ProductDetailsComponent implements OnInit {
     }
     sendData.forEach(ele => {
       ele.quantity = parseInt(ele.quantity, 10);
-      this.proposalsService.createProposalProduct(this.proposalId, ele).subscribe(res => {
-        console.log('inserted: ', res);
-      });
+      if ( this.proposalInfo.dealStatus === 'WON') {
+        console.log('prposal -------------: ', this.proposalInfo);
+        this.commonService.showAlertModal.next(true);
+      } else {
+        this.proposalsService.createProposalProduct(this.proposalId, ele).subscribe(res => {
+          console.log('inserted: ', res);
+        });
+      }
     });
     console.log('inserted products: ', sendData);
   }
 
   sendIndividualProduct(product) {
-    this.openAttachmentModal(product);
+    if ( this.proposalInfo.dealStatus === 'WON') {
+      console.log('prposal -------------: ', this.proposalInfo);
+      this.commonService.showAlertModal.next(true);
+    } else {
+      this.openAttachmentModal(product);
+    }
+
     // this.sharedService.insertToTable([[product]]);
   }
 
@@ -318,5 +334,9 @@ export class ProductDetailsComponent implements OnInit {
     // inssert product to table
     console.log('insert products to table');
     this.productsInfoAll = products;
+  }
+
+  ngOnDestroy() {
+    this.commonService.showAlertModal.next(false);
   }
 }
