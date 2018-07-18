@@ -1,0 +1,28 @@
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
+  <div class="top-nav-bar">
+    <div class="breadcrumb-bar">
+      <span>Stock Control</span>
+      <i class="fa fa-angle-right"></i>
+      <span>Select Purchase Order</span>  
+      <i class="fa fa-angle-right"></i>
+      <span>Receive Inventory</span>  
+    </div>
+  </div>
+
+  <div class="search-box">
+    <input type="text" placeholder="Quick add sku, model numberm upc or name here..." [(ngModel)]="searchKeyword" (ngModelChange)="searchKeywordChanged($event)" />
+  </div>
+  <div class="main-header-box" >
+      INVENTORY CONTROL
+    </div>
+  <div class="main-content-box">
+    <div class="purchaseorderlist-table">
+      <app-po-receive-productlisttable [(purchaseOrdersInfo)]="purchaseOrdersInfo"></app-po-receive-productlisttable>
+    </div>
+  </div>
+  <div class="footer" >
+    <button class="cancel-btn">Cancel</button>
+    <button class="save-btn">Save</button>
+  </div>
+</div>
+
