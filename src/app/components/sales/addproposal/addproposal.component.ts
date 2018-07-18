@@ -310,9 +310,9 @@ export class AddProposalComponent implements OnInit {
   onSelect(item: any) {
     this.selectedItem = item;
     console.log('item: ', item, this.items3);
-    this.items3 = this.items3.filter(function( obj ) {
-      return obj.username !== item.username;
-    });
+    // this.items3 = this.items3.filter(function( obj ) {
+    //   return obj.username !== item.username;
+    // });
     this.proposalDetails.collaborators.push({name: item.label, imageUrl: item.imageUrl, username: item.username });
   }
 

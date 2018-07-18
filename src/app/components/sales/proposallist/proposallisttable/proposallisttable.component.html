@@ -12,7 +12,7 @@
     </tr>
     <tr *ngFor="let proposallist of proposalListInfo; let i = index" (click)="redirectTo(proposallist.id)">
       <td>{{proposallist.id}}</td>
-      <td>{{proposallist.contactId}}</td>
+      <td>{{proposallist.contactName}}</td>
       <td>{{proposallist.name}}</td>
       <td>$ {{proposallist.total | number: '1.2-2'}}</td>
       <td>{{proposallist.status}}</td>

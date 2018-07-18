@@ -169,6 +169,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     localStorage.removeItem('originProposalProductList');
+    this.commonService.showAlertModal.next(false);
   }
 
   ngOnInit() {
@@ -192,11 +193,16 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
       });
     // commented for now
     // Insert data from product details to table
-    this.proposalService.insertedProducts.subscribe(
-      data => {
-        if (data.length > 0) {
-          this.getProposalProductData();
-        }
+    if ( this.proposalInfo.dealStatus === 'WON') {
+      console.log('prposal -------------: ', this.proposalInfo);
+      this.commonService.showAlertModal.next(true);
+      this.getProposalProductData();
+    } else {
+      this.proposalService.insertedProducts.subscribe(
+        data => {
+          if (data.length > 0) {
+            this.getProposalProductData();
+          }
     //     console.log('inserted Data: ', data);
     //     const insertedArr = [];
     //     this.addedIndex = this.proposalProductList.length;
@@ -253,6 +259,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     //     this.proposalProductList = this.proposalProductList.concat(insertedArr);
     //     this.proposalService.postUpdatedProposalProductList(this.proposalProductList);
       });
+    }
     // comment end here
 
     // calculate the sum of all products price
@@ -303,7 +310,13 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
     // detect Delete or backspace key down
     if (event.keyCode === 46 || event.keyCode === 8 ) {
-      this.openDeleteModal();
+      if ( this.proposalInfo.dealStatus === 'WON') {
+        console.log('prposal -------------: ', this.proposalInfo);
+        this.commonService.showAlertModal.next(true);
+        this.getProposalProductData();
+      } else {
+        this.openDeleteModal();
+      }
     }
   }
 
@@ -672,4 +685,5 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     const taxRate = this.taxRatesList.filter(s => s.id === id)[0];
     return taxRate.name;
   }
+
 }

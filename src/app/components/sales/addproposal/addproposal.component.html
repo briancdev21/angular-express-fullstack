@@ -229,7 +229,11 @@
             <div>
               <span>Account Manager (*required)</span>
               <div class="member-container">
-                <div class="followers" (click)="accountEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidAccountManager}"> 
+                <div 
+                  class="followers" 
+                  (click)="accountEditable=true; projectEditable=false; designerEditable=false; $event.stopPropagation()" 
+                  [ngClass]="{'validation-required': invalidAccountManager}"
+                > 
                   <div class="follower">
                     <a *ngIf="proposalDetails.accountManager" [title]='proposalDetails.accountManager.name' ><img [src]='proposalDetails.accountManager.imageUrl'  (click)="accountEditable=true;$event.stopPropagation()"/></a>
                   </div> 
@@ -261,7 +265,10 @@
             <div>
               <span>Project Manager (*required)</span>
               <div class="member-container">
-                <div class="followers" (click)="projectEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidProjectManager}"> 
+                <div 
+                  class="followers" 
+                  (click)="projectEditable=true; accountEditable=false; designerEditable=false; $event.stopPropagation()" 
+                  [ngClass]="{'validation-required': invalidProjectManager}"> 
                   <div class="follower">
                     <a *ngIf="proposalDetails.projectManager"  [title]='proposalDetails.projectManager.name' ><img [src]='proposalDetails.projectManager.imageUrl'  (click)="projectEditable=true;$event.stopPropagation()"/></a>
                   </div> 
@@ -270,12 +277,12 @@
                       <span *ngIf="!proposalDetails.projectManager" class="type-here">Type User's name</span>
                       <li *ngIf="proposalDetails.projectManager">{{proposalDetails.projectManager.username}}</li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <ng-select *ngIf="isAutocompleteUpdated4" [items]="items3"
+                        <ng-select *ngIf="isAutocompleteUpdated4" [items]="items4"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
                           (add)="onSelectProjectManager($event)" >
                         </ng-select>
-                        <ng-select *ngIf="!isAutocompleteUpdated4" [items]="items3"
+                        <ng-select *ngIf="!isAutocompleteUpdated4" [items]="items4"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
                           (add)="onSelectProjectManager($event)">
@@ -291,7 +298,7 @@
           <div class="design-custom tab-row">
             <div>
               <span>Designer (*required)</span>
-              <div class="member-container" (click)="designerEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidDesigner}">
+              <div class="member-container" (click)="designerEditable=true; projectEditable=false; accountEditable=false; $event.stopPropagation()" [ngClass]="{'validation-required': invalidDesigner}">
                 <div class="followers" > 
                   <div class="follower" >
                     <a *ngIf="proposalDetails.designer" [title]='proposalDetails.designer.name' ><img [src]='proposalDetails.designer.imageUrl'  (click)="designerEditable=true;$event.stopPropagation()"/></a>
@@ -301,12 +308,12 @@
                       <span *ngIf="!proposalDetails.designer" class="type-here">Type User's name</span>
                       <li *ngIf="proposalDetails.designer">{{proposalDetails.designer.username}}</li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <ng-select *ngIf="isAutocompleteUpdated5" [items]="items3"
+                        <ng-select *ngIf="isAutocompleteUpdated5" [items]="items5"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
                           (add)="onSelectDesigner($event)" >
                         </ng-select>
-                        <ng-select *ngIf="!isAutocompleteUpdated5" [items]="items3"
+                        <ng-select *ngIf="!isAutocompleteUpdated5" [items]="items5"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
                           (add)="onSelectDesigner($event)">
