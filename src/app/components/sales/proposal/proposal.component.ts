@@ -58,13 +58,9 @@ export class ProposalComponent implements OnInit {
   public productsInfoAll: Array<object> = [
   ];
 
-  public projectCategory = [
-    'Living Room', 'Mechanical Room', 'Multi Category', 'Familiy Room'
-  ];
+  public projectCategory = [];
 
-  public projectSubCategory = [
-    'Lighting System', 'Equipment', 'Automation', 'Video'
-  ];
+  public projectSubCategory = [];
 
   public projectDetails: any;
 
@@ -96,13 +92,6 @@ export class ProposalComponent implements OnInit {
           dealStatus: res.data.status,
           revision: res.data.revision,
           createdDate: moment(res.data.updatedAt).format('MMMM DD, YYYY'),
-          owner: [
-            {
-            imageUrl: 'assets/users/user1.png',
-            profileLink: 'crm/contacts/michael',
-            name: 'Michael'
-            }
-          ],
         };
       });
     });
