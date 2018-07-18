@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -16,42 +16,40 @@ import { ProjectsService } from '../../../../../../services/projects.service';
 
 export class ChangeLogListTableComponent implements OnInit {
 
-  @Input() changeLogList;
-  @Input() set changeLogInfo(val) {
-    this._changeLogInfo = val;
-    if (this._changeLogInfo.workOrderIds) {
-      this._changeLogInfo.workOrderIds.forEach(element => {
-        this.projectsService.getIndividualProjectWorkOrder(this.currentProjectId, element).subscribe(data => {
-          // comment for now
-          console.log('work order list: ', data);
-          this.changeLogList.push(data.results);
-        });
-      });
-    }
-  }
   public barInfo: any;
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
   dateNow = new Date();
   aweekLater = new Date();
-  _changeLogInfo: any;
   currentProjectId: any;
+  currentChangeLogId: any;
+  changeLogItems: any;
+  changeLogs: any;
 
-  constructor( private pmService: ProjectManagementService, private router: Router, private projectsService: ProjectsService ) {
+  constructor( private pmService: ProjectManagementService, private router: Router, private projectsService: ProjectsService,
+    private route: ActivatedRoute ) {
     this.currentProjectId = localStorage.getItem('current_projectId');
+    this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
+    this.projectsService.getProjectChangeLogs(this.currentProjectId).subscribe(res => {
+      this.changeLogs = res.results;
+      this.projectsService.getChangeLogItems(this.currentProjectId, this.currentChangeLogId).subscribe(data => {
+        this.changeLogItems = data.results;
+        this.changeLogItems.forEach(element => {
+          element.formatedCreatedAt = moment(element.createdAt).format('MMMM DD, YYYY');
+          element.formatedUpdatedAt = moment(element.updatedAt).format('MMMM DD, YYYY');
+          element.formatedApprovedAt = element.dateApproved ? moment(element.dateApproved).format('MMMM DD, YYYY') : '';
+          element.typeName = this.changeLogs.filter(l => l.id === element.changeLogId)[0].title;
+        });
+      });
+    });
+
   }
 
   ngOnInit() {
     // get a week later date
     this.aweekLater.setDate(this.aweekLater.getDate() + 7);
 
-    // Change date format
-    this.changeLogList.map( l => {
-      l.dateCreated = moment(l.dateCreated).format('MMMM DD, YYYY');
-      l.lastUpdated = moment(l.lastUpdated).format('MMMM DD, YYYY');
-      l.dateApproved = moment(l.dateApproved).format('MMMM DD, YYYY');
-    });
   }
 
   getStatus() {
@@ -65,7 +63,7 @@ export class ChangeLogListTableComponent implements OnInit {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.changeLogList.sort( function(name1, name2) {
+      this.changeLogItems.sort( function(name1, name2) {
         if ( name1[field] < name2[field] ) {
           return -1;
         } else if ( name1[field] > name2[field]) {
@@ -75,7 +73,7 @@ export class ChangeLogListTableComponent implements OnInit {
         }
       });
     } else {
-      this.changeLogList.reverse();
+      this.changeLogItems.reverse();
     }
   }
 
@@ -83,7 +81,7 @@ export class ChangeLogListTableComponent implements OnInit {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.changeLogList.sort( function(name1, name2) {
+      this.changeLogItems.sort( function(name1, name2) {
         console.log('999', name1[field], name2[field]);
         if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
           return -1;
@@ -94,7 +92,7 @@ export class ChangeLogListTableComponent implements OnInit {
         }
       });
     } else {
-      this.changeLogList.reverse();
+      this.changeLogItems.reverse();
     }
   }
 

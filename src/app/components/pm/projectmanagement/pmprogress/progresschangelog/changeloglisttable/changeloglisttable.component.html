@@ -3,18 +3,18 @@
     <tr>
       <th (click)="sortArray('id')">ID</th>
       <th (click)="sortArray('typeName')">TYPE NAME</th>
-      <th (click)="sortArray('type')">TYPE</th>
+      <th (click)="sortArray('objectType')">TYPE</th>
       <th (click)="sortArray('createdBy')">CREATED BY</th>
       <th (click)="sortArray('budgetImpact')">BUDGET IMPACT</th>
       <th (click)="sortArray('scheduleImpact')">SCHEDULE IMPACT</th> 
-      <th (click)="sortDateArray('dateCreated')">DATE CREATED</th>
-      <th (click)="sortDateArray('lastUpdated')">LAST UPDATED</th>
-      <th (click)="sortDateArray('dateApproved')">DATE APPROVED</th>
+      <th (click)="sortDateArray('formatedCreatedAt')">DATE CREATED</th>
+      <th (click)="sortDateArray('formatedUpdatedAt')">LAST UPDATED</th>
+      <th (click)="sortDateArray('formatedApprovedAt')">DATE APPROVED</th>
     </tr>
-    <tr *ngFor="let changeLog of changeLogList" (click)="redirectTo(changeLog.id)">
+    <tr *ngFor="let changeLog of changeLogItems" (click)="redirectTo(changeLog.id)">
       <td>{{changeLog.id}}</td>
       <td>{{changeLog.typeName}}</td>
-      <td>{{changeLog.type}}</td>
+      <td>{{changeLog.objectType}}</td>
       <td>{{changeLog.createdBy}}</td>
       <td [ngClass]="getColor(changeLog.budgetImpact)"> $ {{changeToAbs(changeLog.budgetImpact) | number: '1.2-2'}}</td>
       <td [ngClass]="getColor(changeLog.scheduleImpact)">
@@ -22,9 +22,9 @@
         <span *ngIf="changeToAbs(changeLog.scheduleImpact)>1">Days</span>
         <span *ngIf="changeToAbs(changeLog.scheduleImpact)===1">Day</span>
       </td>
-      <td>{{changeLog.dateCreated}}</td>
-      <td>{{changeLog.lastUpdated}}</td>
-      <td>{{changeLog.dateApproved}}</td>
+      <td>{{changeLog.formatedCreatedAt}}</td>
+      <td>{{changeLog.formatedUpdatedAt}}</td>
+      <td>{{changeLog.formatedApprovedAt}}</td>
     </tr>
   </table>
 </div>
