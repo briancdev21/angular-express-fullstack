@@ -33,6 +33,7 @@ export class ChangeLogsTableComponent implements OnInit {
         this.addUserRealName(this.usersList);
         this.projectsService.getProjectChangeLogs(this.currentProjectId).subscribe(res => {
           this.changeLogsInfo = res.results;
+          console.log('changslogs: ', this.changeLogsInfo);
           this.changeLogsInfo.forEach(ele => {
             ele['dateCreated'] = moment(ele['createdAt']).format('MMMM DD, YYYY');
             ele['lastUpdated'] = moment(ele['updatedAt']).format('MMMM DD, YYYY');
@@ -60,8 +61,9 @@ export class ChangeLogsTableComponent implements OnInit {
   sortArray(field) {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    console.log('sortscoreclick: ', cmp.sortScoreClicked);
     if (!cmp.sortScoreClicked) {
-      this.changelogListInfo.sort( function(name1, name2) {
+      this.changeLogsInfo.sort( function(name1, name2) {
         if ( Math.abs(name1[field]) < Math.abs(name2[field])) {
           return -1;
         } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
@@ -71,7 +73,27 @@ export class ChangeLogsTableComponent implements OnInit {
         }
       });
     } else {
-      this.changelogListInfo.reverse();
+      this.changeLogsInfo.reverse();
+    }
+  }
+
+  sortArrayWithString(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    console.log('sortscoreclick: ', cmp.sortScoreClicked);
+    if (!cmp.sortScoreClicked) {
+      this.changeLogsInfo.sort( function(name1, name2) {
+        // if ( name1[field].localeCompare(name2[field])) {
+        //   return -1;
+        // } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
+        //   return 1;
+        // } else {
+        //   return 0;
+        // }
+        return name1[field].localeCompare(name2[field]);
+      });
+    } else {
+      this.changeLogsInfo.reverse();
     }
   }
 
@@ -91,7 +113,7 @@ export class ChangeLogsTableComponent implements OnInit {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.changelogListInfo.sort( function(name1, name2) {
+      this.changeLogsInfo.sort( function(name1, name2) {
         if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
           return -1;
         } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
@@ -101,7 +123,7 @@ export class ChangeLogsTableComponent implements OnInit {
         }
       });
     } else {
-      this.changelogListInfo.reverse();
+      this.changeLogsInfo.reverse();
     }
   }
 
