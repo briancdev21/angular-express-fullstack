@@ -17,16 +17,16 @@ import { AUTOCOMPLETE_OPTION_HEIGHT } from '@angular/material';
 export class GanttChartComponent implements OnInit {
   @Input() set tasks(_data) {
     this._tasks = _data;
-    this._tasks.map(task => {
-      if (task !== undefined) {
-        const dateDiff = moment(task.end_date).diff(moment(task.start_date), 'days');
-        if (dateDiff < 1) {
-          task.start_date = moment().format('YYYY-MM-DD'),
-          task.end_date = moment().subtract(1, 'days').format('YYYY-MM-DD');
-          task.title = '';
-        }
-      }
-    });
+    // this._tasks.map(task => {
+    //   if (task !== undefined) {
+    //     const dateDiff = moment(task.end_date).diff(moment(task.start_date), 'days');
+    //     if (dateDiff < 1) {
+    //       task.start_date = moment().format('YYYY-MM-DD'),
+    //       task.end_date = moment().subtract(1, 'days').format('YYYY-MM-DD');
+    //       task.title = '';
+    //     }
+    //   }
+    // });
     while (this._tasks.length < 4) {
       const emptyArr = {
         id: this._tasks.length,

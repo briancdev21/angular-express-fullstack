@@ -79,11 +79,13 @@
                                 <ng-select *ngIf="isAutocompleteUpdated" [items]="allTasks"
                                   bindLabel="config2.sourceField"
                                   [clearSearchOnAdd]="false"
+                                  placeholder="Search tasks"
                                   (add)="onSelect(i, j, $event)" >
                                 </ng-select>
                                 <ng-select *ngIf="!isAutocompleteUpdated" [items]="allTasks"
                                   bindLabel="config2.sourceField"
                                   [clearSearchOnAdd]="false"
+                                  placeholder="Search tasks"
                                   (add)="onSelect(i, j, $event)">
                                 </ng-select>
                             </li>

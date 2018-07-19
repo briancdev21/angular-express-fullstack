@@ -215,7 +215,7 @@ export class PmTasksTableComponent implements OnInit {
         this.milestones[i].editTitle = false;
         this.ownerModalCollapsed[i] = new Array();
         this.dependencyModalCollapsed[i] = new Array();
-
+        console.log('milestones length:', this.milestones[i]);
         if (this.milestones[i].taskIds !== null) {
           for (let j = 0; j < this.milestones[i].taskIds.length; j++) {
             this.ownerModalCollapsed[i][j] = false;
@@ -223,8 +223,8 @@ export class PmTasksTableComponent implements OnInit {
           }
           this.pmTasksService.getTasks(this.milestones[i].id).subscribe(taskData => {
             this.milestones[i].tasks = taskData.results;
-            this.dependencyList.concat(taskData.results);
-
+            this.dependencyList = this.dependencyList.concat(taskData.results);
+            console.log('fetching dat all tasks a:', i);
             this.milestones[i].tasks.forEach(element => {
               element.assigneeInfo = this.getUserInfo(element.assignee);
               element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
@@ -242,9 +242,9 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   addTasksFromPmBoardData(tableDataAtIndex: any, i) {
-    this.tasksTemp[i] = tableDataAtIndex;
+    this.tasksTemp.push(tableDataAtIndex);
+
       if (this.tasksTemp.length === this.milestones.length) {
-        console.log('test: milestones length:', this.tasksTemp);
         this.allTasks = this.dependencyList.map(dependency => dependency.id);
         console.log('all tasks:', this.allTasks);
 
@@ -292,6 +292,7 @@ export class PmTasksTableComponent implements OnInit {
 
   closeDependencyModal(i, j) {
     this.dependencyModalCollapsed[i][j] = false;
+    this.updateTask(this.milestones[i].id, this.milestones[i].tasks[j].id, this.milestones[i].tasks[j]);
   }
 
   removeDependency(i, j, k) {
@@ -299,6 +300,7 @@ export class PmTasksTableComponent implements OnInit {
     this.allTasks.push(item);
     this.milestones[i].tasks[j].dependency.splice(k, 1);
     this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
+    this.milestones[i].tasks[j].dependencyIds = this.milestones[i].tasks[j].dependency;
   }
 
   onInputChangedEvent(val: string) {
@@ -313,6 +315,8 @@ export class PmTasksTableComponent implements OnInit {
     const dependency = this.milestones[i].tasks[j].dependency as any[];
     if (this.milestones[i].tasks[j].dependency.length < 3) {
       dependency.push(item);
+      this.milestones[i].tasks[j].dependencyIds = dependency;
+      // this.updateTask(this.milestones[i].id, this.milestones[i].tasks[j].id, this.milestones[i].tasks[j]);
     }
   }
 
