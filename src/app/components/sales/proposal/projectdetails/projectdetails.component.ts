@@ -94,21 +94,19 @@ projectDetails = {
     pictureURI: ''
   },
   discount: {
-    type: '',
-    amount: ''
+    value: '',
+    unit: ''
   },
   projectCategoriesAll: undefined,
   projectSubCategoriesAll: undefined,
   name: '',
   internalNote: '',
   clientNote: '',
-  shippingAddress: {
-    address: '',
-    city: '',
-    province: '',
-    country: '',
-    postalCode: '',
-  },
+  address: '',
+  city: '',
+  province: '',
+  country: '',
+  postalCode: '',
   collaborators: [],
   customerName: '',
   projectName: '',
@@ -141,9 +139,9 @@ projectDetails = {
   invalidProjectName = false;
   invalidAddress = false;
   invalidCity = false;
-  invalidState = false;
+  invalidProvince = false;
   invalidCountry = false;
-  invalidZipcode = false;
+  invalidPostalCode = false;
   invalidProjectId = false;
   invalidSchedule = false;
   invalidAccountManager = false;
@@ -182,8 +180,8 @@ projectDetails = {
 
   proposalDetails = {
     discount: {
-      amount: 0,
-      type: 'AMOUNT'
+      value: 0,
+      unit: 'AMOUNT'
     },
     contactId : '',
     projectId: '',
@@ -194,11 +192,11 @@ projectDetails = {
     projectManagementContact: '',
     accountReceivable: '',
     association: '',
-    shippingAddress: '',
+    address: '',
     city: '',
-    state: '',
+    province: '',
     country: '',
-    zipcode: '',
+    postalCode: '',
     pricing: undefined,
     projectName: '',
     projectType: undefined,
@@ -210,7 +208,9 @@ projectDetails = {
     taxRate: 1,
     pricingCategoryId: 1,
     internalNote: '',
-    clientNote: ''
+    clientNote: '',
+    clientProjectManagerId: '',
+    accountReceivableId: ''
   };
 
   userInfo = {
@@ -220,11 +220,11 @@ projectDetails = {
     email: '',
     primaryphone: '',
     mobilephone: '',
-    shippingaddress: '',
+    address: '',
     city: '',
-    state: '',
+    province: '',
     country: '',
-    zipcode: '',
+    postalCode: '',
     billingaddress: '',
     keywords: [
     ],
@@ -291,34 +291,6 @@ projectDetails = {
       comp.designerEditable = false;
     });
 
-    this.sharedService.getContacts()
-      .subscribe(data => {
-        console.log('userlist: ', data);
-        this.customerList = data;
-        this.customerList = this.addContactName(this.customerList);
-        this.customersData = this.completerService.local(this.customerList, 'name', 'name');
-        // Add collaborators list
-        this.customerList.forEach( ele => {
-          this.items2.push({
-            id: ele.id,
-            label: name,
-            imageUrl: ele.pictureURI
-          });
-        });
-      });
-
-    this.sharedService.getUsers().subscribe(res => {
-      this.usersList = res;
-      this.usersList.forEach( ele => {
-        this.items3.push({
-          label: ele.firstName + ' ' + ele.lastName,
-          imageUrl: ele.pictureURI,
-          username: ele.username
-        });
-      });
-      this.items4 = this.items5 = this.items3;
-    });
-
     this.sharedService.getPricingCategories().subscribe(res => {
       this.proposalPricingList = res.results;
     });
@@ -327,9 +299,60 @@ projectDetails = {
       this.projectTypeList = res.results;
     });
 
-    this.projectsService.getProjectsList().subscribe(res => {
-      this.projectsList = res.results;
-      this.projectsData = this.completerService.local(this.projectsList, 'id', 'id');
+    this.projectsService.getProjectsList().subscribe(project => {
+      this.projectsList = project.results;
+      this.projectsData = this.completerService.local(this.projectsList, 'name', 'name');
+
+      this.sharedService.getUsers().subscribe(res => {
+        this.usersList = res;
+        this.usersList.forEach( ele => {
+          this.items3.push({
+            label: ele.firstName + ' ' + ele.lastName,
+            imageUrl: ele.pictureURI,
+            username: ele.username
+          });
+        });
+        this.items4 = this.items5 = this.items3;
+
+        this.sharedService.getContacts()
+        .subscribe(data => {
+          console.log('userlist: ', data);
+          this.customerList = data;
+          this.customerList = this.addContactName(this.customerList);
+          this.customersData = this.completerService.local(this.customerList, 'name', 'name');
+          // Add collaborators list
+          this.customerList.forEach( ele => {
+            this.items2.push({
+              id: ele.id,
+              label: name,
+              imageUrl: ele.pictureURI
+            });
+          });
+
+          this.proposalsService.getIndividualProposal(this.proposalId).subscribe(response => {
+            this.proposalInfo = response.data;
+            console.log('this proposalinf', response);
+            this.proposalDetails = response.data;
+            this.selectName = this.getContactCustomerNameFromId(this.proposalDetails.contactId);
+            this.selectProject = this.getContactNameFromId(this.proposalDetails.clientProjectManagerId);
+            this.selectReceivable = this.getContactNameFromId(this.proposalDetails.accountReceivableId);
+            this.proposalDetails['collaboratorsData'] = [];
+            this.proposalDetails.collaborators.forEach(ele => {
+              const selectUser = this.usersList.filter(u => u.username === ele)[0];
+              this.proposalDetails['collaboratorsData'].push(selectUser);
+            });
+            this.proposalDetails.address = this.proposalInfo.shippingAddress.address;
+            console.log('$$$ ', this.proposalDetails.address, this.proposalInfo.shippingAddress.address);
+            this.proposalDetails.city = this.proposalInfo.shippingAddress.city;
+            this.proposalDetails.province = this.proposalInfo.shippingAddress.province;
+            this.proposalDetails.country = this.proposalInfo.shippingAddress.country;
+            this.proposalDetails.postalCode = this.proposalInfo.shippingAddress.postalCode;
+
+            this.proposalDetails.projectName = this.proposalInfo.name;
+            this.proposalInfo.paySchedule = this.proposalDetails.paymentSchedule;
+          });
+        });
+      });
     });
 
     this.proposalsService.getProposals().subscribe(res => {
@@ -340,19 +363,15 @@ projectDetails = {
       this.taxRateList = res.results;
     });
 
-    this.proposalsService.getIndividualProposal(this.proposalId).subscribe(res => {
-      this.proposalInfo = res.data;
-      console.log('this proposalinf', res);
-    });
   }
 
   clickIconShipping() {
     this.switchIconShipping = !this.switchIconShipping;
-    this.proposalDetails.shippingAddress = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.address : '';
+    this.proposalDetails.address = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.address : '';
     this.proposalDetails.city = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.city : '';
-    this.proposalDetails.state = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.province : '';
+    this.proposalDetails.province = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.province : '';
     this.proposalDetails.country = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.country : '';
-    this.proposalDetails.zipcode = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.postalCode : '';
+    this.proposalDetails.postalCode = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.postalCode : '';
   }
 
   clickIconManagement() {
@@ -552,14 +571,14 @@ projectDetails = {
     this.invalidProjectName = false;
     this.invalidAddress = false;
     this.invalidCity = false;
-    this.invalidState = false;
+    this.invalidProvince = false;
     this.invalidCountry = false;
-    this.invalidZipcode = false;
+    this.invalidPostalCode = false;
     if (this.projectDetails.customerName && this.projectDetails.collaborators.length
-      && this.projectDetails.projectName && this.projectDetails.shippingAddress && this.projectDetails.shippingAddress.city
-      && this.projectDetails.shippingAddress.province
-      && this.projectDetails.shippingAddress.country &&
-      this.projectDetails.shippingAddress.postalCode) {
+      && this.projectDetails.projectName && this.projectDetails.address && this.projectDetails.city
+      && this.projectDetails.province
+      && this.projectDetails.country &&
+      this.projectDetails.postalCode) {
         this.ProposalInfoModalCollapsed = true;
         this.showProposalInfo = false;
     } else {
@@ -572,20 +591,20 @@ projectDetails = {
       if (!this.projectDetails.projectName) {
         this.invalidProjectName = true;
       }
-      if (!this.projectDetails.shippingAddress) {
+      if (!this.projectDetails.address) {
         this.invalidAddress = true;
       }
-      if (!this.projectDetails.shippingAddress.city) {
+      if (!this.projectDetails.city) {
         this.invalidCity = true;
       }
-      if (!this.projectDetails.shippingAddress.province) {
-        this.invalidState = true;
+      if (!this.projectDetails.province) {
+        this.invalidProvince = true;
       }
-      if (!this.projectDetails.shippingAddress.country) {
+      if (!this.projectDetails.country) {
         this.invalidCountry = true;
       }
-      if (!this.projectDetails.shippingAddress.postalCode) {
-        this.invalidZipcode = true;
+      if (!this.projectDetails.postalCode) {
+        this.invalidPostalCode = true;
       }
     }
   }
@@ -596,11 +615,13 @@ projectDetails = {
   }
   onChangeClientNote(event) {
     this.proposalDetails.clientNote = event.target.value;
+    console.log('client notes: ', event);
     this.updateProjectDetails();
   }
 
 
   updateProjectDetails() {
+    console.log('Updated Proposal data: ', this.proposalDetails);
     // console.log('project details are updating:', this.proposalDetails);
     // this.proposalDetails.contactId = parseInt(this.proposalDetails.contactId.toString().split('-').pop(), 10);
     // this.proposalDetails.clientProjectManagerId = parseInt(this.proposalDetails.clientProjectManagerId.split('-').pop(), 10);
@@ -630,6 +651,11 @@ projectDetails = {
     const projectSubCategories = event.map( k => k.id);
     this.proposalDetails.projectSubCategoriesAll = projectSubCategories;
     console.log('subcategories: ', event, this.proposalDetails.projectSubCategoriesAll);
+  }
+
+  selectCompletionDate(start) {
+    this.proposalDetails.completionDate = moment(start.value).format('YYYY-MM-DD');
+    // this.formattedStartDate = moment(start.value).format('MMMM DD, YYYY');
   }
 
   tabChange(event) {
@@ -664,16 +690,17 @@ projectDetails = {
       this.invalidProjectName = false;
       this.invalidAddress = false;
       this.invalidCity = false;
-      this.invalidState = false;
+      this.invalidProvince = false;
       this.invalidCountry = false;
-      this.invalidZipcode = false;
+      this.invalidPostalCode = false;
       this.invalidProjectType = false;
       this.invalidAccountReceivable = false;
       this.invalidClientProjectManager = false;
       this.invalidDesigner = false;
       if (this.proposalDetails.contactId && this.proposalDetails.collaborators.length
-        && this.proposalDetails.projectName && this.proposalDetails.shippingAddress && this.proposalDetails.city
-        && this.proposalDetails.state && this.proposalDetails.country && this.proposalDetails.zipcode && this.proposalDetails.projectType) {
+        && this.proposalDetails.projectName && this.proposalDetails.address && this.proposalDetails.city
+        && this.proposalDetails.province && this.proposalDetails.country &&
+        this.proposalDetails.postalCode && this.proposalDetails.projectType) {
           this.tabActiveSecond = true;
           this.tabActiveFirst = false;
           this.tabActiveThird = false;
@@ -689,20 +716,20 @@ projectDetails = {
         if (!this.proposalDetails.projectName) {
           this.invalidProjectName = true;
         }
-        if (!this.proposalDetails.shippingAddress) {
+        if (!this.proposalDetails.address) {
           this.invalidAddress = true;
         }
         if (!this.proposalDetails.city) {
           this.invalidCity = true;
         }
-        if (!this.proposalDetails.state) {
-          this.invalidState = true;
+        if (!this.proposalDetails.province) {
+          this.invalidProvince = true;
         }
         if (!this.proposalDetails.country) {
           this.invalidCountry = true;
         }
-        if (!this.proposalDetails.zipcode) {
-          this.invalidZipcode = true;
+        if (!this.proposalDetails.postalCode) {
+          this.invalidPostalCode = true;
         }
         if (!this.proposalDetails.projectType) {
           this.invalidProjectType = true;
@@ -806,8 +833,15 @@ projectDetails = {
   }
 
   getContactNameFromId(id) {
-    const selectedContact = this.customerList.filter(c => c.id === id)[0];
+    const updatedId = parseInt(id.split('-').pop(), 10);
+    const selectedContact = this.customerList.filter(c => c.id === updatedId)[0];
     return selectedContact.name;
+  }
+
+  getContactCustomerNameFromId(id) {
+    const updatedId = parseInt(id.split('-').pop(), 10);
+    this.selectedCustomer = this.customerList.filter(c => c.id === updatedId)[0];
+    return this.selectedCustomer.name;
   }
 
   finishAddProposal() {
@@ -819,7 +853,8 @@ projectDetails = {
       // 'leadId': 0,
       'projectId': this.proposalDetails.projectId,
       'projectTypeId': parseInt(this.proposalDetails.projectType, 10),
-      'pricingCategoryId': this.proposalDetails.pricing ? parseInt(this.proposalDetails.pricing, 10) : undefined,
+      'pricingCategoryId': this.proposalDetails.pricingCategoryId ?
+        parseInt(this.proposalDetails.pricingCategoryId.toString(), 10) : undefined,
       'categoryIds': this.proposalDetails.projectCategoriesAll,
       'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
       'accountManager': this.proposalDetails.accountManager.username,
@@ -829,10 +864,10 @@ projectDetails = {
       'accountReceivableId': this.proposalDetails.accountReceivable,
       'name': this.proposalDetails.projectName,
       'shippingAddress': {
-        'address': this.proposalDetails.shippingAddress,
+        'address': this.proposalDetails.address,
         'city': this.proposalDetails.city,
-        'province': this.proposalDetails.state,
-        'postalCode': this.proposalDetails.zipcode,
+        'province': this.proposalDetails.province,
+        'postalCode': this.proposalDetails.postalCode,
         'country': this.proposalDetails.country
       },
       'paymentSchedule': this.proposalDetails.paymentSchedule,
@@ -841,8 +876,8 @@ projectDetails = {
       'internalNote': this.extractStringFromEditor(this.internalNoteContent),
       'completionDate': this.proposalDetails.completionDate,
       'discount': {
-        'value': this.proposalDetails.discount.amount,
-        'unit': this.proposalDetails.discount.type
+        'value': this.proposalDetails.discount.value,
+        'unit': this.proposalDetails.discount.unit
       },
       'collaborators': collaborators,
       'taxRateId': parseInt(this.proposalDetails.taxRate.toString(), 10)

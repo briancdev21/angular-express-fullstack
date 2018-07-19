@@ -10,6 +10,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { ImageUploadModule } from 'angular2-image-upload';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 
 import { ProductDetailsComponent } from './productdetails/productdetails.component';
@@ -62,7 +63,9 @@ import { MultiCategoriesSelectComponent } from '../addproposal/multicategoriesse
     Ng2CompleterModule,
     ImageUploadModule.forRoot(),
     InvoicesCmpModule,
-    CommonCmpModule
+    CommonCmpModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ],
   exports: [
     ProductDetailsComponent,
