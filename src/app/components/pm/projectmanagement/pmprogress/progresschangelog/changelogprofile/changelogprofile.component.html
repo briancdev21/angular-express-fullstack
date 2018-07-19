@@ -31,7 +31,7 @@
 
 <div class="log-list" *ngIf="changeLogList">
   <div>CHANGE LOG LIST</div>
-  <app-changeloglisttable [changeLogList]="changeLogList" [changeLogInfo]="changeLogInfo"></app-changeloglisttable>
+  <app-changeloglisttable ></app-changeloglisttable>
 </div>
 
 <div>
@@ -43,7 +43,7 @@
 <div class="confirm-delete-modal-wrapper" *ngIf="showConfirmModal" ></div>
 <div [ngClass]="{'confirm-modal': showConfirmModal, 'confirm-modal-hide': !showConfirmModal }">
   <div class="header">
-    <span>Confirm Delete</span>
+    <span>Create Estimate</span>
     <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showConfirmModal=false" />
   </div>
   <div class="content" >

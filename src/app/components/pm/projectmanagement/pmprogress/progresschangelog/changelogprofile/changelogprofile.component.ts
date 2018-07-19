@@ -38,6 +38,10 @@ export class ChangeLogProfileComponent implements OnInit {
         this.detailsChange = res.data.newScopeOfWork;
       });
 
+      this.projectsService.getChangeLogItems(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
+        this.changeLogList = res.results;
+      });
+
   }
 
   ngOnInit() {
@@ -45,7 +49,7 @@ export class ChangeLogProfileComponent implements OnInit {
   }
 
   confirm() {
-    this.router.navigate(['../estimate']);
+    this.router.navigate(['../add-estimate']);
   }
 
   addUserRealName(data) {
