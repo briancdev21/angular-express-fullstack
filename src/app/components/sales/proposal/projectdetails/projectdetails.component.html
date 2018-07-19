@@ -16,15 +16,15 @@
     </div>
     <div class="project-category">
       <span>Category</span>
-      <div class="category-box" >
-        <app-multicategoriesselect [categories]="categories" (sendCategories)="getProjectCategories($event)"></app-multicategoriesselect>
+      <div class="category-box" *ngIf="proposalInfo">
+        <app-multicategoriesselect [categories]="proposalInfo.categoryIds" (sendCategories)="getProjectCategories($event)"></app-multicategoriesselect>
       </div>
     </div>
 
     <div class="subproject-category">
       <span>Subcategory</span>
-      <div class="-subcategorybox" >
-        <app-multisubcategoriesselect [subCategories]="subCategories" (sendSubCategories)="getProjectSubCategories($event)"></app-multisubcategoriesselect>
+      <div class="subcategory-box" *ngIf="proposalInfo">
+        <app-multisubcategoriesselect [subCategories]="proposalInfo.subcategoryIds" (sendSubCategories)="getProjectSubCategories($event)"></app-multisubcategoriesselect>
       </div>
     </div>
 
@@ -38,12 +38,12 @@
       <textarea (change)="onChangeInternalNote($event)" >{{internalNote}}</textarea>
     </div>
 
-    <div class="recent-activity">
+    <!-- <div class="recent-activity">
       <span>Recent Activity</span>
       <div class="content">
         <app-ng2timeline [timelineData]="timelineData" [oneSide]="true"></app-ng2timeline>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 
@@ -54,50 +54,41 @@
     <img class="close-btn" src="assets/images/x-sign-red.png" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false" />
   </div>
 
-  <div class="content" *ngIf="proposalInfo">
+  <div class="content">
     <tabs>
       <tab tabTitle="CLIENT DETAILS" [(active)]="tabActiveFirst">
         <div class="tab-one">
           <div class="name-col tab-row">
-            <div >
+            <div *ngIf="customerList">
               <span>Customer Name (*required)</span>
               <ng2-completer 
                 [dataService]="customersData" 
                 [minSearchLength]="0" 
                 (selected)="onSelectCustomer($event)" 
-                [(ngModel)]="customerName" 
+                [(ngModel)]="selectName" 
                 class="ng2completer" 
                 [ngClass]="{'validation-required-name': invalidCustomerName}">
               </ng2-completer>
               <!-- <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectCustomer($event)" [ngClass]="{'validation-required-name': invalidCustomerName}" [searchStr]="selectName"></app-in-customer-name> -->
             </div>
             <div class="collaborators">
-              <span>Collaborators</span>
-              <div>
-                <div class="followers" (click)="editable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidCollaborators}"> 
-                  <div class="follower" *ngFor="let user of collaborators; let i = index">
-                    <a [title]='user.name' ><img [src]='user.pictureURI'  (click)="editable=true;$event.stopPropagation()"/></a>
+              <span>Collaborators (*required)</span>
+              <div *ngIf="customerList">
+                <div class="followers"  (click)="editable=true;$event.stopPropagation()" *ngIf="proposalDetails.collaborators" [ngClass]="{'validation-required': invalidCollaborators}"> 
+                  <div class="follower" *ngFor="let user of proposalDetails.collaborators; let i = index" >
+                    <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editable=true;$event.stopPropagation()"/></a>
                   </div> 
                   <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
                     <ul>
-                      <li *ngFor="let user of collaborators; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <span *ngIf="!proposalDetails.collaborators.length" class="type-here">Type collaborator's name</span>
+                      <li *ngFor="let user of proposalDetails.collaborators; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <!-- <input autocomplete [config]="config2" [items]="items2"
-                          (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelect($event)"> -->
-                        <!-- <input 
-                          [ng5-auto-complete]="items2"
-                          filterName="config2.sourceField"
-                          no-record-text="config2.placeholder"
-                          (valueChanged)="onSelect($event)"
-                          (input)="onInputChangedEvent($event)"
-                        />   -->
-                        <ng-select *ngIf="isAutocompleteUpdated2" [items]="items2"
+                        <ng-select *ngIf="isAutocompleteUpdated2" [items]="items3"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
                           (add)="onSelect($event)" >
                         </ng-select>
-                        <ng-select *ngIf="!isAutocompleteUpdated2" [items]="items2"
+                        <ng-select *ngIf="!isAutocompleteUpdated2" [items]="items3"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
                           (add)="onSelect($event)">
@@ -113,10 +104,10 @@
           <div class="project-acc tab-row">
             <div>
               <div class="desc">
-                <span>Project Management</span>
+                <span>Project Management (*required)</span>
                 <div>
-                  <img src="assets/images/switch-off.png" *ngIf="!switchIconManagement" (click)="clickIconManagement()">
                   <img src="assets/images/switch.png" *ngIf="switchIconManagement" (click)="clickIconManagement()">
+                  <img src="assets/images/switch-off.png" *ngIf="!switchIconManagement" (click)="clickIconManagement()">
                   <span>Same as customer</span>
                 </div>
               </div>
@@ -124,18 +115,19 @@
                 [dataService]="customersData" 
                 [minSearchLength]="0" 
                 (selected)="onSelectProjectManagementContact($event)" 
-                [(ngModel)]="clientProjectManager" 
+                [(ngModel)]="selectProject" 
                 class="ng2completer" 
                 [ngClass]="{'validation-required-name': invalidClientProjectManager}">
               </ng2-completer>
+              <!-- <app-in-customer-name [userList]="customerList" [ngClass]="{'validation-required-name': invalidClientProjectManager}" (selectedUser)="onSelectProjectManagementContact($event)" [searchStr]="selectProject"></app-in-customer-name> -->
             </div>
 
             <div>
               <div class="desc">
-                <span>Account Receivable</span>
+                <span>Account Receivable (*required)</span>
                 <div>
-                  <img src="assets/images/switch-off.png" *ngIf="!switchIconReceivable" (click)="clickIconReceivable()">
                   <img src="assets/images/switch.png" *ngIf="switchIconReceivable" (click)="clickIconReceivable()">
+                  <img src="assets/images/switch-off.png" *ngIf="!switchIconReceivable" (click)="clickIconReceivable()">
                   <span>Same as customer</span>
                 </div>
               </div>
@@ -147,18 +139,19 @@
                 class="ng2completer" 
                 [ngClass]="{'validation-required-name': invalidAccountReceivable}">
               </ng2-completer>
+              <!-- <app-in-customer-name [userList]="customerList" [ngClass]="{'validation-required-name': invalidAccountReceivable}" (selectedUser)="onSelectAccountReceivable($event)" [searchStr]="selectReceivable"></app-in-customer-name> -->
             </div>
           </div>
 
           <div class="other-pri tab-row">
-            <div class="other-association" >
+            <div>
               <span>Other Associations</span>
-              <app-in-customer-name [userList]="contactsList" (selectedUser)="onSelectAssociation($event)" [searchStr]="selectAssociation"></app-in-customer-name>
+              <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectAssociation($event)" [searchStr]="selectAssociation"></app-in-customer-name>
             </div>
             <div>
               <span>Proposal Pricing</span>
               <div>
-                <select [(ngModel)]="proposalDetails.pricingCategoryId" (change)="onChangePricingCategory($event)" [ngClass]="{'validation-required': invalidPricing}">
+                <select [(ngModel)]="proposalDetails.pricing" [ngClass]="{'validation-required': invalidPricing}">
                   <option *ngFor="let price of proposalPricingList" [value]="price.id">{{price.name}}</option>
                 </select>
               </div>
@@ -167,13 +160,22 @@
 
           <div class="name-type tab-row">
             <div>
-              <span>Project Name</span>
-              <input placeholder="Enter Project Name" [(ngModel)]="projectDetails.username" (change)="onChangeProjectName($event)" [ngClass]="{'validation-required': invalidProjectName}">
+              <span>Project Name (*required)</span>
+              <!-- <ng2-completer 
+                [dataService]="projectsData" 
+                [minSearchLength]="0" 
+                (selected)="onSelectProjectId($event)" 
+                [(ngModel)]="projectId" 
+                class="ng2completer" 
+                [ngClass]="{'validation-required-name': invalidProjectName}">
+              </ng2-completer> -->
+              <input placeholder="Enter Project Name" [(ngModel)]="proposalDetails.projectName" [ngClass]="{'validation-required': invalidProjectName}">
             </div>
             <div>
-              <span>Project Type</span>
+              <span>Project Type (*required)</span>
               <div>
-                <select [(ngModel)]="projectType" (change)="onChangeProjectType($event)" [ngClass]="{'validation-required': invalidProjectType}">
+                <!-- <app-in-customer-name [userList]="projectTypeList" (selectedUser)="onSelectProjectType($event)" [searchStr]="selectType"></app-in-customer-name> -->
+                <select [(ngModel)]="proposalDetails.projectType" [ngClass]="{'validation-required': invalidProjectType}">
                   <option value="" disabled>Choose Project Type</option>
                   <option *ngFor="let project of projectTypeList" [value]="project.id">{{project.name}}</option>
                 </select>
@@ -183,22 +185,22 @@
 
           <div class="shipping-address ">
             <div class="desc">
-              <span>Shipping Address</span>
+              <span>Shipping Address (*required)</span>
               <div>
                 <img src="assets/images/switch.png" *ngIf="switchIconShipping" (click)="clickIconShipping()">
                 <img src="assets/images/switch-off.png" *ngIf="!switchIconShipping" (click)="clickIconShipping()">
                 <span>Same as the customer profile</span>
               </div>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="shippingAddress.address" [ngClass]="{'validation-required': invalidAddress}" (change)="onChangeShippingAddress($event, 'address')" >
+            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="proposalDetails.shippingAddress" [ngClass]="{'validation-required': invalidAddress}" >
 
             <div class="city-state">
-              <input placeholder="Enter City" [(ngModel)]="shippingAddress.city" (change)="onChangeShippingAddress($event, 'city')" [ngClass]="{'validation-required': invalidCity}">
-              <input placeholder="Enter State" [(ngModel)]="shippingAddress.province" (change)="onChangeShippingAddress($event, 'postalprovinceCode')" [ngClass]="{'validation-required': invalidState}">
+              <input placeholder="Enter City" [(ngModel)]="proposalDetails.city" [ngClass]="{'validation-required': invalidCity}">
+              <input placeholder="Enter State" [(ngModel)]="proposalDetails.state" [ngClass]="{'validation-required': invalidState}">
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country" [(ngModel)]="shippingAddress.country" (change)="onChangeShippingAddress($event, 'country')" [ngClass]="{'validation-required': invalidCountry}">
-              <input placeholder="Enter Zipcode" [(ngModel)]="shippingAddress.postalCode" (change)="onChangeShippingAddress($event, 'postalCode')" [ngClass]="{'validation-required': invalidZipcode}">
+              <input placeholder="Enter Country" [(ngModel)]="proposalDetails.country" [ngClass]="{'validation-required': invalidCountry}">
+              <input placeholder="Enter Zipcode" [(ngModel)]="proposalDetails.zipcode" [ngClass]="{'validation-required': invalidZipcode}">
             </div>
           </div>
           <div class="btn-section" >
@@ -217,30 +219,37 @@
             <div class="discount">
               <span>Discount</span>
               <div>
-                <select [(ngModel)]="proposalDetails.discount.type" (change)="updateProjectDetails()">
+                <select [(ngModel)]="proposalDetails.discount.type">
                   <option value="AMOUNT">$</option>
                   <option value="PERCENT">%</option>
                 </select>
-                <input [(ngModel)]="proposalDetails.discount.amount" (change)="updateProjectDetails()" type="number">
+                <input [(ngModel)]="proposalDetails.discount.amount" type="number">
               </div>
             </div>
             <div>
-              <span>Project ID</span>
-              <input [(ngModel)]="projectDetails.projectId" (change)="updateProjectDetails()" [ngClass]="{'validation-required': invalidProjectId}">
+              <div class="desc">
+                <span>Project ID (*required)</span>
+                <div>
+                  <img src="assets/images/switch.png" *ngIf="switchIconAutoId" (click)="clickIconAutoId()">
+                  <img src="assets/images/switch-off.png" *ngIf="!switchIconAutoId" (click)="clickIconAutoId()">
+                  <span>Auto-generate project ID</span>
+                </div>
+              </div>
+              <input [(ngModel)]="proposalDetails.projectId" [ngClass]="{'validation-required': invalidProjectId}">
             </div>
           </div>
 
           <div class="cate-subcate tab-row">
             <div>
-              <span>Project Categories</span>
+              <span>Project Categories (*required)</span>
               <div class="category-box" [ngClass]="{'validation-required': invalidCategory}">
-                <app-multicategoriesselect [categories]="categories" (sendCategories)="getProjectCategories($event)"></app-multicategoriesselect>
+                <app-multicategoriesselect [categories]="emptyArr" (sendCategories)="getProjectCategories($event)"></app-multicategoriesselect>
               </div>
             </div>
             <div>
-              <span>Project Subcategories</span>
+              <span>Project Subcategories (*required)</span>
               <div class="subcategory-box" [ngClass]="{'validation-required': invalidSubCategory}">
-                <app-multisubcategoriesselect [subCategories]="subCategories" (sendSubCategories)="getProjectSubCategories($event)"></app-multisubcategoriesselect>
+                <app-multisubcategoriesselect [subCategories]="emptyArr" (sendSubCategories)="getProjectSubCategories($event)"></app-multisubcategoriesselect>
               </div>
             </div>
           </div>
@@ -248,7 +257,7 @@
           <div class="comp-sche tab-row">
             <div class="completion">
               <span>Completion Date</span>
-              <app-in-createddatefield [(createdDate)]="proposalDetails.completionDate" ></app-in-createddatefield>
+              <app-in-createddatefield [(createdDate)]="proposalDetails.completionDate"></app-in-createddatefield>
             </div>
             <div class="schedule">
               <div class="schedule-title">
@@ -256,42 +265,41 @@
                 <span>{{scheduleRemain}}%</span>
               </div>
               <div class="milestones" [ngClass]="{'validation-required': invalidSchedule}">
-                <app-schedulemultikeyword [(keywords)]="projectDetails.paymentSchedule" (scheduleRemain)="getSchduleRemain($event)"></app-schedulemultikeyword>
+                <app-schedulemultikeyword [(keywords)]="proposalDetails.paymentSchedule" (scheduleRemain)="getSchduleRemain($event)"></app-schedulemultikeyword>
               </div>
             </div>
           </div>
 
           <div class="account-project tab-row">
             <div>
-              <span>Account Manager</span>
+              <span>Account Manager (*required)</span>
               <div class="member-container">
-                <div class="followers" (click)="accountEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidAccountManager}"> 
-                  <div class="follower" >
-                    <a [title]='projectDetails.accountManager.username' ><img [src]='projectDetails.accountManager.pictureURI'  (click)="accountEditable=true;$event.stopPropagation()"/></a>
+                <div 
+                  class="followers" 
+                  (click)="accountEditable=true; projectEditable=false; designerEditable=false; $event.stopPropagation()" 
+                  [ngClass]="{'validation-required': invalidAccountManager}"
+                > 
+                  <div class="follower">
+                    <a *ngIf="proposalDetails.accountManager" [title]='proposalDetails.accountManager.name' ><img [src]='proposalDetails.accountManager.imageUrl'  (click)="accountEditable=true;$event.stopPropagation()"/></a>
                   </div> 
                   <div class="edit-followers" *ngIf="accountEditable" (click)="accountEditable=true;$event.stopPropagation()" >
                     <ul>
-                      <li >{{projectDetails.accountManager.username}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <span *ngIf="!proposalDetails.accountManager" class="type-here">Type User's name</span>
+                      <li *ngIf="proposalDetails.accountManager">{{proposalDetails.accountManager.username}}</li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <!-- <input autocomplete [config]="config2" [items]="items3"
-                          (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelectAccountManager($event)"> -->
-                        <!-- <input 
-                          [ng5-auto-complete]="items3"
-                          filterName="config2.sourceField"
-                          no-record-text="config2.placeholder"
-                          (valueChanged)="onSelectAccountManager($event)"
-                          (input)="onInputChangedEvent($event)"
-                        /> -->
                         <ng-select *ngIf="isAutocompleteUpdated3" [items]="items3"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
-                          (add)="onSelectAccountManager($event)" >
+                          (add)="onSelectAccountManager($event)"
+                          [maxSelectedItems]="1"
+                        >
                         </ng-select>
                         <ng-select *ngIf="!isAutocompleteUpdated3" [items]="items3"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
-                          (add)="onSelectAccountManager($event)">
+                          (add)="onSelectAccountManager($event)"
+                          [maxSelectedItems]="1"
+                        >
                         </ng-select>
                       </li>
                     </ul>
@@ -300,26 +308,20 @@
               </div>
             </div>
             <div>
-              <span>Project Manager</span>
+              <span>Project Manager (*required)</span>
               <div class="member-container">
-                <div class="followers" (click)="projectEditable=true;$event.stopPropagation()" [ngClass]="{'validation-required': invalidProjectManager}"> 
+                <div 
+                  class="followers" 
+                  (click)="projectEditable=true; accountEditable=false; designerEditable=false; $event.stopPropagation()" 
+                  [ngClass]="{'validation-required': invalidProjectManager}"> 
                   <div class="follower">
-                    <a [title]='projectDetails.projectManager.username' ><img [src]='projectDetails.projectManager.pictureURI'  (click)="projectEditable=true;$event.stopPropagation()"/></a>
+                    <a *ngIf="proposalDetails.projectManager"  [title]='proposalDetails.projectManager.name' ><img [src]='proposalDetails.projectManager.imageUrl'  (click)="projectEditable=true;$event.stopPropagation()"/></a>
                   </div> 
                   <div class="edit-followers" *ngIf="projectEditable" (click)="projectEditable=true;$event.stopPropagation()" >
                     <ul>
-                      <li>{{projectDetails.projectManager.username}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <span *ngIf="!proposalDetails.projectManager" class="type-here">Type User's name</span>
+                      <li *ngIf="proposalDetails.projectManager">{{proposalDetails.projectManager.username}}</li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <!-- <input autocomplete [config]="config2" [items]="items4"
-                          (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelectProjectManager($event)"> -->
-                        <!-- <input 
-                          [ng5-auto-complete]="items4"
-                          filterName="config2.sourceField"
-                          no-record-text="config2.placeholder"
-                          (valueChanged)="onSelectProjectManager($event)"
-                          (input)="onInputChangedEvent($event)"
-                        /> -->
                         <ng-select *ngIf="isAutocompleteUpdated4" [items]="items4"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
@@ -340,26 +342,17 @@
 
           <div class="design-custom tab-row">
             <div>
-              <span>Designer</span>
-              <div class="member-container">
+              <span>Designer (*required)</span>
+              <div class="member-container" (click)="designerEditable=true; projectEditable=false; accountEditable=false; $event.stopPropagation()" [ngClass]="{'validation-required': invalidDesigner}">
                 <div class="followers" > 
-                  <div class="follower">
-                    <a [title]='projectDetails.designer.username' ><img [src]='projectDetails.designer.pictureURI'  (click)="designerEditable=true;$event.stopPropagation()"/></a>
+                  <div class="follower" >
+                    <a *ngIf="proposalDetails.designer" [title]='proposalDetails.designer.name' ><img [src]='proposalDetails.designer.imageUrl'  (click)="designerEditable=true;$event.stopPropagation()"/></a>
                   </div> 
                   <div class="edit-followers" *ngIf="designerEditable" (click)="designerEditable=true;$event.stopPropagation()" >
                     <ul>
-                      <li >{{projectDetails.designer.username}}<span (click)="removeDesigner(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <span *ngIf="!proposalDetails.designer" class="type-here">Type User's name</span>
+                      <li *ngIf="proposalDetails.designer">{{proposalDetails.designer.username}}</li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
-                        <!-- <input autocomplete [config]="config2" [items]="items5"
-                          (inputChangedEvent)="onInputChangedEvent($event)"
-                          (selectEvent)="onSelectDesigner($event)"> -->
-                        <!-- <input 
-                          [ng5-auto-complete]="items5"
-                          filterName="config2.sourceField"
-                          no-record-text="config2.placeholder"
-                          (valueChanged)="onSelectDesigner($event)"
-                          (input)="onInputChangedEvent($event)"
-                        /> -->
                         <ng-select *ngIf="isAutocompleteUpdated5" [items]="items5"
                           bindLabel="config2.sourceField"
                           [clearSearchOnAdd]="false"
@@ -377,8 +370,12 @@
               </div>
             </div>
             <div>
-              <span>Custom Field</span>
-              <input>
+              <span>Tax Rate (*required)</span>
+              <div>
+                <select [(ngModel)]="proposalDetails.taxRate">
+                  <option [value]="tax.id" *ngFor="let tax of taxRateList">{{tax.name}}</option>
+                </select>
+              </div>
             </div>
           </div>
           <div class="btn-section" >
@@ -394,7 +391,7 @@
       <tab tabTitle="SCOPE OF WORK" class="tab-won" [(active)]="tabActiveThird">
         <div class="tab-three">
           <span>Scope of work</span>
-          <div [froalaEditor] class="form-editor">Hello, Froala!</div>
+          <div [froalaEditor] class="form-editor" [ngClass]="{'validation-required': invalidScopeEditorContent}" [(ngModel)]="scopeEditorContent"></div>
           <div class="btn-section" >
             <button class="cancel-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
               Cancel
