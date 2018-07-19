@@ -11,13 +11,30 @@ import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 })
 
 export class ScheduleMultiKeywordComponent implements AfterViewInit, OnInit {
-  @Input() keywords;
+  @Input() set keywords(val) {
+    if (!val) {
+      val = [];
+    }
+    this._keywords = val;
+    let proposalTotal = 0;
+    let proposalRemaining;
+    if (this._keywords.length > 0) {
+      for (let i = 0; i < this._keywords.length ; i ++) {
+        proposalTotal = proposalTotal + parseInt(this._keywords[i], 10);
+      }
+      proposalRemaining = 100 - proposalTotal;
+      if (proposalRemaining >= 0) {
+        this.scheduleRemain.emit(proposalRemaining);
+      }
+    }
+  }
   @ViewChild('box') input: ElementRef;
   @Output() scheduleRemain: EventEmitter<any> = new EventEmitter;
   editable: boolean;
   newKeyword: string;
   schdulePercent: any;
   remaining = 100;
+  _keywords = [];
 
   constructor(private renderer: Renderer) {
     const comp = this;
@@ -28,17 +45,6 @@ export class ScheduleMultiKeywordComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.editable = false;
-    let proposalTotal = 0;
-    let proposalRemaining;
-    if (this.keywords.length > 0) {
-      for (let i = 0; i < this.keywords.length ; i ++) {
-        proposalTotal = proposalTotal + parseInt(this.keywords[i], 10);
-      }
-      proposalRemaining = 100 - proposalTotal;
-      if (proposalRemaining >= 0) {
-        this.scheduleRemain.emit(proposalRemaining);
-      }
-    }
   }
 
   ngAfterViewInit() {
@@ -53,14 +59,14 @@ export class ScheduleMultiKeywordComponent implements AfterViewInit, OnInit {
     let total = 0;
     let a;
     if (this.schdulePercent) {
-      for (let i = 0; i < this.keywords.length ; i ++) {
-        total = total + parseInt(this.keywords[i], 10);
+      for (let i = 0; i < this._keywords.length ; i ++) {
+        total = total + parseInt(this._keywords[i], 10);
       }
       a = 100 - total - this.schdulePercent;
       if (a >= 0) {
         this.remaining = a;
-        this.keywords.push(this.schdulePercent);
-        this.scheduleRemain.emit({'remaining': this.remaining, 'keywords': this.keywords});
+        this._keywords.push(this.schdulePercent);
+        this.scheduleRemain.emit({'remaining': this.remaining, 'keywords': this._keywords});
         this.schdulePercent = undefined;
       } else {
         this.remaining = 100 - total;
@@ -70,12 +76,12 @@ export class ScheduleMultiKeywordComponent implements AfterViewInit, OnInit {
 
   removeSchedule(index) {
     let total = 0;
-    this.keywords.splice(index, 1);
-    for (let i = 0; i < this.keywords.length ; i ++) {
-      total = total + this.keywords[i];
+    this._keywords.splice(index, 1);
+    for (let i = 0; i < this._keywords.length ; i ++) {
+      total = total + this._keywords[i];
     }
     this.remaining = 100 - total;
-    this.scheduleRemain.emit({'remaining': this.remaining, 'keywords': this.keywords});
+    this.scheduleRemain.emit({'remaining': this.remaining, 'keywords': this._keywords});
   }
 
 }
