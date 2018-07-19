@@ -13,7 +13,10 @@ import { SalesService } from '../../sales.service';
 })
 
 export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
-  @Input() categories;
+  @Input() set categories(val) {
+    this._categories = val;
+    console.log('multicategories : ', this._categories);
+  }
   @ViewChild('box') input: ElementRef;
   @Input() placeholder;
   @Output() sendCategories: EventEmitter<any> = new EventEmitter;
@@ -21,13 +24,14 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
   newCategory: string;
   categoriesNameList = [];
   categoriesList = [];
+  _categories: any;
 
   constructor(private renderer: Renderer, private sharedService: SharedService, private salesService: SalesService) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
     });
-    console.log('after create categories list:', this.categories);
+    console.log('after create categories list:', this._categories);
   }
 
   ngOnInit() {
@@ -37,14 +41,14 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       this.categoriesList = data.results;
       this.categoriesNameList = data.results.map(k => k.name);
       // Change categories ids to objects
-      this.categories.forEach(element => {
+      this._categories.forEach(element => {
         for (let i = 0; i < this.categoriesList.length; i ++) {
           if (element === this.categoriesList[i].id) {
             arr.push(this.categoriesList[i]);
           }
         }
       });
-      this.categories = arr;
+      this._categories = arr;
     });
   }
 
@@ -60,14 +64,14 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
     if (!this.categoriesNameList.includes(data)) {
       this.sharedService.createCategory({'name': data})
       .subscribe((res) => {
-        this.categories.push(res.data);
-        this.sendCategories.emit(this.categories);
+        this._categories.push(res.data);
+        this.sendCategories.emit(this._categories);
         this.salesService.selectedCategory.next(res.data.id);
       });
     } else {
       const pos = this.categoriesNameList.indexOf(data);
-      this.categories.push(this.categoriesList[pos]);
-      this.sendCategories.emit(this.categories);
+      this._categories.push(this.categoriesList[pos]);
+      this.sendCategories.emit(this._categories);
       this.salesService.selectedCategory.next(this.categoriesList[pos].id);
     }
   }
@@ -76,11 +80,11 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
     this.sharedService.deleteIndividualCategory(id)
     .subscribe(res => {
       this.sharedService.getCategories().subscribe(data => {
-        this.categories = data.results;
+        this._categories = data.results;
       });
       this.salesService.deletedCategory.next(res.data.id);
     });
-    console.log('categories list:', this.categories, this.sendCategories);
+    console.log('categories list:', this._categories, this.sendCategories);
   }
 
 }
