@@ -13,7 +13,10 @@ import { SalesService } from '../../sales.service';
 })
 
 export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit {
-  @Input() subCategories;
+  @Input() set subCategories(val) {
+    this._subCategories = val;
+    console.log('multicategories : ', this._subCategories);
+  }
   @ViewChild('box') input: ElementRef;
   @Input() placeholder;
   @Output() sendSubCategories: EventEmitter<any> = new EventEmitter;
@@ -21,89 +24,49 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
   newSubCategory: string;
   subCategoriesNameList = [];
   subCategoriesList = [];
-  categoryId: any;
-  categoriesList = [];
+  _subCategories: any;
 
   constructor(private renderer: Renderer, private sharedService: SharedService, private salesService: SalesService) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
     });
-
-    this.salesService.selectedCategory.subscribe(res => {
-      this.categoriesList.push(res);
-      this.categoryId = res;
-      if (res) {
-        this.sharedService.getSubCategories().subscribe(data => {
-          this.subCategoriesList = data.results;
-          this.subCategoriesNameList = data.results.map(r => r.name);
-        });
-      }
-    });
-
-    this.salesService.deletedCategory.subscribe(res => {
-      this.subCategories = [];
-      if (res) {
-        const pos = this.categoriesList.indexOf(res);
-        this.categoriesList.splice(pos, -1);
-        this.categoriesList.forEach(ele => {
-          this.sharedService.getSubCategories().subscribe(data => {
-            this.subCategories.concat(data.results);
-          });
-        });
-      }
-    });
   }
 
   ngOnInit() {
     const arr = [];
     this.editable = false;
-    // if (this.categoryId) {
-    //   this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
-    //     this.subCategoriesList = data.results;
-    //     this.subCategoriesNameList = data.results.map(k => k.name);
-    //     // Change subCategories ids to objects
-    //     // this.subCategories.forEach(element => {
-    //     //   for (let i = 0; i < this.subCategoriesList.length; i ++) {
-    //     //     if (element === this.subCategoriesList[i].id) {
-    //     //       arr.push(this.subCategoriesList[i]);
-    //     //     }
-    //     //   }
-    //     // });
-    //     this.subCategories = arr;
-    //   });
-    // }
+    this.sharedService.getSubCategories().subscribe(data => {
+      this.subCategoriesList = data.results;
+      this.subCategoriesNameList = data.results.map(k => k.name);
+      // Change categories ids to objects
+      this._subCategories.forEach(element => {
+        for (let i = 0; i < this.subCategoriesList.length; i ++) {
+          if (element === this.subCategoriesList[i].id) {
+            arr.push(this.subCategoriesList[i]);
+          }
+        }
+      });
+      this._subCategories = arr;
+    });
   }
 
   ngAfterViewInit() {
     // this.input.nativeElement.focus();
   }
 
-  checkInSub(data) {
-
-    if (this.subCategoriesNameList.includes(data)) {
-      return true;
-    } else {
-      return false;
-    }
-
-  }
-
   addNewSubCategory(data) {
     this.newSubCategory = '';
-    if (this.checkInSub(data)) {
-      const pos = this.subCategoriesNameList.indexOf(data);
-      this.subCategories.push(this.subCategoriesList[pos]);
-      this.sendSubCategories.emit(this.subCategories);
-      console.log('sub pos:', pos, this.subCategories);
-
-    } else {
+    if (!this.subCategoriesNameList.includes(data)) {
       this.sharedService.createSubCategory({'name': data})
       .subscribe((res) => {
-        this.subCategories.push(res.data);
-        this.sendSubCategories.emit(this.subCategories);
-        console.log('subcategories:', this.sendSubCategories, this.subCategories);
+        this._subCategories.push(res.data);
+        this.sendSubCategories.emit(this._subCategories);
       });
+    } else {
+      const pos = this.subCategoriesNameList.indexOf(data);
+      this._subCategories.push(this.subCategoriesList[pos]);
+      this.sendSubCategories.emit(this._subCategories);
     }
   }
 
@@ -111,10 +74,11 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
     this.sharedService.deleteIndividualSubCategory(id)
     .subscribe(res => {
       this.sharedService.getSubCategories().subscribe(data => {
-        this.subCategories = data.results;
-        console.log('subCategories list :', this.subCategories);
+        this._subCategories = data.results;
       });
+      this.salesService.deletedCategory.next(res.data.id);
     });
+    console.log('categories list:', this._subCategories, this.sendSubCategories);
   }
 
 }
