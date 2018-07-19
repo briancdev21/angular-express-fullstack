@@ -8,7 +8,7 @@
       <th>PRODUCT TYPE</th> 
       <th>QYT</th>
       <th>UNIT PRICE</th>
-      <th>DISCOUNT %</th> 
+      <th>DISCOUNT $</th> 
       <th>TOTAL</th>
       <th>TAX RATE</th>
       <th>CATEGORY</th> 
@@ -43,7 +43,7 @@
           <!-- <span *ngIf="!unitPriceEditable" (click)="unitPriceEditable = true;">{{parentProduct.unitPrice | number: '1.2-2'}}</span> -->
           <span *ngIf="!unitPriceEditable">{{parentProduct.unitPrice | number: '1.2-2'}}</span>
         </td>
-        <td><input [(ngModel)]="parentProduct.discount.value" (blur)="onBlur(parentProduct)" (focus)="onFocus()"></td> 
+        <td><input [(ngModel)]="parentProduct.discount.value" (blur)="onBlur(parentProduct)" (focus)="onFocus()" type="number"></td> 
         <td>$ {{parentProduct.total | number:'2.2-2'}}</td>
         <td>
           <select [(ngModel)]="parentProduct.taxRateId" (ngModelChange)="updateProposalProduct(parentProduct)">
