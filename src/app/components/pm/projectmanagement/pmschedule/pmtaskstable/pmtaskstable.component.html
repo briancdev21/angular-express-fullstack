@@ -52,7 +52,7 @@
                 <span class="duration"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0" (change)="taskDurationChanged(milestone.id, task.id, task)" > Days</span>
                 <div class="task-actions">
                   <img *ngIf="task.dependency" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
-                  <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.isImportant}" (click)="task.isImportant = !task.isImportant; updateTask(milestoneId, taskId, task)" >
+                  <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.isImportant}" (click)="task.isImportant = !task.isImportant; updateTask( milestone.id, task.id, task)" >
                   <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
                   <!--Dependency numbers-->
                   <div class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">

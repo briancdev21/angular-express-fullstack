@@ -279,7 +279,7 @@ export class AddDetailedTaskComponent implements OnInit {
       startDate: formattedToday,
       duration: parseInt(duration.toString(), 10),
       dependencyIds: dependency,
-      isImportant: false,
+      isImportant: this.following,
       isComplete: this.completeness === 100 ? true : false,
       attachment: false,
       starred: false,

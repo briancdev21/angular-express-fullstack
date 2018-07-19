@@ -58,20 +58,8 @@ export class PmTasksTableComponent implements OnInit {
   constructor( private dragulaService: DragulaService, private projectManagementService: ProjectManagementService,
      private fb: FormBuilder, private sharedService: SharedService, private pmTasksService: PmTasksService ) {
     this.currentProjectId = localStorage.getItem('current_projectId');
-    dragulaService.dropModel.subscribe((value) => {
+    this.dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
-    });
-
-    // set draggable class
-    const bag: any = this.dragulaService.find('dragMilestone');
-    if (bag !== undefined ) {
-      this.dragulaService.destroy('dragMilestone');
-    }
-
-    dragulaService.setOptions('dragMilestone', {
-      moves: function (el, container, handle) {
-        return handle.className.includes('milestone-title');
-      }
     });
 
     this.sharedService.getContacts().subscribe(contacts => {
@@ -143,6 +131,7 @@ export class PmTasksTableComponent implements OnInit {
     const taskIndex = parseInt(el.id, 10);
     const targetPanelIndex = parseInt(target.id, 10);
     const sourcePanelIndex = parseInt(source.id, 10);
+    console.log('on drop happened:', targetPanelIndex, sourcePanelIndex);
     // const selectedPanel = this.panels.filter(p => p.id === parseInt(source.id, 10))[0];
     // const selectedTask = selectedPanel.tasks.filter( t => t.id === parseInt(el.id, 10));
     const selectedTaskData = this.milestones[sourcePanelIndex].tasks[taskIndex];
@@ -229,20 +218,21 @@ export class PmTasksTableComponent implements OnInit {
 
         if (this.milestones[i].taskIds !== null) {
           for (let j = 0; j < this.milestones[i].taskIds.length; j++) {
-            this.pmTasksService.getTasks(this.milestones[i].id).subscribe(taskData => {
-              this.milestones[i].tasks = taskData.results;
-              this.dependencyList.concat(taskData.results);
-              this.ownerModalCollapsed[i][j] = false;
-              this.dependencyModalCollapsed[i][j] = false;
-              this.milestones[i].tasks.forEach(element => {
-                element.assigneeInfo = this.getUserInfo(element.assignee);
-                element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
-                element.taskTitle = element.title;
-                element.dependency = element.dependencyIds ? element.dependencyIds : [];
-              });
-              this.addTasksFromPmBoardData(this.milestones[i], i);
-            });
+            this.ownerModalCollapsed[i][j] = false;
+            this.dependencyModalCollapsed[i][j] = false;
           }
+          this.pmTasksService.getTasks(this.milestones[i].id).subscribe(taskData => {
+            this.milestones[i].tasks = taskData.results;
+            this.dependencyList.concat(taskData.results);
+
+            this.milestones[i].tasks.forEach(element => {
+              element.assigneeInfo = this.getUserInfo(element.assignee);
+              element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+              element.taskTitle = element.title;
+              element.dependency = element.dependencyIds ? element.dependencyIds : [];
+            });
+            this.addTasksFromPmBoardData(this.milestones[i], i);
+          });
         } else {
           this.milestones[i].taskIds = [];
           this.addTasksFromPmBoardData(this.milestones[i], i);
@@ -257,6 +247,17 @@ export class PmTasksTableComponent implements OnInit {
         console.log('test: milestones length:', this.tasksTemp);
         this.allTasks = this.dependencyList.map(dependency => dependency.id);
         console.log('all tasks:', this.allTasks);
+
+        // set draggable class
+        const bag: any = this.dragulaService.find('dragPanel');
+        if (bag !== undefined ) {
+          this.dragulaService.destroy('dragPanel');
+        }
+        this.dragulaService.setOptions('dragPanel', {
+          moves: function (el, container, handle) {
+            return handle.className === 'milestone-title';
+          }
+        });
         this.updatedGanttData.emit({'data': this.sortById(this.tasksTemp)});
       }
   }
