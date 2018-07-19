@@ -92,7 +92,7 @@ export class PmScheduleComponent implements OnInit {
         // tslint:disable-next-line:whitespace
         // tslint:disable-next-line:max-line-length
         end_date: moment(this.maxDate(this.pmBoardTableData[i].tasks.map(t => moment(t.startDate).add(t.duration, 'days').format('YYYY-MM-DD')))).format('YYYY-MM-DD'),
-        progress: this.getMilestoneProgress(this.pmBoardTableData[i].tasks)
+        progress: this.pmBoardTableData[i].completion
       };
       tasks.push(midTk);
     }
@@ -110,7 +110,7 @@ export class PmScheduleComponent implements OnInit {
           start_date: moment(this.minDate(panelTasks.map(t => t.startDate))).format('YYYY-MM-DD'),
           // tslint:disable-next-line:max-line-length
           end_date: moment(this.maxDate(panelTasks.map(t => moment(t.startDate).add(t.duration, 'days').format('YYYY-MM-DD')))).format('YYYY-MM-DD'),
-          progress: this.getMilestoneProgress(panelTasks)
+          progress: event.data[i].completion
         };
         tasks.push(midTk);
       }
