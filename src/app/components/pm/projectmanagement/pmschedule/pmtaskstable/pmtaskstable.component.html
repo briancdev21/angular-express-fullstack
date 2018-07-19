@@ -14,7 +14,7 @@
                 <span>
                   {{getTaskId(i, j)}}.
                 </span>
-                <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (ngModelChange)="taskTitleChanged(milestone.id, task.id, task)" >
+                <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged(milestone.id, task.id, task)" >
               </div>
               <div class="task-owner">
                 <img src="{{task.assigneeInfo == undefined ? 'assets/users/man.png' : task.assigneeInfo.pictureURI}}" (click)="openOwnerModal(i, j); $event.stopPropagation();">
@@ -31,7 +31,7 @@
                   *ngIf="ownerModalCollapsed[i][j]"
                 >
                   <div class="owner-mdl-content">
-                    <select [(ngModel)]="selectedOwner" (ngModelChange)="onOwnerSelect(milestone.id, task.id, task)" >
+                    <select [(ngModel)]="selectedOwner" (change)="onOwnerSelect(milestone.id, task.id, task)" >
                       <option [value]="0">Select Task Owner</option>
                       <option *ngFor="let owner of taskOwners;" [value]="owner.username">{{owner.username}}</option>
                     </select>
@@ -49,7 +49,7 @@
                   <owl-date-time [pickerType]="'calendar'" #start></owl-date-time>
                   <span [owlDateTimeTrigger]="start" [ngClass]="{'due-date-empty': !task.startDate}">{{task.startDate}}</span>
                 </div>
-                <span class="duration"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0" (ngModelChange)="taskDurationChanged(milestone.id, task.id, task)" > Days</span>
+                <span class="duration"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0" (change)="taskDurationChanged(milestone.id, task.id, task)" > Days</span>
                 <div class="task-actions">
                   <img *ngIf="task.dependency" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
                   <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.isImportant}" (click)="task.isImportant = !task.isImportant; updateTask(milestoneId, taskId, task)" >
