@@ -78,6 +78,7 @@ export class AddLeadComponent implements OnInit {
   invalidDefaultCurrency = false;
   invalidDefaultPricing = false;
   invalidPrimaryNumber = false;
+  invalidHeadContact = false;
   sourceValue = true;
   family: any;
   royalty: any;
@@ -168,6 +169,7 @@ export class AddLeadComponent implements OnInit {
     this.invalidProvince = false;
     this.invalidCountry = false;
     this.invalidPostalCode = false;
+    this.invalidHeadContact = false;
     if (event === 'PERSON') {
       this.typeAccountTypeChange = false;
     } else if (event === 'BUSINESS') {
@@ -193,12 +195,14 @@ export class AddLeadComponent implements OnInit {
   }
 
   onSelectCountry(event) {
+    console.log('country select: ', event);
     this.selectedCountry = event.originalObject.code;
     const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
     this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
   }
 
   onSelectProvince(event) {
+    console.log('province select: ', event);
     this.selectedProvince = event.originalObject.short;
     // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
     this.selectedCountry = event.originalObject.country;
@@ -250,6 +254,7 @@ export class AddLeadComponent implements OnInit {
     this.invalidProvince = false;
     this.invalidCountry = false;
     this.invalidPostalCode = false;
+    this.invalidHeadContact = false;
     this.wrongEmailFormat = !this.checkEmailValidation(this.email);
 
     if (this.businessType === 'PERSON') {
@@ -288,7 +293,7 @@ export class AddLeadComponent implements OnInit {
       }
     } else if (this.businessType === 'BUSINESS') {
       if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat && this.address &&
-        this.city && this.province && this.country && this.postalCode) {
+        this.city && this.province && this.country && this.postalCode && this.headContact) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -297,9 +302,6 @@ export class AddLeadComponent implements OnInit {
         }
         if (!this.primaryNumber) {
           this.invalidPrimaryNumber = true;
-        }
-        if (!this.email || this.wrongEmailFormat) {
-          this.invalidContactEmail = true;
         }
         if (!this.email || this.wrongEmailFormat) {
           this.invalidContactEmail = true;
@@ -318,6 +320,9 @@ export class AddLeadComponent implements OnInit {
         }
         if (!this.postalCode) {
           this.invalidPostalCode = true;
+        }
+        if (!this.headContact) {
+          this.invalidHeadContact = true;
         }
       }
     } else {
@@ -387,6 +392,7 @@ export class AddLeadComponent implements OnInit {
         this.invalidProvince = false;
         this.invalidCountry = false;
         this.invalidPostalCode = false;
+        this.invalidHeadContact = false;
         this.wrongEmailFormat = !this.checkEmailValidation(this.email);
 
         if (this.businessType === 'PERSON') {
@@ -430,7 +436,7 @@ export class AddLeadComponent implements OnInit {
           }
         } else if (this.businessType === 'BUSINESS') {
           if (this.businessName  && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
-            this.city && this.province && this.country && this.postalCode) {
+            this.city && this.province && this.country && this.postalCode && this.headContact) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
           } else {
@@ -461,6 +467,9 @@ export class AddLeadComponent implements OnInit {
             }
             if (!this.postalCode) {
               this.invalidPostalCode = true;
+            }
+            if (!this.headContact) {
+              this.invalidHeadContact = true;
             }
           }
         } else {
@@ -556,6 +565,7 @@ export class AddLeadComponent implements OnInit {
     this.invalidProvince = false;
     this.invalidCountry = false;
     this.invalidPostalCode = false;
+    this.invalidHeadContact = false;
   }
   clickSaveLead() {
     this.invalidDefaultTerm = false;
@@ -621,11 +631,6 @@ export class AddLeadComponent implements OnInit {
             'string'
           ],
           'type': this.businessType,
-          'person': {
-            'jobTitle': this.jobTitle ? this.jobTitle : 'a',
-            'department': this.captain ? this.captain : 'a',
-            'businessAssociation': parseInt(this.businessAssociation, 10),
-          },
           'business': {
             'name': this.businessName,
             'headContact': parseInt(this.headContact, 10),
@@ -637,9 +642,9 @@ export class AddLeadComponent implements OnInit {
           'shippingAddress': {
             'address': this.address,
             'city': this.city,
-            'province': this.province,
+            'province': this.selectedProvince,
             'postalCode': this.postalCode,
-            'country': this.country
+            'country': this.selectedCountry
           },
           'billingAddress': {
             'address': this.switchIconShipping ? this.address : this.billingAddress,
@@ -668,9 +673,6 @@ export class AddLeadComponent implements OnInit {
         delete this.newLead.sourceId;
       }
 
-      if (isNaN(this.newLead.person.businessAssociation)) {
-        delete this.newLead.person.businessAssociation;
-      }
       this.crmService.createLead(JSON.stringify(this.newLead)).subscribe(data => {
         this.addLeadModalCollapsed = true;
         this.showAddLeadModal = false;
