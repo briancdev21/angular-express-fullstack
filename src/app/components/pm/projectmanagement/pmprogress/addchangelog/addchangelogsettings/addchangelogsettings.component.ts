@@ -24,6 +24,7 @@ export class AddChangeLogSettingsComponent {
       isSendToCustomer: this.switchOn,
       saveClicked: true
     };
+    console.log('______________________');
     this.projectManagementService.saveChangeLog.next({sendSaveData});
   }
 

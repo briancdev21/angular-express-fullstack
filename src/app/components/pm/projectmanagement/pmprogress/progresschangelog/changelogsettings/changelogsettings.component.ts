@@ -22,15 +22,18 @@ export class ChangeLogSettingsComponent {
     private projectsService: ProjectsService) {
     this.currentProjectId = localStorage.getItem('current_projectId');
     this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
+    this.projectManagementService.saveChangeLog.next({isSendToCustomer: false, saveClicked: false});
   }
 
   saveChangeLog() {
-    this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
     const sendSaveData = {
       isSendToCustomer: this.switchOn,
       saveClicked: true
     };
-    this.projectManagementService.saveChangeLog.next({sendSaveData});
+
+    this.projectManagementService.saveChangeLog.next(sendSaveData);
+    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@');
+    this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
   }
 
   cancelChangeLog() {
@@ -40,7 +43,7 @@ export class ChangeLogSettingsComponent {
   onClickSendCustomer() {
     this.switchOn = !this.switchOn;
     if (this.switchOn) {
-      this.projectsService.sendChangeLogEmail(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
+      this.projectsService.sendChangelogEmail(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
         console.log('email sent: ', res);
       });
     }

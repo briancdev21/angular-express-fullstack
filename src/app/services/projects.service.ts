@@ -120,6 +120,16 @@ export class ProjectsService {
     return this.http.put(url, body);
   }
 
+  sendChangelogEmail(id, logId): Observable<any>  {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs/${logId}/email`;
+    return this.http.get(url);
+  }
+
+  getChangeLogItems(id, logId): Observable<any>  {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs/${logId}/items`;
+    return this.http.get(url);
+  }
+
   getProjectWorkOrders (id): Observable<any> {
     const url = `${environment.apiUrl}/project-management/projects/${id}/work-orders`;
     return this.http.get(url);
@@ -138,11 +148,6 @@ export class ProjectsService {
   updateIndividualWorkOrder (id, orderId, body): Observable<any> {
     const url = `${apiUrl}inventory/suppliers/${id}/work-orders/${orderId}`;
     return this.http.put(url, body);
-  }
-
-  sendChangeLogEmail(id, logId): Observable<any> {
-    const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs/${logId}/email`;
-    return this.http.get(url);
   }
 
   createProjectProduct (id, body): Observable<any> {
