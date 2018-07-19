@@ -218,6 +218,7 @@ export class LeadProfileComponent implements OnInit {
     this.leadInfoIndex = this.route.snapshot.paramMap.get('id');
     this.crmService.getIndividualLead(this.leadInfoIndex).subscribe(res => {
       this.currentLead = res.data;
+      console.log('current lead: ', this.currentLead);
       // Update userInfo
       this.userInfo = {
         name: res.data.person ? res.data.person.firstName + ' ' + res.data.person.lastName : res.data.business.name,
@@ -229,10 +230,10 @@ export class LeadProfileComponent implements OnInit {
                           res.data.shippingAddress.city + ', ' +
                           res.data.shippingAddress.province + ', ' +
                           res.data.shippingAddress.postalCode,
-        billingaddress: res.data.billingAddress.address + ', ' +
+        billingaddress: res.data.billingAddress ? res.data.billingAddress.address + ', ' +
                         res.data.billingAddress.city + ', ' +
                         res.data.billingAddress.province + ', ' +
-                        res.data.billingAddress.postalCode,
+                        res.data.billingAddress.postalCode : '',
         keywords: res.data.keywordIds ? res.data.keywordIds : [],
         followers: res.data.followers ? res.data.followers : [],
         note: res.data.note
@@ -355,10 +356,12 @@ export class LeadProfileComponent implements OnInit {
     this.savingLead.shippingAddress.city = shippingArr[1];
     this.savingLead.shippingAddress.province = shippingArr[2];
     this.savingLead.shippingAddress.postalCode = shippingArr[3];
-    this.savingLead.billingAddress.address = billingArr[0];
-    this.savingLead.billingAddress.city = billingArr[0];
-    this.savingLead.billingAddress.province = billingArr[0];
-    this.savingLead.billingAddress.postalCode = billingArr[0];
+    if (this.savingLead.billingAddress) {
+      this.savingLead.billingAddress.address = billingArr.length ? billingArr[0] : '';
+      this.savingLead.billingAddress.city = billingArr.length ? billingArr[1] : '';
+      this.savingLead.billingAddress.province = billingArr.length ? billingArr[2] : '';
+      this.savingLead.billingAddress.postalCode = billingArr.length ? billingArr[3] : '';
+    }
     this.savingLead.person.firstName = nameArr[0];
     this.savingLead.person.lastName = nameArr[1];
     this.savingLead.person.businessAssociation = 1;
