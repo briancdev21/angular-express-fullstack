@@ -64,6 +64,7 @@ export class AddChangeLogDetailsComponent implements OnInit {
           'newScopeOfWork': this.detailsChange ? this.detailsChange : this.createdChangeLog.newScopeOfWork,
           'status': this.logStatus
         };
+        console.log('saving log: ', savingData);
 
         // savingData.keys(obj).forEach(k => (!obj[k] && obj[k] !== undefined) && delete obj[k]);
         savingData = JSON.parse(JSON.stringify(savingData));

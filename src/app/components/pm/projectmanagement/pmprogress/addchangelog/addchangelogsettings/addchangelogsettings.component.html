@@ -4,7 +4,7 @@
     <button class="cancel-btn" (click)="cancelChangeLog()">
       Cancel
     </button>
-    <button class="save-btn" (click)="saveChangeLog()">
+    <button class="save-btn" (click)="saveChangeLog(); $event.stopPropagation();">
       Save
     </button>
   </div>

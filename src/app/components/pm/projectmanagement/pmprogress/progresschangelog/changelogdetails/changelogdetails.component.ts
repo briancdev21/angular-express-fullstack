@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
 import { SharedService } from '../../../../../../services/shared.service';
@@ -12,7 +12,7 @@ import * as moment from 'moment';
     './changelogdetails.component.css'
   ]
 })
-export class ChangeLogDetailsComponent implements OnInit {
+export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
 
   @Input() descriptionChange;
   @Input() detailsChange;
@@ -50,10 +50,12 @@ export class ChangeLogDetailsComponent implements OnInit {
     this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
 
     this.projectsService.getIndividualProjectChangeLog(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
+      console.log('Individual data: ', res.data);
       this.createdChangeLog = res.data;
-      this.ccContact = res.data.contactId;
+      this.ccContact = res.data.additionalContactId;
       this.title = res.data.title;
       this.logStatus = res.data.status;
+      this.switchIconPm = res.data.updateProjectManager;
     });
 
     const savingMockData = {
@@ -63,8 +65,8 @@ export class ChangeLogDetailsComponent implements OnInit {
     };
 
     this.projectManagementService.saveChangeLog.subscribe(data => {
-
-      if (data['sendSaveData']) {
+      console.log('44444444 : ', data);
+      if (data['saveClicked']) {
         let savingData = {
           'additionalContactId': this.ccContact ? parseInt(this.ccContact, 10) : this.createdChangeLog.contactId,
           'title': this.title,
@@ -77,11 +79,13 @@ export class ChangeLogDetailsComponent implements OnInit {
 
         // savingData.keys(obj).forEach(k => (!obj[k] && obj[k] !== undefined) && delete obj[k]);
         savingData = JSON.parse(JSON.stringify(savingData));
-        console.log('save is clicked');
+        this.currentProjectId = localStorage.getItem('current_projectId');
+        this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
+        console.log('save is clicked', this.currentProjectId, this.createdChangeLog.id, savingData);
         this.projectsService.updateIndividualChangeLog(this.currentProjectId, this.createdChangeLog.id, savingData)
           .subscribe(res => {
             console.log('updated : ', res);
-            data['sendSaveData'] = false;
+            data['saveClicked'] = false;
           });
       }
     });
@@ -134,6 +138,13 @@ export class ChangeLogDetailsComponent implements OnInit {
     // no need to create id because it will come from back end.
     // this.createChangeLogId();
 
+  }
+
+  ngOnDestroy() {
+    console.log('unsubscribed------------------');
+    // this.projectManagementService.saveChangeLog.unsubscribe();
+    this.currentProjectId = undefined;
+    this.currentChangeLogId = undefined;
   }
 
   clickIconShipping() {
