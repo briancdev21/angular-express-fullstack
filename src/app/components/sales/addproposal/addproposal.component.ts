@@ -24,23 +24,7 @@ export class AddProposalComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
   today = new Date();
-  public proposalInfo: any = {
-    proposalId : '',
-    contactName : '',
-    projectName: '',
-    projectType: '',
-    proposalAmount: 0,
-    dealStatus: 'New',
-    revision: '0',
-    createdDate: '',
-    owner: [
-      {
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Michael'
-      }
-    ],
-  };
+  public proposalInfo;
 
   proposalDetails = {
     discount: {
