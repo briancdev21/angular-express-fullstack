@@ -17,6 +17,13 @@ export class PmProgressComponent implements OnInit {
   tabActiveFourth: boolean;
 
   constructor( private pmService: ProjectManagementService, private router: Router ) {
+    this.pmService.saveChangeLog.subscribe(data => {
+      console.log('******************');
+      if (data['sendSaveData']) {
+        this.tabActiveFourth = true;
+        this.tabActiveFirst = this.tabActiveSecond = this.tabActiveThird = false;
+      }
+    });
   }
 
   ngOnInit() {
