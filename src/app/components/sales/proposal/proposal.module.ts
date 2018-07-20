@@ -11,7 +11,7 @@ import { ClickOutsideModule } from 'ng4-click-outside';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { ImageUploadModule } from 'angular2-image-upload';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-
+import { QuillModule } from 'ngx-quill';
 
 import { ProductDetailsComponent } from './productdetails/productdetails.component';
 import { ProjectDetailsComponent } from './projectdetails/projectdetails.component';
@@ -65,7 +65,8 @@ import { MultiCategoriesSelectComponent } from '../addproposal/multicategoriesse
     InvoicesCmpModule,
     CommonCmpModule,
     OwlDateTimeModule,
-    OwlNativeDateTimeModule
+    OwlNativeDateTimeModule,
+    QuillModule
   ],
   exports: [
     ProductDetailsComponent,

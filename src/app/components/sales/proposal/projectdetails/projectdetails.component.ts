@@ -205,12 +205,14 @@ projectDetails = {
     accountManager: undefined,
     projectManager: undefined,
     designer: undefined,
-    taxRate: 1,
+    taxRateId: 1,
     pricingCategoryId: 1,
     internalNote: '',
     clientNote: '',
     clientProjectManagerId: '',
-    accountReceivableId: ''
+    accountReceivableId: '',
+    collaboratorsData: undefined,
+    projectTypeId: undefined
   };
 
   userInfo = {
@@ -342,7 +344,6 @@ projectDetails = {
               this.proposalDetails['collaboratorsData'].push(selectUser);
             });
             this.proposalDetails.address = this.proposalInfo.shippingAddress.address;
-            console.log('$$$ ', this.proposalDetails.address, this.proposalInfo.shippingAddress.address);
             this.proposalDetails.city = this.proposalInfo.shippingAddress.city;
             this.proposalDetails.province = this.proposalInfo.shippingAddress.province;
             this.proposalDetails.country = this.proposalInfo.shippingAddress.country;
@@ -350,6 +351,13 @@ projectDetails = {
 
             this.proposalDetails.projectName = this.proposalInfo.name;
             this.proposalInfo.paySchedule = this.proposalDetails.paymentSchedule;
+            this.proposalDetails.projectManager = this.usersList.filter(u => u.username === this.proposalDetails.projectManager)[0];
+            this.proposalDetails.projectManager.imageUrl = this.proposalDetails.projectManager.pictureURI;
+            this.proposalDetails.accountManager = this.usersList.filter(u => u.username === this.proposalDetails.accountManager)[0];
+            this.proposalDetails.accountManager.imageUrl = this.proposalDetails.accountManager.pictureURI;
+            this.proposalDetails.designer = this.usersList.filter(u => u.username === this.proposalDetails.designer)[0];
+            this.proposalDetails.designer.imageUrl = this.proposalDetails.designer.pictureURI;
+            console.log('$$$ ', this.proposalDetails);
           });
         });
       });
@@ -432,6 +440,7 @@ projectDetails = {
     //   return obj.username !== item.username;
     // });
     this.proposalDetails.collaborators.push({name: item.label, imageUrl: item.imageUrl, username: item.username });
+    this.proposalDetails.collaboratorsData.push({name: item.label, imageUrl: item.imageUrl, username: item.username });
   }
 
   onSelectAccountManager(item: any) {
@@ -574,39 +583,53 @@ projectDetails = {
     this.invalidProvince = false;
     this.invalidCountry = false;
     this.invalidPostalCode = false;
-    if (this.projectDetails.customerName && this.projectDetails.collaborators.length
-      && this.projectDetails.projectName && this.projectDetails.address && this.projectDetails.city
-      && this.projectDetails.province
-      && this.projectDetails.country &&
-      this.projectDetails.postalCode) {
+    this.invalidProjectType = false;
+    this.invalidAccountReceivable = false;
+    this.invalidClientProjectManager = false;
+
+    if (this.proposalDetails.contactId && this.proposalDetails.collaborators.length
+      && this.proposalDetails.projectName && this.proposalDetails.address && this.proposalDetails.city
+      && this.proposalDetails.province && this.proposalDetails.country &&
+      this.proposalDetails.postalCode && this.proposalDetails.projectTypeId) {
         this.ProposalInfoModalCollapsed = true;
         this.showProposalInfo = false;
-    } else {
-      if (!this.projectDetails.customerName) {
-        this.invalidCustomerName = true;
+        this.updateProjectDetails();
+      } else {
+        console.log('tabone-click1: ', this.proposalDetails);
+        if (!this.proposalDetails.contactId) {
+          this.invalidCustomerName = true;
+        }
+        if (!this.proposalDetails.collaborators.length) {
+          this.invalidCollaborators = true;
+        }
+        if (!this.proposalDetails.projectName) {
+          this.invalidProjectName = true;
+        }
+        if (!this.proposalDetails.address) {
+          this.invalidAddress = true;
+        }
+        if (!this.proposalDetails.city) {
+          this.invalidCity = true;
+        }
+        if (!this.proposalDetails.province) {
+          this.invalidProvince = true;
+        }
+        if (!this.proposalDetails.country) {
+          this.invalidCountry = true;
+        }
+        if (!this.proposalDetails.postalCode) {
+          this.invalidPostalCode = true;
+        }
+        if (!this.proposalDetails.projectTypeId) {
+          this.invalidProjectType = true;
+        }
+        if (!this.proposalDetails.projectManagementContact) {
+          this.invalidClientProjectManager = true;
+        }
+        if (!this.proposalDetails.accountReceivable ) {
+          this.invalidAccountReceivable = true;
+        }
       }
-      if (!this.projectDetails.collaborators.length) {
-        this.invalidCollaborators = true;
-      }
-      if (!this.projectDetails.projectName) {
-        this.invalidProjectName = true;
-      }
-      if (!this.projectDetails.address) {
-        this.invalidAddress = true;
-      }
-      if (!this.projectDetails.city) {
-        this.invalidCity = true;
-      }
-      if (!this.projectDetails.province) {
-        this.invalidProvince = true;
-      }
-      if (!this.projectDetails.country) {
-        this.invalidCountry = true;
-      }
-      if (!this.projectDetails.postalCode) {
-        this.invalidPostalCode = true;
-      }
-    }
   }
 
   onChangeInternalNote(event) {
@@ -696,7 +719,7 @@ projectDetails = {
       this.invalidProjectType = false;
       this.invalidAccountReceivable = false;
       this.invalidClientProjectManager = false;
-      this.invalidDesigner = false;
+
       if (this.proposalDetails.contactId && this.proposalDetails.collaborators.length
         && this.proposalDetails.projectName && this.proposalDetails.address && this.proposalDetails.city
         && this.proposalDetails.province && this.proposalDetails.country &&
@@ -754,6 +777,7 @@ projectDetails = {
       this.invalidDesigner = false;
       this.invalidSubCategory = false;
       this.invalidCategory = false;
+      this.invalidDesigner = false;
       if (this.proposalDetails.projectId && (this.scheduleRemain === 0) && this.proposalDetails.accountManager
         && this.proposalDetails.projectManager && this.proposalDetails.designer && this.proposalDetails.projectCategoriesAll.length > 0
         && this.proposalDetails.projectSubCategoriesAll.length > 0) {
@@ -880,7 +904,7 @@ projectDetails = {
         'unit': this.proposalDetails.discount.unit
       },
       'collaborators': collaborators,
-      'taxRateId': parseInt(this.proposalDetails.taxRate.toString(), 10)
+      'taxRateId': parseInt(this.proposalDetails.taxRateId.toString(), 10)
     };
 
     if (this.scopeEditorContent) {

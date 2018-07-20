@@ -583,6 +583,43 @@ ng2-completer {
 	border: 0px;
 }
 
+/deep/ .tab-three .ql-editor {
+  min-height: 400px;
+  background: #f5f5f5;
+}
+
+/* /deep/ .tab-three .ql-toolbar.ql-snow {
+  border: 0 !important;
+  text-align: left;
+  margin-left: 15px;
+  background: transparent;
+  padding-top: 20px;
+}
+
+/deep/ .tab-three .ql-snow.ql-toolbar button, /deep/ .tab-three .ql-snow .ql-toolbar button {
+  background: white;
+  border: 1px solid lightgray;
+}
+
+/deep/ .tab-three .ql-snow .ql-picker {
+  background: white;
+  border: 1px solid lightgray;
+}
+
+/deep/ .tab-three .ql-container.ql-snow {
+  border: 0;
+}
+
+/deep/ .tab-three .ql-editor.ql-blank::before {
+  left: 25px;
+}
+
+/deep/ .tab-three .ql-snow.ql-toolbar button, /deep/ .tab-three .ql-snow .ql-toolbar button {
+  height: 27px;
+  width: 32px;
+} */
+
+
 @media screen and (max-width: 1200px) {
 	.project-details {
 		width:40px;

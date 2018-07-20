@@ -387,7 +387,7 @@
             <div>
               <span>Tax Rate (*required)</span>
               <div>
-                <select [(ngModel)]="proposalDetails.taxRate">
+                <select [(ngModel)]="proposalDetails.taxRateId">
                   <option [value]="tax.id" *ngFor="let tax of taxRateList">{{tax.name}}</option>
                 </select>
               </div>
@@ -397,7 +397,7 @@
             <button class="cancel-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
               Cancel
             </button>
-            <button class="save-btn" (click)="saveProjectDetails()"  >
+            <button class="save-btn" (click)="saveProjectDetails()">
               Save
             </button>
           </div>
@@ -406,7 +406,9 @@
       <tab tabTitle="SCOPE OF WORK" class="tab-won" [(active)]="tabActiveThird">
         <div class="tab-three">
           <span>Scope of work</span>
-          <div [froalaEditor] class="form-editor" [ngClass]="{'validation-required': invalidScopeEditorContent}" [(ngModel)]="scopeEditorContent"></div>
+          <!-- <div [froalaEditor] class="form-editor" [ngClass]="{'validation-required': invalidScopeEditorContent}" [(ngModel)]="this.proposalDetails.scopeOfWork"></div> -->
+          <quill-editor [ngClass]="{'validation-required': invalidScopeEditorContent}" [(ngModel)]="this.proposalDetails.scopeOfWork">
+          </quill-editor>
           <div class="btn-section" >
             <button class="cancel-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
               Cancel
