@@ -13,7 +13,7 @@ export class ContactAssociationComponent {
 
   @Input() contactUser;
   @Input() subAssoUsers;
-  showContactAssoDialog: boolean = false;
+  showContactAssoDialog = false;
 
   constructor() {
 

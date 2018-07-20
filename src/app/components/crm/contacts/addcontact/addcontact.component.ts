@@ -47,7 +47,7 @@ export class AddContactComponent implements OnInit {
 
   addContactModalCollapsed = true;
   showAddContactModal = false;
-  switchIconShipping: boolean = true;
+  switchIconShipping = true;
   address = '';
   city = '';
   province = '';

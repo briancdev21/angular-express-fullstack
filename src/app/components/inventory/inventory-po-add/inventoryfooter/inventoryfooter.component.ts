@@ -6,8 +6,8 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['./inventoryfooter.component.css']
 })
 export class InventoryFooterComponent {
-  currency = "CAD";
-  language = "ENG";
+  currency = 'CAD';
+  language = 'ENG';
   showButtons = false;
   showPrintOptions = false;
   printOptions = {

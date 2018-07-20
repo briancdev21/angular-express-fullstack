@@ -52,5 +52,5 @@ export class ProposalService {
     this.massEdit.next(data);
   }
 
-  
+
 }

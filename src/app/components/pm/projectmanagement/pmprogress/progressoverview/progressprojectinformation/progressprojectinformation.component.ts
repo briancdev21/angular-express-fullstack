@@ -127,7 +127,7 @@ export class ProgressProjectInformationComponent implements OnInit {
         this.items2 = response;
         this.items3 = response;
         console.log('item3 : ', this.items3);
-        
+
         this.sharedService.getContacts().subscribe(data => {
           this.contactsList = data;
           this.addContactName(this.contactsList);

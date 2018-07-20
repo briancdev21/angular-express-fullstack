@@ -36,8 +36,8 @@ export class AddProductComponent implements OnInit {
 
   addProductModalCollapsed = true;
   showAddProductModal = false;
-  switchIconShipping: boolean = true;
-  shippingAddress: string = '';
+  switchIconShipping = true;
+  shippingAddress = '';
   typeAccountTypeChange = false;
   keywords: any;
   productAssociation: any;

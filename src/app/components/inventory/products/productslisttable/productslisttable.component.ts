@@ -24,8 +24,8 @@ export class ProductsListTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
-  showModal: boolean = false;
-  switchIcon: boolean = false;
+  showModal = false;
+  switchIcon = false;
   showCloneConfirmModal = false;
   showDeleteConfirmModal = false;
   clonedRowProduct: any;

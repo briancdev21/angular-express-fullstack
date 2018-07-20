@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 
 export class Ng2TimelineComponent {
-  
+
   @Input() timelineData;
   @Input() oneSide;
   dataset: any[];

@@ -9,15 +9,15 @@ export class SearchPipe implements PipeTransform {
    input = input.toLowerCase();
    return value.filter(function (el: any) {
    let isTrue = false;
-   for (let k in searchableList) {
-     if(el[searchableList[k]].toLowerCase().indexOf(input) > -1){
+   for (const k in searchableList) {
+     if (el[searchableList[k]].toLowerCase().indexOf(input) > -1){
       isTrue = true;
      }
-     if(isTrue){
-      return el
+     if (isTrue){
+      return el;
      }
     }
-  })
+  });
  }
  return value;
  }

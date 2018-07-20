@@ -16,7 +16,7 @@ export class OrderService {
 	getTimelineData = this.timelineData.asObservable();
 	getAvailableStaff = this.availableStaff.asObservable();
 	getRemovedStaff = this.removedStaff.asObservable();
-	
+
 
 	constructor() {
 	}

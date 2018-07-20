@@ -42,8 +42,8 @@ export class CustomDonutChartComponent {
 
   ngOnInit() {
     console.log('percentage: ', this.percentage);
-    this.gradientTransform = "rotate(0)";
-    
+    this.gradientTransform = 'rotate(0)';
+
     this.percentageInt = parseInt(this.percentage, 10);
     if (this.percentageInt > 60) this.gradientColor = this.gradientColorSet.M60;
     if (this.percentageInt > 80) this.gradientColor = this.gradientColorSet.M80;
@@ -52,34 +52,34 @@ export class CustomDonutChartComponent {
       this.gradientTransform = `rotate(${30 * this.percentageInt / 100})`;
     if (this.percentageInt >= 100) this.isFullPercent = true;
     if (!this.isFullPercent) {
-      this.notFullPercentPath = this.describeArc(60, 60, 45, 0, this.percentageInt/100 *360 );
+      this.notFullPercentPath = this.describeArc(60, 60, 45, 0, this.percentageInt / 100 * 360 );
     } else {
-      this.notFullPercentPath = this.describeArc(60, 60, 45, 180, this.percentageInt/100 *360);
-      this.fullPercentPath = this.describeArc(60, 60, 45, 70/100 *360, 80/100 *360);
+      this.notFullPercentPath = this.describeArc(60, 60, 45, 180, this.percentageInt / 100 * 360);
+      this.fullPercentPath = this.describeArc(60, 60, 45, 70 / 100 * 360, 80 / 100 * 360);
     }
 
   }
- 
+
   polarToCartesian(centerX, centerY, radius, angleInDegrees) {
-    var angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
-  
+    const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+
     return {
       x: centerX + (radius * Math.cos(angleInRadians)),
       y: centerY + (radius * Math.sin(angleInRadians))
     };
   }
-  
+
   describeArc(x, y, radius, startAngle, endAngle){
-  
-      var start = this.polarToCartesian(x, y, radius, endAngle);
-      var end = this.polarToCartesian(x, y, radius, startAngle);
-  
-      var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+      const start = this.polarToCartesian(x, y, radius, endAngle);
+      const end = this.polarToCartesian(x, y, radius, startAngle);
+
+      const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
       if (this.percentageInt === 100) start.x = 58;
-      var d = [
-          "M", start.x, start.y, 
-          "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y
-      ].join(" ");
+      const d = [
+          'M', start.x, start.y,
+          'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y
+      ].join(' ');
 
       return d;
   }

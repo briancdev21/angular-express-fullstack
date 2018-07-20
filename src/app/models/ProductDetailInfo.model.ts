@@ -13,5 +13,5 @@ export class ProductDetailInfo {
   supplierId: number = undefined;
   taxRateId: number = undefined;
   purchaseOrderProductId: number;
-  readonly: boolean = false;
+  readonly = false;
 }

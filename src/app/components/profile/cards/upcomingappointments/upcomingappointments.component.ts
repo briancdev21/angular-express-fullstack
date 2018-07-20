@@ -15,8 +15,8 @@ export class UpcomingAppointmentsComponent {
   @Input() userInfo;
   @Input() upcomingModal;
 
-  showModal: boolean = false;
-  switchIcon: boolean = false;
+  showModal = false;
+  switchIcon = false;
 
   constructor() {
 

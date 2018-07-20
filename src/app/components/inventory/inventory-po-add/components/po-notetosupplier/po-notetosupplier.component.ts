@@ -6,7 +6,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./po-notetosupplier.component.css']
 })
 export class PONoteToSupplierComponent {
-  
+
   @Output() noteChanged: EventEmitter<any> = new EventEmitter();
 
   onNoteChange(event) {

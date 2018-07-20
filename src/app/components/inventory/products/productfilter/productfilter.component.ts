@@ -171,7 +171,7 @@ export class ProductFilterComponent implements OnInit {
     if (this.filters.selectStatus) {
       this.filteredProducts = this.filteredProducts.filter(product => product.status === this.filters.selectStatus);
     }
-    
+
     if (this.filters.createdFrom) {
       this.filteredProducts = this.filteredProducts.filter(
         product => Date.parse(product.createDate) >= Number(this.filters.createdFrom)

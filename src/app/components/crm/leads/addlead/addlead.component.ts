@@ -46,7 +46,7 @@ export class AddLeadComponent implements OnInit {
 
   addLeadModalCollapsed = true;
   showAddLeadModal = false;
-  switchIconShipping: boolean = true;
+  switchIconShipping = true;
   address = '';
   city = '';
   province = '';

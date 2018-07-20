@@ -232,7 +232,7 @@ export class OrderProfileComponent implements OnInit {
     },
     {
       id: 6,
-      description: "Install the client's Apple TV",
+      description: 'Install the client\'s Apple TV',
       status: 'notStarted',
       estimateHour: '',
       estimateMin: '60',

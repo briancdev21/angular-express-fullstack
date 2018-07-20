@@ -16,8 +16,8 @@ export class TeamUpcomingEventComponent implements OnInit {
   @Input() upcomingModalInfo;
   @Output() updatedEvent: EventEmitter<any> = new EventEmitter;
 
-  showModal: boolean = false;
-  switchIcon: boolean = false;
+  showModal = false;
+  switchIcon = false;
   selectedUser = '';
   selectedLocation = '';
   changedEventDate = '';

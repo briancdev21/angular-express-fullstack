@@ -10,38 +10,38 @@ export class GetDateStatus implements PipeTransform {
     const todaysDate = new Date();
     let dateStr;
     // call setHours to take the time out of the comparison
-    const dif = (todaysDate.setHours(0,0,0,0) - inputDate.setHours(0,0,0,0))/86400/1000;
+    const dif = (todaysDate.setHours(0, 0, 0, 0) - inputDate.setHours(0, 0, 0, 0)) / 86400 / 1000;
 
-    switch(dif) {
+    switch (dif) {
       case 0: {
-        dateStr = "Today";
+        dateStr = 'Today';
       } break;
       case 1: {
-        dateStr = "Yesterday";
+        dateStr = 'Yesterday';
       } break;
       case 2 : {
-        dateStr = "Two days ago";
+        dateStr = 'Two days ago';
       } break;
       case 3 : {
-        dateStr = "Three days ago";
+        dateStr = 'Three days ago';
       } break;
       case 4 : {
-        dateStr = "Four days ago";
+        dateStr = 'Four days ago';
       } break;
       case 5 : {
-        dateStr = "Five days ago";
+        dateStr = 'Five days ago';
       } break;
       case 6 : {
-        dateStr = "Six days ago";
+        dateStr = 'Six days ago';
       } break;
     }
-    if ( dif > 7 ) dateStr = "A week ago";
-    if ( dif > 2 * 7 ) dateStr = "Weeks ago";
-    if ( dif > 30 ) dateStr = "A month ago";
-    if ( dif > 2 * 30 ) dateStr = "Months ago";
-    if ( dif > 365 ) dateStr = "A Year ago";
-    if ( dif > 2 * 365 ) dateStr = "Years ago";
-    
+    if ( dif > 7 ) dateStr = 'A week ago';
+    if ( dif > 2 * 7 ) dateStr = 'Weeks ago';
+    if ( dif > 30 ) dateStr = 'A month ago';
+    if ( dif > 2 * 30 ) dateStr = 'Months ago';
+    if ( dif > 365 ) dateStr = 'A Year ago';
+    if ( dif > 2 * 365 ) dateStr = 'Years ago';
+
     return dateStr;
   }
 }

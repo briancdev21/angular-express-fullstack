@@ -26,8 +26,8 @@ export class LeadsListTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
-  showModal: boolean = false;
-  switchIcon: boolean = false;
+  showModal = false;
+  switchIcon = false;
   showCloneConfirmModal = false;
   showDeleteConfirmModal = false;
   clonedRowLead: any;
@@ -204,7 +204,7 @@ export class LeadsListTableComponent implements OnInit {
       'facebook': 'string',
       'twitter': 'string'
     };
-    
+
     // Remove empty/null field from object.
     Object.keys(lead).forEach((key) => (lead[key] == null) && delete lead[key]);
     Object.keys(lead.person).forEach((key) => (lead.person[key] == null) && delete lead.person[key]);

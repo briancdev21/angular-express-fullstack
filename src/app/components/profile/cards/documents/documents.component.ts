@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class DocumentsComponent {
 
   @Input() documents;
-  showContactAssoDialog: boolean = false;
+  showContactAssoDialog = false;
 
   constructor() {
   }

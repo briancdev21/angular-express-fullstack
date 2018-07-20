@@ -6,15 +6,15 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['./inventoryfooter.component.css']
 })
 export class InventoryFooterComponent {
-  currency = "CAD";
-  language = "ENG";
+  currency = 'CAD';
+  language = 'ENG';
   showButtons = false;
   showPrintOptions = false;
   printOptions = {
    brand: false,
    qty: false,
    supplier: false,
-   totalprice: false 
+   totalprice: false
   };
 
   onCancel() {

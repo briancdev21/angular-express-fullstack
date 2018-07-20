@@ -631,7 +631,7 @@ export class AddWorkOrderComponent implements OnInit {
       this.addedDeliveryProducts.push(product);
       console.log('added products list: ', this.addedDeliveryProducts);
       this.showAvailModal = false;
-      
+
     }
   }
 

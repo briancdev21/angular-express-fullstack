@@ -15,7 +15,7 @@ export class CollaboratorsComponent {
 
   @Input() collaborators;
 
-  showCollaboratorsDialog: boolean = false;
+  showCollaboratorsDialog = false;
   constructor() {
   }
 }

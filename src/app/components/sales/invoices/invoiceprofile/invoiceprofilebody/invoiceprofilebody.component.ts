@@ -364,6 +364,6 @@ export class InvoiceProfileBodyComponent implements OnInit {
   deleteService() {
     this.invoicesService.deleteIndividualInvoice(this.currentInvoiceId).subscribe(res => {
       this.router.navigate(['./sales/invoices']);
-    })
+    });
   }
 }
