@@ -270,3 +270,57 @@ td.sku {
   /* non-prefixed version, currently
    not supported by any browser */
 }
+/*  */
+td.handle-bar {
+  padding: 15px 5px;
+  width: 5px;
+}
+td.sku {
+  width: 200px;
+  padding: 5px 0.7em;
+}
+
+ td.model {
+  width: 150px;
+  padding: 5px 0.7em;
+}
+
+ td.name {
+  width: 400px;
+  padding: 5px 0.7em;
+}
+
+ td.measure {
+  width: 50px;
+}
+
+ td.quantity {
+  width: 50px;
+}
+
+ td.unitprice {
+  width: 150px;
+}
+
+ td.discount {
+  width: 100px;
+}
+
+ td.total {
+  width: 150px;
+}
+
+ td.taxrate {
+  width: 150px;
+}
+
+	
+.dollar{
+	display:inline-block;
+  position: relative;
+}
+
+.dollar input{
+  padding-left: 1.5em;
+	}
+}

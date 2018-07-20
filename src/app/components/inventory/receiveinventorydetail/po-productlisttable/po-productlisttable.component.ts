@@ -151,5 +151,41 @@ export class POProductListTableComponent implements OnInit {
       this.priceChange.emit(null);
     });
   }
+
+  getP(e) {
+    if (e.which < 47 || e.which > 58 ) { return false; }
+    if (e.target.value < 0) { e.target.value = undefined; return false;  }
+  }
+
+  changedProfileTaxRate(index, e) {
+    this.selectedTaxRateId =  this.taxRateOptions[e.target.selectedIndex].id;
+    this.productDetails[index].taxrate = this.taxRateOptions[e.target.selectedIndex].rate;
+    this.updatePurchaseOrderProduct(index);
+  }
+
+  updateIndividualPurchaseOrderProduct(index) {
+    if (this.productDetails[index].discount === undefined) {
+      this.productDetails[index].discount = 0;
+    }
+    if (this.productDetails[index].quantity === undefined) {
+      this.productDetails[index].quantity = 0;
+    }
+    this.poProductModel = {
+      sku: this.productDetails[index].sku,
+      taxRateId: this.selectedTaxRateId,
+      supplierId: this.productDetails[index].supplierId,
+      discount: {
+        value: parseInt(this.productDetails[index].discount, 10),
+        unit: 'PERCENT'
+      },
+      recieved: 0,
+      quantity: parseInt(this.productDetails[index].quantity, 10)
+    };
+    this.sharedService.updatePurchaseOrderProduct(this.po_id, this.productDetails[index].purchaseOrderProductId, this.poProductModel)
+    .subscribe(res => {
+      this.productDetails[index].total = res.data.total;
+      this.priceChange.emit(null);
+    });
+  }
 }
 
