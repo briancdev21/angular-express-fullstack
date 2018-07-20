@@ -204,7 +204,9 @@ export class PmBoardTableComponent implements OnInit {
       this.pmBoardTableData[index].editTitle = false;
       const body =  {
         owner: this.pmBoardTableData[index].owner,
-        title: this.pmBoardTableData[index].title
+        title: this.pmBoardTableData[index].title,
+        order: this.pmBoardTableData[index].order,
+        permission: this.pmBoardTableData[index].permission
       };
       this.pmTasksService.updateIndividualTaskGroup(this.pmBoardTableData[index].id, body).subscribe(res => {
         this.updatePmData.emit(null);
