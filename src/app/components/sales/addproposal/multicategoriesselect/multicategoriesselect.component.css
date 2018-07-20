@@ -34,12 +34,14 @@ ul {
   padding: 0;
   margin: 0;
   background: transparent;
+  float: right;
+  margin-right: 5px;
 }
 
 .content-box ul li.add-category img {
   width: 100%;
   height: 100%;
-  margin-top: -2px;
+  margin-top: 2px;
 }
 
 .content-box ul li span {

@@ -49,6 +49,8 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   taxRatesList: any;
   proposalProductOrdered = [];
   modalContent = 'You cannot change WON project';
+  categoryListAll = [];
+  subCategoryListAll = [];
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService,
   private proposalsService: ProposalsService, private route: ActivatedRoute, private sharedService: SharedService,
@@ -66,6 +68,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     //   });
     // }
 
+
     this.productsService.getProductsList().subscribe(res => {
     });
 
@@ -79,13 +82,23 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
           this.productTypesList = pType.results;
 
           this.sharedService.getCategories().subscribe(res => {
-            this.proposalCategoryList = res.results;
+            this.categoryListAll = res.results;
 
             this.sharedService.getSubCategories().subscribe(data => {
               const subCategory = data.results;
-              this.proposalSubCategoryList = data.results;
+              this.subCategoryListAll = data.results;
 
               this.getProposalProductData();
+
+              this.proposalsService.getIndividualProposal(this.proposalId).subscribe(proposal => {
+                this.proposalInfo = proposal.data;
+                this.proposalInfo.categoryIds.forEach(element => {
+                  this.proposalCategoryList.push(this.categoryListAll.filter(c => c.id === element)[0]);
+                });
+                this.proposalInfo.subcategoryIds.forEach(element => {
+                  this.proposalSubCategoryList.push(this.subCategoryListAll.filter(c => c.id === element)[0]);
+                });
+              });
             });
           });
         });
@@ -99,6 +112,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     this.proposalProductOrdered = [];
     this.proposalsService.getProposalProducts(this.proposalId).subscribe(response => {
       this.originProposalProductList = response.results;
+
       this.originProposalProductList.forEach(ele => {
         ele.brand = this.getBrandNameFromId(ele.brandId);
         ele.productType = this.getProductTypeFromId(ele.productTypeId);
@@ -128,21 +142,18 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         element.index = index;
         index = index + 1;
       });
-      console.log('ordered Product List: ', this.proposalProductOrdered);
     });
   }
 
   updateProposalProduct(product) {
     if ( this.proposalInfo.dealStatus === 'WON') {
-      console.log('prposal -------------: ', this.proposalInfo);
       this.commonService.showAlertModal.next(true);
       this.getProposalProductData();
     } else {
-      console.log('parent Product: ', product);
-      if (product.categoryId && product.subcategoryId && product.quantity && (product.discount.value !== null)) {
+      if (product.quantity && (product.discount.value !== null)) {
         const updatingData = {
-          'categoryId': parseInt(product.categoryId, 10),
-          'subcategoryId': parseInt(product.subcategoryId, 10),
+          'categoryId': product.categoryId ? parseInt(product.categoryId, 10) : undefined,
+          'subcategoryId': product.subcategoryId ? parseInt(product.subcategoryId, 10) : undefined,
           'pricingCategoryId': parseInt(product.pricingCategoryId, 10),
           'priceAdjustment': {
             'value': product.priceAdjustment.value,
@@ -156,7 +167,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
           'useProductInProject': product.useProductInProject
         };
         this.proposalsService.updateIndividualProposalProduct(this.proposalId, product.id, updatingData).subscribe(res => {
-          console.log('updated: ', res);
           if (res) {
             this.getProposalProductData();
             this.updatedData.emit(true);
@@ -194,7 +204,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     // commented for now
     // Insert data from product details to table
     if ( this.proposalInfo.dealStatus === 'WON') {
-      console.log('prposal -------------: ', this.proposalInfo);
       this.commonService.showAlertModal.next(true);
       this.getProposalProductData();
     } else {
@@ -293,7 +302,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
     // get parent totoal for each parent node
     this.parents.map(p => p.proposalTotal = p.unitPrice * p.qty * (100 - p.discount) / 100 + this.getChildPriceTotal(p));
-    console.log('222222', this.parents);
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -311,7 +319,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     // detect Delete or backspace key down
     if (event.keyCode === 46 || event.keyCode === 8 ) {
       if ( this.proposalInfo.dealStatus === 'WON') {
-        console.log('prposal -------------: ', this.proposalInfo);
         this.commonService.showAlertModal.next(true);
         this.getProposalProductData();
       } else {
@@ -341,7 +348,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     } else {
       this.selectedRows = [product.id];
     }
-    console.log('seleted rows: ', this.selectedRows);
     window.localStorage.setItem('selectedRows', JSON.stringify(this.selectedRows) );
   }
 
@@ -377,7 +383,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
 
   deleteProduct() {
-    console.log('deleting rows: ', this.selectedRows);
     for (let i = 0; i < this.selectedRows.length; i++) {
       // this.proposalProductList = this.proposalProductList.filter(p => p.id !== this.selectedRows[i]);
       // this.parents = this.getParentNode(this.proposalProductList);
@@ -385,7 +390,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
       //   this.getParentTotalPrice();
       // }
       this.proposalsService.deleteIndividualProposalProduct(this.proposalId, this.selectedRows[i]).subscribe(res => {
-        console.log('deleted: ', res);
         this.getProposalProductData();
       });
     }
@@ -422,7 +426,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     // console.log('parent product:', parent, this.proposalProductList);
     let childstotal = 0;
     const childsList = this.proposalProductList.filter(p => p.parentId === parent.id);
-    console.log('childs list', parent, childsList);
     for (let i = 0; i < childsList.length; i++) {
       if (childsList[i].option === 'automaticAcc') {
         childstotal = childstotal + (childsList[i].qty * childsList[i].unitPrice * (100 - childsList[i].discount) / 100);
@@ -433,7 +436,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   checkExpand(parentProduct) {
     parentProduct.expanded = !parentProduct.expanded;
-    console.log('saving : ', parentProduct);
     const childs = parentProduct.alternatives.concat(parentProduct.accessories);
     childs.forEach(element => {
       this.proposalProductOrdered.forEach(ele => {

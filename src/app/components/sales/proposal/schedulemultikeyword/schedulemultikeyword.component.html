@@ -1,12 +1,12 @@
 <div class="content-box" (click)="editable=true;$event.stopPropagation()">
   <div [ngClass]="{ 'editable': editable, 'non-editable': !editable, 'hidden': editable}">
     <ul>
-      <li *ngFor="let keyword of keywords; let i = index" >{{keyword}} %</li>
+      <li *ngFor="let keyword of _keywords; let i = index" >{{keyword}} %</li>
     </ul>
   </div>
   <div [ngClass]="{ 'editable': editable, 'hidden': !editable }" (click)="editable=true;$event.stopPropagation()" >
     <ul>
-      <li *ngFor="let keyword of keywords; let i = index" >
+      <li *ngFor="let keyword of _keywords; let i = index" >
         {{keyword}}%<span (click)="removeSchedule(i)">&nbsp;&nbsp;x</span></li><br/>
       <li style="background: none; width: 100%; margin: 0;" >
         <input 

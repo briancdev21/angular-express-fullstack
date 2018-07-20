@@ -8,7 +8,10 @@ import { ProductsService } from '../../../../services/inventory/products.service
 import { SharedService } from '../../../../services/shared.service';
 import { ProposalsService } from '../../../../services/proposals.service';
 import * as moment from 'moment';
-import { CompleterService } from 'ng2-completer';
+import { CompleterService, CompleterData } from 'ng2-completer';
+import { ProjectsService } from '../../../../services/projects.service';
+import { SalesService } from '../../sales.service';
+import { CommonService } from '../../../common/common.service';
 
 @Component({
   selector: 'app-projectdetails',
@@ -21,41 +24,42 @@ import { CompleterService } from 'ng2-completer';
 export class ProjectDetailsComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
-  @Input() set projectDetailsData(val) {
-    if (val !== undefined) {
-      this.projectDetails = val;
-      console.log('project details with value:', this.projectDetails);
-      // Get categories and Subcateogries
-      this.categories = this.projectDetails.projectCategoriesAll;
-      this.subCategories = this.projectDetails.projectSubCategoriesAll;
-      this.clientNote = this.projectDetails.clientNote;
-      this.internalNote = this.projectDetails.internalNote;
-      this.shippingAddress = this.projectDetails.shippingAddress;
-      this.collaborators = this.projectDetails.collaborators;
-      this.projectManager = this.projectDetails.projectManager.username;
-      // Get client project manager id:
-      // tslint:disable-next-line:max-line-length
-      const clientProjectManagerContact = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.clientProjectManagerId.split('-').pop(), 10));
-      this.clientProjectManager = clientProjectManagerContact[0]['name'];
+  // @Input() set projectDetailsData(val) {
+  //   if (val !== undefined) {
+  //     this.projectDetails = val;
+  //     console.log('project details with value:', this.projectDetails);
+  //     // Get categories and Subcateogries
+  //     this.categories = this.projectDetails['categoryIds'];
+  //     this.subCategories = this.projectDetails['subcategoryIds'];
+  //     this.clientNote = this.projectDetails.clientNote;
+  //     this.internalNote = this.projectDetails.internalNote;
+  //     this.shippingAddress = this.projectDetails.shippingAddress;
+  //     this.collaborators = this.projectDetails.collaborators;
+  //     this.projectManager = this.projectDetails.projectManager.username;
+  //     // Get client project manager id:
+  //     // tslint:disable-next-line:max-line-length
+  //     const clientProjectManagerContact =
+  //       this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.clientProjectManagerId.split('-').pop(), 10));
+  //     this.clientProjectManager = clientProjectManagerContact[0]['name'];
 
-      // Get client project manager id:
-      // tslint:disable-next-line:max-line-length
-      const accountReceivableData = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.accountReceivableId.split('-').pop(), 10));
-      this.selectReceivable = accountReceivableData[0]['name'];
+  //     // Get client project manager id:
+  //     // tslint:disable-next-line:max-line-length
+  //     const accountReceivableData =
+  //      this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.accountReceivableId.split('-').pop(), 10));
+  //     this.selectReceivable = accountReceivableData[0]['name'];
 
-      // Get customer name:
-      // tslint:disable-next-line:max-line-length
-      const contactData = this.contactsList.filter(contact => contact.id === parseInt(this.projectDetails.contactId.split('-').pop(), 10));
-      this.customerName = contactData[0].username;
+  //     // Get customer name:
+  //     // tslint:disable-next-line:max-line-length
+  //     const contactData = this.contactsList.filter(contact =>
+  //       contact.id === parseInt(this.projectDetails.contactId.split('-').pop(), 10));
+  //     this.customerName = contactData[0].username;
 
 
-      // Get Project Type
-      // tslint:disable-next-line:max-line-length
-      this.projectType = parseInt(this.projectDetails.accountReceivableId.split('-').pop(), 10);
-     }
-  }
-
-  @Input() proposalDetails;
+  //     // Get Project Type
+  //     // tslint:disable-next-line:max-line-length
+  //     this.projectType = parseInt(this.projectDetails.accountReceivableId.split('-').pop(), 10);
+  //    }
+  // }
 
 // Project Details Properties
 clientNote: string;
@@ -70,7 +74,10 @@ shippingAddress = {
   country: '',
   postalCode: '',
 };
-//
+
+
+
+
 projectDetails = {
   contactId: undefined,
   clientProjectManagerId: undefined,
@@ -88,21 +95,19 @@ projectDetails = {
     pictureURI: ''
   },
   discount: {
-    type: '',
-    amount: ''
+    value: '',
+    unit: ''
   },
-  projectCategoriesAll: undefined,
-  projectSubCategoriesAll: undefined,
+  projectCategoriesAll: [],
+  projectSubCategoriesAll: [],
   name: '',
   internalNote: '',
   clientNote: '',
-  shippingAddress: {
-    address: '',
-    city: '',
-    province: '',
-    country: '',
-    postalCode: '',
-  },
+  address: '',
+  city: '',
+  province: '',
+  country: '',
+  postalCode: '',
   collaborators: [],
   customerName: '',
   projectName: '',
@@ -124,7 +129,7 @@ projectDetails = {
   switchIconShipping = true;
   receivable = '';
   showProposalInfo = false;
-  scheduleRemain: any;
+  scheduleRemain = 100;
   showDialog = false;
   projectCategory = [];
   clientProjectManager: any;
@@ -135,9 +140,9 @@ projectDetails = {
   invalidProjectName = false;
   invalidAddress = false;
   invalidCity = false;
-  invalidState = false;
+  invalidProvince = false;
   invalidCountry = false;
-  invalidZipcode = false;
+  invalidPostalCode = false;
   invalidProjectId = false;
   invalidSchedule = false;
   invalidAccountManager = false;
@@ -161,85 +166,8 @@ projectDetails = {
   items3 = [];
   items4 = [];
   items5 = [];
-  customersData: any;
-
-  userInfo = {
-    name: 'John Moss',
-    role: 'Vice President / Sales Department',
-    profileLink: 'assets/users/John Moss.jpg',
-    email: 'john.moss@gmail.com',
-    primaryphone: '4038935433',
-    mobilephone: '4037101212',
-    shippingaddress: {
-      address: '2222 Crescent Hill Dr SW',
-      city: 'Calgary',
-      state: 'AB',
-      country: 'Canada',
-      zipcode: 'T3C 0J4'
-    },
-    billingaddress: '2893 Crescent Hill Dr SW Calgary, AB T3C 0J4',
-    keywords: [
-      'control4',
-      'theatre',
-      'renovation'
-    ],
-    contactUser: 'Hayati Homes',
-    subAssoUsers: [
-      'Danny Shibley',
-      'John Stephen'
-    ],
-    followers: [{
-      pictureURI: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/michael',
-      username: 'Michael'
-    },
-    {
-      pictureURI: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/joseph',
-      username: 'Joseph'
-    }]
-  };
 
   public timelineData: Array<Object> = [
-    {
-      title: 'Meeting',
-      icon: 'fa-home',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
-       Below please find the currnet status of the sale',
-      timelineBtnColor: 'green-btn',
-      buttontitle: 'More Info',
-      date: '2018-1-9',
-      buttonClickEventHandlerName: 'getMoreInfo'
-    },
-    {
-      title: 'Send Document to Mike',
-      icon: 'fa-file-text-o',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
-       Below please find the currnet status of the sale',
-      timelineBtnColor: 'blue-btn',
-      buttontitle: 'Download document',
-      date: '2018-1-9',
-      buttonClickEventHandlerName: 'downloadDoc'
-    },
-    {
-      title: 'Coffee Break',
-      icon: 'fa-coffee',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
-       Below please find the currnet status of the sale',
-      timelineBtnColor: 'lime-btn',
-      buttontitle: 'Read more',
-      date: '2018-1-8',
-      buttonClickEventHandlerName: 'readMoreCoffee'
-    },
-    {
-      title: 'Phone with Jeronimo',
-      icon: 'fa-phone',
-      content: 'Following step to complete',
-      timelineBtnColor: 'orange-btn',
-      buttontitle: 'Download doc',
-      date: '2018-1-7',
-      buttonClickEventHandlerName: 'downloadDoc'
-    }
   ];
 
   proposalId: any;
@@ -247,10 +175,128 @@ projectDetails = {
   projectTypeList = [];
   proposalPricingList = [];
 
+  //////////////////////////////////////////////
+
+  today = new Date();
+
+  proposalDetails = {
+    discount: {
+      value: 0,
+      unit: 'AMOUNT'
+    },
+    contactId : '',
+    projectId: '',
+    completionDate: moment(this.today).format('YYYY-MM-DD'),
+    paymentSchedule: [],
+    projectCategoriesAll: [],
+    projectSubCategoriesAll: [],
+    projectManagementContact: '',
+    accountReceivable: '',
+    association: '',
+    address: '',
+    city: '',
+    province: '',
+    country: '',
+    postalCode: '',
+    pricing: undefined,
+    projectName: '',
+    projectType: undefined,
+    collaborators: [
+    ],
+    accountManager: undefined,
+    projectManager: undefined,
+    designer: undefined,
+    taxRateId: 1,
+    pricingCategoryId: 1,
+    internalNote: '',
+    clientNote: '',
+    clientProjectManagerId: '',
+    accountReceivableId: '',
+    collaboratorsData: undefined,
+    projectTypeId: undefined,
+    categoryIds: [],
+    subcategoryIds: [],
+    currencyId: 1
+  };
+
+  userInfo = {
+    name: '',
+    role: '',
+    profileLink: '',
+    email: '',
+    primaryphone: '',
+    mobilephone: '',
+    address: '',
+    city: '',
+    province: '',
+    country: '',
+    postalCode: '',
+    billingaddress: '',
+    keywords: [
+    ],
+    contactUser: 'Hayati Homes',
+    subAssoUsers: [
+      'Danny Shibley',
+      'John Stephen'
+    ],
+    followers: [{
+      imageUrl: 'assets/users/user1.png',
+      profileLink: 'crm/contacts/michael',
+      name: 'Michael'
+    },
+    {
+      imageUrl: 'assets/users/user2.png',
+      profileLink: 'crm/contacts/joseph',
+      name: 'Joseph'
+    }]
+  };
+
+  customerList = [];
+  scopeEditorContent = 'Test';
+
+  switchIconAutoId = false;
+  showAddProposalModal = false;
+  addProposalModalCollapsed = true;
+  projectIDCount = [];
+  invalidPricing = false;
+  invalidProjectType = false;
+  invalidScopeEditorContent = false;
+  invalidAccountReceivable = false;
+  invalidDesigner = false;
+  invalidCategory = false;
+  invalidSubCategory = false;
+  selectProject = '';
+
+  invalidFirstname = false;
+  selectName: any;
+  selectAssociation: any;
+  selectType: any;
+  selectedCustomer: any;
+  emptyArr = [];
+  usersList = [];
+  internalNoteContent = '';
+  clientNoteContent = '';
+  customersData: CompleterData;
+  projectsData: CompleterData;
+  projectsList: any;
+  projectId = '';
+  proposalsList = [];
+  taxRateList = [];
+
   // tslint:disable-next-line:max-line-length
-  constructor( private proposalService: ProposalService, private route: ActivatedRoute, private sharedService: SharedService, private completerService: CompleterService,
-    private proposalsService: ProposalsService ) {
+  constructor( private proposalService: ProposalService, private route: ActivatedRoute, private sharedService: SharedService,
+    private proposalsService: ProposalsService, private completerService: CompleterService, private projectsService: ProjectsService, private salesService: SalesService,
+    private commonService: CommonService ) {
     this.proposalId = this.route.snapshot.paramMap.get('id');
+
+    const comp = this;
+
+    document.addEventListener('click', function() {
+      comp.editable = false;
+      comp.accountEditable = false;
+      comp.projectEditable = false;
+      comp.designerEditable = false;
+    });
 
     this.sharedService.getPricingCategories().subscribe(res => {
       this.proposalPricingList = res.results;
@@ -260,135 +306,102 @@ projectDetails = {
       this.projectTypeList = res.results;
     });
 
-    this.sharedService.getContacts().subscribe(data => {
-      data = this.addContactName(data);
-      this.contactsList = data;
-      this.customersData = this.completerService.local(this.contactsList, 'name', 'name');
+    this.projectsService.getProjectsList().subscribe(project => {
+      this.projectsList = project.results;
+      this.projectsData = this.completerService.local(this.projectsList, 'name', 'name');
 
-      this.proposalsService.getIndividualProposal(this.proposalId).subscribe(res => {
-        console.log('project details service: ', res);
-        this.proposalInfo = res.data;
-        // {
-        //   proposalId : res.data.id,
-        //   contactName : this.getContactNameFromId(res.data.contactId),
-        //   projectName: res.data.username,
-        //   projectType: 'New Construction',
-        //   proposalAmount: res.data.total,
-        //   dealStatus: res.data.status,
-        //   revision: res.data.revision,
-        //   createdDate: moment(res.data.updatedAt).format('MMMM DD, YYYY'),
-        //   owner: [
-        //     {
-        //     pictureURI: 'assets/users/user1.png',
-        //     profileLink: 'crm/contacts/michael',
-        //     name: 'Michael'
-        //     }
-        //   ],
-        // };
+      this.sharedService.getUsers().subscribe(res => {
+        this.usersList = res;
+        this.usersList.forEach( ele => {
+          this.items3.push({
+            label: ele.firstName + ' ' + ele.lastName,
+            imageUrl: ele.pictureURI,
+            username: ele.username
+          });
+        });
+        this.items4 = this.items5 = this.items3;
+
+        this.sharedService.getContacts()
+        .subscribe(data => {
+          this.customerList = data;
+          this.customerList = this.addContactName(this.customerList);
+          this.customersData = this.completerService.local(this.customerList, 'name', 'name');
+          // Add collaborators list
+          this.customerList.forEach( ele => {
+            this.items2.push({
+              id: ele.id,
+              label: name,
+              imageUrl: ele.pictureURI
+            });
+          });
+
+          this.retrieveData();
+        });
       });
     });
-    // this.sharedService.getCategories().subscribe(data => {
-    //   this.projectCategory = data.results;
-    // });
-    // this.sharedService.getSubCategories(this.categoryId).subscribe(data => {
-    //   this.subCategories = data.results;
-    // });
-    console.log('proposals info: ', this.proposalInfo);
-    const comp = this;
-    document.addEventListener('click', function() {
-      comp.editable = false;
-      comp.accountEditable = false;
-      comp.projectEditable = false;
-      comp.designerEditable = false;
+
+    this.proposalsService.getProposals().subscribe(res => {
+      this.proposalsList = res.results;
     });
 
-    this.sharedService.getUsers().subscribe(res => {
-      // this.userList = res;
-      const details = [];
-      const nameList = res.map(contact => {
-        return {
-          name: contact.username,
-          pictureURI: contact.pictureURI
-        };
-      });
-      console.log('nameList:', nameList);
-      this.items2 = nameList;
-      const itemList = [];
-      this.items2.map(contact => {
-        let hasSameValue = false;
-        for (let i = 0; i < this.collaborators.length; i++) {
-          if (contact.username === this.collaborators[i].username) {
-            hasSameValue = true;
-            break;
-          }
-        }
-        if (!hasSameValue) {
-          itemList.push(contact);
-        }
-      });
-      this.items2 = itemList;
-// Get AccountManagerList
-      this.items3 = nameList;
-      const accountManagerList = [];
-      this.items3.map(contact => {
-        let hasSameValue = false;
-        if (contact.username === this.projectDetails.accountManager.username) {
-          hasSameValue = true;
-        }
-        if (!hasSameValue) {
-          accountManagerList.push(contact);
-        }
-      });
-      this.items3 = accountManagerList;
+    this.sharedService.getTaxRates().subscribe(res => {
+      this.taxRateList = res.results;
+    });
 
-    // Get projectManagerlist
-      this.items4 = nameList;
-      const projectManagerList = [];
-      this.items4.map(contact => {
-        let hasSameValue = false;
-          if (contact.username === this.projectDetails.projectManager.username) {
-            hasSameValue = true;
-          }
-        if (!hasSameValue) {
-          projectManagerList.push(contact);
-        }
+  }
+
+  retrieveData() {
+    this.proposalsService.getIndividualProposal(this.proposalId).subscribe(response => {
+      this.proposalInfo = response.data;
+      this.proposalDetails = response.data;
+      this.selectName = this.getContactCustomerNameFromId(this.proposalDetails.contactId);
+      this.selectProject = this.getContactNameFromId(this.proposalDetails.clientProjectManagerId);
+      this.selectReceivable = this.getContactNameFromId(this.proposalDetails.accountReceivableId);
+      this.proposalDetails['collaboratorsData'] = [];
+      this.proposalDetails.collaborators.forEach(ele => {
+        const selectUser = this.usersList.filter(u => u.username === ele)[0];
+        this.proposalDetails['collaboratorsData'].push(selectUser);
       });
-      this.items4 = projectManagerList;
-    // Get Designer List
-      this.items5 = nameList;
-      const designerList = [];
-      this.items5.map(contact => {
-        let hasSameValue = false;
-          if (contact.username === this.projectDetails.designer.username) {
-            hasSameValue = true;
-          }
-        if (!hasSameValue) {
-          designerList.push(contact);
-        }
+      this.proposalDetails.address = this.proposalInfo.shippingAddress.address;
+      this.proposalDetails.city = this.proposalInfo.shippingAddress.city;
+      this.proposalDetails.province = this.proposalInfo.shippingAddress.province;
+      this.proposalDetails.country = this.proposalInfo.shippingAddress.country;
+      this.proposalDetails.postalCode = this.proposalInfo.shippingAddress.postalCode;
+
+      this.proposalDetails.projectName = this.proposalInfo.name;
+      this.proposalInfo.paySchedule = this.proposalDetails.paymentSchedule;
+      this.proposalDetails.projectManager = this.usersList.filter(u => u.username === this.proposalDetails.projectManager)[0];
+      this.proposalDetails.projectManager.imageUrl = this.proposalDetails.projectManager.pictureURI;
+      this.proposalDetails.accountManager = this.usersList.filter(u => u.username === this.proposalDetails.accountManager)[0];
+      this.proposalDetails.accountManager.imageUrl = this.proposalDetails.accountManager.pictureURI;
+      this.proposalDetails.designer = this.usersList.filter(u => u.username === this.proposalDetails.designer)[0];
+      this.proposalDetails.designer.imageUrl = this.proposalDetails.designer.pictureURI;
+      this.proposalInfo.paySchedule.forEach(element => {
+        this.scheduleRemain = this.scheduleRemain - element;
       });
-      this.items5 = designerList;
+      this.proposalDetails.projectCategoriesAll = this.proposalDetails.categoryIds;
+      this.proposalDetails.projectSubCategoriesAll = this.proposalDetails.subcategoryIds;
+      console.log('$$$ ', this.proposalDetails, this.scheduleRemain);
     });
   }
 
   clickIconShipping() {
     this.switchIconShipping = !this.switchIconShipping;
-    this.projectDetails.shippingAddress.address = (this.switchIconShipping) ? this.userInfo.shippingaddress.address : '';
-    this.projectDetails.shippingAddress.city = (this.switchIconShipping) ? this.userInfo.shippingaddress.city : '';
-    this.projectDetails.shippingAddress.province = (this.switchIconShipping) ? this.userInfo.shippingaddress.state : '';
-    this.projectDetails.shippingAddress.country = (this.switchIconShipping) ? this.userInfo.shippingaddress.country : '';
-    this.projectDetails.shippingAddress.postalCode = (this.switchIconShipping) ? this.userInfo.shippingaddress.zipcode : '';
+    this.proposalDetails.address = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.address : '';
+    this.proposalDetails.city = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.city : '';
+    this.proposalDetails.province = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.province : '';
+    this.proposalDetails.country = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.country : '';
+    this.proposalDetails.postalCode = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.postalCode : '';
   }
 
   clickIconManagement() {
-    // tslint:disable-next-line:max-line-length
-    this.proposalDetails.clientProjectManagerId = (this.switchIconManagement) ? this.proposalDetails.contactId : undefined;
+    this.proposalDetails.projectManagementContact = (!this.switchIconManagement) ? this.proposalDetails.contactId : '';
+    this.selectProject = (!this.switchIconManagement) ? this.getContactNameFromId( this.proposalDetails.contactId) : '';
     this.switchIconManagement = !this.switchIconManagement;
-    this.clientProjectManager = (this.switchIconManagement) ? this.customerName : '';
   }
 
   clickIconReceivable() {
-    // tslint:disable-next-line:max-line-length
-    this.proposalDetails.accountReceivableId = (this.switchIconReceivable) ? this.proposalDetails.contactId : undefined;
+    this.proposalDetails.accountReceivable = (!this.switchIconReceivable) ? this.proposalDetails.contactId : '';
     this.selectReceivable = (!this.switchIconReceivable) ? this.getContactNameFromId( this.proposalDetails.contactId) : '';
     this.switchIconReceivable = !this.switchIconReceivable;
   }
@@ -397,108 +410,135 @@ projectDetails = {
     this.editable = false;
     this.userInfo.followers.forEach(element => {
       this.items2 = this.items2.filter(function( obj ) {
-        return obj.username !== element.username;
+        return obj.label !== element.name;
       });
     });
-
-    // Update project id field with proposal info.
-    // this.projectDetails.projectId = this.proposalInfo.proposalId;
   }
 
-  getSchduleRemain(event) {
-    this.scheduleRemain = event;
-    this.proposalDetails.paymentSchedule = event;
-    this.updateProjectDetails();
+  onSelectCustomer(event) {
+    this.proposalDetails.contactId = event.originalObject.id;
+    this.selectedCustomer = this.customerList.filter( c => c.id === event.originalObject.id)[0];
+  }
+
+  onSelectProjectManagementContact(event) {
+    this.proposalDetails.projectManagementContact = event.originalObject.id;
+  }
+
+  onSelectAccountReceivable(event) {
+    this.proposalDetails.accountReceivable = event.originalObject.id;
+  }
+
+  onSelectProjectId(event) {
+    this.proposalDetails.projectName = event.originalObject.id;
+  }
+
+  onSelectAssociation(event) {
+    this.proposalDetails.association = event;
+  }
+
+  onSelectProjectType(event) {
+    this.proposalDetails.projectType = event;
+  }
+
+  onAccountTypeChange(event) {
   }
 
   onSelect(item: any) {
-    console.log('selected user:', item);
     this.selectedItem = item;
-    this.items2 = this.items2.filter(function( obj ) {
-      return obj.username !== item.username;
-    });
-    this.collaborators.push({username: item.username, pictureURI: item.pictureURI });
-    this.proposalDetails.collaborators.push(item.username);
-    this.updateProjectDetails();
+    console.log('item: ', item, this.items3);
+    // this.items3 = this.items3.filter(function( obj ) {
+    //   return obj.username !== item.username;
+    // });
+    this.proposalDetails.collaborators.push({name: item.label, imageUrl: item.imageUrl, username: item.username });
+    this.proposalDetails.collaboratorsData.push({name: item.label, imageUrl: item.imageUrl, username: item.username });
   }
 
   onSelectAccountManager(item: any) {
     this.selectedItem = item;
-    this.items3 = this.items3.filter(function( obj ) {
-      return obj.username !== item.username;
-    });
-    this.projectDetails.accountManager = {username: item.username, pictureURI: item.pictureURI };
-    this.proposalDetails.accountManager = item.username;
-    this.updateProjectDetails();
+    // this.items3 = this.items3.filter(function( obj ) {
+    //   return obj.id !== item.id;
+    // });
+    this.proposalDetails.accountManager = item;
   }
 
   onSelectProjectManager(item: any) {
     this.selectedItem = item;
-    this.items4 = this.items4.filter(function( obj ) {
-      return obj.username !== item.username;
-    });
-    this.projectDetails.projectManager = {username: item.username, pictureURI: item.pictureURI };
-    this.proposalDetails.projectManager = item.username;
-    this.updateProjectDetails();
+    this.proposalDetails.projectManager = item;
   }
 
   onSelectDesigner(item: any) {
     this.selectedItem = item;
-    this.items5 = this.items5.filter(function( obj ) {
-      return obj.username !== item.username;
-    });
-    this.projectDetails.designer = {username: item.username, pictureURI: item.pictureURI };
-    this.proposalDetails.designer = item.username;
-    this.updateProjectDetails();
+    this.proposalDetails.designer = item;
   }
-
 
   onInputChangedEvent(val: string) {
     this.inputChanged = val;
   }
 
   removeUser(i: number) {
-    const item = this.projectDetails.collaborators[i];
-    this.items2.push({id: this.items2.length, name: item.username, pictureURI: item.pictureURI});
-    this.projectDetails.collaborators.splice(i, 1);
+    const item = this.proposalDetails.collaborators[i];
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
+    this.proposalDetails.collaborators.splice(i, 1);
     this.isAutocompleteUpdated2 = !this.isAutocompleteUpdated2;
   }
 
   removeAccountManager(i: number) {
-    const item = this.projectDetails.accountManager;
-    this.items2.push({id: this.items2.length, name: item.username, pictureURI: item.pictureURI});
-    this.projectDetails.accountManager = undefined;
+    const item = this.proposalDetails.accountManager[i];
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
+    this.proposalDetails.accountManager.splice(i, 1);
     this.isAutocompleteUpdated3 = !this.isAutocompleteUpdated3;
   }
 
   removeProjectManager (i: number) {
-    const item = this.projectDetails.projectManager;
-    this.items2.push({id: this.items2.length, name: item.username, pictureURI: item.pictureURI});
-    this.projectDetails.projectManager = undefined;
+    const item = this.proposalDetails.projectManager[i];
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
+    this.proposalDetails.projectManager.splice(i, 1);
     this.isAutocompleteUpdated4 = !this.isAutocompleteUpdated4;
   }
 
   removeDesigner (i: number) {
-    const item = this.projectDetails.designer;
-    this.items2.push({id: this.items2.length, name: item.username, pictureURI: item.pictureURI});
-    this.projectDetails.designer = undefined;
+    const item = this.proposalDetails.designer[i];
+    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
+    this.proposalDetails.designer.splice(i, 1);
     this.isAutocompleteUpdated5 = !this.isAutocompleteUpdated5;
   }
 
-
-  getProjectCategories(event) {
-    const projectCategories = event.map( k => k.id);
-    this.projectDetails.projectCategoriesAll = projectCategories;
-    console.log('categories: ', event, this.projectDetails.projectCategoriesAll);
-    this.updateProjectDetails();
+  clickIconAutoId() {
+    this.switchIconAutoId = !this.switchIconAutoId;
+    if (this.switchIconAutoId) {
+      this.proposalDetails.projectId = this.generateAutoId();
+    } else {
+      this.proposalDetails.projectId = undefined;
+    }
   }
 
-  getProjectSubCategories(event) {
+  getSchduleRemain(event) {
+    this.scheduleRemain = event.remaining;
+    this.proposalDetails.paymentSchedule = event.keywords;
+  }
 
-    const projectSubCategories = event.map( k => k.id);
-    this.projectDetails.projectSubCategoriesAll = projectSubCategories;
-    console.log('subcategories: ', event, this.projectDetails.projectSubCategoriesAll);
-    this.updateProjectDetails();
+  generateAutoId() {
+    let month: any;
+    let year: any;
+    let count: any;
+    const today = new Date();
+    // just name is count: it is project ids list
+    this.projectIDCount = this.proposalsList.map(p => p.projectId);
+    month = today.getMonth() + 1;
+    if (month.toString().length) {
+      month = '0' + month;
+    }
+    year = today.getFullYear().toString().slice(-2);
+    if (this.projectIDCount.length > 0) {
+      count = this.projectIDCount.length + 1;
+    } else {
+      count = 1;
+    }
+    if (count.toString().length === 1) {
+      count = '0' + count;
+    }
+    const projectId = 'PR_' + month + year + count;
+    return projectId;
   }
 
   // saveProjectDetails() {
@@ -519,43 +559,43 @@ projectDetails = {
   //   }
   // }
 
-  getContactNameFromId(id) {
-    const idCroped = id.slice(-1);
-    const selectedContact = this.contactsList.filter(c => c.id.toString() === idCroped)[0];
-    if (selectedContact.type === 'PERSON') {
-      return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
-    } else {
-      return selectedContact.business.username;
-    }
-  }
-
-  onSelectCustomer(event) {
-    console.log('select customer: ', event);
-    this.proposalDetails.contactId = event.originalObject.id;
-    this.customerName = event.originalObject.username;
-  }
-
   saveProjectDetails() {
     this.invalidProjectId = false;
     this.invalidSchedule = false;
     this.invalidAccountManager = false;
     this.invalidProjectManager = false;
-    if (this.projectDetails.projectId && (this.scheduleRemain === 0) && this.projectDetails.accountManager
-      && this.projectDetails.projectManager) {
+    this.invalidDesigner = false;
+    this.invalidSubCategory = false;
+    this.invalidCategory = false;
+    this.invalidDesigner = false;
+    if (this.proposalDetails.projectId && (this.scheduleRemain === 0) && this.proposalDetails.accountManager
+      && this.proposalDetails.projectManager && this.proposalDetails.designer && this.proposalDetails.projectCategoriesAll.length > 0
+      && this.proposalDetails.projectSubCategoriesAll.length > 0) {
         this.ProposalInfoModalCollapsed = true;
         this.showProposalInfo = false;
+        this.updateProjectDetails();
     } else {
-      if (!this.projectDetails.projectId) {
+      console.log('222', this.proposalDetails);
+      if (!this.proposalDetails.projectId) {
         this.invalidProjectId = true;
       }
       if (this.scheduleRemain !== 0) {
         this.invalidSchedule = true;
       }
-      if (!this.projectDetails.accountManager) {
+      if (!this.proposalDetails.accountManager) {
         this.invalidAccountManager = true;
       }
-      if (!this.projectDetails.projectManager) {
+      if (!this.proposalDetails.projectManager) {
         this.invalidProjectManager = true;
+      }
+      if (!this.proposalDetails.designer) {
+        this.invalidDesigner = true;
+      }
+      if (!this.proposalDetails.categoryIds.length) {
+        this.invalidCategory = true;
+      }
+      if (!this.proposalDetails.subcategoryIds.length) {
+        this.invalidSubCategory = true;
       }
     }
   }
@@ -566,42 +606,55 @@ projectDetails = {
     this.invalidProjectName = false;
     this.invalidAddress = false;
     this.invalidCity = false;
-    this.invalidState = false;
+    this.invalidProvince = false;
     this.invalidCountry = false;
-    this.invalidZipcode = false;
-    if (this.projectDetails.customerName && this.projectDetails.collaborators.length
-      && this.projectDetails.projectName && this.projectDetails.shippingAddress && this.projectDetails.shippingAddress.city
-      && this.projectDetails.shippingAddress.province
-      && this.projectDetails.shippingAddress.country &&
-      this.projectDetails.shippingAddress.postalCode) {
+    this.invalidPostalCode = false;
+    this.invalidProjectType = false;
+    this.invalidAccountReceivable = false;
+    this.invalidClientProjectManager = false;
+
+    if (this.proposalDetails.contactId && this.proposalDetails.collaborators.length
+      && this.proposalDetails.projectName && this.proposalDetails.address && this.proposalDetails.city
+      && this.proposalDetails.province && this.proposalDetails.country &&
+      this.proposalDetails.postalCode && this.proposalDetails.projectTypeId) {
         this.ProposalInfoModalCollapsed = true;
         this.showProposalInfo = false;
-    } else {
-      if (!this.projectDetails.customerName) {
-        this.invalidCustomerName = true;
+        this.updateProjectDetails();
+      } else {
+        if (!this.proposalDetails.contactId) {
+          this.invalidCustomerName = true;
+        }
+        if (!this.proposalDetails.collaborators.length) {
+          this.invalidCollaborators = true;
+        }
+        if (!this.proposalDetails.projectName) {
+          this.invalidProjectName = true;
+        }
+        if (!this.proposalDetails.address) {
+          this.invalidAddress = true;
+        }
+        if (!this.proposalDetails.city) {
+          this.invalidCity = true;
+        }
+        if (!this.proposalDetails.province) {
+          this.invalidProvince = true;
+        }
+        if (!this.proposalDetails.country) {
+          this.invalidCountry = true;
+        }
+        if (!this.proposalDetails.postalCode) {
+          this.invalidPostalCode = true;
+        }
+        if (!this.proposalDetails.projectTypeId) {
+          this.invalidProjectType = true;
+        }
+        if (!this.proposalDetails.projectManagementContact) {
+          this.invalidClientProjectManager = true;
+        }
+        if (!this.proposalDetails.accountReceivable ) {
+          this.invalidAccountReceivable = true;
+        }
       }
-      if (!this.projectDetails.collaborators.length) {
-        this.invalidCollaborators = true;
-      }
-      if (!this.projectDetails.projectName) {
-        this.invalidProjectName = true;
-      }
-      if (!this.projectDetails.shippingAddress) {
-        this.invalidAddress = true;
-      }
-      if (!this.projectDetails.shippingAddress.city) {
-        this.invalidCity = true;
-      }
-      if (!this.projectDetails.shippingAddress.province) {
-        this.invalidState = true;
-      }
-      if (!this.projectDetails.shippingAddress.country) {
-        this.invalidCountry = true;
-      }
-      if (!this.projectDetails.shippingAddress.postalCode) {
-        this.invalidZipcode = true;
-      }
-    }
   }
 
   onChangeInternalNote(event) {
@@ -610,64 +663,346 @@ projectDetails = {
   }
   onChangeClientNote(event) {
     this.proposalDetails.clientNote = event.target.value;
-    this.updateProjectDetails();
-  }
-  onChangeCustomerName(event) {
-    this.proposalDetails.username = event.target.value;
-    this.updateProjectDetails();
-  }
-  onSelectProjectManagementContact(event) {
-    console.log('client project manager id:', event.originalObject);
-    this.proposalDetails.clientProjectManagerId = event.originalObject.id;
-    this.clientProjectManager = event.originalObject.username;
+    console.log('client notes: ', event);
     this.updateProjectDetails();
   }
 
-  onSelectAccountReceivable(event) {
-    this.proposalDetails.accountReceivableId = event.originalObject.id;
-    this.selectReceivable = event.originalObject.username;
-    this.updateProjectDetails();
-  }
-
-  onSelectAssociation(event) {
-    this.proposalDetails.association = event.target.value;
-  }
-  onChangePricingCategory(event) {
-    this.updateProjectDetails();
-  }
-  onChangeProjectName(event) {
-    this.proposalDetails.username = event.target.value;
-    this.updateProjectDetails();
-  }
-  onChangeProjectType(event) {
-    this.proposalDetails.projectTypeId = parseInt(event.target.value, 10);
-    this.updateProjectDetails();
-  }
-  onChangeShippingAddress(event, type) {
-    this.proposalDetails.shippingAddress[type] = event.target.value;
-    this.updateProjectDetails();
-  }
 
   updateProjectDetails() {
-    console.log('project details are updating:', this.proposalDetails);
-    this.proposalDetails.contactId = parseInt(this.proposalDetails.toString().split('-').pop(), 10);
-    this.proposalDetails.clientProjectManagerId = parseInt(this.proposalDetails.clientProjectManagerId.split('-').pop(), 10);
-    this.proposalDetails.accountReceivableId = parseInt(this.proposalDetails.accountReceivableId.split('-').pop(), 10);
-    this.proposalDetails.clientNote = this.proposalDetails.clientNote ?  this.proposalDetails.clientNote : '';
-    this.proposalDetails.internalNote = this.proposalDetails.internalNote ? this.proposalDetails.internalNote : '';
-    this.proposalsService.updateIndividualProposal(this.proposalId, this.proposalDetails).subscribe(res => {
-      console.log('proposal updated');
-    });
+    console.log('Updated Proposal data: ', this.proposalDetails);
+
+    // console.log('project details are updating:', this.proposalDetails);
+    // this.proposalDetails.contactId = parseInt(this.proposalDetails.contactId.toString().split('-').pop(), 10);
+    // this.proposalDetails.clientProjectManagerId = parseInt(this.proposalDetails.clientProjectManagerId.split('-').pop(), 10);
+    // this.proposalDetails.accountReceivableId = parseInt(this.proposalDetails.accountReceivableId.split('-').pop(), 10);
+    // this.proposalDetails.clientNote = this.proposalDetails.clientNote ?  this.proposalDetails.clientNote : '';
+    // this.proposalDetails.internalNote = this.proposalDetails.internalNote ? this.proposalDetails.internalNote : '';
+    // this.proposalsService.updateIndividualProposal(this.proposalId, this.proposalDetails).subscribe(res => {
+    //   console.log('proposal updated');
+    // });
+    if ( this.proposalInfo.status === 'WON') {
+      this.commonService.showAlertModal.next(true);
+      this.retrieveData();
+    } else {
+      const collaboratorData = [];
+      this.collaborators.forEach(ele => {
+        collaboratorData.push(ele.username);
+      });
+      const savingData = {
+        'currencyId': this.proposalDetails.currencyId,
+        'contactId': this.getIdFromString(this.proposalDetails.contactId),
+        // 'leadId': 0,
+        'projectId': this.proposalDetails.projectId,
+        'projectTypeId': parseInt(this.proposalDetails.projectTypeId, 10),
+        'pricingCategoryId': this.proposalDetails.pricingCategoryId ?
+          parseInt(this.proposalDetails.pricingCategoryId.toString(), 10) : undefined,
+        'categoryIds': this.proposalDetails.projectCategoriesAll,
+        'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
+        'accountManager': this.proposalDetails.accountManager.username,
+        'projectManager': this.proposalDetails.projectManager.username,
+        'designer': this.proposalDetails.designer.username,
+        'clientProjectManagerId': this.getIdFromString(this.proposalDetails.clientProjectManagerId),
+        'accountReceivableId': this.getIdFromString(this.proposalDetails.accountReceivableId),
+        'name': this.proposalDetails.projectName,
+        'shippingAddress': {
+          'address': this.proposalDetails.address,
+          'city': this.proposalDetails.city,
+          'province': this.proposalDetails.province,
+          'postalCode': this.proposalDetails.postalCode,
+          'country': this.proposalDetails.country
+        },
+        'paymentSchedule': this.proposalDetails.paymentSchedule,
+        'scopeOfWork': this.scopeEditorContent,
+        'clientNote': this.extractStringFromEditor(this.clientNoteContent),
+        'internalNote': this.extractStringFromEditor(this.internalNoteContent),
+        'completionDate': this.proposalDetails.completionDate,
+        'discount': {
+          'value': this.proposalDetails.discount.value,
+          'unit': this.proposalDetails.discount.unit
+        },
+        'collaborators': collaboratorData,
+        'taxRateId': parseInt(this.proposalDetails.taxRateId.toString(), 10)
+      };
+
+      this.proposalsService.updateIndividualProposal(this.proposalId, savingData).subscribe(res => {
+        console.log('updated : ', res);
+      });
+    }
+
+
+  }
+
+  moveToProjectDetails() {
+
+  }
+
+  saveproposalDetails() {
+  }
+
+  getProjectCategories(event) {
+    const projectCategories = event.map( k => k.id);
+    this.proposalDetails.projectCategoriesAll = projectCategories;
+    this.proposalDetails.categoryIds = projectCategories;
+    this.updateProjectDetails();
+  }
+
+  getProjectSubCategories(event) {
+
+    const projectSubCategories = event.map( k => k.id);
+    this.proposalDetails.projectSubCategoriesAll = projectSubCategories;
+    this.proposalDetails.subcategoryIds = projectSubCategories;
+    this.updateProjectDetails();
+  }
+
+  selectCompletionDate(start) {
+    this.proposalDetails.completionDate = moment(start.value).format('YYYY-MM-DD');
+    // this.formattedStartDate = moment(start.value).format('MMMM DD, YYYY');
+  }
+
+  tabChange(event) {
+    switch (event.tabTitle) {
+      case 'CLIENT DETAILS': {
+        this.tabActiveSecond = false;
+        this.tabActiveFirst = true;
+        this.tabActiveThird = false;
+        break;
+      }
+      case 'PROJECT DETAILS': {
+        this.tabActiveSecond = true;
+        this.tabActiveFirst = false;
+        this.tabActiveThird = false;
+        this.clickNext('tab-one');
+        break;
+      }
+      case 'PROJECT SCOPE': {
+        this.tabActiveSecond = false;
+        this.tabActiveFirst = false;
+        this.tabActiveThird = true;
+        this.clickNext('tab-two');
+        break;
+      }
+    }
+  }
+
+  clickNext(pos) {
+    if (pos === 'tab-one') {
+      this.invalidCustomerName = false;
+      this.invalidCollaborators = false;
+      this.invalidProjectName = false;
+      this.invalidAddress = false;
+      this.invalidCity = false;
+      this.invalidProvince = false;
+      this.invalidCountry = false;
+      this.invalidPostalCode = false;
+      this.invalidProjectType = false;
+      this.invalidAccountReceivable = false;
+      this.invalidClientProjectManager = false;
+
+      if (this.proposalDetails.contactId && this.proposalDetails.collaborators.length
+        && this.proposalDetails.projectName && this.proposalDetails.address && this.proposalDetails.city
+        && this.proposalDetails.province && this.proposalDetails.country &&
+        this.proposalDetails.postalCode && this.proposalDetails.projectType) {
+          this.tabActiveSecond = true;
+          this.tabActiveFirst = false;
+          this.tabActiveThird = false;
+          console.log('tabone-click: ', this.proposalDetails);
+      } else {
+        console.log('tabone-click1: ', this.proposalDetails);
+        if (!this.proposalDetails.contactId) {
+          this.invalidCustomerName = true;
+        }
+        if (!this.proposalDetails.collaborators.length) {
+          this.invalidCollaborators = true;
+        }
+        if (!this.proposalDetails.projectName) {
+          this.invalidProjectName = true;
+        }
+        if (!this.proposalDetails.address) {
+          this.invalidAddress = true;
+        }
+        if (!this.proposalDetails.city) {
+          this.invalidCity = true;
+        }
+        if (!this.proposalDetails.province) {
+          this.invalidProvince = true;
+        }
+        if (!this.proposalDetails.country) {
+          this.invalidCountry = true;
+        }
+        if (!this.proposalDetails.postalCode) {
+          this.invalidPostalCode = true;
+        }
+        if (!this.proposalDetails.projectType) {
+          this.invalidProjectType = true;
+        }
+        if (!this.proposalDetails.projectManagementContact) {
+          this.invalidClientProjectManager = true;
+        }
+        if (!this.proposalDetails.accountReceivable ) {
+          this.invalidAccountReceivable = true;
+        }
+        setTimeout(() => {
+          this.tabActiveSecond = false;
+          this.tabActiveFirst = true;
+          this.tabActiveThird = false;
+        });
+      }
+    } else if (pos === 'tab-two') {
+      this.invalidProjectId = false;
+      this.invalidSchedule = false;
+      this.invalidAccountManager = false;
+      this.invalidProjectManager = false;
+      this.invalidDesigner = false;
+      this.invalidSubCategory = false;
+      this.invalidCategory = false;
+      this.invalidDesigner = false;
+      if (this.proposalDetails.projectId && (this.scheduleRemain === 0) && this.proposalDetails.accountManager
+        && this.proposalDetails.projectManager && this.proposalDetails.designer && this.proposalDetails.categoryIds.length > 0
+        && this.proposalDetails.projectSubCategoriesAll.length > 0) {
+          this.tabActiveThird = true;
+          this.tabActiveFirst = false;
+          this.tabActiveSecond = false;
+          console.log('111', this.proposalDetails);
+      } else {
+        console.log('222', this.proposalDetails);
+        if (!this.proposalDetails.projectId) {
+          this.invalidProjectId = true;
+        }
+        if (this.scheduleRemain !== 0) {
+          this.invalidSchedule = true;
+        }
+        if (!this.proposalDetails.accountManager) {
+          this.invalidAccountManager = true;
+        }
+        if (!this.proposalDetails.projectManager) {
+          this.invalidProjectManager = true;
+        }
+        if (!this.proposalDetails.designer) {
+          this.invalidDesigner = true;
+        }
+        if (!this.proposalDetails.projectCategoriesAll.length) {
+          this.invalidCategory = true;
+        }
+        if (!this.proposalDetails.projectSubCategoriesAll.length) {
+          this.invalidSubCategory = true;
+        }
+        setTimeout(() => {
+          this.tabActiveSecond = true;
+          this.tabActiveFirst = false;
+          this.tabActiveThird = false;
+        });
+      }
+    }
+  }
+
+  clickBack(pos) {
+    if (pos === 'tab-one') {
+      this.showAddProposalModal = false;
+      this.addProposalModalCollapsed = true;
+    } else if (pos === 'tab-two') {
+      this.tabActiveThird = false;
+      this.tabActiveFirst = true;
+      this.tabActiveSecond = false;
+    } else if (pos === 'tab-three') {
+      this.tabActiveThird = false;
+      this.tabActiveFirst = false;
+      this.tabActiveSecond = true;
+    }
+  }
+
+  openAddProposalModal() {
+    this.tabActiveFirst = true;
+    this.tabActiveSecond = false;
+    this.tabActiveThird = false;
+    this.showAddProposalModal = true;
+    this.addProposalModalCollapsed = false;
+  }
+
+  extractStringFromEditor(str) {
+    const md = str.slice(3);
+    return md.slice(-3);
+  }
+
+  getIdFromString(str) {
+    const data = str.split('-').pop();
+    return parseInt(data, 10);
   }
 
   addContactName(data) {
     data.forEach(element => {
       if (element.type === 'PERSON') {
-        element.username = element.person.firstName + ' ' + element.person.lastName;
+        element.name = element.person.firstName + ' ' + element.person.lastName;
       } else {
-        element.username = element.business.username;
+        element.name = element.business.name;
       }
     });
     return data;
+  }
+
+  getContactNameFromId(id) {
+    const updatedId = parseInt(id.split('-').pop(), 10);
+    const selectedContact = this.customerList.filter(c => c.id === updatedId)[0];
+    return selectedContact.name;
+  }
+
+  getContactCustomerNameFromId(id) {
+    const updatedId = parseInt(id.split('-').pop(), 10);
+    this.selectedCustomer = this.customerList.filter(c => c.id === updatedId)[0];
+    return this.selectedCustomer.name;
+  }
+
+  finishAddProposal() {
+    this.invalidScopeEditorContent = false;
+    const collaborators = this.proposalDetails.collaborators.map(collaborator => collaborator.username);
+    const savingProposalData = {
+      'currencyId': 1,
+      'contactId': this.proposalDetails.contactId,
+      // 'leadId': 0,
+      'projectId': this.proposalDetails.projectId,
+      'projectTypeId': parseInt(this.proposalDetails.projectType, 10),
+      'pricingCategoryId': this.proposalDetails.pricingCategoryId ?
+        parseInt(this.proposalDetails.pricingCategoryId.toString(), 10) : undefined,
+      'categoryIds': this.proposalDetails.projectCategoriesAll,
+      'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
+      'accountManager': this.proposalDetails.accountManager.username,
+      'projectManager': this.proposalDetails.projectManager.username,
+      'designer': this.proposalDetails.designer.username,
+      'clientProjectManagerId': this.proposalDetails.projectManagementContact,
+      'accountReceivableId': this.proposalDetails.accountReceivable,
+      'name': this.proposalDetails.projectName,
+      'shippingAddress': {
+        'address': this.proposalDetails.address,
+        'city': this.proposalDetails.city,
+        'province': this.proposalDetails.province,
+        'postalCode': this.proposalDetails.postalCode,
+        'country': this.proposalDetails.country
+      },
+      'paymentSchedule': this.proposalDetails.paymentSchedule,
+      'scopeOfWork': this.scopeEditorContent,
+      'clientNote': this.extractStringFromEditor(this.clientNoteContent),
+      'internalNote': this.extractStringFromEditor(this.internalNoteContent),
+      'completionDate': this.proposalDetails.completionDate,
+      'discount': {
+        'value': this.proposalDetails.discount.value,
+        'unit': this.proposalDetails.discount.unit
+      },
+      'collaborators': collaborators,
+      'taxRateId': parseInt(this.proposalDetails.taxRateId.toString(), 10)
+    };
+
+    if (this.scopeEditorContent) {
+      console.log('saving_proposal: ', savingProposalData);
+      this.proposalsService.createProposal(savingProposalData).subscribe(res => {
+        console.log('created proposal: ', res);
+        this.salesService.proposalAdded.next(true);
+      });
+      this.tabActiveThird = false;
+      this.tabActiveFirst = true;
+      this.tabActiveSecond = false;
+      this.showAddProposalModal = false;
+      this.addProposalModalCollapsed = true;
+    } else {
+      this.invalidScopeEditorContent = true;
+    }
   }
 }

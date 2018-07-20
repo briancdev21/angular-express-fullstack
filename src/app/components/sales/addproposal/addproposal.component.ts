@@ -24,23 +24,7 @@ export class AddProposalComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
   today = new Date();
-  public proposalInfo: any = {
-    proposalId : '',
-    contactName : '',
-    projectName: '',
-    projectType: '',
-    proposalAmount: 0,
-    dealStatus: 'New',
-    revision: '0',
-    createdDate: '',
-    owner: [
-      {
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Michael'
-      }
-    ],
-  };
+  public proposalInfo;
 
   proposalDetails = {
     discount: {
@@ -235,7 +219,7 @@ export class AddProposalComponent implements OnInit {
 
     this.projectsService.getProjectsList().subscribe(res => {
       this.projectsList = res.results;
-      this.projectsData = this.completerService.local(this.projectsList, 'id', 'id');
+      this.projectsData = this.completerService.local(this.projectsList, 'name', 'name');
     });
 
     this.proposalsService.getProposals().subscribe(res => {
@@ -422,6 +406,11 @@ export class AddProposalComponent implements OnInit {
     const projectSubCategories = event.map( k => k.id);
     this.proposalDetails.projectSubCategoriesAll = projectSubCategories;
     console.log('subcategories: ', event, this.proposalDetails.projectSubCategoriesAll);
+  }
+
+  selectCompletionDate(start) {
+    this.proposalDetails.completionDate = moment(start.value).format('YYYY-MM-DD');
+    // this.formattedStartDate = moment(start.value).format('MMMM DD, YYYY');
   }
 
   tabChange(event) {

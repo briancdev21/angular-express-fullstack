@@ -1,14 +1,14 @@
 <div class="content-box" (click)="editable=true;$event.stopPropagation()">
   <div [ngClass]="{ 'editable': editable, 'non-editable': !editable, 'hidden': editable}">
-    <span *ngIf="categories == undefined" class="placeholder">{{placeholder}}</span>
-    <ul *ngIf="categories">
-      <li *ngFor="let category of categories; let i = index" >{{category.name}}</li>
+    <span *ngIf="_categories == undefined" class="placeholder">{{placeholder}}</span>
+    <ul *ngIf="_categories">
+      <li *ngFor="let category of _categories; let i = index" >{{category.name}}</li>
       <li class="add-category"><img src="assets/images/Add-Button.svg" (click)="editable=true;$event.stopPropagation()" /></li>
     </ul>
   </div>
   <div [ngClass]="{ 'editable': editable, 'hidden': !editable }" (click)="editable=true;$event.stopPropagation()" >
-    <ul *ngIf="categories">
-      <li *ngFor="let category of categories; let i = index" >{{category.name}}<span (click)="deleteCategory(category.id)">&nbsp;&nbsp;x</span></li><br/>
+    <ul *ngIf="_categories">
+      <li *ngFor="let category of _categories; let i = index" >{{category.name}}<span (click)="deleteCategory(category.id)">&nbsp;&nbsp;x</span></li><br/>
       <li style="background: none; width: 100%; margin: 0;" >
         <input placeholder="Type Here..." #box [(ngModel)]="newCategory" class="add-category-input" type="text" (keyup.enter)="addNewCategory(newCategory)"/></li>
     </ul>

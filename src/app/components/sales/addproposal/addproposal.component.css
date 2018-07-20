@@ -421,3 +421,31 @@ app-schedulemultikeyword {
 .shipping-address {
 	margin-top: 5px;
 }
+
+.formated-date, .start-time {
+	border: 1px solid #F5F5F5;
+	width: 100%;
+	height: 34px;
+	padding: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.formated-date img, .start-time img {
+	width: 20px;
+	height: 20px;
+}
+
+.start-date {
+	height: 36px;
+}
+
+.start-date>input {
+	width: 0px;
+	height: 0px;
+	visibility: hidden;
+	margin: 0;
+	padding: 0;
+	border: 0px;
+}

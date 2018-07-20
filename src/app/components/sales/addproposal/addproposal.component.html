@@ -124,7 +124,8 @@
                 class="ng2completer" 
                 [ngClass]="{'validation-required-name': invalidProjectName}">
               </ng2-completer> -->
-              <input placeholder="Enter Project Name" [(ngModel)]="proposalDetails.projectName" [ngClass]="{'validation-required': invalidProjectName}">
+              
+              <input placeholder="Enter Project ID" [(ngModel)]="proposalDetails.projectName" [ngClass]="{'validation-required': invalidProjectName}">
             </div>
             <div>
               <span>Project Type (*required)</span>
@@ -212,7 +213,20 @@
           <div class="comp-sche tab-row">
             <div class="completion">
               <span>Completion Date</span>
-              <app-in-createddatefield [(createdDate)]="proposalDetails.completionDate"></app-in-createddatefield>
+              <div class="start-date">
+                <div class="formated-date" [owlDateTimeTrigger]="completionDate">
+                  <span >{{proposalDetails.completionDate}}</span>
+                  <img src="assets/images/calendar-plain.png">
+                </div>
+                <input 
+                  [owlDateTimeTrigger]="completionDate" 
+                  [owlDateTime]="completionDate" 
+                  placeholder="Choose a start date" 
+                  (dateTimeChange)="selectCompletionDate($event)" 
+                  [(ngModel)]="proposalDetails.completionDate"
+                  [min]="today">
+                <owl-date-time [pickerType]="'calendar'" #completionDate></owl-date-time>
+              </div>
             </div>
             <div class="schedule">
               <div class="schedule-title">
