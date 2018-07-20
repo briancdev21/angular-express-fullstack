@@ -24,7 +24,7 @@ export class ScheduleMultiKeywordComponent implements AfterViewInit, OnInit {
       }
       proposalRemaining = 100 - proposalTotal;
       if (proposalRemaining >= 0) {
-        this.scheduleRemain.emit(proposalRemaining);
+        this.scheduleRemain.emit({'remaining': proposalRemaining, 'keywords': this._keywords});
       }
     }
   }
