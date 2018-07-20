@@ -26,21 +26,28 @@ export class ReceiveInventoryComponent implements OnInit {
   searchKeyword = '';
   contacts = [];
   originalPurchaseOrderInfos = [];
+  contactList = [];
 
   constructor( private sharedService: SharedService ) {
     this.filterAvaliableTo = 'everyone';
     this.sharedService.getContacts().subscribe( contactRes => {
-      this.contacts = contactRes;
+      contactRes = this.addContactName(contactRes);
+      this.contactList = contactRes;
       this.sharedService.getPurchaseOrders().subscribe(res => {
         console.log('purchase orders:', res.results);
         res.results.forEach(ele => {
+          let contactName = '';
+          if (ele.contactId) {
+            const contactId = parseInt(ele.contactId.split('-').pop(), 10);
+            contactName = this.contactList.filter(contact => contact.id === contactId).pop().name;
+          }
           if (ele.status === 'OPEN' && ele.status !== 'FULFILLED') {
             const ele_contactId = ele.contactId.split('-').pop();
             const contactAt = this.contacts.filter(contact => contact.id.toString() === ele_contactId).pop();
             const purchaseOrdersInfoItem = {
               projectNumber: ele.id,
               purchaseOrderNumber: `PO${ele.id}`,
-              source: contactAt.person.firstName + ' ' + contactAt.person.lastName,
+              source: contactName,
               type: 'Purchase Order',
               status: ele.status,
               quantity: ele.quantity,
@@ -214,5 +221,15 @@ export class ReceiveInventoryComponent implements OnInit {
       newPOInfos.push(productInfo);
       this.purchaseOrdersInfo = newPOInfos;
     }
+  }
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }
