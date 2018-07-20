@@ -16,6 +16,21 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
   @Input() set categories(val) {
     this._categories = val;
     console.log('multicategories : ', this._categories);
+    const arr = [];
+    this.editable = false;
+    this.sharedService.getCategories().subscribe(data => {
+      this.categoriesList = data.results;
+      this.categoriesNameList = data.results.map(k => k.name);
+      // Change categories ids to objects
+      this._categories.forEach(element => {
+        for (let i = 0; i < this.categoriesList.length; i ++) {
+          if (element === this.categoriesList[i].id) {
+            arr.push(this.categoriesList[i]);
+          }
+        }
+      });
+      this._categories = arr;
+    });
   }
   @ViewChild('box') input: ElementRef;
   @Input() placeholder;
@@ -35,21 +50,21 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    const arr = [];
-    this.editable = false;
-    this.sharedService.getCategories().subscribe(data => {
-      this.categoriesList = data.results;
-      this.categoriesNameList = data.results.map(k => k.name);
-      // Change categories ids to objects
-      this._categories.forEach(element => {
-        for (let i = 0; i < this.categoriesList.length; i ++) {
-          if (element === this.categoriesList[i].id) {
-            arr.push(this.categoriesList[i]);
-          }
-        }
-      });
-      this._categories = arr;
-    });
+    // const arr = [];
+    // this.editable = false;
+    // this.sharedService.getCategories().subscribe(data => {
+    //   this.categoriesList = data.results;
+    //   this.categoriesNameList = data.results.map(k => k.name);
+    //   // Change categories ids to objects
+    //   this._categories.forEach(element => {
+    //     for (let i = 0; i < this.categoriesList.length; i ++) {
+    //       if (element === this.categoriesList[i].id) {
+    //         arr.push(this.categoriesList[i]);
+    //       }
+    //     }
+    //   });
+    //   this._categories = arr;
+    // });
   }
 
   ngAfterViewInit() {

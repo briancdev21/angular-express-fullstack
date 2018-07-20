@@ -16,6 +16,21 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
   @Input() set subCategories(val) {
     this._subCategories = val;
     console.log('multicategories : ', this._subCategories);
+    const arr = [];
+    this.editable = false;
+    this.sharedService.getSubCategories().subscribe(data => {
+      this.subCategoriesList = data.results;
+      this.subCategoriesNameList = data.results.map(k => k.name);
+      // Change categories ids to objects
+      this._subCategories.forEach(element => {
+        for (let i = 0; i < this.subCategoriesList.length; i ++) {
+          if (element === this.subCategoriesList[i].id) {
+            arr.push(this.subCategoriesList[i]);
+          }
+        }
+      });
+      this._subCategories = arr;
+    });
   }
   @ViewChild('box') input: ElementRef;
   @Input() placeholder;
@@ -34,21 +49,6 @@ export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit 
   }
 
   ngOnInit() {
-    const arr = [];
-    this.editable = false;
-    this.sharedService.getSubCategories().subscribe(data => {
-      this.subCategoriesList = data.results;
-      this.subCategoriesNameList = data.results.map(k => k.name);
-      // Change categories ids to objects
-      this._subCategories.forEach(element => {
-        for (let i = 0; i < this.subCategoriesList.length; i ++) {
-          if (element === this.subCategoriesList[i].id) {
-            arr.push(this.subCategoriesList[i]);
-          }
-        }
-      });
-      this._subCategories = arr;
-    });
   }
 
   ngAfterViewInit() {
