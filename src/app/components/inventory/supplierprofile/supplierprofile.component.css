@@ -137,3 +137,114 @@ tab select {
   }
 
 }
+
+
+.profile-info {
+  flex: 1; 
+  padding: 30px; 
+  text-align: left; 
+  color: #646464;
+}
+.chartset {
+  padding: 20px;
+  border-bottom: solid 1px #D3D3D3;
+}
+
+.recent-activities {
+  border-bottom: solid 1px #D3D3D3;
+  padding: 10px 20px 5px;
+  color: black;
+  font-weight: 500;
+  text-align: left;
+}
+
+.editor {
+  border-bottom: solid 1px #D3D3D3;
+  font-size: 0.9em;
+}
+
+.v-timeline {  
+  flex: 1;
+  padding: 20px;
+}
+
+.left-sidebar {
+  flex: 3;
+}
+
+.right-sidebar {
+  flex: 1;
+  padding: 20px; 
+  border-left: solid 1px #D3D3D3;
+}
+
+.chartset {
+  display:flex;
+  justify-content: space-around; 
+  padding: 25px 2.5%;
+}
+
+.chart-wrapper {
+  width:19%;
+  margin:0 2.5%;
+  box-shadow: lightgrey 0 0 3px 1px;
+}
+
+tabs {
+  padding: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+
+.editor textarea {
+  width: 100%;
+  padding: 15px 20px;
+  min-height: 150px;
+  outline: none;
+  color: #646464;
+  border: none;
+  resize: vertical;
+}
+
+.tab-email>div {
+  display: flex;
+}
+
+tab input {
+  width: 50%;
+  padding: 5px 20px 5px;
+  float: left;
+  color: #95989a;
+}
+
+tab input::placeholder, tab textarea::placeholder {
+  color: #95989a !important;
+}
+
+
+tab select {
+  width: 50%;
+  height: 29px;
+  background: none;
+  border: 1px solid #F5F5F5;
+  border-radius: 0;
+  -webkit-appearance: none;
+  padding-left: 20px;
+  color: #95989A;
+  background: url(/assets/images/down-arrow.png) no-repeat;
+  background-position: right 10px center;
+  background-size: 4%;
+}
+
+.tab-call textarea, .tab-email textarea {
+  min-height: calc(150px - 31px);
+  color: #95989a;
+}
+
+.tab-call select {
+  width: 100%;
+  background: url(/assets/images/down-arrow.png) no-repeat;
+  background-position: right 10px center;
+  background-size: 2%;
+}
