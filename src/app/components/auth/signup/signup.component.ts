@@ -66,12 +66,9 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  onRegisterFormValuesChanged()
-  {
-      for ( const field in this.registerFormErrors )
-      {
-          if ( !this.registerFormErrors.hasOwnProperty(field) )
-          {
+  onRegisterFormValuesChanged() {
+      for ( const field in this.registerFormErrors ) {
+          if ( !this.registerFormErrors.hasOwnProperty(field) ) {
               continue;
           }
 
@@ -81,8 +78,7 @@ export class SignupComponent implements OnInit {
           // Get the control
           const control = this.registerForm.get(field);
 
-          if ( control && control.dirty && !control.valid )
-          {
+          if ( control && control.dirty && !control.valid ) {
               this.registerFormErrors[field] = control.errors;
           }
       }
