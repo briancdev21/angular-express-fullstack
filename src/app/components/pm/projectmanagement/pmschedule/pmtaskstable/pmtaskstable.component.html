@@ -1,14 +1,14 @@
 <div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
   <div class="milestone-table">
-    <div class="milestone-row" [dragula]="'dragMilestone'" [dragulaModel]='milestones'>
+    <div class="milestone-row" >
       <div *ngFor="let milestone of milestones; let i = index;"  class="draggable-column">
         <div class="milestone-title" [ngStyle]="{'background': milestone.color}" style="opacity: .7;"   >
           <div *ngIf="!milestone.editTitle" (click)="milestone.editTitle = true; $event.stopPropagation();">{{milestone.title | uppercase }}</div>
           <input *ngIf="milestone.editTitle" placeholder="Enter title here..." [(ngModel)]="milestone.title" (keydown)="updateMilestoneTitle(i, $event)" >
         </div>
-        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="milestone.tasks && milestone.tasks !== undefined">
-          <div *ngFor="let task of milestone.tasks; let j = index;" class="draggable-task">
-            <div class="task-content" (dblclick)="openDetailedModal(task, i, j)">
+        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="milestone.tasks && milestone.tasks !== undefined" id={{milestone.id}} >
+          <div *ngFor="let task of milestone.tasks; let j = index;" class="draggable-task" id={{task.id}} >
+            <div class="task-content" >
               <img *ngIf="task.attachmentImg" src="attachmentImg">
               <div class="task-title" >
                 <span>
@@ -54,12 +54,43 @@
                   <img *ngIf="task.dependency" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
                   <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.isImportant}" (click)="task.isImportant = !task.isImportant; updateTask( milestone.id, task.id, task)" >
                   <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
+                  <img src="assets/images/menu(1).png" (click)='showSettingsModal[i][j]=true;$event.stopPropagation();'>
                   <!--Dependency numbers-->
                   <div class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">
                     <span *ngFor="let dependency of milestones[i].tasks[j].dependency; let l = index" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
                       <span *ngIf="l != 0">,</span>
                       {{dependency}}
                     </span>
+                  </div>
+                  <!--settings modal-->
+                  <div [ngClass]="{'settings-modal': showSettingsModal[i][j], 'settings-modal-hide': !showSettingsModal[i][j] }" (clickOutside)="showSettingsModal[i][j] = false;">
+                    <div (click)="showDeleteConfirmModal[i][j]= true;">Delete Task</div>
+                    <div (click)="deleteSelectedSubTasks()">Delete Selected Subtasks</div>
+                    <div (click)="copySelectedSubTasks()">Copy Task</div>
+                    <div>Mark as Waiting On</div>
+                    <div>Print</div>
+                  </div>
+                  <!-- Confirm delete modal wrapper -->
+                  <div class="confirm-delete-modal-wrapper" *ngIf="showDeleteConfirmModal[i][j]" >
+                    <div [ngClass]="{'confirm-modal': showDeleteConfirmModal[i][j], 'confirm-modal-hide': !showDeleteConfirmModal[i][j] }">
+                      <div class="header">
+                        <span>Confirm Delete</span>
+                        <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showDeleteConfirmModal[i][j]=false" />
+                      </div>
+                      <div class="content" >
+                        <div class="confirm-que">
+                          Do you really want to delete?
+                        </div>
+                        <div class="center-btn-section" >
+                          <button class="confirm-btn" (click)="confirmDeleteMainTask(milestone.id, task.id); showDeleteConfirmModal[i][j]=false;" >
+                            Confirm
+                          </button>
+                          <button class="cancel-btn" (click)="showDeleteConfirmModal[i][j]=false" >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div> 
                   </div>
                   <!-- dependecy selection modal-->
                   <div

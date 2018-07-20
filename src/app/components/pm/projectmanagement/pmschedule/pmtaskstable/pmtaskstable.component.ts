@@ -30,6 +30,8 @@ export class PmTasksTableComponent implements OnInit {
   addMilestoneClicked = false;
   ownerModalCollapsed = [[]];
   dependencyModalCollapsed = [[]];
+  showSettingsModal = [[]];
+  showDeleteConfirmModal = [[]];
   selectedOwner: any;
   customForm: any;
   heroForm: FormGroup;
@@ -58,9 +60,7 @@ export class PmTasksTableComponent implements OnInit {
   constructor( private dragulaService: DragulaService, private projectManagementService: ProjectManagementService,
      private fb: FormBuilder, private sharedService: SharedService, private pmTasksService: PmTasksService ) {
     this.currentProjectId = localStorage.getItem('current_projectId');
-    this.dragulaService.dropModel.subscribe((value) => {
-      this.onDropModel(value.slice(1));
-    });
+
 
     this.sharedService.getContacts().subscribe(contacts => {
       this.contactsList = contacts;
@@ -127,20 +127,25 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   private onDropModel(args) {
-    const [el, target, source] = args;
-    const taskIndex = parseInt(el.id, 10);
-    const targetPanelIndex = parseInt(target.id, 10);
-    const sourcePanelIndex = parseInt(source.id, 10);
+    const [sourceItem, targetContainer, sourceContainer, targetItem] = args;
+    console.log('drop model called', args);
+    const sourceItemIndex = parseInt(sourceItem.id, 10);
+    const targetItemIndex = parseInt(targetItem.id, 10);
+
+    const targetPanelIndex = parseInt(targetContainer.id, 10);
+    const sourcePanelIndex = parseInt(sourceContainer.id, 10);
     console.log('on drop happened:', targetPanelIndex, sourcePanelIndex);
     // const selectedPanel = this.panels.filter(p => p.id === parseInt(source.id, 10))[0];
     // const selectedTask = selectedPanel.tasks.filter( t => t.id === parseInt(el.id, 10));
-    const selectedTaskData = this.milestones[sourcePanelIndex].tasks[taskIndex];
-    console.log('selected drag data: ', selectedTaskData, this.milestones);
-    if (target !== source) {
+    const sourcePanelData = this.milestones.filter(milestone => milestone.id === sourcePanelIndex).pop();
+    const selectedTaskData = sourcePanelData.tasks.filter(task => task.id === sourceItemIndex).pop();
+    console.log('selected drag data: ', sourceItemIndex, sourcePanelIndex, selectedTaskData);
+    if (targetContainer !== sourceContainer) {
       this.milestones[targetPanelIndex].tasks.push(selectedTaskData);
     }
     this.pmTasksService
-    .deleteIndividualtask(this.milestones[sourcePanelIndex].id, this.milestones[sourcePanelIndex].tasks[taskIndex].id).subscribe(res => {
+    .deleteIndividualtask(sourcePanelIndex, sourceItemIndex)
+    .subscribe(res => {
       console.log('task deleted: ', res);
     });
     const savingData = {
@@ -150,7 +155,7 @@ export class PmTasksTableComponent implements OnInit {
       'isComplete': selectedTaskData.isComplete,
       'startDate': moment(selectedTaskData.startDate).format('YYYY-MM-DD'),
     };
-    this.pmTasksService.createTask(this.milestones[targetPanelIndex].id, savingData).subscribe(res => {
+    this.pmTasksService.createTask(targetPanelIndex, savingData).subscribe(res => {
       console.log('task created: ', res);
     });
   }
@@ -181,7 +186,7 @@ export class PmTasksTableComponent implements OnInit {
       title: ''
     };
     this.pmTasksService.createTask(milestone.id, newMockTask).subscribe(res => {
-      this.refreshTable();
+      this.updateDataForGanttChart();
     });
   }
 
@@ -208,6 +213,7 @@ export class PmTasksTableComponent implements OnInit {
 
   refreshTable() {
     console.log('refresh table:');
+    this.tasksTemp = [];
     this.pmTasksService.getTaskGroupsWithParams({projectId: this.currentProjectId}).subscribe(data => {
       this.milestones = data.results;
       for (let i = 0; i < this.milestones.length; i++) {
@@ -215,11 +221,15 @@ export class PmTasksTableComponent implements OnInit {
         this.milestones[i].editTitle = false;
         this.ownerModalCollapsed[i] = new Array();
         this.dependencyModalCollapsed[i] = new Array();
+        this.showSettingsModal[i] = new Array();
+        this.showDeleteConfirmModal[i] = new Array();
         console.log('milestones length:', this.milestones[i]);
         if (this.milestones[i].taskIds !== null) {
           for (let j = 0; j < this.milestones[i].taskIds.length; j++) {
             this.ownerModalCollapsed[i][j] = false;
             this.dependencyModalCollapsed[i][j] = false;
+            this.showSettingsModal[i][j] = false;
+            this.showDeleteConfirmModal[i][j] = false;
           }
           this.pmTasksService.getTasks(this.milestones[i].id).subscribe(taskData => {
             this.milestones[i].tasks = taskData.results;
@@ -231,32 +241,61 @@ export class PmTasksTableComponent implements OnInit {
               element.taskTitle = element.title;
               element.dependency = element.dependencyIds ? element.dependencyIds : [];
             });
-            this.addTasksFromPmBoardData(this.milestones[i], i);
+            this.addTasksFromPmBoardData(this.milestones[i], i, this.milestones.length);
           });
         } else {
           this.milestones[i].taskIds = [];
-          this.addTasksFromPmBoardData(this.milestones[i], i);
+          this.addTasksFromPmBoardData(this.milestones[i], i, this.milestones.length);
         }
       }
     });
   }
 
-  addTasksFromPmBoardData(tableDataAtIndex: any, i) {
+  updateDataForGanttChart() {
+    console.log('update Gantt Chart:');
+    this.tasksTemp = [];
+    this.pmTasksService.getTaskGroupsWithParams({projectId: this.currentProjectId}).subscribe(data => {
+      const milestones = data.results;
+      for (let i = 0; i < milestones.length; i++) {
+        if (milestones[i].taskIds !== null) {
+          this.pmTasksService.getTasks(milestones[i].id).subscribe(taskData => {
+            milestones[i].tasks = taskData.results;
+            this.dependencyList = this.dependencyList.concat(taskData.results);
+            milestones[i].tasks.forEach(element => {
+              element.assigneeInfo = this.getUserInfo(element.assignee);
+              element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+              element.taskTitle = element.title;
+              element.dependency = element.dependencyIds ? element.dependencyIds : [];
+            });
+            this.addTasksFromPmBoardData(milestones[i], i, milestones.length);
+          });
+        } else {
+          milestones[i].taskIds = [];
+          this.addTasksFromPmBoardData(milestones[i], i, milestones.length);
+        }
+      }
+    });
+  }
+
+  addTasksFromPmBoardData(tableDataAtIndex: any, i, milestoneLength) {
     this.tasksTemp.push(tableDataAtIndex);
 
-      if (this.tasksTemp.length === this.milestones.length) {
+      if (this.tasksTemp.length === milestoneLength) {
         this.allTasks = this.dependencyList.map(dependency => dependency.id);
         console.log('all tasks:', this.allTasks);
 
         // set draggable class
-        const bag: any = this.dragulaService.find('dragPanel');
-        if (bag !== undefined ) {
-          this.dragulaService.destroy('dragPanel');
-        }
-        this.dragulaService.setOptions('dragPanel', {
-          moves: function (el, container, handle) {
-            return handle.className === 'milestone-title';
-          }
+        // const bag: any = this.dragulaService.find('dragTask');
+        // if (bag !== undefined ) {
+        //   this.dragulaService.destroy('dragTask');
+        // }
+        // this.dragulaService.setOptions('dragTask', {
+        //   moves: function (el, container, handle) {
+        //     return handle.className === 'task-content';
+        //   }
+        // });
+        this.dragulaService.drop.subscribe((value) => {
+          this.onDropModel(value.slice(1));
         });
         this.updatedGanttData.emit({'data': this.sortById(this.tasksTemp)});
       }
@@ -435,10 +474,12 @@ export class PmTasksTableComponent implements OnInit {
       this.milestones[index].editTitle = false;
       const body =  {
         owner: this.milestones[index].owner,
-        title: this.milestones[index].title
+        title: this.milestones[index].title,
+        order: this.milestones[index].order,
+        permission: this.milestones[index].permission,
       };
       this.pmTasksService.updateIndividualTaskGroup(this.milestones[index].id, body).subscribe(res => {
-        this.refreshTable();
+        this.updateDataForGanttChart();
       });
     }
   }
@@ -460,7 +501,14 @@ export class PmTasksTableComponent implements OnInit {
 
     this.pmTasksService.updateIndividualTask(milestoneId, taskId, taskData).subscribe(res => {
       console.log('task updated:');
-      this.refreshTable();
+      this.updateDataForGanttChart();
+    });
+  }
+
+  confirmDeleteMainTask(milestoneId, taskId) {
+    this.pmTasksService.deleteIndividualtask(milestoneId, taskId).subscribe(res => {
+      console.log('task deleted:');
+      this.updateDataForGanttChart();
     });
   }
 }
