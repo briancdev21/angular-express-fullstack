@@ -6,8 +6,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class FilterService {
 
-	constructor() {
-
-	}
+constructor() {
+}
 
 }

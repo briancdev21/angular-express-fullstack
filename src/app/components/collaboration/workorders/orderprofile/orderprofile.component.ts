@@ -175,82 +175,10 @@ export class OrderProfileComponent implements OnInit {
 
 
 
-  public taskTicketInfo: Array<object> = [
-    {
-      id: 0,
-      description: 'Install TV in Kitchen',
-      status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '60',
-      priority: 'level1',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 1,
-      description: 'Install TV in Kitchen',
-      status: 'inProgress',
-      estimateHour: '',
-      estimateMin: '25',
-      priority: 'level1',
-      createdDate: 'December 17, 2017 at 5:42 PM'
-    },
-    {
-      id: 2,
-      description: 'Install TV in home',
-      status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '25',
-      priority: 'level3',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 3,
-      description: 'Walking',
-      status: 'inProgress',
-      estimateHour: '',
-      estimateMin: '30',
-      priority: 'level2',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 4,
-      description: 'Install TV in Masterbedroom',
-      status: 'complete',
-      estimateHour: '1',
-      estimateMin: '45',
-      priority: 'level1',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 5,
-      description: 'Walking through fuctioinality with the client',
-      status: 'complete',
-      estimateHour: '',
-      estimateMin: '20',
-      priority: 'level2',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 6,
-      description: 'Install the client\'s Apple TV',
-      status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '60',
-      priority: 'level1',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 7,
-      description: 'Install Apple TV',
-      status: 'notComplete',
-      estimateHour: '',
-      estimateMin: '10',
-      priority: 'level3',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    }
+  public taskTicketInfo = [
   ];
 
-  public productDelivery: Array<object> = [
+  public productDelivery = [
   ];
 
   ngOnInit() {

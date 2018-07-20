@@ -5,6 +5,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 
 export class FilterService {
-	constructor() {
-	}
+  constructor() {
+  }
 }

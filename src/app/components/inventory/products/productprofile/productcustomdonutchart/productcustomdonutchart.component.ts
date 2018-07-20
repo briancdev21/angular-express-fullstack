@@ -15,7 +15,7 @@ export class ProductCustomDonutChartComponent implements OnInit {
   @Input() percentage;
   @Input() number;
   percentageInt: number;
-  isFullPercent: Boolean = false;
+  isFullPercent = false;
   notFullPercentPath: String;
   fullPercentPath: String;
   gradientColor: any;
@@ -44,12 +44,20 @@ export class ProductCustomDonutChartComponent implements OnInit {
     console.log('percentage: ', this.percentage);
     this.gradientTransform = 'rotate(0)';
     this.percentageInt = parseInt(this.percentage, 10);
-    if (this.percentageInt > 60) this.gradientColor = this.gradientColorSet.M60;
-    if (this.percentageInt > 80) this.gradientColor = this.gradientColorSet.M80;
+    if (this.percentageInt > 60) {
+      this.gradientColor = this.gradientColorSet.M60;
+    }
+    if (this.percentageInt > 80) {
+      this.gradientColor = this.gradientColorSet.M80;
+    }
 
-    if (this.percentageInt > 50 && this.percentageInt < 100 )
+    if (this.percentageInt > 50 && this.percentageInt < 100 ) {
       this.gradientTransform = `rotate(${30 * this.percentageInt / 100})`;
-    if (this.percentageInt >= 100) this.isFullPercent = true;
+    }
+
+    if (this.percentageInt >= 100) {
+      this.isFullPercent = true;
+    }
     if (!this.isFullPercent) {
       this.notFullPercentPath = this.describeArc(60, 60, 45, 0, this.percentageInt / 100 * 360 );
     } else {
@@ -73,7 +81,10 @@ export class ProductCustomDonutChartComponent implements OnInit {
     const end = this.polarToCartesian(x, y, radius, startAngle);
 
     const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
-    if (this.percentageInt === 100) start.x = 58;
+    if (this.percentageInt === 100) {
+      start.x = 58;
+    }
+
     const d = [
         'M', start.x, start.y,
         'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y

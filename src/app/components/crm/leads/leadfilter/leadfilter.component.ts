@@ -116,11 +116,11 @@ export class LeadFilterComponent implements OnInit {
     this.filteredLeads = this.filteredLeads.filter(lead => lead.score >= this.filters.scoreFrom && lead.score <= this.filters.scoreTo);
 
     if (this.filters.selectStatus) {
-      this.filteredLeads = this.filteredLeads.filter(lead => lead.status == this.filters.selectStatus);
+      this.filteredLeads = this.filteredLeads.filter(lead => lead.status === this.filters.selectStatus);
     }
 
     if (this.filters.selectOwner) {
-      this.filteredLeads = this.filteredLeads.filter(lead => lead.owner == this.filters.selectOwner);
+      this.filteredLeads = this.filteredLeads.filter(lead => lead.owner === this.filters.selectOwner);
     }
 
     if (this.filters.createdDateFrom) {

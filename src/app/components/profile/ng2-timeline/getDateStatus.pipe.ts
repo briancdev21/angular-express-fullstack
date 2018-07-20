@@ -35,12 +35,25 @@ export class GetDateStatus implements PipeTransform {
         dateStr = 'Six days ago';
       } break;
     }
-    if ( dif > 7 ) dateStr = 'A week ago';
-    if ( dif > 2 * 7 ) dateStr = 'Weeks ago';
-    if ( dif > 30 ) dateStr = 'A month ago';
-    if ( dif > 2 * 30 ) dateStr = 'Months ago';
-    if ( dif > 365 ) dateStr = 'A Year ago';
-    if ( dif > 2 * 365 ) dateStr = 'Years ago';
+
+    if ( dif > 7 ) {
+      dateStr = 'A week ago';
+    }
+    if ( dif > 2 * 7 ) {
+      dateStr = 'Weeks ago';
+    }
+    if ( dif > 30 ) {
+      dateStr = 'A month ago';
+    }
+    if ( dif > 2 * 30 ) {
+      dateStr = 'Months ago';
+    }
+    if ( dif > 365 ) {
+      dateStr = 'A Year ago';
+    }
+    if ( dif > 2 * 365 ) {
+      dateStr = 'Years ago';
+    }
 
     return dateStr;
   }
