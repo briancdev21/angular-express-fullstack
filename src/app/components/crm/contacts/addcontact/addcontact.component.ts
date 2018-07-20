@@ -80,6 +80,7 @@ export class AddContactComponent implements OnInit {
   invalidProvince = false;
   invalidCountry = false;
   invalidPostalCode = false;
+  invalidHeadContact = false;
   sourceValue = true;
   newEmail = '';
   newAddress = '';
@@ -164,6 +165,7 @@ export class AddContactComponent implements OnInit {
     this.invalidProvince = false;
     this.invalidCountry = false;
     this.invalidPostalCode = false;
+    this.invalidHeadContact = false;
     if (event === 'PERSON') {
       this.typeAccountTypeChange = false;
     } else if (event === 'BUSINESS') {
@@ -230,6 +232,7 @@ export class AddContactComponent implements OnInit {
     this.invalidProvince = false;
     this.invalidCountry = false;
     this.invalidPostalCode = false;
+    this.invalidHeadContact = false;
     this.wrongEmailFormat = !this.checkEmailValidation(this.email);
     if (this.businessType === 'PERSON') {
       if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
@@ -267,7 +270,7 @@ export class AddContactComponent implements OnInit {
       }
     } else if (this.businessType === 'BUSINESS') {
       if (this.businessName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
-        this.city && this.province && this.country && this.postalCode) {
+        this.city && this.province && this.country && this.postalCode && this.headContact) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -294,6 +297,9 @@ export class AddContactComponent implements OnInit {
         }
         if (!this.postalCode) {
           this.invalidPostalCode = true;
+        }
+        if (!this.headContact) {
+          this.invalidHeadContact = true;
         }
       }
     } else {
@@ -363,6 +369,7 @@ export class AddContactComponent implements OnInit {
         this.invalidProvince = false;
         this.invalidCountry = false;
         this.invalidPostalCode = false;
+        this.invalidHeadContact = false;
         this.wrongEmailFormat = this.checkEmailValidation(this.email);
 
         if (this.businessType === 'PERSON') {
@@ -406,7 +413,7 @@ export class AddContactComponent implements OnInit {
           }
         } else if (this.businessType === 'BUSINESS') {
           if (this.businessName  && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
-            this.city && this.province && this.country && this.postalCode) {
+            this.city && this.province && this.country && this.postalCode && this.headContact) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
           } else {
@@ -437,6 +444,9 @@ export class AddContactComponent implements OnInit {
             }
             if (!this.postalCode) {
               this.invalidPostalCode = true;
+            }
+            if (!this.headContact) {
+              this.invalidHeadContact = true;
             }
           }
         } else {
@@ -548,6 +558,7 @@ export class AddContactComponent implements OnInit {
     this.invalidProvince = false;
     this.invalidCountry = false;
     this.invalidPostalCode = false;
+    this.invalidHeadContact = false;
   }
 
   // clean(obj) {
@@ -622,11 +633,6 @@ export class AddContactComponent implements OnInit {
             'string'
           ],
           'type': this.businessType,
-          'person': {
-            'jobTitle': this.jobTitle ? this.jobTitle : 'a',
-            'department': this.captain ? this.captain : 'a',
-            'businessAssociation': parseInt(this.businessAssociation, 10),
-          },
           'business': {
             'name': this.businessName,
             'headContact': parseInt(this.headContact, 10),
@@ -638,9 +644,9 @@ export class AddContactComponent implements OnInit {
           'shippingAddress': {
             'address': this.address,
             'city': this.city,
-            'province': this.province,
+            'province': this.selectedProvince,
             'postalCode': this.postalCode,
-            'country': this.country
+            'country': this.selectedCountry
           },
           'billingAddress': {
             'address': this.switchIconShipping ? this.address : this.billingAddress,
@@ -669,8 +675,10 @@ export class AddContactComponent implements OnInit {
         delete this.newContact.sourceId;
       }
 
-      if (isNaN(this.newContact.person.businessAssociation)) {
-        delete this.newContact.person.businessAssociation;
+      if (this.newContact.person) {
+        if (isNaN(this.newContact.person.businessAssociation)) {
+          delete this.newContact.person.businessAssociation;
+        }
       }
 
       // this.clean(this.newContact);

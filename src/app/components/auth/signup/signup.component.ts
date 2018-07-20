@@ -66,12 +66,9 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  onRegisterFormValuesChanged()
-  {
-      for ( const field in this.registerFormErrors )
-      {
-          if ( !this.registerFormErrors.hasOwnProperty(field) )
-          {
+  onRegisterFormValuesChanged() {
+      for ( const field in this.registerFormErrors ) {
+          if ( !this.registerFormErrors.hasOwnProperty(field) ) {
               continue;
           }
 
@@ -81,8 +78,7 @@ export class SignupComponent implements OnInit {
           // Get the control
           const control = this.registerForm.get(field);
 
-          if ( control && control.dirty && !control.valid )
-          {
+          if ( control && control.dirty && !control.valid ) {
               this.registerFormErrors[field] = control.errors;
           }
       }
@@ -90,28 +86,23 @@ export class SignupComponent implements OnInit {
 
 }
 
-function confirmPassword(control: AbstractControl)
-{
-    if ( !control.parent || !control )
-    {
+function confirmPassword(control: AbstractControl) {
+    if ( !control.parent || !control ) {
         return;
     }
 
     const password = control.parent.get('password');
     const passwordConfirm = control.parent.get('passwordConfirm');
 
-    if ( !password || !passwordConfirm )
-    {
+    if ( !password || !passwordConfirm ) {
         return;
     }
 
-    if ( passwordConfirm.value === '' )
-    {
+    if ( passwordConfirm.value === '' ) {
         return;
     }
 
-    if ( password.value !== passwordConfirm.value )
-    {
+    if ( password.value !== passwordConfirm.value ) {
         return {
             passwordsNotMatch: true
         };

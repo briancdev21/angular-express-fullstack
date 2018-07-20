@@ -56,7 +56,7 @@ export class ForgotPasswordComponent implements OnInit {
       }
     }, 1000);
     this.registerForm = this.formBuilder.group({
-        email          : ['', [Validators.required, Validators.email]],
+        email: ['', [Validators.required, Validators.email]],
     });
 
     this.registerForm.valueChanges.subscribe(() => {
@@ -64,12 +64,9 @@ export class ForgotPasswordComponent implements OnInit {
     });
   }
 
-  onRegisterFormValuesChanged()
-  {
-      for ( const field in this.registerFormErrors )
-      {
-          if ( !this.registerFormErrors.hasOwnProperty(field) )
-          {
+  onRegisterFormValuesChanged() {
+      for ( const field in this.registerFormErrors ) {
+          if ( !this.registerFormErrors.hasOwnProperty(field) ) {
               continue;
           }
 
@@ -79,8 +76,7 @@ export class ForgotPasswordComponent implements OnInit {
           // Get the control
           const control = this.registerForm.get(field);
 
-          if ( control && control.dirty && !control.valid )
-          {
+          if ( control && control.dirty && !control.valid ) {
               this.registerFormErrors[field] = control.errors;
           }
       }

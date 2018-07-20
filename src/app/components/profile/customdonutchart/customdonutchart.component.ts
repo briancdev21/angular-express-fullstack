@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,13 +9,13 @@ import { Router } from '@angular/router';
   ]
 })
 
-export class CustomDonutChartComponent {
+export class CustomDonutChartComponent implements OnInit {
 
   @Input() title;
   @Input() percentage;
   @Input() number;
   percentageInt: number;
-  isFullPercent: Boolean = false;
+  isFullPercent = false;
   notFullPercentPath: String;
   fullPercentPath: String;
   gradientColor: any;
@@ -45,12 +45,19 @@ export class CustomDonutChartComponent {
     this.gradientTransform = 'rotate(0)';
 
     this.percentageInt = parseInt(this.percentage, 10);
-    if (this.percentageInt > 60) this.gradientColor = this.gradientColorSet.M60;
-    if (this.percentageInt > 80) this.gradientColor = this.gradientColorSet.M80;
+    if (this.percentageInt > 60) {
+      this.gradientColor = this.gradientColorSet.M60;
+    }
+    if (this.percentageInt > 80) {
+      this.gradientColor = this.gradientColorSet.M80;
+    }
 
-    if (this.percentageInt > 50 && this.percentageInt < 100 )
+    if (this.percentageInt > 50 && this.percentageInt < 100 ) {
       this.gradientTransform = `rotate(${30 * this.percentageInt / 100})`;
-    if (this.percentageInt >= 100) this.isFullPercent = true;
+    }
+    if (this.percentageInt >= 100) {
+      this.isFullPercent = true;
+    }
     if (!this.isFullPercent) {
       this.notFullPercentPath = this.describeArc(60, 60, 45, 0, this.percentageInt / 100 * 360 );
     } else {
@@ -69,16 +76,18 @@ export class CustomDonutChartComponent {
     };
   }
 
-  describeArc(x, y, radius, startAngle, endAngle){
+  describeArc(x, y, radius, startAngle, endAngle) {
 
       const start = this.polarToCartesian(x, y, radius, endAngle);
       const end = this.polarToCartesian(x, y, radius, startAngle);
 
       const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
-      if (this.percentageInt === 100) start.x = 58;
+      if (this.percentageInt === 100) {
+        start.x = 58;
+      }
       const d = [
-          'M', start.x, start.y,
-          'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y
+        'M', start.x, start.y,
+        'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y
       ].join(' ');
 
       return d;

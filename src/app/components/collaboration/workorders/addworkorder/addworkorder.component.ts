@@ -520,9 +520,13 @@ export class AddWorkOrderComponent implements OnInit {
   }
 
   getColor(task) {
-    if (task.priority === 'Level 1') return 'green';
-    else if (task.priority === 'Level 2') return 'orange';
-    else return 'red';
+    if (task.priority === 'Level 1') {
+      return 'green';
+    } else if (task.priority === 'Level 2') {
+      return 'orange';
+    } else {
+      return 'red';
+    }
   }
 
   changeVisibility(task, i) {
@@ -631,7 +635,6 @@ export class AddWorkOrderComponent implements OnInit {
       this.addedDeliveryProducts.push(product);
       console.log('added products list: ', this.addedDeliveryProducts);
       this.showAvailModal = false;
-
     }
   }
 

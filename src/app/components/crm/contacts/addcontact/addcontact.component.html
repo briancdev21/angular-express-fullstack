@@ -30,9 +30,9 @@
 							<input placeholder="Enter business name" [ngClass]="{'validation-required': invalidBusinessName}" [(ngModel)]="businessName" >
 						</div>  
             <div>
-							<span>Head contact</span>
+							<span>Head contact  (*required)</span>
 							<div *ngIf="contactsList">
-                <select [(ngModel)]="headContact">
+                <select [(ngModel)]="headContact" [ngClass]="{'validation-required': invalidHeadContact}">
                   <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.name}}</option>
                 </select>
               </div>
@@ -58,7 +58,7 @@
 
 					<div class=" tab-row">
             <div>
-              <span>Email <span *ngIf="wrongEmailFormat" class="wrong-format"> : Wrong Email Format!</span></span>
+              <span>Email (*required) <span *ngIf="wrongEmailFormat" class="wrong-format"> : Wrong Email Format!</span></span>
               <input placeholder="Enter email" [(ngModel)]="email" type="email" [ngClass]="{'validation-required': invalidContactEmail}"  >
             </div>
             <div>

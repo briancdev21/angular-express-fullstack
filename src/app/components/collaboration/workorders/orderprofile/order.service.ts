@@ -6,34 +6,33 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class OrderService {
 
-	private openAvailabilityModal = new BehaviorSubject<boolean>(false);
-	private timelineData = new BehaviorSubject<any>({});
-	private availableStaff = new BehaviorSubject<any>({});
-	private removedStaff = new BehaviorSubject<any>({});
-	saveWorkOrder: BehaviorSubject<object> = new BehaviorSubject({});
+  private openAvailabilityModal = new BehaviorSubject<boolean>(false);
+  private timelineData = new BehaviorSubject<any>({});
+  private availableStaff = new BehaviorSubject<any>({});
+  private removedStaff = new BehaviorSubject<any>({});
+  saveWorkOrder: BehaviorSubject<object> = new BehaviorSubject({});
 
-	openModal = this.openAvailabilityModal.asObservable();
-	getTimelineData = this.timelineData.asObservable();
-	getAvailableStaff = this.availableStaff.asObservable();
-	getRemovedStaff = this.removedStaff.asObservable();
+  openModal = this.openAvailabilityModal.asObservable();
+  getTimelineData = this.timelineData.asObservable();
+  getAvailableStaff = this.availableStaff.asObservable();
+  getRemovedStaff = this.removedStaff.asObservable();
 
+  constructor() {
+  }
 
-	constructor() {
-	}
+  showAvailabilityModal(data) {
+    this.openAvailabilityModal.next(data);
+  }
 
-	showAvailabilityModal(data) {
-		this.openAvailabilityModal.next(data);
-	}
+  postTimelineData(data) {
+    this.timelineData.next(data);
+  }
 
-	postTimelineData(data) {
-		this.timelineData.next(data);
-	}
+  postAvailableStaff(data) {
+    this.availableStaff.next(data);
+  }
 
-	postAvailableStaff(data) {
-		this.availableStaff.next(data);
-	}
-
-	postRemovedStaff (data) {
-		this.removedStaff.next(data);
-	}
+  postRemovedStaff (data) {
+    this.removedStaff.next(data);
+  }
 }
