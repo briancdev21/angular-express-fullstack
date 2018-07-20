@@ -410,10 +410,10 @@
           <quill-editor [ngClass]="{'validation-required': invalidScopeEditorContent}" [(ngModel)]="this.proposalDetails.scopeOfWork">
           </quill-editor>
           <div class="btn-section" >
-            <button class="cancel-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
+            <button class="cancel-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false; updateProjectDetails();"  >
               Cancel
             </button>
-            <button class="save-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false"  >
+            <button class="save-btn" (click)="ProposalInfoModalCollapsed=true; showProposalInfo=false; updateProjectDetails();"  >
               Save
             </button>
           </div>

@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { ProjectsService } from '../../../../services/projects.service';
 import { SalesService } from '../../sales.service';
+import { CommonService } from '../../../common/common.service';
 
 @Component({
   selector: 'app-projectdetails',
@@ -97,8 +98,8 @@ projectDetails = {
     value: '',
     unit: ''
   },
-  projectCategoriesAll: undefined,
-  projectSubCategoriesAll: undefined,
+  projectCategoriesAll: [],
+  projectSubCategoriesAll: [],
   name: '',
   internalNote: '',
   clientNote: '',
@@ -128,7 +129,7 @@ projectDetails = {
   switchIconShipping = true;
   receivable = '';
   showProposalInfo = false;
-  scheduleRemain: number;
+  scheduleRemain = 100;
   showDialog = false;
   projectCategory = [];
   clientProjectManager: any;
@@ -212,7 +213,10 @@ projectDetails = {
     clientProjectManagerId: '',
     accountReceivableId: '',
     collaboratorsData: undefined,
-    projectTypeId: undefined
+    projectTypeId: undefined,
+    categoryIds: [],
+    subcategoryIds: [],
+    currencyId: 1
   };
 
   userInfo = {
@@ -281,7 +285,8 @@ projectDetails = {
 
   // tslint:disable-next-line:max-line-length
   constructor( private proposalService: ProposalService, private route: ActivatedRoute, private sharedService: SharedService,
-    private proposalsService: ProposalsService, private completerService: CompleterService, private projectsService: ProjectsService, private salesService: SalesService ) {
+    private proposalsService: ProposalsService, private completerService: CompleterService, private projectsService: ProjectsService, private salesService: SalesService,
+    private commonService: CommonService ) {
     this.proposalId = this.route.snapshot.paramMap.get('id');
 
     const comp = this;
@@ -318,7 +323,6 @@ projectDetails = {
 
         this.sharedService.getContacts()
         .subscribe(data => {
-          console.log('userlist: ', data);
           this.customerList = data;
           this.customerList = this.addContactName(this.customerList);
           this.customersData = this.completerService.local(this.customerList, 'name', 'name');
@@ -331,34 +335,7 @@ projectDetails = {
             });
           });
 
-          this.proposalsService.getIndividualProposal(this.proposalId).subscribe(response => {
-            this.proposalInfo = response.data;
-            console.log('this proposalinf', response);
-            this.proposalDetails = response.data;
-            this.selectName = this.getContactCustomerNameFromId(this.proposalDetails.contactId);
-            this.selectProject = this.getContactNameFromId(this.proposalDetails.clientProjectManagerId);
-            this.selectReceivable = this.getContactNameFromId(this.proposalDetails.accountReceivableId);
-            this.proposalDetails['collaboratorsData'] = [];
-            this.proposalDetails.collaborators.forEach(ele => {
-              const selectUser = this.usersList.filter(u => u.username === ele)[0];
-              this.proposalDetails['collaboratorsData'].push(selectUser);
-            });
-            this.proposalDetails.address = this.proposalInfo.shippingAddress.address;
-            this.proposalDetails.city = this.proposalInfo.shippingAddress.city;
-            this.proposalDetails.province = this.proposalInfo.shippingAddress.province;
-            this.proposalDetails.country = this.proposalInfo.shippingAddress.country;
-            this.proposalDetails.postalCode = this.proposalInfo.shippingAddress.postalCode;
-
-            this.proposalDetails.projectName = this.proposalInfo.name;
-            this.proposalInfo.paySchedule = this.proposalDetails.paymentSchedule;
-            this.proposalDetails.projectManager = this.usersList.filter(u => u.username === this.proposalDetails.projectManager)[0];
-            this.proposalDetails.projectManager.imageUrl = this.proposalDetails.projectManager.pictureURI;
-            this.proposalDetails.accountManager = this.usersList.filter(u => u.username === this.proposalDetails.accountManager)[0];
-            this.proposalDetails.accountManager.imageUrl = this.proposalDetails.accountManager.pictureURI;
-            this.proposalDetails.designer = this.usersList.filter(u => u.username === this.proposalDetails.designer)[0];
-            this.proposalDetails.designer.imageUrl = this.proposalDetails.designer.pictureURI;
-            console.log('$$$ ', this.proposalDetails);
-          });
+          this.retrieveData();
         });
       });
     });
@@ -371,6 +348,41 @@ projectDetails = {
       this.taxRateList = res.results;
     });
 
+  }
+
+  retrieveData() {
+    this.proposalsService.getIndividualProposal(this.proposalId).subscribe(response => {
+      this.proposalInfo = response.data;
+      this.proposalDetails = response.data;
+      this.selectName = this.getContactCustomerNameFromId(this.proposalDetails.contactId);
+      this.selectProject = this.getContactNameFromId(this.proposalDetails.clientProjectManagerId);
+      this.selectReceivable = this.getContactNameFromId(this.proposalDetails.accountReceivableId);
+      this.proposalDetails['collaboratorsData'] = [];
+      this.proposalDetails.collaborators.forEach(ele => {
+        const selectUser = this.usersList.filter(u => u.username === ele)[0];
+        this.proposalDetails['collaboratorsData'].push(selectUser);
+      });
+      this.proposalDetails.address = this.proposalInfo.shippingAddress.address;
+      this.proposalDetails.city = this.proposalInfo.shippingAddress.city;
+      this.proposalDetails.province = this.proposalInfo.shippingAddress.province;
+      this.proposalDetails.country = this.proposalInfo.shippingAddress.country;
+      this.proposalDetails.postalCode = this.proposalInfo.shippingAddress.postalCode;
+
+      this.proposalDetails.projectName = this.proposalInfo.name;
+      this.proposalInfo.paySchedule = this.proposalDetails.paymentSchedule;
+      this.proposalDetails.projectManager = this.usersList.filter(u => u.username === this.proposalDetails.projectManager)[0];
+      this.proposalDetails.projectManager.imageUrl = this.proposalDetails.projectManager.pictureURI;
+      this.proposalDetails.accountManager = this.usersList.filter(u => u.username === this.proposalDetails.accountManager)[0];
+      this.proposalDetails.accountManager.imageUrl = this.proposalDetails.accountManager.pictureURI;
+      this.proposalDetails.designer = this.usersList.filter(u => u.username === this.proposalDetails.designer)[0];
+      this.proposalDetails.designer.imageUrl = this.proposalDetails.designer.pictureURI;
+      this.proposalInfo.paySchedule.forEach(element => {
+        this.scheduleRemain = this.scheduleRemain - element;
+      });
+      this.proposalDetails.projectCategoriesAll = this.proposalDetails.categoryIds;
+      this.proposalDetails.projectSubCategoriesAll = this.proposalDetails.subcategoryIds;
+      console.log('$$$ ', this.proposalDetails, this.scheduleRemain);
+    });
   }
 
   clickIconShipping() {
@@ -395,7 +407,6 @@ projectDetails = {
   }
 
   ngOnInit() {
-    this.scheduleRemain = 100;
     this.editable = false;
     this.userInfo.followers.forEach(element => {
       this.items2 = this.items2.filter(function( obj ) {
@@ -405,7 +416,6 @@ projectDetails = {
   }
 
   onSelectCustomer(event) {
-    console.log('select customer: ', event);
     this.proposalDetails.contactId = event.originalObject.id;
     this.selectedCustomer = this.customerList.filter( c => c.id === event.originalObject.id)[0];
   }
@@ -554,22 +564,38 @@ projectDetails = {
     this.invalidSchedule = false;
     this.invalidAccountManager = false;
     this.invalidProjectManager = false;
-    if (this.projectDetails.projectId && (this.scheduleRemain === 0) && this.projectDetails.accountManager
-      && this.projectDetails.projectManager) {
+    this.invalidDesigner = false;
+    this.invalidSubCategory = false;
+    this.invalidCategory = false;
+    this.invalidDesigner = false;
+    if (this.proposalDetails.projectId && (this.scheduleRemain === 0) && this.proposalDetails.accountManager
+      && this.proposalDetails.projectManager && this.proposalDetails.designer && this.proposalDetails.projectCategoriesAll.length > 0
+      && this.proposalDetails.projectSubCategoriesAll.length > 0) {
         this.ProposalInfoModalCollapsed = true;
         this.showProposalInfo = false;
+        this.updateProjectDetails();
     } else {
-      if (!this.projectDetails.projectId) {
+      console.log('222', this.proposalDetails);
+      if (!this.proposalDetails.projectId) {
         this.invalidProjectId = true;
       }
       if (this.scheduleRemain !== 0) {
         this.invalidSchedule = true;
       }
-      if (!this.projectDetails.accountManager) {
+      if (!this.proposalDetails.accountManager) {
         this.invalidAccountManager = true;
       }
-      if (!this.projectDetails.projectManager) {
+      if (!this.proposalDetails.projectManager) {
         this.invalidProjectManager = true;
+      }
+      if (!this.proposalDetails.designer) {
+        this.invalidDesigner = true;
+      }
+      if (!this.proposalDetails.categoryIds.length) {
+        this.invalidCategory = true;
+      }
+      if (!this.proposalDetails.subcategoryIds.length) {
+        this.invalidSubCategory = true;
       }
     }
   }
@@ -595,7 +621,6 @@ projectDetails = {
         this.showProposalInfo = false;
         this.updateProjectDetails();
       } else {
-        console.log('tabone-click1: ', this.proposalDetails);
         if (!this.proposalDetails.contactId) {
           this.invalidCustomerName = true;
         }
@@ -645,6 +670,7 @@ projectDetails = {
 
   updateProjectDetails() {
     console.log('Updated Proposal data: ', this.proposalDetails);
+
     // console.log('project details are updating:', this.proposalDetails);
     // this.proposalDetails.contactId = parseInt(this.proposalDetails.contactId.toString().split('-').pop(), 10);
     // this.proposalDetails.clientProjectManagerId = parseInt(this.proposalDetails.clientProjectManagerId.split('-').pop(), 10);
@@ -654,6 +680,56 @@ projectDetails = {
     // this.proposalsService.updateIndividualProposal(this.proposalId, this.proposalDetails).subscribe(res => {
     //   console.log('proposal updated');
     // });
+    if ( this.proposalInfo.status === 'WON') {
+      this.commonService.showAlertModal.next(true);
+      this.retrieveData();
+    } else {
+      const collaboratorData = [];
+      this.collaborators.forEach(ele => {
+        collaboratorData.push(ele.username);
+      });
+      const savingData = {
+        'currencyId': this.proposalDetails.currencyId,
+        'contactId': this.getIdFromString(this.proposalDetails.contactId),
+        // 'leadId': 0,
+        'projectId': this.proposalDetails.projectId,
+        'projectTypeId': parseInt(this.proposalDetails.projectTypeId, 10),
+        'pricingCategoryId': this.proposalDetails.pricingCategoryId ?
+          parseInt(this.proposalDetails.pricingCategoryId.toString(), 10) : undefined,
+        'categoryIds': this.proposalDetails.projectCategoriesAll,
+        'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
+        'accountManager': this.proposalDetails.accountManager.username,
+        'projectManager': this.proposalDetails.projectManager.username,
+        'designer': this.proposalDetails.designer.username,
+        'clientProjectManagerId': this.getIdFromString(this.proposalDetails.clientProjectManagerId),
+        'accountReceivableId': this.getIdFromString(this.proposalDetails.accountReceivableId),
+        'name': this.proposalDetails.projectName,
+        'shippingAddress': {
+          'address': this.proposalDetails.address,
+          'city': this.proposalDetails.city,
+          'province': this.proposalDetails.province,
+          'postalCode': this.proposalDetails.postalCode,
+          'country': this.proposalDetails.country
+        },
+        'paymentSchedule': this.proposalDetails.paymentSchedule,
+        'scopeOfWork': this.scopeEditorContent,
+        'clientNote': this.extractStringFromEditor(this.clientNoteContent),
+        'internalNote': this.extractStringFromEditor(this.internalNoteContent),
+        'completionDate': this.proposalDetails.completionDate,
+        'discount': {
+          'value': this.proposalDetails.discount.value,
+          'unit': this.proposalDetails.discount.unit
+        },
+        'collaborators': collaboratorData,
+        'taxRateId': parseInt(this.proposalDetails.taxRateId.toString(), 10)
+      };
+
+      this.proposalsService.updateIndividualProposal(this.proposalId, savingData).subscribe(res => {
+        console.log('updated : ', res);
+      });
+    }
+
+
   }
 
   moveToProjectDetails() {
@@ -666,14 +742,16 @@ projectDetails = {
   getProjectCategories(event) {
     const projectCategories = event.map( k => k.id);
     this.proposalDetails.projectCategoriesAll = projectCategories;
-    console.log('categories: ', event, this.proposalDetails.projectCategoriesAll);
+    this.proposalDetails.categoryIds = projectCategories;
+    this.updateProjectDetails();
   }
 
   getProjectSubCategories(event) {
 
     const projectSubCategories = event.map( k => k.id);
     this.proposalDetails.projectSubCategoriesAll = projectSubCategories;
-    console.log('subcategories: ', event, this.proposalDetails.projectSubCategoriesAll);
+    this.proposalDetails.subcategoryIds = projectSubCategories;
+    this.updateProjectDetails();
   }
 
   selectCompletionDate(start) {
@@ -779,7 +857,7 @@ projectDetails = {
       this.invalidCategory = false;
       this.invalidDesigner = false;
       if (this.proposalDetails.projectId && (this.scheduleRemain === 0) && this.proposalDetails.accountManager
-        && this.proposalDetails.projectManager && this.proposalDetails.designer && this.proposalDetails.projectCategoriesAll.length > 0
+        && this.proposalDetails.projectManager && this.proposalDetails.designer && this.proposalDetails.categoryIds.length > 0
         && this.proposalDetails.projectSubCategoriesAll.length > 0) {
           this.tabActiveThird = true;
           this.tabActiveFirst = false;
@@ -843,6 +921,11 @@ projectDetails = {
   extractStringFromEditor(str) {
     const md = str.slice(3);
     return md.slice(-3);
+  }
+
+  getIdFromString(str) {
+    const data = str.split('-').pop();
+    return parseInt(data, 10);
   }
 
   addContactName(data) {
