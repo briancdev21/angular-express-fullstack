@@ -92,14 +92,11 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
               this.proposalsService.getIndividualProposal(this.proposalId).subscribe(proposal => {
                 this.proposalInfo = proposal.data;
-                console.log('proposal Info: ', proposal);
                 this.proposalInfo.categoryIds.forEach(element => {
                   this.proposalCategoryList.push(this.categoryListAll.filter(c => c.id === element)[0]);
-                  console.log('proposal Info: ', this.proposalCategoryList);
                 });
                 this.proposalInfo.subcategoryIds.forEach(element => {
                   this.proposalSubCategoryList.push(this.subCategoryListAll.filter(c => c.id === element)[0]);
-                  console.log('proposal Info: ', this.subCategoryListAll);
                 });
               });
             });
@@ -145,17 +142,14 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         element.index = index;
         index = index + 1;
       });
-      console.log('ordered Product List: ', this.proposalProductOrdered);
     });
   }
 
   updateProposalProduct(product) {
     if ( this.proposalInfo.dealStatus === 'WON') {
-      console.log('prposal -------------: ', this.proposalInfo);
       this.commonService.showAlertModal.next(true);
       this.getProposalProductData();
     } else {
-      console.log('parent Product: ', product);
       if (product.quantity && (product.discount.value !== null)) {
         const updatingData = {
           'categoryId': product.categoryId ? parseInt(product.categoryId, 10) : undefined,
@@ -173,7 +167,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
           'useProductInProject': product.useProductInProject
         };
         this.proposalsService.updateIndividualProposalProduct(this.proposalId, product.id, updatingData).subscribe(res => {
-          console.log('updated: ', res);
           if (res) {
             this.getProposalProductData();
             this.updatedData.emit(true);
@@ -211,7 +204,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     // commented for now
     // Insert data from product details to table
     if ( this.proposalInfo.dealStatus === 'WON') {
-      console.log('prposal -------------: ', this.proposalInfo);
       this.commonService.showAlertModal.next(true);
       this.getProposalProductData();
     } else {
@@ -310,7 +302,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
     // get parent totoal for each parent node
     this.parents.map(p => p.proposalTotal = p.unitPrice * p.qty * (100 - p.discount) / 100 + this.getChildPriceTotal(p));
-    console.log('222222', this.parents);
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -328,7 +319,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     // detect Delete or backspace key down
     if (event.keyCode === 46 || event.keyCode === 8 ) {
       if ( this.proposalInfo.dealStatus === 'WON') {
-        console.log('prposal -------------: ', this.proposalInfo);
         this.commonService.showAlertModal.next(true);
         this.getProposalProductData();
       } else {
@@ -358,7 +348,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     } else {
       this.selectedRows = [product.id];
     }
-    console.log('seleted rows: ', this.selectedRows);
     window.localStorage.setItem('selectedRows', JSON.stringify(this.selectedRows) );
   }
 
@@ -394,7 +383,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
 
   deleteProduct() {
-    console.log('deleting rows: ', this.selectedRows);
     for (let i = 0; i < this.selectedRows.length; i++) {
       // this.proposalProductList = this.proposalProductList.filter(p => p.id !== this.selectedRows[i]);
       // this.parents = this.getParentNode(this.proposalProductList);
@@ -402,7 +390,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
       //   this.getParentTotalPrice();
       // }
       this.proposalsService.deleteIndividualProposalProduct(this.proposalId, this.selectedRows[i]).subscribe(res => {
-        console.log('deleted: ', res);
         this.getProposalProductData();
       });
     }
@@ -439,7 +426,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     // console.log('parent product:', parent, this.proposalProductList);
     let childstotal = 0;
     const childsList = this.proposalProductList.filter(p => p.parentId === parent.id);
-    console.log('childs list', parent, childsList);
     for (let i = 0; i < childsList.length; i++) {
       if (childsList[i].option === 'automaticAcc') {
         childstotal = childstotal + (childsList[i].qty * childsList[i].unitPrice * (100 - childsList[i].discount) / 100);
@@ -450,7 +436,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   checkExpand(parentProduct) {
     parentProduct.expanded = !parentProduct.expanded;
-    console.log('saving : ', parentProduct);
     const childs = parentProduct.alternatives.concat(parentProduct.accessories);
     childs.forEach(element => {
       this.proposalProductOrdered.forEach(ele => {
