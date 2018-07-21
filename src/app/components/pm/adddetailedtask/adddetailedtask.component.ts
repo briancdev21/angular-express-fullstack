@@ -82,13 +82,15 @@ export class AddDetailedTaskComponent implements OnInit {
     this.pmTasksService.getTaskGroupsWithParams({projectId: this.projectId}).subscribe(res => {
       const taskgroups = res.results;
       taskgroups.forEach(group => {
+        if (group.taskIds !== undefined && group.taskIds !== null) {
           for (let i = 0; i < group.taskIds.length; i++) {
             const taskId = group.taskIds[i];
             this.pmTasksService.getIndividualTask(group.id, taskId).subscribe(taskRes => {
               this.dependencyData.push({title: taskRes.data.title, id: taskId});
             });
           }
-        });
+        }
+      });
     });
 
     this.subscription = this.pmService.openDetailedTaskModal().subscribe(data => {

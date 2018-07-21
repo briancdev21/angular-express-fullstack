@@ -25,6 +25,7 @@ export class PmTasksTableComponent implements OnInit {
   @Output() updatedGanttData = new EventEmitter;
 
   milestones = [];
+  copyMilestones = [];
   menuCollapsed = true;
   newMilestoneTitle = '';
   addMilestoneClicked = false;
@@ -42,6 +43,7 @@ export class PmTasksTableComponent implements OnInit {
   isAutocompleteUpdated = false;
   tasksTemp = [];
   dependencyList = [];
+  showTaskGroupDeleteConfirmModal = [];
 
   config2: any = {'placeholder': 'Type here', 'sourceField': ''};
   colors = ['#F0D7BD', '#DFE5B0', '#F0C9C9', '#CBE0ED', '#E0BBCC', '#C4BBE0', '#BBC0E0', '#BBE0CC', '#E0BBBB', '#E8E3A7'];
@@ -137,11 +139,10 @@ export class PmTasksTableComponent implements OnInit {
     console.log('on drop happened:', targetPanelIndex, sourcePanelIndex);
     // const selectedPanel = this.panels.filter(p => p.id === parseInt(source.id, 10))[0];
     // const selectedTask = selectedPanel.tasks.filter( t => t.id === parseInt(el.id, 10));
-    const sourcePanelData = this.milestones.filter(milestone => milestone.id === sourcePanelIndex).pop();
+    const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id === sourcePanelIndex).pop();
     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id === sourceItemIndex).pop();
     console.log('selected drag data: ', sourceItemIndex, sourcePanelIndex, selectedTaskData);
     if (targetContainer !== sourceContainer) {
-      this.milestones[targetPanelIndex].tasks.push(selectedTaskData);
     }
     this.pmTasksService
     .deleteIndividualtask(sourcePanelIndex, sourceItemIndex)
@@ -157,6 +158,9 @@ export class PmTasksTableComponent implements OnInit {
     };
     this.pmTasksService.createTask(targetPanelIndex, savingData).subscribe(res => {
       console.log('task created: ', res);
+      document.getElementById('' + sourceItemIndex).id = res.data.id;
+      document.getElementById('' + sourceItemIndex).dataset.taskgroupid = res.data.taskGroupId;
+      this.updateDataForGanttChart();
     });
   }
 
@@ -186,6 +190,7 @@ export class PmTasksTableComponent implements OnInit {
       title: ''
     };
     this.pmTasksService.createTask(milestone.id, newMockTask).subscribe(res => {
+
       this.updateDataForGanttChart();
     });
   }
@@ -220,6 +225,7 @@ export class PmTasksTableComponent implements OnInit {
         this.milestones[i].color = this.colors[i];
         this.milestones[i].editTitle = false;
         this.ownerModalCollapsed[i] = new Array();
+        this.showTaskGroupDeleteConfirmModal[i] = false;
         this.dependencyModalCollapsed[i] = new Array();
         this.showSettingsModal[i] = new Array();
         this.showDeleteConfirmModal[i] = new Array();
@@ -282,7 +288,9 @@ export class PmTasksTableComponent implements OnInit {
 
       if (this.tasksTemp.length === milestoneLength) {
         this.allTasks = this.dependencyList.map(dependency => dependency.id);
+        this.allTasks = _.uniq(this.allTasks);
         console.log('all tasks:', this.allTasks);
+        this.copyMilestones = this.milestones;
 
         // set draggable class
         // const bag: any = this.dragulaService.find('dragTask');
@@ -290,6 +298,12 @@ export class PmTasksTableComponent implements OnInit {
         //   this.dragulaService.destroy('dragTask');
         // }
         // this.dragulaService.setOptions('dragTask', {
+        //   moves: function (el, container, handle) {
+        //     return handle.className === 'task-content';
+        //   }
+        // });
+        // this.dragulaService.setOptions('dragTask', {
+        //   revertOnSpill: true,
         //   moves: function (el, container, handle) {
         //     return handle.className === 'task-content';
         //   }
@@ -337,6 +351,7 @@ export class PmTasksTableComponent implements OnInit {
   removeDependency(i, j, k) {
     const item = this.milestones[i].tasks[j].dependency[k];
     this.allTasks.push(item);
+    this.allTasks = _.uniq(this.allTasks);
     this.milestones[i].tasks[j].dependency.splice(k, 1);
     this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
     this.milestones[i].tasks[j].dependencyIds = this.milestones[i].tasks[j].dependency;
@@ -508,6 +523,14 @@ export class PmTasksTableComponent implements OnInit {
   confirmDeleteMainTask(milestoneId, taskId) {
     this.pmTasksService.deleteIndividualtask(milestoneId, taskId).subscribe(res => {
       console.log('task deleted:');
+      this.updateDataForGanttChart();
+    });
+  }
+
+  confirmDeleteTaskGroup(milestoneId) {
+    // console.log('taskgroup deleted');
+    this.pmTasksService.deleteIndividualTaskGroup(milestoneId).subscribe(res => {
+      // console.log('taskgroup deleted:');
       this.updateDataForGanttChart();
     });
   }
