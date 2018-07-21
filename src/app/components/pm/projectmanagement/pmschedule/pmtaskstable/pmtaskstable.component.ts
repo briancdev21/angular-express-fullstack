@@ -159,7 +159,7 @@ export class PmTasksTableComponent implements OnInit {
     this.pmTasksService.createTask(targetPanelIndex, savingData).subscribe(res => {
       console.log('task created: ', res);
       document.getElementById('' + sourceItemIndex).id = res.data.id;
-      document.getElementById('' + sourceItemIndex).dataset.taskgroupid = res.data.taskGroupId;
+      // document.getElementById('' + sourceItemIndex).dataset.taskgroupid = res.data.taskGroupId;
       this.updateDataForGanttChart();
     });
   }
