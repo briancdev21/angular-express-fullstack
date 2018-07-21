@@ -131,18 +131,23 @@ export class MyTasksComponent implements OnInit {
 
         if (this.panels[i].taskIds !== null) {
           for (let j = 0; j < this.panels[i].taskIds.length; j++) {
-            this.pmTasksService.getTasks(this.panels[i].id).subscribe(taskData => {
-              this.panels[i].tasks = taskData.results;
-              this.ownerModalCollapsed[i][j] = false;
-              this.dependencyModalCollapsed[i][j] = false;
-              this.panels[i].tasks.forEach(element => {
-                element.assigneeInfo = this.getUserInfo(element.assignee);
-                element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
-                element.taskTitle = element.title;
-                element.dependency = element.dependencyIds ? element.dependencyIds : [];
-              });
-            });
+            this.ownerModalCollapsed[i][j] = false;
+            this.dependencyModalCollapsed[i][j] = false;
           }
+          this.pmTasksService.getTasks(this.panels[i].id).subscribe(taskData => {
+            this.panels[i].tasks = taskData.results;
+            this.panels[i].tasks.forEach(element => {
+              element.assigneeInfo = this.getUserInfo(element.assignee);
+              element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+              element.taskTitle = element.title;
+              element.dependency = element.dependencyIds ? element.dependencyIds : [];
+            });
+            let importantTasks = [];
+            importantTasks = this.panels[i].tasks.filter(t => t.isImportant === true);
+            console.log('important task: ', importantTasks);
+            const unImportantTasks = this.panels[i].tasks.filter(t => t.isImportant === false);
+            this.panels[i].tasks = importantTasks.concat(unImportantTasks);
+          });
         }
       }
       console.log('panels2: ', data);
@@ -197,6 +202,13 @@ export class MyTasksComponent implements OnInit {
       'isImportant': selectedTaskData.isImportant,
       'isComplete': selectedTaskData.isComplete,
       'startDate': moment(selectedTaskData.startDate).format('YYYY-MM-DD'),
+      'keywordIds': selectedTaskData.keywordIds ? selectedTaskData.keywordIds : [],
+      'followers': selectedTaskData.followers ? selectedTaskData.followers : [],
+      'dependencyIds': selectedTaskData.followers ? selectedTaskData.followers : [],
+      'order': selectedTaskData.order,
+      'duration': selectedTaskData.duration,
+      'note': selectedTaskData.note ? selectedTaskData.note : '',
+      'completion': selectedTaskData.completion,
     };
     this.pmTasksService.createTask(this.panels[targetPanelIndex].id, savingData).subscribe(res => {
       console.log('task created: ', res);
@@ -350,13 +362,37 @@ export class MyTasksComponent implements OnInit {
   updateIndividualTask(panelId, taskId) {
     const selectedPanel = this.panels.filter(p => p.id === panelId)[0];
     const selectedTask = selectedPanel.tasks.filter(t => t.id === taskId)[0];
+    console.log('selected task: ', selectedTask);
     const savingData = {
       'assignee': selectedTask.assigneeInfo ? selectedTask.assigneeInfo.username : selectedTask.assignee,
       'title': selectedTask.taskTitle ? selectedTask.taskTitle : selectedTask.title,
       'isImportant': selectedTask.isImportant,
       'isComplete': selectedTask.isComplete,
       'startDate': moment(selectedTask.startDate).format('YYYY-MM-DD'),
+      'keywordIds': selectedTask.keywordIds ? selectedTask.keywordIds : [],
+      'followers': selectedTask.followers ? selectedTask.followers : [],
+      'dependencyIds': selectedTask.followers ? selectedTask.followers : [],
+      'order': selectedTask.order,
+      'duration': selectedTask.duration,
+      'note': selectedTask.note ? selectedTask.note : '',
+      'completion': selectedTask.completion,
     };
+
+    const data = {
+      'keywordIds': selectedTask.keywordIds ? selectedTask.keywordIds : [],
+      'followers': selectedTask.followers ? selectedTask.followers : [],
+      'dependencyIds': selectedTask.followers ? selectedTask.followers : [],
+      'assignee': 'string',
+      'title': 'string',
+      'order': selectedTask.order,
+      'isImportant': true,
+      'isComplete': true,
+      'completion': selectedTask.completion,
+      'startDate': 'string',
+      'duration': selectedTask.duration,
+      'note': selectedTask.note ? selectedTask.note : '',
+    };
+
     this.pmTasksService.updateIndividualTask(panelId, taskId, savingData).subscribe(res => {
       console.log('task updated: ', res);
     });

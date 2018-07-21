@@ -18,9 +18,9 @@
                
                 <span *ngIf="panel.projectId">
                   <!--{{getTaskId(i, j)}}.-->
-                  {{task.id}}.
+                  {{task.id}}. 
                 </span>
-                <textarea 
+                <!-- <textarea 
                   *ngIf="task.inputShow"
                   placeholder="Enter task here" 
                   [(ngModel)]="task.taskTitle" 
@@ -33,9 +33,10 @@
                 </textarea>
                 <div (click)="task.inputShow=true; task.maxHeight = 30;  $event.stopPropagation();" *ngIf="!task.inputShow" class="task-title-show">
                   {{task.taskTitle}}
-                </div>
+                </div> -->
+                <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (keydown.enter)="updateInfo(i, j);" (change)="updateInfo(i, j);">
               </div>
-              <div class="task-owner">
+              <div class="task-owner" *ngIf="i==1 || i==2">
                 <img src="{{task.assigneeInfo == undefined ? 'assets/users/man.png' : task.assigneeInfo.pictureURI}}"  (click)="openOwnerModal(i, j); $event.stopPropagation();">
                 <!-- <img *ngIf="!task.assigneeInfo.pictureURI && panel.projectId === null" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();"> -->
                 <span *ngIf="panel.projectId" class="task-path">{{task.taskPath}}</span>
@@ -73,7 +74,7 @@
                   <img *ngIf="panel.projectId" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
                   <img *ngIf="!panel.projectId && task.isImportant == true" src="assets/images/star.png"  (click)="task.isImportant = !task.isImportant; updateInfo(i, j);">
                   <img *ngIf="!panel.projectId && task.isImportant == false" src="assets/images/star-empty.png" (click)="task.isImportant = !task.isImportant; updateInfo(i, j);">
-                  <img *ngIf="panel.projectId || panel.projectId === null" src="assets/images/alarm.png" [ngClass]="{'blured': !task.like}" (click)="task.like = !task.like">
+                  <img *ngIf="i == 1 || i == 2" src="assets/images/alarm.png" [ngClass]="{'blured': !task.like}" (click)="task.like = !task.like">
                   <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
                   <!--Dependency numbers-->
                   <div *ngIf="panel.projectId" class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">
