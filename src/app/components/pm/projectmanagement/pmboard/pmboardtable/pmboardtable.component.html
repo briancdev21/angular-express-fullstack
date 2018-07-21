@@ -7,6 +7,30 @@
         <div class="title" [ngStyle]="{'background': project.color}">
           <div *ngIf="!project.editTitle" (click)="project.editTitle = true; $event.stopPropagation();">{{project.title | uppercase }}</div>
           <input *ngIf="project.editTitle" placeholder="Enter title here..." [(ngModel)]="project.title" (keydown)="updateProjectTitle(i, $event)" >
+          <div class="milestone-delete-btn">
+            <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showTaskGroupDeleteConfirmModal[i]=true" />
+          </div>
+        </div>
+        <div class="confirm-delete-modal-wrapper" *ngIf="showTaskGroupDeleteConfirmModal[i]" >
+          <div [ngClass]="{'confirm-modal': showTaskGroupDeleteConfirmModal[i], 'confirm-modal-hide': !showTaskGroupDeleteConfirmModal[i] }">
+            <div class="header">
+              <span>Confirm Delete</span>
+              <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showTaskGroupDeleteConfirmModal[i]=false" />
+            </div>
+            <div class="content" >
+              <div class="confirm-que">
+                Do you really want to delete TaskGroup?
+              </div>
+              <div class="center-btn-section" >
+                <button class="confirm-btn" (click)="confirmDeleteTaskGroup(project.id); showTaskGroupDeleteConfirmModal[i]=false;" >
+                  Confirm
+                </button>
+                <button class="cancel-btn" (click)="showTaskGroupDeleteConfirmModal[i]=false" >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div> 
         </div>
         <div class="add-btn" (click)="showDetailedTaskModal=true; temp=project.id">+</div>
         <div class="personal-project-cards">

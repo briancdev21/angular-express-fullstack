@@ -152,7 +152,7 @@
       </div>
     </div>
     <div class="following">
-      <img src="assets/images/alarm.png" [ngStyle]="{'opacity': following ? 0.5 : 1}" (click)="following = !following">
+      <img src="assets/images/alarm.png" [ngStyle]="{'opacity': !following ? 0.5 : 1}" (click)="following = !following">
       <span>Following</span>
     </div>
   </div>

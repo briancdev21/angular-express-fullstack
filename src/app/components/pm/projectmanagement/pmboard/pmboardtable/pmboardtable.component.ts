@@ -24,6 +24,7 @@ export class PmBoardTableComponent implements OnInit {
         const pickColorId = i % 10;
         this.pmBoardTableData[i].color = this.colors[pickColorId];
         this.pmBoardTableData[i].editTitle = false;
+        this.showTaskGroupDeleteConfirmModal[i] = false;
      }
     }
   }
@@ -36,6 +37,7 @@ export class PmBoardTableComponent implements OnInit {
   rightReached = false;
   pmBoardTableData: any;
   dataReady = false;
+  showTaskGroupDeleteConfirmModal = [];
   //  private temp: number;
   //  private leftReached = true;
   //  private rightReached = false;
@@ -204,11 +206,21 @@ export class PmBoardTableComponent implements OnInit {
       this.pmBoardTableData[index].editTitle = false;
       const body =  {
         owner: this.pmBoardTableData[index].owner,
-        title: this.pmBoardTableData[index].title
+        title: this.pmBoardTableData[index].title,
+        order: this.pmBoardTableData[index].order,
+        permission: this.pmBoardTableData[index].permission
       };
       this.pmTasksService.updateIndividualTaskGroup(this.pmBoardTableData[index].id, body).subscribe(res => {
         this.updatePmData.emit(null);
       });
     }
+  }
+
+  confirmDeleteTaskGroup(milestoneId) {
+    // console.log('taskgroup deleted');
+    this.pmTasksService.deleteIndividualTaskGroup(milestoneId).subscribe(res => {
+      // console.log('taskgroup deleted:');
+      this.updatePmData.emit(null);
+    });
   }
 }

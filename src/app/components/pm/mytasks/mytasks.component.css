@@ -183,6 +183,7 @@
   display: flex;
   font-size: 18px;
   align-items: center;
+  padding-bottom: 3px;
 }
 
 .draggable-task .task-title input {
