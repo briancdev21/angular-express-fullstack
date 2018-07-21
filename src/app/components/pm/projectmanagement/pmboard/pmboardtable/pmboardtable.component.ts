@@ -24,6 +24,7 @@ export class PmBoardTableComponent implements OnInit {
         const pickColorId = i % 10;
         this.pmBoardTableData[i].color = this.colors[pickColorId];
         this.pmBoardTableData[i].editTitle = false;
+        this.showTaskGroupDeleteConfirmModal[i] = false;
      }
     }
   }
@@ -36,6 +37,7 @@ export class PmBoardTableComponent implements OnInit {
   rightReached = false;
   pmBoardTableData: any;
   dataReady = false;
+  showTaskGroupDeleteConfirmModal = [];
   //  private temp: number;
   //  private leftReached = true;
   //  private rightReached = false;
@@ -212,5 +214,13 @@ export class PmBoardTableComponent implements OnInit {
         this.updatePmData.emit(null);
       });
     }
+  }
+
+  confirmDeleteTaskGroup(milestoneId) {
+    // console.log('taskgroup deleted');
+    this.pmTasksService.deleteIndividualTaskGroup(milestoneId).subscribe(res => {
+      // console.log('taskgroup deleted:');
+      this.updatePmData.emit(null);
+    });
   }
 }

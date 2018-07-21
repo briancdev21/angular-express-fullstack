@@ -2,17 +2,21 @@
   <div class="milestone-table">
     <div class="milestone-row" >
       <div *ngFor="let milestone of milestones; let i = index;"  class="draggable-column">
+
         <div class="milestone-title" [ngStyle]="{'background': milestone.color}" style="opacity: .7;"   >
           <div *ngIf="!milestone.editTitle" (click)="milestone.editTitle = true; $event.stopPropagation();">{{milestone.title | uppercase }}</div>
           <input *ngIf="milestone.editTitle" placeholder="Enter title here..." [(ngModel)]="milestone.title" (keydown)="updateMilestoneTitle(i, $event)" >
+          <div class="milestone-delete-btn">
+            <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showTaskGroupDeleteConfirmModal[i]=true" />
+          </div>
         </div>
-        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="milestone.tasks && milestone.tasks !== undefined" id={{milestone.id}} >
-          <div *ngFor="let task of milestone.tasks; let j = index;" class="draggable-task" id={{task.id}} >
+        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="milestone.tasks" id={{milestone.id}}  >
+          <div *ngFor="let task of milestone.tasks; let j = index;" class="draggable-task" id={{task.id}} data-taskgroupid={{milestone.id}} >
             <div class="task-content" >
               <img *ngIf="task.attachmentImg" src="attachmentImg">
               <div class="task-title" >
-                <span>
-                  {{getTaskId(i, j)}}.
+                <span class="task-id-value" >
+                  {{task.id}}
                 </span>
                 <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged(milestone.id, task.id, task)" >
               </div>
@@ -131,7 +135,28 @@
             </div>
           </div>
         </div>
-        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="!milestone.tasks || milestone.tasks === undefined">
+        <div class="confirm-delete-modal-wrapper" *ngIf="showTaskGroupDeleteConfirmModal[i]" >
+          <div [ngClass]="{'confirm-modal': showTaskGroupDeleteConfirmModal[i], 'confirm-modal-hide': !showTaskGroupDeleteConfirmModal[i] }">
+            <div class="header">
+              <span>Confirm Delete</span>
+              <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showTaskGroupDeleteConfirmModal[i]=false" />
+            </div>
+            <div class="content" >
+              <div class="confirm-que">
+                Do you really want to delete TaskGroup?
+              </div>
+              <div class="center-btn-section" >
+                <button class="confirm-btn" (click)="confirmDeleteTaskGroup(milestone.id); showTaskGroupDeleteConfirmModal[i]=false;" >
+                  Confirm
+                </button>
+                <button class="cancel-btn" (click)="showTaskGroupDeleteConfirmModal[i]=false" >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div> 
+        </div>
+        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="!milestone.tasks">
         </div>
         <div class="add-task" (click)="addTask(milestone)">
           <img src="assets/images/add.png">
