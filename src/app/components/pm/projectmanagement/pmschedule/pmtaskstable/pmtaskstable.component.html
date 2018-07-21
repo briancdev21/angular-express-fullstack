@@ -11,13 +11,14 @@
           </div>
         </div>
         <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="milestone.tasks" id={{milestone.id}}  >
-          <div *ngFor="let task of milestone.tasks; let j = index;" class="draggable-task" id={{task.id}} data-taskgroupid={{milestone.id}} >
+          <div *ngFor="let task of milestone.tasks; let j = index;" class="draggable-task" id={{task.id}} >
             <div class="task-content" >
               <img *ngIf="task.attachmentImg" src="attachmentImg">
               <div class="task-title" >
                 <span class="task-id-value" >
                   {{task.id}}
                 </span>
+                <!-- <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged(this.parentElement.parentElement.parentElement.id)" > -->
                 <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged(milestone.id, task.id, task)" >
               </div>
               <div class="task-owner">
