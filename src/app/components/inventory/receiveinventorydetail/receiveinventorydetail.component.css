@@ -277,6 +277,7 @@ app-submenu {
   width: 35%;
 }
 
+/*
 .available input[type='radio']:after {
 	width: 18px;
 	height: 18px;
@@ -289,7 +290,7 @@ app-submenu {
 	display: inline-block;
 	visibility: visible;
   border: 1px solid #95989a;
-}
+} */
 
 .available input[type='radio']:checked:after {
 	width: 18px;
@@ -340,7 +341,7 @@ app-submenu {
 
 .saved-filters-list ul {
 	margin: 0;
-	padding: 15px 10px 15px 15px;
+	padding: 15pxdd 10px 15px 15px;
 }
 
 .search-box {
