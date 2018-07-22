@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../profile/multikeywordselect/multikeywordselect.component';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { ScheduleMultiKeywordComponent } from '../proposal/schedulemultikeyword/schedulemultikeyword.component';
@@ -173,7 +173,8 @@ export class AddProposalComponent implements OnInit {
   leadsList = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
-     private proposalsService: ProposalsService, private projectsService: ProjectsService, private salesService: SalesService) {
+    private proposalsService: ProposalsService, private projectsService: ProjectsService, private salesService: SalesService,
+    private router: Router) {
     const comp = this;
 
     document.addEventListener('click', function() {
@@ -653,6 +654,7 @@ export class AddProposalComponent implements OnInit {
       this.proposalsService.createProposal(savingProposalData).subscribe(res => {
         console.log('created proposal: ', res);
         this.salesService.proposalAdded.next(true);
+        this.router.navigate(['../sales/proposal-details', {id: res.data.id}]);
       });
       this.tabActiveThird = false;
       this.tabActiveFirst = true;
