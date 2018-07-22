@@ -3,7 +3,7 @@
     <div class="panel-row" [dragula]="'dragPanel'" [dragulaModel]='panels'>
       <div *ngFor="let panel of panels; let i = index;"  class="draggable-column">
         <div class="panel-title" [ngStyle]="{'background': panel.color}" style="opacity: .7;">
-          <div *ngIf="!panel.editTitle" (click)="panel.editTitle = true; $event.stopPropagation();">
+          <div *ngIf="!panel.editTitle" (click)="$event.stopPropagation(); openTitleChange(panel, i)">
             {{panel.title | uppercase }}
           </div>
           <input 

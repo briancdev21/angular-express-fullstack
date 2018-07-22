@@ -450,4 +450,12 @@ export class MyTasksComponent implements OnInit {
       this.refreshTable();
     });
   }
+
+  openTitleChange(panel, i) {
+    if (i === 0 || i === 1 || i === 2) {
+      return;
+    } else {
+      this.panels[i].editTitle = true;
+    }
+  }
 }
