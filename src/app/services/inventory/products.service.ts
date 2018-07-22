@@ -142,5 +142,15 @@ export class ProductsService {
     const url = `${apiUrl}inventory/products/${id}/accessories`;
     return this.http.post(url, body, this.options);
   }
+
+  deleteIndividualAccessory (id, sku): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/accessories/${sku}`;
+    return this.http.delete(url,  this.options);
+  }
+
+  deleteIndividualAlternative (id, sku): Observable<any> {
+    const url = `${apiUrl}inventory/products/${id}/alternatives/${sku}`;
+    return this.http.delete(url,  this.options);
+  }
 }
 

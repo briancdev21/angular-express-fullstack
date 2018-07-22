@@ -44,7 +44,9 @@
           <span *ngIf="!unitPriceEditable">{{parentProduct.unitPrice | number: '1.2-2'}}</span>
         </td>
         <td><input [(ngModel)]="parentProduct.discount.value" (blur)="onBlur(parentProduct)" (focus)="onFocus()" type="number"></td> 
-        <td>$ {{parentProduct.total | number:'2.2-2'}}</td>
+        <td>$ 
+          <span *ngIf="parentProduct.type == 'PRODUCT'">{{parentProduct.parentTotalPrice | number:'2.2-2'}}</span> 
+          <span *ngIf="parentProduct.type !== 'PRODUCT'">{{parentProduct.total | number:'2.2-2'}}</span></td>
         <td>
           <select [(ngModel)]="parentProduct.taxRateId" (ngModelChange)="updateProposalProduct(parentProduct)">
             <option *ngFor = "let tax of taxRatesList" [value]="tax.id">{{tax.name}}</option>

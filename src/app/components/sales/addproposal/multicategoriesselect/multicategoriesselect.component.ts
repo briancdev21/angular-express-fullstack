@@ -15,7 +15,6 @@ import { SalesService } from '../../sales.service';
 export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
   @Input() set categories(val) {
     this._categories = val;
-    console.log('multicategories : ', this._categories);
     const arr = [];
     this.editable = false;
     this.sharedService.getCategories().subscribe(data => {
@@ -46,7 +45,6 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
     document.addEventListener('click', function() {
       comp.editable = false;
     });
-    console.log('after create categories list:', this._categories);
   }
 
   ngOnInit() {
@@ -99,7 +97,6 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
       });
       this.salesService.deletedCategory.next(res.data.id);
     });
-    console.log('categories list:', this._categories, this.sendCategories);
   }
 
 }

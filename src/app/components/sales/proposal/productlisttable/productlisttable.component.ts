@@ -123,10 +123,12 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
       this.parents = this.originProposalProductList.filter(p => p.type === 'PRODUCT');
       this.parents.forEach(ele => {
         ele.expand = true;
+        ele.parentTotalPrice = ele.total;
         this.proposalProductOrdered = this.proposalProductOrdered.concat(ele);
         if (ele.accessories) {
           ele.accessories.forEach(element => {
             const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+            ele.parentTotalPrice = ele.parentTotalPrice + selectedItem.total;
             this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
           });
         }
@@ -142,6 +144,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         element.index = index;
         index = index + 1;
       });
+      console.log('ordered products: ', this.proposalProductOrdered);
     });
   }
 
@@ -436,18 +439,28 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   checkExpand(parentProduct) {
     parentProduct.expanded = !parentProduct.expanded;
-    const childs = parentProduct.alternatives.concat(parentProduct.accessories);
-    childs.forEach(element => {
-      this.proposalProductOrdered.forEach(ele => {
-        if (element === ele.id) {
-          ele.expand = !ele.expand;
-        }
+    let childs = [];
+    if (parentProduct.alternatives) {
+      childs = parentProduct.alternatives.concat(parentProduct.accessories);
+    } else {
+      childs = parentProduct.accessories;
+    }
+
+    if (childs) {
+      childs.forEach(element => {
+        this.proposalProductOrdered.forEach(ele => {
+          if (element === ele.id) {
+            ele.expand = !ele.expand;
+          }
+        });
       });
-    });
+    }
+
   }
 
   updateOptional(product) {
-    if (product.type === 'accessories' && product.useProductInProject === false) {
+    console.log('optional accessory: ', product);
+    if (product.type === 'ACCESSORY' || product.type === 'ALTERNATIVE') {
       product.useProductInProject = !product.useProductInProject;
       this.updateProposalProduct(product);
     }
