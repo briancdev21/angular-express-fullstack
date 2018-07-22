@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { ProposalService } from '../proposal/proposal.service';
 import { ProjectsService } from '../../../services/projects.service';
 import { SalesService } from '../sales.service';
+import { CrmService } from '../../../services/crm.service';
 
 @Component({
   selector: 'app-addproposal',
@@ -169,8 +170,9 @@ export class AddProposalComponent implements OnInit {
   projectId = '';
   proposalsList = [];
   taxRateList = [];
+  leadsList = [];
 
-  constructor(private completerService: CompleterService, private sharedService: SharedService,
+  constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
      private proposalsService: ProposalsService, private projectsService: ProjectsService, private salesService: SalesService) {
     const comp = this;
 
@@ -186,13 +188,24 @@ export class AddProposalComponent implements OnInit {
         console.log('userlist: ', data);
         this.customerList = data;
         this.customerList = this.addContactName(this.customerList);
-        this.customersData = this.completerService.local(this.customerList, 'name', 'name');
-        // Add collaborators list
-        this.customerList.forEach( ele => {
-          this.items2.push({
-            id: ele.id,
-            label: name,
-            imageUrl: ele.pictureURI
+        this.crmService.getLeadsList().subscribe(lead => {
+          this.leadsList = lead.results;
+          if (this.leadsList.length) {
+            this.leadsList = this.addContactName(this.leadsList);
+            this.leadsList.forEach(ele => {
+              ele.leadId = ele.id;
+            });
+            this.customerList = this.customerList.concat(this.leadsList);
+          }
+          console.log('leads: ', lead);
+          this.customersData = this.completerService.local(this.customerList, 'name', 'name');
+          // Add collaborators list
+          this.customerList.forEach( ele => {
+            this.items2.push({
+              id: ele.id,
+              label: name,
+              imageUrl: ele.pictureURI
+            });
           });
         });
       });
@@ -597,7 +610,7 @@ export class AddProposalComponent implements OnInit {
     const savingProposalData = {
       'currencyId': 1,
       'contactId': this.proposalDetails.contactId,
-      // 'leadId': 0,
+      'leadId': this.proposalDetails.contactId,
       'projectId': this.proposalDetails.projectId,
       'projectTypeId': parseInt(this.proposalDetails.projectType, 10),
       'pricingCategoryId': this.proposalDetails.pricing ? parseInt(this.proposalDetails.pricing, 10) : undefined,
@@ -628,6 +641,12 @@ export class AddProposalComponent implements OnInit {
       'collaborators': collaborators,
       'taxRateId': parseInt(this.proposalDetails.taxRate.toString(), 10)
     };
+
+    if (this.selectedCustomer.leadId) {
+      delete savingProposalData.contactId;
+    } else {
+      delete savingProposalData.leadId;
+    }
 
     if (this.scopeEditorContent) {
       console.log('saving_proposal: ', savingProposalData);
