@@ -54,6 +54,7 @@ export class MyTasksComponent implements OnInit {
   usersList = [];
   contactsList = [];
   addedNewTask: any;
+  showTaskGroupDeleteConfirmModal = [];
 
   constructor( private dragulaService: DragulaService, private fb: FormBuilder, private renderer: Renderer,
     private pmTasksService: PmTasksService, private sharedService: SharedService ) {
@@ -128,6 +129,7 @@ export class MyTasksComponent implements OnInit {
         this.panels[i].editTitle = false;
         this.ownerModalCollapsed[i] = new Array();
         this.dependencyModalCollapsed[i] = new Array();
+        this.showTaskGroupDeleteConfirmModal[i] = false;
 
         if (this.panels[i].taskIds !== null) {
           for (let j = 0; j < this.panels[i].taskIds.length; j++) {
@@ -429,16 +431,23 @@ export class MyTasksComponent implements OnInit {
     }
     return foreTaskCount + this.panels[panel].tasks[task].id;
   }
-  updatePanelTitle(index, event) {
-    if (event.key === 'Enter') {
-      this.panels[index].editTitle = false;
-      const body =  {
-        owner: this.panels[index].owner,
-        title: this.panels[index].title
-      };
-      this.pmTasksService.updateIndividualTaskGroup(this.panels[index].id, body).subscribe(res => {
-        this.refreshTable();
-      });
-    }
+  updatePanelTitle(index) {
+    this.panels[index].editTitle = false;
+    const body =  {
+      owner: this.panels[index].owner,
+      title: this.panels[index].title,
+      order: this.panels[index].order,
+      permission: this.panels[index].permission,
+    };
+    this.pmTasksService.updateIndividualTaskGroup(this.panels[index].id, body).subscribe(res => {
+      this.refreshTable();
+    });
+  }
+
+  confirmDeleteTaskGroup(milestoneId) {
+    // console.log('taskgroup deleted');
+    this.pmTasksService.deleteIndividualTaskGroup(milestoneId).subscribe(res => {
+      this.refreshTable();
+    });
   }
 }

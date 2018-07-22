@@ -3,8 +3,19 @@
     <div class="panel-row" [dragula]="'dragPanel'" [dragulaModel]='panels'>
       <div *ngFor="let panel of panels; let i = index;"  class="draggable-column">
         <div class="panel-title" [ngStyle]="{'background': panel.color}" style="opacity: .7;">
-            <div *ngIf="!panel.editTitle" (click)="panel.editTitle = true; $event.stopPropagation();">{{panel.title | uppercase }}</div>
-            <input *ngIf="panel.editTitle" placeholder="Enter title here..." [(ngModel)]="panel.title" (keydown)="updatePanelTitle(i, $event)" >
+          <div *ngIf="!panel.editTitle" (click)="panel.editTitle = true; $event.stopPropagation();">
+            {{panel.title | uppercase }}
+          </div>
+          <input 
+            *ngIf="panel.editTitle" 
+            placeholder="Enter title here..." 
+            [(ngModel)]="panel.title" 
+            (keydown.enter)="updatePanelTitle(i)"
+            (clickOutside)="updatePanelTitle(i)"
+          >
+          <div class="milestone-delete-btn" *ngIf="i != 0 && i != 1 && i != 2">
+            <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showTaskGroupDeleteConfirmModal[i]=true" />
+          </div>
         </div>
         <div id={{i}} class="panel-content" [dragula]="'dragTask'" [dragulaModel]='panel.taskIds'>
           <div *ngFor="let task of panel.tasks; let j = index;" class="draggable-task" id={{j}}>
@@ -118,6 +129,28 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="confirm-delete-modal-wrapper" *ngIf="showTaskGroupDeleteConfirmModal[i]" >
+          <div [ngClass]="{'confirm-modal': showTaskGroupDeleteConfirmModal[i], 'confirm-modal-hide': !showTaskGroupDeleteConfirmModal[i] }">
+            <div class="header">
+              <span>Confirm Delete</span>
+              <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showTaskGroupDeleteConfirmModal[i]=false" />
+            </div>
+            <div class="content" >
+              <div class="confirm-que">
+                Do you really want to delete TaskGroup?
+              </div>
+              <div class="center-btn-section" >
+                <button class="confirm-btn" (click)="confirmDeleteTaskGroup(panel.id); showTaskGroupDeleteConfirmModal[i]=false;" >
+                  Confirm
+                </button>
+                <button class="cancel-btn" (click)="showTaskGroupDeleteConfirmModal[i]=false" >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div> 
         </div>
         <div class="add-task" (click)="addTask(panel)">
           <img src="assets/images/add.png">

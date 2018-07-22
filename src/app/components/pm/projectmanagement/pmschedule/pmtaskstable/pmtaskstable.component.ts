@@ -44,6 +44,7 @@ export class PmTasksTableComponent implements OnInit {
   tasksTemp = [];
   dependencyList = [];
   showTaskGroupDeleteConfirmModal = [];
+  currentTaskDependency = [];
 
   config2: any = {'placeholder': 'Type here', 'sourceField': ''};
   colors = ['#F0D7BD', '#DFE5B0', '#F0C9C9', '#CBE0ED', '#E0BBCC', '#C4BBE0', '#BBC0E0', '#BBE0CC', '#E0BBBB', '#E8E3A7'];
@@ -120,12 +121,18 @@ export class PmTasksTableComponent implements OnInit {
     return foreTaskCount + this.milestones[milestone].tasks[task].id;
   }
 
-  selectStartDate(event, milestoneId, taskId, task) {
+  selectStartDate(event) {
+    console.log('start date event', event);
+    const milestoneId = event.input.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.input.parentElement.querySelector('input.taskId').value;
+    const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+    const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const dDate = new Intl.DateTimeFormat('en-US', options).format(event.value);
     // Add dDate field to panel info and update it with formatted date.
-    task.startDate = dDate;
-    this.updateTask(milestoneId, taskId, task);
+    selectedTaskData.startDate = dDate;
+    this.updateTask(milestoneId, taskId, selectedTaskData);
   }
 
   private onDropModel(args) {
@@ -139,16 +146,12 @@ export class PmTasksTableComponent implements OnInit {
     console.log('on drop happened:', targetPanelIndex, sourcePanelIndex);
     // const selectedPanel = this.panels.filter(p => p.id === parseInt(source.id, 10))[0];
     // const selectedTask = selectedPanel.tasks.filter( t => t.id === parseInt(el.id, 10));
-    const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id === sourcePanelIndex).pop();
+    const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === sourcePanelIndex.toString()).pop();
     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id === sourceItemIndex).pop();
     console.log('selected drag data: ', sourceItemIndex, sourcePanelIndex, selectedTaskData);
     if (targetContainer !== sourceContainer) {
     }
-    this.pmTasksService
-    .deleteIndividualtask(sourcePanelIndex, sourceItemIndex)
-    .subscribe(res => {
-      console.log('task deleted: ', res);
-    });
+
     const savingData = {
       'assignee': selectedTaskData.assigneeInfo ? selectedTaskData.assigneeInfo.username : selectedTaskData.assignee,
       'title': selectedTaskData.taskTitle ? selectedTaskData.taskTitle : selectedTaskData.title,
@@ -158,9 +161,23 @@ export class PmTasksTableComponent implements OnInit {
     };
     this.pmTasksService.createTask(targetPanelIndex, savingData).subscribe(res => {
       console.log('task created: ', res);
+      // tslint:disable-next-line:max-line-length
+      const inputTaskElements = document.getElementById('' + sourceItemIndex).querySelectorAll('input.taskId') as NodeListOf<HTMLInputElement>;
+      for (let i = 0; i < inputTaskElements.length; i++) {
+        inputTaskElements[i].value = res.data.id;
+      }
+      // tslint:disable-next-line:max-line-length
+      const inputTaskGroupElements = document.getElementById('' + sourceItemIndex).querySelectorAll('input.taskGroupId') as NodeListOf<HTMLInputElement>;
+      for (let i = 0; i < inputTaskElements.length; i++) {
+        inputTaskGroupElements[i].value = res.data.taskGroupId;
+      }
       document.getElementById('' + sourceItemIndex).id = res.data.id;
-      // document.getElementById('' + sourceItemIndex).dataset.taskgroupid = res.data.taskGroupId;
       this.updateDataForGanttChart();
+    });
+    this.pmTasksService
+    .deleteIndividualtask(sourcePanelIndex, sourceItemIndex)
+    .subscribe(res => {
+      console.log('task deleted: ', res);
     });
   }
 
@@ -323,38 +340,77 @@ export class PmTasksTableComponent implements OnInit {
     this.addMilestoneClicked = false;
   }
 
-  closeOwnerModal(i, j) {
-    this.ownerModalCollapsed[i][j] = false;
+  closeOwnerModal(event) {
+    const modalElement = event.srcElement.parentElement.querySelector('.owner-modal') as HTMLDivElement;
+    modalElement.className = modalElement.className.replace('show-modal', 'hide-modal');
+    const modalWrapperElement = event.srcElement.parentElement.querySelector('.owner-modal-wrapper') as HTMLDivElement;
+    modalWrapperElement.className = modalWrapperElement.className.replace('show-modal', 'hide-modal');
   }
 
-  onOwnerSelect(milestoneId, taskId, task ) {
-    task.assignee = this.selectedOwner;
-    this.updateTask(milestoneId, taskId, task);
+  // onOwnerSelect(milestoneId, taskId, task) {
+  //   task.assignee = this.selectedOwner;
+  //   this.updateTask(milestoneId, taskId, task);
+  // }
+  onOwnerSelect(event) {
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+     selectedTaskData.assignee = this.selectedOwner;
+    this.updateTask(milestoneId, taskId, selectedTaskData);
   }
 
-  openOwnerModal(i, j) {
-    this.ownerModalCollapsed = this.ownerModalCollapsed.map(m => m.map(t => t = false));
-    this.ownerModalCollapsed[i][j] = true;
-    this.selectedOwner = this.milestones[i].tasks[j].assigneeInfo.username;
+  openOwnerModal(event) {
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+    // this.ownerModalCollapsed = this.ownerModalCollapsed.map(m => m.map(t => t = false));
+    // this.ownerModalCollapsed[i][j] = true;
+    this.selectedOwner = selectedTaskData.assigneeInfo.username;
+    const modalElement = event.srcElement.parentElement.querySelector('.owner-modal') as HTMLDivElement;
+    modalElement.className = modalElement.className.replace('hide-modal', 'show-modal');
+    const modalWrapperElement = event.srcElement.parentElement.querySelector('.owner-modal-wrapper') as HTMLDivElement;
+    modalWrapperElement.className = modalWrapperElement.className.replace('hide-modal', 'show-modal');
   }
 
-  openDependencyModal(i, j) {
-    this.dependencyModalCollapsed = this.ownerModalCollapsed.map(m => m.map(t => t = false));
-    this.dependencyModalCollapsed[i][j] = true;
+  openDependencyModal(event) {
+    const modalElement = event.srcElement.parentElement.querySelector('.dependency-modal') as HTMLDivElement;
+    modalElement.className = modalElement.className.replace('hide-modal', 'show-modal');
+    const modalWrapperElement = event.srcElement.parentElement.querySelector('.dependency-modal-wrapper') as HTMLDivElement;
+    modalWrapperElement.className = modalWrapperElement.className.replace('hide-modal', 'show-modal');
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+    this.currentTaskDependency = selectedTaskData.dependency;
   }
 
-  closeDependencyModal(i, j) {
-    this.dependencyModalCollapsed[i][j] = false;
-    this.updateTask(this.milestones[i].id, this.milestones[i].tasks[j].id, this.milestones[i].tasks[j]);
+  closeDependencyModal(event) {
+    const modalElement = event.srcElement.parentElement.querySelector('.dependency-modal') as HTMLDivElement;
+    modalElement.className = modalElement.className.replace('show-modal', 'hide-modal');
+    const modalWrapperElement = event.srcElement.parentElement.querySelector('.dependency-modal-wrapper') as HTMLDivElement;
+    modalWrapperElement.className = modalWrapperElement.className.replace('show-modal', 'hide-modal');
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+    this.updateTask(milestoneId, taskId, selectedTaskData);
   }
 
-  removeDependency(i, j, k) {
-    const item = this.milestones[i].tasks[j].dependency[k];
+  removeDependency(event) {
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+    const dependencyId = event.srcElement.parentElement.querySelector('input.dependencyId').value;
+    const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+    const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+    const item = selectedTaskData.dependency[dependencyId];
     this.allTasks.push(item);
     this.allTasks = _.uniq(this.allTasks);
-    this.milestones[i].tasks[j].dependency.splice(k, 1);
+    selectedTaskData.dependency.splice(dependencyId, 1);
+    selectedTaskData.dependencyIds = selectedTaskData.dependency;
     this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
-    this.milestones[i].tasks[j].dependencyIds = this.milestones[i].tasks[j].dependency;
+    this.updateTask(milestoneId, taskId, selectedTaskData);
   }
 
   onInputChangedEvent(val: string) {
@@ -483,29 +539,38 @@ export class PmTasksTableComponent implements OnInit {
     //   attachment: false,
     //   attachmentImg: '',
   }
-  updateMilestoneTitle(index, event) {
+  updateMilestoneTitle(index) {
     console.log('milestone index,', index);
-    if (event.key === 'Enter') {
-      this.milestones[index].editTitle = false;
-      const body =  {
-        owner: this.milestones[index].owner,
-        title: this.milestones[index].title,
-        order: this.milestones[index].order,
-        permission: this.milestones[index].permission,
-      };
-      this.pmTasksService.updateIndividualTaskGroup(this.milestones[index].id, body).subscribe(res => {
-        this.updateDataForGanttChart();
-      });
-    }
+    this.milestones[index].editTitle = false;
+    const body =  {
+      owner: this.milestones[index].owner,
+      title: this.milestones[index].title,
+      order: this.milestones[index].order,
+      permission: this.milestones[index].permission,
+    };
+    this.pmTasksService.updateIndividualTaskGroup(this.milestones[index].id, body).subscribe(res => {
+      this.updateDataForGanttChart();
+    });
   }
 
-  taskTitleChanged(milestoneId, taskId, taskData) {
-    taskData.title = taskData.taskTitle;
-    this.updateTask(milestoneId, taskId, taskData);
+  taskTitleChanged(event) {
+    // tslint:disable-next-line:max-line-length
+    // console.log('task title changed:', event.srcElement.parentElement.querySelector('input.taskId').value,  event.srcElement.parentElement.querySelector('input.taskGroupId').value);
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+     selectedTaskData.title = event.target.value;
+    this.updateTask(milestoneId, taskId, selectedTaskData);
   }
 
-  taskDurationChanged(milestoneId, taskId, taskData) {
-    this.updateTask(milestoneId, taskId, taskData);
+  taskDurationChanged(event) {
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+     selectedTaskData.duration = parseInt(event.target.value, 10);
+    this.updateTask(milestoneId, taskId, selectedTaskData);
   }
   updateTask(milestoneId, taskId, taskData) {
     taskData.startDate = moment(taskData.startDate).format('YYYY-MM-DD');
@@ -520,9 +585,14 @@ export class PmTasksTableComponent implements OnInit {
     });
   }
 
-  confirmDeleteMainTask(milestoneId, taskId) {
+  confirmDeleteMainTask(event) {
+    console.log('delete main task:,', event);
+    const milestoneId = parseInt(event.srcElement.parentElement.querySelector('input.taskGroupId').value, 10);
+    const taskId = parseInt(event.srcElement.parentElement.querySelector('input.taskId').value, 10);
     this.pmTasksService.deleteIndividualtask(milestoneId, taskId).subscribe(res => {
       console.log('task deleted:');
+      const taskElement = document.getElementById('' + taskId) as HTMLDivElement;
+      taskElement.style.display = 'none';
       this.updateDataForGanttChart();
     });
   }
@@ -533,5 +603,21 @@ export class PmTasksTableComponent implements OnInit {
       // console.log('taskgroup deleted:');
       this.updateDataForGanttChart();
     });
+  }
+
+  updateImportantTask(event) {
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+    const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+    const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+    selectedTaskData.isImportant = !selectedTaskData.isImportant;
+    event.srcElement.className = selectedTaskData.isImportant ? 'blured' : '';
+    this.updateTask(milestoneId, taskId, selectedTaskData);
+  }
+
+  getDependencyList(milestoneId, taskId) {
+    const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+    const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+    return selectedTaskData.dependency;
   }
 }
