@@ -15,7 +15,6 @@ import { SalesService } from '../../sales.service';
 export class MultiSubCategoriesSelectComponent implements AfterViewInit, OnInit {
   @Input() set subCategories(val) {
     this._subCategories = val;
-    console.log('multicategories : ', this._subCategories);
     const arr = [];
     this.editable = false;
     this.sharedService.getSubCategories().subscribe(data => {
