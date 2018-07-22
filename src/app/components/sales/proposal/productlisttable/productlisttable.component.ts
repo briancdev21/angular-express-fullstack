@@ -51,6 +51,8 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   modalContent = 'You cannot change WON project';
   categoryListAll = [];
   subCategoryListAll = [];
+  searchFields = ['sku', 'brand', 'model', 'name', 'categoryName', 'subCategoryName'];
+  backUp = [];
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService,
   private proposalsService: ProposalsService, private route: ActivatedRoute, private sharedService: SharedService,
@@ -83,12 +85,12 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
           this.sharedService.getCategories().subscribe(res => {
             this.categoryListAll = res.results;
+            console.log('categories: ', this.categoryListAll);
 
             this.sharedService.getSubCategories().subscribe(data => {
               const subCategory = data.results;
               this.subCategoryListAll = data.results;
-
-              this.getProposalProductData();
+              console.log('categories: ', this.subCategoryListAll);
 
               this.proposalsService.getIndividualProposal(this.proposalId).subscribe(proposal => {
                 this.proposalInfo = proposal.data;
@@ -98,6 +100,8 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
                 this.proposalInfo.subcategoryIds.forEach(element => {
                   this.proposalSubCategoryList.push(this.subCategoryListAll.filter(c => c.id === element)[0]);
                 });
+
+                this.getProposalProductData();
               });
             });
           });
@@ -118,7 +122,19 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         ele.productType = this.getProductTypeFromId(ele.productTypeId);
         ele.taxRate = this.getTaxRateNameFromId(ele.taxRateId);
         ele.categoryId = ele.categoryId ? ele.categoryId : 0;
+        if (!this.proposalCategoryList.includes(ele.categoryId)) {
+          ele.categoryId = 0;
+          ele.categoryName = '';
+        } else {
+          ele.categoryName = this.categoryListAll.filter(c => c.id === ele.catetoryId)[0].name;
+        }
         ele.subcategoryId = ele.subcategoryId ? ele.subcategoryId : 0;
+        if (!this.proposalSubCategoryList.includes(ele.subcategoryId)) {
+          ele.subcategoryId = 0;
+          ele.subCategoryName = '';
+        } else {
+          ele.subCategoryName = this.subCategoryListAll.filter(c => c.id === ele.subcategoryId)[0].name;
+        }
       });
       this.parents = this.originProposalProductList.filter(p => p.type === 'PRODUCT');
       this.parents.forEach(ele => {
@@ -145,6 +161,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         index = index + 1;
       });
       console.log('ordered products: ', this.proposalProductOrdered);
+      this.backUp = this.proposalProductOrdered;
     });
   }
 
@@ -187,6 +204,14 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.proposalProductList = this.originProposalProductList;
+
+    this.proposalService.searchQueryProposalProducts.subscribe(data => {
+      if (data) {
+        this.filterTxt(this.proposalProductOrdered, data);
+      } else {
+        this.proposalProductOrdered = this.backUp;
+      }
+    });
     this.proposalService.tableExpanded.subscribe(
       data => {
         this.expandAll(data);
@@ -336,6 +361,30 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     this.isCtrl = false;
   }
 
+  filterTxt (arr, searchKey) {
+    let newArr = [];
+    arr = this.backUp;
+    this.searchFields.forEach(field => {
+      const selected = arr.filter(a => a[field].includes(searchKey));
+      newArr = newArr.concat(selected);
+    });
+    this.proposalProductOrdered = this.arrayUnique(newArr);
+  }
+
+  arrayUnique (arr) {
+    const newA = [];
+
+    arr.forEach(element => {
+      if (newA.filter(a => a.id === element.id).length > 0) {
+        return;
+      } else {
+        newA.push(element);
+      }
+    });
+    return newA;
+  }
+
+
   onParentRowSelect(product) {
     if (this.isCtrl) {
       const index = this.selectedRows.indexOf(product.id);
@@ -459,7 +508,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
 
   updateOptional(product) {
-    console.log('optional accessory: ', product);
     if (product.type === 'ACCESSORY' || product.type === 'ALTERNATIVE') {
       product.useProductInProject = !product.useProductInProject;
       this.updateProposalProduct(product);

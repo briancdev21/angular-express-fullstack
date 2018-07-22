@@ -10,12 +10,13 @@ export class ProposalService {
   constructor() {
 
   }
-   insertProducts = new BehaviorSubject<any>([]);
-   expanded = new BehaviorSubject<boolean>(false);
-   modalClose = new BehaviorSubject<any>(true);
-   updatedProposalProductList = new BehaviorSubject<any>([]);
-   updatedProposalDiscount = new BehaviorSubject<any>({});
-   massEdit = new BehaviorSubject<any>([]);
+  insertProducts = new BehaviorSubject<any>([]);
+  expanded = new BehaviorSubject<boolean>(false);
+  modalClose = new BehaviorSubject<any>(true);
+  updatedProposalProductList = new BehaviorSubject<any>([]);
+  updatedProposalDiscount = new BehaviorSubject<any>({});
+  massEdit = new BehaviorSubject<any>([]);
+  searchQueryProposalProducts: BehaviorSubject<string> = new BehaviorSubject('');
 
   // Observable string streams
   tableExpanded = this.expanded.asObservable();
