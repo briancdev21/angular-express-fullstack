@@ -18,25 +18,35 @@
                 <span class="task-id-value" >
                   {{task.id}}
                 </span>
-                <!-- <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged(this.parentElement.parentElement.parentElement.id)" > -->
-                <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged(milestone.id, task.id, task)" >
+                <input [value]="task.id" type="hidden" class="taskId" >
+                <input [value]="milestone.id" type="hidden" class="taskGroupId" >
+                <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged($event)" >
+                <!-- <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged(milestone.id, task.id, task)" > -->
               </div>
               <div class="task-owner">
-                <img src="{{task.assigneeInfo == undefined ? 'assets/users/man.png' : task.assigneeInfo.pictureURI}}" (click)="openOwnerModal(i, j); $event.stopPropagation();">
+                  <input [value]="task.id" type="hidden" class="taskId" >
+                  <input [value]="milestone.id" type="hidden" class="taskGroupId" >
+                <img src="{{task.assigneeInfo == undefined ? 'assets/users/man.png' : task.assigneeInfo.pictureURI}}" (click)="openOwnerModal($event); $event.stopPropagation();">
                 <!-- <img *ngIf="!task.assigneeInfo.pictureURI" src="assets/users/man.png" style="border-radius: 100%;" (click)="openOwnerModal(i, j); $event.stopPropagation();"> -->
                 <div class="sub-tasks">
 
                 </div>
                 <span>{{task.completion}}%</span>
                 <!-- Task owner selection modal-->
-                <div
-                  class="owner-modal"
+                <!-- <div
+                  class="owner-modal hide-modal"
                   [ngClass]="{'show-modal': ownerModalCollapsed[i][j], 'hide-modal': !ownerModalCollapsed[i][j] }"
                   (clickOutside)="closeOwnerModal(i, j)"
                   *ngIf="ownerModalCollapsed[i][j]"
+                > -->
+                <div class="owner-modal-wrapper hide-modal" (click)="closeOwnerModal($event); $event.stopPropagation();"></div>
+                <div
+                  class="owner-modal hide-modal"
                 >
-                  <div class="owner-mdl-content">
-                    <select [(ngModel)]="selectedOwner" (change)="onOwnerSelect(milestone.id, task.id, task)" >
+                  <div class="owner-mdl-content" >
+                    <input [value]="task.id" type="hidden" class="taskId" >
+                    <input [value]="milestone.id" type="hidden" class="taskGroupId" >
+                    <select [(ngModel)]="selectedOwner" (change)="onOwnerSelect($event)" >
                       <option [value]="0">Select Task Owner</option>
                       <option *ngFor="let owner of taskOwners;" [value]="owner.username">{{owner.username}}</option>
                     </select>
@@ -45,24 +55,32 @@
               </div>
               <div class="task-bottom">
                 <div class="due-date">
+                  <input [value]="task.id" type="hidden" class="taskId" >
+                  <input [value]="milestone.id" type="hidden" class="taskGroupId" >
                   <input 
                     [owlDateTime]="start" 
                     [owlDateTimeTrigger]="start" 
-                    (dateTimeChange)="selectStartDate($event, milestone.id, task.id, task)" 
+                    (dateTimeChange)="selectStartDate($event)" 
                     [(ngModel)]="task.startDate" 
                   >
                   <owl-date-time [pickerType]="'calendar'" #start></owl-date-time>
                   <span [owlDateTimeTrigger]="start" [ngClass]="{'due-date-empty': !task.startDate}">{{task.startDate}}</span>
                 </div>
-                <span class="duration"><input [(ngModel)]="task.duration" type="number" maxlength="3" min="0" (change)="taskDurationChanged(milestone.id, task.id, task)" > Days</span>
+                <span class="duration">
+                  <input [value]="task.id" type="hidden" class="taskId" >
+                  <input [value]="milestone.id" type="hidden" class="taskGroupId" >
+                  <input [(ngModel)]="task.duration" type="number" maxlength="3" min="0" (change)="taskDurationChanged($event)" > Days
+                </span>
                 <div class="task-actions">
-                  <img *ngIf="task.dependency" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
-                  <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.isImportant}" (click)="task.isImportant = !task.isImportant; updateTask( milestone.id, task.id, task)" >
+                  <input [value]="task.id" type="hidden" class="taskId" >
+                  <input [value]="milestone.id" type="hidden" class="taskGroupId" >  
+                  <img *ngIf="task.dependency" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal($event); editable=true; $event.stopPropagation();">
+                  <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.isImportant}" (click)="updateImportantTask($event)" >
                   <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
                   <img src="assets/images/menu(1).png" (click)='showSettingsModal[i][j]=true;$event.stopPropagation();'>
                   <!--Dependency numbers-->
-                  <div class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">
-                    <span *ngFor="let dependency of milestones[i].tasks[j].dependency; let l = index" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
+                  <div class="dependency-numbers" style="pointer-events: none;" >
+                     <span *ngFor="let dependency of milestones[i].tasks[j].dependency; let l = index" style="pointer-events: none;" >
                       <span *ngIf="l != 0">,</span>
                       {{dependency}}
                     </span>
@@ -87,7 +105,9 @@
                           Do you really want to delete?
                         </div>
                         <div class="center-btn-section" >
-                          <button class="confirm-btn" (click)="confirmDeleteMainTask(milestone.id, task.id); showDeleteConfirmModal[i][j]=false;" >
+                          <input [value]="task.id" type="hidden" class="taskId" >
+                          <input [value]="milestone.id" type="hidden" class="taskGroupId" >  
+                          <button class="confirm-btn" (click)="confirmDeleteMainTask($event); showDeleteConfirmModal[i][j]=false;" >
                             Confirm
                           </button>
                           <button class="cancel-btn" (click)="showDeleteConfirmModal[i][j]=false" >
@@ -98,10 +118,11 @@
                     </div> 
                   </div>
                   <!-- dependecy selection modal-->
+                  <div class="dependency-modal-wrapper hide-modal"
+                    (click)="closeDependencyModal($event)"
+                  ></div>
                   <div
-                    class="dependency-modal"
-                    (clickOutside)="closeDependencyModal(i, j)"
-                    *ngIf="dependencyModalCollapsed[i][j]"
+                    class="dependency-modal hide-modal"
                   >
                     <div class="dependency-mdl-content">
                       <div class="followers">
@@ -110,7 +131,12 @@
                         </div> 
                         <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
                           <ul>
-                            <li *ngFor="let task of milestones[i].tasks[j].dependency; let k = index">{{task}}<span (click)="removeDependency(i, j, k)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                            <li *ngFor="let dependency of currentTaskDependency; let k = index">
+                              {{dependency}}
+                              <input type="hidden" [value]="k" class="dependencyId"  />
+                              <input [value]="task.id" type="hidden" class="taskId" >
+                              <input [value]="milestone.id" type="hidden" class="taskGroupId" >  
+                              <span (click)="removeDependency($event)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                             <li style="background: none; width: 100%; margin: 0;">
                                 <ng-select *ngIf="isAutocompleteUpdated" [items]="allTasks"
                                   bindLabel="config2.sourceField"
