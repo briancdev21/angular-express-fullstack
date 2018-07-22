@@ -55,7 +55,8 @@
 
 <div class="attachment-modal-wrapper" *ngIf="!addAttachmentModalCollapsed"></div>
 <div class="attachment-modal"  [ngClass]="{'show-attachment-modal': !addAttachmentModalCollapsed, 'hide-attachment-modal': addAttachmentModalCollapsed }">
-  <div class="header">
+  <!-- fully inplement product import 
+    <div class="header">
     <span>ARE YOU SURE TO IMPORT THIS VARIANT?</span>
     <img class="close-btn" src="assets/images/x-sign-red.png" (click)="closeModal()" />
   </div>
@@ -66,19 +67,19 @@
     <button class="save-btn" (click)="saveAttachmentModal()">
       OK
     </button>
-  </div>
+  </div> -->
   
   <!-- commented for now because back end is not ready for it -->
   
-  <!-- <div class="header">
-    <span>ATTACHMENTS</span>
+  <div class="header">
+    <span>Do you want to Attach anything?</span>
     <img class="close-btn" src="assets/images/x-sign-red.png" (click)="closeModal()" />
   </div>
   <div class="accessories-alternatives edit-variant">
     <div class="accessories">
       <span>Accessories</span>
-      <input [(ngModel)]="accQueryString" placeholder="Search for a product" (input)="startSearch()">
-      <table class="acc-table">
+      <!-- <input [(ngModel)]="accQueryString" placeholder="Search for a product" (input)="startSearch()"> -->
+      <table class="acc-table" *ngIf="addedAccList">
         <tr>
           <th>SKU</th>
           <th>PRODUCT NAME</th>
@@ -92,19 +93,21 @@
           <td>
             <div class="accessory-sku" >
               <div class="check-box" [ngClass]="getSkuCheckColor(acc)"></div>
-              <span>{{acc.sku}}</span>
+              <span>{{acc.variant.sku}}</span>
             </div>
           </td>
-          <td>{{acc.name}}</td>
-          <td>{{acc.model}}</td>
-          <td>{{acc.brand}}</td>
-          <td><input [(ngModel)]="acc.quantity" ></td>
+          <td>{{acc.variant.name}}</td>
+          <td>{{selectedProduct.model}}</td>
+          <td>{{selectedProduct.brandName}}</td>
+          <td><input [(ngModel)]="acc.quantity" >{{acc.quantity}}</td>
           <td class="calcedPrice">
-            $ <input value="{{acc.price * acc.quantity}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
-            <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.price * acc.quantity | number: '1.2-2'}}</span>
-          
+            <!-- $ <input value="{{acc.variant.cost * acc.quantity}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
+            <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.variant.cost * acc.quantity | number: '1.2-2'}}</span> -->
+            {{ acc.variant.cost * acc.quantity | number: '1.2-2'}}
           </td>
-          <td>
+          <td>{{acc.option}}</td>
+
+          <!-- <td>
             <div class="td-option">
               <select [(ngModel)]="acc.option">
                 <option value="OPTIONAL" default>Optional</option>
@@ -112,10 +115,10 @@
               </select>
               <img src="assets/images/garbage.png" (click)="removeAcc(i, acc)">
             </div>
-          </td>
+          </td> -->
         </tr>
       </table>
-      <div class="search-modal" [ngClass]="{'show-modal': !searchModalCollapsed, 'hide-modal': searchModalCollapsed}" (clickOutside)="removeSearchModal();">
+      <!-- <div class="search-modal" [ngClass]="{'show-modal': !searchModalCollapsed, 'hide-modal': searchModalCollapsed}" (clickOutside)="removeSearchModal();">
         <div class="search-modal-content">
           <table>
             <tr *ngFor="let product of productsInfoAll | SearchPipe: accQueryString : searchableList; let i = index;" (click)="addToAccessories(product)">
@@ -129,13 +132,13 @@
           </table>
           
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="alternatives">
       <span>Alternatives</span>
-      <input [(ngModel)]="alterQueryString" placeholder="Search for a product" (input)="startAlterSearch()">
-      <table class="alter-table">
+      <!-- <input [(ngModel)]="alterQueryString" placeholder="Search for a product" (input)="startAlterSearch()"> -->
+      <table class="alter-table" *ngIf="addedAlterList">
         <tr>
           <th>SKU</th>
           <th>PRODUCT NAME</th>
@@ -145,17 +148,17 @@
           <th>PRICE</th>
         </tr>
         <tr *ngFor="let alter of addedAlterList; let i = index;">
-          <td>{{alter.sku}}</td>
-          <td>{{alter.name}}</td>
-          <td>{{alter.model}}</td>
-          <td>{{alter.brand}}</td>
-          <td><input [(ngModel)]="alter.quantity" ></td>
+          <td>{{alter.variant.sku}}</td>
+          <td>{{alter.variant.name}}</td>
+          <td>{{selectedProduct.model}}</td>
+          <td>{{selectedProduct.brandName}}</td>
+          <td>{{alter.quantity}}</td>
           <td >
             <div class="calcedPrice">
               <div>
-                $ <input value="{{alter.price * alter.quantity}}" name="inputField" type="number" *ngIf="alterPriceEditable" (blur)="alterPriceEditable=false">
-                <span *ngIf="!alterPriceEditable" (click)="alterPriceEditable=true">{{ alter.price * alter.quantity | number: '1.2-2'}}</span>
-                
+                <!-- $ <input value="{{alter.variant.cost * alter.quantity}}" name="inputField" type="number" *ngIf="alterPriceEditable" (blur)="alterPriceEditable=false">
+                <span *ngIf="!alterPriceEditable" (click)="alterPriceEditable=true">{{ alter.variant.cost * alter.quantity | number: '1.2-2'}}</span> -->
+                {{ alter.variant.cost * alter.quantity | number: '1.2-2'}}
               </div>
               <img src="assets/images/garbage.png" (click)="removeAlter(i, alter)">
             </div>
@@ -186,5 +189,5 @@
         Save
       </button>
     </div>
-  </div> -->
+  </div>
 </div>

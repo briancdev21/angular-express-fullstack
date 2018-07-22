@@ -71,6 +71,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     }
   };
   proposalId: any;
+  brandsList = [];
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService, private sharedService: SharedService,
     private route: ActivatedRoute, private proposalsService: ProposalsService, private commonService: CommonService ) {
@@ -88,6 +89,10 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
     this.sharedService.getProductTypes().subscribe(res => {
       this.productType = res.results;
+    });
+
+    this.sharedService.getBrands().subscribe(res => {
+      this.brandsList = res.results;
     });
   }
 
@@ -167,6 +172,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       } else {
         this.proposalsService.createProposalProduct(this.proposalId, ele).subscribe(res => {
           console.log('inserted: ', res);
+          this.proposalService.insertToTable(sendData);
         });
       }
     });
@@ -190,6 +196,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     console.log('insert to table');
   }
   openAddProductModal() {
+
     this.showAddProductModal = true;
     this.addProductModalCollapsed = false;
     // this.productsService.createProduct(this.newProductMock).subscribe(res => {
@@ -198,10 +205,20 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   openAttachmentModal(product) {
+    console.log('insert to table: ', product);
     this.addAttachmentModalCollapsed = false;
     this.selectedProduct = product;
-    this.addedAccList = this.selectedProduct.addedAccList ? this.selectedProduct.addedAccList : [];
-    this.addedAlterList = this.selectedProduct.addedAlterList ? this.selectedProduct.addedAlterList : [];
+    this.selectedProduct.brandName = this.brandsList.filter(brand => brand.id === this.selectedProduct.brandId)[0].name;
+    this.productsService.getProductAlternativesList(product.productId).subscribe(res => {
+      this.addedAlterList = res.results;
+      console.log('insert alter: ', res);
+    });
+    this.productsService.getProductAccessoriesList(product.productId).subscribe(res => {
+      this.addedAccList = res.results;
+      console.log('insert acce: ', res);
+    });
+    // this.addedAccList = this.selectedProduct.addedAccList ? this.selectedProduct.addedAccList : [];
+    // this.addedAlterList = this.selectedProduct.addedAlterList ? this.selectedProduct.addedAlterList : [];
   }
 
   closeModal() {
@@ -263,10 +280,16 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   removeAcc(i, acc) {
     this.addedAccList.splice(i, 1);
+    this.productsService.deleteIndividualAccessory (this.selectedProduct.productId, acc.variant.sku).subscribe(res => {
+      console.log('deleted: ', res);
+    });
   }
 
   removeAlter(i, alter) {
     this.addedAlterList.splice(i, 1);
+    this.productsService.deleteIndividualAlternative(this.selectedProduct.productId, alter.variant.sku).subscribe(res => {
+      console.log('deleted: ', res);
+    });
   }
 
   filterTxt (arr, searchKey) {
