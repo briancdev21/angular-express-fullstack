@@ -539,20 +539,18 @@ export class PmTasksTableComponent implements OnInit {
     //   attachment: false,
     //   attachmentImg: '',
   }
-  updateMilestoneTitle(index, event) {
+  updateMilestoneTitle(index) {
     console.log('milestone index,', index);
-    if (event.key === 'Enter') {
-      this.milestones[index].editTitle = false;
-      const body =  {
-        owner: this.milestones[index].owner,
-        title: this.milestones[index].title,
-        order: this.milestones[index].order,
-        permission: this.milestones[index].permission,
-      };
-      this.pmTasksService.updateIndividualTaskGroup(this.milestones[index].id, body).subscribe(res => {
-        this.updateDataForGanttChart();
-      });
-    }
+    this.milestones[index].editTitle = false;
+    const body =  {
+      owner: this.milestones[index].owner,
+      title: this.milestones[index].title,
+      order: this.milestones[index].order,
+      permission: this.milestones[index].permission,
+    };
+    this.pmTasksService.updateIndividualTaskGroup(this.milestones[index].id, body).subscribe(res => {
+      this.updateDataForGanttChart();
+    });
   }
 
   taskTitleChanged(event) {

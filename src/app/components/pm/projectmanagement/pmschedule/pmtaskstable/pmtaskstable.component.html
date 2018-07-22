@@ -5,7 +5,7 @@
 
         <div class="milestone-title" [ngStyle]="{'background': milestone.color}" style="opacity: .7;"   >
           <div *ngIf="!milestone.editTitle" (click)="milestone.editTitle = true; $event.stopPropagation();">{{milestone.title | uppercase }}</div>
-          <input *ngIf="milestone.editTitle" placeholder="Enter title here..." [(ngModel)]="milestone.title" (keydown)="updateMilestoneTitle(i, $event)" >
+          <input *ngIf="milestone.editTitle" placeholder="Enter title here..." [(ngModel)]="milestone.title" (keydown.enter)="updateMilestoneTitle(i)" (clickOutside)="updateMilestoneTitle(i)">
           <div class="milestone-delete-btn">
             <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showTaskGroupDeleteConfirmModal[i]=true" />
           </div>
