@@ -213,6 +213,7 @@ export class LeadProfileComponent implements OnInit {
   currentLead: any;
   savingLead: any;
   contactsList: any;
+  leadsList = [];
 
   constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService, private sharedService: SharedService) {
     this.leadInfoIndex = this.route.snapshot.paramMap.get('id');
@@ -243,7 +244,7 @@ export class LeadProfileComponent implements OnInit {
 
       this.crmService.getLeadActivities(this.currentLead.id).subscribe(response => {
         const activities = response.results;
-        this.timelineData = activities;
+        this.timelineData = activities.reverse();
         // Update time line data
         this.timelineData.map(a => {
           a['title'] = a['type'];
@@ -276,7 +277,12 @@ export class LeadProfileComponent implements OnInit {
     });
 
     this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res;
+      this.crmService.getLeadsList().subscribe(lead => {
+        this.leadsList = lead.results;
+        this.contactsList = res.concat(this.leadsList);
+        console.log('contaccts : ', this.contactsList);
+        this.addContactName(this.contactsList);
+      });
     });
   }
 
@@ -287,6 +293,17 @@ export class LeadProfileComponent implements OnInit {
       contact: undefined,
       content: ''
     };
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
   tabChanged(event) {
@@ -336,6 +353,7 @@ export class LeadProfileComponent implements OnInit {
     };
 
     this.crmService.createLeadActivity(this.currentLead.id, savingActivityInfo).subscribe( res => {
+      console.log('activity created: ', res);
     });
     this.timelineData.unshift(nitem);
     this.activity.subject = undefined;

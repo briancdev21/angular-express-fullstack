@@ -18,7 +18,8 @@
               <tab tabTitle="EMAIL" class="tab-email" >
                 <div>
                   <input placeholder="Subject" #emailsubject (input)="activity.subject=emailsubject.value"  />
-                  <select #emailcontacts (change)="activity.contact=emailcontacts.value">
+                  <select #emailcontacts (change)="activity.contact=emailcontacts.value" *ngIf="contactsList">
+                  <!-- <select #emailcontacts [(ngModel)]="activity.contact" *ngIf="contactsList"> -->
                     <option>Select Contact</option>
                     <option [value]="contact.id" *ngFor="let contact of contactsList" >
                       {{contact.name}}
