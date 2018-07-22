@@ -402,8 +402,9 @@ export class PmTasksTableComponent implements OnInit {
     const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
     const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
     const dependencyId = event.srcElement.parentElement.querySelector('input.dependencyId').value;
-
-c[dependencyId];
+    const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+    const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+    const item = selectedTaskData.dependency[dependencyId];
     this.allTasks.push(item);
     this.allTasks = _.uniq(this.allTasks);
     selectedTaskData.dependency.splice(dependencyId, 1);
