@@ -148,7 +148,7 @@ export class PmTasksTableComponent implements OnInit {
     // const selectedPanel = this.panels.filter(p => p.id === parseInt(source.id, 10))[0];
     // const selectedTask = selectedPanel.tasks.filter( t => t.id === parseInt(el.id, 10));
     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === sourcePanelIndex.toString()).pop();
-    const selectedTaskData = sourcePanelData.tasks.filter(task => task.id === sourceItemIndex).pop();
+    const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === sourceItemIndex.toString()).pop();
     console.log('selected drag data: ', sourceItemIndex, sourcePanelIndex, selectedTaskData);
     if (targetContainer !== sourceContainer) {
     }
@@ -217,7 +217,7 @@ export class PmTasksTableComponent implements OnInit {
     };
     this.pmTasksService.createTask(milestone.id, newMockTask).subscribe(res => {
 
-      this.updateDataForGanttChart();
+      this.refreshTable();
     });
   }
 
@@ -637,9 +637,42 @@ export class PmTasksTableComponent implements OnInit {
       for ( let j = 0; j < this.copyMilestones[i].tasks.length; j++) {
         const task = this.copyMilestones[i].tasks[j];
         const element = document.getElementById('' + task.id) as HTMLDivElement;
-        if (element === null) { console.log('element order', task.id, element); }
-        else { element.querySelector('.task-id-value').innerHTML = `${task.order}. `; }
+        if (element === null) {
+          console.log('element order', task.id, element);
+        } else {
+          element.querySelector('.task-id-value').innerHTML = `${task.order}. `;
+        }
       }
     }
+  }
+
+  copyTask(event) {
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+
+    const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+    const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+
+    selectedTaskData.followers = selectedTaskData.followers  !== null ? selectedTaskData.followers : [];
+    selectedTaskData.dependencyIds = selectedTaskData.dependencyIds  !== null ? selectedTaskData.dependencyIds : [];
+    selectedTaskData.keywordIds = selectedTaskData.keywordIds  !== null ? selectedTaskData.keywordIds : [];
+    selectedTaskData.subtaskIds = selectedTaskData.subtaskIds  !== null ? selectedTaskData.subtaskIds : [];
+    selectedTaskData.note = selectedTaskData.note !== null ? selectedTaskData.note : '';
+    selectedTaskData.startDate = moment(selectedTaskData.startDate).format('YYYY-MM-DD');
+    console.log('selected task data', selectedTaskData);
+    this.pmTasksService.createTask(milestoneId, selectedTaskData).subscribe(res => {
+      // tslint:disable-next-line:max-line-lengt
+      const inputTaskElements = document.getElementById('' + taskId).querySelectorAll('input.taskId') as NodeListOf<HTMLInputElement>;
+      for (let i = 0; i < inputTaskElements.length; i++) {
+        inputTaskElements[i].value = res.data.id;
+      }
+      // tslint:disable-next-line:max-line-length
+      const inputTaskGroupElements = document.getElementById('' + taskId).querySelectorAll('input.taskGroupId') as NodeListOf<HTMLInputElement>;
+      for (let i = 0; i < inputTaskElements.length; i++) {
+        inputTaskGroupElements[i].value = res.data.taskGroupId;
+      }
+      document.getElementById('' + taskId).id = res.data.id;
+      this.refreshTable();
+    });
   }
 }

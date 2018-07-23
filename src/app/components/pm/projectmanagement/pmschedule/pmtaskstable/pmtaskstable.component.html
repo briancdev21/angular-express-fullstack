@@ -87,8 +87,10 @@
                   </div>
                   <!--settings modal-->
                   <div [ngClass]="{'settings-modal': showSettingsModal[i][j], 'settings-modal-hide': !showSettingsModal[i][j] }" (clickOutside)="showSettingsModal[i][j] = false;">
+                    <input [value]="task.id" type="hidden" class="taskId" >
+                    <input [value]="milestone.id" type="hidden" class="taskGroupId" >
                     <div (click)="showDeleteConfirmModal[i][j]= true;">Delete Task</div>
-                    <div (click)="copySelectedSubTasks()">Copy Task</div>
+                    <div (click)="copyTask($event)">Copy Task</div>
                     <div>Mark as Waiting On</div>
                   </div>
                   <!-- Confirm delete modal wrapper -->
