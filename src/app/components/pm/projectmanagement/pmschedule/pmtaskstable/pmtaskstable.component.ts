@@ -123,16 +123,16 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   selectStartDate(event) {
-    console.log('start date event', event);
     const milestoneId = event.input.parentElement.querySelector('input.taskGroupId').value;
     const taskId = event.input.parentElement.querySelector('input.taskId').value;
     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
     // Update Milestones data
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const dDate = new Intl.DateTimeFormat('en-US', options).format(event.value);
+    // const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    // const dDate = new Intl.DateTimeFormat('en-US', options).format(event.value);
     // Add dDate field to panel info and update it with formatted date.
-    selectedTaskData.startDate = dDate;
+    selectedTaskData.startDate = moment(event.value).utc();
+    console.log('event value:', event.value);
     this.updateTask(milestoneId, taskId, selectedTaskData);
   }
 
@@ -153,16 +153,23 @@ export class PmTasksTableComponent implements OnInit {
     if (targetContainer !== sourceContainer) {
     }
 
-    const savingData = {
-      'assignee': selectedTaskData.assigneeInfo ? selectedTaskData.assigneeInfo.username : selectedTaskData.assignee,
-      'title': selectedTaskData.taskTitle ? selectedTaskData.taskTitle : selectedTaskData.title,
-      'isImportant': selectedTaskData.isImportant,
-      'isComplete': selectedTaskData.isComplete,
-      'startDate': moment(selectedTaskData.startDate).format('YYYY-MM-DD'),
-    };
+    // const savingData = {
+    //   'assignee': selectedTaskData.assigneeInfo ? selectedTaskData.assigneeInfo.username : selectedTaskData.assignee,
+    //   'title': selectedTaskData.taskTitle ? selectedTaskData.taskTitle : selectedTaskData.title,
+    //   'isImportant': selectedTaskData.isImportant,
+    //   'isComplete': selectedTaskData.isComplete,
+    //   'startDate': moment(selectedTaskData.startDate).utc().format('YYYY-MM-DD'),
+    // };
+    selectedTaskData.followers = selectedTaskData.followers  !== null ? selectedTaskData.followers : [];
+    selectedTaskData.dependencyIds = selectedTaskData.dependencyIds  !== null ? selectedTaskData.dependencyIds : [];
+    selectedTaskData.keywordIds = selectedTaskData.keywordIds  !== null ? selectedTaskData.keywordIds : [];
+    selectedTaskData.subtaskIds = selectedTaskData.subtaskIds  !== null ? selectedTaskData.subtaskIds : [];
+    selectedTaskData.note = selectedTaskData.note !== null ? selectedTaskData.note : '';
+    selectedTaskData.startDate = moment(selectedTaskData.startDate).format('YYYY-MM-DD');
+    console.log('selected task data', selectedTaskData);
     if (sourceItemIndex.toString() !== localStorage.getItem('sourceItemIndex')) {
       localStorage.setItem('sourceItemIndex', sourceItemIndex.toString());
-      this.pmTasksService.createTask(targetPanelIndex, savingData).subscribe(res => {
+      this.pmTasksService.createTask(targetPanelIndex, selectedTaskData).subscribe(res => {
         console.log('task created: ', res);
         // tslint:disable-next-line:max-line-length
         const inputTaskElements = document.getElementById('' + sourceItemIndex).querySelectorAll('input.taskId') as NodeListOf<HTMLInputElement>;
@@ -310,7 +317,7 @@ export class PmTasksTableComponent implements OnInit {
         this.allTasks = _.uniq(this.allTasks);
         console.log('all tasks:', this.allTasks);
         this.copyMilestones = this.tasksTemp;
-
+        this.updateTaskOrderNumber();
         // set draggable class
         // const bag: any = this.dragulaService.find('dragTask');
         // if (bag !== undefined ) {
@@ -623,5 +630,16 @@ export class PmTasksTableComponent implements OnInit {
     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
     return selectedTaskData.dependency;
+  }
+
+  updateTaskOrderNumber() {
+    for ( let i = 0; i < this.copyMilestones.length; i++) {
+      for ( let j = 0; j < this.copyMilestones[i].tasks.length; j++) {
+        const task = this.copyMilestones[i].tasks[j];
+        const element = document.getElementById('' + task.id) as HTMLDivElement;
+        if (element === null) { console.log('element order', task.id, element); }
+        else { element.querySelector('.task-id-value').innerHTML = `${task.order}. `; }
+      }
+    }
   }
 }

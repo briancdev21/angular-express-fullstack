@@ -1,0 +1,43 @@
+.cmp-breadcrumb {
+  display: flex;
+  align-items: center;
+}
+
+.right-arrow {
+  display: inline-block;
+}
+
+.breadcrumb-item {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 1.1em;
+  color: #6EB1DD;
+  height: 50px;
+}
+
+.right-arrow { 
+   padding-left: 20px;
+   font-size: 40px;
+   font-weight: 200;
+   line-height: 1em;
+   margin-top: -7.5px;
+   color: #464646;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.breadcrumb-item:last-child .right-arrow {
+  display: none;
+
+}
+
+.breadcrumb-item:last-child .path {
+  color: #464646;
+
+}
+
+
+
