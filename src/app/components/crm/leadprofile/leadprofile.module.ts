@@ -9,6 +9,7 @@ import { BreadcrumbModule } from '../../../components/breadcrumb/breadcrumb.modu
 import { LeadProfileCardsComponent } from './leadprofilecards/leadprofilecards.component';
 import { LeadScoreComponent } from './leadprofilecards/leadscore/leadscore.component';
 import { LeadProfileInfoBarComponent } from './leadprofileinfobar/leadprofileinfobar.component';
+import { LeadBreadcrumbBarComponent } from './leadbreadcrumbbar/leadbreadcrumbbar.component';
 
 import { TabModule } from 'angular-tabs-component';
 import { Ng2TimelineComponent } from '../../profile/ng2-timeline/ng2timeline.component';
@@ -24,7 +25,8 @@ import { ProfileCmpModule } from '../../profile/profile.module';
     LeadProfileComponent,
     LeadProfileCardsComponent,
     LeadScoreComponent,
-    LeadProfileInfoBarComponent
+    LeadProfileInfoBarComponent,
+    LeadBreadcrumbBarComponent
   ],
   imports: [
     BrowserModule,

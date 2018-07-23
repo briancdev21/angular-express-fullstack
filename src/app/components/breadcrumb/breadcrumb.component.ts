@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,9 +10,11 @@ import { Router } from '@angular/router';
 })
 
 
-export class BreadcrumbComponent {
+export class BreadcrumbComponent implements OnInit {
   @Input() data;
-  // this.data = ['Contacts', 'John Moss'];
+  @Input() link;
+  ngOnInit () {
+  }
 
 }
 
