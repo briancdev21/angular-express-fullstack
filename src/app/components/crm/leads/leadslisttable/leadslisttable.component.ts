@@ -208,6 +208,7 @@ export class LeadsListTableComponent implements OnInit {
     // Remove empty/null field from object.
     Object.keys(lead).forEach((key) => (lead[key] == null) && delete lead[key]);
     Object.keys(lead.person).forEach((key) => (lead.person[key] == null) && delete lead.person[key]);
+    Object.keys(lead.phoneNumbers).forEach((key) => (lead.phoneNumbers[key] == null) && delete lead.phoneNumbers[key]);
     this.clonedRowLead = lead;
     this.leadModalInfoCollapsed[index] = false;
     this.showLeadModalInfo = false;
