@@ -36,6 +36,7 @@ export class LeadsListTableComponent implements OnInit {
   sortLeadStatusArr: any;
   currentLeadId: any;
   contactsList: any;
+  leadsList: any;
 
   activity: {
     title: string;
@@ -52,9 +53,14 @@ export class LeadsListTableComponent implements OnInit {
     duration: '1 hr, 30 min'
   };
   constructor( private filterService: FilterService, private router: Router, private crmService: CrmService,
-     private sharedService: SharedService ) {
+    private sharedService: SharedService ) {
     this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res;
+      this.crmService.getLeadsList().subscribe(lead => {
+        this.leadsList = lead.results;
+        this.contactsList = res.concat(this.leadsList);
+        this.addContactName(this.contactsList);
+        this.addContactName(this.leadsListInfo);
+      });
     });
   }
 
@@ -65,6 +71,17 @@ export class LeadsListTableComponent implements OnInit {
       contact: undefined,
       content: ''
     };
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
   tabChanged(event) {
@@ -100,13 +117,26 @@ export class LeadsListTableComponent implements OnInit {
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
       this.leadsListInfo.sort( function(name1, name2) {
-        if ( name1[field] < name2[field] ) {
+        if ( Math.abs(name1[field]) < Math.abs(name2[field])) {
           return -1;
-        } else if ( name1[field] > name2[field]) {
+        } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
           return 1;
         } else {
           return 0;
         }
+      });
+    } else {
+      this.leadsListInfo.reverse();
+    }
+  }
+
+  sortArrayWithString(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    console.log('leadsListInfo: ', this.leadsListInfo);
+    if (!cmp.sortScoreClicked) {
+      this.leadsListInfo.sort( function(name1, name2) {
+        return name1[field].localeCompare(name2[field]);
       });
     } else {
       this.leadsListInfo.reverse();
@@ -135,13 +165,13 @@ export class LeadsListTableComponent implements OnInit {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.sortLeadStatusArr = this.leadsListInfo.filter(lead => lead.status === 'New');
-      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'Follow-up'));
-      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'Seen'));
-      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'Demo'));
-      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'Negotiation'));
-      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'Won'));
-      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'Lost'));
+      this.sortLeadStatusArr = this.leadsListInfo.filter(lead => lead.status === 'NEW');
+      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'FOLLOW_UP'));
+      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'SEEN'));
+      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'DEMO'));
+      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'NEGOTIATION'));
+      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'WON'));
+      this.sortLeadStatusArr.push(this.leadsListInfo.filter(lead => lead.status === 'LOST'));
       this.leadsListInfo = _.flatten(this.sortLeadStatusArr);
     } else {
       this.leadsListInfo.reverse();
@@ -194,6 +224,7 @@ export class LeadsListTableComponent implements OnInit {
     this.crmService.createLeadActivity(this.currentLeadId, savingActivityInfo).subscribe( res => {
     });
     this.activity.subject = undefined;
+    this.activity.contact = undefined;
   }
 
   cloneRow(lead, index) {
