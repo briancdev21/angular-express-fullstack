@@ -51,6 +51,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   modalContent = 'You cannot change WON project';
   categoryListAll = [];
   subCategoryListAll = [];
+  searchFields = ['sku', 'brand', 'model', 'name', 'categoryName', 'subCategoryName', 'productType'];
+  backUp = [];
+  sortScoreClicked = true;
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService,
   private proposalsService: ProposalsService, private route: ActivatedRoute, private sharedService: SharedService,
@@ -88,8 +91,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
               const subCategory = data.results;
               this.subCategoryListAll = data.results;
 
-              this.getProposalProductData();
-
               this.proposalsService.getIndividualProposal(this.proposalId).subscribe(proposal => {
                 this.proposalInfo = proposal.data;
                 this.proposalInfo.categoryIds.forEach(element => {
@@ -98,6 +99,12 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
                 this.proposalInfo.subcategoryIds.forEach(element => {
                   this.proposalSubCategoryList.push(this.subCategoryListAll.filter(c => c.id === element)[0]);
                 });
+
+                this.getProposalProductData();
+
+                if ( this.proposalInfo.status === 'WON') {
+                  this.commonService.showAlertModal.next(true);
+                }
               });
             });
           });
@@ -118,7 +125,19 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         ele.productType = this.getProductTypeFromId(ele.productTypeId);
         ele.taxRate = this.getTaxRateNameFromId(ele.taxRateId);
         ele.categoryId = ele.categoryId ? ele.categoryId : 0;
+        if (!this.proposalCategoryList.includes(ele.categoryId)) {
+          ele.categoryId = 0;
+          ele.categoryName = '';
+        } else {
+          ele.categoryName = this.categoryListAll.filter(c => c.id === ele.catetoryId)[0].name;
+        }
         ele.subcategoryId = ele.subcategoryId ? ele.subcategoryId : 0;
+        if (!this.proposalSubCategoryList.includes(ele.subcategoryId)) {
+          ele.subcategoryId = 0;
+          ele.subCategoryName = '';
+        } else {
+          ele.subCategoryName = this.subCategoryListAll.filter(c => c.id === ele.subcategoryId)[0].name;
+        }
       });
       this.parents = this.originProposalProductList.filter(p => p.type === 'PRODUCT');
       this.parents.forEach(ele => {
@@ -145,6 +164,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         index = index + 1;
       });
       console.log('ordered products: ', this.proposalProductOrdered);
+      this.backUp = this.proposalProductOrdered;
     });
   }
 
@@ -187,22 +207,30 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.proposalProductList = this.originProposalProductList;
+
+    this.proposalService.searchQueryProposalProducts.subscribe(data => {
+      if (data) {
+        this.filterTxt(this.proposalProductOrdered, data);
+      } else {
+        this.proposalProductOrdered = this.backUp;
+      }
+    });
     this.proposalService.tableExpanded.subscribe(
       data => {
         this.expandAll(data);
-        this.proposalProductList.map(product => product.expanded = false);
-        this.parents = this.getParentNode(this.proposalProductList);
-        for (let i = 0; i < this.parents.length; i++) {
-          this.childNodesForParents[i] = this.getChildNode(this.parents[i]);
-        }
-        if (data) {
-          // this.proposalProductList =  JSON.parse(localStorage.getItem('originProposalProductList'));
-        } else {
-            // if (!localStorage.getItem('originProposalProductList')) {
-            //   localStorage.setItem('originProposalProductList', JSON.stringify(this.originProposalProductList));
-            // }
-            // this.proposalProductList = JSON.parse(localStorage.getItem('originProposalProductList'));
-          }
+        // this.proposalProductList.map(product => product.expanded = false);
+        // this.parents = this.getParentNode(this.proposalProductList);
+        // for (let i = 0; i < this.parents.length; i++) {
+        //   this.childNodesForParents[i] = this.getChildNode(this.parents[i]);
+        // }
+        // if (data) {
+        //   // this.proposalProductList =  JSON.parse(localStorage.getItem('originProposalProductList'));
+        // } else {
+        //     // if (!localStorage.getItem('originProposalProductList')) {
+        //     //   localStorage.setItem('originProposalProductList', JSON.stringify(this.originProposalProductList));
+        //     // }
+        //     // this.proposalProductList = JSON.parse(localStorage.getItem('originProposalProductList'));
+        //   }
       });
     // commented for now
     // Insert data from product details to table
@@ -304,7 +332,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     this.proposalProductList.map(p => p.unitPrice = +p.unitPrice);
 
     // get parent totoal for each parent node
-    this.parents.map(p => p.proposalTotal = p.unitPrice * p.qty * (100 - p.discount) / 100 + this.getChildPriceTotal(p));
+    // this.parents.map(p => p.proposalTotal = p.unitPrice * p.qty * (100 - p.discount) / 100 + this.getChildPriceTotal(p));
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -334,6 +362,98 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   keyUpEvent(event: KeyboardEvent) {
     this.isShift = false;
     this.isCtrl = false;
+  }
+
+  filterTxt (arr, searchKey) {
+    let newArr = [];
+    arr = this.backUp;
+    this.searchFields.forEach(field => {
+      const selected = arr.filter(a => a[field].includes(searchKey));
+      newArr = newArr.concat(selected);
+    });
+    this.proposalProductOrdered = this.arrayUnique(newArr);
+  }
+
+  getParentsDataForSorting(parents) {
+    let index = 0;
+    this.proposalProductOrdered = [];
+    parents.forEach(ele => {
+      ele.expand = true;
+      ele.parentTotalPrice = ele.total;
+      this.proposalProductOrdered = this.proposalProductOrdered.concat(ele);
+      if (ele.accessories) {
+        ele.accessories.forEach(element => {
+          const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+          ele.parentTotalPrice = ele.parentTotalPrice + selectedItem.total;
+          this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
+        });
+      }
+
+      if (ele.alternatives) {
+        ele.alternatives.forEach(element => {
+          const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+          this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
+        });
+      }
+    });
+    this.proposalProductOrdered.forEach(element => {
+      element.index = index;
+      index = index + 1;
+    });
+  }
+
+  arrayUnique (arr) {
+    const newA = [];
+
+    arr.forEach(element => {
+      if (newA.filter(a => a.id === element.id).length > 0) {
+        return;
+      } else {
+        newA.push(element);
+      }
+    });
+    return newA;
+  }
+
+  sortArray(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    console.log('sortscoreclick: ', cmp.sortScoreClicked);
+    if (!cmp.sortScoreClicked) {
+      this.parents.sort( function(name1, name2) {
+        if ( Math.abs(name1[field]) < Math.abs(name2[field])) {
+          return -1;
+        } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else {
+      this.parents.reverse();
+    }
+    this.getParentsDataForSorting(this.parents);
+  }
+
+  sortArrayWithString(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    console.log('sortscoreclick: ', cmp.sortScoreClicked);
+    if (!cmp.sortScoreClicked) {
+      this.parents.sort( function(name1, name2) {
+        // if ( name1[field].localeCompare(name2[field])) {
+        //   return -1;
+        // } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
+        //   return 1;
+        // } else {
+        //   return 0;
+        // }
+        return name1[field].localeCompare(name2[field]);
+      });
+    } else {
+      this.parents.reverse();
+    }
+    this.getParentsDataForSorting(this.parents);
   }
 
   onParentRowSelect(product) {
@@ -459,7 +579,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
 
   updateOptional(product) {
-    console.log('optional accessory: ', product);
     if (product.type === 'ACCESSORY' || product.type === 'ALTERNATIVE') {
       product.useProductInProject = !product.useProductInProject;
       this.updateProposalProduct(product);

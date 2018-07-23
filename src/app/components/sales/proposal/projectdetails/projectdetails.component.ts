@@ -216,7 +216,8 @@ projectDetails = {
     projectTypeId: undefined,
     categoryIds: [],
     subcategoryIds: [],
-    currencyId: 1
+    currencyId: 1,
+    scopeOfWork: '',
   };
 
   userInfo = {
@@ -712,9 +713,9 @@ projectDetails = {
           'country': this.proposalDetails.country
         },
         'paymentSchedule': this.proposalDetails.paymentSchedule,
-        'scopeOfWork': this.scopeEditorContent,
-        'clientNote': this.extractStringFromEditor(this.clientNoteContent),
-        'internalNote': this.extractStringFromEditor(this.internalNoteContent),
+        'scopeOfWork': this.proposalDetails.scopeOfWork,
+        'clientNote': this.proposalDetails.clientNote,
+        'internalNote': this.proposalDetails.internalNote,
         'completionDate': this.proposalDetails.completionDate,
         'discount': {
           'value': this.proposalDetails.discount.value,
@@ -951,58 +952,4 @@ projectDetails = {
     return this.selectedCustomer.name;
   }
 
-  finishAddProposal() {
-    this.invalidScopeEditorContent = false;
-    const collaborators = this.proposalDetails.collaborators.map(collaborator => collaborator.username);
-    const savingProposalData = {
-      'currencyId': 1,
-      'contactId': this.proposalDetails.contactId,
-      // 'leadId': 0,
-      'projectId': this.proposalDetails.projectId,
-      'projectTypeId': parseInt(this.proposalDetails.projectType, 10),
-      'pricingCategoryId': this.proposalDetails.pricingCategoryId ?
-        parseInt(this.proposalDetails.pricingCategoryId.toString(), 10) : undefined,
-      'categoryIds': this.proposalDetails.projectCategoriesAll,
-      'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
-      'accountManager': this.proposalDetails.accountManager.username,
-      'projectManager': this.proposalDetails.projectManager.username,
-      'designer': this.proposalDetails.designer.username,
-      'clientProjectManagerId': this.proposalDetails.projectManagementContact,
-      'accountReceivableId': this.proposalDetails.accountReceivable,
-      'name': this.proposalDetails.projectName,
-      'shippingAddress': {
-        'address': this.proposalDetails.address,
-        'city': this.proposalDetails.city,
-        'province': this.proposalDetails.province,
-        'postalCode': this.proposalDetails.postalCode,
-        'country': this.proposalDetails.country
-      },
-      'paymentSchedule': this.proposalDetails.paymentSchedule,
-      'scopeOfWork': this.scopeEditorContent,
-      'clientNote': this.extractStringFromEditor(this.clientNoteContent),
-      'internalNote': this.extractStringFromEditor(this.internalNoteContent),
-      'completionDate': this.proposalDetails.completionDate,
-      'discount': {
-        'value': this.proposalDetails.discount.value,
-        'unit': this.proposalDetails.discount.unit
-      },
-      'collaborators': collaborators,
-      'taxRateId': parseInt(this.proposalDetails.taxRateId.toString(), 10)
-    };
-
-    if (this.scopeEditorContent) {
-      console.log('saving_proposal: ', savingProposalData);
-      this.proposalsService.createProposal(savingProposalData).subscribe(res => {
-        console.log('created proposal: ', res);
-        this.salesService.proposalAdded.next(true);
-      });
-      this.tabActiveThird = false;
-      this.tabActiveFirst = true;
-      this.tabActiveSecond = false;
-      this.showAddProposalModal = false;
-      this.addProposalModalCollapsed = true;
-    } else {
-      this.invalidScopeEditorContent = true;
-    }
-  }
 }

@@ -106,8 +106,9 @@ export class ProposalComponent implements OnInit {
   expandAll(input) {
     this.proposalService.expandAll(true);
 
-    this.proposalProductList = this.proposalProductListBackup;
-    this.proposalProductList = this.filterTxt(this.proposalProductList, input);
+    // this.proposalProductList = this.proposalProductListBackup;
+    // this.proposalProductList = this.filterTxt(this.proposalProductList, input);
+    this.proposalService.searchQueryProposalProducts.next(input);
   }
 
   getUpdatedDate(data) {
