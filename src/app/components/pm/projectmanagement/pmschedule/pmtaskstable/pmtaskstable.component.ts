@@ -128,7 +128,7 @@ export class PmTasksTableComponent implements OnInit {
     const taskId = event.input.parentElement.querySelector('input.taskId').value;
     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
-
+    // Update Milestones data
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const dDate = new Intl.DateTimeFormat('en-US', options).format(event.value);
     // Add dDate field to panel info and update it with formatted date.
@@ -603,6 +603,8 @@ export class PmTasksTableComponent implements OnInit {
     // console.log('taskgroup deleted');
     this.pmTasksService.deleteIndividualTaskGroup(milestoneId).subscribe(res => {
       // console.log('taskgroup deleted:');
+      const taskGroupElement = document.getElementById('' + milestoneId).parentElement as HTMLDivElement;
+      taskGroupElement.style.display = 'none';
       this.updateDataForGanttChart();
     });
   }

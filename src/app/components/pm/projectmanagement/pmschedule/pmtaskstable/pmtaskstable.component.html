@@ -64,7 +64,7 @@
                     [(ngModel)]="task.startDate" 
                   >
                   <owl-date-time [pickerType]="'calendar'" #start></owl-date-time>
-                  <span [owlDateTimeTrigger]="start" [ngClass]="{'due-date-empty': !task.startDate}">{{task.startDate}}</span>
+                  <span [owlDateTimeTrigger]="start" [ngClass]="{'due-date-empty': !task.startDate}">{{task.startDate | date: 'MMMM dd, yyyy'}}</span>
                 </div>
                 <span class="duration">
                   <input [value]="task.id" type="hidden" class="taskId" >
