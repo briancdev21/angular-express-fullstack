@@ -183,7 +183,7 @@
             </div>
           </div> 
         </div>
-        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="!milestone.tasks">
+        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="!milestone.tasks" id={{milestone.id}} >
         </div>
         <div class="add-task" (click)="addTask(milestone)">
           <img src="assets/images/add.png">

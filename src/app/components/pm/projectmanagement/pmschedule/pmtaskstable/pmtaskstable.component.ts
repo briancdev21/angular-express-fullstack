@@ -5,6 +5,7 @@ import { DragulaService } from 'ng2-dragula';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {TaskStableMapToKeysPipe} from './map-to-keys.pipe';
+
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { PmTasksService } from '../../../../../services/pmtasks.service';
@@ -139,7 +140,7 @@ export class PmTasksTableComponent implements OnInit {
     const [sourceItem, targetContainer, sourceContainer, targetItem] = args;
     console.log('drop model called', args);
     const sourceItemIndex = parseInt(sourceItem.id, 10);
-    const targetItemIndex = parseInt(targetItem.id, 10);
+    // const targetItemIndex = parseInt(targetItem.id, 10);
 
     const targetPanelIndex = parseInt(targetContainer.id, 10);
     const sourcePanelIndex = parseInt(sourceContainer.id, 10);
@@ -159,26 +160,27 @@ export class PmTasksTableComponent implements OnInit {
       'isComplete': selectedTaskData.isComplete,
       'startDate': moment(selectedTaskData.startDate).format('YYYY-MM-DD'),
     };
-    this.pmTasksService.createTask(targetPanelIndex, savingData).subscribe(res => {
-      console.log('task created: ', res);
-      // tslint:disable-next-line:max-line-length
-      const inputTaskElements = document.getElementById('' + sourceItemIndex).querySelectorAll('input.taskId') as NodeListOf<HTMLInputElement>;
-      for (let i = 0; i < inputTaskElements.length; i++) {
-        inputTaskElements[i].value = res.data.id;
-      }
-      // tslint:disable-next-line:max-line-length
-      const inputTaskGroupElements = document.getElementById('' + sourceItemIndex).querySelectorAll('input.taskGroupId') as NodeListOf<HTMLInputElement>;
-      for (let i = 0; i < inputTaskElements.length; i++) {
-        inputTaskGroupElements[i].value = res.data.taskGroupId;
-      }
-      document.getElementById('' + sourceItemIndex).id = res.data.id;
-      this.updateDataForGanttChart();
-    });
-    this.pmTasksService
-    .deleteIndividualtask(sourcePanelIndex, sourceItemIndex)
-    .subscribe(res => {
-      console.log('task deleted: ', res);
-    });
+    if (sourceItemIndex.toString() !== localStorage.getItem('sourceItemIndex')) {
+      localStorage.setItem('sourceItemIndex', sourceItemIndex.toString());
+      this.pmTasksService.createTask(targetPanelIndex, savingData).subscribe(res => {
+        console.log('task created: ', res);
+        // tslint:disable-next-line:max-line-length
+        const inputTaskElements = document.getElementById('' + sourceItemIndex).querySelectorAll('input.taskId') as NodeListOf<HTMLInputElement>;
+        for (let i = 0; i < inputTaskElements.length; i++) {
+          inputTaskElements[i].value = res.data.id;
+        }
+        // tslint:disable-next-line:max-line-length
+        const inputTaskGroupElements = document.getElementById('' + sourceItemIndex).querySelectorAll('input.taskGroupId') as NodeListOf<HTMLInputElement>;
+        for (let i = 0; i < inputTaskElements.length; i++) {
+          inputTaskGroupElements[i].value = res.data.taskGroupId;
+        }
+        document.getElementById('' + sourceItemIndex).id = res.data.id;
+        this.updateDataForGanttChart();
+        this.pmTasksService
+        .deleteIndividualtask(sourcePanelIndex, sourceItemIndex)
+        .subscribe();
+      });
+    }
   }
 
   toggleMenubar(data: boolean) {
@@ -307,7 +309,7 @@ export class PmTasksTableComponent implements OnInit {
         this.allTasks = this.dependencyList.map(dependency => dependency.id);
         this.allTasks = _.uniq(this.allTasks);
         console.log('all tasks:', this.allTasks);
-        this.copyMilestones = this.milestones;
+        this.copyMilestones = this.tasksTemp;
 
         // set draggable class
         // const bag: any = this.dragulaService.find('dragTask');
@@ -362,7 +364,7 @@ export class PmTasksTableComponent implements OnInit {
 
   openOwnerModal(event) {
     const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
-    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+    const taskId = event.srcEltonesement.parentElement.querySelector('input.taskId').value;
      const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
      const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
     // this.ownerModalCollapsed = this.ownerModalCollapsed.map(m => m.map(t => t = false));
