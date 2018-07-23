@@ -216,7 +216,8 @@ projectDetails = {
     projectTypeId: undefined,
     categoryIds: [],
     subcategoryIds: [],
-    currencyId: 1
+    currencyId: 1,
+    scopeOfWork: '',
   };
 
   userInfo = {
@@ -712,9 +713,9 @@ projectDetails = {
           'country': this.proposalDetails.country
         },
         'paymentSchedule': this.proposalDetails.paymentSchedule,
-        'scopeOfWork': this.scopeEditorContent,
-        'clientNote': this.extractStringFromEditor(this.clientNoteContent),
-        'internalNote': this.extractStringFromEditor(this.internalNoteContent),
+        'scopeOfWork': this.proposalDetails.scopeOfWork,
+        'clientNote': this.proposalDetails.clientNote,
+        'internalNote': this.proposalDetails.internalNote,
         'completionDate': this.proposalDetails.completionDate,
         'discount': {
           'value': this.proposalDetails.discount.value,
@@ -978,9 +979,9 @@ projectDetails = {
         'country': this.proposalDetails.country
       },
       'paymentSchedule': this.proposalDetails.paymentSchedule,
-      'scopeOfWork': this.scopeEditorContent,
-      'clientNote': this.extractStringFromEditor(this.clientNoteContent),
-      'internalNote': this.extractStringFromEditor(this.internalNoteContent),
+      'scopeOfWork': this.proposalDetails.scopeOfWork,
+      'clientNote': this.extractStringFromEditor(this.proposalDetails.clientNote),
+      'internalNote': this.extractStringFromEditor(this.proposalDetails.internalNote),
       'completionDate': this.proposalDetails.completionDate,
       'discount': {
         'value': this.proposalDetails.discount.value,
