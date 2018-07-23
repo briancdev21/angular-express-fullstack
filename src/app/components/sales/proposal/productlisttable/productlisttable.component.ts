@@ -51,8 +51,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   modalContent = 'You cannot change WON project';
   categoryListAll = [];
   subCategoryListAll = [];
-  searchFields = ['sku', 'brand', 'model', 'name', 'categoryName', 'subCategoryName'];
+  searchFields = ['sku', 'brand', 'model', 'name', 'categoryName', 'subCategoryName', 'productType'];
   backUp = [];
+  sortScoreClicked = true;
 
   constructor( private proposalService: ProposalService, private productsService: ProductsService,
   private proposalsService: ProposalsService, private route: ActivatedRoute, private sharedService: SharedService,
@@ -217,19 +218,19 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     this.proposalService.tableExpanded.subscribe(
       data => {
         this.expandAll(data);
-        this.proposalProductList.map(product => product.expanded = false);
-        this.parents = this.getParentNode(this.proposalProductList);
-        for (let i = 0; i < this.parents.length; i++) {
-          this.childNodesForParents[i] = this.getChildNode(this.parents[i]);
-        }
-        if (data) {
-          // this.proposalProductList =  JSON.parse(localStorage.getItem('originProposalProductList'));
-        } else {
-            // if (!localStorage.getItem('originProposalProductList')) {
-            //   localStorage.setItem('originProposalProductList', JSON.stringify(this.originProposalProductList));
-            // }
-            // this.proposalProductList = JSON.parse(localStorage.getItem('originProposalProductList'));
-          }
+        // this.proposalProductList.map(product => product.expanded = false);
+        // this.parents = this.getParentNode(this.proposalProductList);
+        // for (let i = 0; i < this.parents.length; i++) {
+        //   this.childNodesForParents[i] = this.getChildNode(this.parents[i]);
+        // }
+        // if (data) {
+        //   // this.proposalProductList =  JSON.parse(localStorage.getItem('originProposalProductList'));
+        // } else {
+        //     // if (!localStorage.getItem('originProposalProductList')) {
+        //     //   localStorage.setItem('originProposalProductList', JSON.stringify(this.originProposalProductList));
+        //     // }
+        //     // this.proposalProductList = JSON.parse(localStorage.getItem('originProposalProductList'));
+        //   }
       });
     // commented for now
     // Insert data from product details to table
@@ -331,7 +332,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     this.proposalProductList.map(p => p.unitPrice = +p.unitPrice);
 
     // get parent totoal for each parent node
-    this.parents.map(p => p.proposalTotal = p.unitPrice * p.qty * (100 - p.discount) / 100 + this.getChildPriceTotal(p));
+    // this.parents.map(p => p.proposalTotal = p.unitPrice * p.qty * (100 - p.discount) / 100 + this.getChildPriceTotal(p));
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -373,6 +374,34 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     this.proposalProductOrdered = this.arrayUnique(newArr);
   }
 
+  getParentsDataForSorting(parents) {
+    let index = 0;
+    this.proposalProductOrdered = [];
+    parents.forEach(ele => {
+      ele.expand = true;
+      ele.parentTotalPrice = ele.total;
+      this.proposalProductOrdered = this.proposalProductOrdered.concat(ele);
+      if (ele.accessories) {
+        ele.accessories.forEach(element => {
+          const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+          ele.parentTotalPrice = ele.parentTotalPrice + selectedItem.total;
+          this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
+        });
+      }
+
+      if (ele.alternatives) {
+        ele.alternatives.forEach(element => {
+          const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
+          this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
+        });
+      }
+    });
+    this.proposalProductOrdered.forEach(element => {
+      element.index = index;
+      index = index + 1;
+    });
+  }
+
   arrayUnique (arr) {
     const newA = [];
 
@@ -386,6 +415,46 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     return newA;
   }
 
+  sortArray(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    console.log('sortscoreclick: ', cmp.sortScoreClicked);
+    if (!cmp.sortScoreClicked) {
+      this.parents.sort( function(name1, name2) {
+        if ( Math.abs(name1[field]) < Math.abs(name2[field])) {
+          return -1;
+        } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else {
+      this.parents.reverse();
+    }
+    this.getParentsDataForSorting(this.parents);
+  }
+
+  sortArrayWithString(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    console.log('sortscoreclick: ', cmp.sortScoreClicked);
+    if (!cmp.sortScoreClicked) {
+      this.parents.sort( function(name1, name2) {
+        // if ( name1[field].localeCompare(name2[field])) {
+        //   return -1;
+        // } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
+        //   return 1;
+        // } else {
+        //   return 0;
+        // }
+        return name1[field].localeCompare(name2[field]);
+      });
+    } else {
+      this.parents.reverse();
+    }
+    this.getParentsDataForSorting(this.parents);
+  }
 
   onParentRowSelect(product) {
     if (this.isCtrl) {

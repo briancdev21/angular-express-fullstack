@@ -1,18 +1,18 @@
 <div class="content">
   <table (clickOutside)="onClickedOutside($event)">
     <tr>
-      <th>SKU</th>
-      <th>BRAND</th> 
-      <th>MODEL</th>
-      <th>PRODUCT NAME</th>
-      <th>PRODUCT TYPE</th> 
-      <th>QYT</th>
-      <th>UNIT PRICE</th>
-      <th>DISCOUNT $</th> 
-      <th>TOTAL</th>
-      <th>TAX RATE</th>
-      <th>CATEGORY</th> 
-      <th>SUBCATEGORY</th>
+      <th (click)="sortArrayWithString('sku')">SKU</th>
+      <th (click)="sortArrayWithString('brand')">BRAND</th> 
+      <th (click)="sortArrayWithString('model')">MODEL</th>
+      <th (click)="sortArrayWithString('name')">PRODUCT NAME</th>
+      <th (click)="sortArrayWithString('productType')">PRODUCT TYPE</th> 
+      <th (click)="sortArray('quantity')">QYT</th>
+      <th (click)="sortArray('unitPrice')">UNIT PRICE</th>
+      <th (click)="sortArray('discount[value]')">DISCOUNT $</th> 
+      <th (click)="sortArrayWithString('parentTotalPrice')">TOTAL</th>
+      <th (click)="sortArrayWithString('taxRate')">TAX RATE</th>
+      <th (click)="sortArrayWithString('categoryName')">CATEGORY</th> 
+      <th (click)="sortArrayWithString('subCategoryName')">SUBCATEGORY</th>
     </tr>
     <tbody
       *ngFor="let parentProduct of proposalProductOrdered; let parentI = index; "
