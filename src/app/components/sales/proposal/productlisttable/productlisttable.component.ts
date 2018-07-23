@@ -85,12 +85,10 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
           this.sharedService.getCategories().subscribe(res => {
             this.categoryListAll = res.results;
-            console.log('categories: ', this.categoryListAll);
 
             this.sharedService.getSubCategories().subscribe(data => {
               const subCategory = data.results;
               this.subCategoryListAll = data.results;
-              console.log('categories: ', this.subCategoryListAll);
 
               this.proposalsService.getIndividualProposal(this.proposalId).subscribe(proposal => {
                 this.proposalInfo = proposal.data;
@@ -102,6 +100,10 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
                 });
 
                 this.getProposalProductData();
+
+                if ( this.proposalInfo.status === 'WON') {
+                  this.commonService.showAlertModal.next(true);
+                }
               });
             });
           });
