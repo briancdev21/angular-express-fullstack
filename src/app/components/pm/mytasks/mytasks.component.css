@@ -109,6 +109,7 @@
   padding: 20px;
   display: flex;
   overflow: auto;
+  padding-top: 40px;
 }
 
 .panel-row {
@@ -146,7 +147,7 @@
 
 .panel-content {
   margin-top: 60px;
-  max-height: calc(100vh - 275px);
+  max-height: calc(99vh - 295px);
   overflow: auto;
   margin-bottom: 60px;
 }
@@ -626,5 +627,5 @@
 
 .project-column {
   margin-bottom: 15px !important;
-  max-height: calc(100vh - 230px) !important;
+  max-height: calc(99vh - 250px) !important;
 }
