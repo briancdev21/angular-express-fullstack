@@ -10,7 +10,7 @@
             <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showTaskGroupDeleteConfirmModal[i]=true" />
           </div>
         </div>
-        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="milestone.tasks" id={{milestone.id}}  >
+        <div class="milestone-content" *ngIf="milestone.tasks" id={{milestone.id}}  >
           <div *ngFor="let task of milestone.tasks; let j = index;" class="draggable-task" id={{task.id}} >
             <div class="task-content" >
               <img *ngIf="task.attachmentImg" src="attachmentImg">
