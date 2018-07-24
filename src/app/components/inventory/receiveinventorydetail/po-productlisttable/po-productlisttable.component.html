@@ -1,0 +1,49 @@
+<div class="po-add-table content">
+  <TABLE>
+    <thead>
+      <tr>
+        <th>SKU</th>
+        <th>MODEL</th>
+        <th>Name</th>
+        <th>UPC</th>
+        <th>QTY</th>
+        <th>RECEIVED</th>
+        <th>BRAND</th>
+        <th>SUPPLIER</th>
+        <th colspan="2" >DATE RECEIVED</th>
+      </tr>
+    </thead>
+    <tbody class="ngx-dnd-container" ngxDroppable>
+
+      <tr *ngFor="let productDetailInfo of productDetails; index as i" class="ngx-dnd-item has-handle" ngxDraggable>
+        <td class="sku">
+          {{productDetailInfo.sku}}
+        </td>
+        <td class="model">
+          {{productDetailInfo.model}}
+        </td>
+        <td class="name">
+          {{productDetailInfo.name}}
+        </td>
+        <td class="upc">
+          {{productDetailInfo.upc}}
+        </td>
+        <td class="quantity">
+          <input class="quantity" type="text" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantity" (ngModelChange)="calcualteTotalPrice(i)" (change)="updatePurchaseOrderProduct(i)" (keypress)="checkValue($event)" />
+        </td>
+        <td class="received">
+          <input class="received" type="text" placeholder="0" min="0" [(ngModel)]="productDetailInfo.received" (ngModelChange)="calcualteTotalPrice(i)" (change)="updatePurchaseOrderProduct(i)" (keypress)="checkValue($event)" />
+        </td>
+        <td class="brand">
+          <span>{{productDetailInfo.brand}}</span>
+        </td>
+        <td class="supplier">
+          <span>{{productDetailInfo.supplier}}</span>
+        </td>
+        <td class="datecreated">
+          <span>{{productDetailInfo.dateCreated}}</span>
+        </td>
+      </tr>
+    </tbody>
+  </TABLE>
+</div>

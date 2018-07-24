@@ -31,6 +31,8 @@ import { InventoryPOAddModule } from './inventory-po-add/inventory.module';
 import {InventoryADProfileModule} from './inventory-ad-profile/inventory.module';
 import {InventoryTRProfileModule} from './inventory-tr-profile/inventory.module';
 import { ReceiveInventoryModule} from './receiveinventory/receiveinventory.module';
+import { ReceiveInventoryDetailModule } from './receiveinventorydetail/receiveinventorydetail.module';
+
 @NgModule({
   declarations: [
     PurchaseOrderListComponent,
@@ -67,7 +69,8 @@ import { ReceiveInventoryModule} from './receiveinventory/receiveinventory.modul
     InventoryPOAddModule,
     InventoryADProfileModule,
     InventoryTRProfileModule,
-    ReceiveInventoryModule
+    ReceiveInventoryModule,
+    ReceiveInventoryDetailModule
   ],
   exports: [
     MatInputModule,

@@ -87,6 +87,7 @@ import { EstimateProfileComponent } from './components/sales/invoices/estimatepr
 
 import { AuthGuard } from './services/authguard.service';
 import { ReceiveInventoryComponent } from './components/inventory/receiveinventory/receiveinventory.component';
+import { ReceiveInventoryDetailComponent } from './components/inventory/receiveinventorydetail/receiveinventorydetail.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -164,9 +165,10 @@ export const routes: Routes = [
       { path: 'stock-control/add-transfer', component: InventoryTrAddComponent },
       { path: 'stock-control/add-adjustment', component: InventoryAdAddComponent },
       { path: 'stock-control/purchase-order/:id', component: InventoryPoProfileComponent },
+      { path: 'stock-control/purchase-order/:id/recieve-inventory', component: ReceiveInventoryDetailComponent },
       { path: 'stock-control/transfer/:id', component: InventoryTrProfileComponent },
       { path: 'stock-control/adjustment/:id', component: InventoryAdProfileComponent },
-      { path: 'stock-control/received-inventory', component: ReceiveInventoryComponent },
+      { path: 'stock-control/received-inventory', component: ReceiveInventoryDetailComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'suppliers', component: SuppliersComponent },
       { path: 'supplier-profile', component: SupplierProfileComponent },
