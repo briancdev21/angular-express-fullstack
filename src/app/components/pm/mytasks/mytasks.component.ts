@@ -74,6 +74,13 @@ export class MyTasksComponent implements OnInit {
       }
     });
 
+    dragulaService.setOptions('dragTask', {
+      accepts: (el, target, source, sibling) => {
+        // To avoid dragging from first second, third column
+        return target.id !== '1' && source.id !== '1' && target.id !== '2' && source.id !== '2' && target.id !== '0';
+      }
+    });
+
     this.sharedService.getContacts().subscribe(contacts => {
       this.contactsList = contacts;
       this.addContactName(this.contactsList);
@@ -124,6 +131,8 @@ export class MyTasksComponent implements OnInit {
   refreshTable() {
     this.pmTasksService.getTaskGroups().subscribe(data => {
       this.panels = data.results;
+      // sort task groups by order
+      this.sortArray('order');
       for (let i = 0; i < this.panels.length; i++) {
         this.panels[i].color = this.colors[i];
         this.panels[i].editTitle = false;
@@ -170,6 +179,21 @@ export class MyTasksComponent implements OnInit {
       foreTaskCount = 0;
     }
     return foreTaskCount + this.panels[panel].tasks[task].id;
+  }
+
+
+  sortArray(field) {
+    const cmp = this;
+    this.panels.sort( function(name1, name2) {
+      if ( name1[field] < name2[field]) {
+        return -1;
+      } else if ( name1[field] > name2[field]) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    console.log('sortscoreclick: ', cmp.panels);
   }
 
   selectStartDate(event, i, j) {
@@ -449,5 +473,13 @@ export class MyTasksComponent implements OnInit {
     this.pmTasksService.deleteIndividualTaskGroup(milestoneId).subscribe(res => {
       this.refreshTable();
     });
+  }
+
+  openTitleChange(panel, i) {
+    if (i === 0 || i === 1 || i === 2) {
+      return;
+    } else {
+      this.panels[i].editTitle = true;
+    }
   }
 }

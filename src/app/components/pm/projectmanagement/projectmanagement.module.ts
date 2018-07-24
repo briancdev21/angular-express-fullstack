@@ -49,6 +49,7 @@ import { Ng2CompleterModule } from 'ng2-completer';
 
 import { ProjectManagementService } from './projectmanagement.service';
 import { TaskStableMapToKeysPipe } from './pmschedule/pmtaskstable/map-to-keys.pipe';
+import {PMBreadcrumbModule} from './pmbreadcrumbbar/breadcrumb/breadcrumb.module';
 
 export const MY_NATIVE_FORMATS = {
   fullPickerInput: {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'},
@@ -106,7 +107,8 @@ export const MY_NATIVE_FORMATS = {
     ProgressProductLogCmpModule,
     DpDatePickerModule,
     Ng2CompleterModule,
-    ProjectFinancialsTableCmpModule
+    ProjectFinancialsTableCmpModule,
+    PMBreadcrumbModule
   ],
   exports: [
     PmBreadcrumbBarComponent,

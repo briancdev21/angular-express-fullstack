@@ -16,7 +16,7 @@
               <img *ngIf="task.attachmentImg" src="attachmentImg">
               <div class="task-title" >
                 <span class="task-id-value" >
-                  {{task.id}}
+                  {{task.order}}.&nbsp;
                 </span>
                 <input [value]="task.id" type="hidden" class="taskId" >
                 <input [value]="milestone.id" type="hidden" class="taskGroupId" >
@@ -64,7 +64,7 @@
                     [(ngModel)]="task.startDate" 
                   >
                   <owl-date-time [pickerType]="'calendar'" #start></owl-date-time>
-                  <span [owlDateTimeTrigger]="start" [ngClass]="{'due-date-empty': !task.startDate}">{{task.startDate}}</span>
+                  <span [owlDateTimeTrigger]="start" [ngClass]="{'due-date-empty': !task.startDate}">{{task.startDate | date: 'MMMM dd, yyyy'}}</span>
                 </div>
                 <span class="duration">
                   <input [value]="task.id" type="hidden" class="taskId" >
@@ -87,11 +87,11 @@
                   </div>
                   <!--settings modal-->
                   <div [ngClass]="{'settings-modal': showSettingsModal[i][j], 'settings-modal-hide': !showSettingsModal[i][j] }" (clickOutside)="showSettingsModal[i][j] = false;">
+                    <input [value]="task.id" type="hidden" class="taskId" >
+                    <input [value]="milestone.id" type="hidden" class="taskGroupId" >
                     <div (click)="showDeleteConfirmModal[i][j]= true;">Delete Task</div>
-                    <div (click)="deleteSelectedSubTasks()">Delete Selected Subtasks</div>
-                    <div (click)="copySelectedSubTasks()">Copy Task</div>
+                    <div (click)="copyTask($event)">Copy Task</div>
                     <div>Mark as Waiting On</div>
-                    <div>Print</div>
                   </div>
                   <!-- Confirm delete modal wrapper -->
                   <div class="confirm-delete-modal-wrapper" *ngIf="showDeleteConfirmModal[i][j]" >
@@ -183,7 +183,7 @@
             </div>
           </div> 
         </div>
-        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="!milestone.tasks">
+        <div class="milestone-content" [dragula]="'dragTask'" [dragulaModel]='milestone.tasks' *ngIf="!milestone.tasks" id={{milestone.id}} >
         </div>
         <div class="add-task" (click)="addTask(milestone)">
           <img src="assets/images/add.png">
