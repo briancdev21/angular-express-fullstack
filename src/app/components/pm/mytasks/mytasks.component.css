@@ -623,3 +623,8 @@
   top: 0;
   left: 0;
 }
+
+.project-column {
+  margin-bottom: 15px !important;
+  max-height: calc(100vh - 230px) !important;
+}
