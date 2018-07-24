@@ -17,7 +17,7 @@
             <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showTaskGroupDeleteConfirmModal[i]=true" />
           </div>
         </div>
-        <div id={{i}} class="panel-content" [dragula]="'dragTask'" [dragulaModel]='panel.taskIds'>
+        <div id={{i}} class="panel-content" [dragula]="'dragTask'" [dragulaModel]='panel.taskIds' [ngClass]="{'project-column': i===2}">
           <div *ngFor="let task of panel.tasks; let j = index;" class="draggable-task" id={{j}}>
             <div class="task-content" *ngIf="!task.isComplete">
               <img *ngIf="task.attachmentImg" src="attachmentImg">
@@ -152,7 +152,7 @@
             </div>
           </div> 
         </div>
-        <div class="add-task" (click)="addTask(panel)">
+        <div class="add-task" (click)="addTask(panel)" *ngIf="i!==2">
           <img src="assets/images/add.png">
           <span>Add a task here</span>
         </div>
