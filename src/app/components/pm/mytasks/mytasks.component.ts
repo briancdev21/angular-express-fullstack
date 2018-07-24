@@ -133,35 +133,35 @@ export class MyTasksComponent implements OnInit {
       this.panels = data.results;
       // sort task groups by order
       this.sortArray('order');
+
       for (let i = 0; i < this.panels.length; i++) {
+
         this.panels[i].color = this.colors[i];
         this.panels[i].editTitle = false;
         this.ownerModalCollapsed[i] = new Array();
         this.dependencyModalCollapsed[i] = new Array();
         this.showTaskGroupDeleteConfirmModal[i] = false;
 
-        if (this.panels[i].taskIds !== null) {
-          for (let j = 0; j < this.panels[i].taskIds.length; j++) {
+        this.pmTasksService.getTasks(this.panels[i].id).subscribe(taskData => {
+          this.panels[i].tasks = taskData.results;
+          this.panels[i].tasks.forEach(element => {
+            element.assigneeInfo = this.getUserInfo(element.assignee);
+            element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+            element.taskTitle = element.title;
+            element.dependency = element.dependencyIds ? element.dependencyIds : [];
+          });
+          let importantTasks = [];
+          importantTasks = this.panels[i].tasks.filter(t => t.isImportant === true);
+          const unImportantTasks = this.panels[i].tasks.filter(t => t.isImportant === false);
+          this.panels[i].tasks = importantTasks.concat(unImportantTasks);
+
+          for (let j = 0; j < this.panels[i].tasks.length; j++) {
             this.ownerModalCollapsed[i][j] = false;
             this.dependencyModalCollapsed[i][j] = false;
           }
-          this.pmTasksService.getTasks(this.panels[i].id).subscribe(taskData => {
-            this.panels[i].tasks = taskData.results;
-            this.panels[i].tasks.forEach(element => {
-              element.assigneeInfo = this.getUserInfo(element.assignee);
-              element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
-              element.taskTitle = element.title;
-              element.dependency = element.dependencyIds ? element.dependencyIds : [];
-            });
-            let importantTasks = [];
-            importantTasks = this.panels[i].tasks.filter(t => t.isImportant === true);
-            console.log('important task: ', importantTasks);
-            const unImportantTasks = this.panels[i].tasks.filter(t => t.isImportant === false);
-            this.panels[i].tasks = importantTasks.concat(unImportantTasks);
-          });
-        }
+        });
       }
-      console.log('panels2: ', data);
+
     });
   }
 
