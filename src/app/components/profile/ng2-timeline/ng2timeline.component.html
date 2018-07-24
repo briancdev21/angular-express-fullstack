@@ -15,10 +15,10 @@
       </div>
       <div  class="timeline-body">
         <h6 *ngIf="data.subject">subject: {{data.subject}}</h6>
-        <h6 *ngIf="data.contact">subject: {{data.contact}}</h6>
-        <p >{{data.content}}</p>
+        <!-- <h6 *ngIf="data.contact">contact: {{data.contact}}</h6> -->
+        <p>{{data.content}}</p>
       </div>
-      <div class="btn-container" >
+      <div class="btn-container" *ngIf="data.type !== 'NOTE' && data.type !== 'EMAIL' && data.type !== 'CALL'">
         <button [ngClass]="data.timelineBtnColor" (click)="doAction(data.buttonClickEventHandlerName)" >{{data.buttontitle}}</button>
       </div>
     </div>

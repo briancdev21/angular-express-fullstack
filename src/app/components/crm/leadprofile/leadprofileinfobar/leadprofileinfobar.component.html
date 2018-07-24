@@ -17,11 +17,21 @@
   <img src="assets/images/ringing.png" />
   <div>
     <span>
-      <input value="{{userInfo.primaryphone}}" id="primaryphone" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" >
+      <input 
+        value="{{userInfo.primaryphone}}" 
+        id="primaryphone" 
+        (keyup.enter)="showConfirmModal($event)" 
+        (blur)="showConfirmModal($event)" 
+        [ngClass]="{'phone-validation': invalidPrimaryPhone}">
       <span>(Primary Contact)</span>
     </span>
     <span>
-      <input value="{{userInfo.mobilephone}}" id="mobilephone" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" >
+      <input 
+        value="{{userInfo.mobilephone}}" 
+        id="mobilephone" 
+        (keyup.enter)="showConfirmModal($event)" 
+        (blur)="showConfirmModal($event)" 
+        [ngClass]="{'phone-validation': invalidSecondaryPhone}">
       <span>(Mobile)</span>
     </span>
   </div>
@@ -31,13 +41,99 @@
 <h5>Shipping</h5>
 <div class="shipping editable">
   <img src="assets/images/placeholder.png" />
-  <textarea value="{{userInfo.shippingaddress}}" id="shippingaddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea>
+  <!-- <textarea value="{{userInfo.shippingaddress}}" id="shippingaddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea> -->
+  <div class="shipping-address-container">
+    <input 
+      class="address" 
+      value="{{userInfo.shippingaddress.address}}" 
+      (keyup.enter)="showConfirmShippingAddressModal($event)" 
+      (blur)="showConfirmShippingAddressModal($event)"
+      placeholder="Address"
+      id="address">
+    <div class="city-state-country">
+      <input 
+        class="city" 
+        value="{{userInfo.shippingaddress.city}}" 
+        (keyup.enter)="showConfirmShippingAddressModal($event)" 
+        (blur)="showConfirmShippingAddressModal($event)"
+        placeholder="City"
+        id="city">
+      <ng2-completer 
+        [(ngModel)]="shippingProvince" 
+        [ngClass]="{'validation-required': invalidShippingProvince}" 
+        [datasource]="provincesSource" 
+        [minSearchLength]="0" 
+        (keyup.enter)="onEnter()" 
+        (selected)="onSelectShippingProvince($event)"
+        [placeholder]="'Provice'">
+      </ng2-completer>
+      <ng2-completer 
+        [(ngModel)]="shippingCountry" 
+        [ngClass]="{'validation-required': invalidShippingCountry}" 
+        [datasource]="countriesSource" 
+        [minSearchLength]="0" 
+        (keyup.enter)="onEnter()" 
+        (selected)="onSelectShippingCountry($event)"
+        [placeholder]="'Country'">
+      </ng2-completer>
+    </div>
+    <input 
+      class="postal-code" 
+      value="{{userInfo.shippingaddress.postalCode}}" 
+      (keyup.enter)="showConfirmShippingAddressModal($event)" 
+      (blur)="showConfirmShippingAddressModal($event)"
+      placeholder="Postal Code"
+      id="postalCode">
+  </div>
 </div>
 
 <h5>Billing Address</h5>
 <div class="billing-address editable">
   <img src="assets/images/placeholder.png" />
-  <textarea value="{{userInfo.billingaddress}}" id="billingaddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea>
+  <!-- <textarea value="{{userInfo.billingaddress}}" id="billingaddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea> -->
+  <div class="shipping-address-container">
+    <input 
+      class="address" 
+      value="{{userInfo.billingaddress.address}}" 
+      (keyup.enter)="showConfirmBillingAddressModal($event)" 
+      (blur)="showConfirmBillingAddressModal($event)"
+      placeholder="Address"
+      id="address">
+    <div class="city-state-country">
+      <input 
+        class="city" 
+        value="{{userInfo.billingaddress.city}}" 
+        (keyup.enter)="showConfirmBillingAddressModal($event)" 
+        (blur)="showConfirmBillingAddressModal($event)"
+        placeholder="City"
+        id="city">
+      <ng2-completer 
+        [(ngModel)]="billingProvince" 
+        [ngClass]="{'validation-required': invalidShippingProvince}" 
+        [datasource]="provincesSource" 
+        [minSearchLength]="0" 
+        (keyup.enter)="onEnter()" 
+        (selected)="onSelectBillingProvince($event)"
+        [placeholder]="'Provice'">
+      </ng2-completer>
+      <ng2-completer 
+        [(ngModel)]="billingCountry" 
+        [ngClass]="{'validation-required': invalidShippingCountry}" 
+        [datasource]="countriesSource" 
+        [minSearchLength]="0" 
+        (keyup.enter)="onEnter()" 
+        (selected)="onSelectBillingCountry($event)"
+        [placeholder]="'Country'">
+      </ng2-completer>
+    </div>
+    <input 
+      class="postal-code" 
+      value="{{userInfo.billingaddress.postalCode}}" 
+      (keyup.enter)="showConfirmBillingAddressModal($event)" 
+      (blur)="showConfirmBillingAddressModal($event)"
+      placeholder="Postal Code"
+      id="postalCode">
+  </div>
 </div>
 
 <h4>Customer Keywords</h4>

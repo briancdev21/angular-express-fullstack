@@ -673,6 +673,10 @@ export class AddLeadComponent implements OnInit {
         delete this.newLead.sourceId;
       }
 
+      if (this.newLead.person.businessAssociation === null) {
+        delete this.newLead.person.businessAssociation;
+      }
+
       this.crmService.createLead(JSON.stringify(this.newLead)).subscribe(data => {
         this.addLeadModalCollapsed = true;
         this.showAddLeadModal = false;

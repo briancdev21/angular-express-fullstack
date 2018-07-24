@@ -1,5 +1,5 @@
 <div class="cmp-breadcrumb" >
   <div class="breadcrumb-item" *ngFor="let path of data; let i = index">
-    <a routerLink="/sales" ><span class="path" >{{ path }}</span></a><a><span class="right-arrow">&#8250;</span></a>
+    <a [routerLink]="link" ><span class="path" >{{ path }}</span></a><a><span class="right-arrow">&#8250;</span></a>
   </div> 
 </div>                                                                                                                                                                                                                                  

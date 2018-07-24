@@ -213,6 +213,7 @@ export class LeadProfileComponent implements OnInit {
   currentLead: any;
   savingLead: any;
   contactsList: any;
+  leadsList = [];
 
   constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService, private sharedService: SharedService) {
     this.leadInfoIndex = this.route.snapshot.paramMap.get('id');
@@ -226,24 +227,26 @@ export class LeadProfileComponent implements OnInit {
         email: res.data.email,
         primaryphone: res.data.phoneNumbers.primary,
         mobilephone: res.data.phoneNumbers.secondary,
-        shippingaddress: res.data.shippingAddress.address + ', ' +
-                          res.data.shippingAddress.city + ', ' +
-                          res.data.shippingAddress.province + ', ' +
-                          res.data.shippingAddress.postalCode,
-        billingaddress: res.data.billingAddress ? res.data.billingAddress.address + ', ' +
-                        res.data.billingAddress.city + ', ' +
-                        res.data.billingAddress.province + ', ' +
-                        res.data.billingAddress.postalCode : '',
+        // shippingaddress: res.data.shippingAddress.address + ', ' +
+        //                   res.data.shippingAddress.city + ', ' +
+        //                   res.data.shippingAddress.province + ', ' +
+        //                   res.data.shippingAddress.postalCode,
+        // billingaddress: res.data.billingAddress ? res.data.billingAddress.address + ', ' +
+        //                 res.data.billingAddress.city + ', ' +
+        //                 res.data.billingAddress.province + ', ' +
+        //                 res.data.billingAddress.postalCode : '',
         keywords: res.data.keywordIds ? res.data.keywordIds : [],
         followers: res.data.followers ? res.data.followers : [],
-        note: res.data.note
+        note: res.data.note,
+        shippingaddress: this.currentLead.shippingAddress,
+        billingaddress: this.currentLead.billingAddress
       };
       // Update cards info
       this.cards.leadScore = res.data.score;
 
       this.crmService.getLeadActivities(this.currentLead.id).subscribe(response => {
         const activities = response.results;
-        this.timelineData = activities;
+        this.timelineData = activities.reverse();
         // Update time line data
         this.timelineData.map(a => {
           a['title'] = a['type'];
@@ -276,7 +279,12 @@ export class LeadProfileComponent implements OnInit {
     });
 
     this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res;
+      this.crmService.getLeadsList().subscribe(lead => {
+        this.leadsList = lead.results;
+        this.contactsList = res.concat(this.leadsList);
+        console.log('contaccts : ', this.contactsList);
+        this.addContactName(this.contactsList);
+      });
     });
   }
 
@@ -287,6 +295,17 @@ export class LeadProfileComponent implements OnInit {
       contact: undefined,
       content: ''
     };
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
   tabChanged(event) {
@@ -336,6 +355,7 @@ export class LeadProfileComponent implements OnInit {
     };
 
     this.crmService.createLeadActivity(this.currentLead.id, savingActivityInfo).subscribe( res => {
+      console.log('activity created: ', res);
     });
     this.timelineData.unshift(nitem);
     this.activity.subject = undefined;
@@ -348,19 +368,19 @@ export class LeadProfileComponent implements OnInit {
   onChangedUserInfo(event) {
     this.savingLead = this.currentLead;
     const userInfo = event.data;
-    const shippingArr = userInfo.shippingaddress.split(',');
-    const billingArr = userInfo.billingaddress.split(',');
+    // const shippingArr = userInfo.shippingaddress.split(',');
+    // const billingArr = userInfo.billingaddress.split(',');
     const nameArr = userInfo.name.split(' ');
 
-    this.savingLead.shippingAddress.address = shippingArr[0];
-    this.savingLead.shippingAddress.city = shippingArr[1];
-    this.savingLead.shippingAddress.province = shippingArr[2];
-    this.savingLead.shippingAddress.postalCode = shippingArr[3];
+    this.savingLead.shippingAddress.address = userInfo.shippingaddress.address;
+    this.savingLead.shippingAddress.city = userInfo.shippingaddress.city;
+    this.savingLead.shippingAddress.province = userInfo.shippingaddress.province;
+    this.savingLead.shippingAddress.postalCode = userInfo.shippingaddress.postalCode;
     if (this.savingLead.billingAddress) {
-      this.savingLead.billingAddress.address = billingArr.length ? billingArr[0] : '';
-      this.savingLead.billingAddress.city = billingArr.length ? billingArr[1] : '';
-      this.savingLead.billingAddress.province = billingArr.length ? billingArr[2] : '';
-      this.savingLead.billingAddress.postalCode = billingArr.length ? billingArr[3] : '';
+      this.savingLead.billingAddress.address = userInfo.billingaddress.address;
+      this.savingLead.billingAddress.city = userInfo.billingaddress.city;
+      this.savingLead.billingAddress.province = userInfo.billingaddress.province;
+      this.savingLead.billingAddress.postalCode = userInfo.billingaddress.postalCode;
     }
     this.savingLead.person.firstName = nameArr[0];
     this.savingLead.person.lastName = nameArr[1];
