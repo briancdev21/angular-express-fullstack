@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { CrmService } from '../../../../services/crm.service';
+import { countries } from '../../../../../assets/json/countries';
+import { provinces } from '../../../../../assets/json/provinces';
+import { CompleterService, CompleterData } from 'ng2-completer';
 
 @Component({
   selector: 'app-leadprofileinfobar',
@@ -23,11 +26,53 @@ export class LeadProfileInfoBarComponent implements OnInit {
   data1: any;
   showEditImageModal = false;
   customerNotes: string;
+  countriesSource: CompleterData;
+  provincesSource: CompleterData;
+  provincesBillingSource: CompleterData;
 
   croppedImage: any = '';
   BASE64_MARKER = ';base64,';
   selectedUncroppedFile: any;
   imageChangedEvent: any;
+  selectedProvince: any;
+  selectedCountry: any;
+  selectedBillingProvince: any;
+  selectedBillingCountry: any;
+  shippingProvince: any;
+  shippingCountry: any;
+  billingProvince: any;
+  billingCountry: any;
+  billingAddressChanged = false;
+  shippingAddressChanged = false;
+  shippingProvinceChanged = false;
+  shippingCountryChanged = false;
+  billingProvinceChanged = false;
+  billingCountryChanged = false;
+  invalidPrimaryPhone = false;
+  invalidSecondaryPhone = false;
+
+  constructor(private router: Router, private crmService: CrmService, private completerService: CompleterService ) {
+
+    this.eventData = undefined;
+    this.name = 'Angular2';
+
+    this.data1 = {};
+    this.countriesSource = completerService.local(countries, 'name', 'name');
+    this.provincesSource = completerService.local(provinces, 'name', 'name');
+  }
+
+  ngOnInit() {
+    this.shippingCountry = this.userInfo.shippingaddress.country;
+    this.shippingProvince = this.userInfo.shippingaddress.province;
+    this.billingCountry = this.userInfo.billingaddress.country;
+    this.billingProvince = this.userInfo.billingaddress.province;
+    console.log('userinfo: ', this.userInfo);
+  }
+
+  public onReturnData(data: any) {
+    // Do what you want to do
+    console.warn(JSON.parse(data));
+  }
 
   fileChangeEvent(event: any): void {
     this.imageChangedEvent = event;
@@ -39,18 +84,6 @@ export class LeadProfileInfoBarComponent implements OnInit {
 
   imageLoaded() {
 
-  }
-  constructor(private router: Router, private crmService: CrmService ) {
-
-    this.eventData = undefined;
-    this.name = 'Angular2';
-
-    this.data1 = {};
-  }
-
-  public onReturnData(data: any) {
-    // Do what you want to do
-    console.warn(JSON.parse(data));
   }
 
   cancelCrop() {
@@ -104,6 +137,11 @@ export class LeadProfileInfoBarComponent implements OnInit {
     return (!m) ? null : '(' + m[1] + ') ' + m[2] + '-' + m[3];
   }
 
+  phoneNumberValidation(number) {
+    const re =  /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
+    return re.test(String(number));
+  }
+
   showConfirmModal(event) {
     if (this.eventData) { return false; }
     if (event.target.value.trim() !== this.userInfo[event.target.id]) {
@@ -114,6 +152,72 @@ export class LeadProfileInfoBarComponent implements OnInit {
     }
   }
 
+  showConfirmShippingAddressModal(event) {
+    if (this.eventData) { return false; }
+    if (event.target.value.trim() !== this.userInfo.shippingaddress[event.target.id]) {
+      this.showModal = true;
+      this.eventData = event;
+      this.shippingAddressChanged = true;
+     } else {
+       this.showModal = false;
+    }
+  }
+
+  showConfirmBillingAddressModal(event) {
+    console.log('event data: ', event, this.userInfo);
+    if (this.eventData) { return false; }
+    if (event.target.value.trim() !== this.userInfo.billingaddress[event.target.id]) {
+      this.showModal = true;
+      this.eventData = event;
+      this.billingAddressChanged = true;
+     } else {
+       this.showModal = false;
+    }
+  }
+
+  onEnter() {}
+
+  onSelectShippingProvince(event) {
+    console.log('province select: ', event);
+    this.selectedProvince = event.originalObject.short;
+    if (this.selectedProvince !== this.userInfo.shippingaddress.province) {
+      this.showModal = true;
+      this.shippingProvinceChanged = true;
+    }
+    const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
+    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+  }
+
+  onSelectShippingCountry(event) {
+    this.selectedCountry = event.originalObject.code;
+    if (this.selectedCountry !== this.userInfo.shippingaddress.country) {
+      this.showModal = true;
+      this.shippingCountryChanged = true;
+    }
+    this.selectedCountry = event.originalObject.country;
+    this.shippingCountry = countries.filter(c => c.code === this.selectedCountry)[0].name;
+  }
+
+  onSelectBillingProvince(event) {
+    this.selectedBillingProvince = event.originalObject.short;
+    if (this.selectedBillingProvince !== this.userInfo.billingaddress.province) {
+      this.showModal = true;
+      this.billingProvinceChanged = true;
+    }
+    const provincesSourceList = provinces.filter(p => p.country === this.selectedBillingCountry);
+    this.provincesBillingSource = this.completerService.local(provincesSourceList, 'name', 'name');
+  }
+
+  onSelectBillingCountry(event) {
+    this.selectedBillingCountry = event.originalObject.code;
+    if (this.selectedBillingCountry !== this.userInfo.billiingaddress.country) {
+      this.showModal = true;
+      this.billingCountryChanged = true;
+    }
+    this.selectedBillingCountry = event.originalObject.country;
+    this.billingCountry = countries.filter(c => c.code === this.selectedBillingCountry)[0].name;
+  }
+
   onKeywordsChanged(event) {
     const keywordIds = event.map( k => k.id);
     this.userInfo.keywordIds = keywordIds;
@@ -121,19 +225,64 @@ export class LeadProfileInfoBarComponent implements OnInit {
   }
 
   confirmChange() {
-    this.userInfo[this.eventData.target.id] = this.eventData.target.value;
+    if (!this.phoneNumberValidation(this.userInfo.primaryPhone)) {
+      this.invalidPrimaryPhone = true;
+    } else {
+      this.invalidPrimaryPhone = false;
+    }
+    if (!this.phoneNumberValidation(this.userInfo.secondaryPhone)) {
+      this.invalidSecondaryPhone = true;
+    } else {
+      this.invalidSecondaryPhone = false;
+    }
+    if (this.billingAddressChanged) {
+      this.userInfo.billingaddress[this.eventData.target.id] = this.eventData.target.value;
+      this.billingAddressChanged = false;
+    } else if (this.shippingAddressChanged) {
+      this.userInfo.shippingaddress[this.eventData.target.id] = this.eventData.target.value;
+      this.shippingAddressChanged = false;
+    } else if (this.shippingProvinceChanged) {
+      this.userInfo.shippingaddress.province = this.selectedProvince;
+      this.shippingProvinceChanged = false;
+    } else if (this.shippingCountryChanged) {
+      this.userInfo.shippingaddress.country = this.selectedCountry;
+      this.shippingProvinceChanged = false;
+    } else if (this.billingProvinceChanged) {
+      this.userInfo.billingaddress.province = this.selectedBillingProvince;
+      this.billingProvinceChanged = false;
+    } else if (this.shippingAddressChanged) {
+      this.userInfo.billingaddress.country = this.selectedBillingCountry;
+      this.billingCountryChanged = false;
+    } else {
+      this.userInfo[this.eventData.target.id] = this.eventData.target.value;
+    }
     this.eventData = undefined;
     this.changedUserInfo.emit({'data': this.userInfo});
   }
 
   cancelChange() {
-    this.eventData.target.value = this.userInfo[this.eventData.target.id];
+    if (this.billingAddressChanged) {
+      this.eventData.target.value = this.userInfo.billingaddress[this.eventData.target.id];
+      this.billingAddressChanged = false;
+    } else if (this.shippingAddressChanged) {
+      this.eventData.target.value = this.userInfo.shippingaddress[this.eventData.target.id];
+      this.shippingAddressChanged = false;
+    } else if (this.shippingProvinceChanged) {
+      this.selectedProvince = this.userInfo.shippingaddress.province;
+      this.shippingProvinceChanged = false;
+    } else if (this.shippingCountryChanged) {
+      this.selectedCountry = this.userInfo.shippingaddress.country;
+      this.shippingProvinceChanged = false;
+    } else if (this.billingProvinceChanged) {
+      this.selectedBillingProvince = this.userInfo.billingaddress.province;
+      this.billingProvinceChanged = false;
+    } else if (this.shippingAddressChanged) {
+      this.selectedBillingCountry = this.userInfo.billingaddress.country;
+      this.billingCountryChanged = false;
+    } else {
+      this.eventData.target.value = this.userInfo[this.eventData.target.id];
+    }
     this.eventData = undefined;
-  }
-
-  ngOnInit() {
-    this.userInfo.primaryphone = this.formatPhoneNumber(this.userInfo.primaryphone);
-    this.userInfo.mobilephone = this.formatPhoneNumber(this.userInfo.mobilephone);
   }
 
   changeImage() {
