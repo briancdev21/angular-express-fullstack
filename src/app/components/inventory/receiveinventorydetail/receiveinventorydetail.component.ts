@@ -13,13 +13,13 @@ import { SharedService } from '../../../services/shared.service';
 })
 export class ReceiveInventoryDetailComponent implements OnInit {
 
-
+  searchKeyword: any;
   constructor( private sharedService: SharedService ) {
-  // get collaborators
-
+    // get collaborators
+    this.getPurchaseOrderList();
   }
 
-  public purchaseOrdersInfo = [];
+  public productsInfo = [];
 
   public documents: Array<Object> = [
     {
@@ -44,17 +44,16 @@ export class ReceiveInventoryDetailComponent implements OnInit {
 
 
   ngOnInit() {
-    this.activity = {
-      title: 'Notes',
-      subject: undefined,
-      contact: undefined,
-      content: ''
-    };
+    
   }
 
-  tabChanged(event) {
-    this.activity.title = event.tabTitle;
+  searchKeywordChanged(event) {
+ 
   }
 
-
+  getPurchaseOrderList() {
+    this.sharedService.getPurchaseOrders().subscribe(res => {
+      console.log('total:', res.total);
+    })
+  }
 }
