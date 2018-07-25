@@ -30,9 +30,9 @@
 							<input placeholder="Enter business name" [ngClass]="{'validation-required': invalidBusinessName}" [(ngModel)]="businessName" >
 						</div>  
             <div>
-							<span>Head contact (*required)</span>
+							<span>Head contact</span>
 							<div *ngIf="contactsList">
-                <select [(ngModel)]="headContact"  [ngClass]="{'validation-required': invalidHeadContact}">
+                <select [(ngModel)]="headContact">
                   <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.name}}</option>
                 </select>
               </div>
