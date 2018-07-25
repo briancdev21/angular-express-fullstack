@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../../components/common/common.component';
 import { SubmenuComponent } from '../../submenu/submenu.component';
 import { ProposalService } from './proposal.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router , ActivatedRoute } from '@angular/router';
 import { SharedService } from '../../../services/shared.service';
 import { ProposalsService } from '../../../services/proposals.service';
 import * as moment from 'moment';
@@ -52,7 +52,7 @@ export class ProposalComponent implements OnInit {
   public projectDetails: any;
 
   constructor( private proposalService: ProposalService, private route: ActivatedRoute, private sharedService: SharedService,
-    private proposalsService: ProposalsService ) {
+    private proposalsService: ProposalsService, private router: Router ) {
     this.proposalId = this.route.snapshot.paramMap.get('id');
     this.sharedService.getProjectTypes().subscribe(res => {
       this.productTypesList = res;
@@ -73,6 +73,10 @@ export class ProposalComponent implements OnInit {
       }
     );
     this.proposalProductListBackup = this.proposalProductList;
+  }
+
+  redirectToProposals() {
+    this.router.navigate(['../sales/proposals']);
   }
 
   getProposalData() {

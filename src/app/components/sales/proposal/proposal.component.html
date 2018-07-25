@@ -1,7 +1,7 @@
 <div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
   <div class="proposalInfo-top">
     <div>
-			<span class="root">Proposal</span>
+			<span class="root" (click)="redirectToProposals()">Proposal</span>
 			<i class="fa fa-angle-right"></i>
 			<span>{{proposalInfo.projectName}}</span>
     </div>
