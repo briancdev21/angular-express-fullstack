@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { SharedService } from '../../../services/shared.service';
+import { ActivatedRoute } from '@angular/router';
+
+
 @Component({
   selector: 'app-receiveinventorydetail',
   templateUrl: './receiveinventorydetail.component.html',
@@ -12,14 +15,20 @@ import { SharedService } from '../../../services/shared.service';
   ],
 })
 export class ReceiveInventoryDetailComponent implements OnInit {
-
+  menuCollapsed = true;
   searchKeyword: any;
-  constructor( private sharedService: SharedService ) {
+  purcahseOrderId: any;
+
+  constructor( private sharedService: SharedService, private activeRoute: ActivatedRoute ) {
     // get collaborators
+    const routeParams = this.activeRoute.snapshot.params;
+    this.purcahseOrderId = routeParams.id;
     this.getPurchaseOrderList();
   }
 
-  public productsInfo = [];
+  productsInfo = [];
+  brandList = [];
+  supplierList = [];
 
   public documents: Array<Object> = [
     {
@@ -44,16 +53,33 @@ export class ReceiveInventoryDetailComponent implements OnInit {
 
 
   ngOnInit() {
-    
-  }
-
-  searchKeywordChanged(event) {
- 
   }
 
   getPurchaseOrderList() {
-    this.sharedService.getPurchaseOrders().subscribe(res => {
-      console.log('total:', res.total);
-    })
+    this.sharedService.getBrands().subscribe(res => {
+      this.brandList = res.results;
+      this.sharedService.getSuppliers().subscribe(res => {
+        this.supplierList = res.results;
+        this.sharedService.getPurchaseOrderProducts(this.purcahseOrderId).subscribe(res => {
+          res.results.forEach(product => {
+            if (this.brandList.filter(brand => brand.id === product.brandId).pop() !== undefined) {
+              product.brand = this.brandList.filter(brand => brand.id === product.brandId).pop().name;
+            }
+            if (this.supplierList.filter(supplier => supplier.id === product.supplierId).pop() !== undefined) {
+              product.supplier = this.supplierList.filter(supplier => supplier.id === product.supplierId).pop().name;
+            }
+          });
+          this.productsInfo = res.results;
+        });
+      });
+    });
+  }
+
+  toggleMenubar(data: boolean) {
+    this.menuCollapsed  = data;
+  }
+
+  searchKeywordChanged() {
+
   }
 }

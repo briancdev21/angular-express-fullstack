@@ -82,7 +82,7 @@ app-submenu {
 .main-content-box {
   width: 100%;
   border-top: 1px solid #F5F5F5;
-  display: flex;
+	display: flex;
 }
 
 .purchaseorderlist-table {
