@@ -15,8 +15,7 @@ th {
   font-weight: 400;
   border: solid 1px #d3d3d3;
   padding: 10px 1em;
-  text-transform: uppercase;  
-  font-size: 1.1em;
+  text-transform: uppercase;
 }
 
 td {
@@ -289,4 +288,17 @@ td.sku {
 td.delete-icon {
   width: 20px;
   padding: 0;
+}
+
+tr.emptyRow td {
+	color: lightgray;
+	text-transform: uppercase;
+}
+
+th.sku {
+  padding-left: 30px;
+}
+
+td.sku {
+  padding-left: 30px;
 }
