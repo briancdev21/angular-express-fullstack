@@ -99,7 +99,10 @@
           <td>{{acc.variant.name}}</td>
           <td>{{selectedProduct.model}}</td>
           <td>{{selectedProduct.brandName}}</td>
-          <td><input [(ngModel)]="acc.quantity" >{{acc.quantity}}</td>
+          <td>
+            <!-- <input [(ngModel)]="acc.quantity" > -->
+              {{acc.quantity}}
+            </td>
           <td class="calcedPrice">
             <!-- $ <input value="{{acc.variant.cost * acc.quantity}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
             <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.variant.cost * acc.quantity | number: '1.2-2'}}</span> -->
