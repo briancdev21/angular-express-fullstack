@@ -190,8 +190,8 @@ projectDetails = {
     paymentSchedule: [],
     projectCategoriesAll: [],
     projectSubCategoriesAll: [],
-    projectManagementContact: '',
-    accountReceivable: '',
+    projectManagementContact: undefined,
+    accountReceivable: undefined,
     association: '',
     address: '',
     city: '',
@@ -382,6 +382,9 @@ projectDetails = {
       });
       this.proposalDetails.projectCategoriesAll = this.proposalDetails.categoryIds;
       this.proposalDetails.projectSubCategoriesAll = this.proposalDetails.subcategoryIds;
+      this.proposalDetails.accountReceivable = this.getIdFromString(this.proposalDetails.accountReceivableId);
+      this.proposalDetails.projectManagementContact = this.getIdFromString(this.proposalDetails.clientProjectManagerId);
+      
       console.log('$$$ ', this.proposalDetails, this.scheduleRemain);
     });
   }
@@ -702,8 +705,8 @@ projectDetails = {
         'accountManager': this.proposalDetails.accountManager.username,
         'projectManager': this.proposalDetails.projectManager.username,
         'designer': this.proposalDetails.designer.username,
-        'clientProjectManagerId': this.getIdFromString(this.proposalDetails.clientProjectManagerId),
-        'accountReceivableId': this.getIdFromString(this.proposalDetails.accountReceivableId),
+        'clientProjectManagerId': this.proposalDetails.projectManagementContact,
+        'accountReceivableId': this.proposalDetails.accountReceivable,
         'name': this.proposalDetails.projectName,
         'shippingAddress': {
           'address': this.proposalDetails.address,
