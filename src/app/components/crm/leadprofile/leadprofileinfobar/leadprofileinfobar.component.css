@@ -310,7 +310,7 @@ image-cropper {
   overflow: auto;
 }
 
-/deep/ ng2-completer .completer-input {
+/deep/.shipping-address-container ng2-completer .completer-input {
   border: 0;
   color: #95989a;
   font-size: 12px;
