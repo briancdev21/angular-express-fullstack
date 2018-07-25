@@ -59,7 +59,7 @@ app-submenu {
   padding: 15px 30px;
   justify-content: space-between;
   align-items: center;
-  font-size: 2rem;
+  font-size: 1.6rem;
 }
 
 .top-nav-bar span {
@@ -82,7 +82,7 @@ app-submenu {
 .main-content-box {
   width: 100%;
   border-top: 1px solid #F5F5F5;
-  display: flex;
+	display: flex;
 }
 
 .purchaseorderlist-table {
@@ -360,7 +360,7 @@ app-submenu {
 
 .main-header-box {
 	text-align: left;
-	padding: 10px 30px;
+	padding: 10px 25px;
 	color: #95989a;
 }
 

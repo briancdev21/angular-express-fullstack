@@ -15,8 +15,7 @@ th {
   font-weight: 400;
   border: solid 1px #d3d3d3;
   padding: 10px 1em;
-  text-transform: uppercase;  
-  font-size: 1.1em;
+  text-transform: uppercase;
 }
 
 td {
@@ -104,31 +103,39 @@ td.handle-bar {
   padding: 15px 5px;
   width: 5px;
 }
+
+td {
+  text-align: left;
+}
+
 td.sku {
   width: 200px;
   padding: 5px 0.7em;
+  text-align: left;
 }
 
  td.model {
   width: 150px;
   padding: 5px 0.7em;
+  text-align: left;
 }
 
  td.name {
   width: 400px;
   padding: 5px 0.7em;
+  text-align: left;
 }
 
- td.measure {
-  width: 50px;
+ td.upc {
+  text-align: left;
 }
 
  td.quantity {
-  width: 50px;
+  width: 100px;
 }
 
- td.unitprice {
-  width: 150px;
+ td.received {
+  width: 100px;
 }
 
  td.discount {
@@ -269,4 +276,29 @@ td.sku {
   user-select: none;
   /* non-prefixed version, currently
    not supported by any browser */
+}
+
+.remove-btn {
+  width: 15px;
+  margin-right: 0px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+td.delete-icon {
+  width: 20px;
+  padding: 0;
+}
+
+tr.emptyRow td {
+	color: lightgray;
+	text-transform: uppercase;
+}
+
+th.sku {
+  padding-left: 30px;
+}
+
+td.sku {
+  padding-left: 30px;
 }

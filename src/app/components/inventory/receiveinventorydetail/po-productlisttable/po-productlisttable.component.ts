@@ -14,9 +14,74 @@ import { SharedService } from '../../../../services/shared.service';
 
 
 export class POProductListTableComponent implements OnInit {
-  @Input() productsInfo;
-  ngOnInit() {
-    
+  @Input() set productsInfo(val) {
+    console.log('proudts info updated: detail po table');
+    if (val !== undefined) {
+      this.originProductsInfo = val;
+      this.originProductsInfo.forEach(product => {
+        product.quantityCopy = product.quantity;
+        product.recievedCopy = product.recieved;
+      });
+      if (this.originProductsInfo.length === 0) {
+        this.emptyRow = true;
+      } else {
+        this.emptyRow = false;
+      }
+    }
+  }
+
+  @Output() productInfoUpdated: EventEmitter<any> = new EventEmitter;
+
+
+  originProductsInfo = [];
+  emptyRow: boolean;
+
+  constructor(private router: Router, private sharedService: SharedService) {
+
+  }
+
+  ngOnInit() {    
+  }
+
+  onChangeQuantity(index, e) {
+    if (e.which < 47 || e.which > 58 ) {  return false; }
+    this.originProductsInfo[index].quantityCopy = parseInt(e.target.value, 10);
+    if (this.originProductsInfo[index].quantityCopy < this.originProductsInfo[index].recievedCopy) {
+      this.originProductsInfo[index].quantityCopy = this.originProductsInfo[index].recievedCopy;
+    }
+    // console.log('origin product info:', this.originProductsInfo);
+    this.savePurchaseOrderProducts();
+
+  }
+  onChangeReceived(index, e) {
+    if (e.which < 47 || e.which > 58 ) {  return false; }
+    this.originProductsInfo[index].recievedCopy = parseInt(e.target.value, 10);
+    if (this.originProductsInfo[index].recievedCopy < this.originProductsInfo[index].recieved) {
+      this.originProductsInfo[index].recievedCopy = this.originProductsInfo[index].recieved;
+    }
+
+    if (this.originProductsInfo[index].quantityCopy < this.originProductsInfo[index].recievedCopy)
+    {
+      this.originProductsInfo[index].quantityCopy = this.originProductsInfo[index].recievedCopy;
+    }
+    // console.log('origin product info:', this.originProductsInfo);
+    this.savePurchaseOrderProducts();
+  }
+
+  savePurchaseOrderProducts() {
+    let count = 0;
+    this.originProductsInfo.forEach(product => {
+      product.recieved = product.recievedCopy;
+      product.received = product.recievedCopy;
+      product.quantity = product.quantityCopy;
+    });
+    this.productInfoUpdated.emit(this.originProductsInfo);
+  }
+
+  clearProductChange(index) {
+    this.originProductsInfo[index].quantityCopy = this.originProductsInfo[index].quantity;
+    this.originProductsInfo[index].recievedCopy = this.originProductsInfo[index].recieved;
+    this.savePurchaseOrderProducts();
   }
 }
 
