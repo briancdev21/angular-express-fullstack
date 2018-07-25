@@ -117,6 +117,10 @@ export class AddLeadComponent implements OnInit {
   billingSelectedProvince: any;
   invalidPrimaryFormat = false;
   invalidSecondaryFormat = false;
+  countriesNameList = countries.map(c => c.name);
+  provincesNameList = provinces.map(p => p.name);
+  provinceNotIncluded = false;
+  selectedProvincesNameList = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
     private filterService: FilterService ) {
@@ -245,6 +249,8 @@ export class AddLeadComponent implements OnInit {
   }
 
   clickNext() {
+    console.log('country: ', this.country, countries);
+    console.log('pro: ', this.province, provinces);
     this.invalidFirstname = false;
     this.invalidLastname = false;
     this.invalidBusinessName = false;
@@ -260,10 +266,18 @@ export class AddLeadComponent implements OnInit {
     this.wrongEmailFormat = !this.checkEmailValidation(this.email);
     this.invalidPrimaryFormat = !this.phoneNumberValidation(this.primaryNumber);
     this.invalidSecondaryFormat = !this.phoneNumberValidation(this.secondaryNumber);
+    if (!this.countriesNameList.includes(this.country)) {
+      this.provinceNotIncluded = true;
+      this.invalidCountry = true;
+    } else if (!this.provincesNameList.includes(this.province)) {
+      this.provinceNotIncluded = true;
+      this.invalidProvince = true;
+    }
 
     if (this.businessType === 'PERSON') {
       if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
-        this.city && this.province && this.country && this.postalCode && !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
+        !this.provinceNotIncluded && this.city && this.province && this.country && this.postalCode &&
+        !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -297,7 +311,7 @@ export class AddLeadComponent implements OnInit {
       }
     } else if (this.businessType === 'BUSINESS') {
       if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat && this.address &&
-        this.city && this.province && this.country && this.postalCode && this.headContact) {
+        this.city && this.province && this.country && this.postalCode && this.headContact && !this.provinceNotIncluded) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
