@@ -376,6 +376,17 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     this.proposalProductOrdered = this.arrayUnique(newArr);
   }
 
+  deleteProductByClick(product) {
+    console.log('deleting product: ', product);
+    if ( this.proposalInfo.dealStatus === 'WON') {
+      this.commonService.showAlertModal.next(true);
+      this.getProposalProductData();
+    } else {
+      this.openDeleteModal();
+      this.selectedRows[0] = product.id;
+    }
+  }
+
   getParentsDataForSorting(parents) {
     let index = 0;
     this.proposalProductOrdered = [];
@@ -522,6 +533,8 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     }
     this.deleteModalCollapsed = true;
   }
+
+
 
   cancelDelete() {
     this.deleteModalCollapsed = true;

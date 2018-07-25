@@ -70,6 +70,8 @@
             <option value="0">Select Sub Category</option>
             <option *ngFor="let subcategory of proposalSubCategoryList" [value]="subcategory.id" >{{subcategory.name}}</option>
           </select>
+
+          <img src="assets/images/garbage.png" (click)="deleteProductByClick(parentProduct)">
         </td>
       </tr>
       <!-- Disabled for now because current back end does not support multi category products expanding function (2018/07/13) -->
