@@ -2,9 +2,9 @@
   <table *ngIf="leadsListInfo">
     <tr>
       <th (click)="sortArrayWithString('name')">LEAD NAME</th>
-      <th (click)="sortArrayWithString('phoneNumbers[primary]')">PHONE NUMBER</th> 
+      <th (click)="sortArrayWithString('primaryNumber')">PHONE NUMBER</th> 
       <th (click)="sortArrayWithString('email')">EMAIL ADDRESS</th>
-      <th (click)="sortCreateDateArray('createDate')">LEAD DATE</th>
+      <th (click)="sortCreateDateArray('createdAt')">LEAD DATE</th>
       <th (click)="SortLeadStatus()">LEAD STATUS</th> 
       <th (click)="sortArray('score')">LEAD SCORE <img src="assets/images/Edit.png"></th>
     </tr>

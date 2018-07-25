@@ -50,6 +50,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
   billingCountryChanged = false;
   invalidPrimaryPhone = false;
   invalidSecondaryPhone = false;
+  phoneNumberChanged = false;
 
   constructor(private router: Router, private crmService: CrmService, private completerService: CompleterService ) {
 
@@ -139,14 +140,33 @@ export class LeadProfileInfoBarComponent implements OnInit {
 
   phoneNumberValidation(number) {
     const re =  /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
-    return re.test(String(number));
+    return re.test(number);
   }
 
   showConfirmModal(event) {
     if (this.eventData) { return false; }
     if (event.target.value.trim() !== this.userInfo[event.target.id]) {
-      this.showModal = true;
-      this.eventData = event;
+      if (this.phoneNumberChanged) {
+        if (!this.phoneNumberValidation(this.userInfo.primaryphone)) {
+          this.invalidPrimaryPhone = true;
+          return false;
+        } else {
+          this.invalidPrimaryPhone = false;
+          this.showModal = true;
+          this.eventData = event;
+        }
+        if (!this.phoneNumberValidation(this.userInfo.mobilephone)) {
+          this.invalidSecondaryPhone = true;
+          return false;
+        } else {
+          this.invalidSecondaryPhone = false;
+          this.showModal = true;
+          this.eventData = event;
+        }
+      } else {
+        this.showModal = true;
+        this.eventData = event;
+      }
      } else {
        this.showModal = false;
     }
@@ -225,12 +245,14 @@ export class LeadProfileInfoBarComponent implements OnInit {
   }
 
   confirmChange() {
-    if (!this.phoneNumberValidation(this.userInfo.primaryPhone)) {
+    console.log('phone : ', this.userInfo, this.phoneNumberValidation(this.userInfo.primaryPhone));
+    if (!this.phoneNumberValidation(this.userInfo.primaryphone)) {
+
       this.invalidPrimaryPhone = true;
     } else {
       this.invalidPrimaryPhone = false;
     }
-    if (!this.phoneNumberValidation(this.userInfo.secondaryPhone)) {
+    if (!this.phoneNumberValidation(this.userInfo.mobilephone)) {
       this.invalidSecondaryPhone = true;
     } else {
       this.invalidSecondaryPhone = false;

@@ -51,7 +51,7 @@ export class LeadsComponent implements OnInit {
     selectStatus: '',
   };
 
-  public leadsListInfo: Array<Object> = [
+  public leadsListInfo = [
   ];
 
   public leadOwners = [
@@ -65,6 +65,12 @@ export class LeadsComponent implements OnInit {
     this.backUpLeads = this.leadsListInfo;
     this.crmService.getLeadsList().subscribe(data => {
       this.leadsListInfo = data.results;
+      this.leadsListInfo.forEach(ele => {
+        const numbersOnly = ele.phoneNumbers.primary.split('-');
+        numbersOnly.forEach(element => {
+          ele.primaryNumber = ele.primaryNumber + element;
+        });
+      });
     });
   }
 

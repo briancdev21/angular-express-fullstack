@@ -20,18 +20,20 @@
       <input 
         value="{{userInfo.primaryphone}}" 
         id="primaryphone" 
-        (keyup.enter)="showConfirmModal($event)" 
-        (blur)="showConfirmModal($event)" 
-        [ngClass]="{'phone-validation': invalidPrimaryPhone}">
+        (keyup.enter)="showConfirmModal($event); phoneNumberChanged = true" 
+        (blur)="showConfirmModal($event); phoneNumberChanged = true" 
+        [ngClass]="{'phone-validation': invalidPrimaryPhone}"
+        placeholder="XXX-XXX-XXXX">
       <span>(Primary Contact)</span>
     </span>
     <span>
       <input 
         value="{{userInfo.mobilephone}}" 
         id="mobilephone" 
-        (keyup.enter)="showConfirmModal($event)" 
-        (blur)="showConfirmModal($event)" 
-        [ngClass]="{'phone-validation': invalidSecondaryPhone}">
+        (keyup.enter)="showConfirmModal($event); phoneNumberChanged = true" 
+        (blur)="showConfirmModal($event); phoneNumberChanged = true" 
+        [ngClass]="{'phone-validation': invalidSecondaryPhone}"
+        placeholder="XXX-XXX-XXXX">
       <span>(Mobile)</span>
     </span>
   </div>

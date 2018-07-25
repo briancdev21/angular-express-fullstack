@@ -29,7 +29,7 @@
                 <textarea placeholder="Start tying..." #textarea2 (input)="activity.content=textarea2.value" (keyup.enter)="addNewTimelineItem(); textarea2.value=''; emailsubject.value='' " ></textarea>
               </tab>
               <tab tabTitle="CALL" class="tab-call" >
-                <select #callcontacts (change)="activity.contact=callcontacts.value" >
+                <select #callcontacts (change)="activity.contact=callcontacts.value" class="call-contacts">
                   <option>Select Contact</option>
                   <option [value]="contact.id" *ngFor="let contact of contactsList" >
                     {{contact.name}}

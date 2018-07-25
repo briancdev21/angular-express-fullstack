@@ -325,7 +325,8 @@ export class LeadProfileComponent implements OnInit {
       date: today,
       buttonClickEventHandlerName: 'getMoreInfo',
       subject: this.activity.subject,
-      contact: this.activity.contact
+      contact: this.activity.contact,
+      type: this.activity.title
     };
 
     switch (nitem.title) {
