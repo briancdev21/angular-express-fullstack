@@ -10,12 +10,12 @@
         <th>RECEIVED</th>
         <th>BRAND</th>
         <th>SUPPLIER</th>
-        <th colspan="2" >DATE RECEIVED</th>
+        <th colspan="2" style="width: 200px" >DATE RECEIVED</th>
       </tr>
     </thead>
     <tbody class="ngx-dnd-container" ngxDroppable>
 
-      <tr *ngFor="let productDetailInfo of productDetails; index as i" class="ngx-dnd-item has-handle" ngxDraggable>
+      <tr *ngFor="let productDetailInfo of originProductsInfo; index as i" class="ngx-dnd-item has-handle" ngxDraggable>
         <td class="sku">
           {{productDetailInfo.sku}}
         </td>
@@ -29,10 +29,10 @@
           {{productDetailInfo.upc}}
         </td>
         <td class="quantity">
-          <input class="quantity" type="text" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantity" (ngModelChange)="calcualteTotalPrice(i)" (change)="updatePurchaseOrderProduct(i)" (keypress)="checkValue($event)" />
+          <input class="quantity" type="text" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantityCopy" (keyup)="onChangeQuantity(i, $event)" />
         </td>
         <td class="received">
-          <input class="received" type="text" placeholder="0" min="0" [(ngModel)]="productDetailInfo.received" (ngModelChange)="calcualteTotalPrice(i)" (change)="updatePurchaseOrderProduct(i)" (keypress)="checkValue($event)" />
+          <input class="received" type="text" placeholder="0" min="0" [(ngModel)]="productDetailInfo.recievedCopy" (keyup)="onChangeReceived(i,$event)" />
         </td>
         <td class="brand">
           <span>{{productDetailInfo.brand}}</span>
@@ -42,6 +42,9 @@
         </td>
         <td class="datecreated">
           <span>{{productDetailInfo.dateCreated}}</span>
+        </td>
+        <td class="delete-icon" align="center" >
+          <img class="remove-btn" src="/assets/images/Trash Symbol.svg" (click)="clearProductChange(i)" />
         </td>
       </tr>
     </tbody>
