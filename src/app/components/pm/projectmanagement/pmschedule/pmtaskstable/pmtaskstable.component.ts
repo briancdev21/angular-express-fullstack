@@ -675,4 +675,13 @@ export class PmTasksTableComponent implements OnInit {
       this.refreshTable();
     });
   }
+
+  openShowSettingModal(i, j) {
+    for (let ki = 0; ki < this.milestones.length; ki++) {
+      for (let kj = 0; kj < this.milestones[ki].tasks.length; kj++) {
+        this.showSettingsModal[ki][kj] = false;
+      }
+    }
+    this.showSettingsModal[i][j] = true;
+  }
 }
