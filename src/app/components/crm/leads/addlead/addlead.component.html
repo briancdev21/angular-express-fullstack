@@ -72,16 +72,20 @@
 
           <div class="name-type tab-row">
             <div>
-              <span>Primary number (*required)</span>
-              <input placeholder="(XXX)XXX-XXXX" [ngClass]="{'validation-required': invalidPrimaryNumber}" [(ngModel)]="primaryNumber" type="tel">
+              <span>Primary number (*required) <span *ngIf="invalidPrimaryFormat" class="wrong-format"> : Wrong Phone Number Format!</span></span>
+              <input placeholder="XXX-XXX-XXXX" [ngClass]="{'validation-required': invalidPrimaryNumber || invalidPrimaryFormat}" [(ngModel)]="primaryNumber" type="tel">
             </div>
             <div *ngIf="!typeAccountTypeChange">
-              <span>Mobile</span>
-              <input placeholder="(XXX)XXX-XXXX" pattern='[(\d{3}[\)]\d{4}[\-]\d{4}' [(ngModel)]="secondaryNumber"  type="tel">
+              <span>Mobile <span *ngIf="invalidSecondaryFormat" class="wrong-format"> : Wrong Phone Number Format!</span></span>
+              <input 
+                placeholder="XXX-XXX-XXXX" 
+                [(ngModel)]="secondaryNumber"  
+                type="tel" 
+                [ngClass]="{'validation-required': invalidSecondaryFormat}">
             </div>
 						<div *ngIf="typeAccountTypeChange">
-              <span>Secondary number</span>
-              <input placeholder="(XXX)XXX-XXXX" [(ngModel)]="secondaryNumber" type="tel">
+              <span>Secondary number <span *ngIf="invalidSecondaryFormat" class="wrong-format"> : Wrong Phone Number Format!</span></span>
+              <input placeholder="XXX-XXX-XXXX" [(ngModel)]="secondaryNumber" type="tel" [ngClass]="{'validation-required': invalidSecondaryFormat}">
             </div>
           </div>
 

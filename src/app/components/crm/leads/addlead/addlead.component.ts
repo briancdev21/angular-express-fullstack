@@ -115,6 +115,8 @@ export class AddLeadComponent implements OnInit {
   selectedProvince: any;
   billingSelectedCountry: any;
   billingSelectedProvince: any;
+  invalidPrimaryFormat = false;
+  invalidSecondaryFormat = false;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
     private filterService: FilterService ) {
@@ -256,10 +258,12 @@ export class AddLeadComponent implements OnInit {
     this.invalidPostalCode = false;
     this.invalidHeadContact = false;
     this.wrongEmailFormat = !this.checkEmailValidation(this.email);
+    this.invalidPrimaryFormat = !this.phoneNumberValidation(this.primaryNumber);
+    this.invalidSecondaryFormat = !this.phoneNumberValidation(this.secondaryNumber);
 
     if (this.businessType === 'PERSON') {
       if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
-        this.city && this.province && this.country && this.postalCode) {
+        this.city && this.province && this.country && this.postalCode && !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -395,6 +399,7 @@ export class AddLeadComponent implements OnInit {
         this.invalidHeadContact = false;
         this.wrongEmailFormat = !this.checkEmailValidation(this.email);
 
+
         if (this.businessType === 'PERSON') {
           if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
             this.city && this.province && this.country && this.postalCode) {
@@ -514,6 +519,11 @@ export class AddLeadComponent implements OnInit {
   checkEmailValidation(email) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
+  }
+
+  phoneNumberValidation(number) {
+    const re =  /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
+    return re.test(number);
   }
 
   clearInputs() {
