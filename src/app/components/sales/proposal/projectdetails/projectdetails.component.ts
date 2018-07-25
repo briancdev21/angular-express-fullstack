@@ -686,7 +686,7 @@ projectDetails = {
       this.retrieveData();
     } else {
       const collaboratorData = [];
-      this.collaborators.forEach(ele => {
+      this.proposalDetails['collaboratorsData'].forEach(ele => {
         collaboratorData.push(ele.username);
       });
       const savingData = {
