@@ -31,7 +31,17 @@
                 <div class="sub-tasks">
 
                 </div>
-                <span>{{task.completion}}%</span>
+                <!-- <span>{{task.completion}}%</span> -->
+                <div class="completion">
+                  <input [value]="task.id" type="hidden" class="taskId" >
+                  <input [value]="milestone.id" type="hidden" class="taskGroupId" >
+                  <input 
+                    [(ngModel)]="task.completion" 
+                    (change)="completionChanged($event)" 
+                    (keyup.enter)="completionChanged()"
+                    type="number"
+                    size="3">%
+                </div>
                 <!-- Task owner selection modal-->
                 <!-- <div
                   class="owner-modal hide-modal"
