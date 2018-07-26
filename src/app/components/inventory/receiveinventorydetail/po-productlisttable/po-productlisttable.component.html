@@ -5,7 +5,6 @@
         <th class="sku" >SKU</th>
         <th>MODEL</th>
         <th>Name</th>
-        <th>UPC</th>
         <th>QTY</th>
         <th>RECEIVED</th>
         <th>BRAND</th>
@@ -25,9 +24,6 @@
         <td class="name">
           {{productDetailInfo.name}}
         </td>
-        <td class="upc">
-          {{productDetailInfo.upc}}
-        </td>
         <td class="quantity">
           <input class="quantity" type="text" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantityCopy" (keyup)="onChangeQuantity(i, $event)" />
         </td>
@@ -44,7 +40,7 @@
           <span>{{productDetailInfo.dateCreated}}</span>
         </td>
         <td class="delete-icon" align="center" >
-          <img class="remove-btn" src="/assets/images/Trash Symbol.svg" (click)="clearProductChange(i)" />
+          <img class="remove-btn" src="/assets/images/return.png" (click)="clearProductChange(i)" />
         </td>
       </tr>
       <tr *ngIf="emptyRow" class="ngx-dnd-item has-handle emptyRow" ngxDraggable>
