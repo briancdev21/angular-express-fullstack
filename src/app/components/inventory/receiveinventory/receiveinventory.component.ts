@@ -59,7 +59,7 @@ export class ReceiveInventoryComponent implements OnInit {
             this.originalPurchaseOrderInfos.push(purchaseOrdersInfoItem);
           }
         });
-        this.sortArray('purchaseOrderNumber');
+        this.sortArray('projectNumber');
         this.purchaseOrdersInfo = this.originalPurchaseOrderInfos.slice();
       });
     });
