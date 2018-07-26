@@ -686,9 +686,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   getIconImgResource(product) {
     if (product.type === 'ACCESSORY' && product.useProductInProject === true) {
-      return 'assets/images/right-arrow (1).svg';
-    } else if (product.type === 'ACCESSORY' && product.useProductInProject === false) {
       return 'assets/images/right-arrow copy.svg';
+    } else if (product.type === 'ACCESSORY' && product.useProductInProject === false) {
+      return 'assets/images/right-arrow (1).svg';
     } else if (product.type === 'ALTERNATIVE') {
       return 'assets/images/shuffle.svg';
     }
