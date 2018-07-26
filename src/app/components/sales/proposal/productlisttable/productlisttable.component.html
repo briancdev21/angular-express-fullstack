@@ -36,7 +36,9 @@
             (blur)="onBlur(parentProduct)" 
             (focus)="onFocus()" 
             (keyup.enter)="updateProposalProduct(parentProduct)" 
-            type="number">
+            type="number"
+            *ngIf="parentProduct.type == 'PRODUCT'">
+          <span *ngIf="parentProduct.type !== 'PRODUCT'">{{parentProduct.quantity}}</span>
           </td>
         <td>
           $ <input [(ngModel)]="parentProduct.unitPrice" *ngIf="unitPriceEditable" (blur)="unitPriceEditable = false; onBlur(parentProduct);" (input)="getParentTotalPrice(parentProduct)"  (focus)="onFocus()">
