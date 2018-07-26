@@ -297,6 +297,20 @@ export class LeadProfileComponent implements OnInit {
     };
   }
 
+  updateFollowers(event) {
+    console.log('followers update: ', event);
+    // name === username currently
+    const followerUsernames = {
+      followers: event.map(e => e.name),
+    }
+
+    if (event) {
+      this.crmService.updateIndividualLead(this.currentLead.id, followerUsernames).subscribe( res => {
+      console.log('updated lead: ', res);
+    });
+    }
+  }
+
   addContactName(data) {
     data.forEach(element => {
       if (element.type === 'PERSON') {
@@ -408,7 +422,9 @@ export class LeadProfileComponent implements OnInit {
     if (this.savingLead.phoneNumbers.secondary === null) {
       delete this.savingLead.phoneNumbers.secondary;
     }
+    console.log('saving lead: ', this.savingLead);
     this.crmService.updateIndividualLead(this.currentLead.id, this.savingLead).subscribe( res => {
+      console.log('updated lead: ', res);
     });
   }
 

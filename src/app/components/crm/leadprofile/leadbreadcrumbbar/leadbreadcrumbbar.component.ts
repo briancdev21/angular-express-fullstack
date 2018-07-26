@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../../../../services/shared.service';
 
@@ -17,6 +17,7 @@ export class LeadBreadcrumbBarComponent implements AfterViewInit {
     }
   }
   @Input() keywords;
+  @Output() getFollowersUpdates = new EventEmitter;
   autocompleterLoaded = false;
   editable: boolean;
   _userInfo: any = {
@@ -71,6 +72,8 @@ export class LeadBreadcrumbBarComponent implements AfterViewInit {
       return obj.label !== item.label;
     });
     this._userInfo.followers.push({name: item.label, imageUrl: item.imageUrl });
+    console.log('followers: ', this._userInfo.followers);
+    this.getFollowersUpdates.emit(this._userInfo.followers);
   }
 
 
