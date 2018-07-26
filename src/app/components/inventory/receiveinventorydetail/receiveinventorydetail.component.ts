@@ -115,7 +115,6 @@ export class ReceiveInventoryDetailComponent implements OnInit {
     this.productsInfo.forEach(product => {
       this.sharedService.updatePurchaseOrderProduct(product.purchaseOrderId, product.id, product).subscribe();
     });
-    this.router.navigate(['inventory/stock-control/received-inventory']);
   }
 
   onCancel() {
