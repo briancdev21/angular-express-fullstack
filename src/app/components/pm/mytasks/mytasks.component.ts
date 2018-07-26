@@ -41,7 +41,7 @@ export class MyTasksComponent implements OnInit {
   isAutocompleteUpdated = false;
 
   config2 = {'placeholder': 'Type here', 'sourceField': ''};
-  colors = ['#F0D7BD', '#DFE5B0', '#F0C9C9', '#CBE0ED', '#E0BBCC', '#C4BBE0', '#BBC0E0', '#BBE0CC', '#E0BBBB', '#E8E3A7'];
+  colors = ['#F0D7BD', '#CBE0ED', '#DFE5B0', '#F0C9C9', '#E0BBCC', '#C4BBE0', '#BBC0E0', '#BBE0CC', '#E0BBBB', '#E8E3A7'];
 
   defaultTaskOwner = {
     name: '',
@@ -74,12 +74,12 @@ export class MyTasksComponent implements OnInit {
       }
     });
 
-    dragulaService.setOptions('dragTask', {
-      accepts: (el, target, source, sibling) => {
-        // To avoid dragging from first second, third column
-        return target.id !== '1' && source.id !== '1' && target.id !== '2' && source.id !== '2' && target.id !== '0';
-      }
-    });
+    // dragulaService.setOptions('dragTask', {
+    //   accepts: (el, target, source, sibling) => {
+    //     // To avoid dragging from first second, third column
+    //     return target.id !== '1' && source.id !== '1' && target.id !== '2' && source.id !== '2' && target.id !== '0';
+    //   }
+    // });
 
     this.sharedService.getContacts().subscribe(contacts => {
       this.contactsList = contacts;
