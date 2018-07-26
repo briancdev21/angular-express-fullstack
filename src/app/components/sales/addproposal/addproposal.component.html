@@ -223,7 +223,7 @@
                   [owlDateTime]="completionDate" 
                   placeholder="Choose a start date" 
                   (dateTimeChange)="selectCompletionDate($event)" 
-                  [(ngModel)]="proposalDetails.completionDate"
+                  [(ngModel)]= "needlessDate"
                   [min]="today">
                 <owl-date-time [pickerType]="'calendar'" #completionDate></owl-date-time>
               </div>

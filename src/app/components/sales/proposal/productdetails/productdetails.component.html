@@ -92,14 +92,17 @@
         <tr *ngFor="let acc of addedAccList; let i = index;">
           <td>
             <div class="accessory-sku" >
-              <div class="check-box" [ngClass]="getSkuCheckColor(acc)"></div>
+              <div class="check-box" [ngClass]="getSkuCheckColor(acc)" (click)="changeOption(acc);"></div>
               <span>{{acc.variant.sku}}</span>
             </div>
           </td>
           <td>{{acc.variant.name}}</td>
           <td>{{selectedProduct.model}}</td>
           <td>{{selectedProduct.brandName}}</td>
-          <td><input [(ngModel)]="acc.quantity" >{{acc.quantity}}</td>
+          <td>
+            <!-- <input [(ngModel)]="acc.quantity" > -->
+              {{acc.quantity}}
+            </td>
           <td class="calcedPrice">
             <!-- $ <input value="{{acc.variant.cost * acc.quantity}}" *ngIf="accPriceEditable" (blur)="accPriceEditable=false">
             <span *ngIf="!accPriceEditable" (click)="accPriceEditable=true">{{ acc.variant.cost * acc.quantity | number: '1.2-2'}}</span> -->
@@ -160,7 +163,7 @@
                 <span *ngIf="!alterPriceEditable" (click)="alterPriceEditable=true">{{ alter.variant.cost * alter.quantity | number: '1.2-2'}}</span> -->
                 {{ alter.variant.cost * alter.quantity | number: '1.2-2'}}
               </div>
-              <img src="assets/images/garbage.png" (click)="removeAlter(i, alter)">
+              <!-- <img src="assets/images/garbage.png" (click)="removeAlter(i, alter)"> -->
             </div>
           </td>
         </tr>
@@ -183,10 +186,10 @@
     </div>
     <div class="btn-section" >
       <button class="cancel-btn" (click)="closeModal()">
-        Cancel
+        NO
       </button>
       <button class="save-btn" (click)="saveAttachmentModal()">
-        Save
+        YES
       </button>
     </div>
   </div>

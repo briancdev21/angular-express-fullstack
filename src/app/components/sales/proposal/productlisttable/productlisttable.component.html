@@ -36,14 +36,23 @@
             (blur)="onBlur(parentProduct)" 
             (focus)="onFocus()" 
             (keyup.enter)="updateProposalProduct(parentProduct)" 
-            type="number">
+            type="number"
+            *ngIf="parentProduct.type == 'PRODUCT'">
+          <span *ngIf="parentProduct.type !== 'PRODUCT'">{{parentProduct.quantity}}</span>
           </td>
         <td>
           $ <input [(ngModel)]="parentProduct.unitPrice" *ngIf="unitPriceEditable" (blur)="unitPriceEditable = false; onBlur(parentProduct);" (input)="getParentTotalPrice(parentProduct)"  (focus)="onFocus()">
           <!-- <span *ngIf="!unitPriceEditable" (click)="unitPriceEditable = true;">{{parentProduct.unitPrice | number: '1.2-2'}}</span> -->
           <span *ngIf="!unitPriceEditable">{{parentProduct.unitPrice | number: '1.2-2'}}</span>
         </td>
-        <td><input [(ngModel)]="parentProduct.discount.value" (blur)="onBlur(parentProduct)" (focus)="onFocus()" type="number"></td> 
+        <td>
+          <input 
+            [(ngModel)]="parentProduct.discount.value" 
+            (blur)="onBlur(parentProduct)" 
+            (focus)="onFocus()" 
+            type="number"
+            (keydown.enter)="onBlur(parentProduct)">
+          </td> 
         <td>$ 
           <span *ngIf="parentProduct.type == 'PRODUCT'">{{parentProduct.parentTotalPrice | number:'2.2-2'}}</span> 
           <span *ngIf="parentProduct.type !== 'PRODUCT'">{{parentProduct.total | number:'2.2-2'}}</span></td>
@@ -63,6 +72,8 @@
             <option value="0">Select Sub Category</option>
             <option *ngFor="let subcategory of proposalSubCategoryList" [value]="subcategory.id" >{{subcategory.name}}</option>
           </select>
+
+          <img src="assets/images/garbage.png" *ngIf="parentProduct.type !== 'ACCESSORY'" (click)="deleteProductByClick(parentProduct)">
         </td>
       </tr>
       <!-- Disabled for now because current back end does not support multi category products expanding function (2018/07/13) -->

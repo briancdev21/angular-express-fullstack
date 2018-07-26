@@ -54,6 +54,18 @@ td:nth-child(8), th:nth-child(8) {
   width: 7%;
 }
 
+td:last-child {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+td img {
+	width: 18px;
+	height: 18px;
+	margin: 0 7px;
+}
+
 
 td input {
   border: 0;

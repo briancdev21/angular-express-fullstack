@@ -154,6 +154,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   sendProducts() {
     const sendData = [];
+    let count = 1;
     for (let i = 0; i <= this.selectedRows.length - 1; i += 1) {
       sendData.push(this.productsInfoAll.filter(p => p.sku === this.selectedRows[i])[0]);
     }
@@ -163,25 +164,26 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       // set option field as undefined for resolving conflice when expand table
       // sendData.map( s => s[0].option = undefined );
       // this.proposalService.insertToTable(sendData);
+      sendData.forEach(ele => {
+        ele.quantity = parseInt(ele.quantity, 10);
+        if ( this.proposalInfo.dealStatus === 'WON') {
+          this.commonService.showAlertModal.next(true);
+        } else {
+          this.proposalsService.createProposalProduct(this.proposalId, ele).subscribe(res => {
+            count = count + 1;
+            if (sendData.length === count) {
+              this.proposalService.insertSucess.next(true);
+              this.showDialog = false;
+              this.sidebarCollapsed = true;
+            }
+          });
+        }
+      });
     }
-    sendData.forEach(ele => {
-      ele.quantity = parseInt(ele.quantity, 10);
-      if ( this.proposalInfo.dealStatus === 'WON') {
-        console.log('prposal -------------: ', this.proposalInfo);
-        this.commonService.showAlertModal.next(true);
-      } else {
-        this.proposalsService.createProposalProduct(this.proposalId, ele).subscribe(res => {
-          console.log('inserted: ', res);
-          this.proposalService.insertToTable(sendData);
-        });
-      }
-    });
-    console.log('inserted products: ', sendData);
   }
 
   sendIndividualProduct(product) {
     if ( this.proposalInfo.dealStatus === 'WON') {
-      console.log('prposal -------------: ', this.proposalInfo);
       this.commonService.showAlertModal.next(true);
     } else {
       this.openAttachmentModal(product);
@@ -193,7 +195,6 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   updateIndividualProduct(product) {
     this.openAttachmentModal(product);
     this.insertToTable([[product]]);
-    console.log('insert to table');
   }
   openAddProductModal() {
 
@@ -205,17 +206,15 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   openAttachmentModal(product) {
-    console.log('insert to table: ', product);
     this.addAttachmentModalCollapsed = false;
     this.selectedProduct = product;
     this.selectedProduct.brandName = this.brandsList.filter(brand => brand.id === this.selectedProduct.brandId)[0].name;
     this.productsService.getProductAlternativesList(product.productId).subscribe(res => {
       this.addedAlterList = res.results;
-      console.log('insert alter: ', res);
     });
     this.productsService.getProductAccessoriesList(product.productId).subscribe(res => {
       this.addedAccList = res.results;
-      console.log('insert acce: ', res);
+      console.log('Acc List: ', this.addedAccList);
     });
     // this.addedAccList = this.selectedProduct.addedAccList ? this.selectedProduct.addedAccList : [];
     // this.addedAlterList = this.selectedProduct.addedAlterList ? this.selectedProduct.addedAlterList : [];
@@ -273,6 +272,18 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  changeOption(product) {
+    console.log('changing product: ', product);
+    const accSkuList = this.addedAccList.map(p => p.sku);
+    const pos = accSkuList.indexOf(product.sku);
+    if (product.option === 'OPTIONAL') {
+      this.addedAccList[pos].option = 'AUTOMATICALLY';
+    } else {
+      this.addedAccList[pos].option = 'OPTIONAL';
+    }
+
+  }
+
   removeSearchModal() {
     this.searchModalCollapsed = true;
     this.searchAlterModalCollapsed = true;
@@ -281,14 +292,12 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   removeAcc(i, acc) {
     this.addedAccList.splice(i, 1);
     this.productsService.deleteIndividualAccessory (this.selectedProduct.productId, acc.variant.sku).subscribe(res => {
-      console.log('deleted: ', res);
     });
   }
 
   removeAlter(i, alter) {
     this.addedAlterList.splice(i, 1);
     this.productsService.deleteIndividualAlternative(this.selectedProduct.productId, alter.variant.sku).subscribe(res => {
-      console.log('deleted: ', res);
     });
   }
 
@@ -320,14 +329,15 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       this.selectedProduct.addedAlterList.concat(this.addedAlterList);
     }
 
+    const requiredAccSkus = this.addedAccList.filter(p => p.option === 'AUTOMATICALLY').map(ele => ele.variant.sku);
+    this.selectedProduct.accessorySkus = requiredAccSkus;
+
     this.accQueryString = '';
     this.alterQueryString = '';
     this.addAttachmentModalCollapsed = true;
     this.sidebarCollapsed = true;
-    console.log('inserted proudcts: ', this.selectedProduct);
     this.selectedProduct.quantity = parseInt(this.selectedProduct.quantity, 10);
     this.proposalsService.createProposalProduct(this.proposalId, this.selectedProduct).subscribe(res => {
-      console.log('inserted product : ', res);
       this.proposalService.insertToTable([[this.selectedProduct]]);
     });
   }
@@ -355,7 +365,6 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
   insertToTable(products) {
     // inssert product to table
-    console.log('insert products to table');
     this.productsInfoAll = products;
   }
 

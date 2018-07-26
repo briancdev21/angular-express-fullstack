@@ -71,6 +71,11 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     //   });
     // }
 
+    this.proposalService.insertSucess.subscribe(res => {
+      if (res) {
+        this.getProposalProductData();
+      }
+    });
 
     this.productsService.getProductsList().subscribe(res => {
     });
@@ -147,7 +152,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         if (ele.accessories) {
           ele.accessories.forEach(element => {
             const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
-            ele.parentTotalPrice = ele.parentTotalPrice + selectedItem.total;
+            if (element.useProductInProject) {
+              ele.parentTotalPrice = ele.parentTotalPrice + selectedItem.total;
+            }
             this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
           });
         }
@@ -163,7 +170,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         element.index = index;
         index = index + 1;
       });
-      console.log('ordered products: ', this.proposalProductOrdered);
       this.backUp = this.proposalProductOrdered;
     });
   }
@@ -374,6 +380,17 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     this.proposalProductOrdered = this.arrayUnique(newArr);
   }
 
+  deleteProductByClick(product) {
+    console.log('deleting product: ', product);
+    if ( this.proposalInfo.dealStatus === 'WON') {
+      this.commonService.showAlertModal.next(true);
+      this.getProposalProductData();
+    } else {
+      this.openDeleteModal();
+      this.selectedRows[0] = product.id;
+    }
+  }
+
   getParentsDataForSorting(parents) {
     let index = 0;
     this.proposalProductOrdered = [];
@@ -384,7 +401,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
       if (ele.accessories) {
         ele.accessories.forEach(element => {
           const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
-          ele.parentTotalPrice = ele.parentTotalPrice + selectedItem.total;
+          if (element.useProductInProject) {
+            ele.parentTotalPrice = ele.parentTotalPrice + selectedItem.total;
+          }
           this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
         });
       }
@@ -506,18 +525,36 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
 
   deleteProduct() {
-    for (let i = 0; i < this.selectedRows.length; i++) {
-      // this.proposalProductList = this.proposalProductList.filter(p => p.id !== this.selectedRows[i]);
-      // this.parents = this.getParentNode(this.proposalProductList);
-      // if () {
-      //   this.getParentTotalPrice();
-      // }
-      this.proposalsService.deleteIndividualProposalProduct(this.proposalId, this.selectedRows[i]).subscribe(res => {
+    if (this.selectedRows.length === 1) {
+      this.proposalsService.deleteIndividualProposalProduct(this.proposalId, this.selectedRows[0]).subscribe(res => {
         this.getProposalProductData();
       });
+    } else {
+      let selectedProduct;
+      const parents = [];
+      // Should delete parents not accessories and alternatives
+      for (let i = 0; i < this.selectedRows.length; i++) {
+        selectedProduct = this.proposalProductOrdered.filter(p => p.id === this.selectedRows[i])[0];
+        if (selectedProduct.type === 'PRODUCT') {
+          parents.push(selectedProduct.id);
+        }
+      }
+
+      const length = parents.length;
+
+      for (let i = 0; i < length; i++) {
+        this.proposalsService.deleteIndividualProposalProduct(this.proposalId, parents[i]).subscribe(res => {
+          if (i === length - 1) {
+            this.getProposalProductData();
+          }
+        });
+      }
     }
+
     this.deleteModalCollapsed = true;
   }
+
+
 
   cancelDelete() {
     this.deleteModalCollapsed = true;
@@ -669,9 +706,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
 
   getIconImgResource(product) {
     if (product.type === 'ACCESSORY' && product.useProductInProject === true) {
-      return 'assets/images/right-arrow (1).svg';
-    } else if (product.type === 'ACCESSORY' && product.useProductInProject === false) {
       return 'assets/images/right-arrow copy.svg';
+    } else if (product.type === 'ACCESSORY' && product.useProductInProject === false) {
+      return 'assets/images/right-arrow (1).svg';
     } else if (product.type === 'ALTERNATIVE') {
       return 'assets/images/shuffle.svg';
     }

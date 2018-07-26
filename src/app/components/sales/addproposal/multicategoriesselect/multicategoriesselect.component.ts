@@ -90,13 +90,18 @@ export class MultiCategoriesSelectComponent implements AfterViewInit, OnInit {
   }
 
   deleteCategory(id) {
-    this.sharedService.deleteIndividualCategory(id)
-    .subscribe(res => {
-      this.sharedService.getCategories().subscribe(data => {
-        this._categories = data.results;
-      });
-      this.salesService.deletedCategory.next(res.data.id);
-    });
+    // this.sharedService.deleteIndividualCategory(id)
+    // .subscribe(res => {
+    //   this.sharedService.getCategories().subscribe(data => {
+    //     this._categories = data.results;
+    //   });
+    //   this.salesService.deletedCategory.next(res.data.id);
+    // });
+    const categoryIds = this._categories.map(c => c.id);
+    const pos = categoryIds.indexOf(id);
+    this._categories.splice(pos, 1);
+    this.sendCategories.emit(this._categories);
+
   }
 
 }

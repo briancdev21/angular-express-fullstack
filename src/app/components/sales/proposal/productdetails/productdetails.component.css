@@ -419,12 +419,13 @@ span {
 .accessory-sku {
 	width: 90px;
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 }
 
 .accessory-sku span {
 	margin: 0;
+	width: 65%;
 }
 
 

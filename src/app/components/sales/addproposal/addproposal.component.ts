@@ -171,6 +171,7 @@ export class AddProposalComponent implements OnInit {
   proposalsList = [];
   taxRateList = [];
   leadsList = [];
+  needlessDate: any;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
     private proposalsService: ProposalsService, private projectsService: ProjectsService, private salesService: SalesService,
