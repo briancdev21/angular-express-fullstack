@@ -65,10 +65,18 @@ export class ReceiveInventoryDetailComponent implements OnInit {
         this.supplierList = res.results;
         this.sharedService.getPurchaseOrderProducts(this.purcahseOrderId).subscribe(res => {
           res.results.forEach(product => {
-
-            if (this.brandList.filter(brand => brand.id === product.brandId).pop() !== undefined) {
-              product.brand = this.brandList.filter(brand => brand.id === product.brandId).pop().name;
-            }
+            const skuArray = [];
+            skuArray.push(product.sku);
+            const params = {};
+            params['skus'] = skuArray;
+            let brandId;
+            this.sharedService.getInventoryProductsWithParams(params).subscribe(res => {
+              console.log('inventory products by skus:', res.results);
+              brandId = parseInt(res.results.pop().brandId, 10);
+              if (this.brandList.filter(brand => brand.id === brandId).pop() !== undefined) {
+                product.brand = this.brandList.filter(brand => brand.id === brandId).pop().name;
+              }
+            });
             if (this.supplierList.filter(supplier => supplier.id === product.supplierId).pop() !== undefined) {
               product.supplier = this.supplierList.filter(supplier => supplier.id === product.supplierId).pop().name;
             }
@@ -76,7 +84,7 @@ export class ReceiveInventoryDetailComponent implements OnInit {
           this.originProductsInfo = res.results;
           this.productsInfo = res.results;
         });
-      });
+      }); 
     });
   }
 
