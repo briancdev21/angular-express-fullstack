@@ -51,6 +51,8 @@ export class LeadProfileInfoBarComponent implements OnInit {
   invalidPrimaryPhone = false;
   invalidSecondaryPhone = false;
   phoneNumberChanged = false;
+  invalidShippingCountry = false;
+  invalidShippingProvince = false;
 
   constructor(private router: Router, private crmService: CrmService, private completerService: CompleterService ) {
 
