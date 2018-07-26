@@ -17,6 +17,7 @@ export class ProposalService {
   updatedProposalDiscount = new BehaviorSubject<any>({});
   massEdit = new BehaviorSubject<any>([]);
   searchQueryProposalProducts: BehaviorSubject<string> = new BehaviorSubject('');
+  insertSucess: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   // Observable string streams
   tableExpanded = this.expanded.asObservable();

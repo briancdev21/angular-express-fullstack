@@ -71,6 +71,11 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     //   });
     // }
 
+    this.proposalService.insertSucess.subscribe(res => {
+      if (res) {
+        this.getProposalProductData();
+      }
+    });
 
     this.productsService.getProductsList().subscribe(res => {
     });
@@ -165,7 +170,6 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         element.index = index;
         index = index + 1;
       });
-      console.log('ordered products: ', this.proposalProductOrdered);
       this.backUp = this.proposalProductOrdered;
     });
   }

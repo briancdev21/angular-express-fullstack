@@ -154,6 +154,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   sendProducts() {
     const sendData = [];
+    let count = 1;
     for (let i = 0; i <= this.selectedRows.length - 1; i += 1) {
       sendData.push(this.productsInfoAll.filter(p => p.sku === this.selectedRows[i])[0]);
     }
@@ -163,18 +164,22 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       // set option field as undefined for resolving conflice when expand table
       // sendData.map( s => s[0].option = undefined );
       // this.proposalService.insertToTable(sendData);
+      sendData.forEach(ele => {
+        ele.quantity = parseInt(ele.quantity, 10);
+        if ( this.proposalInfo.dealStatus === 'WON') {
+          this.commonService.showAlertModal.next(true);
+        } else {
+          this.proposalsService.createProposalProduct(this.proposalId, ele).subscribe(res => {
+            count = count + 1;
+            if (sendData.length === count) {
+              this.proposalService.insertSucess.next(true);
+              this.showDialog = false;
+              this.sidebarCollapsed = true;
+            }
+          });
+        }
+      });
     }
-    sendData.forEach(ele => {
-      ele.quantity = parseInt(ele.quantity, 10);
-      if ( this.proposalInfo.dealStatus === 'WON') {
-        this.commonService.showAlertModal.next(true);
-      } else {
-        this.proposalsService.createProposalProduct(this.proposalId, ele).subscribe(res => {
-          this.proposalService.insertToTable(sendData);
-        });
-      }
-    });
-    console.log('inserted products: ', sendData);
   }
 
   sendIndividualProduct(product) {
