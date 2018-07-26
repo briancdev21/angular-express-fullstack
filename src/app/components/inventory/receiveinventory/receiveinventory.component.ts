@@ -41,7 +41,7 @@ export class ReceiveInventoryComponent implements OnInit {
             const contactId = parseInt(ele.contactId.split('-').pop(), 10);
             contactName = this.contactList.filter(contact => contact.id === contactId).pop().name;
           }
-          if (ele.status === 'OPEN' && ele.status !== 'FULFILLED') {
+          if (ele.status.toLowerCase() !== 'fulfilled') {
             const ele_contactId = ele.contactId.split('-').pop();
             const contactAt = this.contacts.filter(contact => contact.id.toString() === ele_contactId).pop();
             const purchaseOrdersInfoItem = {
@@ -60,21 +60,7 @@ export class ReceiveInventoryComponent implements OnInit {
           }
         });
         this.sortArray('purchaseOrderNumber');
-        if (this.purchaseOrdersInfo.length === 0) {
-          const purchaseOrdersInfoItem = {
-            fakeData: true,
-            projectNumber: 0,
-            purchaseOrderNumber: 'ORDER#',
-            source: 'SOURCE',
-            type: 'TYPE',
-            status: 'STATUS',
-            quantity: 'QUANTITY',
-            received: 'RECEIVED',
-            dueDate: 'DUE DATE',
-            lastUpdated: 'LAST UPDATED'
-          };
-          this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
-        }
+        this.purchaseOrdersInfo = this.originalPurchaseOrderInfos.slice();
       });
     });
   }
