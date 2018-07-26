@@ -35,6 +35,7 @@ export class POProductListTableComponent implements OnInit {
 
   originProductsInfo = [];
   emptyRow: boolean;
+  sortScoreClicked: boolean;
 
   constructor(private router: Router, private sharedService: SharedService) {
 
@@ -82,6 +83,44 @@ export class POProductListTableComponent implements OnInit {
     this.originProductsInfo[index].quantityCopy = this.originProductsInfo[index].quantity;
     this.originProductsInfo[index].recievedCopy = this.originProductsInfo[index].recieved;
     this.savePurchaseOrderProducts();
+  }
+
+
+  sortArray(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    if (!cmp.sortScoreClicked) {
+      this.originProductsInfo.sort( function(name1, name2) {
+        if ( name1[field] < name2[field] ) {
+          return -1;
+        } else if ( name1[field] > name2[field]) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else {
+      this.originProductsInfo.reverse();
+    }
+  }
+
+  sortDateArray(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    if (!cmp.sortScoreClicked) {
+      this.originProductsInfo.sort( function(name1, name2) {
+        console.log('999', name1[field], name2[field]);
+        if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
+          return -1;
+        } else if ( Date.parse(name1[field]) > Date.parse(name2[field]) || name2[field] === '') {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else {
+      this.originProductsInfo.reverse();
+    }
   }
 }
 

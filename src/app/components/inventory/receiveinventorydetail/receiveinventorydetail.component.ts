@@ -31,6 +31,7 @@ export class ReceiveInventoryDetailComponent implements OnInit {
   supplierList = [];
   updatedProductInfo = [];
   searchKeyList = [];
+  originProductsInfo = [];
 
   public documents: Array<Object> = [
     {
@@ -72,6 +73,7 @@ export class ReceiveInventoryDetailComponent implements OnInit {
               product.supplier = this.supplierList.filter(supplier => supplier.id === product.supplierId).pop().name;
             }
           });
+          this.originProductsInfo = res.results;
           this.productsInfo = res.results;
         });
       });
@@ -85,25 +87,22 @@ export class ReceiveInventoryDetailComponent implements OnInit {
   searchKeywordChanged() {
     const keyword = this.searchKeyword;
 
-    this.sharedService.getPurchaseOrderProducts(this.purcahseOrderId).subscribe(res => {
-      const filteredProducts = [];
-      res.results.forEach(product => {
-        if (product.sku.indexOf(keyword) !== -1 ||
-          product.name.indexOf(keyword) !== -1 ||
-          product.model.indexOf(keyword) !== -1
-        ) {
-          if (this.brandList.filter(brand => brand.id === product.brandId).pop() !== undefined) {
-            product.brand = this.brandList.filter(brand => brand.id === product.brandId).pop().name;
-          }
-          if (this.supplierList.filter(supplier => supplier.id === product.supplierId).pop() !== undefined) {
-            product.supplier = this.supplierList.filter(supplier => supplier.id === product.supplierId).pop().name;
-          }
-          filteredProducts.push(product);
+    const filteredProducts = [];
+    this.originProductsInfo.forEach(product => {
+      if (product.sku.indexOf(keyword) !== -1 ||
+        product.name.indexOf(keyword) !== -1 ||
+        product.model.indexOf(keyword) !== -1
+      ) {
+        if (this.brandList.filter(brand => brand.id === product.brandId).pop() !== undefined) {
+          product.brand = this.brandList.filter(brand => brand.id === product.brandId).pop().name;
         }
-      });
-      this.productsInfo = filteredProducts;
-      console.log('product info:', this.productsInfo);
+        if (this.supplierList.filter(supplier => supplier.id === product.supplierId).pop() !== undefined) {
+          product.supplier = this.supplierList.filter(supplier => supplier.id === product.supplierId).pop().name;
+        }
+        filteredProducts.push(product);
+      }
     });
+    this.productsInfo = filteredProducts;
   }
 
   productInfoUpdated(event) {
@@ -115,7 +114,6 @@ export class ReceiveInventoryDetailComponent implements OnInit {
     this.productsInfo.forEach(product => {
       this.sharedService.updatePurchaseOrderProduct(product.purchaseOrderId, product.id, product).subscribe();
     });
-    this.router.navigate(['inventory/stock-control/received-inventory']);
   }
 
   onCancel() {
