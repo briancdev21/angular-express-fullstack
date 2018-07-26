@@ -57,7 +57,7 @@ td:nth-child(8), th:nth-child(8) {
 td:last-child {
 	display: flex;
 	align-items: center;
-	justify-content: space-around;
+	justify-content: space-between;
 }
 
 td img {
