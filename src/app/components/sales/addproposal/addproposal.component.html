@@ -363,10 +363,19 @@
           <div class="added-tasks"></div> -->
           <span class="editor-title">Scope of work (*required)</span>
           <div [froalaEditor] class="form-editor" [ngClass]="{'validation-required': invalidScopeEditorContent}" [(ngModel)]="scopeEditorContent"></div>
-          <span class="editor-title">Client notes</span>
-          <div [froalaEditor] class="form-editor" [(ngModel)]="clientNoteContent">Hello, Froala!</div>
-          <span class="editor-title">Internal notes</span>
-          <div [froalaEditor] class="form-editor" [(ngModel)]="internalNoteContent">Hello, Froala!</div>
+          <div class="notes">
+            <div>
+              <span class="editor-title">Client notes</span>
+              <!-- <div [froalaEditor] class="form-editor" [(ngModel)]="clientNoteContent">Hello, Froala!</div> -->
+              <textarea [(ngModel)]="clientNoteContent"></textarea>
+            </div>
+            <div>
+              <span class="editor-title">Internal notes</span>
+              <!-- <div [froalaEditor] class="form-editor" [(ngModel)]="internalNoteContent">Hello, Froala!</div> -->
+              <textarea [(ngModel)]="internalNoteContent"></textarea>
+            </div>
+          </div>
+          
           <div class="btn-section" >
             <button class="cancel-btn" (click)="clickBack('tab-three')"  >
               Back

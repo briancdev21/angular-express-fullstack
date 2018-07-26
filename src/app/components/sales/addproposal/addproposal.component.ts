@@ -633,8 +633,8 @@ export class AddProposalComponent implements OnInit {
       },
       'paymentSchedule': this.proposalDetails.paymentSchedule,
       'scopeOfWork': this.scopeEditorContent,
-      'clientNote': this.extractStringFromEditor(this.clientNoteContent),
-      'internalNote': this.extractStringFromEditor(this.internalNoteContent),
+      'clientNote': this.clientNoteContent,
+      'internalNote': this.internalNoteContent,
       'completionDate': this.proposalDetails.completionDate,
       'discount': {
         'value': this.proposalDetails.discount.amount,

@@ -30,14 +30,19 @@ export class ProposalListComponent implements OnInit {
   filterName = '';
   proposallistTypes: any;
   contactsList = [];
+  usersList = [];
 
   constructor( private filterService: FilterService, private proposalsService: ProposalsService, private salesService: SalesService,
     private sharedService: SharedService ) {
     this.filterAvaliableTo = 'everyone';
-    this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res;
-      this.retrieveData();
+    this.sharedService.getUsers().subscribe(user => {
+      this.usersList = user;
+      this.sharedService.getContacts().subscribe(res => {
+        this.contactsList = res;
+        this.retrieveData();
+      });
     });
+
 
     this.salesService.proposalAdded.subscribe(data => {
       if (data) {
@@ -73,9 +78,18 @@ export class ProposalListComponent implements OnInit {
   retrieveData() {
     this.proposalsService.getProposals().subscribe(res => {
       this.proposalListInfo = res.results;
-      console.log('proposals : ', res, this.contactsList);
       this.proposalListInfo.forEach(ele => {
         ele['contactName'] = this.getContactName(this.getContactIdFromString(ele.contactId));
+        let owners = [];
+        const ownersDetails = [];
+        owners.push(ele.designer);
+        owners.push(ele.projectManager);
+        owners.push(ele.accountManager);
+        owners = Array.from(new Set(owners));
+        owners.forEach(owner => {
+          ownersDetails.push(this.usersList.filter(u => u.username === owner)[0]);
+        });
+        ele.owners = ownersDetails;
       });
     });
   }
