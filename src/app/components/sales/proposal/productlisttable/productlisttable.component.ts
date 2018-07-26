@@ -525,16 +525,32 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
   }
 
   deleteProduct() {
-    for (let i = 0; i < this.selectedRows.length; i++) {
-      // this.proposalProductList = this.proposalProductList.filter(p => p.id !== this.selectedRows[i]);
-      // this.parents = this.getParentNode(this.proposalProductList);
-      // if () {
-      //   this.getParentTotalPrice();
-      // }
-      this.proposalsService.deleteIndividualProposalProduct(this.proposalId, this.selectedRows[i]).subscribe(res => {
+    if (this.selectedRows.length === 1) {
+      this.proposalsService.deleteIndividualProposalProduct(this.proposalId, this.selectedRows[0]).subscribe(res => {
         this.getProposalProductData();
       });
+    } else {
+      let selectedProduct;
+      const parents = [];
+      // Should delete parents not accessories and alternatives
+      for (let i = 0; i < this.selectedRows.length; i++) {
+        selectedProduct = this.proposalProductOrdered.filter(p => p.id === this.selectedRows[i])[0];
+        if (selectedProduct.type === 'PRODUCT') {
+          parents.push(selectedProduct.id);
+        }
+      }
+
+      const length = parents.length;
+
+      for (let i = 0; i < length; i++) {
+        this.proposalsService.deleteIndividualProposalProduct(this.proposalId, parents[i]).subscribe(res => {
+          if (i === length - 1) {
+            this.getProposalProductData();
+          }
+        });
+      }
     }
+
     this.deleteModalCollapsed = true;
   }
 
