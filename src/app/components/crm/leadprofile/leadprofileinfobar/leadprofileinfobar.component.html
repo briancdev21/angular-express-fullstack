@@ -1,5 +1,9 @@
 <div class="name editable">
-  <input value="{{userInfo.name}}" id="name" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" >
+  <input value="{{userInfo.business.name}}" id="name" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" *ngIf="userInfo.business">
+  <div *ngIf="userInfo.person" class="personal-name">
+    <input value="{{userInfo.person.firstName}}" id="name" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)">
+    <input value="{{userInfo.person.lastName}}" id="name" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)">
+  </div>
 </div>
 <div class="role editable">
   <textarea value="{{userInfo.role}}" id="role" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" > </textarea>
@@ -43,11 +47,11 @@
 <h5>Shipping</h5>
 <div class="shipping editable">
   <img src="assets/images/placeholder.png" />
-  <!-- <textarea value="{{userInfo.shippingaddress}}" id="shippingaddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea> -->
+  <!-- <textarea value="{{userInfo.shippingAddress}}" id="shippingAddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea> -->
   <div class="shipping-address-container">
     <input 
       class="address" 
-      value="{{userInfo.shippingaddress.address}}" 
+      value="{{userInfo.shippingAddress.address}}" 
       (keyup.enter)="showConfirmShippingAddressModal($event)" 
       (blur)="showConfirmShippingAddressModal($event)"
       placeholder="Address"
@@ -55,7 +59,7 @@
     <div class="city-state-country">
       <input 
         class="city" 
-        value="{{userInfo.shippingaddress.city}}" 
+        value="{{userInfo.shippingAddress.city}}" 
         (keyup.enter)="showConfirmShippingAddressModal($event)" 
         (blur)="showConfirmShippingAddressModal($event)"
         placeholder="City"
@@ -81,7 +85,7 @@
     </div>
     <input 
       class="postal-code" 
-      value="{{userInfo.shippingaddress.postalCode}}" 
+      value="{{userInfo.shippingAddress.postalCode}}" 
       (keyup.enter)="showConfirmShippingAddressModal($event)" 
       (blur)="showConfirmShippingAddressModal($event)"
       placeholder="Postal Code"
@@ -92,11 +96,11 @@
 <h5>Billing Address</h5>
 <div class="billing-address editable">
   <img src="assets/images/placeholder.png" />
-  <!-- <textarea value="{{userInfo.billingaddress}}" id="billingaddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea> -->
+  <!-- <textarea value="{{userInfo.billingAddress}}" id="billingAddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea> -->
   <div class="shipping-address-container">
     <input 
       class="address" 
-      value="{{userInfo.billingaddress.address}}" 
+      value="{{userInfo.billingAddress.address}}" 
       (keyup.enter)="showConfirmBillingAddressModal($event)" 
       (blur)="showConfirmBillingAddressModal($event)"
       placeholder="Address"
@@ -104,7 +108,7 @@
     <div class="city-state-country">
       <input 
         class="city" 
-        value="{{userInfo.billingaddress.city}}" 
+        value="{{userInfo.billingAddress.city}}" 
         (keyup.enter)="showConfirmBillingAddressModal($event)" 
         (blur)="showConfirmBillingAddressModal($event)"
         placeholder="City"
@@ -130,7 +134,7 @@
     </div>
     <input 
       class="postal-code" 
-      value="{{userInfo.billingaddress.postalCode}}" 
+      value="{{userInfo.billingAddress.postalCode}}" 
       (keyup.enter)="showConfirmBillingAddressModal($event)" 
       (blur)="showConfirmBillingAddressModal($event)"
       placeholder="Postal Code"

@@ -65,10 +65,10 @@ export class LeadProfileInfoBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.shippingCountry = this.userInfo.shippingaddress.country;
-    this.shippingProvince = this.userInfo.shippingaddress.province;
-    this.billingCountry = this.userInfo.billingaddress.country;
-    this.billingProvince = this.userInfo.billingaddress.province;
+    this.shippingCountry = this.userInfo.shippingAddress.country;
+    this.shippingProvince = this.userInfo.shippingAddress.province;
+    this.billingCountry = this.userInfo.billingAddress.country;
+    this.billingProvince = this.userInfo.billingAddress.province;
     console.log('userinfo: ', this.userInfo);
   }
 
@@ -146,55 +146,55 @@ export class LeadProfileInfoBarComponent implements OnInit {
   }
 
   showConfirmModal(event) {
-    if (this.eventData) { return false; }
-    if (event.target.value.trim() !== this.userInfo[event.target.id]) {
-      if (this.phoneNumberChanged) {
-        if (!this.phoneNumberValidation(this.userInfo.primaryphone)) {
-          this.invalidPrimaryPhone = true;
-          return false;
-        } else {
-          this.invalidPrimaryPhone = false;
-          this.showModal = true;
-          this.eventData = event;
-        }
-        if (!this.phoneNumberValidation(this.userInfo.mobilephone)) {
-          this.invalidSecondaryPhone = true;
-          return false;
-        } else {
-          this.invalidSecondaryPhone = false;
-          this.showModal = true;
-          this.eventData = event;
-        }
-      } else {
-        this.showModal = true;
-        this.eventData = event;
-      }
-     } else {
-       this.showModal = false;
-    }
+    // if (this.eventData) { return false; }
+    // if (event.target.value.trim() !== this.userInfo[event.target.id]) {
+    //   if (this.phoneNumberChanged) {
+    //     if (!this.phoneNumberValidation(this.userInfo.primaryphone)) {
+    //       this.invalidPrimaryPhone = true;
+    //       return false;
+    //     } else {
+    //       this.invalidPrimaryPhone = false;
+    //       this.showModal = true;
+    //       this.eventData = event;
+    //     }
+    //     if (!this.phoneNumberValidation(this.userInfo.mobilephone)) {
+    //       this.invalidSecondaryPhone = true;
+    //       return false;
+    //     } else {
+    //       this.invalidSecondaryPhone = false;
+    //       this.showModal = true;
+    //       this.eventData = event;
+    //     }
+    //   } else {
+    //     this.showModal = true;
+    //     this.eventData = event;
+    //   }
+    //  } else {
+    //    this.showModal = false;
+    // }
   }
 
   showConfirmShippingAddressModal(event) {
-    if (this.eventData) { return false; }
-    if (event.target.value.trim() !== this.userInfo.shippingaddress[event.target.id]) {
-      this.showModal = true;
-      this.eventData = event;
-      this.shippingAddressChanged = true;
-     } else {
-       this.showModal = false;
-    }
+    // if (this.eventData) { return false; }
+    // if (event.target.value.trim() !== this.userInfo.shippingAddress[event.target.id]) {
+    //   this.showModal = true;
+    //   this.eventData = event;
+    //   this.shippingAddressChanged = true;
+    //  } else {
+    //    this.showModal = false;
+    // }
   }
 
   showConfirmBillingAddressModal(event) {
-    console.log('event data: ', event, this.userInfo);
-    if (this.eventData) { return false; }
-    if (event.target.value.trim() !== this.userInfo.billingaddress[event.target.id]) {
-      this.showModal = true;
-      this.eventData = event;
-      this.billingAddressChanged = true;
-     } else {
-       this.showModal = false;
-    }
+    // console.log('event data: ', event, this.userInfo);
+    // if (this.eventData) { return false; }
+    // if (event.target.value.trim() !== this.userInfo.billingAddress[event.target.id]) {
+    //   this.showModal = true;
+    //   this.eventData = event;
+    //   this.billingAddressChanged = true;
+    //  } else {
+    //    this.showModal = false;
+    // }
   }
 
   onEnter() {}
@@ -202,7 +202,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
   onSelectShippingProvince(event) {
     console.log('province select: ', event);
     this.selectedProvince = event.originalObject.short;
-    if (this.selectedProvince !== this.userInfo.shippingaddress.province) {
+    if (this.selectedProvince !== this.userInfo.shippingAddress.province) {
       this.showModal = true;
       this.shippingProvinceChanged = true;
     }
@@ -212,7 +212,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
 
   onSelectShippingCountry(event) {
     this.selectedCountry = event.originalObject.code;
-    if (this.selectedCountry !== this.userInfo.shippingaddress.country) {
+    if (this.selectedCountry !== this.userInfo.shippingAddress.country) {
       this.showModal = true;
       this.shippingCountryChanged = true;
     }
@@ -222,7 +222,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
 
   onSelectBillingProvince(event) {
     this.selectedBillingProvince = event.originalObject.short;
-    if (this.selectedBillingProvince !== this.userInfo.billingaddress.province) {
+    if (this.selectedBillingProvince !== this.userInfo.billingAddress.province) {
       this.showModal = true;
       this.billingProvinceChanged = true;
     }
@@ -260,22 +260,22 @@ export class LeadProfileInfoBarComponent implements OnInit {
       this.invalidSecondaryPhone = false;
     }
     if (this.billingAddressChanged) {
-      this.userInfo.billingaddress[this.eventData.target.id] = this.eventData.target.value;
+      this.userInfo.billingAddress[this.eventData.target.id] = this.eventData.target.value;
       this.billingAddressChanged = false;
     } else if (this.shippingAddressChanged) {
-      this.userInfo.shippingaddress[this.eventData.target.id] = this.eventData.target.value;
+      this.userInfo.shippingAddress[this.eventData.target.id] = this.eventData.target.value;
       this.shippingAddressChanged = false;
     } else if (this.shippingProvinceChanged) {
-      this.userInfo.shippingaddress.province = this.selectedProvince;
+      this.userInfo.shippingAddress.province = this.selectedProvince;
       this.shippingProvinceChanged = false;
     } else if (this.shippingCountryChanged) {
-      this.userInfo.shippingaddress.country = this.selectedCountry;
+      this.userInfo.shippingAddress.country = this.selectedCountry;
       this.shippingProvinceChanged = false;
     } else if (this.billingProvinceChanged) {
-      this.userInfo.billingaddress.province = this.selectedBillingProvince;
+      this.userInfo.billingAddress.province = this.selectedBillingProvince;
       this.billingProvinceChanged = false;
     } else if (this.shippingAddressChanged) {
-      this.userInfo.billingaddress.country = this.selectedBillingCountry;
+      this.userInfo.billingAddress.country = this.selectedBillingCountry;
       this.billingCountryChanged = false;
     } else {
       this.userInfo[this.eventData.target.id] = this.eventData.target.value;
@@ -284,30 +284,30 @@ export class LeadProfileInfoBarComponent implements OnInit {
     this.changedUserInfo.emit({'data': this.userInfo});
   }
 
-  cancelChange() {
-    if (this.billingAddressChanged) {
-      this.eventData.target.value = this.userInfo.billingaddress[this.eventData.target.id];
-      this.billingAddressChanged = false;
-    } else if (this.shippingAddressChanged) {
-      this.eventData.target.value = this.userInfo.shippingaddress[this.eventData.target.id];
-      this.shippingAddressChanged = false;
-    } else if (this.shippingProvinceChanged) {
-      this.selectedProvince = this.userInfo.shippingaddress.province;
-      this.shippingProvinceChanged = false;
-    } else if (this.shippingCountryChanged) {
-      this.selectedCountry = this.userInfo.shippingaddress.country;
-      this.shippingProvinceChanged = false;
-    } else if (this.billingProvinceChanged) {
-      this.selectedBillingProvince = this.userInfo.billingaddress.province;
-      this.billingProvinceChanged = false;
-    } else if (this.shippingAddressChanged) {
-      this.selectedBillingCountry = this.userInfo.billingaddress.country;
-      this.billingCountryChanged = false;
-    } else {
-      this.eventData.target.value = this.userInfo[this.eventData.target.id];
-    }
-    this.eventData = undefined;
-  }
+  // cancelChange() {
+  //   if (this.billingAddressChanged) {
+  //     this.eventData.target.value = this.userInfo.billingAddress[this.eventData.target.id];
+  //     this.billingAddressChanged = false;
+  //   } else if (this.shippingAddressChanged) {
+  //     this.eventData.target.value = this.userInfo.shippingAddress[this.eventData.target.id];
+  //     this.shippingAddressChanged = false;
+  //   } else if (this.shippingProvinceChanged) {
+  //     this.selectedProvince = this.userInfo.shippingAddress.province;
+  //     this.shippingProvinceChanged = false;
+  //   } else if (this.shippingCountryChanged) {
+  //     this.selectedCountry = this.userInfo.shippingAddress.country;
+  //     this.shippingProvinceChanged = false;
+  //   } else if (this.billingProvinceChanged) {
+  //     this.selectedBillingProvince = this.userInfo.billingAddress.province;
+  //     this.billingProvinceChanged = false;
+  //   } else if (this.shippingAddressChanged) {
+  //     this.selectedBillingCountry = this.userInfo.billingAddress.country;
+  //     this.billingCountryChanged = false;
+  //   } else {
+  //     this.eventData.target.value = this.userInfo[this.eventData.target.id];
+  //   }
+  //   this.eventData = undefined;
+  // }
 
   changeImage() {
     this.showEditImageModal = true;

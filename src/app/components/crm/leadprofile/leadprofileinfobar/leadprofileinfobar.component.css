@@ -321,3 +321,7 @@ image-cropper {
 .phone-validation {
   border: 1px solid red !important;
 }
+
+.personal-name {
+  display: flex;
+}

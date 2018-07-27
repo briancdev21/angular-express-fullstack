@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../../../../services/shared.service';
+import { CrmService } from '../../../../services/crm.service';
 
 @Component({
   selector: 'app-leadbreadcrumbbar',
@@ -31,21 +32,12 @@ export class LeadBreadcrumbBarComponent implements AfterViewInit {
   public link = '/crm/leads';
   items2: any[] = [
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'username'};
   isAutocompleteUpdated = false;
   usersList: any;
 
-  constructor(private sharedService: SharedService) {
-    this.sharedService.getUsers().subscribe(res => {
-      this.usersList = res;
-      res.forEach((element, index) => {
-        this.items2.push({
-          id: index,
-          label: element.username,
-          imageUrl: element.pictureURI
-        });
-      });
-    });
+  constructor(private sharedService: SharedService, private crmService: CrmService) {
+
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
@@ -53,12 +45,25 @@ export class LeadBreadcrumbBarComponent implements AfterViewInit {
   }
 
   init() {
-      this.editable = false;
+    this.editable = false;
+    const fData = [];
+    this.sharedService.getUsers().subscribe(res => {
+      this.usersList = res;
+      this.items2 = res;
       this._userInfo.followers.forEach(element => {
-        this.items2 = this.items2.filter(function( obj ) {
-          return obj.label !== element.name;
-        });
+        fData.push(this.items2.filter(u => u.username === element)[0]);
       });
+      console.log('fdata: ', fData);
+      // fData.forEach(d => {
+      //   d.name = d.label;
+      // });
+      this._userInfo.followers = fData;
+      this._userInfo.followers.forEach(element => {
+        this.items2 = this.items2.filter(i => i.username !== element.username);
+      });
+      console.log('userInfo ###:', this.items2);
+    });
+
 
     // input breadcrumb bar info
     if (this._userInfo.name) {
@@ -69,13 +74,49 @@ export class LeadBreadcrumbBarComponent implements AfterViewInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.username !== item.username;
     });
-    this._userInfo.followers.push({name: item.label, imageUrl: item.imageUrl });
-    console.log('followers: ', this._userInfo.followers);
-    this.getFollowersUpdates.emit(this._userInfo.followers);
+    this._userInfo.followers.push(item);
+    console.log('followers: ', this._userInfo);
+    this.updateFollowers();
   }
 
+  updateFollowers() {
+    let savingData;
+    if (this._userInfo.type === 'PERSON') {
+      savingData = {
+        type: this._userInfo.type,
+        currencyId: this._userInfo.currencyId,
+        termId: this._userInfo.termId,
+        pricingCategoryId: this._userInfo.pricingCategoryId,
+        shippingAddress: this._userInfo.shippingAddress,
+        email: this._userInfo.email,
+        phoneNumbers: this._userInfo.phoneNumbers,
+        followers: this._userInfo.followers.map(f => f.username),
+        person: {
+          firstName: this._userInfo.person.firstName,
+          lastName: this._userInfo.person.lastName,
+        }
+      };
+    } else {
+      savingData = {
+        type: this._userInfo.type,
+        currencyId: this._userInfo.currencyId,
+        termId: this._userInfo.termId,
+        pricingCategoryId: this._userInfo.pricingCategoryId,
+        shippingAddress: this._userInfo.shippingAddress,
+        email: this._userInfo.email,
+        phoneNumbers: this._userInfo.phoneNumbers,
+        followers: this._userInfo.followers.map(f => f.username),
+        business: {
+          name: this._userInfo.business.name
+        }
+      };
+    }
+    this.crmService.updateIndividualLead(this._userInfo.id, savingData).subscribe(res => {
+      console.log('lead update: ', res);
+    });
+  }
 
   onInputChangedEvent(val: string) {
     this.inputChanged = val;
@@ -91,8 +132,9 @@ export class LeadBreadcrumbBarComponent implements AfterViewInit {
 
   removeUser(i: number) {
     const item = this._userInfo.followers[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
+    this.items2.push(item);
     this._userInfo.followers.splice(i, 1);
+    this.updateFollowers();
     this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
