@@ -58,6 +58,7 @@ th {
   cursor: pointer;
   border-bottom: 0;
   color: #464646;
+  min-width: 100px;
 }
 
 th:first-child, th:last-child {

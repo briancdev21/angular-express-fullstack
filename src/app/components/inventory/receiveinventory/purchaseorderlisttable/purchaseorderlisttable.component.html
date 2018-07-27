@@ -13,7 +13,7 @@
     <tr *ngFor="let purchaseorder of purchaseOrdersInfo; let itemorder = index;" (click)="redirectTo(itemorder)">
       <td [ngClass]="{'empty-data': purchaseorder.fakeData}" >{{purchaseorder.purchaseOrderNumber}}</td>
       <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.source}}</td>
-      <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.type}}</td>
+      <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.projectId}}</td>
       <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.status}}</td>
       <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.quantity}}</td>
       <td [ngClass]="{'empty-data': purchaseorder.fakeData}">{{purchaseorder.received}}</td>
