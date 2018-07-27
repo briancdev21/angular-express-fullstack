@@ -319,6 +319,10 @@ image-cropper {
   border-left: 1px solid lightgray;
 }
 
+/deep/.shipping-address-container ng2-completer .completer-input::placeholder {
+  color: #d3d3d3;
+}
+
 .phone-validation {
   border: 1px solid red !important;
 }

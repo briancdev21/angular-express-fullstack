@@ -75,14 +75,15 @@ export class LeadProfileInfoBarComponent implements OnInit {
     this.data1 = {};
     this.countriesSource = completerService.local(countries, 'name', 'name');
     this.provincesSource = completerService.local(provinces, 'name', 'name');
+    this.provincesBillingSource = completerService.local(provinces, 'name', 'name');
   }
 
   ngOnInit() {
-    this.shippingCountry = this.userInfo.shippingAddress.country;
-    this.shippingProvince = this.userInfo.shippingAddress.province;
-    this.billingCountry = this.userInfo.billingAddress.country;
-    this.billingProvince = this.userInfo.billingAddress.province;
-    console.log('userinfo: ', this.userInfo);
+    this.shippingCountry = countries.filter(c => c.code === this.userInfo.shippingAddress.country)[0].name;
+    this.shippingProvince = provinces.filter(p => p.country === this.userInfo.shippingAddress.province)[0].name;
+    this.billingCountry = countries.filter(c => c.code === this.userInfo.billingAddress.country)[0].name;
+    this.billingProvince = provinces.filter(p => p.country === this.userInfo.billingAddress.province)[0].name;
+    console.log('userinfo: ', this.userInfo, provinces);
   }
 
   public onReturnData(data: any) {
@@ -219,39 +220,51 @@ export class LeadProfileInfoBarComponent implements OnInit {
 
   onSelectShippingProvince(event) {
     console.log('province select: ', event);
-    this.selectedProvince = event.originalObject.short;
-    if (this.selectedProvince !== this.userInfo.shippingAddress.province) {
-      this.shippingProvinceChanged = true;
-    }
-    const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
-    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+    this.shippingProvince = event.originalObject.name;
+    this.userInfo.shippingAddress.province = event.originalObject.short;
+    // const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
+    // this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+    const selectedCountryData = countries.filter(c => c.code === event.originalObject.country)[0];
+    console.log('country select: ', selectedCountryData);
+    this.shippingCountry = selectedCountryData.name;
+    this.userInfo.shippingAddress.country = selectedCountryData.code;
+    this.updateProfile();
   }
 
   onSelectShippingCountry(event) {
-    this.selectedCountry = event.originalObject.code;
-    if (this.selectedCountry !== this.userInfo.shippingAddress.country) {
-      this.shippingCountryChanged = true;
-    }
-    this.selectedCountry = event.originalObject.country;
-    this.shippingCountry = countries.filter(c => c.code === this.selectedCountry)[0].name;
+    console.log('country select: ', event);
+    this.shippingCountry = event.originalObject.name;
+    this.userInfo.shippingAddress.country = event.originalObject.code;
+    // this.shippingCountry = countries.filter(c => c.code === this.selectedCountry)[0].name;
+    const provincesSourceList = provinces.filter(p => p.country === event.originalObject.code);
+    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+    this.shippingProvince = '';
+    this.userInfo.shippingAddress.province = '';
+    this.updateProfile();
   }
 
   onSelectBillingProvince(event) {
-    this.selectedBillingProvince = event.originalObject.short;
-    if (this.selectedBillingProvince !== this.userInfo.billingAddress.province) {
-      this.billingProvinceChanged = true;
-    }
-    const provincesSourceList = provinces.filter(p => p.country === this.selectedBillingCountry);
-    this.provincesBillingSource = this.completerService.local(provincesSourceList, 'name', 'name');
+    this.billingProvince = event.originalObject.name;
+    this.userInfo.billingAddress.province = event.originalObject.short;
+    // const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
+    // this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+    const selectedCountryData = countries.filter(c => c.code === event.originalObject.country)[0];
+    console.log('country select: ', selectedCountryData);
+    this.billingCountry = selectedCountryData.name;
+    this.userInfo.billingAddress.country = selectedCountryData.code;
+    this.updateProfile();
   }
 
   onSelectBillingCountry(event) {
-    this.selectedBillingCountry = event.originalObject.code;
-    if (this.selectedBillingCountry !== this.userInfo.billiingaddress.country) {
-      this.billingCountryChanged = true;
-    }
-    this.selectedBillingCountry = event.originalObject.country;
-    this.billingCountry = countries.filter(c => c.code === this.selectedBillingCountry)[0].name;
+    console.log('country select: ', event);
+    this.billingCountry = event.originalObject.name;
+    this.userInfo.billingAddress.country = event.originalObject.code;
+    // this.shippingCountry = countries.filter(c => c.code === this.selectedCountry)[0].name;
+    const provincesSourceList = provinces.filter(p => p.country === event.originalObject.code);
+    this.provincesBillingSource = this.completerService.local(provincesSourceList, 'name', 'name');
+    this.billingProvince = '';
+    this.userInfo.billingAddress.province = '';
+    this.updateProfile();
   }
 
   onKeywordsChanged(event) {
@@ -350,8 +363,9 @@ export class LeadProfileInfoBarComponent implements OnInit {
     console.log('user info: ', this.userInfo);
     if (this.userInfo.type === 'PERSON') {
       if (this.userInfo.person.firstName !== '' && this.userInfo.person.lastName !== '' && this.userInfo.email !== '' && !this.invalidEmail
-      && this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
-        !this.invalidPrimaryPhone && this.userInfo.phoneNumbers.primary && !this.invalidSecondaryPhone) {
+        && this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
+        !this.invalidPrimaryPhone && this.userInfo.phoneNumbers.primary && !this.invalidSecondaryPhone && this.billingProvince !== '' &&
+        this.billingCountry !== '') {
           if (this.userInfo.billingAddress) {
             if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode) {
               this.saveData();

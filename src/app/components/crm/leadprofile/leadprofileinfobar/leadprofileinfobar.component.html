@@ -81,7 +81,7 @@
         [minSearchLength]="0" 
         (keyup.enter)="onEnter()" 
         (selected)="onSelectShippingProvince($event)"
-        [placeholder]="'Provice'">
+        [placeholder]="'Select Province'">
       </ng2-completer>
       <ng2-completer 
         [(ngModel)]="shippingCountry" 
@@ -90,7 +90,7 @@
         [minSearchLength]="0" 
         (keyup.enter)="onEnter()" 
         (selected)="onSelectShippingCountry($event)"
-        [placeholder]="'Country'">
+        [placeholder]="'Select Country'">
       </ng2-completer>
     </div>
     <input 
@@ -128,21 +128,21 @@
         [ngClass]="{'validation-required': invalidBillingCity}">
       <ng2-completer 
         [(ngModel)]="billingProvince" 
-        [ngClass]="{'validation-required': invalidShippingProvince}" 
+        [ngClass]="{'validation-required': invalidBillingProvince}" 
         [datasource]="provincesSource" 
         [minSearchLength]="0" 
         (keyup.enter)="onEnter()" 
         (selected)="onSelectBillingProvince($event)"
-        [placeholder]="'Provice'">
+        [placeholder]="'Select Province'">
       </ng2-completer>
       <ng2-completer 
         [(ngModel)]="billingCountry" 
-        [ngClass]="{'validation-required': invalidShippingCountry}" 
+        [ngClass]="{'validation-required': invalidBillingCountry}" 
         [datasource]="countriesSource" 
         [minSearchLength]="0" 
         (keyup.enter)="onEnter()" 
         (selected)="onSelectBillingCountry($event)"
-        [placeholder]="'Country'">
+        [placeholder]="'Select Country'">
       </ng2-completer>
     </div>
     <input 
