@@ -21,6 +21,11 @@ export class POProductListTableComponent implements OnInit {
       this.originProductsInfo.forEach(product => {
         product.quantityCopy = product.quantity;
         product.recievedCopy = product.recieved;
+        const temp = {};
+        temp['quantity'] = product.quantity;
+        temp['recieved'] = product.recieved;
+        this.copyProductsInfo.push(temp);
+
       });
       if (this.originProductsInfo.length === 0) {
         this.emptyRow = true;
@@ -34,6 +39,7 @@ export class POProductListTableComponent implements OnInit {
 
 
   originProductsInfo = [];
+  copyProductsInfo = [];
   emptyRow: boolean;
   sortScoreClicked: boolean;
 
@@ -52,7 +58,6 @@ export class POProductListTableComponent implements OnInit {
     }
     // console.log('origin product info:', this.originProductsInfo);
     this.savePurchaseOrderProducts();
-
   }
   onChangeReceived(index, e) {
     if (e.which < 47 || e.which > 58 ) {  return false; }
@@ -80,8 +85,8 @@ export class POProductListTableComponent implements OnInit {
   }
 
   clearProductChange(index) {
-    this.originProductsInfo[index].quantityCopy = this.originProductsInfo[index].quantity;
-    this.originProductsInfo[index].recievedCopy = this.originProductsInfo[index].recieved;
+    this.originProductsInfo[index].quantityCopy = this.copyProductsInfo[index].quantity;
+    this.originProductsInfo[index].recievedCopy = this.copyProductsInfo[index].recieved;
     this.savePurchaseOrderProducts();
   }
 

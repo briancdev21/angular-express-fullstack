@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { SharedService } from '../../../services/shared.service';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-receiveinventorydetail',
@@ -80,6 +80,7 @@ export class ReceiveInventoryDetailComponent implements OnInit {
             if (this.supplierList.filter(supplier => supplier.id === product.supplierId).pop() !== undefined) {
               product.supplier = this.supplierList.filter(supplier => supplier.id === product.supplierId).pop().name;
             }
+            product.lastUpdated = moment(product.updatedAt).format('MMMM DD, YYYY');
           });
           this.originProductsInfo = res.results;
           this.productsInfo = res.results;
