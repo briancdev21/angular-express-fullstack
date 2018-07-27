@@ -48,7 +48,7 @@ export class ReceiveInventoryComponent implements OnInit {
               projectNumber: ele.id,
               purchaseOrderNumber: `PO${ele.id}`,
               source: contactName,
-              type: 'Purchase Order',
+              projectId: ele.projectId,
               status: ele.status,
               quantity: ele.quantity,
               received: ele.recieved,
