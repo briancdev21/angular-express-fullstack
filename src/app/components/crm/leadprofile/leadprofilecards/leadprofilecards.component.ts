@@ -7,6 +7,7 @@ import { UpcomingAppointmentsComponent } from '../../../profile/cards/upcomingap
 import { TasksComponent } from '../../../profile/cards/tasks/tasks.component';
 import { DocumentsComponent } from '../../../profile/cards/documents/documents.component';
 import { CollaboratorsComponent } from '../../../profile/cards/collaborators/collaborators.component';
+import { SharedService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'app-leadprofilecards',
@@ -31,11 +32,23 @@ export class LeadProfileCardsComponent {
   @Input() wonDealsInfo;
   @Input() userInfo;
   @Input() tasksInfo;
-  @Input() collaboratorsInfo;
+  @Input() set collaboratorsInfo(val) {
+    this.sharedService.getUsers().subscribe(user => {
+      this.usersList = user;
+      this._collaboratorInfo = val;
+      this._collaboratorInfo.forEach(element => {
+        this.collaborators.push(this.usersList.filter(u => u.username === element)[0]);
+      });
+    });
+  }
   @Input() documentsInfo;
   @Input() upcomingModalInfo;
 
-  constructor() {
+  _collaboratorInfo: any;
+  usersList: any;
+  collaborators = [];
+
+  constructor(private sharedService: SharedService) {
 
   }
 }

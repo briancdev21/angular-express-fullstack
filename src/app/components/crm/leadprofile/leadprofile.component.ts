@@ -168,27 +168,7 @@ export class LeadProfileComponent implements OnInit {
         }]
     }
   ];
-  public collaborators = {
-    projectManager: ['Michael Yue'],
-    teamMembers: ['Sepher Shoarinejad', 'Tyler Labonte'],
-    serviceTeam: [],
-    otherMembers: [],
-    collInfo: [{
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/Tyler',
-      name: 'Tyler'
-    },
-    {
-      imageUrl: 'assets/users/user3.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Michael'
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/joseph',
-      name: 'Joseph'
-    }]
-  };
+  public collaborators = [];
 
   public documents: Array<Object> = [
     {
@@ -221,18 +201,9 @@ export class LeadProfileComponent implements OnInit {
       this.currentLead = res.data;
       console.log('current lead: ', this.currentLead);
       // Update userInfo
+      this.collaborators =  this.currentLead.collaborators ? this.currentLead.collaborators : [];
+
       this.userInfo = this.currentLead;
-      // this.userInfo = {
-      //   profileLink: res.data.pictureURI,
-      //   email: res.data.email,
-      //   primaryphone: res.data.phoneNumbers.primary,
-      //   mobilephone: res.data.phoneNumbers.secondary,
-      //   keywords: res.data.keywordIds ? res.data.keywordIds : [],
-      //   followers: res.data.followers ? res.data.followers : [],
-      //   note: res.data.note,
-      //   shippingaddress: this.currentLead.shippingAddress,
-      //   billingaddress: this.currentLead.billingAddress
-      // };
       this.userInfo.profileLink = res.data.pictureURI;
       this.userInfo.primaryphone  = res.data.phoneNumbers.primary;
       this.userInfo.mobilephone = res.data.phoneNumbers.secondary;
@@ -304,7 +275,7 @@ export class LeadProfileComponent implements OnInit {
     // name === username currently
     const followerUsernames = {
       followers: event.map(e => e.name),
-    }
+    };
 
     if (event) {
       this.crmService.updateIndividualLead(this.currentLead.id, followerUsernames).subscribe( res => {

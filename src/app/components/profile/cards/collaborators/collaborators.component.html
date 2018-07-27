@@ -1,10 +1,10 @@
 <div class="card">
 	<div class="card-heading">
 		<h4>Collaborators</h4>
-		<img (click)="showCollaboratorsDialog=true" src="assets/images/Add-Button.svg"/>
+		<!-- <img (click)="showCollaboratorsDialog=true" src="assets/images/Add-Button.svg"/> -->
 	</div>
 	<div class="card-content">
-		<img *ngFor="let collaborator of collaborators.collInfo; let i = index;" src="{{collaborator.imageUrl}}"/>
+		<img *ngFor="let collaborator of collaborators; let i = index;" src="{{collaborator.pictureURI}}"/>
 	</div>
 </div>
 
@@ -12,7 +12,7 @@
 <div  [ngClass]="{'collaborators-dialog': showCollaboratorsDialog, 'collaborators-dialog-hide': !showCollaboratorsDialog }">
   <div class="header">
     <span>Collaborators</span>
-    <!-- <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showCollaboratorsDialog=false" /> -->
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showCollaboratorsDialog=false" />
   </div>
   <div class="content">
     <table width="100%">
