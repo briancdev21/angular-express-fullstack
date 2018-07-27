@@ -55,6 +55,8 @@ export class MyTasksComponent implements OnInit {
   contactsList = [];
   addedNewTask: any;
   showTaskGroupDeleteConfirmModal = [];
+  showSettingsModal = [[]];
+  showDeleteConfirmModal = [[]];
 
   constructor( private dragulaService: DragulaService, private fb: FormBuilder, private renderer: Renderer,
     private pmTasksService: PmTasksService, private sharedService: SharedService ) {
@@ -141,6 +143,8 @@ export class MyTasksComponent implements OnInit {
         this.ownerModalCollapsed[i] = new Array();
         this.dependencyModalCollapsed[i] = new Array();
         this.showTaskGroupDeleteConfirmModal[i] = false;
+        this.showSettingsModal[i] = new Array();
+        this.showDeleteConfirmModal[i] = new Array();
 
         this.pmTasksService.getTasks(this.panels[i].id).subscribe(taskData => {
           this.panels[i].tasks = taskData.results;
@@ -158,6 +162,8 @@ export class MyTasksComponent implements OnInit {
           for (let j = 0; j < this.panels[i].tasks.length; j++) {
             this.ownerModalCollapsed[i][j] = false;
             this.dependencyModalCollapsed[i][j] = false;
+            this.showSettingsModal[i][j] = false;
+            this.showDeleteConfirmModal[i][j] = false;
           }
         });
       }
@@ -402,6 +408,7 @@ export class MyTasksComponent implements OnInit {
       'duration': selectedTask.duration,
       'note': selectedTask.note ? selectedTask.note : '',
       'completion': selectedTask.completion,
+      'notify': selectedTask.notify,
     };
 
     const data = {
@@ -481,5 +488,31 @@ export class MyTasksComponent implements OnInit {
     } else {
       this.panels[i].editTitle = true;
     }
+  }
+
+  confirmDeleteMainTask(panel, task) {
+    this.pmTasksService.deleteIndividualtask(panel.id, task.id).subscribe(res => {
+      this.refreshTable();
+    });
+  }
+
+  copyTask(panel, task) {
+    const savingData = task;
+    savingData.startDate = moment(task.startDate).format('YYYY-MM-DD');
+    // remove null
+    Object.keys(savingData).forEach((key) => (savingData[key] == null) && delete savingData[key]);
+    // savingData = JSON.parse(savingData);
+    this.pmTasksService.createTask(panel.id, savingData).subscribe(res => {
+      this.refreshTable();
+    });
+  }
+
+  openShowSettingModal(i, j) {
+    for (let ki = 0; ki < this.panels.length; ki++) {
+      for (let kj = 0; kj < this.panels[ki].tasks.length; kj++) {
+        this.showSettingsModal[ki][kj] = false;
+      }
+    }
+    this.showSettingsModal[i][j] = true;
   }
 }

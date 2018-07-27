@@ -85,14 +85,48 @@
                   <img *ngIf="panel.projectId" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
                   <img *ngIf="!panel.projectId && task.isImportant == true" src="assets/images/star.png"  (click)="task.isImportant = !task.isImportant; updateInfo(i, j);">
                   <img *ngIf="!panel.projectId && task.isImportant == false" src="assets/images/star-empty.png" (click)="task.isImportant = !task.isImportant; updateInfo(i, j);">
-                  <img *ngIf="i == 1 || i == 2" src="assets/images/alarm.png" [ngClass]="{'blured': !task.like}" (click)="task.like = !task.like">
+                  <img *ngIf="i == 1 || i == 2" src="assets/images/alarm.png" [ngClass]="{'blured': !task.notify}" (click)="task.notify = !task.notify; updateInfo(i, j);">
                   <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
+                  <img src="assets/images/menu(1).png" (click)='openShowSettingModal(i, j);$event.stopPropagation();' class="menu-icon">
                   <!--Dependency numbers-->
                   <div *ngIf="panel.projectId" class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">
                     <span *ngFor="let dependency of panels[i].tasks[j].dependency; let l = index" (click)="openDependencyModal(i, j); editable=true; $event.stopPropagation();">
                       <span *ngIf="l != 0">,</span>
                       {{dependency}}
                     </span>
+                  </div>
+
+                  <!--settings modal-->
+                  <div [ngClass]="{'settings-modal': showSettingsModal[i][j], 'settings-modal-hide': !showSettingsModal[i][j] }" (clickOutside)="showSettingsModal[i][j] = false;">
+                    <!-- <input [value]="task.id" type="hidden" class="taskId" >
+                    <input [value]="milestone.id" type="hidden" class="taskGroupId" > -->
+                    <div (click)="showDeleteConfirmModal[i][j]= true;">Delete Task</div>
+                    <div (click)="copyTask(panel, task)">Copy Task</div>
+                    <!-- <div>Mark as Waiting On</div> -->
+                  </div>
+                  <!-- Confirm delete modal wrapper -->
+                  <div class="confirm-delete-modal-wrapper" *ngIf="showDeleteConfirmModal[i][j]" >
+                    <div [ngClass]="{'confirm-modal': showDeleteConfirmModal[i][j], 'confirm-modal-hide': !showDeleteConfirmModal[i][j] }">
+                      <div class="header">
+                        <span>Confirm Delete</span>
+                        <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showDeleteConfirmModal[i][j]=false" />
+                      </div>
+                      <div class="content" >
+                        <div class="confirm-que">
+                          Do you really want to delete?
+                        </div>
+                        <div class="center-btn-section" >
+                          <!-- <input [value]="task.id" type="hidden" class="taskId" >
+                          <input [value]="milestone.id" type="hidden" class="taskGroupId" >   -->
+                          <button class="confirm-btn" (click)="confirmDeleteMainTask(panel, task); showDeleteConfirmModal[i][j]=false;" >
+                            Confirm
+                          </button>
+                          <button class="cancel-btn" (click)="showDeleteConfirmModal[i][j]=false" >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div> 
                   </div>
                   <!-- dependecy selection modal-->
                   <div
