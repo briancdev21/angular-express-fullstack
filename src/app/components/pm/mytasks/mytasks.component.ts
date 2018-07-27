@@ -167,7 +167,7 @@ export class MyTasksComponent implements OnInit {
           }
         });
       }
-
+      console.log('panels: ', this.panels);
     });
   }
 
