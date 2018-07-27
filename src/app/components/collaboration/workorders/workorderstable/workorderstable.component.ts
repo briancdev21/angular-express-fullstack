@@ -26,28 +26,37 @@ export class WorkOrdersTableComponent implements OnInit {
   sortScoreClicked = true;
   contactsList = [];
   workOrdersList = [];
+  usersList = [];
 
   constructor( private filterService: FilterService, private router: Router, private sharedService: SharedService,
     private collaboratorsService: CollaboratorsService, private route: ActivatedRoute ) {
-
-    this.sharedService.getContacts().subscribe(data => {
-      this.contactsList = data;
-      this.addContactName(this.contactsList);
-      this.collaboratorsService.getWorkOrders().subscribe(res => {
-
-        this.workOrdersList = res.results;
-        this.workOrdersList.forEach(element => {
-          element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
-          element.contactName = this.getContactNameFromId(element.contactId);
-          element.barInfo = {
-            title: element.completion + '%',
-            completeness: element.completion
-          };
+    this.sharedService.getUsers().subscribe(user => {
+      this.usersList = user;
+      this.sharedService.getContacts().subscribe(data => {
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.collaboratorsService.getWorkOrders().subscribe(res => {
+          this.workOrdersList = res.results;
+          this.workOrdersList.forEach(element => {
+            const colArr = [];
+            element.startTime = moment(element.startDate).format('hh:mm a');
+            element.endTime = moment(element.endDate).format('hh:mm a');
+            element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+            element.contactName = this.getContactNameFromId(element.contactId);
+            element.barInfo = {
+              title: element.completion + '%',
+              completeness: element.completion
+            };
+            element.collaborators.forEach(col => {
+              colArr.push(this.usersList.filter(u => u.username === col)[0]);
+            });
+            element.collaboratorsData = colArr;
+          });
+          console.log('work order list: ', this.workOrdersList);
         });
-        console.log('work order list: ', this.workOrdersList);
       });
-
     });
+
 
   }
 
@@ -65,7 +74,7 @@ export class WorkOrdersTableComponent implements OnInit {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.workOrdersInfo.sort( function(name1, name2) {
+      this.workOrdersList.sort( function(name1, name2) {
         if ( name1[field] < name2[field] ) {
           return -1;
         } else if ( name1[field] > name2[field]) {
@@ -75,7 +84,7 @@ export class WorkOrdersTableComponent implements OnInit {
         }
       });
     } else {
-      this.workOrdersInfo.reverse();
+      this.workOrdersList.reverse();
     }
   }
 
@@ -95,7 +104,7 @@ export class WorkOrdersTableComponent implements OnInit {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.workOrdersInfo.sort( function(name1, name2) {
+      this.workOrdersList.sort( function(name1, name2) {
         if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
           return -1;
         } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
@@ -105,7 +114,7 @@ export class WorkOrdersTableComponent implements OnInit {
         }
       });
     } else {
-      this.workOrdersInfo.reverse();
+      this.workOrdersList.reverse();
     }
   }
 
