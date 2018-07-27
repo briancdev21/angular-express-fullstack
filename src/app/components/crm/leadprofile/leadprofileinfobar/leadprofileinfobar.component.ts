@@ -79,10 +79,15 @@ export class LeadProfileInfoBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.shippingCountry = countries.filter(c => c.code === this.userInfo.shippingAddress.country)[0].name;
-    this.shippingProvince = provinces.filter(p => p.country === this.userInfo.shippingAddress.province)[0].name;
-    this.billingCountry = countries.filter(c => c.code === this.userInfo.billingAddress.country)[0].name;
-    this.billingProvince = provinces.filter(p => p.country === this.userInfo.billingAddress.province)[0].name;
+    // this.shippingCountry = countries.filter(c => c.code === this.userInfo.shippingAddress.country)[0].name;
+    // this.shippingProvince = provinces.filter(p => p.country === this.userInfo.shippingAddress.province)[0].name;
+    // this.billingCountry = countries.filter(c => c.code === this.userInfo.billingAddress.country)[0].name;
+    // this.billingProvince = provinces.filter(p => p.country === this.userInfo.billingAddress.province)[0].name;
+    this.shippingCountry = this.userInfo.shippingAddress.country;
+    this.shippingProvince = this.userInfo.shippingAddress.province;
+    this.billingCountry = this.userInfo.billingAddress.country;
+    this.billingProvince = this.userInfo.billingAddress.province;
+    console.log('userinfo: ', this.userInfo);
     console.log('userinfo: ', this.userInfo, provinces);
   }
 

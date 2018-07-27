@@ -129,7 +129,7 @@
       <ng2-completer 
         [(ngModel)]="billingProvince" 
         [ngClass]="{'validation-required': invalidBillingProvince}" 
-        [datasource]="provincesSource" 
+        [datasource]="provincesBillingSource" 
         [minSearchLength]="0" 
         (keyup.enter)="onEnter()" 
         (selected)="onSelectBillingProvince($event)"
