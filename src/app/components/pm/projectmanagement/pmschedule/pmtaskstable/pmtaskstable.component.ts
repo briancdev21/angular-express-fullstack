@@ -582,6 +582,7 @@ export class PmTasksTableComponent implements OnInit {
     this.updateTask(milestoneId, taskId, selectedTaskData);
   }
   updateTask(milestoneId, taskId, taskData) {
+    console.log('task data: ', taskData);
     taskData.startDate = moment(taskData.startDate).format('YYYY-MM-DD');
     taskData.dependencyIds = taskData.dependency ? taskData.dependency : [];
     taskData.followers = taskData.followers ? taskData.followers : [];
@@ -589,7 +590,7 @@ export class PmTasksTableComponent implements OnInit {
     taskData.note = taskData.note ? taskData.note : '';
 
     this.pmTasksService.updateIndividualTask(milestoneId, taskId, taskData).subscribe(res => {
-      console.log('task updated:');
+      console.log('task updated:', res);
       this.updateDataForGanttChart();
     });
   }
@@ -683,5 +684,15 @@ export class PmTasksTableComponent implements OnInit {
       }
     }
     this.showSettingsModal[i][j] = true;
+  }
+
+  completionChanged(event) {
+    console.log('comoplete: ', event);
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
+    const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
+    const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
+    selectedTaskData.title = event.target.value;
+    this.updateTask(milestoneId, taskId, selectedTaskData);
   }
 }
