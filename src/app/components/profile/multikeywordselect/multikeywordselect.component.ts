@@ -70,12 +70,16 @@ export class MultiKeywordSelectComponent implements AfterViewInit, OnInit {
   }
 
   deleteKeyword(id) {
-    this.sharedService.deleteKeyword(id)
-    .subscribe(res => {
-      this.sharedService.getKeywords().subscribe(data => {
-        this.keywords = data.results;
-      });
-    });
+    // this.sharedService.deleteKeyword(id)
+    // .subscribe(res => {
+    //   this.sharedService.getKeywords().subscribe(data => {
+    //     this.keywords = data.results;
+    //   });
+    // });
+    const keywordIds = this.keywords.map(k => k.id);
+    const pos = keywordIds.indexOf(id);
+    this.keywords.splice(pos, 1);
+    this.sendKeywords.emit(this.keywords);
   }
 
 }

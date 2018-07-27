@@ -168,27 +168,7 @@ export class LeadProfileComponent implements OnInit {
         }]
     }
   ];
-  public collaborators = {
-    projectManager: ['Michael Yue'],
-    teamMembers: ['Sepher Shoarinejad', 'Tyler Labonte'],
-    serviceTeam: [],
-    otherMembers: [],
-    collInfo: [{
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/Tyler',
-      name: 'Tyler'
-    },
-    {
-      imageUrl: 'assets/users/user3.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Michael'
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/joseph',
-      name: 'Joseph'
-    }]
-  };
+  public collaborators = [];
 
   public documents: Array<Object> = [
     {
@@ -221,26 +201,19 @@ export class LeadProfileComponent implements OnInit {
       this.currentLead = res.data;
       console.log('current lead: ', this.currentLead);
       // Update userInfo
-      this.userInfo = {
-        name: res.data.person ? res.data.person.firstName + ' ' + res.data.person.lastName : res.data.business.name,
-        profileLink: res.data.pictureURI,
-        email: res.data.email,
-        primaryphone: res.data.phoneNumbers.primary,
-        mobilephone: res.data.phoneNumbers.secondary,
-        // shippingaddress: res.data.shippingAddress.address + ', ' +
-        //                   res.data.shippingAddress.city + ', ' +
-        //                   res.data.shippingAddress.province + ', ' +
-        //                   res.data.shippingAddress.postalCode,
-        // billingaddress: res.data.billingAddress ? res.data.billingAddress.address + ', ' +
-        //                 res.data.billingAddress.city + ', ' +
-        //                 res.data.billingAddress.province + ', ' +
-        //                 res.data.billingAddress.postalCode : '',
-        keywords: res.data.keywordIds ? res.data.keywordIds : [],
-        followers: res.data.followers ? res.data.followers : [],
-        note: res.data.note,
-        shippingaddress: this.currentLead.shippingAddress,
-        billingaddress: this.currentLead.billingAddress
-      };
+      this.collaborators =  this.currentLead.collaborators ? this.currentLead.collaborators : [];
+
+      this.userInfo = this.currentLead;
+      this.userInfo.profileLink = res.data.pictureURI;
+      this.userInfo.primaryphone  = res.data.phoneNumbers.primary;
+      this.userInfo.mobilephone = res.data.phoneNumbers.secondary;
+      this.userInfo.keywords = res.data.keywordIds ? res.data.keywordIds : [];
+      this.userInfo.followers = res.data.followers ? res.data.followers : [];
+      if (this.userInfo.type === 'PERSON') {
+        this.userInfo.name = this.userInfo.person.firstName + ' ' + this.userInfo.person.lastName;
+      } else {
+        this.userInfo.name = this.userInfo.business.name;
+      }
       // Update cards info
       this.cards.leadScore = res.data.score;
 
@@ -295,6 +268,20 @@ export class LeadProfileComponent implements OnInit {
       contact: undefined,
       content: ''
     };
+  }
+
+  updateFollowers(event) {
+    console.log('followers update: ', event);
+    // name === username currently
+    const followerUsernames = {
+      followers: event.map(e => e.name),
+    };
+
+    if (event) {
+      this.crmService.updateIndividualLead(this.currentLead.id, followerUsernames).subscribe( res => {
+      console.log('updated lead: ', res);
+    });
+    }
   }
 
   addContactName(data) {
@@ -408,7 +395,9 @@ export class LeadProfileComponent implements OnInit {
     if (this.savingLead.phoneNumbers.secondary === null) {
       delete this.savingLead.phoneNumbers.secondary;
     }
+    console.log('saving lead: ', this.savingLead);
     this.crmService.updateIndividualLead(this.currentLead.id, this.savingLead).subscribe( res => {
+      console.log('updated lead: ', res);
     });
   }
 

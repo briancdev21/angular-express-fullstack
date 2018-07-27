@@ -1,5 +1,5 @@
 <div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
-  <app-leadbreadcrumbbar *ngIf="userInfo" [userInfo]='userInfo' ></app-leadbreadcrumbbar>
+  <app-leadbreadcrumbbar *ngIf="userInfo" [userInfo]='userInfo' (getFollowersUpdates)="updateFollowers($event);"></app-leadbreadcrumbbar>
   <div class="content">
     <div class="profile-info" *ngIf="userInfo">
       <app-leadprofileinfobar [userInfo]='userInfo' (changedUserInfo)="onChangedUserInfo($event)" [currentLead]="currentLead"></app-leadprofileinfobar>
