@@ -51,8 +51,21 @@ export class LeadProfileInfoBarComponent implements OnInit {
   invalidPrimaryPhone = false;
   invalidSecondaryPhone = false;
   phoneNumberChanged = false;
+
+  invalidBusinessName = false;
+  invalidFirstName = false;
+  invalidLastName = false;
+  invalidShippingAddress = false;
+  invalidShippingCity = false;
+  invalidShippingPostalCode = false;
   invalidShippingCountry = false;
   invalidShippingProvince = false;
+  invalidBillingAddress = false;
+  invalidBillingCity = false;
+  invalidBillingProvince = false;
+  invalidBillingCountry = false;
+  invalidBillingPostalCode = false;
+  invalidEmail = false;
 
   constructor(private router: Router, private crmService: CrmService, private completerService: CompleterService ) {
 
@@ -197,13 +210,17 @@ export class LeadProfileInfoBarComponent implements OnInit {
     // }
   }
 
+  checkEmailValidation(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
   onEnter() {}
 
   onSelectShippingProvince(event) {
     console.log('province select: ', event);
     this.selectedProvince = event.originalObject.short;
     if (this.selectedProvince !== this.userInfo.shippingAddress.province) {
-      this.showModal = true;
       this.shippingProvinceChanged = true;
     }
     const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
@@ -213,7 +230,6 @@ export class LeadProfileInfoBarComponent implements OnInit {
   onSelectShippingCountry(event) {
     this.selectedCountry = event.originalObject.code;
     if (this.selectedCountry !== this.userInfo.shippingAddress.country) {
-      this.showModal = true;
       this.shippingCountryChanged = true;
     }
     this.selectedCountry = event.originalObject.country;
@@ -223,7 +239,6 @@ export class LeadProfileInfoBarComponent implements OnInit {
   onSelectBillingProvince(event) {
     this.selectedBillingProvince = event.originalObject.short;
     if (this.selectedBillingProvince !== this.userInfo.billingAddress.province) {
-      this.showModal = true;
       this.billingProvinceChanged = true;
     }
     const provincesSourceList = provinces.filter(p => p.country === this.selectedBillingCountry);
@@ -233,7 +248,6 @@ export class LeadProfileInfoBarComponent implements OnInit {
   onSelectBillingCountry(event) {
     this.selectedBillingCountry = event.originalObject.code;
     if (this.selectedBillingCountry !== this.userInfo.billiingaddress.country) {
-      this.showModal = true;
       this.billingCountryChanged = true;
     }
     this.selectedBillingCountry = event.originalObject.country;
@@ -314,6 +328,175 @@ export class LeadProfileInfoBarComponent implements OnInit {
   }
 
   loadImageFailed () {
+  }
+
+  updateProfile() {
+    this.invalidBusinessName = false;
+    this.invalidFirstName = false;
+    this.invalidLastName = false;
+    this.invalidShippingAddress = false;
+    this.invalidShippingCity = false;
+    this.invalidShippingPostalCode = false;
+    this.invalidShippingCountry = false;
+    this.invalidShippingProvince = false;
+    this.invalidBillingAddress = false;
+    this.invalidBillingCity = false;
+    this.invalidBillingProvince = false;
+    this.invalidBillingCountry = false;
+    this.invalidBillingPostalCode = false;
+    this.invalidEmail = !this.checkEmailValidation(this.userInfo.email);
+    this.invalidPrimaryPhone = !this.phoneNumberValidation(this.userInfo.phoneNumbers.primary);
+    this.invalidSecondaryPhone = !this.phoneNumberValidation(this.userInfo.phoneNumbers.secondary);
+    console.log('user info: ', this.userInfo);
+    if (this.userInfo.type === 'PERSON') {
+      if (this.userInfo.person.firstName !== '' && this.userInfo.person.lastName !== '' && this.userInfo.email !== '' && !this.invalidEmail
+      && this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
+        !this.invalidPrimaryPhone && this.userInfo.phoneNumbers.primary && !this.invalidSecondaryPhone) {
+          if (this.userInfo.billingAddress) {
+            if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode) {
+              this.saveData();
+            } else {
+              if (this.userInfo.billingAddress.address === ''  || this.userInfo.billingAddress.address === undefined) {
+                this.invalidBillingAddress = true;
+              }
+              if (this.userInfo.billingAddress.city === ''  || this.userInfo.billingAddress.city === undefined) {
+                this.invalidBillingCity = true;
+              }
+              if (this.userInfo.billingAddress.postalCode === ''  || this.userInfo.billingAddress.postalCode === undefined) {
+                this.invalidBillingPostalCode = true;
+              }
+              if (this.billingProvince === ''  || this.billingProvince === undefined) {
+                this.invalidBillingProvince = true;
+              }
+              if (this.billingCountry === ''  || this.billingCountry === undefined) {
+                this.invalidBillingCountry = true;
+              }
+            }
+          } else {
+            this.saveData();
+          }
+      } else {
+        console.log('check again: ', this.userInfo);
+        if (this.userInfo.person.firstName === undefined || this.userInfo.person.firstName === '') {
+          this.invalidFirstName = true;
+        }
+        if (this.userInfo.person.lastName === '') {
+          console.log('check again agai: ', this.userInfo);
+          this.invalidLastName = true;
+        }
+        if (!this.userInfo.email) {
+          this.invalidEmail = true;
+        }
+        if (this.userInfo.shippingAddress.address === ''  || this.userInfo.shippingAddress.address === undefined) {
+          this.invalidShippingAddress = true;
+        }
+        if (this.userInfo.shippingAddress.city === ''  || this.userInfo.shippingAddress.city === undefined) {
+          this.invalidShippingCity = true;
+        }
+        if (this.userInfo.shippingAddress.postalCode === ''  || this.userInfo.shippingAddress.postalCode === undefined) {
+          this.invalidShippingPostalCode = true;
+        }
+        if (this.shippingProvince === ''  || this.shippingProvince === undefined) {
+          this.invalidShippingProvince = true;
+        }
+        if (this.billingCountry === ''  || this.billingCountry === undefined) {
+          this.invalidShippingCountry = true;
+        }
+        if (!this.userInfo.phoneNumbers.primary) {
+          this.invalidPrimaryPhone = true;
+        }
+      }
+    } else {
+      if (this.userInfo.business.name && this.userInfo.email && !this.invalidEmail &&
+        this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
+        !this.invalidPrimaryPhone && this.userInfo.phoneNumbers.primary && !this.invalidSecondaryPhone) {
+          if (this.userInfo.billingAddress) {
+            if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode) {
+              this.saveData();
+            } else {
+              if (this.userInfo.billingAddress.address === ''  || this.userInfo.billingAddress.address === undefined) {
+                this.invalidBillingAddress = true;
+              }
+              if (this.userInfo.billingAddress.city === ''  || this.userInfo.billingAddress.city === undefined) {
+                this.invalidBillingCity = true;
+              }
+              if (this.userInfo.billingAddress.postalCode === ''  || this.userInfo.billingAddress.postalCode === undefined) {
+                this.invalidBillingPostalCode = true;
+              }
+              if (this.billingProvince === ''  || this.billingProvince === undefined) {
+                this.invalidBillingProvince = true;
+              }
+              if (this.billingCountry === ''  || this.billingCountry === undefined) {
+                this.invalidBillingCountry = true;
+              }
+            }
+          } else {
+            this.saveData();
+          }
+      } else {
+        if (this.userInfo.business.name === undefined || this.userInfo.business.name === '') {
+          this.invalidBusinessName = true;
+        }
+        if (!this.userInfo.email) {
+          this.invalidEmail = true;
+        }
+        if (this.userInfo.shippingAddress.address === ''  || this.userInfo.shippingAddress.address === undefined) {
+          this.invalidShippingAddress = true;
+        }
+        if (this.userInfo.shippingAddress.city === ''  || this.userInfo.shippingAddress.city === undefined) {
+          this.invalidShippingCity = true;
+        }
+        if (this.userInfo.shippingAddress.postalCode === ''  || this.userInfo.shippingAddress.postalCode === undefined) {
+          this.invalidShippingPostalCode = true;
+        }
+        if (this.shippingProvince === ''  || this.shippingProvince === undefined) {
+          this.invalidShippingProvince = true;
+        }
+        if (this.billingCountry === ''  || this.billingCountry === undefined) {
+          this.invalidShippingCountry = true;
+        }
+        if (!this.userInfo.phoneNumbers.primary) {
+          this.invalidPrimaryPhone = true;
+        }
+      }
+    }
+  }
+
+  saveData() {
+    let savingData;
+    if (this.userInfo.type === 'PERSON') {
+      savingData = {
+        type: this.userInfo.type,
+        currencyId: this.userInfo.currencyId,
+        termId: this.userInfo.termId,
+        pricingCategoryId: this.userInfo.pricingCategoryId,
+        shippingAddress: this.userInfo.shippingAddress,
+        email: this.userInfo.email,
+        phoneNumbers: this.userInfo.phoneNumbers,
+        followers: this.userInfo.followers.map(f => f.username),
+        person: {
+          firstName: this.userInfo.person.firstName,
+          lastName: this.userInfo.person.lastName,
+        }
+      };
+    } else {
+      savingData = {
+        type: this.userInfo.type,
+        currencyId: this.userInfo.currencyId,
+        termId: this.userInfo.termId,
+        pricingCategoryId: this.userInfo.pricingCategoryId,
+        shippingAddress: this.userInfo.shippingAddress,
+        email: this.userInfo.email,
+        phoneNumbers: this.userInfo.phoneNumbers,
+        followers: this.userInfo.followers.map(f => f.username),
+        business: {
+          name: this.userInfo.business.name
+        }
+      };
+    }
+    this.crmService.updateIndividualLead(this.userInfo.id, savingData).subscribe(res => {
+      console.log('lead update: ', res);
+    });
   }
 }
 

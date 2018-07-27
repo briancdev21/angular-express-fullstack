@@ -1,13 +1,20 @@
 <div class="name editable">
-  <input value="{{userInfo.business.name}}" id="name" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" *ngIf="userInfo.business">
+  <input 
+    value="{{userInfo.business.name}}" 
+    id="name" 
+    (keyup.enter)="updateProfile()" 
+    (blur)="updateProfile()" 
+    *ngIf="userInfo.business" 
+    placeholder="Business name" 
+    [ngClass]="{'validation-required': invalidBusinessName}">
   <div *ngIf="userInfo.person" class="personal-name">
-    <input value="{{userInfo.person.firstName}}" id="name" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)">
-    <input value="{{userInfo.person.lastName}}" id="name" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)">
+    <input [(ngModel)]="userInfo.person.firstName" (keyup.enter)="updateProfile()" (blur)="updateProfile()" placeholder="First name" [ngClass]="{'validation-required': invalidFirstName}">
+    <input [(ngModel)]="userInfo.person.lastName" (keyup.enter)="updateProfile()" (blur)="updateProfile()" placeholder="Last name" [ngClass]="{'validation-required': invalidLastName}">
   </div>
 </div>
-<div class="role editable">
-  <textarea value="{{userInfo.role}}" id="role" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" > </textarea>
-</div>
+<!-- <div class="role editable" >
+  <textarea value="{{userInfo.role}}" id="role" (keyup.enter)="updateProfile()" (blur)="updateProfile()" > </textarea>
+</div> -->
 <div class="logo">
     
   <img [src]='userInfo.profileLink' alt = "Add Profile Image Here"/>
@@ -15,27 +22,28 @@
 </div>
 <div class="email editable">
   <img src="assets/images/envelope.png" />
-  <textarea value="{{userInfo.email}}" id="email" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)"></textarea>
+  <input [(ngModel)]="userInfo.email" id="email" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidEmail}">
 </div>
+<span class="alert-email" *ngIf="invalidEmail">Wrong Email Format</span>
 <div class="phone editable">
   <img src="assets/images/ringing.png" />
   <div>
     <span>
       <input 
-        value="{{userInfo.primaryphone}}" 
+        [(ngModel)]="userInfo.phoneNumbers.primary" 
         id="primaryphone" 
-        (keyup.enter)="showConfirmModal($event); phoneNumberChanged = true" 
-        (blur)="showConfirmModal($event); phoneNumberChanged = true" 
+        (keyup.enter)="updateProfile(); phoneNumberChanged = true" 
+        (blur)="updateProfile(); phoneNumberChanged = true" 
         [ngClass]="{'phone-validation': invalidPrimaryPhone}"
         placeholder="XXX-XXX-XXXX">
       <span>(Primary Contact)</span>
     </span>
     <span>
       <input 
-        value="{{userInfo.mobilephone}}" 
+        [(ngModel)]="userInfo.phoneNumbers.secondary" 
         id="mobilephone" 
-        (keyup.enter)="showConfirmModal($event); phoneNumberChanged = true" 
-        (blur)="showConfirmModal($event); phoneNumberChanged = true" 
+        (keyup.enter)="updateProfile(); phoneNumberChanged = true" 
+        (blur)="updateProfile(); phoneNumberChanged = true" 
         [ngClass]="{'phone-validation': invalidSecondaryPhone}"
         placeholder="XXX-XXX-XXXX">
       <span>(Mobile)</span>
@@ -47,23 +55,25 @@
 <h5>Shipping</h5>
 <div class="shipping editable">
   <img src="assets/images/placeholder.png" />
-  <!-- <textarea value="{{userInfo.shippingAddress}}" id="shippingAddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea> -->
+  <!-- <textarea value="{{userInfo.shippingAddress}}" id="shippingAddress" (keyup.enter)="updateProfile()" (blur)="updateProfile()" ></textarea> -->
   <div class="shipping-address-container">
     <input 
       class="address" 
-      value="{{userInfo.shippingAddress.address}}" 
-      (keyup.enter)="showConfirmShippingAddressModal($event)" 
-      (blur)="showConfirmShippingAddressModal($event)"
+      [(ngModel)]="userInfo.shippingAddress.address" 
+      (keyup.enter)="updateProfile()" 
+      (blur)="updateProfile()"
       placeholder="Address"
-      id="address">
+      id="address"
+      [ngClass]="{'validation-required': invalidShippingAddress}">
     <div class="city-state-country">
       <input 
         class="city" 
         value="{{userInfo.shippingAddress.city}}" 
-        (keyup.enter)="showConfirmShippingAddressModal($event)" 
-        (blur)="showConfirmShippingAddressModal($event)"
+        (keyup.enter)="updateProfile()" 
+        (blur)="updateProfile()"
         placeholder="City"
-        id="city">
+        id="city"
+        [ngClass]="{'validation-required': invalidShippingCity}">
       <ng2-completer 
         [(ngModel)]="shippingProvince" 
         [ngClass]="{'validation-required': invalidShippingProvince}" 
@@ -85,34 +95,37 @@
     </div>
     <input 
       class="postal-code" 
-      value="{{userInfo.shippingAddress.postalCode}}" 
-      (keyup.enter)="showConfirmShippingAddressModal($event)" 
-      (blur)="showConfirmShippingAddressModal($event)"
+      [(ngModel)]="userInfo.shippingAddress.postalCode" 
+      (keyup.enter)="updateProfile()" 
+      (blur)="updateProfile()"
       placeholder="Postal Code"
-      id="postalCode">
+      id="postalCode"
+      [ngClass]="{'validation-required': invalidShippingPostalCode}">
   </div>
 </div>
 
 <h5>Billing Address</h5>
 <div class="billing-address editable">
   <img src="assets/images/placeholder.png" />
-  <!-- <textarea value="{{userInfo.billingAddress}}" id="billingAddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea> -->
+  <!-- <textarea value="{{userInfo.billingAddress}}" id="billingAddress" (keyup.enter)="updateProfile()" (blur)="updateProfile()" ></textarea> -->
   <div class="shipping-address-container">
     <input 
       class="address" 
       value="{{userInfo.billingAddress.address}}" 
-      (keyup.enter)="showConfirmBillingAddressModal($event)" 
-      (blur)="showConfirmBillingAddressModal($event)"
+      (keyup.enter)="updateProfile()" 
+      (blur)="updateProfile()"
       placeholder="Address"
-      id="address">
+      id="address"
+      [ngClass]="{'validation-required': invalidBillingAddress}">
     <div class="city-state-country">
       <input 
         class="city" 
         value="{{userInfo.billingAddress.city}}" 
-        (keyup.enter)="showConfirmBillingAddressModal($event)" 
-        (blur)="showConfirmBillingAddressModal($event)"
+        (keyup.enter)="updateProfile()" 
+        (blur)="updateProfile()"
         placeholder="City"
-        id="city">
+        id="city"
+        [ngClass]="{'validation-required': invalidBillingCity}">
       <ng2-completer 
         [(ngModel)]="billingProvince" 
         [ngClass]="{'validation-required': invalidShippingProvince}" 
@@ -135,10 +148,11 @@
     <input 
       class="postal-code" 
       value="{{userInfo.billingAddress.postalCode}}" 
-      (keyup.enter)="showConfirmBillingAddressModal($event)" 
-      (blur)="showConfirmBillingAddressModal($event)"
+      (keyup.enter)="updateProfile()" 
+      (blur)="updateProfile()"
       placeholder="Postal Code"
-      id="postalCode">
+      id="postalCode"
+      [ngClass]="{'validation-required': invalidBillingPostalCode}">
   </div>
 </div>
 
@@ -153,11 +167,11 @@
 
 <h4>Customer Notes</h4>
 <div class="customer-notes">
-    <textarea  [(ngModel)]="userInfo.note" id="customerNotes" (blur)="showConfirmModal($event)"></textarea>
+    <textarea  [(ngModel)]="userInfo.note" id="customerNotes" (blur)="updateProfile()"></textarea>
 </div>
 
 <!-- Confirm Alert Box -->
-<div class="confirm-modal-wrapper" *ngIf="showModal" ></div>
+<!-- <div class="confirm-modal-wrapper" *ngIf="showModal" ></div>
 <div [ngClass]="{'confirm-modal': showModal, 'confirm-modal-hide': !showModal }">
   <div class="header">
     <span>Confirm</span>
@@ -176,7 +190,7 @@
       </button>
     </div>
   </div>
-</div>  
+</div>   -->
 
 
 <!-- Image Edit Modal -->
