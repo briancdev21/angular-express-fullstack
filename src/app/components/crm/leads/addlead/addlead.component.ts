@@ -121,6 +121,8 @@ export class AddLeadComponent implements OnInit {
   provincesNameList = provinces.map(p => p.name);
   provinceNotIncluded = false;
   selectedProvincesNameList = [];
+  contactsSource: CompleterData;
+  businessAss: any;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
     private filterService: FilterService ) {
@@ -149,11 +151,16 @@ export class AddLeadComponent implements OnInit {
     this.sharedService.getContacts().subscribe(res => {
       this.contactsList = res;
       this.addContactName(this.contactsList);
+
+      this.sharedService.getUsers().subscribe(user => {
+        this.usersList = user;
+        this.usersList.forEach(element => {
+          element.name = element.username;
+        });
+        this.contactsSource = this.completerService.local(this.contactsList, 'name', 'name');
+      });
     });
 
-    this.sharedService.getUsers().subscribe(res => {
-      this.usersList = res;
-    });
 
     this.sharedService.getSources().subscribe(res => {
       this.sourcesList = res.results;
@@ -184,6 +191,11 @@ export class AddLeadComponent implements OnInit {
   }
 
   onEnter() {
+  }
+
+  onSelectCustomer(event) {
+    console.log('event: ', event);
+    this.businessAssociation = event.originalObject.id;
   }
 
   checkSource(event) {
@@ -597,7 +609,7 @@ export class AddLeadComponent implements OnInit {
             'lastName': this.lastName,
             'jobTitle': this.jobTitle ? this.jobTitle : 'a',
             'department': this.captain ? this.captain : 'a',
-            'businessAssociation': parseInt(this.businessAssociation, 10),
+            'businessAssociation': this.businessAssociation,
           },
           'shippingAddress': {
             'address': this.address,

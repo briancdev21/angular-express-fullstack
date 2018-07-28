@@ -143,9 +143,10 @@
             <div *ngIf="!typeAccountTypeChange">
               <span>Business association</span>
               <div *ngIf="contactsList">
-                <select [(ngModel)]="businessAssociation">
+                <!-- <select [(ngModel)]="businessAssociation">
                   <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.name}}</option>
-                </select>
+                </select> -->
+                <ng2-completer [(ngModel)]="businessAss" [datasource]="contactsSource" [minSearchLength]="0" (keyup.enter)="onEnter()" (selected)="onSelectCustomer($event)" ></ng2-completer>
               </div>
             </div>
 						<div *ngIf="typeAccountTypeChange">
