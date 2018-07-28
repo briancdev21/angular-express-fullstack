@@ -15,21 +15,28 @@
         <div class="tab-one">
           <div class="name-col tab-row">
             <div>
-              <span>Customer Name (*required)</span>
-              <ng2-completer
+              <span>Customer Name</span>
+              <!-- <ng2-completer
                 [dataService]="customerList" 
                 (selected)="onSelectCustomer($event)" 
                 [ngClass]="{'validation-required-name': invalidCustomerName}" 
                 [(ngModel)]="selectName"
                 [minSearchLength]="0"
                 *ngIf="contactsList">
-              </ng2-completer>
+              </ng2-completer> -->
+              <ng2-completer
+              [dataService]="customerList" 
+              (selected)="onSelectCustomer($event)" 
+              [(ngModel)]="selectName"
+              [minSearchLength]="0"
+              *ngIf="contactsList">
+            </ng2-completer>
             </div>
             <div class="workorder-project">
               <span>Project</span>
               <select [(ngModel)]="workorderDetails.selectedProject" (ngModelChange)="onSelectProject($event)">
-                <option *ngFor="let project of openProjects" [value]="project.id">
-                  {{project.projectName}}
+                <option *ngFor="let project of projectsList" [value]="project.id">
+                  {{project.name}}
                 </option>
               </select>
             </div>
@@ -37,7 +44,7 @@
 
           <div class="ordername-ordernumber tab-row">
             <div>
-              <span>Work Order Name</span>
+              <span>Work Order Name (*required)</span>
               <div>
                 <input [(ngModel)]="workorderDetails.workorderName" [ngClass]="{'validation-required': invalidName}">
               </div>
@@ -65,8 +72,7 @@
                     [owlDateTimeTrigger]="startDate" 
                     [owlDateTime]="startDate" 
                     placeholder="Choose a start date" 
-                    (dateTimeChange)="selectStartDate($event)" 
-                    [(ngModel)]="workorderDetails.startDate">
+                    (dateTimeChange)="selectStartDate($event)">
                   <owl-date-time [pickerType]="'calendar'" #startDate></owl-date-time>
                 </div>
               </div>
@@ -101,8 +107,7 @@
                   <input 
                     [owlDateTimeTrigger]="endDate" 
                     [owlDateTime]="endDate" 
-                    (dateTimeChange)="selectEndDate($event)" 
-                    [(ngModel)]="workorderDetails.endDate" 
+                    (dateTimeChange)="selectEndDate($event)"
                     [min]="workorderDetails.startDate">
                   <owl-date-time [pickerType]="'calendar'" #endDate></owl-date-time>
                 </div>
@@ -128,11 +133,19 @@
           </div>
 
           <div class="dependency-followers tab-row">
-            <div class="workorder-project">
+            <!-- <div class="workorder-project">
               <span>Dependencies</span>
               <select [(ngModel)]="workorderDetails.dependency">
                 <option *ngFor="let dependency of openDependencies" [value]="dependency">
-                  {{usersProjects[dependency].projectName}}
+                  {{projectsList[dependency].projectName}}
+                </option>
+              </select>
+            </div> -->
+            <div class="change-log">
+              <span>Change Log</span>
+              <select [(ngModel)]="workorderDetails.changeLog">
+                <option *ngFor="let changeLog of openChangeLogs" [value]="changeLog.id">
+                  {{changeLog.title}}
                 </option>
               </select>
             </div>
@@ -165,22 +178,15 @@
             </div>            
           </div>
           <div class="milestone-log tab-row">
-            <div class="milestone">
+            <!-- <div class="milestone">
               <span>Milestone</span>
               <select [(ngModel)]="workorderDetails.milestone">
                 <option *ngFor="let milestone of openMilestones" [value]="milestone">
                   {{milestone}}
                 </option>
               </select>
-            </div>
-            <div class="change-log">
-              <span>Change Log</span>
-              <select [(ngModel)]="workorderDetails.changeLog">
-                <option *ngFor="let changeLog of openChangeLogs" [value]="changeLog">
-                  {{changeLog}}
-                </option>
-              </select>
-            </div>
+            </div> -->
+            
           </div>
           <div class="btn-section" >
             <button class="cancel-btn" (click)="clickBack('tab-one')"  >

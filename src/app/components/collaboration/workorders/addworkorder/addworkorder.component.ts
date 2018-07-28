@@ -7,6 +7,7 @@ import { AvailabilityComponent } from '../orderprofile/availability/availability
 import { SharedService } from '../../../../services/shared.service';
 import { CollaboratorsService } from '../../../../services/collaborators.service';
 import { ProductsService } from '../../../../services/inventory/products.service';
+import { ProjectsService } from '../../../../services/projects.service';
 
 @Component({
   selector: 'app-addworkorder',
@@ -20,68 +21,10 @@ import { ProductsService } from '../../../../services/inventory/products.service
 export class AddWorkOrderComponent implements OnInit {
 
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
-  usersProjects = [
-    {
-      id: 0,
-      projectName: 'Remodel with a Nu Life',
-      projectId: 0,
-      owner: 'John Moss',
-    },
-    {
-      id: 1,
-      projectName: 'Project 1',
-      projectId: 1,
-      owner: 'John Moss',
-    },
-    {
-      id: 2,
-      projectName: 'Project 2',
-      projectId: 1,
-      owner: 'Latif',
-    },
-    {
-      id: 3,
-      projectName: 'Project 3',
-      projectId: 2,
-      owner: 'Latif',
-    },
-    {
-      id: 4,
-      projectName: 'Project 4',
-      projectId: 3,
-      owner: 'Dennis',
-    }
+  projectsList = [
   ];
 
   projectInfo = [
-    {
-      id: 0,
-      name: 'Remodel with a Nu Life',
-      dependency: [1, 3],
-      milestone: ['Planning 1', 'Planning 2', 'Complete'],
-      changeLog: ['change log 1', 'change log 2']
-    },
-    {
-      id: 1,
-      name: 'Project 1',
-      dependency: [1, 2],
-      milestone: ['Planning 2', 'Implementation 2', 'Complete'],
-      changeLog: ['change log 3', 'change log 4']
-    },
-    {
-      id: 2,
-      name: 'Project 2',
-      dependency: [0, 1, 3],
-      milestone: ['Planning 1', 'Implementation 3', 'Complete 3'],
-      changeLog: ['change log 5', 'change log 6']
-    },
-    {
-      id: 3,
-      name: 'Project 3',
-      dependency: [0, 1, 2],
-      milestone: ['Planning 4', 'Integration', 'Complete'],
-      changeLog: ['change log 7', 'change log 8']
-    }
   ];
 
   taskTicketInfo: Array<object> = [
@@ -144,20 +87,18 @@ export class AddWorkOrderComponent implements OnInit {
   deliveryProducts: Array<object> = [];
 
   workorderDetails = {
-    projectId: '',
-    contactId : '',
-    selectedProject: 0,
+    projectId: undefined,
+    contactId : undefined,
+    selectedProject: undefined,
     workorderNumber: '',
     startDate: '',
     endDate: '',
     startTime: '',
     endTime: '',
     description: '',
-    dependency: '',
     followers: [],
-    milestone: '',
-    changeLog: '',
-    workorderName: ''
+    changeLog: undefined,
+    workorderName: undefined
   };
 
   addWorkorderModalCollapsed = true;
@@ -220,10 +161,6 @@ export class AddWorkOrderComponent implements OnInit {
   inputChanged: any = '';
   config2: any = {'placeholder': 'No Result', 'sourceField': 'label'};
   items2: any[] = [
-    {id: 0, label: 'John Moss', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Latif', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
-    {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
   ];
 
   searchableList = ['name'];
@@ -250,7 +187,7 @@ export class AddWorkOrderComponent implements OnInit {
   newCreatedWorkOrderId: any;
   availableProductsList = [];
 
-  constructor(private completerService: CompleterService, private sharedService: SharedService,
+  constructor(private completerService: CompleterService, private sharedService: SharedService, private projectsService: ProjectsService,
     private collaboratorsService: CollaboratorsService, private productsService: ProductsService) {
     const comp = this;
     document.addEventListener('click', function() {
@@ -281,6 +218,12 @@ export class AddWorkOrderComponent implements OnInit {
       this.availableProductsList = data.results;
       console.log('proudctslist: ', data);
     });
+
+    this.projectsService.getProjectsList().subscribe(res => {
+      this.projectsList = res.results;
+      console.log('projects List: ', this.projectsList);
+      // this.openProjects = this.projectsList.filter(p => p.)
+    });
   }
 
   ngOnInit() {
@@ -293,7 +236,7 @@ export class AddWorkOrderComponent implements OnInit {
   onSelectCustomer(event) {
     console.log('selected customer: ', event);
     this.workorderDetails.contactId = event.originalObject.id;
-    this.openProjects = this.usersProjects.filter( p => p.owner === event);
+    // this.openProjects = this.usersProjects.filter( p => p.owner === event);
   }
 
   onInputChangedEvent(val: string) {
@@ -370,13 +313,10 @@ export class AddWorkOrderComponent implements OnInit {
       console.log('workorder name: ', this.workorderDetails.workorderName);
       this.invalidCustomerName = false;
       this.invalidStartTime = this.invalidStartDate = this.invalidEndDate = this.invalidEndTime = this.invalidName = false;
-      if (this.workorderDetails.contactId && this.workorderDetails.startTime && this.workorderDetails.workorderName &&
+      if (this.workorderDetails.startTime && this.workorderDetails.workorderName &&
           this.workorderDetails.startDate && this.workorderDetails.endDate && this.workorderDetails.endTime)  {
             this.createNewWorkOrder();
       } else {
-        if (!this.workorderDetails.contactId) {
-          this.invalidCustomerName = true;
-        }
         if (!this.workorderDetails.endDate) {
           this.invalidEndDate = true;
         }
@@ -430,20 +370,28 @@ export class AddWorkOrderComponent implements OnInit {
   }
 
   createNewWorkOrder() {
+    console.log('saving work orders: ', this.workorderDetails);
     const timeStart = moment(this.workorderDetails.startTime).format('hh:mm:ss');
     const timeAddedStart = this.workorderDetails.startDate + 'T' + timeStart;
     const isoFormatStart = new Date (timeAddedStart).toISOString();
 
     const timeEnd = moment(this.workorderDetails.endTime).format('hh:mm:ss');
-    const timeAddedEnd = this.workorderDetails.startDate + 'T' + timeEnd;
+    const timeAddedEnd = this.workorderDetails.endDate + 'T' + timeEnd;
     const isoFormatEnd = new Date (timeAddedEnd).toISOString();
     const savingWorkOrderData = {
       contactId: this.workorderDetails.contactId,
       name: this.workorderDetails.workorderName,
       startDate: isoFormatStart,
       endDate: isoFormatEnd,
-      followers: this.followers
+      followers: this.followers.length > 0 ? this.followers : undefined,
+      projectId: this.workorderDetails.selectedProject ? this.workorderDetails.selectedProject : undefined,
+      changelogId: this.workorderDetails.changeLog ? parseInt(this.workorderDetails.changeLog, 10) : null,
+      description: this.workorderDetails.description
     };
+
+    // remove undefined and null fields
+    Object.keys(savingWorkOrderData).forEach((key) =>
+      (savingWorkOrderData[key] == null || savingWorkOrderData[key] === undefined) && delete savingWorkOrderData[key]);
 
     this.collaboratorsService.createWorkOrder(savingWorkOrderData).subscribe(res => {
       if (res.error) {
@@ -504,10 +452,14 @@ export class AddWorkOrderComponent implements OnInit {
   }
 
   onSelectProject(event) {
-    const index = parseInt(event, 10);
-    this.openDependencies = this.projectInfo[index].dependency;
-    this.openMilestones = this.projectInfo[index].milestone;
-    this.openChangeLogs = this.projectInfo[index].changeLog;
+    console.log('selected project: ', event);
+    this.projectsService.getProjectChangeLogs(event).subscribe(res => {
+      this.openChangeLogs = res.results.filter(c => c.status === 'IN_PROGRESS' || c.status === 'NEW');
+      console.log('openChangeLogs: ', this.openChangeLogs);
+    });
+    // this.openDependencies = this.projectInfo[index].dependency;
+    // this.openMilestones = this.projectInfo[index].milestone;
+    // this.openChangeLogs = this.projectInfo[index].changeLog;
   }
 
   onSelectFollowers(item: any) {
