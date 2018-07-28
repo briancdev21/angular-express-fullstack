@@ -32,7 +32,7 @@
             </div>
           </div> 
         </div>
-        <div class="add-btn" (click)="showDetailedTaskModal=true; temp=project.id">+</div>
+        <!-- <div class="add-btn" (click)="showDetailedTaskModal=true; temp=project.id">+</div> -->
         <div class="personal-project-cards">
           <div *ngFor="let owner of taskOwners" >
             <div class="personal-card" *ngIf="getTasksCount(owner, project) > 0">
