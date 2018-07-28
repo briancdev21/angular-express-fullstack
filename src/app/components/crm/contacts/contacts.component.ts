@@ -67,6 +67,7 @@ export class ContactsComponent implements OnInit {
     this.backUpContacts = this.contactsListInfo;
     this.crmService.getContactsList().subscribe(data => {
       this.contactsListInfo = data.results;
+      this.addContactName(this.contactsListInfo);
       console.log('contacts: ', data);
     });
   }
@@ -141,5 +142,16 @@ export class ContactsComponent implements OnInit {
     this.contactsListInfo = this.backUpContacts;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }
