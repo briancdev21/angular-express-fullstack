@@ -177,27 +177,7 @@ export class ProfileComponent implements OnInit {
         }]
     }
   ];
-  public collaborators = {
-    projectManager: ['Michael Yue'],
-    teamMembers: ['Sepher Shoarinejad', 'Tyler Labonte'],
-    serviceTeam: [],
-    otherMembers: [],
-    collInfo: [{
-      imageUrl: 'assets/users/user1.png',
-      profileLink: 'crm/contacts/Tyler',
-      name: 'Tyler'
-    },
-    {
-      imageUrl: 'assets/users/user3.png',
-      profileLink: 'crm/contacts/michael',
-      name: 'Michael'
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      profileLink: 'crm/contacts/joseph',
-      name: 'Joseph'
-    }]
-  };
+  public collaborators = [];
 
   public documents: Array<Object> = [
     {
@@ -234,7 +214,9 @@ export class ProfileComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService, private sharedService: SharedService) {
     this.contactInfoIndex = this.route.snapshot.paramMap.get('id');
     this.crmService.getIndividualContact(this.contactInfoIndex).subscribe(res => {
+      
       this.currentContact = res.data;
+      this.collaborators =  this.currentContact.collaborators ? this.currentContact.collaborators : [];
       this.dataRetrieved = true;
       // Update userInfo
       this.userInfo = {
