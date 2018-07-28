@@ -1,6 +1,7 @@
 export class PurchaseOrderModel {
   id: number;
   status: string;
+  projectId: string;
   contactId: number;
   shippingAddress: {
     address: string;

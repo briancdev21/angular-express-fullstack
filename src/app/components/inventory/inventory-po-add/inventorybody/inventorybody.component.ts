@@ -6,6 +6,7 @@ import { ContactUserModel } from '../../../../models/contactuser.model';
 import { PurchaseOrderModel } from '../../../../models/purchaseorder.model';
 import { PurchaseOrderCreateModel } from '../../../../models/purchaseordercreate.model';
 import { Router } from '@angular/router';
+import { ProjectsService } from '../../../../services/projects.service';
 
 @Component({
   selector: 'app-inventorybody',
@@ -43,7 +44,7 @@ export class InventoryBodyComponent {
   contactId = undefined;
   userList = [];
 
-  projects = ['task1', 'task2', 'task3'];
+  projects = [];
   labelText = 'Use customer address';
 
   terms = [];
@@ -84,7 +85,7 @@ export class InventoryBodyComponent {
   };
   showErrors = false;
 
-  constructor(private sharedService: SharedService, private router: Router) {
+  constructor(private sharedService: SharedService, private router: Router, private projectService: ProjectsService) {
     this.createdDate = new Date().toISOString();
     this.dueDate = new Date().toISOString();
       // Get contacts
@@ -99,6 +100,10 @@ export class InventoryBodyComponent {
       this.sharedService.getTerms().subscribe(termRes => {
         this.terms = termRes.results;
       });
+      this.projectService.getProjectsList().subscribe(res => {
+        console.log('res results:', res.results.map(project => project.id));
+        this.projects = res.results.map(project => project.id);
+      }); 
   }
 
   onSwitchChanged(status: boolean) {

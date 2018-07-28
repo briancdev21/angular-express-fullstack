@@ -3,7 +3,7 @@
     <div>
       <select (ngModelChange)="onChooseProject($event)" >
           <option value="default" default>Choose a project</option>
-          <option *ngFor="let pn of projectnames" [ngValue]="pn">{{pn}}</option>
+          <option *ngFor="let pn of projects" [ngValue]="pn">{{pn}}</option>
       </select>
     </div>
   </div>

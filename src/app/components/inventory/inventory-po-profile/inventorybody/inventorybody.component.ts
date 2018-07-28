@@ -37,6 +37,7 @@ export class InventoryBodyComponent {
     }
     this.internalMemo = this.po_mock.internalMemo;
     this.supplierNote = this.po_mock.supplierNote;
+    this.selectedProject = this.po_mock.projectId;
 
     if (this.po_mock.id !== undefined) {
       this.sharedService.getPurchaseOrderProducts(this.po_mock.id).subscribe( productRes => {
@@ -91,7 +92,7 @@ export class InventoryBodyComponent {
   totalamountdue = undefined;
   taxrate = 0;
   origin_taxes = undefined;
-
+  selectedProject: any;
   po_id = '';
   createdDate: any;
   supplierNote: any;
