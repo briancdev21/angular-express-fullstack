@@ -19,6 +19,8 @@ export class PfFinancialTableComponent implements OnInit {
 
   @Input() purchaseOrdersList;
   @Input() invoicesList;
+  @Input() workOrdersList;
+  @Input() tableDataAll;
 
   constructor( private filterService: FilterService,  private sharedService: SharedService ) {
 

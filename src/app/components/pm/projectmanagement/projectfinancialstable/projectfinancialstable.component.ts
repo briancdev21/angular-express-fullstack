@@ -4,6 +4,7 @@ import 'rxjs/add/operator/finally';
 import { CommonComponent } from '../../../common/common.component';
 import { FilterService } from './filter.service';
 import { PmService } from '../../pm.service';
+import { CollaboratorsService } from '../../../../services/collaborators.service';
 
 @Component({
   selector: 'app-projectfinancialstable',
@@ -20,6 +21,9 @@ export class ProjectFinancialsTableComponent implements OnInit {
 
   @Input() purchaseOrdersList = [];
   @Input() invoicesList;
+  public workOrdersList = [];
+  public tableDataAll = [];
+
   menuCollapsed = true;
   saveFilterModalCollapsed = true;
   showSaveFilterModal = false;
@@ -56,22 +60,40 @@ export class ProjectFinancialsTableComponent implements OnInit {
   tagsList = [
   ];
 
-  constructor( private filterService: FilterService, private pmService: PmService) {
+  constructor( private filterService: FilterService, private pmService: PmService, private collaboratorsService: CollaboratorsService) {
 
     this.filterAvaliableTo = 'everyone';
-    this.currentProjectId = localStorage.getItem('current_pending_projectId');
+    this.currentProjectId = localStorage.getItem('current_projectId');
 
     this.pmService.getPurchaseOrders(this.currentProjectId)
     .subscribe(res => {
       this.purchaseOrdersList = res.results;
-      console.log('purchaseOrdersList: ', this.purchaseOrdersList);
-    });
+      this.purchaseOrdersList.forEach(po => {
+        po.type = 'Purchase Order';
+        po.typeNumber = 'PO' + ' ' + po.id;
+      });
+      this.tableDataAll = this.purchaseOrdersList;
 
-    this.pmService.getInvoices()
-    .finally(() => this.getInvoices(this.currentProjectId))
-    .subscribe(res => {
-      this.invoicesList = res.results;
-      console.log('invoicesList: ', this.invoicesList);
+      this.pmService.getInvoices()
+      .subscribe(invoice => {
+        this.invoicesList = invoice.results;
+        this.invoicesList = this.invoicesList.filter(b => b.projectId === this.currentProjectId);
+        this.invoicesList.forEach(iv => {
+          iv.type = 'Invoice';
+          iv.typeNumber = 'IN' + ' ' + iv.id;
+        });
+        this.tableDataAll = this.tableDataAll.concat(this.invoicesList);
+
+        this.collaboratorsService.getWorkOrders().subscribe(order => {
+          this.workOrdersList = order.results;
+          this.workOrdersList = this.workOrdersList.filter(w => w.projectId === this.currentProjectId);
+          this.workOrdersList.forEach(wo => {
+            wo.type = 'Work Order';
+            wo.typeNumber = 'WO' + ' ' + wo.id;
+          });
+          this.tableDataAll = this.tableDataAll.concat(this.workOrdersList);
+        });
+      });
     });
   }
 

@@ -9,23 +9,14 @@
       <th>DATE UPDATED</th>
       <th>COLLABORATORS</th>
     </tr>
-    <tr *ngFor="let order of purchaseOrdersList; let i = index">
-      <td>PO {{order.id}}</td>
-      <td>Purchase Order</td>
-      <td>{{order.total}}</td>
-      <td>{{order.status}}</td>
-      <td>{{getFormatedDate(order.createdAt)}}</td>
-      <td>{{getFormatedDate(order.updatedAt)}}</td>
-      <td>{{order.owner}}</td>
-    </tr>
-    <tr *ngFor="let invoice of invoicesList; let i = index">
-      <td>IN {{invoice.id}}</td>
-      <td>Invoice</td>
-      <td>{{invoice.total}}</td>
-      <td>{{invoice.status}}</td>
-      <td>{{getFormatedDate(invoice.createdAt)}}</td>
-      <td>{{getFormatedDate(invoice.updatedAt)}}</td>
-      <td>{{invoice.owner}}</td>
+    <tr *ngFor="let item of tableDataAll; let i = index">
+      <td>{{item.typeNumber}}</td>
+      <td>{{item.type}}</td>
+      <td>{{item.total}}</td>
+      <td>{{item.status}}</td>
+      <td>{{getFormatedDate(item.createdAt)}}</td>
+      <td>{{getFormatedDate(item.updatedAt)}}</td>
+      <td>{{item.owner}}</td>
     </tr>
   </table>
 </div>
