@@ -146,7 +146,7 @@ export class POTableComponent implements OnInit {
         value: parseInt(this.productDetails[index].discount, 10),
         unit: 'PERCENT'
       },
-      recieved: 0,
+      received: 0,
       quantity: parseInt(this.productDetails[index].quantity, 10)
     };
     this.sharedService.updatePurchaseOrderProduct(this.po_id, this.productDetails[index].purchaseOrderProductId, this.poProductModel)
