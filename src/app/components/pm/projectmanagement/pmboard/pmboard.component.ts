@@ -210,7 +210,7 @@ export class PmBoardComponent implements OnInit {
         title: tableDataAtIndex.title,
         start_date: this.minDate(tableDataAtIndex.tasks.map(t => t.startDate)),
         end_date: this.maxDate(tableDataAtIndex.tasks.map(t => t.dueDate)),
-        progress: tableDataAtIndex.completion
+        progress: tableDataAtIndex.completion / 100
       };
       this.tasksTemp.push(midTk);
 
