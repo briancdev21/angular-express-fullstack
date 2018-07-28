@@ -275,7 +275,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
   onKeywordsChanged(event) {
     const keywordIds = event.map( k => k.id);
     this.userInfo.keywordIds = keywordIds;
-    this.changedUserInfo.emit({'data': this.userInfo});
+    // this.changedUserInfo.emit({'data': this.userInfo});
   }
 
   confirmChange() {
@@ -400,7 +400,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
           this.invalidFirstName = true;
         }
         if (this.userInfo.person.lastName === '') {
-          console.log('check again agai: ', this.userInfo);
+          console.log('check again agai: ', this.userInfo, this.shippingProvince);
           this.invalidLastName = true;
         }
         if (!this.userInfo.email) {
@@ -496,7 +496,9 @@ export class LeadProfileInfoBarComponent implements OnInit {
         person: {
           firstName: this.userInfo.person.firstName,
           lastName: this.userInfo.person.lastName,
-        }
+        },
+        keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
+        note: this.userInfo.note ? this.userInfo.note : ''
       };
     } else {
       savingData = {
@@ -510,7 +512,9 @@ export class LeadProfileInfoBarComponent implements OnInit {
         followers: this.userInfo.followers.map(f => f.username),
         business: {
           name: this.userInfo.business.name
-        }
+        },
+        keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
+        note: this.userInfo.note ? this.userInfo.note : ''
       };
     }
     this.crmService.updateIndividualLead(this.userInfo.id, savingData).subscribe(res => {
