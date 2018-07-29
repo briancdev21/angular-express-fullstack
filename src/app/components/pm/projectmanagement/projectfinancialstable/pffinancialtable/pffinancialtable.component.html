@@ -9,7 +9,7 @@
       <th (click)="sortCreateDateArray('updatedAt')">DATE UPLOADED</th>
       <th>COLLABORATORS</th>
     </tr>
-    <tr *ngFor="let item of tableDataAll; let i = index">
+    <tr *ngFor="let item of tableDataAll; let i = index" (click)="navigateTo(item)">
       <td>{{item.typeNumber}}</td>
       <td>{{item.type}}</td>
       <td><span *ngIf="item.total">$ </span>{{item.total}}</td>

@@ -91,6 +91,10 @@ th:last-child {
   border-right: none;
 }
 
+tr:hover {
+  box-shadow: 0 1px 10px 1px #d3d3d3;
+}
+
 @media screen and (max-width: 1700px) {
   .card-title {
     font-size: 17px;
