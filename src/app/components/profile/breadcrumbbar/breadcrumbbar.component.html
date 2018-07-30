@@ -1,18 +1,18 @@
 <div class="breadcrumb-bar" >
   <div class="breadcrumb-section" *ngIf="_userInfo.name">
-    <app-breadcrumb [data]="data"></app-breadcrumb>
+    <app-breadcrumb [data]="data"  [link]="link"></app-breadcrumb>
   </div>
-  <div class="followers" > 
+  <div class="followers" *ngIf="usersList" > 
     <span style="padding:1em; ">Followers</span>
     <div class="follower" *ngFor="let user of _userInfo.followers; let i = index">
-      <a [routerLink]='user.profileLink' [title]='user.name' ><img [src]='user.imageUrl'/></a>
+      <a [title]='user.username' ><img [src]='user.pictureURI'/></a>
     </div> 
     <div class="follower add-follower" >
-      <a (click)='addUser()' title='user.name' (click)="editable=true;$event.stopPropagation()" ><img src='assets/images/Add-Button.svg'/></a>
+      <a (click)='addUser()' (click)="editable=true;$event.stopPropagation()" ><img src='assets/images/Add-Button.svg'/></a>
     </div> 
     <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
         <ul>
-          <li *ngFor="let user of _userInfo.followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li *ngFor="let user of _userInfo.followers; let i = index">{{user.username}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;">
             <ng-select *ngIf="isAutocompleteUpdated" [items]="items2"
               bindLabel="config2.sourceField"
