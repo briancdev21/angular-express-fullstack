@@ -521,7 +521,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
       };
     }
     if (savingData.phoneNumbers.secondary) {
-      delete(this._userInfo.phoneNumbers.secondary);
+      delete(savingData.phoneNumbers.secondary);
     }
     this.crmService.updateIndividualLead(this.userInfo.id, savingData).subscribe(res => {
       console.log('lead update: ', res);
