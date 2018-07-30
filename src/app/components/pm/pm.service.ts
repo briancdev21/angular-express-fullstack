@@ -17,6 +17,7 @@ import { apiHeaders, apiUrl } from '../../config';
 export class PmService {
 
     currentProjectId: BehaviorSubject<string> = new BehaviorSubject('');
+    today = new Date();
 
     options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
 
@@ -40,6 +41,11 @@ export class PmService {
 
     getInvoices (limit: number = 50, offset: number = 0): Observable<any> {
         const url = `${environment.apiUrl}/sales/invoices?limit=${limit}&offset=${offset}`;
+        return this.http.get<any>(url);
+    }
+
+    getNearestSchedule (projectId: string): Observable<any>  {
+        const url = `${environment.apiUrl}/project-management/projects/${projectId}/payment-schedules?order=ASC&limit=${1}&startDate=${this.today}`;
         return this.http.get<any>(url);
     }
 

@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { SharedService } from '../../../../../services/shared.service';
 import { ProjectsService } from '../../../../../services/projects.service';
+import { PmService } from '../../../pm.service';
 
 @Component({
   selector: 'app-pmboardtopinfo',
@@ -23,9 +24,11 @@ export class PmBoardTopInfoComponent implements OnInit {
   currentProjectId: any;
   contactsList = [];
   projectInfo: any;
+  today = new Date();
+  nearest: any;
 
 
-  constructor( private router: Router, private sharedService: SharedService,
+  constructor( private router: Router, private sharedService: SharedService, private pmService: PmService,
     private projectsService: ProjectsService, private route: ActivatedRoute) {
     this.currentProjectId = localStorage.getItem('current_projectId');
     if (this.currentProjectId !== '') {
@@ -37,6 +40,13 @@ export class PmBoardTopInfoComponent implements OnInit {
           this.projectInfo = res.data;
           this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
           this.projectInfo.startDate = moment(this.projectInfo.startDate).format('MMM DD, YYYY');
+          this.projectInfo.endDate = moment(this.projectInfo.endDate).format('MMM DD, YYYY');
+        });
+
+        this.pmService.getNearestSchedule(this.currentProjectId).subscribe(res => {
+          console.log('nearest : ', res);
+          this.nearest = res.results[0];
+          this.projectInfo.nextPaymentDate = moment(this.nearest.date).format('MMM DD, YYYY');
         });
 
       });
@@ -65,6 +75,12 @@ export class PmBoardTopInfoComponent implements OnInit {
 
   selectNextPaymentDate(date) {
     this.projectInfo.nextPaymentDate = moment(date.value).format('MMM DD, YYYY');
+    const updatingData = {
+      date: moment(this.projectInfo.nextPaymentDate).format('YYYY-MM-DD')
+    };
+    this.projectsService.updateProjectPaymentSchedule(this.currentProjectId, this.nearest.id, updatingData).subscribe(res => {
+      console.log('successfuly modified: ', res);
+    });
   }
 
   addContactName(data) {

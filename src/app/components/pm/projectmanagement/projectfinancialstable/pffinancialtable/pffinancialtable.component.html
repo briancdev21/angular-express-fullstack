@@ -1,31 +1,22 @@
 <div class="content">
   <table>
     <tr>
-      <th>TYPE NUMBER</th>
-      <th>TYPE</th>
-      <th>TYPE TOTAL</th>
-      <th>STATUS</th>
-      <th>CREATED DATE</th>
-      <th>DATE UPDATED</th>
+      <th (click)="sortArrayWithString('typeNumber')">TYPE #</th>
+      <th (click)="sortArrayWithString('type')">TYPE</th>
+      <th (click)="sortArray('total')">TOTAL</th>
+      <th (click)="sortArrayWithString('status')">STATUS</th>
+      <th (click)="sortCreateDateArray('createdAt')">DATE CREATED</th>
+      <th (click)="sortCreateDateArray('updatedAt')">DATE UPLOADED</th>
       <th>COLLABORATORS</th>
     </tr>
-    <tr *ngFor="let order of purchaseOrdersList; let i = index">
-      <td>PO {{order.id}}</td>
-      <td>Purchase Order</td>
-      <td>{{order.total}}</td>
-      <td>{{order.status}}</td>
-      <td>{{getFormatedDate(order.createdAt)}}</td>
-      <td>{{getFormatedDate(order.updatedAt)}}</td>
-      <td>{{order.owner}}</td>
-    </tr>
-    <tr *ngFor="let invoice of invoicesList; let i = index">
-      <td>IN {{invoice.id}}</td>
-      <td>Invoice</td>
-      <td>{{invoice.total}}</td>
-      <td>{{invoice.status}}</td>
-      <td>{{getFormatedDate(invoice.createdAt)}}</td>
-      <td>{{getFormatedDate(invoice.updatedAt)}}</td>
-      <td>{{invoice.owner}}</td>
+    <tr *ngFor="let item of tableDataAll; let i = index" (click)="navigateTo(item)">
+      <td>{{item.typeNumber}}</td>
+      <td>{{item.type}}</td>
+      <td><span *ngIf="item.total">$ </span>{{item.total}}</td>
+      <td>{{item.status}}</td>
+      <td>{{getFormatedDate(item.createdAt)}}</td>
+      <td>{{getFormatedDate(item.updatedAt)}}</td>
+      <td>{{item.owner}}</td>
     </tr>
   </table>
 </div>

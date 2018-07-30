@@ -24,25 +24,25 @@
 <div class="finances-table">
   <table>
     <tr>
-      <th>TYPE</th>
-      <th>TYPE #</th>
-      <th>TOTAL</th>
-      <th>STATUS</th>
-      <th>DATE CREATED</th>
-      <th>DATE UPLOADED</th>
+      <th (click)="sortArrayWithString('type')">TYPE</th>
+      <th (click)="sortArrayWithString('typeNumber')">TYPE #</th>
+      <th (click)="sortArray('total')">TOTAL</th>
+      <th (click)="sortArrayWithString('status')">STATUS</th>
+      <th (click)="sortCreateDateArray('createdAt')">DATE CREATED</th>
+      <th (click)="sortCreateDateArray('updatedAt')">DATE UPLOADED</th>
       <th>COLLABORATOR</th>
     </tr>
-    <tr *ngFor="let t of financialTableData">
+    <tr *ngFor="let t of tableDataAll"  (click)="navigateTo(t)">
       <td>{{t.type}}</td>
       <td>{{t.typeNumber}}</td>
-      <td [ngClass]="getTotalColor(t.status)">$ {{t.total | number: '1.2-2'}}</td>
+      <td [ngClass]="getTotalColor(t.status)"><span *ngIf="t.total" [ngClass]="getTotalColor(t.status)">$ </span> {{t.total | number: '1.2-2'}}</td>
       <td [ngClass]="getStatusColor(t.status)">{{t.status}}</td>
-      <td>{{t.dateCreated}}</td>
-      <td>{{t.dateUpdated}}</td>
+      <td>{{getFormatedDate(t.createdAt)}}</td>
+      <td>{{getFormatedDate(t.updatedAt)}}</td>
       <td class="collaborators">
-        <div *ngFor="let col of t.collaborators">
+        <!-- <div *ngFor="let col of t.collaborators">
           <img [src]="col.imgUrl">
-        </div>
+        </div> -->
       </td>
     </tr>
   </table>
