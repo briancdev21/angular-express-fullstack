@@ -74,6 +74,7 @@ export class POTableComponent implements OnInit {
     console.log('new product added');
     const newProduct = new ProductDetailInfo();
     newProduct.taxRateId = this.taxRateOptions[0].id;
+    // newProduct.quantity = 1;
     this.productDetails.push(newProduct);
   }
 
@@ -107,6 +108,7 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].model = product.model;
       this.productDetails[index].unitPrice = item.originalObject.cost;
       this.productDetails[index].name = product.name;
+      this.productDetails[index].quantity = 1;
       this.productDetails[index].measure = product.unitOfMeasure.quantity;
       this.poProductModel = {
         sku: item.originalObject.sku,
@@ -120,6 +122,9 @@ export class POTableComponent implements OnInit {
       };
       this.sharedService.addPurchaseOrderProduct(this.po_id, this.poProductModel).subscribe(resp => {
         this.productDetails[index].purchaseOrderProductId = resp.data.id;
+        this.productDetails[index].quantity = resp.data.quantity;
+        this.productDetails[index].total = resp.data.total;
+        
       });
     });
     if (index === this.productDetails.length - 1) {
@@ -169,7 +174,7 @@ export class POTableComponent implements OnInit {
         value: parseInt(this.productDetails[index].discount, 10),
         unit: 'PERCENT'
       },
-      recieved: 0,
+      received: 0,
       quantity: parseInt(this.productDetails[index].quantity, 10)
     };
     this.sharedService.updatePurchaseOrderProduct(this.po_id, this.productDetails[index].purchaseOrderProductId, this.poProductModel)

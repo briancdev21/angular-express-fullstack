@@ -11,7 +11,7 @@ export class POProjectSelectorComponent implements OnInit {
   projectnames = ['john', 'smith'];
 
   ngOnInit() {
-    this.projectnames = this.projects;
+    // this.projectnames = this.projects;
   }
 
   onChooseProject(val) {

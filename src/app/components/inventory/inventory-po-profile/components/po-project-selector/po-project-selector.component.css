@@ -42,3 +42,15 @@ select option:first {
   width: 100%;
   font-size: 12px;
 } */
+
+
+.input-box {
+  padding: 0.4em 1em;
+  border: solid;
+  border: solid 1px #f5f5f5;
+  font-weight: 500;
+  height: 32px;
+  width: 100%;
+  font-size: 12px;
+
+}

@@ -4,7 +4,7 @@
       <div class="left-sidebar">
         <div class="flex aligntop" >
           <app-po-customer-name class="flex1 mr-15" [contactUser]="contactId" [userList]="userList" (selectedUser)="onSelectUser($event)" ></app-po-customer-name>
-          <app-po-project-selector class="flex1 ml-15" [projects]="projects" ></app-po-project-selector>
+          <app-po-project-selector class="flex1 ml-15" [projectname]="selectedProject" ></app-po-project-selector>
         </div>
         <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [addressFromLocation]="shippingAddress" (shippingAddressChange)="onShippingAddressChanged($event)" ></app-shippingaddress>
       </div>

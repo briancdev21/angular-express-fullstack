@@ -7,11 +7,10 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class POProjectSelectorComponent implements OnInit {
 
-  @Input() projects;
+  @Input() projectname;
   projectnames = ['john', 'smith'];
 
   ngOnInit() {
-    this.projectnames = this.projects;
   }
 
   onChooseProject(val) {
