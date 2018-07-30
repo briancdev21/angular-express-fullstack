@@ -58,7 +58,7 @@ export class PgProductLogTableComponent implements OnInit {
   };
   currentProjectId: any;
   constructor( private filterService: FilterService, private sharedService: SharedService, private projectsService: ProjectsService,
-    private pmService: PmService ) {
+    private pmService: PmService, private router: Router ) {
     this.currentProjectId = localStorage.getItem('current_projectId');
     this.sharedService.getBrands().subscribe(res => {
       this.brandsList = res.results;
@@ -189,6 +189,10 @@ export class PgProductLogTableComponent implements OnInit {
     this.projectsService.updateIndividualProjectProduct(this.currentProjectId, product.id, updatingQty).subscribe(res => {
       console.log('updated: ', res);
     });
+  }
+
+  navigateTo(order) {
+    this.router.navigate([`./inventory/stock-control/purchase-order/${order.purchaseOrderId}`]);
   }
 }
 

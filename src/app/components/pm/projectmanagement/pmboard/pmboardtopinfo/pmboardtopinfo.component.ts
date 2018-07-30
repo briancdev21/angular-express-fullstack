@@ -41,12 +41,12 @@ export class PmBoardTopInfoComponent implements OnInit {
           this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
           this.projectInfo.startDate = moment(this.projectInfo.startDate).format('MMM DD, YYYY');
           this.projectInfo.endDate = moment(this.projectInfo.endDate).format('MMM DD, YYYY');
-        });
 
-        this.pmService.getNearestSchedule(this.currentProjectId).subscribe(res => {
-          console.log('nearest : ', res);
-          this.nearest = res.results[0];
-          this.projectInfo.nextPaymentDate = moment(this.nearest.date).format('MMM DD, YYYY');
+          this.pmService.getNearestSchedule(this.currentProjectId).subscribe(schedule => {
+            console.log('nearest : ', schedule);
+            this.nearest = schedule.results[0];
+            this.projectInfo.nextPaymentDate = moment(this.nearest.date).format('MMM DD, YYYY');
+          });
         });
 
       });
