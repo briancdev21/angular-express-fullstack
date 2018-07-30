@@ -108,6 +108,11 @@ table i {
 
 tr:hover {
   box-shadow: 0 1px 10px 1px #d3d3d3;
+  cursor: pointer;
+}
+
+tr:first-child:hover {
+  box-shadow: none;
 }
 
 @media screen and (max-width: 1200px) {

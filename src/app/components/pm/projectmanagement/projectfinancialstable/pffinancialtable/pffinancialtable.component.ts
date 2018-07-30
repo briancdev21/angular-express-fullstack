@@ -23,7 +23,7 @@ export class PfFinancialTableComponent implements OnInit {
   @Input() tableDataAll;
   sortClicked = true;
 
-  constructor( private filterService: FilterService,  private sharedService: SharedService ) {
+  constructor( private filterService: FilterService,  private sharedService: SharedService, private router: Router ) {
 
   }
 
@@ -79,6 +79,16 @@ export class PfFinancialTableComponent implements OnInit {
       });
     } else {
       this.tableDataAll.reverse();
+    }
+  }
+
+  navigateTo(item) {
+    if (item.type === 'Invoice') {
+      this.router.navigate([`./invoice-profile/${item.id}`]);
+    } else if (item.type === 'Work Order') {
+      this.router.navigate([`./collaboration/order-profile`, {id: item.id}]);
+    } else if (item.type === 'Purchase Order') {
+      this.router.navigate([`./inventory/stock-control/purchase-order/${item.id}`]);
     }
   }
 

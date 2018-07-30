@@ -23,7 +23,7 @@ export class ProjectFinanceComponent implements OnInit {
   currentProjectId: any;
   sortClicked = true;
 
-  constructor( private pmService: PmService, private collaboratorsService: CollaboratorsService) {
+  constructor( private pmService: PmService, private collaboratorsService: CollaboratorsService, private router: Router) {
     this.currentProjectId = localStorage.getItem('current_projectId');
     this.pmService.getPurchaseOrders(this.currentProjectId)
     .subscribe(res => {
@@ -124,6 +124,16 @@ export class ProjectFinanceComponent implements OnInit {
       });
     } else {
       this.tableDataAll.reverse();
+    }
+  }
+
+  navigateTo(item) {
+    if (item.type === 'Invoice') {
+      this.router.navigate([`./invoice-profile/${item.id}`]);
+    } else if (item.type === 'Work Order') {
+      this.router.navigate([`./collaboration/order-profile`, {id: item.id}]);
+    } else if (item.type === 'Purchase Order') {
+      this.router.navigate([`./inventory/stock-control/purchase-order/${item.id}`]);
     }
   }
 
