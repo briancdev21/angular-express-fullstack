@@ -216,6 +216,7 @@ export class ProfileComponent implements OnInit {
     this.crmService.getIndividualContact(this.contactInfoIndex).subscribe(res => {
 
       this.currentContact = res.data;
+      console.log('current contact: ', res.data);
       this.collaborators =  this.currentContact.collaborators ? this.currentContact.collaborators : [];
       this.dataRetrieved = true;
       // Update userInfo
@@ -241,8 +242,8 @@ export class ProfileComponent implements OnInit {
       // Update donut chart info
       this.chartSetData[0]['percentage'] = res.data.accountRating;
       this.chartSetData[1]['percentage'] = res.data.loyaltyRating;
-      this.chartSetData[2]['percentage'] = res.data.dealsRatio;
-      this.chartSetData[3]['percentage'] = res.data.serviceRatio;
+      this.chartSetData[2]['percentage'] = res.data.dealsRatio * 100;
+      this.chartSetData[3]['percentage'] = res.data.serviceRatio * 100;
 
       this.crmService.getContactActivities(this.currentContact.id).subscribe(response => {
         const activities = response.results;

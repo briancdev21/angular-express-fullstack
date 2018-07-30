@@ -37,6 +37,6 @@
       </svg>
       <!-- end -->
       <div class="text" >
-        {{percentage}}%
+        {{percentage | number: '1.0-0'}}<span *ngIf="title === 'Account Rating' || title === 'Loyalty Rating'">%</span>
       </div>
   </div>
