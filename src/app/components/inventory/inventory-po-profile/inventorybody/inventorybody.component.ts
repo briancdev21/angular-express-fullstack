@@ -258,4 +258,10 @@ export class InventoryBodyComponent {
     });
     return data;
   }
+
+  onDelete() {
+    this.sharedService.deletePurchaseOrder(this.po_mock.id).subscribe((resp) => {
+      this.router.navigate(['./inventory/stock-control']);
+    });
+  }
 }

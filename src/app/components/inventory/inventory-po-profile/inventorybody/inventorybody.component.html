@@ -43,6 +43,7 @@
         Setting
       </div>
       <div class="btn-group" >
+        <div class="btn delete" (click)="onDelete()" *ngIf="po_mock.status === 'OPEN' || po_mock.status === 'SENT'" >Delete</div>
         <div class="btn save_and_close" (click)="onSave()" >Send</div>
       </div>
     </section>
