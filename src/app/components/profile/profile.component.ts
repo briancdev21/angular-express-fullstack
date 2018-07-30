@@ -214,7 +214,7 @@ export class ProfileComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService, private sharedService: SharedService) {
     this.contactInfoIndex = this.route.snapshot.paramMap.get('id');
     this.crmService.getIndividualContact(this.contactInfoIndex).subscribe(res => {
-      
+
       this.currentContact = res.data;
       this.collaborators =  this.currentContact.collaborators ? this.currentContact.collaborators : [];
       this.dataRetrieved = true;
