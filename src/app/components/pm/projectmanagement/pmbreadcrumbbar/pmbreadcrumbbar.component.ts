@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { ProjectsService } from '../../../../services/projects.service';
 
 @Component({
   selector: 'app-pmbreadcrumbbar',
@@ -17,7 +18,9 @@ export class PmBreadcrumbBarComponent implements OnInit {
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
-  data = ['Projects', 'Remodel with a Nu life'];
+  currentProjectId: any;
+
+  data = [];
   items2: any[] = [
     {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
     {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
@@ -27,7 +30,11 @@ export class PmBreadcrumbBarComponent implements OnInit {
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   isAutocompleteUpdated = false;
 
-  constructor() {
+  constructor(private projectsService: ProjectsService) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
+    this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+      this.data = ['Projects', res.data.name];
+    });
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
