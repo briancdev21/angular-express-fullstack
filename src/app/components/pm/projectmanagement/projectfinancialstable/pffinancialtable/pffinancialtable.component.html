@@ -16,7 +16,11 @@
       <td>{{item.status}}</td>
       <td>{{getFormatedDate(item.createdAt)}}</td>
       <td>{{getFormatedDate(item.updatedAt)}}</td>
-      <td>{{item.owner}}</td>
+      <td class="collaborators">
+        <div *ngFor="let col of item.collaboratorData">
+          <img [src]="col.pictureURI">
+        </div>
+      </td>
     </tr>
   </table>
 </div>
