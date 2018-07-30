@@ -19,27 +19,28 @@
   <div class="project-progress">
     <span class="title">PROJECT PROGRESS</span>
     <div class="progress-content">
-      <div>
+      <!-- <div>
         <span class="card-title">Quality Performance</span>
         <span class="card-value" [ngClass]="getPerformanceColor(projectInfo.qualityPerformance)">{{projectInfo.qualityPerformance}}%</span>
-      </div>
+      </div> -->
       <div>
         <span class="card-title">Scope Performance</span>
         <span class="card-value" [ngClass]="getPerformanceColor(projectInfo.scopePerformance)">{{projectInfo.scopePerformance}}%</span>
       </div>
-    </div>
-    <div class="progress-content">
       <div>
         <span class="card-title">Scope Change</span>
         <span class="card-value orange">{{projectInfo.scopeChange}}</span>
       </div>
-      <!-- 
+    </div>
+    <!-- <div class="progress-content">
+      
+      
       commented for now because back end is not ready for this  
       <div>
         <span class="card-title">Scope Performance</span>
         <span class="card-value orange" >{{projectInfo.projectProgress.mitigation}}</span>
-      </div> -->
-    </div>
+      </div>
+    </div> -->
   </div>
   <div class="inventory-health">
     <span class="title">INVENTORY HEALTH</span>
