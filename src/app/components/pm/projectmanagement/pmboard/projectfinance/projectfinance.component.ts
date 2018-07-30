@@ -4,7 +4,7 @@ import { ProjectManagementService } from '../../projectmanagement.service';
 import { PmService } from '../../../pm.service';
 import { CollaboratorsService } from '../../../../../services/collaborators.service';
 import * as moment from 'moment';
-
+import { SharedService } from '../../../../../services/shared.service';
 @Component({
   selector: 'app-projectfinance',
   templateUrl: './projectfinance.component.html',
@@ -22,38 +22,58 @@ export class ProjectFinanceComponent implements OnInit {
   workOrdersList = [];
   currentProjectId: any;
   sortClicked = true;
+  usersList = [];
 
-  constructor( private pmService: PmService, private collaboratorsService: CollaboratorsService, private router: Router) {
+  constructor( private pmService: PmService, private collaboratorsService: CollaboratorsService, private router: Router,
+  private sharedService: SharedService) {
     this.currentProjectId = localStorage.getItem('current_projectId');
-    this.pmService.getPurchaseOrders(this.currentProjectId)
-    .subscribe(res => {
-      this.purchaseOrdersList = res.results;
-      this.purchaseOrdersList.forEach(po => {
-        po.type = 'Purchase Order';
-        po.typeNumber = 'PO' + ' ' + po.id;
-      });
-      this.tableDataAll = this.purchaseOrdersList;
+    this.sharedService.getUsers().subscribe(user => {
+      this.usersList = user;
+      console.log('userslist: ', user);
 
-      this.pmService.getInvoices()
-      .subscribe(invoice => {
-        this.invoicesList = invoice.results;
-        this.invoicesList = this.invoicesList.filter(b => b.projectId === this.currentProjectId);
-        this.invoicesList.forEach(iv => {
-          iv.type = 'Invoice';
-          iv.typeNumber = 'IN' + ' ' + iv.id;
+      this.pmService.getPurchaseOrders(this.currentProjectId)
+      .subscribe(res => {
+        this.purchaseOrdersList = res.results;
+        this.purchaseOrdersList.forEach(po => {
+          po.type = 'Purchase Order';
+          po.typeNumber = 'PO' + ' ' + po.id;
         });
-        this.tableDataAll = this.tableDataAll.concat(this.invoicesList);
+        this.tableDataAll = this.purchaseOrdersList;
 
-        this.collaboratorsService.getWorkOrders().subscribe(order => {
-          this.workOrdersList = order.results;
-          this.workOrdersList = this.workOrdersList.filter(w => w.projectId === this.currentProjectId);
-          this.workOrdersList.forEach(wo => {
-            wo.type = 'Work Order';
-            wo.typeNumber = 'WO' + ' ' + wo.id;
+        this.pmService.getInvoices()
+        .subscribe(invoice => {
+          this.invoicesList = invoice.results;
+          this.invoicesList = this.invoicesList.filter(b => b.projectId === this.currentProjectId);
+          this.invoicesList.forEach(iv => {
+            iv.type = 'Invoice';
+            iv.typeNumber = 'IN' + ' ' + iv.id;
           });
-          this.tableDataAll = this.tableDataAll.concat(this.workOrdersList);
+          this.tableDataAll = this.tableDataAll.concat(this.invoicesList);
+
+          this.collaboratorsService.getWorkOrders().subscribe(order => {
+            this.workOrdersList = order.results;
+            this.workOrdersList = this.workOrdersList.filter(w => w.projectId === this.currentProjectId);
+            this.workOrdersList.forEach(wo => {
+              wo.type = 'Work Order';
+              wo.typeNumber = 'WO' + ' ' + wo.id;
+            });
+            this.tableDataAll = this.tableDataAll.concat(this.workOrdersList);
+            console.log('data all: ', this.tableDataAll);
+            this.tableDataAll.forEach(element => {
+              if (element.collaborators) {
+                const collData = [];
+                element.collaborators.forEach(col => {
+                  collData.push(this.usersList.filter(u => u.username === col)[0]);
+                });
+                element.collaboratorData = collData;
+              } else {
+                element.collaboratorData = [];
+              }
+            });
+          });
         });
       });
+
     });
   }
 
