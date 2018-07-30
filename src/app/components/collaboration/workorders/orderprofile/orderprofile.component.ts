@@ -173,11 +173,6 @@ export class OrderProfileComponent implements OnInit {
   //   ]
   // };
 
-
-
-  public taskTicketInfo = [
-  ];
-
   public productDelivery = [
   ];
 

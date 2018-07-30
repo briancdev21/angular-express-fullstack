@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DragulaService } from 'ng2-dragula';
 import { OrderService } from '../order.service';
+import { CollaboratorsService } from '../../../../../services/collaborators.service';
+
 
 @Component({
   selector: 'app-draggableticket',
@@ -14,7 +16,8 @@ import { OrderService } from '../order.service';
 export class DraggableTicketComponent implements OnInit {
 
   @Input() orderProfileInfo;
-  @Input() taskTicketInfo;
+
+  taskTicketInfo: any;
   notStarted = [];
   inProgress = [];
   complete = [];
@@ -34,10 +37,20 @@ export class DraggableTicketComponent implements OnInit {
   selectedPriority = 'default';
   issueTickets = [];
   issueTicket: any;
+  currentWorkOrderId: any;
+  workOrderTasks = [];
 
-  constructor(private dragulaService: DragulaService, private orderService: OrderService) {
+  constructor(private dragulaService: DragulaService, private orderService: OrderService,
+    private collaboratorsService: CollaboratorsService, private router: Router, private route: ActivatedRoute) {
     dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
+    });
+
+    this.currentWorkOrderId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+
+    this.collaboratorsService.getWorkOrderTasks(this.currentWorkOrderId).subscribe(res => {
+      this.workOrderTasks = res.results;
+      console.log('work order tasks: ', res);
     });
   }
 
