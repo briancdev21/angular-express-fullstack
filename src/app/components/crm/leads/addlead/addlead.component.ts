@@ -310,7 +310,8 @@ export class AddLeadComponent implements OnInit {
       }
     } else if (this.businessType === 'BUSINESS') {
       if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat && this.address &&
-        this.city && this.province && this.country && this.postalCode && !this.provinceNotIncluded) {
+        this.city && this.province && this.country && this.postalCode && !this.provinceNotIncluded &&
+        !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -461,7 +462,8 @@ export class AddLeadComponent implements OnInit {
           }
         } else if (this.businessType === 'BUSINESS') {
           if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat && this.address &&
-            this.city && this.province && this.country && this.postalCode && !this.provinceNotIncluded) {
+            this.city && this.province && this.country && this.postalCode && !this.provinceNotIncluded
+            && !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
           } else {
@@ -645,6 +647,9 @@ export class AddLeadComponent implements OnInit {
           'note': this.notes,
           'lastContacted': moment().format('YYYY-MM-DD')
         };
+        if (this.newLead.person.businessAssociation === null) {
+          delete this.newLead.person.businessAssociation;
+        }
       } else {
         this.newLead = {
           'currencyId': this.defaultCurrency,
@@ -700,10 +705,6 @@ export class AddLeadComponent implements OnInit {
 
       if (isNaN(this.newLead.sourceId)) {
         delete this.newLead.sourceId;
-      }
-
-      if (this.newLead.person.businessAssociation === null) {
-        delete this.newLead.person.businessAssociation;
       }
 
       this.crmService.createLead(JSON.stringify(this.newLead)).subscribe(data => {

@@ -388,7 +388,8 @@ export class ProfileInfoBarComponent implements OnInit {
           lastName: this.userInfo.person.lastName,
         },
         keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
-        note: this.userInfo.note ? this.userInfo.note : ''
+        note: this.userInfo.note ? this.userInfo.note : '',
+        billingAddress: this.userInfo.billingAddress
       };
     } else {
       savingData = {
@@ -404,7 +405,8 @@ export class ProfileInfoBarComponent implements OnInit {
           name: this.userInfo.business.name
         },
         keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
-        note: this.userInfo.note ? this.userInfo.note : ''
+        note: this.userInfo.note ? this.userInfo.note : '',
+        billingAddress: this.userInfo.billingAddress
       };
     }
     if (!savingData.phoneNumbers.secondary) {
