@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FilterService } from './filter.service';
+import { SharedService } from '../../../services/shared.service';
+import { CollaboratorsService } from '../../../services/collaborators.service';
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-workorders',
   templateUrl: './workorders.component.html',
@@ -25,9 +30,40 @@ export class WorkOrdersComponent implements OnInit {
   filterAvaliableTo: any;
   filterName = '';
   workorderTypes: any;
+  usersList = [];
+  contactsList = [];
+  workOrdersList: any;
 
-  constructor( private filterService: FilterService ) {
+  constructor( private filterService: FilterService, private sharedService: SharedService,
+    private collaboratorsService: CollaboratorsService, private route: ActivatedRoute  ) {
     this.filterAvaliableTo = 'everyone';
+
+    this.sharedService.getUsers().subscribe(user => {
+      this.usersList = user;
+      this.sharedService.getContacts().subscribe(data => {
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.collaboratorsService.getWorkOrders().subscribe(res => {
+          this.workOrdersList = res.results;
+          this.workOrdersList.forEach(element => {
+            const colArr = [];
+            element.startTime = moment(element.startDate).format('hh:mm a');
+            element.endTime = moment(element.endDate).format('hh:mm a');
+            element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+            element.contactName = this.getContactNameFromId(element.contactId);
+            element.barInfo = {
+              title: element.completion + '%',
+              completeness: element.completion
+            };
+            element.collaborators.forEach(col => {
+              colArr.push(this.usersList.filter(u => u.username === col)[0]);
+            });
+            element.collaboratorsData = colArr;
+          });
+          console.log('work order list: ', this.workOrdersList);
+        });
+      });
+    });
   }
 
   public workorderStatus = ['Not started', 'Not complete', 'Delivered', 'In progress', 'Complete'];
@@ -44,76 +80,7 @@ export class WorkOrdersComponent implements OnInit {
   public collaborators: Array<string> = [
   ];
 
-  public workOrdersInfo: Array<Object> = [
-    {
-      workOrderNumber: 'WO12345',
-      workOrderName: 'Work Order Title Here',
-      customerName: 'John Moss',
-      startDate: 'November 20, 2017',
-      scheduledStart: '8:00 AM',
-      scheduledEnd: '4:30 PM',
-      completion: 33,
-      status: 'Not started',
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        }
-      ]
-    },
-    {
-      workOrderNumber: 'WO12344',
-      workOrderName: 'Work Order Title Here',
-      customerName: 'John Moss',
-      startDate: 'March 19, 2018',
-      scheduledStart: '1:00 PM',
-      scheduledEnd: '6:30 PM',
-      completion: 64,
-      status: 'Delivered',
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        },
-        {
-          name: 'Michael',
-          imgUrl: 'assets/users/user2.png'
-        }
-      ]
-    },
-    {
-      workOrderNumber: 'WO12343',
-      workOrderName: 'Work Order Title Here',
-      customerName: 'Agile Smith',
-      startDate: 'April 18, 2018',
-      scheduledStart: '7:00 AM',
-      scheduledEnd: '11:00 AM',
-      completion: 89,
-      status: 'Complete',
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        }
-      ]
-    },
-    {
-      workOrderNumber: 'WO12342',
-      workOrderName: 'Work Order Title Here',
-      customerName: 'Agile Smith',
-      startDate: 'March 10, 2018',
-      scheduledStart: '6:00 AM',
-      scheduledEnd: '6:30 PM',
-      completion: 59,
-      status: 'In progress',
-      collaborators: [
-        {
-          name: 'Agile Smith',
-          imgUrl: 'assets/users/user3.png'
-        }
-      ]
-    },
-  ];
+  public workOrdersInfo = [];
 
   ngOnInit() {
     this.backUpWorkOrders = this.workOrdersInfo;
@@ -137,6 +104,17 @@ export class WorkOrdersComponent implements OnInit {
     this.showSaveFilterModal = false;
     this.filterClicked = false;
     this.workOrdersInfo = this.backUpWorkOrders;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
   cancelFilter() {
@@ -186,5 +164,10 @@ export class WorkOrdersComponent implements OnInit {
     this.workOrdersInfo = this.backUpWorkOrders;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
   }
 }

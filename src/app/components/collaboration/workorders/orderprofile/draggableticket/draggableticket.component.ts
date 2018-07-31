@@ -17,7 +17,7 @@ export class DraggableTicketComponent implements OnInit {
 
   @Input() orderProfileInfo;
 
-  taskTicketInfo: any;
+  taskTicketInfo = [];
   notStarted = [];
   inProgress = [];
   complete = [];

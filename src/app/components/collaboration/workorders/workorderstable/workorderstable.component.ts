@@ -19,7 +19,7 @@ import * as moment from 'moment';
 
 export class WorkOrdersTableComponent implements OnInit {
 
-  workOrdersInfo: any;
+  @Input() workOrdersInfo;
   public barInfo: any;
   sortClicked = true;
   clicked = false;
@@ -30,33 +30,6 @@ export class WorkOrdersTableComponent implements OnInit {
 
   constructor( private filterService: FilterService, private router: Router, private sharedService: SharedService,
     private collaboratorsService: CollaboratorsService, private route: ActivatedRoute ) {
-    this.sharedService.getUsers().subscribe(user => {
-      this.usersList = user;
-      this.sharedService.getContacts().subscribe(data => {
-        this.contactsList = data;
-        this.addContactName(this.contactsList);
-        this.collaboratorsService.getWorkOrders().subscribe(res => {
-          this.workOrdersList = res.results;
-          this.workOrdersList.forEach(element => {
-            const colArr = [];
-            element.startTime = moment(element.startDate).format('hh:mm a');
-            element.endTime = moment(element.endDate).format('hh:mm a');
-            element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
-            element.contactName = this.getContactNameFromId(element.contactId);
-            element.barInfo = {
-              title: element.completion + '%',
-              completeness: element.completion
-            };
-            element.collaborators.forEach(col => {
-              colArr.push(this.usersList.filter(u => u.username === col)[0]);
-            });
-            element.collaboratorsData = colArr;
-          });
-          console.log('work order list: ', this.workOrdersList);
-        });
-      });
-    });
-
 
   }
 

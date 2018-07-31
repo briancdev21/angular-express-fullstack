@@ -82,6 +82,11 @@ export class CollaboratorsService {
     return this.http.post<any>(url, body);
   }
 
+  getProjectWorkOrders (projectId: string): Observable<any> {
+    const url = `${environment.apiUrl}/collaborators/work-orders?projectId=${projectId}`;
+    return this.http.get(url);
+  }
+
   updateIndividualWorkOrder (id, body): Observable<any> {
     const url = `${environment.apiUrl}/collaborators/work-orders/${id}`;
     return this.http.put<any>(url, body);

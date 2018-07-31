@@ -36,6 +36,7 @@ import { ProgressProjectBriefComponent } from './pmprogress/progressprojectbrief
 import { CommonCmpModule } from '../../../components/common/common.module';
 import { ProfileCmpModule } from '../../profile/profile.module';
 import { BreadcrumbModule } from '../../../components/breadcrumb/breadcrumb.module';
+import { WorkOrdersCmpModule } from '../../collaboration/workorders/workorders.module';
 import { ProgressProductLogCmpModule } from './pmprogress/progressproductlog/progressproductlog.module';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { DragulaModule } from 'ng2-dragula';
@@ -108,7 +109,8 @@ export const MY_NATIVE_FORMATS = {
     DpDatePickerModule,
     Ng2CompleterModule,
     ProjectFinancialsTableCmpModule,
-    PMBreadcrumbModule
+    PMBreadcrumbModule,
+    WorkOrdersCmpModule
   ],
   exports: [
     PmBreadcrumbBarComponent,

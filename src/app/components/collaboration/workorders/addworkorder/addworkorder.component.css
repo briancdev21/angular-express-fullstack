@@ -127,7 +127,7 @@ span {
 	height: 22px;
 }
 
-tabs {
+.add-workorder-modal .content tabs {
 	padding: 0;
 	min-height: 0;
 	height: 100%;
