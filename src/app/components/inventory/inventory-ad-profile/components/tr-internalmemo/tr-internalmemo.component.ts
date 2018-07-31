@@ -10,6 +10,7 @@ export class TRInternalMemoComponent {
   @Output() memoChanged: EventEmitter<any> = new EventEmitter();
   @Input() internalMemoData: any;
   onMemoChange(event) {
+    // console.log('memo changed');
     this.memoChanged.emit(event.target.value);
   }
 }
