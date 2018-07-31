@@ -149,7 +149,7 @@ export class AddContactComponent implements OnInit {
         this.usersList.forEach(element => {
           element.name = element.username;
         });
-        this.contactsSource = this.completerService.local(this.contactsList, 'name', 'name');
+        this.contactsSource = this.completerService.local(this.contactsList.filter(c => c.type === 'BUSINESS'), 'name', 'name');
       });
     });
 
