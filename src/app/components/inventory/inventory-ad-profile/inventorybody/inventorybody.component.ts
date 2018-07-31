@@ -33,7 +33,7 @@ export class InventoryBodyComponent implements OnDestroy {
     if (_addata !== undefined) {
       this.ad_mock = _addata;
       this.ad_id = `AD-${this.ad_mock.id}`;
-      this.transferdate = _addata.createdAt;
+      this.transferdate = _addata.adjustedDate;
       this.adjustedLocation = _addata.adjustedLocationId;
       this.ad_mock.adjustedLocation = _addata.adjustedLocationId;
       this.internalMemo = _addata.internalMemo;
