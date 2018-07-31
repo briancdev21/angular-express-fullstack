@@ -274,3 +274,7 @@ td.sku {
 .input-error {
   border: solid 2px red;
 }
+
+td.measure input {
+  outline: none;
+}

@@ -33,8 +33,8 @@
             <ng2-completer (keyup)="keyListener($event, i)" [dataService]="nameService" placeholder="Type NAME here..." [minSearchLength]="0" (selected)="onNameSelected($event, i)" [(ngModel)]="productDetailInfo.name" ></ng2-completer>
         </td>
         <td class="measure">
-          <input class="measure" type="number" placeholder="0" min="0" readonly [(ngModel)]="productDetailInfo.measure" (ngModelChange)="calcualteTotalPrice(i)" (keypress)="checkValue($event)" />
-        </td>
+            <input class="measure" type="text"  readonly [(ngModel)]="productDetailInfo.unitOfMeasure"  />
+          </td>
         <td class="quantity">
           <input class="quantity" [ngClass]="{'input-error': productDetailInfo.quantityError}"  type="text" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantity" (ngModelChange)="calcualteTotalPrice(i)" (change)="updatePurchaseOrderProduct(i)" (keypress)="checkValue($event)" />
         </td>
