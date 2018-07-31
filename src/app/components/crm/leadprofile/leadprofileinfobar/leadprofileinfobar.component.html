@@ -1,6 +1,6 @@
 <div class="name editable">
   <input 
-    value="{{userInfo.business.name}}" 
+    [(ngModel)]="userInfo.business.name" 
     id="name" 
     (keyup.enter)="updateProfile()" 
     (blur)="updateProfile()" 
@@ -68,7 +68,7 @@
     <div class="city-state-country">
       <input 
         class="city" 
-        value="{{userInfo.shippingAddress.city}}" 
+        [(ngModel)]="userInfo.shippingAddress.city" 
         (keyup.enter)="updateProfile()" 
         (blur)="updateProfile()"
         placeholder="City"
@@ -111,7 +111,7 @@
   <div class="shipping-address-container">
     <input 
       class="address" 
-      value="{{userInfo.billingAddress.address}}" 
+      [(ngModel)]="userInfo.billingAddress.address" 
       (keyup.enter)="updateProfile()" 
       (blur)="updateProfile()"
       placeholder="Address"
@@ -120,7 +120,7 @@
     <div class="city-state-country">
       <input 
         class="city" 
-        value="{{userInfo.billingAddress.city}}" 
+        [(ngModel)]="userInfo.billingAddress.city" 
         (keyup.enter)="updateProfile()" 
         (blur)="updateProfile()"
         placeholder="City"
@@ -147,7 +147,7 @@
     </div>
     <input 
       class="postal-code" 
-      value="{{userInfo.billingAddress.postalCode}}" 
+      [(ngModel)]="userInfo.billingAddress.postalCode" 
       (keyup.enter)="updateProfile()" 
       (blur)="updateProfile()"
       placeholder="Postal Code"

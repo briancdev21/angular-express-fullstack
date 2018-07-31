@@ -1,7 +1,7 @@
 <div class="name editable">
   <!-- <input value="{{userInfo.name}}" id="name" (keyup.enter)="updateProfile()" (blur)="updateProfile()" > -->
   <input 
-    value="{{userInfo.business.name}}" 
+    [(ngModel)]="userInfo.business.name" 
     id="name" 
     (keyup.enter)="updateProfile()" 
     (blur)="updateProfile()" 
@@ -23,7 +23,7 @@
 </div>
 <div class="email editable">
   <img src="assets/images/envelope.png" />
-  <textarea value="{{userInfo.email}}" id="email" (keyup.enter)="updateProfile()" (blur)="updateProfile()"></textarea>
+  <textarea [(ngModel)]="userInfo.email" id="email" (keyup.enter)="updateProfile()" (blur)="updateProfile()"></textarea>
 </div>
 <span class="alert-email" *ngIf="invalidEmail">Wrong Email Format</span>
 <div class="phone editable">
@@ -70,7 +70,7 @@
     <div class="city-state-country">
       <input 
         class="city"
-        value="{{userInfo.shippingAddress.city}}" 
+        [(ngModel)]="userInfo.shippingAddress.city" 
         (keyup.enter)="updateProfile()" 
         (blur)="updateProfile()"
         placeholder="City"
@@ -113,7 +113,7 @@
   <div class="shipping-address-container">
     <input 
       class="address" 
-      value="{{userInfo.billingAddress.address}}" 
+      [(ngModel)]="userInfo.billingAddress.address" 
       (keyup.enter)="updateProfile()" 
       (blur)="updateProfile()"
       placeholder="Address"
@@ -122,7 +122,7 @@
     <div class="city-state-country">
       <input 
         class="city" 
-        value="{{userInfo.billingAddress.city}}" 
+        [(ngModel)]="userInfo.billingAddress.city" 
         (keyup.enter)="updateProfile()" 
         (blur)="updateProfile()"
         placeholder="City"
@@ -149,7 +149,7 @@
     </div>
     <input 
       class="postal-code" 
-      value="{{userInfo.billingAddress.postalCode}}" 
+      [(ngModel)]="userInfo.billingAddress.postalCode" 
       (keyup.enter)="updateProfile()" 
       (blur)="updateProfile()"
       placeholder="Postal Code"
