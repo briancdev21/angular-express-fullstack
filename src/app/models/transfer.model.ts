@@ -1,6 +1,6 @@
 export class TransferModel {
   id: number;
-  dateTransferred: Date;
+  dateTransferred: string;
   fromLocation: number;
   toLocation: number;
   status: string;

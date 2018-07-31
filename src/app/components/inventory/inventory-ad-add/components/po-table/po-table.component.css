@@ -270,3 +270,7 @@ td.sku {
   /* non-prefixed version, currently
    not supported by any browser */
 }
+
+.input-error {
+  border: solid 2px red;
+}

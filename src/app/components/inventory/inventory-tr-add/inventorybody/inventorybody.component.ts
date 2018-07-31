@@ -3,6 +3,7 @@ import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
 import { TransferModel } from '../../../../models/transfer.model';
 import { SharedService } from '../../../../services/shared.service';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-inventorybody',
@@ -44,8 +45,10 @@ export class InventoryBodyComponent {
   constructor(private sharedService: SharedService, private router: Router) {
     this.createdDate = new Date().toISOString();
     this.transferdate = new Date().toISOString();
-
-    this.sharedService.getLocations().subscribe(locationRes => {
+    const params = {
+      RMA: true
+    };
+    this.sharedService.getLocationsWithParams(params).subscribe(locationRes => {
       this.locations = locationRes.results;
     });
   }
@@ -71,6 +74,11 @@ export class InventoryBodyComponent {
     this.updateTR();
   }
 
+  // onTransferDateChanged(event) {
+  //   this.tr_mock.dateTransferred = moment(event).format('YYYY-MM-DD');
+  //   // this.updateTR();
+  // }
+
   onCancel() {
     this.showCancelPOModal = true;
   }
@@ -79,6 +87,10 @@ export class InventoryBodyComponent {
     this.sharedService.deleteInventoryAdjustment(this.tr_mock.id).subscribe(() => {
       this.router.navigate(['./inventory/stock-control']);
     });
+  }
+
+  onDelete() {
+    this.deletePO();
   }
 
   onSave() {

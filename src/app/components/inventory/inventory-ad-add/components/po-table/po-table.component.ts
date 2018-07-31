@@ -78,6 +78,7 @@ export class POTableComponent implements OnInit {
       const product = res.data;
       this.productDetails[index].sku = item.originalObject.sku;
       this.productDetails[index].readonly = true;
+      this.productDetails[index].quantityError = false;
       this.productDetails[index].taxRateId = this.taxRateOptions[0].id;
       this.selectedTaxRateId = this.taxRateOptions[0].id;
       this.productDetails[index].taxrate = this.taxRateOptions[0].rate;
@@ -85,6 +86,7 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].model = product.model;
       this.productDetails[index].unitPrice = item.originalObject.cost;
       this.productDetails[index].name = product.name;
+      this.productDetails[index].quantity = 1;
       this.productDetails[index].measure = product.unitOfMeasure.quantity;
       this.trProductModel = {
         sku: item.originalObject.sku,
@@ -93,6 +95,7 @@ export class POTableComponent implements OnInit {
       };
       this.sharedService.addInventoryAdjustmentProduct(this.ad_id, this.trProductModel).subscribe(resp => {
         this.productDetails[index].transferProductId = resp.data.id;
+        this.productDetails[index].total = resp.data.total;
       });
     });
     if (index === this.productDetails.length - 1) {
@@ -129,21 +132,28 @@ export class POTableComponent implements OnInit {
   }
 
   updatePurchaseOrderProduct(index) {
+    let canUpdate = true;
     if (this.productDetails[index].discount === undefined) {
       this.productDetails[index].discount = 0;
     }
-    if (this.productDetails[index].quantity === undefined) {
-      this.productDetails[index].quantity = 0;
+
+    this.productDetails[index].quantityError = false;
+    if (this.productDetails[index].quantity === undefined || !this.productDetails[index].quantity ||  this.productDetails[index].quantity < 1 ) {
+      this.productDetails[index].quantityError = true;
+      canUpdate = false;
     }
+  
     this.trProductModel = {
-      taxRateId: this.selectedTaxRateId,
+      taxRateId: this.productDetails[index].taxRateId ? parseInt(this.productDetails[index].taxRateId, 10) : this.taxRateOptions[0].id,
       quantity: parseInt(this.productDetails[index].quantity, 10),
     };
-    this.sharedService.updateInventoryAdjustmentProduct(this.ad_id,
-      this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
-        this.productDetails[index].total = res.data.total;
-        this.priceChange.emit(null);
-    });
+    if (canUpdate) {
+      this.sharedService.updateInventoryAdjustmentProduct(this.ad_id,
+        this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
+          this.productDetails[index].total = res.data.total;
+          this.priceChange.emit(null);
+      });
+    }
   }
 }
 

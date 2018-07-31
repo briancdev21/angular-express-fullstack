@@ -3,6 +3,7 @@ import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
 import { TransferModel } from '../../../../models/transfer.model';
 import { SharedService } from '../../../../services/shared.service';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-inventorybody',
@@ -14,14 +15,14 @@ export class InventoryBodyComponent {
   @Input() set trData(_trdata) {
     if (_trdata !== undefined) {
       this.tr_mock = _trdata;
-      this.tr_mock.toLocation = _trdata.toLocation;
-      this.toLocation = _trdata.toLocation;
-      this.tr_mock.fromLocation = _trdata.fromLocation;
-      this.fromLocation = _trdata.fromLocation;
+      this.tr_mock.toLocation = _trdata.toLocationId;
+      this.toLocation = _trdata.toLocationId;
+      this.tr_mock.fromLocation = _trdata.fromLocationId;
+      this.fromLocation = _trdata.fromLocationId;
       this.tr_mock.status = _trdata.status;
       this.tr_mock.internalMemo = _trdata.internalMemo;
       this.internalMemo = _trdata.internalMemo !== null ? _trdata.internalMemo : '';
-      this.transferdate = _trdata.createdAt;
+      this.transferdate = _trdata.dateTransferred;
       this.tr_id = `TR-${this.tr_mock.id}`;
       if (this.tr_mock.id !== undefined) {
         this.sharedService.getTransferProducts(this.tr_mock.id).subscribe( productRes => {
@@ -60,7 +61,10 @@ export class InventoryBodyComponent {
     this.createdDate = new Date().toISOString();
     this.tr_mock = new TransferModel();
     this.tr_mock.status = 'OPEN';
-    this.sharedService.getLocations().subscribe(locationRes => {
+    const params = {
+      RMA: true
+    }
+    this.sharedService.getLocationsWithParams(params).subscribe(locationRes => {
       this.locations = locationRes.results;
     });
   }
@@ -94,6 +98,10 @@ export class InventoryBodyComponent {
     });
   }
 
+  onDelete() {
+    this.deletePO();
+  }
+
   onSave() {
     console.log('mock:', this.tr_mock);
     if (this.tr_mock.fromLocation !== undefined &&
@@ -113,6 +121,11 @@ export class InventoryBodyComponent {
       this.router.navigate(['./inventory/stock-control']);
     }
   }
+
+  // onTransferDateChanged(event) {
+  //   this.tr_mock.dateTransferred = moment(event).format('YYYY-MM-DD');
+  //   // this.updateTR();
+  // }
 
   updateTR() {
     if (this.tr_mock.status === 'OPEN') {

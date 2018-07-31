@@ -75,6 +75,7 @@ export class POTableComponent implements OnInit {
   trProductModel: any;
   productDetails = [];
   stockcontrolStatus = 'OPEN';
+  quantityError: boolean;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
   }
@@ -113,6 +114,7 @@ export class POTableComponent implements OnInit {
       const product = res.data;
       this.productDetails[index].sku = item.originalObject.sku;
       this.productDetails[index].readonly = true;
+      this.productDetails[index].quantityError = false;
       this.productDetails[index].taxRateId = this.taxRateOptions[0].id;
       this.selectedTaxRateId = this.taxRateOptions[0].id;
       this.productDetails[index].taxrate = this.taxRateOptions[0].rate;
@@ -147,9 +149,8 @@ export class POTableComponent implements OnInit {
 
   checkValue(e) {
     if (e.which < 47 || e.which > 58 ) { return false; }
-    if (e.target.value < 0) { e.target.value = undefined; return false;  }
+    if (e.target.value < 1) { e.target.value = undefined; return false;  }
   }
-
 
   changedTaxRate(index, e) {
     this.selectedTaxRateId =  this.taxRateOptions[e.target.selectedIndex].id;
@@ -160,17 +161,23 @@ export class POTableComponent implements OnInit {
 
   updatePurchaseOrderProduct(index) {
     console.log('updating product detail:', this.productDetails[index]);
-    if (this.productDetails[index].quantity === undefined) {
-      this.productDetails[index].quantity = 0;
+    let canUpdate = true;
+    this.productDetails[index].quantityError = false;
+    if (this.productDetails[index].quantity === undefined || !this.productDetails[index].quantity ||  this.productDetails[index].quantity < 1 ) {
+      canUpdate = false;
+      this.productDetails[index].quantityError = true;
     }
+
     this.trProductModel = {
-      taxRateId: this.productDetails[index].taxRateId,
+      taxRateId: this.productDetails[index].taxRateId ? parseInt(this.productDetails[index].taxRateId, 10) : this.taxRateOptions[0].id,
       quantity: parseInt(this.productDetails[index].quantity, 10)
     };
-    this.sharedService.updateTransferProduct(this.po_id,
-      this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
-        this.productDetails[index].total = res.data.total;
-        this.priceChange.emit(null);
-    });
+    if (canUpdate) {
+      this.sharedService.updateTransferProduct(this.po_id,
+        this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
+          this.productDetails[index].total = res.data.total;
+          this.priceChange.emit(null);
+      });
+    }
   }
 }

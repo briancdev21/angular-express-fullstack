@@ -69,16 +69,22 @@ export class InventoryBodyComponent implements OnDestroy {
   }
 
   onMemoChanged(event) {
+    // console.log('event memo changed');
     if (event) {
       this.errors.memoChanged = true;
       this.ad_mock.internalMemo = event;
+      this.updateAD();
     }
-    this.updateAD();
   }
 
   onCancel() {
     this.showCancelPOModal = true;
   }
+
+  onDelete () {
+    this.deletePO();
+  }
+
   deletePO() {
     this.sharedService.deleteInventoryAdjustment(this.ad_mock.id).subscribe(() => {
       this.router.navigate(['./inventory/stock-control']);

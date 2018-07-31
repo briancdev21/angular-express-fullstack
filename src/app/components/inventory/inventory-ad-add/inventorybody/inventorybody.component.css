@@ -124,6 +124,11 @@ app-po-discount {
   background: #eee;
 }
 
+.delete {
+  background: red;
+  color: white;
+}
+
 .save_and_close {
   background: #a9f2df;
 }
