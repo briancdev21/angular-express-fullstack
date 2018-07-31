@@ -134,18 +134,24 @@ export class POTableComponent implements OnInit {
     if (this.productDetails[index].discount === undefined) {
       this.productDetails[index].discount = 0;
     }
-    if (this.productDetails[index].quantity === undefined) {
-      this.productDetails[index].quantity = 0;
+    let canUpdate = true;
+    this.productDetails[index].quantityError = false;
+    if (this.productDetails[index].quantity === undefined || !this.productDetails[index].quantity ||  this.productDetails[index].quantity < 1 ) {
+      canUpdate = false;
+      this.productDetails[index].quantityError = true;
     }
+
     this.trProductModel = {
       taxRateId: this.selectedTaxRateId,
       quantity: this.productDetails[index].quantity
     };
-    this.sharedService.updateTransferProduct(this.tr_id,
-      this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
-        this.productDetails[index].total = res.data.total;
-        this.priceChange.emit(null);
-    });
+    if (canUpdate) {
+      this.sharedService.updateTransferProduct(this.tr_id,
+        this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
+          this.productDetails[index].total = res.data.total;
+          this.priceChange.emit(null);
+      });
+    }
   }
 }
 
