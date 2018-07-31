@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { NgSelectModule } from '@ng-select/ng-select';
+import { Ng2CompleterModule } from 'ng2-completer';
 
 // import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
 
@@ -58,7 +59,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     NgSelectModule,
     FormsModule,
     ImageCropperModule,
-    NgSelectModule
+    NgSelectModule,
+    Ng2CompleterModule
   ],
   exports: [
     BreadcrumbBarComponent,

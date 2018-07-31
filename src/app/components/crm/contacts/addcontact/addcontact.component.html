@@ -30,9 +30,9 @@
 							<input placeholder="Enter business name" [ngClass]="{'validation-required': invalidBusinessName}" [(ngModel)]="businessName" >
 						</div>  
             <div>
-							<span>Head contact  (*required)</span>
+							<span>Head contact</span>
 							<div *ngIf="contactsList">
-                <select [(ngModel)]="headContact" [ngClass]="{'validation-required': invalidHeadContact}">
+                <select [(ngModel)]="headContact">
                   <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.name}}</option>
                 </select>
               </div>
@@ -72,16 +72,20 @@
 
           <div class="name-type tab-row">
             <div>
-              <span>Primary number (*required)</span>
-              <input placeholder="Enter primary phone number" [ngClass]="{'validation-required': invalidPrimaryNumber}" [(ngModel)]="primaryNumber">
+              <span>Primary number (*required) <span *ngIf="invalidPrimaryFormat" class="wrong-format"> : Wrong Phone Number Format!</span></span>
+              <input placeholder="XXX-XXX-XXXX" [ngClass]="{'validation-required': invalidPrimaryNumber || invalidPrimaryFormat}" [(ngModel)]="primaryNumber" type="tel">
             </div>
             <div *ngIf="!typeAccountTypeChange">
-              <span>Mobile</span>
-              <input placeholder="Enter mobile number" [(ngModel)]="secondaryNumber" >
+              <span>Mobile <span *ngIf="invalidSecondaryFormat" class="wrong-format"> : Wrong Phone Number Format!</span></span>
+              <input 
+                placeholder="XXX-XXX-XXXX" 
+                [(ngModel)]="secondaryNumber"  
+                type="tel" 
+                [ngClass]="{'validation-required': invalidSecondaryFormat}">
             </div>
 						<div *ngIf="typeAccountTypeChange">
-              <span>Secondary number</span>
-              <input placeholder="Enter secondary number" [(ngModel)]="secondaryNumber">
+              <span>Secondary number <span *ngIf="invalidSecondaryFormat" class="wrong-format"> : Wrong Phone Number Format!</span></span>
+              <input placeholder="XXX-XXX-XXXX" [(ngModel)]="secondaryNumber" type="tel" [ngClass]="{'validation-required': invalidSecondaryFormat}">
             </div>
           </div>
 
@@ -132,9 +136,10 @@
             <div *ngIf="!typeAccountTypeChange">
               <span>Business association</span>
               <div *ngIf="contactsList">
-                <select [(ngModel)]="businessAssociation">
+                <!-- <select [(ngModel)]="businessAssociation">
                   <option *ngFor="let contact of contactsList" [value]="contact.id" class="default-option">{{contact.name}}</option>
-                </select>
+                </select> -->
+                <ng2-completer [(ngModel)]="businessAss" [datasource]="contactsSource" [minSearchLength]="0" (keyup.enter)="onEnter()" (selected)="onSelectCustomer($event)" ></ng2-completer>
               </div>
             </div>
 						<div *ngIf="typeAccountTypeChange">

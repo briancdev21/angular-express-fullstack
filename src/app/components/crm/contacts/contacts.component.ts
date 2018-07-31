@@ -34,6 +34,7 @@ export class ContactsComponent implements OnInit {
       if (data) {
         this.crmService.getContactsList().subscribe(res => {
           this.contactsListInfo = res.results;
+          this.addContactName(this.contactsListInfo);
         });
       }
     });

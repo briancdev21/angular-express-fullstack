@@ -113,6 +113,9 @@ export class LeadBreadcrumbBarComponent implements AfterViewInit {
         }
       };
     }
+    if (!this._userInfo.phoneNumbers.secondary) {
+      delete(this._userInfo.phoneNumbers.secondary);
+    }
     this.crmService.updateIndividualLead(this._userInfo.id, savingData).subscribe(res => {
       console.log('lead update: ', res);
     });

@@ -78,14 +78,7 @@ export class AddLeadComponent implements OnInit {
   invalidDefaultCurrency = false;
   invalidDefaultPricing = false;
   invalidPrimaryNumber = false;
-  invalidHeadContact = false;
   sourceValue = true;
-  family: any;
-  royalty: any;
-  retail: any;
-  euro: any;
-  cad: any;
-  usd: any;
   Test1: any;
   Test2: any;
   currencyList = [];
@@ -269,7 +262,9 @@ export class AddLeadComponent implements OnInit {
     this.invalidPostalCode = false;
     this.wrongEmailFormat = !this.checkEmailValidation(this.email);
     this.invalidPrimaryFormat = !this.phoneNumberValidation(this.primaryNumber);
-    this.invalidSecondaryFormat = !this.phoneNumberValidation(this.secondaryNumber);
+    if (this.secondaryNumber) {
+      this.invalidSecondaryFormat = !this.phoneNumberValidation(this.secondaryNumber);
+    }
     if (!this.countriesNameList.includes(this.country)) {
       this.provinceNotIncluded = true;
       this.invalidCountry = true;
@@ -315,7 +310,7 @@ export class AddLeadComponent implements OnInit {
       }
     } else if (this.businessType === 'BUSINESS') {
       if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat && this.address &&
-        this.city && this.province && this.country && this.postalCode && this.headContact && !this.provinceNotIncluded) {
+        this.city && this.province && this.country && this.postalCode && !this.provinceNotIncluded) {
         this.tabActiveFirst = false;
         this.tabActiveSecond = true;
       } else {
@@ -412,11 +407,22 @@ export class AddLeadComponent implements OnInit {
         this.invalidCountry = false;
         this.invalidPostalCode = false;
         this.wrongEmailFormat = !this.checkEmailValidation(this.email);
-
+        this.invalidPrimaryFormat = !this.phoneNumberValidation(this.primaryNumber);
+        if (this.secondaryNumber) {
+          this.invalidSecondaryFormat = !this.phoneNumberValidation(this.secondaryNumber);
+        }
+        if (!this.countriesNameList.includes(this.country)) {
+          this.provinceNotIncluded = true;
+          this.invalidCountry = true;
+        } else if (!this.provincesNameList.includes(this.province)) {
+          this.provinceNotIncluded = true;
+          this.invalidProvince = true;
+        }
 
         if (this.businessType === 'PERSON') {
           if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
-            this.city && this.province && this.country && this.postalCode) {
+            !this.provinceNotIncluded && this.city && this.province && this.country && this.postalCode &&
+            !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
             break;
@@ -454,8 +460,8 @@ export class AddLeadComponent implements OnInit {
             }
           }
         } else if (this.businessType === 'BUSINESS') {
-          if (this.businessName  && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
-            this.city && this.province && this.country && this.postalCode && this.headContact) {
+          if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat && this.address &&
+            this.city && this.province && this.country && this.postalCode && !this.provinceNotIncluded) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
           } else {
@@ -687,6 +693,9 @@ export class AddLeadComponent implements OnInit {
           'note': this.notes,
           'lastContacted': moment().format('YYYY-MM-DD')
         };
+        if (!this.newLead.business.headContact) {
+          delete(this.newLead.business.headContact);
+        }
       }
 
       if (isNaN(this.newLead.sourceId)) {

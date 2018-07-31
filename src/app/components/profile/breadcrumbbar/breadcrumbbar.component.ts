@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../../../services/shared.service';
+import { CrmService } from '../../../services/crm.service';
 
 @Component({
   selector: 'app-breadcrumbbar',
@@ -17,6 +18,7 @@ export class BreadcrumbBarComponent implements AfterViewInit {
     }
   }
   @Input() keywords;
+  @Output() getFollowersUpdates = new EventEmitter;
   autocompleterLoaded = false;
   editable: boolean;
   _userInfo: any = {
@@ -27,23 +29,14 @@ export class BreadcrumbBarComponent implements AfterViewInit {
   selectedItem: any;
   inputChanged: any = '';
   public data = ['contact', ''];
+  public link = '/crm/contacts';
   items2: any[] = [
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'username'};
   isAutocompleteUpdated = false;
   usersList: any;
 
-  constructor(private sharedService: SharedService) {
-    this.sharedService.getUsers().subscribe(res => {
-      this.usersList = res;
-      res.forEach((element, index) => {
-        this.items2.push({
-          id: index,
-          label: element.username,
-          imageUrl: element.pictureURI
-        });
-      });
-    });
+  constructor(private sharedService: SharedService, private crmService: CrmService) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
@@ -52,10 +45,18 @@ export class BreadcrumbBarComponent implements AfterViewInit {
 
   init() {
       this.editable = false;
-      this._userInfo.followers.forEach(element => {
-        this.items2 = this.items2.filter(function( obj ) {
-          return obj.label !== element.name;
+      const fData = [];
+      this.sharedService.getUsers().subscribe(res => {
+        this.usersList = res;
+        this.items2 = res;
+        this._userInfo.followers.forEach(element => {
+          fData.push(this.items2.filter(u => u.username === element)[0]);
         });
+        this._userInfo.followers = fData;
+        this._userInfo.followers.forEach(element => {
+          this.items2 = this.items2.filter(i => i.username !== element.username);
+        });
+        console.log('userInfo ###:', this.items2);
       });
 
     // input breadcrumb bar info
@@ -67,9 +68,51 @@ export class BreadcrumbBarComponent implements AfterViewInit {
   onSelect(item: any) {
     this.selectedItem = item;
     this.items2 = this.items2.filter(function( obj ) {
-      return obj.label !== item.label;
+      return obj.username !== item.username;
     });
-    this._userInfo.followers.push({name: item.label, imageUrl: item.imageUrl });
+    this._userInfo.followers.push(item);
+    console.log('followers: ', this._userInfo);
+    this.updateFollowers();
+  }
+
+  updateFollowers() {
+    let savingData;
+    if (this._userInfo.type === 'PERSON') {
+      savingData = {
+        type: this._userInfo.type,
+        currencyId: this._userInfo.currencyId,
+        termId: this._userInfo.termId,
+        pricingCategoryId: this._userInfo.pricingCategoryId,
+        shippingAddress: this._userInfo.shippingAddress,
+        email: this._userInfo.email,
+        phoneNumbers: this._userInfo.phoneNumbers,
+        followers: this._userInfo.followers.map(f => f.username),
+        person: {
+          firstName: this._userInfo.person.firstName,
+          lastName: this._userInfo.person.lastName,
+        }
+      };
+    } else {
+      savingData = {
+        type: this._userInfo.type,
+        currencyId: this._userInfo.currencyId,
+        termId: this._userInfo.termId,
+        pricingCategoryId: this._userInfo.pricingCategoryId,
+        shippingAddress: this._userInfo.shippingAddress,
+        email: this._userInfo.email,
+        phoneNumbers: this._userInfo.phoneNumbers,
+        followers: this._userInfo.followers.map(f => f.username),
+        business: {
+          name: this._userInfo.business.name
+        }
+      };
+    }
+    if (!this._userInfo.phoneNumbers.secondary) {
+      delete(this._userInfo.phoneNumbers.secondary);
+    }
+    this.crmService.updateIndividualContact(this._userInfo.id, savingData).subscribe(res => {
+      console.log('lead update: ', res);
+    });
   }
 
 
@@ -87,8 +130,9 @@ export class BreadcrumbBarComponent implements AfterViewInit {
 
   removeUser(i: number) {
     const item = this._userInfo.followers[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
+    this.items2.push(item);
     this._userInfo.followers.splice(i, 1);
+    this.updateFollowers();
     this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 

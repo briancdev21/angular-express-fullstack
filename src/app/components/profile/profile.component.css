@@ -96,6 +96,8 @@ tab input {
   width: 50%;
   padding: 5px 20px 5px;
   float: left;
+  height: 31px;
+  border: 1px solid lightgray;
 }
 
 tab select {

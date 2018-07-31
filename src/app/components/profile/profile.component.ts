@@ -23,8 +23,7 @@ export class ProfileComponent implements OnInit {
   contactInfoIndex: any;
   contactsList: any;
 
-  userInfo = {
-  };
+  userInfo: any;
   public chartSetData: Array<Object> = [
     {
       title: 'Account Rating',
@@ -51,8 +50,8 @@ export class ProfileComponent implements OnInit {
   ];
   public cards =
     {
-      statusRevenue: '$25,434.00',
-      statusPoints: '5,078',
+      statusRevenue: 0,
+      statusPoints: 0,
       dealsPrice: '$12,552.37',
       dealsDate: 'January 19, 2017',
       appointmentsDate: 'January 26, 2017',
@@ -211,38 +210,35 @@ export class ProfileComponent implements OnInit {
   savingContact: any;
 
   dataRetrieved = false;
+  leadsList = [];
   constructor(private router: Router, private route: ActivatedRoute, private crmService: CrmService, private sharedService: SharedService) {
     this.contactInfoIndex = this.route.snapshot.paramMap.get('id');
     this.crmService.getIndividualContact(this.contactInfoIndex).subscribe(res => {
-      
+
       this.currentContact = res.data;
+      console.log('current contact: ', res.data);
       this.collaborators =  this.currentContact.collaborators ? this.currentContact.collaborators : [];
       this.dataRetrieved = true;
       // Update userInfo
-      this.userInfo = {
-        name: res.data.person ? res.data.person.firstName + ' ' + res.data.person.lastName : res.data.business.name,
-        profileLink: res.data.pictureURI,
-        email: res.data.email,
-        primaryphone: res.data.phoneNumbers.primary,
-        mobilephone: res.data.phoneNumbers.secondary,
-        shippingaddress: res.data.shippingAddress.address + ', ' +
-                          res.data.shippingAddress.city + ', ' +
-                          res.data.shippingAddress.province + ', ' +
-                          res.data.shippingAddress.postalCode,
-        billingaddress: res.data.billingAddress.address + ', ' +
-                        res.data.billingAddress.city + ', ' +
-                        res.data.billingAddress.province + ', ' +
-                        res.data.billingAddress.postalCode,
-        keywords: res.data.keywordIds ? res.data.keywordIds : [],
-        followers: res.data.followers ? res.data.followers : [],
-        note: res.data.note
-      };
+      this.userInfo = this.currentContact;
+      this.userInfo.profileLink = res.data.pictureURI;
+      this.userInfo.primaryphone  = res.data.phoneNumbers.primary;
+      this.userInfo.mobilephone = res.data.phoneNumbers.secondary;
+      this.userInfo.keywords = res.data.keywordIds ? res.data.keywordIds : [];
+      this.userInfo.followers = res.data.followers ? res.data.followers : [];
+      this.cards.statusRevenue = this.userInfo.revenue;
+      this.cards.statusPoints = this.userInfo.points;
+      if (this.userInfo.type === 'PERSON') {
+        this.userInfo.name = this.userInfo.person.firstName + ' ' + this.userInfo.person.lastName;
+      } else {
+        this.userInfo.name = this.userInfo.business.name;
+      }
 
       // Update donut chart info
       this.chartSetData[0]['percentage'] = res.data.accountRating;
       this.chartSetData[1]['percentage'] = res.data.loyaltyRating;
-      this.chartSetData[2]['percentage'] = res.data.dealsRatio;
-      this.chartSetData[3]['percentage'] = res.data.serviceRatio;
+      this.chartSetData[2]['percentage'] = res.data.dealsRatio * 100;
+      this.chartSetData[3]['percentage'] = res.data.serviceRatio * 100;
 
       this.crmService.getContactActivities(this.currentContact.id).subscribe(response => {
         const activities = response.results;
@@ -254,6 +250,7 @@ export class ProfileComponent implements OnInit {
           a['buttontitle'] = 'More Info';
           a['date'] = moment(a['createdAt']).format('YYYY-MM-DD');
           a['buttonClickEventHandlerName'] = 'getMoreInfo';
+          a['subject'] = a['emailSubject'];
 
           switch (a['title']) {
             case 'NOTE':
@@ -277,7 +274,12 @@ export class ProfileComponent implements OnInit {
     });
 
     this.sharedService.getContacts().subscribe(res => {
-      this.contactsList = res;
+      this.crmService.getLeadsList().subscribe(lead => {
+        this.leadsList = lead.results;
+        this.contactsList = res.concat(this.leadsList);
+        console.log('contaccts : ', this.contactsList);
+        this.addContactName(this.contactsList);
+      });
     });
   }
 
@@ -288,6 +290,31 @@ export class ProfileComponent implements OnInit {
       contact: undefined,
       content: ''
     };
+  }
+
+  updateFollowers(event) {
+    console.log('followers update: ', event);
+    // name === username currently
+    const followerUsernames = {
+      followers: event.map(e => e.name),
+    };
+
+    if (event) {
+      this.crmService.updateIndividualLead(this.currentContact.id, followerUsernames).subscribe( res => {
+      console.log('updated lead: ', res);
+    });
+    }
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
   tabChanged(event) {
@@ -307,7 +334,8 @@ export class ProfileComponent implements OnInit {
       date: today,
       buttonClickEventHandlerName: 'getMoreInfo',
       subject: this.activity.subject,
-      contact: this.activity.contact
+      contact: this.activity.contact,
+      type: this.activity.title
     };
 
     switch (nitem.title) {
@@ -352,18 +380,18 @@ export class ProfileComponent implements OnInit {
     this.savingContact = this.currentContact;
     console.log('changed User inf:', event);
     const userInfo = event.data;
-    const shippingArr = userInfo.shippingaddress.split(',');
-    const billingArr = userInfo.billingaddress.split(',');
     const nameArr = userInfo.name.split(' ');
 
-    this.savingContact.shippingAddress.address = shippingArr[0];
-    this.savingContact.shippingAddress.city = shippingArr[1];
-    this.savingContact.shippingAddress.province = shippingArr[2];
-    this.savingContact.shippingAddress.postalCode = shippingArr[3];
-    this.savingContact.billingAddress.address = billingArr[0];
-    this.savingContact.billingAddress.city = billingArr[0];
-    this.savingContact.billingAddress.province = billingArr[0];
-    this.savingContact.billingAddress.postalCode = billingArr[0];
+    this.savingContact.shippingAddress.address = userInfo.shippingAddress.address;
+    this.savingContact.shippingAddress.city = userInfo.shippingAddress.city;
+    this.savingContact.shippingAddress.province = userInfo.shippingAddress.province;
+    this.savingContact.shippingAddress.postalCode = userInfo.shippingAddress.postalCode;
+    if (this.savingContact.billingAddress) {
+      this.savingContact.billingAddress.address = userInfo.billingAddress.address;
+      this.savingContact.billingAddress.city = userInfo.billingAddress.city;
+      this.savingContact.billingAddress.province = userInfo.billingAddress.province;
+      this.savingContact.billingAddress.postalCode = userInfo.billingAddress.postalCode;
+    }
     this.savingContact.person.firstName = nameArr[0];
     this.savingContact.person.lastName = nameArr[1];
     this.savingContact.person.businessAssociation = 1;

@@ -149,7 +149,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
     this.crmService.uploadLeadProfileImage(this.currentLead.id, uploadData).subscribe(res => {
       console.log('imga result: ', res);
       // this.userInfo.profileLink = res.data.fulfillmentValue.pictureURI;
-      this.changedUserInfo.emit({'data': this.userInfo});
+      this.updateProfile();
     });
   }
 
@@ -276,6 +276,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
     const keywordIds = event.map( k => k.id);
     this.userInfo.keywordIds = keywordIds;
     // this.changedUserInfo.emit({'data': this.userInfo});
+    this.updateProfile();
   }
 
   confirmChange() {
@@ -364,7 +365,9 @@ export class LeadProfileInfoBarComponent implements OnInit {
     this.invalidBillingPostalCode = false;
     this.invalidEmail = !this.checkEmailValidation(this.userInfo.email);
     this.invalidPrimaryPhone = !this.phoneNumberValidation(this.userInfo.phoneNumbers.primary);
-    this.invalidSecondaryPhone = !this.phoneNumberValidation(this.userInfo.phoneNumbers.secondary);
+    if (this.userInfo.phoneNumbers.secondary) {
+      this.invalidSecondaryPhone = !this.phoneNumberValidation(this.userInfo.phoneNumbers.secondary);
+    }
     console.log('user info: ', this.userInfo);
     if (this.userInfo.type === 'PERSON') {
       if (this.userInfo.person.firstName !== '' && this.userInfo.person.lastName !== '' && this.userInfo.email !== '' && !this.invalidEmail
@@ -516,6 +519,9 @@ export class LeadProfileInfoBarComponent implements OnInit {
         keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
         note: this.userInfo.note ? this.userInfo.note : ''
       };
+    }
+    if (savingData.phoneNumbers.secondary) {
+      delete(savingData.phoneNumbers.secondary);
     }
     this.crmService.updateIndividualLead(this.userInfo.id, savingData).subscribe(res => {
       console.log('lead update: ', res);
