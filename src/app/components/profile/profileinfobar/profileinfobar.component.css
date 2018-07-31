@@ -49,6 +49,11 @@ span, input {
   padding: 0 5px;
 }
 
+span.phone-numbers {
+  display: flex;
+  padding: 2px 5px;
+}
+
 .editable input {
   border: 0;
   width: 100%;

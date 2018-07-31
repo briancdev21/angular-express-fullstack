@@ -407,7 +407,7 @@ export class ProfileInfoBarComponent implements OnInit {
         note: this.userInfo.note ? this.userInfo.note : ''
       };
     }
-    if (savingData.phoneNumbers.secondary) {
+    if (!savingData.phoneNumbers.secondary) {
       delete(savingData.phoneNumbers.secondary);
     }
     this.crmService.updateIndividualContact(this.userInfo.id, savingData).subscribe(res => {

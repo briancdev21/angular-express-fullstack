@@ -28,7 +28,7 @@
 <div class="phone editable">
   <img src="assets/images/ringing.png" />
   <div>
-    <span>
+    <span class="phone-numbers">
       <input 
         [(ngModel)]="userInfo.phoneNumbers.primary" 
         id="primaryphone" 
@@ -36,9 +36,9 @@
         (blur)="updateProfile(); phoneNumberChanged = true" 
         [ngClass]="{'phone-validation': invalidPrimaryPhone}"
         placeholder="XXX-XXX-XXXX">
-      <span>(Primary Contact)</span>
+      <span>(Primary)</span>
     </span>
-    <span>
+    <span class="phone-numbers">
       <input 
         [(ngModel)]="userInfo.phoneNumbers.secondary" 
         id="mobilephone" 

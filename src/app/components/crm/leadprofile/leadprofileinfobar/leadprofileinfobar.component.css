@@ -346,3 +346,8 @@ input::placeholder {
 .name input::placeholder {
   font-size: 16px;
 }
+
+span.phone-numbers {
+  padding: 2px 5px;
+  display: flex;
+}
