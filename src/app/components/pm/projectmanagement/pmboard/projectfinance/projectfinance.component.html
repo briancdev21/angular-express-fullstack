@@ -40,9 +40,9 @@
       <td>{{getFormatedDate(t.createdAt)}}</td>
       <td>{{getFormatedDate(t.updatedAt)}}</td>
       <td class="collaborators">
-        <!-- <div *ngFor="let col of t.collaborators">
-          <img [src]="col.imgUrl">
-        </div> -->
+        <div *ngFor="let col of t.collaboratorData">
+          <img [src]="col.pictureURI">
+        </div>
       </td>
     </tr>
   </table>

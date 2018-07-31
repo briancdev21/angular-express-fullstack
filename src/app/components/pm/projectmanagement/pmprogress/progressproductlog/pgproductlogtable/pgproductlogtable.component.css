@@ -67,6 +67,10 @@ tr {
   border-bottom: 1px solid #F5F5F5;
 }
 
+tr.purchase-order:hover {
+  box-shadow: 0 1px 10px 1px #d3d3d3;
+}
+
 th:last-child, td:last-child {
   display: flex;
   border: none;

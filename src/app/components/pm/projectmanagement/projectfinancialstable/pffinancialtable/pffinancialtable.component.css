@@ -602,3 +602,7 @@ input::placeholder {
   top: 0;
   left: 0;
 }
+
+table img {
+  border-radius: 50%;
+}

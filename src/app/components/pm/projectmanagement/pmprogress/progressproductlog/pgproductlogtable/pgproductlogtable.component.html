@@ -10,7 +10,7 @@
       <th (click)="sortArray('quantity', purchaseOrdersList)">QTY</th>
       <th (click)="sortArray('status', purchaseOrdersList)">STATUS</th>
     </tr>
-    <tr *ngFor="let order of purchaseOrdersList; let i = index">
+    <tr *ngFor="let order of purchaseOrdersList; let i = index" (click)="navigateTo(order)" class="purchase-order">
       <td><img [src]="order.imgUrl"></td>
       <td>{{order.name}}</td>
       <td>{{getSupplierName(order.supplierId)}}</td>
