@@ -7,6 +7,6 @@
 <!-- Tasks Card on right sidebar // Hide for now-->
 <!-- <app-tasks [tasks]="tasksInfo"></app-tasks> -->
 <!-- Collaborators Card on right sidebar-->
-<app-collaborators [collaborators]="collaboratorsInfo"></app-collaborators>
+<app-collaborators [collaborators]="collaborators" *ngIf="usersList"></app-collaborators>
 <!-- Documents Card on right sidebar-->
 <app-documents [documents]="documentsInfo"></app-documents>
