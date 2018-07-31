@@ -60,7 +60,10 @@ export class InventoryBodyComponent {
     this.createdDate = new Date().toISOString();
     this.tr_mock = new TransferModel();
     this.tr_mock.status = 'OPEN';
-    this.sharedService.getLocations().subscribe(locationRes => {
+    const params = {
+      RMA: true
+    }
+    this.sharedService.getLocationsWithParams(params).subscribe(locationRes => {
       this.locations = locationRes.results;
     });
   }
@@ -92,6 +95,10 @@ export class InventoryBodyComponent {
     this.sharedService.deleteTransfer(this.tr_mock.id).subscribe(() => {
       this.router.navigate(['./inventory/stock-control']);
     });
+  }
+
+  onDelete() {
+    this.deletePO();
   }
 
   onSave() {

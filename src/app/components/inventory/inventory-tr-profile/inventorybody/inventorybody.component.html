@@ -37,7 +37,7 @@
         &nbsp;
       </div>
       <div class="btn-group" >
-        <div class="btn cancel" (click)="onCancel()" [ngClass]="{'disabled': tr_mock.status === 'TRANSFERRED' }" >Cancel</div>
+        <div class="btn delete" (click)="onDelete()" [ngClass]="{'disabled': tr_mock.status === 'TRANSFERRED' }" >Delete</div>
         <div class="btn save_and_close" (click)="onSave()" >Transferred</div>
       </div>
     </section>

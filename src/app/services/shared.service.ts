@@ -67,6 +67,11 @@ export class SharedService {
     return this.http.get(url);
   }
 
+  getLocationsWithParams(params): Observable<any> {
+    const url = `${environment.apiUrl}/organization/locations/`;
+    return this.http.get(url, {params: params});
+  }
+
   createLocation (body): Observable<any> {
     const url = `${environment.apiUrl}/organization/locations/`;
     return this.http.post<any>(url, body);
