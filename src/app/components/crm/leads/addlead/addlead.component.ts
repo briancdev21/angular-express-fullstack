@@ -546,9 +546,9 @@ export class AddLeadComponent implements OnInit {
   clearInputs() {
     this.address = '';
     this.city = '';
-    this.province = '';
+    // this.province = '';
     this.postalCode = '';
-    this.country = '';
+    // this.country = '';
     this.typeAccountTypeChange = false;
     this.keywords = [];
     this.contactAssociation = undefined;
@@ -579,8 +579,8 @@ export class AddLeadComponent implements OnInit {
     this.notes = '';
     this.billingAddress = '';
     this.billingCity = '';
-    this.billingProvince = '';
-    this.billingCountry = '';
+    // this.billingProvince = '';
+    // this.billingCountry = '';
     this.billingPostalCode = '';
     this.secondaryNumber = '';
     this.selectedSourceId = undefined;
