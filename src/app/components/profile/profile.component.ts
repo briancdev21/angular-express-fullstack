@@ -359,7 +359,7 @@ export class ProfileComponent implements OnInit {
     const savingActivityInfo = {
       'contactId':  nitem.contact ? parseInt(nitem.contact, 10) : undefined,
       'emailSubject': nitem.subject,
-      'leadId': this.currentContact.id,
+      'leadId': nitem.contact ? parseInt(nitem.contact, 10) : undefined,
       'type': nitem.title,
       'detail': nitem.content
     };
@@ -368,8 +368,6 @@ export class ProfileComponent implements OnInit {
     });
     this.timelineData.unshift(nitem);
     this.activity.subject = undefined;
-    this.activity.contact = undefined;
-    this.activity.title = undefined;
   }
 
   toggleMenubar(data: boolean) {
