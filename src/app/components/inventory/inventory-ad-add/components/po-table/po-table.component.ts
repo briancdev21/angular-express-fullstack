@@ -85,6 +85,7 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].model = product.model;
       this.productDetails[index].unitPrice = item.originalObject.cost;
       this.productDetails[index].name = product.name;
+      this.productDetails[index].quantity = 1;
       this.productDetails[index].measure = product.unitOfMeasure.quantity;
       this.trProductModel = {
         sku: item.originalObject.sku,
@@ -93,6 +94,7 @@ export class POTableComponent implements OnInit {
       };
       this.sharedService.addInventoryAdjustmentProduct(this.ad_id, this.trProductModel).subscribe(resp => {
         this.productDetails[index].transferProductId = resp.data.id;
+        this.productDetails[index].total = resp.data.total;
       });
     });
     if (index === this.productDetails.length - 1) {
