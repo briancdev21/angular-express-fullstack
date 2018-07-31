@@ -75,6 +75,7 @@ export class POTableComponent implements OnInit {
   trProductModel: any;
   productDetails = [];
   stockcontrolStatus = 'OPEN';
+  quantityError: boolean;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
   }
@@ -147,9 +148,8 @@ export class POTableComponent implements OnInit {
 
   checkValue(e) {
     if (e.which < 47 || e.which > 58 ) { return false; }
-    if (e.target.value < 0) { e.target.value = undefined; return false;  }
+    if (e.target.value < 1) { e.target.value = undefined; return false;  }
   }
-
 
   changedTaxRate(index, e) {
     this.selectedTaxRateId =  this.taxRateOptions[e.target.selectedIndex].id;
@@ -164,7 +164,7 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].quantity = 0;
     }
     this.trProductModel = {
-      taxRateId: this.productDetails[index].taxRateId,
+      taxRateId: this.productDetails[index].taxRateId ? parseInt(this.productDetails[index].taxRateId, 10) : this.taxRateOptions[0].id,
       quantity: parseInt(this.productDetails[index].quantity, 10)
     };
     this.sharedService.updateTransferProduct(this.po_id,

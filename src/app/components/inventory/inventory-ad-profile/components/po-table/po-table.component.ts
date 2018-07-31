@@ -78,6 +78,7 @@ export class POTableComponent implements OnInit {
   selectedTaxRateId: number;
   trProductModel: any;
   productDetails = [];
+  // quantityError: boolean;
   stockcontrolStatus = 'OPEN';
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {
@@ -115,6 +116,7 @@ export class POTableComponent implements OnInit {
 
       const product = res.data;
       this.productDetails[index].sku = item.originalObject.sku;
+      this.productDetails[index].quantityError = false;
       this.productDetails[index].readonly = true;
       this.productDetails[index].taxRateId = this.taxRateOptions[0].id;
       this.selectedTaxRateId = this.taxRateOptions[0].id;
@@ -163,6 +165,15 @@ export class POTableComponent implements OnInit {
     if (e.target.value < 0) { e.target.value = undefined; return false;  }
   }
 
+  checkQuantityValue(e, index) {
+    if (e.which < 47 || e.which > 58 ) { return false; }
+    // console.log('event :', e.target.value);
+    // if (parseInt(e.target.value, 10) < 1) {
+    //   this.productDetails[index].quantityError = true;
+    // } else {
+    //   this.productDetails[index].quantityError = false;
+    // }
+  }
 
   changedTaxRate(index, e) {
     this.selectedTaxRateId =  this.taxRateOptions[e.target.selectedIndex].id;
@@ -174,14 +185,19 @@ export class POTableComponent implements OnInit {
     if (this.productDetails[index].discount === undefined) {
       this.productDetails[index].discount = 0;
     }
-    if (this.productDetails[index].quantity === undefined) {
-      this.productDetails[index].quantity = 0;
+
+    this.canUpdate = true;
+    this.productDetails[index].quantityError = false;
+    if (this.productDetails[index].quantity === undefined || !this.productDetails[index].quantity ||  this.productDetails[index].quantity < 1 ) {
+      this.canUpdate = false;
+      this.productDetails[index].quantityError = true;
     }
+
     this.trProductModel = {
-      taxRateId: this.selectedTaxRateId,
+      taxRateId: this.productDetails[index].taxRateId ? parseInt(this.productDetails[index].taxRateId, 10) : this.taxRateOptions[0].id,
       quantity: parseInt(this.productDetails[index].quantity, 10)
     };
-    if (this.canUpdate) {
+    if (this.canUpdate && !this.productDetails[index].quantityError) {
       this.sharedService.updateInventoryAdjustmentProduct(this.ad_id,
         this.productDetails[index].transferProductId, this.trProductModel).subscribe(res => {
           this.productDetails[index].total = res.data.total;
