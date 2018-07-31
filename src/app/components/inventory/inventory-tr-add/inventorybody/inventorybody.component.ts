@@ -3,6 +3,7 @@ import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
 import { TransferModel } from '../../../../models/transfer.model';
 import { SharedService } from '../../../../services/shared.service';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-inventorybody',
@@ -72,6 +73,11 @@ export class InventoryBodyComponent {
     console.log('mock:', this.tr_mock);
     this.updateTR();
   }
+
+  // onTransferDateChanged(event) {
+  //   this.tr_mock.dateTransferred = moment(event).format('YYYY-MM-DD');
+  //   // this.updateTR();
+  // }
 
   onCancel() {
     this.showCancelPOModal = true;

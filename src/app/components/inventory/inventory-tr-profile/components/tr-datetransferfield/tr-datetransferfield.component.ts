@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-tr-datetransferfield',
@@ -7,6 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TRDateTransferFieldComponent implements OnInit {
   @Input() transferdate;
+  // @Output() dateChanged: EventEmitter<any> = new EventEmitter();
   today: Date;
 
   ngOnInit() {
@@ -15,5 +16,6 @@ export class TRDateTransferFieldComponent implements OnInit {
   }
   selectCreatedFrom(event) {
     this.transferdate = event.value;
+    // this.dateChanged.emit(event.value);
   }
 }
