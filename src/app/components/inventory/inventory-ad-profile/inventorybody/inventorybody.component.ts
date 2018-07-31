@@ -97,6 +97,10 @@ export class InventoryBodyComponent implements OnDestroy {
     this.showCancelPOModal = true;
   }
 
+  onDelete() {
+    this.deletePO();
+  }
+
   deletePO() {
     this.sharedService.deleteInventoryAdjustment(this.ad_mock.id).subscribe(() => {
       this.router.navigate(['./inventory/stock-control']);
