@@ -14,10 +14,10 @@ export class InventoryBodyComponent {
   @Input() set trData(_trdata) {
     if (_trdata !== undefined) {
       this.tr_mock = _trdata;
-      this.tr_mock.toLocation = _trdata.toLocation;
-      this.toLocation = _trdata.toLocation;
-      this.tr_mock.fromLocation = _trdata.fromLocation;
-      this.fromLocation = _trdata.fromLocation;
+      this.tr_mock.toLocation = _trdata.toLocationId;
+      this.toLocation = _trdata.toLocationId;
+      this.tr_mock.fromLocation = _trdata.fromLocationId;
+      this.fromLocation = _trdata.fromLocationId;
       this.tr_mock.status = _trdata.status;
       this.tr_mock.internalMemo = _trdata.internalMemo;
       this.internalMemo = _trdata.internalMemo !== null ? _trdata.internalMemo : '';
