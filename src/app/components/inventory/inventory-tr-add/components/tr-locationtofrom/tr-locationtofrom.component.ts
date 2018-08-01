@@ -7,14 +7,20 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class TRLocationFromToComponent implements OnInit {
 
-  @Input() set locations(_locations: any[]) {
-    this.locations_local = _locations;
+  @Input() set toLocations(_locations: any[]) {
+    this.to_locations_local = _locations;
+  }
+  @Input() set fromLocations(_locations: any[]) {
+    this.from_locations_local = _locations;
   }
 
+  @Input() fromLocation;
+  @Input() toLocation;
+
   @Output() selectedLocation: EventEmitter<any> = new EventEmitter();
-  locations_local = [];
-  toLocation = 'default';
-  fromLocation = 'default';
+  from_locations_local = [];
+  to_locations_local = [];
+
 
   onchangeToLocation (event) {
     this.toLocation = event.target.value;
