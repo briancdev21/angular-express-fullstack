@@ -96,6 +96,7 @@ export class AddChangeLogDetailsComponent implements OnInit {
 
     this.projectsService.createProjectChangeLog(this.currentProjectId, savingMockData).subscribe(data => {
       this.createdChangeLog = data.data;
+      this.projectManagementService.createdChangeLogData.next(this.createdChangeLog);
       console.log('createdChangeLog', data);
     });
 

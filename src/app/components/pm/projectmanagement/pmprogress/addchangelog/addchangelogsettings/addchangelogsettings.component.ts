@@ -35,6 +35,10 @@ export class AddChangeLogSettingsComponent implements OnDestroy {
     this.switchOn = !this.switchOn;
   }
 
+  deleteChangeLog() {
+
+  }
+
   ngOnDestroy() {
     const sendSaveData = {
       isSendToCustomer: this.switchOn,

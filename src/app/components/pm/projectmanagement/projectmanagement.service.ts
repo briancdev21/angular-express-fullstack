@@ -15,6 +15,7 @@ export class ProjectManagementService {
   progressInternalNoteChange: BehaviorSubject<string> = new BehaviorSubject('');
   logTitleChange: BehaviorSubject<string> = new BehaviorSubject('');
   logStatusChange: BehaviorSubject<string> = new BehaviorSubject('');
+  createdChangeLogData: BehaviorSubject<object> = new BehaviorSubject({});
 
   closeTaskModal = this.closeDetailedTaskModal.asObservable();
   deleteOpenedTask = this.deleteTask.asObservable();

@@ -10,7 +10,7 @@
   <app-addchangelogdetails [descriptionChange]="descriptionChange" [detailsChange]="detailsChange"></app-addchangelogdetails>
 </div>
 <div class="btn-sec">
-  <div class="create-btns" (click)="showConfirmModal=true">CREATE ESTIMATE</div>
+  <div class="create-btns" (click)="createEstimate()">CREATE ESTIMATE</div>
   <div class="create-btns">CREATE WORK ORDER</div>
   <!-- <div class="create-btns">ADD TASKS</div> -->
 </div>
@@ -40,7 +40,7 @@
 
 
 <!-- Confirm Delete Alert Box -->
-<div class="confirm-delete-modal-wrapper" *ngIf="showConfirmModal" ></div>
+<!-- <div class="confirm-delete-modal-wrapper" *ngIf="showConfirmModal" ></div>
 <div [ngClass]="{'confirm-modal': showConfirmModal, 'confirm-modal-hide': !showConfirmModal }">
   <div class="header">
     <span>Confirm Delete</span>
@@ -60,4 +60,4 @@
       </button>
     </div>
   </div>
-</div> 
+</div>  -->
