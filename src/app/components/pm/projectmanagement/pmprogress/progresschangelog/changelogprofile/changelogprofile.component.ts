@@ -38,7 +38,6 @@ export class ChangeLogProfileComponent implements OnInit {
       this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
       this.projectsService.getIndividualProjectChangeLog(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
         this.changeLogInfo = res.data;
-        console.log('change log info: ', this.changeLogInfo);
         this.title = res.data.title;
         this.changeLogStatus = res.data.status;
         this.descriptionChange = res.data.description;
