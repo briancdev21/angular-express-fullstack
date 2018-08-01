@@ -14,8 +14,12 @@ import * as moment from 'moment';
 })
 export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
 
-  @Input() descriptionChange;
-  @Input() detailsChange;
+  @Input() set descriptionChange(val) {
+    this._descriptionChange = val;
+  }
+  @Input() set detailsChange (val) {
+    this._detailsChange = val;
+  }
   changeLogInfo: any;
   switchIconAddress = false;
   switchIconPm = false;
@@ -43,6 +47,8 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
   title = '';
   logStatus = 'IN_PROGRESS';
   currentChangeLogId: any;
+  _descriptionChange: any;
+  _detailsChange: any;
 
   constructor( private projectManagementService: ProjectManagementService, private sharedService: SharedService,
     private projectsService: ProjectsService, private route: ActivatedRoute  ) {
@@ -50,7 +56,6 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
     this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
 
     this.projectsService.getIndividualProjectChangeLog(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
-      console.log('Individual data: ', res.data);
       this.createdChangeLog = res.data;
       this.ccContact = res.data.additionalContactId;
       this.title = res.data.title;
@@ -65,15 +70,14 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
     };
 
     this.projectManagementService.saveChangeLog.subscribe(data => {
-      console.log('44444444 : ', data);
       if (data['saveClicked']) {
         let savingData = {
           'additionalContactId': this.ccContact ? parseInt(this.ccContact, 10) : this.createdChangeLog.contactId,
           'title': this.title,
           'useContactAddress': this.switchIconAddress,
           'updateProjectManager': this.switchIconPm,
-          'description': this.descriptionChange ? this.descriptionChange : this.createdChangeLog.description,
-          'newScopeOfWork': this.detailsChange ? this.detailsChange : this.createdChangeLog.newScopeOfWork,
+          'description': this._descriptionChange ? this._descriptionChange : this.createdChangeLog.description,
+          'newScopeOfWork': this._detailsChange ? this._detailsChange : this.createdChangeLog.newScopeOfWork,
           'status': this.logStatus
         };
 
@@ -81,10 +85,8 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
         savingData = JSON.parse(JSON.stringify(savingData));
         this.currentProjectId = localStorage.getItem('current_projectId');
         this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
-        console.log('save is clicked', this.currentProjectId, this.createdChangeLog.id, savingData);
         this.projectsService.updateIndividualChangeLog(this.currentProjectId, this.createdChangeLog.id, savingData)
           .subscribe(res => {
-            console.log('updated : ', res);
             data['saveClicked'] = false;
           });
       }
@@ -141,7 +143,6 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('unsubscribed------------------');
     // this.projectManagementService.saveChangeLog.unsubscribe();
     this.currentProjectId = undefined;
     this.currentChangeLogId = undefined;

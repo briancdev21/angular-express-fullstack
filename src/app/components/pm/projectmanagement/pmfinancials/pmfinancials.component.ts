@@ -245,7 +245,7 @@ export class PmFinancialsComponent implements OnInit {
   selectScheduleDate(event, pos, schedule) {
     const updatedDate = moment(event.value).format('YYYY-MM-DD');
     // this.scheduleDateList[pos] = moment(event.value).format('MMMM DD, YYYY');
-    this.paymentSchedule[pos].date = updatedDate;
+    this.paymentSchedule[pos].date = moment(updatedDate).format('MMMM DD, YYYY');
     const savingData = {
       'date': updatedDate
     };

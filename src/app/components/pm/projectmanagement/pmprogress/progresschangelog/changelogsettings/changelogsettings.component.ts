@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
 import { ProjectsService } from '../../../../../../services/projects.service';
@@ -10,7 +10,7 @@ import { ProjectsService } from '../../../../../../services/projects.service';
     './changelogsettings.component.css'
   ]
 })
-export class ChangeLogSettingsComponent {
+export class ChangeLogSettingsComponent implements OnDestroy {
 
   settingsCollapsed = true;
   showReminderModal = false;
@@ -32,12 +32,14 @@ export class ChangeLogSettingsComponent {
     };
 
     this.projectManagementService.saveChangeLog.next(sendSaveData);
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@');
     this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
   }
 
   cancelChangeLog() {
     this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
+  }
+
+  deleteChangeLog() {
   }
 
   onClickSendCustomer() {
@@ -47,5 +49,13 @@ export class ChangeLogSettingsComponent {
         console.log('email sent: ', res);
       });
     }
+  }
+
+  ngOnDestroy() {
+    const sendSaveData = {
+      isSendToCustomer: this.switchOn,
+      saveClicked: false
+    };
+    this.projectManagementService.saveChangeLog.next(sendSaveData);
   }
 }

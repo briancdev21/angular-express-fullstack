@@ -10,9 +10,9 @@
   <app-changelogdetails [descriptionChange]="descriptionChange" [detailsChange]="detailsChange"></app-changelogdetails>
 </div>
 <div class="btn-sec">
-  <div class="create-btns" (click)="showConfirmModal=true">CREATE ESTIMATE</div>
+  <div class="create-btns" (click)="createEstimate()" [ngClass]="{'greyed-btn': estimateExist}">CREATE ESTIMATE</div>
   <div class="create-btns">CREATE WORK ORDER</div>
-  <div class="create-btns">ADD TASKS</div>
+  <!-- <div class="create-btns">ADD TASKS</div> -->
 </div>
 
 <div class="text-editor-sec">
