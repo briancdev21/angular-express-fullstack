@@ -234,3 +234,8 @@
   top: 0;
   left: 0;
 }
+
+.greyed-btn {
+  background: #DCFAF2 !important;
+  color: #d3d3d3 !important;
+}

@@ -4,6 +4,8 @@ import { ProjectManagementService } from '../../../projectmanagement.service';
 import * as moment from 'moment';
 import { SharedService } from '../../../../../../services/shared.service';
 import { ProjectsService } from '../../../../../../services/projects.service';
+import { EstimatesService } from '../../../../../../services/estimates.service';
+
 @Component({
   selector: 'app-changelogprofile',
   templateUrl: './changelogprofile.component.html',
@@ -26,16 +28,28 @@ export class ChangeLogProfileComponent implements OnInit {
   contactsList = [];
   title: string;
   changeLogStatus = 'IN_PROGRESS';
+  createdEstimateId: any;
+  estimatesList = [];
+  estimateExist = false;
 
   constructor( private projectManagementService: ProjectManagementService, private router: Router, private sharedService: SharedService,
-    private projectsService: ProjectsService, private route: ActivatedRoute ) {
+    private projectsService: ProjectsService, private route: ActivatedRoute, private estimatesService: EstimatesService ) {
       this.currentProjectId = localStorage.getItem('current_projectId');
       this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
       this.projectsService.getIndividualProjectChangeLog(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
+        this.changeLogInfo = res.data;
+        console.log('change log info: ', this.changeLogInfo);
         this.title = res.data.title;
         this.changeLogStatus = res.data.status;
         this.descriptionChange = res.data.description;
         this.detailsChange = res.data.newScopeOfWork;
+
+        this.estimatesService.getEstimates().subscribe(estimate => {
+          this.estimatesList = estimate.results;
+          if (this.estimatesList.filter(e => e.changeLogId === this.changeLogInfo.id).length > 0) {
+            this.estimateExist = true;
+          }
+        });
       });
 
       this.projectsService.getChangeLogItems(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
@@ -49,7 +63,24 @@ export class ChangeLogProfileComponent implements OnInit {
   }
 
   confirm() {
-    this.router.navigate(['../add-estimate']);
+    this.router.navigate(['./add-estimate']);
+  }
+
+  createEstimate() {
+    if (this.estimateExist) {
+      return;
+    } else {
+      const savingData = {
+        changeLogId: this.changeLogInfo.id,
+        shippingAddress: this.changeLogInfo.adress,
+        contactId: this.changeLogInfo.contactId
+      };
+      this.estimatesService.createEstimate(savingData).subscribe(res => {
+        console.log('created Estimate: ', res);
+        this.createdEstimateId = res.data.id;
+        this.router.navigate([`./estimate-profile/${this.createdEstimateId}`]);
+      });
+    }
   }
 
   addUserRealName(data) {
