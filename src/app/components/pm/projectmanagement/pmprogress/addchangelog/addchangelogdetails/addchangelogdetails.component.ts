@@ -14,8 +14,12 @@ import * as moment from 'moment';
 })
 export class AddChangeLogDetailsComponent implements OnInit {
 
-  @Input() descriptionChange;
-  @Input() detailsChange;
+  @Input() set descriptionChange(val) {
+    this._descriptionChange = val;
+  }
+  @Input() set detailsChange (val) {
+    this._detailsChange = val;
+  }
   changeLogInfo: any;
   switchIconAddress = false;
   switchIconPm = false;
@@ -42,6 +46,8 @@ export class AddChangeLogDetailsComponent implements OnInit {
   createdChangeLog: any;
   title = '';
   logStatus = 'IN_PROGRESS';
+  _descriptionChange: any;
+  _detailsChange: any;
 
   constructor( private projectManagementService: ProjectManagementService, private sharedService: SharedService,
     private projectsService: ProjectsService ) {
@@ -60,8 +66,8 @@ export class AddChangeLogDetailsComponent implements OnInit {
           'title': this.title,
           'useContactAddress': this.switchIconAddress,
           'updateProjectManager': this.switchIconPm,
-          'description': this.descriptionChange ? this.descriptionChange : this.createdChangeLog.description,
-          'newScopeOfWork': this.detailsChange ? this.detailsChange : this.createdChangeLog.newScopeOfWork,
+          'description': this._descriptionChange ? this._descriptionChange : this.createdChangeLog.description,
+          'newScopeOfWork': this._detailsChange ? this._detailsChange : this.createdChangeLog.newScopeOfWork,
           'status': this.logStatus
         };
         console.log('saving log: ', savingData);

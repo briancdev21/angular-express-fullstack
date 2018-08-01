@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
 
@@ -9,7 +9,7 @@ import { ProjectManagementService } from '../../../projectmanagement.service';
     './addchangelogsettings.component.css'
   ]
 })
-export class AddChangeLogSettingsComponent {
+export class AddChangeLogSettingsComponent implements OnDestroy {
 
   settingsCollapsed = true;
   showReminderModal = false;
@@ -24,7 +24,6 @@ export class AddChangeLogSettingsComponent {
       isSendToCustomer: this.switchOn,
       saveClicked: true
     };
-    console.log('______________________');
     this.projectManagementService.saveChangeLog.next({sendSaveData});
   }
 
@@ -34,5 +33,13 @@ export class AddChangeLogSettingsComponent {
 
   onClickSendCustomer() {
     this.switchOn = !this.switchOn;
+  }
+
+  ngOnDestroy() {
+    const sendSaveData = {
+      isSendToCustomer: this.switchOn,
+      saveClicked: false
+    };
+    this.projectManagementService.saveChangeLog.next(sendSaveData);
   }
 }
