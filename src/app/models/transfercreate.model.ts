@@ -1,5 +1,5 @@
 export class TransferCreateModel {
-  fromLocation = 1;
-  toLocation = 1;
+  fromLocation: number;
+  toLocation: number;
   internalMemo = '';
 }

@@ -17,6 +17,7 @@ import {InventoryFooterComponent} from './inventoryfooter/inventoryfooter.compon
 import { TRInternalMemoComponent } from './components/tr-internalmemo/tr-internalmemo.component';
 import { ADAdjustmentIdFieldComponent } from './components/ad-adjustmentid/ad-adjustmentid.component';
 import { AdLocationFromToComponent } from './components/ad-locationtofrom/ad-locationtofrom.component';
+import { CommonCmpModule } from '../../common/common.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { AdLocationFromToComponent } from './components/ad-locationtofrom/ad-loc
     OwlNativeDateTimeModule,
     Ng2CompleterModule,
     FormsModule,
-    NgxDnDModule
+    NgxDnDModule,
+    CommonCmpModule
   ],
   exports: [
     InventoryAdProfileComponent,
