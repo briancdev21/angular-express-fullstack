@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DragulaService } from 'ng2-dragula';
 import { OrderService } from '../order.service';
 import { CollaboratorsService } from '../../../../../services/collaborators.service';
-
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-draggableticket',
@@ -39,6 +39,7 @@ export class DraggableTicketComponent implements OnInit {
   issueTicket: any;
   currentWorkOrderId: any;
   workOrderTasks = [];
+  selectedTask: any;
 
   constructor(private dragulaService: DragulaService, private orderService: OrderService,
     private collaboratorsService: CollaboratorsService, private router: Router, private route: ActivatedRoute) {
@@ -50,27 +51,34 @@ export class DraggableTicketComponent implements OnInit {
 
     this.collaboratorsService.getWorkOrderTasks(this.currentWorkOrderId).subscribe(res => {
       this.workOrderTasks = res.results;
+      this.taskTicketInfo = res.results;
+      this.taskTicketInfo.forEach(ele => {
+        ele.estimateHour = Math.floor(ele.duration / 60);
+        ele.estimateMin = ele.duration % 60;
+        ele.createdAt = moment(ele.createdAt).format('YYYY-MM-DD');
+      });
       console.log('work order tasks: ', res);
+      this.notStarted = this.taskTicketInfo.filter(t => t.status === 'NOT_STARTED');
+      this.inProgress = this.taskTicketInfo.filter(t => t.status === 'IN_PROGRESS');
+      this.complete = this.taskTicketInfo.filter(t => t.status === 'COMPLETE');
+      this.notComplete = this.taskTicketInfo.filter(t => t.status === 'NOT_COMPLETE');
+      this.taskTicketInfo.map(t => t.visibility = true);
+      this.notStarted.map(t => t.visibility = true);
+      this.issueTickets.map(t => t.visibility = true);
     });
   }
 
   private onDropModel(args) {
     const [el, target, source] = args;
-    this.notStarted.map(t => t.status = 'notStarted');
-    this.inProgress.map(t => t.status = 'inProgress');
-    this.notComplete.map(t => t.status = 'notComplete');
-    this.complete.map(t => t.status = 'complete');
+    this.notStarted.map(t => t.status = 'NOT_STARTED');
+    this.inProgress.map(t => t.status = 'IN_PROGRESS');
+    this.notComplete.map(t => t.status = 'NOT_COMPLETE');
+    this.complete.map(t => t.status = 'COMPLETE');
   }
 
 
   ngOnInit() {
-    this.notStarted = this.taskTicketInfo.filter(t => t.status === 'notStarted');
-    this.inProgress = this.taskTicketInfo.filter(t => t.status === 'inProgress');
-    this.complete = this.taskTicketInfo.filter(t => t.status === 'complete');
-    this.notComplete = this.taskTicketInfo.filter(t => t.status === 'notComplete');
-    this.taskTicketInfo.map(t => t.visibility = true);
-    this.notStarted.map(t => t.visibility = true);
-    this.issueTickets.map(t => t.visibility = true);
+
   }
 
   openTimeEstimationModal(index, task) {
@@ -104,12 +112,17 @@ export class DraggableTicketComponent implements OnInit {
   }
 
   getColor(task) {
-    if (task.priority === 'level1') return 'green';
-    else if (task.priority === 'level2') return 'orange';
-    else return 'red';
+    if (task.priority === '1') {
+      return 'green';
+    } else if (task.priority === '2') {
+      return 'orange';
+    } else {
+      return 'red';
+    }
   }
 
   deleteTicket(task) {
+    this.selectedTask = task;
     this.checkColumnIn(task);
     const currentTask = this.taskTicketInfo.filter(t => t.id === task.id);
     this.currentInfoId = this.taskTicketInfo.map(t => t.id).indexOf(currentTask[0].id);
@@ -118,9 +131,13 @@ export class DraggableTicketComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.taskTicketInfo.splice(this.currentInfoId, 1);
-    this.selectedColumn.splice(this.currentColumnId, 1);
-    this.showDeleteConfirmModal = false;
+    console.log('seleted task: ', this.selectedTask);
+    this.collaboratorsService.deleteIndividualWorkOrderTask(this.currentWorkOrderId, this.selectedTask.id).subscribe(res => {
+      console.log('deleted ', res);
+      this.taskTicketInfo.splice(this.currentInfoId, 1);
+      this.selectedColumn.splice(this.currentColumnId, 1);
+      this.showDeleteConfirmModal = false;
+    });
   }
 
   changeVisibility(task) {
@@ -132,16 +149,16 @@ export class DraggableTicketComponent implements OnInit {
 
   checkColumnIn(task) {
     switch (task.status) {
-      case 'notStarted':
+      case 'NOT_STARTED':
         this.selectedColumn = this.notStarted;
         break;
-      case 'inProgress':
+      case 'IN_PROGRESS':
         this.selectedColumn = this.inProgress;
         break;
-      case 'complete':
+      case 'COMPLETE':
         this.selectedColumn = this.complete;
         break;
-      case 'notComplete':
+      case 'NOT_COMPLETE':
         this.selectedColumn = this.notComplete;
         break;
     }
@@ -206,7 +223,7 @@ export class DraggableTicketComponent implements OnInit {
     const newProduct = {
       id: newId,
       description: '',
-      status: 'notStarted',
+      status: 'NOT_STARTED',
       estimateHour: '',
       estimateMin: '',
       priority: 'level1',

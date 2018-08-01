@@ -34,12 +34,12 @@
 					</div>
 					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
 						<div>
-							<input placeholder="Type your task here" [(ngModel)]="task.description" [value]="task.description">
-							<span class="create-date">{{task.createdDate}}</span>
+							<input placeholder="Type your task here" [(ngModel)]="task.description" >
+							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div>
 							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
-							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<!-- <img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();"> -->
 							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
 							<!-- Start Small Dialog when clicking images to add time -->
 							<div 
@@ -55,7 +55,7 @@
 							<!--End Add time -->
 							<!-- Start Small Dialog when clicking images to add dependency -->
 							
-							<div 
+							<!-- <div 
 								class="dependency-modal"
 								[ngClass]="{'show-modal': dependencyModalCollapsed[i], 'hide-modal': !dependencyModalCollapsed[i] }"
 								(clickOutside)="closeDependencyModal(i)">
@@ -65,7 +65,7 @@
 										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
 									</select>
 								</div>
-							</div>
+							</div> -->
 							<!--End Add Dependency -->
 							<!-- Start Small Dialog when clicking images to add Priority -->
 							
@@ -76,9 +76,9 @@
 								<div class="priority-mdl-content">
 									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
 										<option [value]="'default'">Select Priority</option>
-										<option [value]="'level1'">Level 1</option>
-										<option [value]="'level2'">Level 2</option>
-										<option [value]="'level3'">Level 3</option>
+										<option [value]="'1'">Level 1</option>
+										<option [value]="'2'">Level 2</option>
+										<option [value]="'3'">Level 3</option>
 									</select>
 								</div>
 							</div>
@@ -103,11 +103,11 @@
 					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
 						<div>
 							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
-							<span class="create-date">{{task.createdDate}}</span>
+							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div>
 							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
-							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<!-- <img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();"> -->
 							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
 							<!-- Start Small Dialog when clicking images to edit tickets -->
 							
@@ -171,11 +171,11 @@
 					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
 						<div>
 							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
-							<span class="create-date">{{task.createdDate}}</span>
+							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div>
 							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
-							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<!-- <img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();"> -->
 							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
 							<!-- Start Small Dialog when clicking images to edit tickets -->
 							
@@ -239,11 +239,11 @@
 					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
 						<div>
 							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
-							<span class="create-date">{{task.createdDate}}</span>
+							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div class="img-section">
 							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
-							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<!-- <img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();"> -->
 							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
 							<!-- Start Small Dialog when clicking images to edit tickets -->
 							
@@ -299,7 +299,7 @@
 						<span>{{issue.description}}</span>
 						<div class="time-imgs">
 							<span class="estimated">
-								<span>{{issue.createdDate}}</span>
+								<span>{{issue.createdAt}}</span>
 							</span>
 							<img src="assets/images/attachment.png" class="img-attachment" (click)="downloadAttachment(issue)">
 						</div>
@@ -307,9 +307,9 @@
 					<div class="issue-ticket-column issue-style edit-form draggable" *ngIf="!issue.visibility" (clickOutside)="onIssueClickedOutside(i, issue)">
 						<input [(ngModel)]="issue.description" [value]="issue.description" placeholder="Type your issue here">
 						<div class="img-section">
-							<span class="create-date">{{issue.createdDate}}</span>
+							<span class="create-date">{{issue.createdAt}}</span>
 							<div>
-								<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, issue); $event.stopPropagation();">
+								<!-- <img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, issue); $event.stopPropagation();"> -->
 								<img src="assets/images/attachment.png" (click)="addAttachment(i, issue); $event.stopPropagation();">
 							</div>
 						</div>
