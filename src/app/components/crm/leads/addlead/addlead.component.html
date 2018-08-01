@@ -16,11 +16,11 @@
           <div class="tab-row" *ngIf="!typeAccountTypeChange">
             <div>
               <span>First Name (*required)</span>
-              <input placeholder="Enter first name" [ngClass]="{'validation-required': invalidFirstname}" [(ngModel)]="firstName" [value]="firstName">
+              <input placeholder="Enter first name" [ngClass]="{'validation-required': invalidFirstname}" [(ngModel)]="firstName" >
             </div>
             <div>
               <span>Last Name (*required)</span>
-              <input placeholder="Enter last name" [ngClass]="{'validation-required': invalidLastname}" [(ngModel)]="lastName" [value]="lastName">
+              <input placeholder="Enter last name" [ngClass]="{'validation-required': invalidLastname}" [(ngModel)]="lastName">
             </div>
           </div>
 

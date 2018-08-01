@@ -452,7 +452,8 @@ export class AddContactComponent implements OnInit {
           }
         } else if (this.businessType === 'BUSINESS') {
           if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat && this.address &&
-            this.city && this.province && this.country && this.postalCode && !this.provinceNotIncluded) {
+            this.city && this.province && this.country && this.postalCode && !this.provinceNotIncluded &&
+            !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
             this.tabActiveFirst = false;
             this.tabActiveSecond = true;
           } else {
