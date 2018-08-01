@@ -104,7 +104,7 @@ export class PmScheduleComponent implements OnInit {
 
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
           console.log('project info: ', res);
-          this.contactName = this.contactsList.filter(c => c.id === res.results.contactId)[0].name;
+          this.contactName = this.contactsList.filter(c => c.id === res.data.contactId)[0].name;
           console.log('project info: ', this.contactName);
         });
       });

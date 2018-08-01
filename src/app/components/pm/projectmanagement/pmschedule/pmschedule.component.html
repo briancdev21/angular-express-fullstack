@@ -10,9 +10,9 @@
       <div>
         <div class="top-nav-bar">
             <div class="breadcrumb-bar">
-              <span>Work Orders</span>
-              <i class="fa fa-angle-right"></i>
-              <span *ngIf="!filterClicked">All Work Orders</span>      
+              <span *ngIf="contactName">{{contactName}}  Work Orders</span>
+              <!-- <i class="fa fa-angle-right"></i>
+              <span *ngIf="!filterClicked">All Work Orders</span>       -->
               <div class="saved-filters">
                 <i *ngIf="!filterClicked" class="fa fa-angle-down" (click)="clickSavedFilters()"></i>
                 <div class="saved-filters-list-wrapper" *ngIf="openSavedFiltersList" (click)="savedFiltersListCollapsed=true; openSavedFiltersList=false"></div>
