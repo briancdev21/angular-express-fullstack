@@ -24,6 +24,7 @@ export class InventoryBodyComponent {
       this.discountType = this.po_mock.discount.unit;
       this.freightcosts = this.po_mock.freightCost;
       this.po_mock.status = 'OPEN';
+      this.fromLocation = this.po_mock.locationId;
     }
   }
 
@@ -53,7 +54,7 @@ export class InventoryBodyComponent {
 
   locations = [];
   selectedLocation = undefined;
-
+  fromLocation: number;
   productDetails = [];
 
   internalMemo = undefined;
@@ -69,7 +70,7 @@ export class InventoryBodyComponent {
   taxrate = 0;
   noteToSupplier: any;
 
-  po_mock: PurchaseOrderModel;
+  po_mock: any;
   shippingAddress = {
     address: undefined,
     province: undefined,
