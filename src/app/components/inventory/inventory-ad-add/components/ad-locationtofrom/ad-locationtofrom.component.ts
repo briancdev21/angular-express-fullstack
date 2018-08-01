@@ -7,13 +7,18 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class AdLocationFromToComponent implements OnInit {
 
-  @Input() set locations(_locations: any[]) {
-    this.locations_local = _locations;
+  @Input() set fromLocations(_locations: any[]) {
+    this.from_locations_local = _locations;
   }
 
+  @Input() fromLocation;
+
   @Output() selectedLocation: EventEmitter<any> = new EventEmitter();
-  locations_local = [];
-  fromLocation = 'default';
+  from_locations_local = [];
+
+  // @Output() selectedLocation: EventEmitter<any> = new EventEmitter();
+  // locations_local = [];
+  // fromLocation = 'default';
 
   onchangeFromLocation (event) {
     this.fromLocation = event.target.value;
