@@ -1,6 +1,7 @@
 <div class="work-order-settings" [ngClass]="{'work-order-settings-origin-collapsed': !settingsCollapsed}">
   <span (click)="settingsCollapsed = !settingsCollapsed">Settings</span>
   <div class="btn-section" >
+    <button class="delete-btn" (click)="deleteChangeLog()"></button>
     <button class="cancel-btn" (click)="cancelChangeLog()">
       Cancel
     </button>

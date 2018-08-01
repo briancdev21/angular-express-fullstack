@@ -32,12 +32,14 @@ export class ChangeLogSettingsComponent {
     };
 
     this.projectManagementService.saveChangeLog.next(sendSaveData);
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@');
     this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
   }
 
   cancelChangeLog() {
     this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
+  }
+
+  deleteChangeLog() {
   }
 
   onClickSendCustomer() {
