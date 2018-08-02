@@ -23,8 +23,8 @@
 		<div class="not-started-content">
 			<div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='notStarted'>
 				<div *ngFor="let task of notStarted; let i = index;">
-					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
-						<span>{{task.description}}</span>
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)" id={{task.id}}>
+						<span>{{task.name}}</span>
 						<span class="estimated">
 							<span>Estimated</span>
 							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
@@ -32,9 +32,9 @@
 						</span>
 						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
 					</div>
-					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)" id={{task.id}}>
 						<div>
-							<input placeholder="Type your task here" [(ngModel)]="task.description" >
+							<input placeholder="Type your task here" [(ngModel)]="task.name" >
 							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div>
@@ -62,7 +62,7 @@
 								<div class="dependency-mdl-content">
 									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
 										<option [value]="'default'">Select Dependency</option>
-										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.name}}</option>
 									</select>
 								</div>
 							</div> -->
@@ -74,8 +74,7 @@
 								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
 								(clickOutside)="closePriorityModal(i)">
 								<div class="priority-mdl-content">
-									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
-										<option [value]="'default'">Select Priority</option>
+									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
 										<option [value]="'1'">Level 1</option>
 										<option [value]="'2'">Level 2</option>
 										<option [value]="'3'">Level 3</option>
@@ -91,8 +90,8 @@
 		<div class="in-progress-content">
 			<div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='inProgress'>
 				<div *ngFor="let task of inProgress; let i = index;" >
-					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
-						<span>{{task.description}}</span>
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)" id={{task.id}}>
+						<span>{{task.name}}</span>
 						<span class="estimated">
 							<span>Estimated</span>
 							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
@@ -100,9 +99,9 @@
 						</span>
 						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
 					</div>
-					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)" id={{task.id}}>
 						<div>
-							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
+							<input [(ngModel)]="task.name"  placeholder="Type your task here">
 							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div>
@@ -130,7 +129,7 @@
 								<div class="dependency-mdl-content">
 									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
 										<option [value]="'default'">Select Dependency</option>
-										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.name}}</option>
 									</select>
 								</div>
 							</div>
@@ -142,8 +141,8 @@
 								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
 								(clickOutside)="closePriorityModal(i)">
 								<div class="priority-mdl-content">
-									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
-										<option [value]="'default'">Select Priority</option>
+									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
+										
 										<option [value]="'level1'">Level 1</option>
 										<option [value]="'level2'">Level 2</option>
 										<option [value]="'level3'">Level 3</option>
@@ -159,8 +158,8 @@
 		<div class="complete-content">
 			<div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='complete'>
 				<div *ngFor="let task of complete; let i = index;" >
-					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
-						<span>{{task.description}}</span>
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)" id={{task.id}}>
+						<span>{{task.name}}</span>
 						<span class="estimated">
 							<span>Estimated</span>
 							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
@@ -168,9 +167,9 @@
 						</span>
 						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
 					</div>
-					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)" id={{task.id}}>
 						<div>
-							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
+							<input [(ngModel)]="task.name"  placeholder="Type your task here">
 							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div>
@@ -198,7 +197,7 @@
 								<div class="dependency-mdl-content">
 									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
 										<option [value]="'default'">Select Dependency</option>
-										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.name}}</option>
 									</select>
 								</div>
 							</div>
@@ -210,8 +209,8 @@
 								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
 								(clickOutside)="closePriorityModal(i)">
 								<div class="priority-mdl-content">
-									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
-										<option [value]="'default'">Select Priority</option>
+									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
+										
 										<option [value]="'level1'">Level 1</option>
 										<option [value]="'level2'">Level 2</option>
 										<option [value]="'level3'">Level 3</option>
@@ -227,8 +226,8 @@
 		<div class="not-complete-content">
 			<div [dragula]="'dragItem'"  class="draggable-column" [dragulaModel]='notComplete'>
 				<div *ngFor="let task of notComplete; let i = index;">
-					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
-						<span>{{task.description}}</span>
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)" id={{task.id}}>
+						<span>{{task.name}}</span>
 						<span class="estimated">
 							<span>Estimated</span>
 							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
@@ -236,9 +235,9 @@
 						</span>
 						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
 					</div>
-					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)" id={{task.id}}>
 						<div>
-							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
+							<input [(ngModel)]="task.name"  placeholder="Type your task here">
 							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div class="img-section">
@@ -266,7 +265,7 @@
 								<div class="dependency-mdl-content">
 									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
 										<option [value]="'default'">Select Dependency</option>
-										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.name}}</option>
 									</select>
 								</div>
 							</div>
@@ -278,8 +277,8 @@
 								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
 								(clickOutside)="closePriorityModal(i)">
 								<div class="priority-mdl-content">
-									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
-										<option [value]="'default'">Select Priority</option>
+									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
+										
 										<option [value]="'level1'">Level 1</option>
 										<option [value]="'level2'">Level 2</option>
 										<option [value]="'level3'">Level 3</option>
@@ -322,7 +321,7 @@
 								<div class="dependency-mdl-content">
 									<select [(ngModel)]="selectedDependency" (ngModelChange)="onIssueDependencySelect($event, issue)" >
 										<option [value]="'default'">Select Dependency</option>
-										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.name}}</option>
 									</select>
 								</div>
 							</div>

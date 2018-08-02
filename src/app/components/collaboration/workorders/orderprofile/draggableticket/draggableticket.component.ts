@@ -56,6 +56,7 @@ export class DraggableTicketComponent implements OnInit {
         ele.estimateHour = Math.floor(ele.duration / 60);
         ele.estimateMin = ele.duration % 60;
         ele.createdAt = moment(ele.createdAt).format('YYYY-MM-DD');
+
       });
       console.log('work order tasks: ', res);
       this.notStarted = this.taskTicketInfo.filter(t => t.status === 'NOT_STARTED');
@@ -70,10 +71,34 @@ export class DraggableTicketComponent implements OnInit {
 
   private onDropModel(args) {
     const [el, target, source] = args;
-    this.notStarted.map(t => t.status = 'NOT_STARTED');
-    this.inProgress.map(t => t.status = 'IN_PROGRESS');
-    this.notComplete.map(t => t.status = 'NOT_COMPLETE');
-    this.complete.map(t => t.status = 'COMPLETE');
+    const selectedTaskId = parseInt(el.firstElementChild.id, 10);
+    const targetParentClassName = target.parentElement.className;
+    let selectedColumn;
+
+    if (targetParentClassName === 'not-started-content') {
+      this.notStarted.map(t => t.status = 'NOT_STARTED');
+      selectedColumn = this.notStarted;
+    } else if (targetParentClassName === 'in-progress-content') {
+      this.inProgress.map(t => t.status = 'IN_PROGRESS');
+      selectedColumn = this.inProgress;
+    } else if (targetParentClassName === 'complete-content') {
+      this.complete.map(t => t.status = 'COMPLETE');
+      selectedColumn = this.complete;
+    } else if (targetParentClassName === 'not-complete-content') {
+      this.notComplete.map(t => t.status = 'NOT_COMPLETE');
+      selectedColumn = this.notComplete;
+    }
+
+    const task = selectedColumn.filter(c => c.id === selectedTaskId)[0];
+    const updatingData = {
+      'name': task.name,
+      'status': task.status,
+      'duration': (task.estimateHour * 60) + (task.estimateMin),
+      'priority': task.priority,
+    };
+    this.collaboratorsService.updateIndividualWorkOrderTask(this.currentWorkOrderId, selectedTaskId, updatingData).subscribe(res => {
+      console.log('updated task: ', res);
+    });
   }
 
 
@@ -169,6 +194,15 @@ export class DraggableTicketComponent implements OnInit {
   }
 
   onClickedOutside(i, task) {
+    const updatingData = {
+      'name': task.name,
+      'status': task.status,
+      'duration': (task.estimateHour * 60) + (task.estimateMin),
+      'priority': task.priority,
+    };
+    this.collaboratorsService.updateIndividualWorkOrderTask(this.currentWorkOrderId, task.id, updatingData).subscribe(res => {
+      console.log('updated task: ', res);
+    });
     this.checkColumnIn(task);
     const currentTask = this.selectedColumn.filter(t => t.id === task.id);
     this.currentColumnId = this.selectedColumn.map(t => t.id).indexOf(currentTask[0].id);
@@ -212,7 +246,7 @@ export class DraggableTicketComponent implements OnInit {
   }
 
   onPrioritySelect(event, task) {
-    this.taskTicketInfo[task.id].priority = event;
+    // this.taskTicketInfo[task.id].priority = event;
   }
 
   addTicket() {
@@ -220,20 +254,19 @@ export class DraggableTicketComponent implements OnInit {
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
     const newId = Math.max(...this.taskTicketInfo.map(t => t.id)) + 1;
     const newDate = new Intl.DateTimeFormat('en-US', options).format(date);
-    const newProduct = {
-      id: newId,
-      description: '',
-      status: 'NOT_STARTED',
-      estimateHour: '',
-      estimateMin: '',
-      priority: 'level1',
-      createdDate: newDate,
-      visibility: false,
-      new: true
+    const savingTask = {
+      name: ``,
+      duration: 0,
+      priority: '1'
     };
-    newProduct.new = true;
-    this.notStarted.push(newProduct);
-    this.taskTicketInfo.push(newProduct);
+    let newTask;
+    this.collaboratorsService.createWorkOrderTask(this.currentWorkOrderId, savingTask).subscribe(res => {
+      newTask = res.data;
+      newTask.new = true;
+      newTask.createdAt = moment(newTask.createdAt).format('YYYY-MM-DD');
+      this.notStarted.push(newTask);
+      this.taskTicketInfo.push(newTask);
+    });
   }
 
   addIssueTicket() {
