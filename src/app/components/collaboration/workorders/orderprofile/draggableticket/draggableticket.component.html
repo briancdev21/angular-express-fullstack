@@ -143,9 +143,9 @@
 								<div class="priority-mdl-content">
 									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
 										
-										<option [value]="'level1'">Level 1</option>
-										<option [value]="'level2'">Level 2</option>
-										<option [value]="'level3'">Level 3</option>
+										<option [value]="'1'">Level 1</option>
+										<option [value]="'2'">Level 2</option>
+										<option [value]="'3'">Level 3</option>
 									</select>
 								</div>
 							</div>
@@ -211,9 +211,9 @@
 								<div class="priority-mdl-content">
 									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
 										
-										<option [value]="'level1'">Level 1</option>
-										<option [value]="'level2'">Level 2</option>
-										<option [value]="'level3'">Level 3</option>
+										<option [value]="'1'">Level 1</option>
+										<option [value]="'2'">Level 2</option>
+										<option [value]="'3'">Level 3</option>
 									</select>
 								</div>
 							</div>
@@ -279,9 +279,9 @@
 								<div class="priority-mdl-content">
 									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
 										
-										<option [value]="'level1'">Level 1</option>
-										<option [value]="'level2'">Level 2</option>
-										<option [value]="'level3'">Level 3</option>
+										<option [value]="'1'">Level 1</option>
+										<option [value]="'2'">Level 2</option>
+										<option [value]="'3'">Level 3</option>
 									</select>
 								</div>
 							</div>
@@ -302,6 +302,7 @@
 							</span>
 							<img src="assets/images/attachment.png" class="img-attachment" (click)="downloadAttachment(issue)">
 						</div>
+						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteIssue(issue)">
 					</div>
 					<div class="issue-ticket-column issue-style edit-form draggable" *ngIf="!issue.visibility" (clickOutside)="onIssueClickedOutside(i, issue)">
 						<input [(ngModel)]="issue.description" [value]="issue.description" placeholder="Type your issue here">

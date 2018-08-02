@@ -56,7 +56,6 @@ export class DraggableTicketComponent implements OnInit {
         ele.estimateHour = Math.floor(ele.duration / 60);
         ele.estimateMin = ele.duration % 60;
         ele.createdAt = moment(ele.createdAt).format('YYYY-MM-DD');
-
       });
       console.log('work order tasks: ', res);
       this.notStarted = this.taskTicketInfo.filter(t => t.status === 'NOT_STARTED');
@@ -65,8 +64,16 @@ export class DraggableTicketComponent implements OnInit {
       this.notComplete = this.taskTicketInfo.filter(t => t.status === 'NOT_COMPLETE');
       this.taskTicketInfo.map(t => t.visibility = true);
       this.notStarted.map(t => t.visibility = true);
-      this.issueTickets.map(t => t.visibility = true);
     });
+
+    this.collaboratorsService.getWorkOrderIssues(this.currentWorkOrderId).subscribe(res => {
+      this.issueTickets = res.results;
+      this.issueTickets.forEach(ele => {
+        ele.createdAt = moment(ele.createdAt).format('YYYY-MM-DD');
+        this.issueTickets.map(t => t.visibility = true);
+      });
+    });
+
   }
 
   private onDropModel(args) {
@@ -155,6 +162,15 @@ export class DraggableTicketComponent implements OnInit {
     this.showDeleteConfirmModal = true;
   }
 
+  deleteIssue(issue) {
+    console.log('delete: ', issue);
+    this.collaboratorsService.deleteIndividualWorkOrderIssue(this.currentWorkOrderId, issue.id).subscribe(res => {
+      console.log('deleted ', res);
+      const pos = this.issueTickets.map(t => t.id).indexOf(issue.id);
+      this.issueTickets.splice(this.currentInfoId, 1);
+    });
+  }
+
   confirmDelete() {
     console.log('seleted task: ', this.selectedTask);
     this.collaboratorsService.deleteIndividualWorkOrderTask(this.currentWorkOrderId, this.selectedTask.id).subscribe(res => {
@@ -197,7 +213,7 @@ export class DraggableTicketComponent implements OnInit {
     const updatingData = {
       'name': task.name,
       'status': task.status,
-      'duration': (task.estimateHour * 60) + (task.estimateMin),
+      'duration': (task.estimateHour * 60) + (task.estimateMin) ? (task.estimateHour * 60) + (task.estimateMin) : 0,
       'priority': task.priority,
     };
     this.collaboratorsService.updateIndividualWorkOrderTask(this.currentWorkOrderId, task.id, updatingData).subscribe(res => {
@@ -223,6 +239,12 @@ export class DraggableTicketComponent implements OnInit {
   }
 
   onIssueClickedOutside(i, task) {
+    const updatingData = {
+      'description': task.description,
+    };
+    this.collaboratorsService.updateIndividualWorkOrderIssue(this.currentWorkOrderId, task.id, updatingData).subscribe(res => {
+      console.log('updated issue: ', res);
+    });
     this.issueTickets[i].visibility = true;
 
     if (this.issueTickets[i].pending) {
@@ -270,23 +292,16 @@ export class DraggableTicketComponent implements OnInit {
   }
 
   addIssueTicket() {
-    let newId = 0;
-    const date = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-    if (this.issueTickets.length === 0) {
-      newId = 0;
-    } else {
-      newId = Math.max(...this.issueTickets.map(t => t.id ? t.id : 0)) + 1;
-    }
-    const newDate = new Intl.DateTimeFormat('en-US', options).format(date);
-    const newIssue = {
-      id: newId,
-      description: '',
-      createdDate: newDate,
-      visibility: false,
-      new: true
+    let newIssue;
+    const savingIssue = {
+      description: ''
     };
-    this.issueTickets.push(newIssue);
+    this.collaboratorsService.createWorkOrderIssue(this.currentWorkOrderId, savingIssue).subscribe(res => {
+      newIssue = res.data;
+      newIssue.new = true;
+      newIssue.createdAt = moment(newIssue.createdAt).format('YYYY-MM-DD');
+      this.issueTickets.push(newIssue);
+    });
   }
 
   downloadAttachment(issue) {
