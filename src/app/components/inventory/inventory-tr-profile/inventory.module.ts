@@ -17,6 +17,8 @@ import { TRInternalMemoComponent } from './components/tr-internalmemo/tr-interna
 import { TRLocationFromToComponent } from './components/tr-locationtofrom/tr-locationtofrom.component';
 
 import { TRTransferIdFieldComponent } from './components/ad-transferid/ad-transferid.component';
+import { CommonCmpModule } from '../../common/common.module';
+
 @NgModule({
   declarations: [
     InventoryHeaderComponent,
@@ -35,7 +37,8 @@ import { TRTransferIdFieldComponent } from './components/ad-transferid/ad-transf
     OwlNativeDateTimeModule,
     Ng2CompleterModule,
     FormsModule,
-    NgxDnDModule
+    NgxDnDModule,
+    CommonCmpModule
   ],
     exports: [
     InventoryTrProfileComponent,
