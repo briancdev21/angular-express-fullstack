@@ -122,7 +122,7 @@ export class ProfileInfoBarComponent implements OnInit {
     this.userInfo.profileLink = this.croppedImage;
 
     const uploadData = new FormData();
-    uploadData.append('leadPicture', this.selectedUncroppedFile, this.selectedUncroppedFile.name);
+    uploadData.append('contactPicture', this.selectedUncroppedFile, this.selectedUncroppedFile.name);
 
     // const binary = this.convertDataURIToBinary(this.croppedImage);
     // console.log('binary', binary);
