@@ -107,3 +107,12 @@ img {
   text-align: left;
   padding: 5px;
 }
+
+.time-select input {
+  width: 0px;
+  height: 0px;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  visibility: hidden;
+}

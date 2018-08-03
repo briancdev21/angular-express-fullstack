@@ -21,7 +21,8 @@ export class OrderDetailsComponent implements OnInit {
   country = '';
   zipcode = '';
   public endMin;
-  public startMax = new Date();
+  public startMax: any;
+  startMin = new Date();
   startDateValue: Date;
   endDateValue: Date;
   startTimeValue: any;
@@ -62,17 +63,22 @@ export class OrderDetailsComponent implements OnInit {
 
   clickIconShipping() {
 
-    this.orderProfileInfo.shippingAddress.address = (this.switchIconShipping) ? this.street :
-                                                                                this.orderProfileInfo.selectedContact.shippingAddress.city;
-    this.orderProfileInfo.shippingAddress.city = (this.switchIconShipping) ? this.city :
-                                            this.orderProfileInfo.selectedContact.shippingAddress.city;
-    this.orderProfileInfo.shippingAddress.province = (this.switchIconShipping) ? this.state :
-                                              this.orderProfileInfo.selectedContact.shippingAddress.province;
-    this.orderProfileInfo.shippingAddress.country = (this.switchIconShipping) ? this.country :
-                                              this.orderProfileInfo.selectedContact.shippingAddress.country;
-    this.orderProfileInfo.shippingAddress.postalCode = (this.switchIconShipping) ? this.zipcode :
-                                              this.orderProfileInfo.selectedContact.shippingAddress.postalCode;
-    this.switchIconShipping = !this.switchIconShipping;
+    if (this.orderProfileInfo.completion) {
+      return;
+    } else {
+      this.orderProfileInfo.shippingAddress.address = (this.switchIconShipping) ? this.street :
+        this.orderProfileInfo.selectedContact.shippingAddress.city;
+      this.orderProfileInfo.shippingAddress.city = (this.switchIconShipping) ? this.city :
+       this.orderProfileInfo.selectedContact.shippingAddress.city;
+      this.orderProfileInfo.shippingAddress.province = (this.switchIconShipping) ? this.state :
+        this.orderProfileInfo.selectedContact.shippingAddress.province;
+      this.orderProfileInfo.shippingAddress.country = (this.switchIconShipping) ? this.country :
+        this.orderProfileInfo.selectedContact.shippingAddress.country;
+      this.orderProfileInfo.shippingAddress.postalCode = (this.switchIconShipping) ? this.zipcode :
+        this.orderProfileInfo.selectedContact.shippingAddress.postalCode;
+      this.switchIconShipping = !this.switchIconShipping;
+    }
+
   }
 
   onStartDate(event) {
@@ -83,6 +89,7 @@ export class OrderDetailsComponent implements OnInit {
 
   onEndDate(event) {
     this.endDateValue = event.value;
+    this.startMax = this.endDateValue;
     this.orderService.postTimelineData({title: this.endDateValue.toDateString(), type: 'endDate'});
   }
 
