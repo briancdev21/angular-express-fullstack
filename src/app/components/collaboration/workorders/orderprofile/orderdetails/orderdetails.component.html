@@ -42,28 +42,28 @@
 				<owl-date-time [pickerType]="'calendar'" #startDate ></owl-date-time>
 			</div>
 		</div>
-		<div class="start-time">
+		<div class="time-select">
 			<span>Start Time</span>
-			<div  *ngIf="!showStartTime" (clickOutside)="showStartTime = true;">
-				<input [owlDateTime]="startTime" [owlDateTimeTrigger]="startTime" (dateTimeChange)="onStartTime($event)" [(ngModel)]="startTimeValue">
+			<div (clickOutside)="showStartTime = true;" style="width: 0px;">
+				<input [owlDateTime]="startTime" [owlDateTimeTrigger]="startTime" (dateTimeChange)="onStartTime($event)" [(ngModel)]="startTimeValue"  >
 				<owl-date-time [pickerType]="'timer'" #startTime ></owl-date-time>
 			</div>
-			<div class="time-holder" *ngIf="showStartTime" (click)="showStartTime = !showStartTime; $event.stopPropagation();">{{startTimeValue}}</div>
+			<div class="time-holder" (click)="showStartTime = !showStartTime; $event.stopPropagation();" [owlDateTimeTrigger]="startTime">{{startTimeValue}}</div>
 		</div>
-		<div class="end-date">
+		<div class="start-date">
 			<span>End Date</span>
 			<div>
 				<input [owlDateTimeTrigger]="endDate" [owlDateTime]="endDate" (dateTimeChange)="onEndDate($event)" [min]="endMin" [(ngModel)]="endDateValue" >
 				<owl-date-time [pickerType]="'calendar'" #endDate ></owl-date-time>
 			</div>
 		</div>
-		<div class="end-time">
+		<div class="end-time" class="time-select">
 			<span>End Time</span>
-			<div *ngIf="!showEndTime" (clickOutside)="showEndTime = true;">
+			<div (clickOutside)="showEndTime = true;" style="width: 0px;">
 				<input [owlDateTimeTrigger]="endTime" [owlDateTime]="endTime" (dateTimeChange)="onEndTime($event)"[(ngModel)]="endTimeValue" >
 				<owl-date-time [pickerType]="'timer'" #endTime ></owl-date-time>
 			</div>
-			<div class="time-holder" *ngIf="showEndTime" (click)="showEndTime = !showEndTime; $event.stopPropagation();">{{endTimeValue}}</div>
+			<div class="time-holder" (click)="showEndTime = !showEndTime; $event.stopPropagation();" [owlDateTimeTrigger]="endTime">{{endTimeValue}}</div>
 		</div>
 	</div>
 </div>

@@ -291,3 +291,7 @@
 .cdk-overlay-container {
   z-index: 9993;
 }
+
+.cdk-overlay-pane {
+  padding-top: 20px !important;
+}
