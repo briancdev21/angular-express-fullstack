@@ -13,7 +13,7 @@
         <app-po-createddatefield [(createdDate)]="createdDate" ></app-po-createddatefield>
         <app-po-termsfield  [ngClass]="{'has-error': showErrors&&!errors.termChanged}" [terms]="terms" (selectedTerm)="onSelectTerm($event)" ></app-po-termsfield>
         <app-po-duedatefield [(dueDate)]="dueDate" (dueDateChanged)="onDueDateChanged($event)" ></app-po-duedatefield>
-        <app-po-locationsfield  [ngClass]="{'has-error': showErrors&&!errors.locationChanged}"  [locations]="locations" (selectedLocation)="onSelectLocation($event)" ></app-po-locationsfield>
+        <app-po-locationsfield  [ngClass]="{'has-error': showErrors&&!errors.locationChanged}"   [fromLocation]="fromLocation" [locations]="locations" (selectedLocation)="onSelectLocation($event)" ></app-po-locationsfield>
       </div>
     </div>
     <div class="product__table">

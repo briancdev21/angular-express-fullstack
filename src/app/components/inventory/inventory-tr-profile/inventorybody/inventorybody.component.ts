@@ -4,6 +4,7 @@ import { TransferModel } from '../../../../models/transfer.model';
 import { SharedService } from '../../../../services/shared.service';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { CommonService } from '../../../common/common.service';
 
 @Component({
   selector: 'app-inventorybody',
@@ -24,6 +25,9 @@ export class InventoryBodyComponent {
       this.internalMemo = _trdata.internalMemo !== null ? _trdata.internalMemo : '';
       this.transferdate = _trdata.dateTransferred;
       this.tr_id = `TR-${this.tr_mock.id}`;
+      if (_trdata.status === 'TRANSFERRED') {
+        this.commonService.showAlertModal.next(true);
+      }
       if (this.tr_mock.id !== undefined) {
         this.sharedService.getTransferProducts(this.tr_mock.id).subscribe( productRes => {
           this.productDetails = productRes.results;
@@ -56,8 +60,9 @@ export class InventoryBodyComponent {
     locationToChanged: false,
     locationFromChanged: false,
   };
+  modalContent = "You cannot update a TRANSFERRED stock transfer";
 
-  constructor(private sharedService: SharedService, private router: Router) {
+  constructor(private sharedService: SharedService, private router: Router, private commonService: CommonService) {
     this.createdDate = new Date().toISOString();
     this.tr_mock = new TransferModel();
     this.tr_mock.status = 'OPEN';

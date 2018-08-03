@@ -31,6 +31,8 @@ import { POTotalAamountDueComponent } from './components/po-totalamountdue/po-to
 
 import { PODiscountComponent } from './components/po-discount/po-discount.component';
 import { POSubTotalProductsComponent } from './components/po-subtotalproducts/po-subtotalproducts.component';
+import { CommonCmpModule } from '../../common/common.module';
+
 @NgModule({
   declarations: [
     InventoryHeaderComponent,
@@ -61,7 +63,8 @@ import { POSubTotalProductsComponent } from './components/po-subtotalproducts/po
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     Ng2CompleterModule,
-    NgxDnDModule
+    NgxDnDModule,
+    CommonCmpModule
   ],
     exports: [
     InventoryPoProfileComponent,

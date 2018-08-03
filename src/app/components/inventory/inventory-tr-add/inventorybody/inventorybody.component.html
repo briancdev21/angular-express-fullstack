@@ -18,7 +18,10 @@
       <div>
         <app-tr-locationtofrom
           [ngClass]="{'has-error-tolocation': showErrors&&!errors.locationToChanged, 'has-error-fromlocation': showErrors&&!errors.locationFromChanged}"
-          [locations]="locations"
+          [fromLocations]="fromLocations"
+          [toLocations]="toLocations"
+          [fromLocation]="fromLocation"
+          [toLocation]="toLocation"
           (selectedLocation)="onSelectLocation($event)" >
         </app-tr-locationtofrom>
         <div class="internal-memo">

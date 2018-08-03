@@ -10,6 +10,7 @@ export class POLocationSelectorComponent implements OnInit {
   @Input() set locations(_locations: any[]) {
     this.locations_local = _locations;
   }
+  @Input() fromLocation;
   @Output() selectedLocation: EventEmitter<any> = new EventEmitter();
   locations_local = [];
 

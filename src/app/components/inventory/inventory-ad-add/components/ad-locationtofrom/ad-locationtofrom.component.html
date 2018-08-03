@@ -4,7 +4,7 @@
     <div class="orderinfo-input" >
       <select [(ngModel)]="fromLocation" (change)="onchangeFromLocation($event)" >
           <!-- <option value="default" default>Choose a location</option> -->
-          <option *ngFor="let locationFrom of locations_local" [value]="locationFrom.id">{{locationFrom.name}}</option>
+          <option *ngFor="let locationFrom of from_locations_local" [value]="locationFrom.id">{{locationFrom.name}}</option>
       </select>
     </div>
   </div>

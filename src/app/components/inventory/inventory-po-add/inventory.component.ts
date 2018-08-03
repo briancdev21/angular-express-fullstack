@@ -50,7 +50,10 @@ export class InventoryPoAddComponent implements OnInit {
 
     this.sharedService.getTerms().subscribe(terms => {
       po_create_mock.term = terms.results[0].id;
-      this.sharedService.getLocations().subscribe(locations => {
+      const params = {
+        isDefault: true
+      }
+      this.sharedService.getLocationsWithParams(params).subscribe(locations => {
         po_create_mock.location = locations.results[0].id;
         this.sharedService.getContacts().subscribe(contacts => {
           contacts = this.addContactName(contacts);

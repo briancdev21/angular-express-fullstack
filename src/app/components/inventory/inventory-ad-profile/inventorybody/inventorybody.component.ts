@@ -3,6 +3,7 @@ import { ProductDetailInfo } from '../../../../models/ProductDetailInfo.model';
 import { SharedService } from '../../../../services/shared.service';
 import { Router } from '@angular/router';
 import { AdjustmentModel } from '../../../../models/adjustment.model';
+import { CommonService } from '../../../common/common.service';
 @Component({
   selector: 'app-inventorybody',
   templateUrl: './inventorybody.component.html',
@@ -27,7 +28,9 @@ export class InventoryBodyComponent implements OnDestroy {
     country: 'Canada',
     postcode: 'T3C 0J7'
   };
+  modalContent = "You cannot update a ADJUSTED stock adjustment";
   showButtons = false;
+  showNotUpdatePOModal = false;
 
   @Input() set adData(_addata) {
     if (_addata !== undefined) {
@@ -37,6 +40,9 @@ export class InventoryBodyComponent implements OnDestroy {
       this.adjustedLocation = _addata.adjustedLocationId;
       this.ad_mock.adjustedLocation = _addata.adjustedLocationId;
       this.internalMemo = _addata.internalMemo;
+      if (_addata.status == 'ADJUSTED') {
+        this.commonService.showAlertModal.next(true);
+      }
       this.sharedService.getInventoryAdjustmentProducts(this.ad_mock.id).subscribe( productRes => {
         this.productDetails = productRes.results;
         this.productDetails.map(productDetail => {
@@ -64,7 +70,7 @@ export class InventoryBodyComponent implements OnDestroy {
   };
   adjustedLocation: any;
 
-  constructor(private sharedService: SharedService, private router: Router) {
+  constructor(private sharedService: SharedService, private router: Router, private commonService: CommonService) {
     this.transferdate = new Date().toISOString();
     this.ad_mock = new AdjustmentModel();
     console.log('this admock', this.ad_mock);

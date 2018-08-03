@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { PurchaseOrderModel } from '../../../../models/purchaseorder.model';
 import { SharedService } from '../../../../services/shared.service';
 import { ContactUserModel } from '../../../../models/contactuser.model';
+import { CommonService } from '../../../common/common.service';
 
 @Component({
   selector: 'app-inventorybody',
@@ -13,6 +14,7 @@ import { ContactUserModel } from '../../../../models/contactuser.model';
 })
 
 export class InventoryBodyComponent {
+
   @Input() set poData(_podata) {
     this.po_mock = _podata;
     this.po_id = `PO-${this.po_mock.id}`;
@@ -38,7 +40,9 @@ export class InventoryBodyComponent {
     this.internalMemo = this.po_mock.internalMemo;
     this.supplierNote = this.po_mock.supplierNote;
     this.selectedProject = this.po_mock.projectId;
-
+    if (_podata.status == 'FULFILLED') {
+      this.commonService.showAlertModal.next(true);
+    }
     if (this.po_mock.id !== undefined) {
       this.sharedService.getPurchaseOrderProducts(this.po_mock.id).subscribe( productRes => {
         this.productDetails = productRes.results;
@@ -54,6 +58,7 @@ export class InventoryBodyComponent {
   contactList: ContactUserModel[] = [];
   contactId = undefined;
   userList = [];
+  modalContent = "You cannot update a FULFILLED purchase order";
 
   projects = ['task1', 'task2', 'task3'];
   labelText = 'Use customer address';
@@ -111,7 +116,7 @@ export class InventoryBodyComponent {
    totalprice: false
   };
 
-  constructor(private router: Router, private sharedService: SharedService) {
+  constructor(private router: Router, private sharedService: SharedService, private commonService: CommonService) {
     this.sharedService.getContacts().subscribe(res => {
       res = this.addContactName(res);
       this.contactList = res;

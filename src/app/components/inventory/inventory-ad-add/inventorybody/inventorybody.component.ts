@@ -30,18 +30,21 @@ export class InventoryBodyComponent implements OnDestroy {
   showButtons = false;
 
   @Input() set adData(_addata) {
-    this.ad_mock = new AdjustmentModel();
+    // this.ad_mock = new AdjustmentModel();
     this.ad_mock = _addata;
     if (_addata) {
       this.ad_id = `AD-${this.ad_mock.id}`;
+      this.fromLocation = this.ad_mock.adjustedLocationId;
+      this.ad_mock.adjustedLocation = this.ad_mock.adjustedLocationId;
     }
   }
   saveBtnClicked = false;
   locations: string[] = [];
+  fromLocation: number;
   productDetails = [];
   internalMemo = undefined;
   ad_id = '';
-  ad_mock: AdjustmentModel;
+  ad_mock: any;
   transferdate: any;
   showSendPOModal = false;
   showCancelPOModal = false;

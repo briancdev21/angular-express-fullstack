@@ -13,12 +13,12 @@ import * as moment from 'moment';
 export class InventoryBodyComponent {
 
   @Input() set trData(_trdata) {
-    this.tr_mock = new TransferModel();
+    // this.tr_mock = new TransferModel();
     this.tr_mock = _trdata;
     if (_trdata !== undefined) {
       console.log('trd data:', _trdata);
-      this.tr_mock.toLocation = undefined;
-      this.tr_mock.fromLocation = undefined;
+      this.toLocation = this.tr_mock.toLocationId;
+      this.fromLocation = this.tr_mock.fromLocationId;
       this.tr_mock.internalMemo = '';
       if (_trdata) {
         this.tr_id = `TR-${this.tr_mock.id}`;
@@ -26,11 +26,14 @@ export class InventoryBodyComponent {
     }
   }
 
-  locations: string[] = [];
+  toLocations: string[] = [];
+  fromLocations: string[] = [];
+  toLocation: number;
+  fromLocation: number;
   productDetails = [];
   internalMemo = undefined;
   tr_id = '';
-  tr_mock: TransferModel;
+  tr_mock: any;
   createdDate: any;
   transferdate: any;
   showButtons = false;
@@ -49,7 +52,10 @@ export class InventoryBodyComponent {
       RMA: true
     };
     this.sharedService.getLocationsWithParams(params).subscribe(locationRes => {
-      this.locations = locationRes.results;
+      this.toLocations = locationRes.results;
+    });
+    this.sharedService.getLocations().subscribe(locationRes => {
+      this.fromLocations = locationRes.results;
     });
   }
 
