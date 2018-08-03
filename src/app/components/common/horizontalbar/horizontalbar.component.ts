@@ -11,18 +11,27 @@ import { Router } from '@angular/router';
 
 export class HorizontalBarComponent implements OnInit {
 
-  @Input() barInfo;
+  @Input() set barInfo (val) {
+    this._barInfo = val;
+    this.init();
+  }
+
+  _barInfo: any;
 
   ngOnInit() {
-    if (this.barInfo.completeness < 60) {
-      this.barInfo.filledColor = '#FF7E7E';
-      this.barInfo.backgroundColor = '#FFF2F2';
-    } else if (this.barInfo.completeness < 80) {
-      this.barInfo.filledColor = '#FFAC58';
-      this.barInfo.backgroundColor = '#FFF6EE';
+
+  }
+
+  init() {
+    if (this._barInfo.completeness < 60) {
+      this._barInfo.filledColor = '#FF7E7E';
+      this._barInfo.backgroundColor = '#FFF2F2';
+    } else if (this._barInfo.completeness < 80) {
+      this._barInfo.filledColor = '#FFAC58';
+      this._barInfo.backgroundColor = '#FFF6EE';
     } else {
-      this.barInfo.filledColor = '#C5D92D';
-      this.barInfo.backgroundColor = '#F9FBEA';
+      this._barInfo.filledColor = '#C5D92D';
+      this._barInfo.backgroundColor = '#F9FBEA';
     }
   }
 

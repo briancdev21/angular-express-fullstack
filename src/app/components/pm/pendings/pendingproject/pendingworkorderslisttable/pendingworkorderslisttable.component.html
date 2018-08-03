@@ -1,26 +1,26 @@
 <div class="content">
-  <table class="work-order-table">
+  <table class="work-order-table" *ngIf="workOrdersList">
     <tr>
-      <th (click)="sortArray('workOrderNumber')">WORK ORDER #</th>
-      <th (click)="sortArray('workOrderName')">NAME OF WORK ORDER</th>
-      <th (click)="sortArray('customerName')">CUSTOMER NAME</th>
+      <th (click)="sortArray('id')">WORK ORDER #</th>
+      <th (click)="sortArray('name')">NAME OF WORK ORDER</th>
+      <th (click)="sortArray('contactName')">CUSTOMER NAME</th>
       <th (click)="sortCreateDateArray('startDate')">START DATE</th> 
-      <th (click)="sortArray('scheduleStart')">SCHEDULED</th>
-      <th (click)="sortArray('customerName')">COLLABORATORS</th>
+      <th (click)="sortArray('startTime')">SCHEDULED</th>
+      <th >COLLABORATORS</th>
       <th (click)="sortArray('completion')">WORK ORDER COMPLETION</th>
     </tr>
-    <tr *ngFor="let projectslist of projectsListInfo; let i = index">
-      <td>{{projectslist.workOrderNumber}}</td>
-      <td>{{projectslist.workOrderName}}</td>
-      <td>{{projectslist.customerName}}</td>
+    <tr *ngFor="let projectslist of workOrdersList; let i = index" (click)="redirectTo(projectslist.id)">
+      <td>{{projectslist.id}}</td>
+      <td>{{projectslist.name}}</td>
+      <td>{{projectslist.contactName}}</td>
       <td>{{projectslist.startDate}}</td>
-      <td>{{projectslist.scheduleStart}} - {{projectslist.scheduleEnd}}</td>
-      <td>
-        <div class="collaborators">
-          <img *ngFor="let collaborator of projectslist.collaborators" [src]="collaborator.imgUrl">
+      <td>{{projectslist.startTime}} - {{projectslist.endTime}}</td>
+      <td class="collaborators">
+        <div *ngFor="let col of projectslist.collaboratorsData" >
+          <img [src]="col.pictureURI">
         </div>
       </td>
-      <td class="work-order-completion"><app-horizontalbar [barInfo]="projectslist.barInfo"></app-horizontalbar></td> 
+      <td class="work-order-completion"><app-horizontalbar [barInfo]="projectslist.barInfo"></app-horizontalbar></td>
     </tr>
   </table>
 </div>
