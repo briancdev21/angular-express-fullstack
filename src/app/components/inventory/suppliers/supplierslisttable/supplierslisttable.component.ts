@@ -59,7 +59,7 @@ export class SuppliersListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate([`./inventory/supplier-profile/${id}`]);
+    this.router.navigate([`./inventory/supplier-profile/`, {id: id}]);
   }
 
   selectedFilterEventHandler(filteredList) {

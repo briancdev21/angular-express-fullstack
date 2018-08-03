@@ -13,7 +13,7 @@ import { TasksComponent } from '../../profile/cards/tasks/tasks.component';
 import { DocumentsComponent } from '../../profile/cards/documents/documents.component';
 import { CollaboratorsComponent } from '../../profile/cards/collaborators/collaborators.component';
 import { SharedService } from '../../../services/shared.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-supplierprofile',
@@ -29,43 +29,34 @@ import { ActivatedRoute } from '@angular/router';
 export class SupplierProfileComponent implements OnInit {
 
   menuCollapsed = true;
-  supplierId: number;
+  currentSupplierId: any;
 
   constructor(private sharedSevice: SharedService, private route: ActivatedRoute) {
-    this.route.params.subscribe( params => {
-      this.supplierId = params.id;
-      this.getSupplierInfo();
-    });
+
+    this.currentSupplierId = this.route.snapshot.paramMap.get('id');
+    this.getSupplierInfo();
+
   }
 
 
-  userInfo = {
-    name: '',
-    contactName: '',
-    email: '',
-    primaryphone: '',
-    shippingaddress: undefined,
-    billingaddress: undefined,
-    keywords: [],
-    followers: []
-  };
+  userInfo: any;
   public chartSetData: Array<Object> = [
-    {
-      title: 'Supplier Rating',
-      percentage: '120',
-    },
-    {
-      title: 'Sensitivity Rating',
-      percentage: '90',
-    },
-    {
-      title: 'PO Ratio',
-      percentage: '70',
-    },
-    {
-      title: 'Efficiency Ratio',
-      percentage: '50',
-    }
+    // {
+    //   title: 'Supplier Rating',
+    //   percentage: '120',
+    // },
+    // {
+    //   title: 'Sensitivity Rating',
+    //   percentage: '90',
+    // },
+    // {
+    //   title: 'PO Ratio',
+    //   percentage: '70',
+    // },
+    // {
+    //   title: 'Efficiency Ratio',
+    //   percentage: '50',
+    // }
   ];
    /**
     * Each item will have title,content,complete flag and icon
@@ -305,54 +296,10 @@ export class SupplierProfileComponent implements OnInit {
   }
 
   getSupplierInfo () {
-    this.sharedSevice.getSupplier(this.supplierId).subscribe(supplierRes => {
-      const data = supplierRes.data;
-      console.log('supplierRes id:', supplierRes.data);
-      this.sharedSevice.getContact(data.contactId).subscribe(contactRes => {
-        const contact = contactRes['data'];
-        this.sharedSevice.getTerm(data.contactId).subscribe(termRes => {
-          const term = termRes.data;
-          this.sharedSevice.getCurrency(data.contactId).subscribe(res => {
-            const followers = [];
-            if (contact.followers) {
-              contact.followers.forEach(follower => {
-                this.sharedSevice.getUser(follower).subscribe(followerRes => {
-                  followers.push({
-                    imageUrl: followerRes.data.pictureURI,
-                    name: `${followerRes.data.firstName} ${followerRes.data.lastName}`,
-                    profileLink: `crm/contacts/${followerRes.data.username}`,
-                  });
-                });
-                if (followers.length === contact.followers.length) {
-                  this.userInfo = {
-                    name: data.name,
-                    contactName: contact.name,
-                    email: contact.email,
-                    primaryphone: contact.phoneNumbers.primary,
-                    // tslint:disable-next-line:max-line-length
-                    shippingaddress: `${data.shippingAddress.address}, ${data.shippingAddress.city}, ${data.shippingAddress.province}, ${data.shippingAddress.postalCode}`,
-                    billingaddress: `${data.billingAddress.address}, ${data.billingAddress.city}, ${data.billingAddress.province}, ${data.billingAddress.postalCode}`,
-                    keywords: data.keywords,
-                    followers: followers
-                  };
-                }
-              });
-            } else {
-              this.userInfo = {
-                name: data.name,
-                contactName: contact.name,
-                email: contact.email,
-                primaryphone: contact.phoneNumbers.primary,
-                // tslint:disable-next-line:max-line-length
-                shippingaddress: `${data.shippingAddress.address}, ${data.shippingAddress.city}, ${data.shippingAddress.province}, ${data.shippingAddress.postalCode}`,
-                billingaddress: `${data.billingAddress.address}, ${data.billingAddress.city}, ${data.billingAddress.province}, ${data.billingAddress.postalCode}`,
-                keywords: data.keywords,
-                followers: followers
-              };
-            }
-          });
-        });
-      });
+    this.sharedSevice.getSupplier(this.currentSupplierId).subscribe(res => {
+      console.log('current supplier: ', res);
+      this.userInfo = res.data;
     });
+
   }
 }

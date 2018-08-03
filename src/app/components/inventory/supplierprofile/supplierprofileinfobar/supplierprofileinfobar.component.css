@@ -246,3 +246,68 @@ span, input {
   padding-left: 0;
   margin-bottom: 23px;
 }
+
+
+.shipping-address-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.city-state-country {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.city-state-country > * {
+  width: 33% !important;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+/deep/ ng2-completer .completer-dropdown {
+  height: 100px !important;
+  overflow: auto;
+}
+
+/deep/.shipping-address-container ng2-completer .completer-input {
+  border: 0;
+  color: #95989a;
+  font-size: 12px;
+  height: 18px;
+  border-left: 1px solid lightgray;
+}
+
+/deep/.shipping-address-container ng2-completer .completer-input::placeholder {
+  color: #d3d3d3;
+}
+
+.phone-validation {
+  border: 1px solid red !important;
+}
+
+.personal-name {
+}
+
+.alert-email {
+  color: red;
+  font-size: 13px;
+}
+
+input::placeholder {
+  color: #d3d3d3;
+}
+
+.validation-required {
+  border: 1px solid red !important;
+}
+
+.name input::placeholder {
+  font-size: 16px;
+}
+
+span.phone-numbers {
+  padding: 2px 5px;
+  display: flex;
+}
