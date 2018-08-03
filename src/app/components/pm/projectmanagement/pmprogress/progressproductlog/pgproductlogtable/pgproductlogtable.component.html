@@ -1,26 +1,18 @@
 <div class="content">
   <table>
     <tr>
-      <th class="img-cell"></th>
       <th (click)="sortArray('name', purchaseOrdersList)">PRODUCT NAME</th>
       <th (click)="sortArray('supplier', purchaseOrdersList)">SUPPLIER</th>
-      <th (click)="sortArray('brand', purchaseOrdersList)">BRAND</th>
       <th (click)="sortArray('sku', purchaseOrdersList)">SKU</th>
       <th (click)="sortArray('purchaseOrderId', purchaseOrdersList)">ORDER #</th>
       <th (click)="sortArray('quantity', purchaseOrdersList)">QTY</th>
-      <th (click)="sortArray('status', purchaseOrdersList)">STATUS</th>
     </tr>
     <tr *ngFor="let order of purchaseOrdersList; let i = index" (click)="navigateTo(order)" class="purchase-order">
-      <td><img [src]="order.imgUrl"></td>
       <td>{{order.name}}</td>
       <td>{{getSupplierName(order.supplierId)}}</td>
-      <td>{{order.brand}}</td>
       <td>{{order.sku}}</td>
       <td>{{order.purchaseOrderId}}</td>
       <td class="order-status">{{order.quantity}}</td>
-      <td>
-        <span class="order-status">{{order.status}}</span>
-      </td>
     </tr>
   </table>
   <div class="reserved-inventory-title">
@@ -35,6 +27,7 @@
       <th (click)="sortArray('brand', reservedInventoryList)">BRAND</th>
       <th (click)="sortArray('sku', reservedInventoryList)">SKU</th>
       <th (click)="sortArray('reservedQuantity', reservedInventoryList)">QTY</th>
+      <th (click)="sortArray('deliveredQuantity', reservedInventoryList)">Delivered</th>
       <th (click)="sortArray('status', reservedInventoryList)">STATUS</th>
     </tr>
     <tr *ngFor="let inventory of reservedInventoryList; let i = index">
@@ -44,8 +37,9 @@
       <td>{{getBrandName(inventory.brandId)}}</td>
       <td>{{inventory.sku}}</td>
       <td class="inventory-status">
-        <input [(ngModel)]="inventory.reservedQuantity" (keydown.enter)="updateInventoryQuantity(inventory)" type="number">
+        <input [(ngModel)]="inventory.reservedQuantity" (keydown.enter)="updateInventoryQuantity(inventory)" type="number" disabled>
       </td>
+      <td>{{inventory.deliveredQuantity}}</td>
       <td>
         <span class="inventory-status">Reserved</span>
         <img src="assets/images/three-dots.png" (click)="openInventoryModal(i)" style="cursor: pointer;">
