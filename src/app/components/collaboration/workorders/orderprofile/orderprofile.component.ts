@@ -56,7 +56,7 @@ export class OrderProfileComponent implements OnInit {
       for (let i = 0; i < this.usersList.length; i++) {
         this.items2.push({
           id: i,
-          label: this.usersList[i].firstName + ' ' + this.usersList[i].lastName,
+          label: this.usersList[i].username,
           imageUrl: this.usersList[i].pictureURI,
           userName: this.usersList[i].username
         });
@@ -81,11 +81,13 @@ export class OrderProfileComponent implements OnInit {
               });
               const selectedUser = this.usersList.filter(u => u.username === element)[0];
               this.followersDetails.push({
-                name: selectedUser.firstName + ' ' + selectedUser.lastName,
+                name: selectedUser.username,
                 imageUrl: selectedUser.pictureURI,
                 userName: selectedUser.username
               });
             });
+          } else {
+            this.orderProfileInfo.followersDetails = [];
           }
 
           this.orderProfileInfo.followersDetails = this.followersDetails;
@@ -344,12 +346,13 @@ export class OrderProfileComponent implements OnInit {
   }
 
   onSelect(item: any) {
+    console.log('follower: ', item);
     this.selectedItem = item;
     this.orderService.postTimelineData({title: item.label, type: 'addNewStaff'});
     this.items2 = this.items2.filter(function( obj ) {
       return obj.label !== item.label;
     });
-    this.orderProfileInfo.followers.push({name: item.label, imageUrl: item.imageUrl });
+    this.orderProfileInfo.followersDetails.push({name: item.label, imageUrl: item.imageUrl });
   }
 
 

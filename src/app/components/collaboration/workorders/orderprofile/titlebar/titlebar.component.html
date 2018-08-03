@@ -1,13 +1,34 @@
 <div class="content-title-bar" >
-  <input class="title" placeholder="Work Order Title Here" [(ngModel)]="orderProfileInfo.name" (clickOutside)="clickOutsideTitle(orderTitle)">
+  <input class="title" placeholder="Work Order Title Here" [(ngModel)]="_orderProfileInfo.name" (clickOutside)="clickOutsideTitle(orderTitle)">
   <div class="titlebar-right">
     <span (click)="openAvailabilityModal();">Check Availability</span>
-    <div class="followers" > 
-      <div class="follower" *ngFor="let user of availableStaff; let i = index">
-        <a [title]='user.name'><img [src]='user.imageUrl'/></a>
+    <div class="followers" *ngIf="usersList" > 
+      <span style="padding:1em; ">Followers</span>
+      <div class="follower" *ngFor="let user of _userInfo.followers; let i = index">
+        <a [title]='user.username' ><img [src]='user.pictureURI'/></a>
       </div> 
+      <div class="follower add-follower" >
+        <a (click)='addUser()' (click)="editable=true;$event.stopPropagation()" ><img src='assets/images/Add-Button.svg'/></a>
+      </div> 
+      <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
+        <ul>
+          <li *ngFor="let user of _userInfo.followers; let i = index">{{user.username}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li style="background: none; width: 100%; margin: 0;">
+            <ng-select *ngIf="isAutocompleteUpdated" [items]="items2"
+              bindLabel="config2.sourceField"
+              [clearSearchOnAdd]="false"
+              (add)="onSelect($event)" >
+            </ng-select>
+            <ng-select *ngIf="!isAutocompleteUpdated" [items]="items2"
+              bindLabel="config2.sourceField"
+              [clearSearchOnAdd]="false"
+              (add)="onSelect($event)">
+            </ng-select>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="status">{{orderProfileInfo.status}}</div>
+    <div class="status">{{_orderProfileInfo.status}}</div>
   <div>
  
 </div>

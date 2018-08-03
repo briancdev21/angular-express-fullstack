@@ -11,7 +11,11 @@ import { OrderService } from '../order.service';
 })
 export class TitleBarComponent implements OnInit {
 
-  @Input() orderProfileInfo;
+  @Input() set orderProfileInfo(val) {
+    if (val.followers !== undefined) {
+      this._orderProfileInfo = val;
+    }
+  }
   @Input() showAvailabilityModal;
   editable: boolean;
   newKeyword: string;
@@ -22,25 +26,22 @@ export class TitleBarComponent implements OnInit {
   availableStaff: any;
 
   items2: any[] = [
-    {id: 0, payload: {label: 'Michael', imageUrl: 'assets/users/user1.png'}},
-    {id: 1, payload: {label: 'Joseph', imageUrl: 'assets/users/user2.png'}},
-    {id: 2, payload: {label: 'Danny', imageUrl: 'assets/users/user1.png'}},
-    {id: 3, payload: {label: 'John', imageUrl: 'assets/users/user3.png'}},
   ];
   config2: any = {'placeholder': 'Type here', 'sourceField': ['payload', 'label']};
+  _orderProfileInfo: any;
 
   constructor(private orderService: OrderService) {
 
   }
 
   ngOnInit() {
-    if (this.orderProfileInfo.followers) {
-      this.orderProfileInfo.followers.forEach(element => {
-        this.items2 = this.items2.filter(function( obj ) {
-          return obj.payload.label !== element.name;
-        });
-      });
-    }
+    // if (this.orderProfileInfo.followers) {
+    //   this.orderProfileInfo.followers.forEach(element => {
+    //     this.items2 = this.items2.filter(function( obj ) {
+    //       return obj.payload.label !== element.name;
+    //     });
+    //   });
+    // }
 
     this.titleOrigin = this.orderTitle;
     this.orderService.getAvailableStaff.subscribe(
