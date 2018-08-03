@@ -384,6 +384,7 @@ export class OrderProfileComponent implements OnInit {
   }
 
   checkDelivered(product) {
+    console.log('product: ', product);
     const quantity = parseInt(product.quantity, 10);
     let delivered = parseInt(product.delivered, 10);
     if (delivered === quantity ) {
@@ -391,16 +392,16 @@ export class OrderProfileComponent implements OnInit {
     }
 
     if (quantity < delivered) {
-      delivered = 0;
+      delivered = 1;
     }
 
     const savingData = {
-      'sku': product.sku,
-      'quantity': quantity,
-      'delivered': delivered
+      'delivered': delivered,
+      'invoiceId': product.invoiceId
     };
 
-    this.collaboratorsService.updateIndividualWorkOrderProduct(this.currentWorkOrderId, product.id, savingData).subscribe(res => {
+    this.collaboratorsService.updateIndividualWorkOrderProduct(this.currentWorkOrderId, product.sku, savingData).subscribe(res => {
+      this.getDeliveryData();
     });
     this.getDeliveryData();
 

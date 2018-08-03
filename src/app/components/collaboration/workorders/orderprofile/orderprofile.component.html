@@ -11,11 +11,11 @@
     </div>
 
     <div class="order-details">
-      <app-orderdetails [orderProfileInfo]="orderProfileInfo"></app-orderdetails>
+      <app-orderdetails [orderProfileInfo]="orderProfileInfo" *ngIf="orderProfileInfo"></app-orderdetails>
     </div>
 
     <div class="draggable-ticket">
-      <app-draggableticket [(orderProfileInfo)]="orderProfileInfo"></app-draggableticket>
+      <app-draggableticket [(orderProfileInfo)]="orderProfileInfo"  *ngIf="orderProfileInfo"></app-draggableticket>
     </div>
 
     <div class="delivery-description">
@@ -34,7 +34,7 @@
               <td>{{product.sku}}</td>
               <td>{{product.model}}</td>
               <td>{{product.name}}</td>
-              <td><input [(ngModel)]="product.quantity" (input)="checkDelivered(product)"></td>
+              <td><input [(ngModel)]="product.quantity" (input)="checkDelivered(product)" disabled></td>
               <td><input [(ngModel)]="product.delivered" (input)="checkDelivered(product)"></td>
             </tr>
           </table>
@@ -96,7 +96,7 @@
     </div>
   </div>
   <div class="work-order-settings">
-    <app-ordersettings [orderProfileInfo]="orderProfileInfo"></app-ordersettings>
+    <app-ordersettings [orderProfileInfo]="orderProfileInfo"  *ngIf="orderProfileInfo"></app-ordersettings>
   </div>
 
   <div class="availability-modal-wrapper" *ngIf="showAvailabilityModal" ></div>
