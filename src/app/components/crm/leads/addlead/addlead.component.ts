@@ -602,10 +602,10 @@ export class AddLeadComponent implements OnInit {
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
       if (this.businessType === 'PERSON') {
         this.newLead = {
-          'currencyId': this.defaultCurrency,
-          'termId': this.defaultTerm,
-          'sourceId': parseInt(this.selectedSourceId, 10),
-          'pricingCategoryId': this.defaultPricing,
+          'currencyId': Number(this.defaultCurrency),
+          'termId': Number(this.defaultTerm),
+          'sourceId': Number(this.selectedSourceId),
+          'pricingCategoryId': Number(this.defaultPricing),
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -652,10 +652,10 @@ export class AddLeadComponent implements OnInit {
         }
       } else {
         this.newLead = {
-          'currencyId': this.defaultCurrency,
-          'termId': this.defaultTerm,
-          'sourceId': parseInt(this.selectedSourceId, 10),
-          'pricingCategoryId': this.defaultPricing,
+          'currencyId': Number(this.defaultCurrency),
+          'termId': Number(this.defaultTerm),
+          'sourceId': Number(this.selectedSourceId),
+          'pricingCategoryId': Number(this.defaultPricing),
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [

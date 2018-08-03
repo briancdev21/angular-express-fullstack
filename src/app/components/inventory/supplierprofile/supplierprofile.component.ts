@@ -299,6 +299,23 @@ export class SupplierProfileComponent implements OnInit {
     this.sharedSevice.getSupplier(this.currentSupplierId).subscribe(res => {
       console.log('current supplier: ', res);
       this.userInfo = res.data;
+      this.chartSetData = [
+            {
+              title: 'Supplier Rating',
+              percentage: this.userInfo.supplierRating,
+            },
+            {
+              title: 'Sensitivity Rating',
+              percentage: this.userInfo.sensitivityRating,
+            },
+            {
+              title: 'PO Ratio',
+              percentage: this.userInfo.purchaseOrderRatio,
+            },
+            {
+              title: 'Efficiency Ratio',
+              percentage: this.userInfo.efficiencyRatio,
+            }];
     });
 
   }

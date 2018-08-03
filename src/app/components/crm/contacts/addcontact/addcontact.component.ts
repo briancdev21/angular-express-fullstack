@@ -617,10 +617,10 @@ export class AddContactComponent implements OnInit {
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
       if (this.businessType === 'PERSON') {
         this.newContact = {
-          'currencyId': this.defaultCurrency,
-          'termId': this.defaultTerm,
-          'sourceId': parseInt(this.selectedSourceId, 10),
-          'pricingCategoryId': this.defaultPricing,
+          'currencyId': Number(this.defaultCurrency),
+          'termId': Number(this.defaultTerm),
+          'sourceId': Number(this.selectedSourceId),
+          'pricingCategoryId': Number(this.defaultPricing),
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -664,10 +664,10 @@ export class AddContactComponent implements OnInit {
         };
       } else {
         this.newContact = {
-          'currencyId': this.defaultCurrency,
-          'termId': this.defaultTerm,
-          'sourceId': parseInt(this.selectedSourceId, 10),
-          'pricingCategoryId': this.defaultPricing,
+          'currencyId': Number(this.defaultCurrency),
+          'termId': Number(this.defaultTerm),
+          'sourceId': Number(this.selectedSourceId),
+          'pricingCategoryId': Number(this.defaultPricing),
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
