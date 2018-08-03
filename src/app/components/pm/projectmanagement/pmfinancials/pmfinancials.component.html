@@ -67,7 +67,8 @@
     <div class="schedule-panel">
       <div class="panel-top">
         <span>BUDGET</span>
-        <span [ngClass]="{'invalid-budget': invalidBudget}">UNUSED BUDGET $ {{unusedBudget | number: '1.2-2'}}</span>
+        <span *ngIf="!invalidBudget">UNUSED BUDGET $ {{unusedBudget | number: '1.2-2'}}</span>
+        <span *ngIf="invalidBudget" style="color:red">UNUSED BUDGET $ {{unusedBudget | number: '1.2-2'}}</span>
       </div>
       <div class="budget-summary">
         <div class="input-sec">
