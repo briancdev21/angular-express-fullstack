@@ -21,7 +21,7 @@ export class OrderDetailsComponent implements OnInit {
   country = '';
   zipcode = '';
   public endMin;
-  public startMax;
+  public startMax = new Date();
   startDateValue: Date;
   endDateValue: Date;
   startTimeValue: any;
@@ -83,7 +83,6 @@ export class OrderDetailsComponent implements OnInit {
 
   onEndDate(event) {
     this.endDateValue = event.value;
-    this.startMax = this.endDateValue;
     this.orderService.postTimelineData({title: this.endDateValue.toDateString(), type: 'endDate'});
   }
 
@@ -110,6 +109,7 @@ export class OrderDetailsComponent implements OnInit {
     const savingData = this.orderProfileInfo;
     savingData.startDate = moment(this.startDateValue).format('YYYY-MM-DD');
     savingData.endDate = moment(this.endDateValue).format('YYYY-MM-DD');
+    savingData.followers = this.orderProfileInfo.followersDetails.map(f => f.name);
     console.log('saving Data: ', savingData);
     this.collaboratorsService.updateIndividualWorkOrder(this.currentWorkOrderId, savingData).subscribe(res => {
       console.log('saving workorder: ', res);
