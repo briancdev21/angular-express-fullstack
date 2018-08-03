@@ -23,7 +23,7 @@
 
   <div class="main-content-box">
     <div class="workorders-table">
-      <app-workorderstable></app-workorderstable>
+      <app-workorderstable [(workOrdersInfo)]="workOrdersList" *ngIf="workOrdersList"></app-workorderstable>
     </div>
     <div class="workorders-filter">
       <app-workorderfilter 

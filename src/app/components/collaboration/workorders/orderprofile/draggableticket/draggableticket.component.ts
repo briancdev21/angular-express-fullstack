@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DragulaService } from 'ng2-dragula';
 import { OrderService } from '../order.service';
+import { CollaboratorsService } from '../../../../../services/collaborators.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-draggableticket',
@@ -14,7 +16,8 @@ import { OrderService } from '../order.service';
 export class DraggableTicketComponent implements OnInit {
 
   @Input() orderProfileInfo;
-  @Input() taskTicketInfo;
+
+  taskTicketInfo = [];
   notStarted = [];
   inProgress = [];
   complete = [];
@@ -34,30 +37,80 @@ export class DraggableTicketComponent implements OnInit {
   selectedPriority = 'default';
   issueTickets = [];
   issueTicket: any;
+  currentWorkOrderId: any;
+  workOrderTasks = [];
+  selectedTask: any;
 
-  constructor(private dragulaService: DragulaService, private orderService: OrderService) {
+  constructor(private dragulaService: DragulaService, private orderService: OrderService,
+    private collaboratorsService: CollaboratorsService, private router: Router, private route: ActivatedRoute) {
     dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });
+
+    this.currentWorkOrderId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+
+    this.collaboratorsService.getWorkOrderTasks(this.currentWorkOrderId).subscribe(res => {
+      this.workOrderTasks = res.results;
+      this.taskTicketInfo = res.results;
+      this.taskTicketInfo.forEach(ele => {
+        ele.estimateHour = Math.floor(ele.duration / 60);
+        ele.estimateMin = ele.duration % 60;
+        ele.createdAt = moment(ele.createdAt).format('YYYY-MM-DD');
+      });
+      console.log('work order tasks: ', res);
+      this.notStarted = this.taskTicketInfo.filter(t => t.status === 'NOT_STARTED');
+      this.inProgress = this.taskTicketInfo.filter(t => t.status === 'IN_PROGRESS');
+      this.complete = this.taskTicketInfo.filter(t => t.status === 'COMPLETE');
+      this.notComplete = this.taskTicketInfo.filter(t => t.status === 'NOT_COMPLETE');
+      this.taskTicketInfo.map(t => t.visibility = true);
+      this.notStarted.map(t => t.visibility = true);
+    });
+
+    this.collaboratorsService.getWorkOrderIssues(this.currentWorkOrderId).subscribe(res => {
+      this.issueTickets = res.results;
+      this.issueTickets.forEach(ele => {
+        ele.createdAt = moment(ele.createdAt).format('YYYY-MM-DD');
+        this.issueTickets.map(t => t.visibility = true);
+      });
+    });
+
   }
 
   private onDropModel(args) {
     const [el, target, source] = args;
-    this.notStarted.map(t => t.status = 'notStarted');
-    this.inProgress.map(t => t.status = 'inProgress');
-    this.notComplete.map(t => t.status = 'notComplete');
-    this.complete.map(t => t.status = 'complete');
+    const selectedTaskId = parseInt(el.firstElementChild.id, 10);
+    const targetParentClassName = target.parentElement.className;
+    let selectedColumn;
+
+    if (targetParentClassName === 'not-started-content') {
+      this.notStarted.map(t => t.status = 'NOT_STARTED');
+      selectedColumn = this.notStarted;
+    } else if (targetParentClassName === 'in-progress-content') {
+      this.inProgress.map(t => t.status = 'IN_PROGRESS');
+      selectedColumn = this.inProgress;
+    } else if (targetParentClassName === 'complete-content') {
+      this.complete.map(t => t.status = 'COMPLETE');
+      selectedColumn = this.complete;
+    } else if (targetParentClassName === 'not-complete-content') {
+      this.notComplete.map(t => t.status = 'NOT_COMPLETE');
+      selectedColumn = this.notComplete;
+    }
+
+    const task = selectedColumn.filter(c => c.id === selectedTaskId)[0];
+    const updatingData = {
+      'name': task.name,
+      'status': task.status,
+      'duration': (task.estimateHour * 60) + (task.estimateMin),
+      'priority': task.priority,
+    };
+    this.collaboratorsService.updateIndividualWorkOrderTask(this.currentWorkOrderId, selectedTaskId, updatingData).subscribe(res => {
+      console.log('updated task: ', res);
+    });
   }
 
 
   ngOnInit() {
-    this.notStarted = this.taskTicketInfo.filter(t => t.status === 'notStarted');
-    this.inProgress = this.taskTicketInfo.filter(t => t.status === 'inProgress');
-    this.complete = this.taskTicketInfo.filter(t => t.status === 'complete');
-    this.notComplete = this.taskTicketInfo.filter(t => t.status === 'notComplete');
-    this.taskTicketInfo.map(t => t.visibility = true);
-    this.notStarted.map(t => t.visibility = true);
-    this.issueTickets.map(t => t.visibility = true);
+
   }
 
   openTimeEstimationModal(index, task) {
@@ -91,12 +144,17 @@ export class DraggableTicketComponent implements OnInit {
   }
 
   getColor(task) {
-    if (task.priority === 'level1') return 'green';
-    else if (task.priority === 'level2') return 'orange';
-    else return 'red';
+    if (task.priority === '1') {
+      return 'green';
+    } else if (task.priority === '2') {
+      return 'orange';
+    } else {
+      return 'red';
+    }
   }
 
   deleteTicket(task) {
+    this.selectedTask = task;
     this.checkColumnIn(task);
     const currentTask = this.taskTicketInfo.filter(t => t.id === task.id);
     this.currentInfoId = this.taskTicketInfo.map(t => t.id).indexOf(currentTask[0].id);
@@ -104,10 +162,23 @@ export class DraggableTicketComponent implements OnInit {
     this.showDeleteConfirmModal = true;
   }
 
+  deleteIssue(issue) {
+    console.log('delete: ', issue);
+    this.collaboratorsService.deleteIndividualWorkOrderIssue(this.currentWorkOrderId, issue.id).subscribe(res => {
+      console.log('deleted ', res);
+      const pos = this.issueTickets.map(t => t.id).indexOf(issue.id);
+      this.issueTickets.splice(this.currentInfoId, 1);
+    });
+  }
+
   confirmDelete() {
-    this.taskTicketInfo.splice(this.currentInfoId, 1);
-    this.selectedColumn.splice(this.currentColumnId, 1);
-    this.showDeleteConfirmModal = false;
+    console.log('seleted task: ', this.selectedTask);
+    this.collaboratorsService.deleteIndividualWorkOrderTask(this.currentWorkOrderId, this.selectedTask.id).subscribe(res => {
+      console.log('deleted ', res);
+      this.taskTicketInfo.splice(this.currentInfoId, 1);
+      this.selectedColumn.splice(this.currentColumnId, 1);
+      this.showDeleteConfirmModal = false;
+    });
   }
 
   changeVisibility(task) {
@@ -119,16 +190,16 @@ export class DraggableTicketComponent implements OnInit {
 
   checkColumnIn(task) {
     switch (task.status) {
-      case 'notStarted':
+      case 'NOT_STARTED':
         this.selectedColumn = this.notStarted;
         break;
-      case 'inProgress':
+      case 'IN_PROGRESS':
         this.selectedColumn = this.inProgress;
         break;
-      case 'complete':
+      case 'COMPLETE':
         this.selectedColumn = this.complete;
         break;
-      case 'notComplete':
+      case 'NOT_COMPLETE':
         this.selectedColumn = this.notComplete;
         break;
     }
@@ -139,6 +210,15 @@ export class DraggableTicketComponent implements OnInit {
   }
 
   onClickedOutside(i, task) {
+    const updatingData = {
+      'name': task.name,
+      'status': task.status,
+      'duration': (task.estimateHour * 60) + (task.estimateMin) ? (task.estimateHour * 60) + (task.estimateMin) : 0,
+      'priority': task.priority,
+    };
+    this.collaboratorsService.updateIndividualWorkOrderTask(this.currentWorkOrderId, task.id, updatingData).subscribe(res => {
+      console.log('updated task: ', res);
+    });
     this.checkColumnIn(task);
     const currentTask = this.selectedColumn.filter(t => t.id === task.id);
     this.currentColumnId = this.selectedColumn.map(t => t.id).indexOf(currentTask[0].id);
@@ -159,6 +239,12 @@ export class DraggableTicketComponent implements OnInit {
   }
 
   onIssueClickedOutside(i, task) {
+    const updatingData = {
+      'description': task.description,
+    };
+    this.collaboratorsService.updateIndividualWorkOrderIssue(this.currentWorkOrderId, task.id, updatingData).subscribe(res => {
+      console.log('updated issue: ', res);
+    });
     this.issueTickets[i].visibility = true;
 
     if (this.issueTickets[i].pending) {
@@ -182,7 +268,7 @@ export class DraggableTicketComponent implements OnInit {
   }
 
   onPrioritySelect(event, task) {
-    this.taskTicketInfo[task.id].priority = event;
+    // this.taskTicketInfo[task.id].priority = event;
   }
 
   addTicket() {
@@ -190,40 +276,32 @@ export class DraggableTicketComponent implements OnInit {
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
     const newId = Math.max(...this.taskTicketInfo.map(t => t.id)) + 1;
     const newDate = new Intl.DateTimeFormat('en-US', options).format(date);
-    const newProduct = {
-      id: newId,
-      description: '',
-      status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '',
-      priority: 'level1',
-      createdDate: newDate,
-      visibility: false,
-      new: true
+    const savingTask = {
+      name: ``,
+      duration: 0,
+      priority: '1'
     };
-    newProduct.new = true;
-    this.notStarted.push(newProduct);
-    this.taskTicketInfo.push(newProduct);
+    let newTask;
+    this.collaboratorsService.createWorkOrderTask(this.currentWorkOrderId, savingTask).subscribe(res => {
+      newTask = res.data;
+      newTask.new = true;
+      newTask.createdAt = moment(newTask.createdAt).format('YYYY-MM-DD');
+      this.notStarted.push(newTask);
+      this.taskTicketInfo.push(newTask);
+    });
   }
 
   addIssueTicket() {
-    let newId = 0;
-    const date = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-    if (this.issueTickets.length === 0) {
-      newId = 0;
-    } else {
-      newId = Math.max(...this.issueTickets.map(t => t.id ? t.id : 0)) + 1;
-    }
-    const newDate = new Intl.DateTimeFormat('en-US', options).format(date);
-    const newIssue = {
-      id: newId,
-      description: '',
-      createdDate: newDate,
-      visibility: false,
-      new: true
+    let newIssue;
+    const savingIssue = {
+      description: ''
     };
-    this.issueTickets.push(newIssue);
+    this.collaboratorsService.createWorkOrderIssue(this.currentWorkOrderId, savingIssue).subscribe(res => {
+      newIssue = res.data;
+      newIssue.new = true;
+      newIssue.createdAt = moment(newIssue.createdAt).format('YYYY-MM-DD');
+      this.issueTickets.push(newIssue);
+    });
   }
 
   downloadAttachment(issue) {

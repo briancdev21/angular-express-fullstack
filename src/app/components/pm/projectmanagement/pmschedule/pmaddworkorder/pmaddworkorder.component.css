@@ -56,6 +56,35 @@ span {
 	border: 1px solid red !important;
 }
 
+:host ::ng-deep .add-workorder-modal .content>tabs .tabs__tab-bar {
+  font-size: 13px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  font-weight: 400;
+  padding-bottom: 0px;
+  line-height: 2.5rem;
+  border-bottom: solid 1px #f5f5f5;
+}
+
+:host ::ng-deep .add-workorder-modal .content tabs .tabs__tab.active, :host ::ng-deep .add-workorder-modal .content>tabs .tabs__tab.active {
+  border-bottom: 0 !important;
+  color: #87d6c7 !important;
+}
+
+:host ::ng-deep .add-workorder-modal .content>tabs .tabs__tab:last-child {
+  border-right: 0;
+  border-left: solid 1px #f5f5f5;
+  width: 16%;
+}
+
+:host ::ng-deep .add-workorder-modal .content>tabs .tabs__tab:first-child {
+	width: 20%;
+	margin-left: 0px;
+}
+
 .name-col ng2-completer { 
 	display: block;
 	margin-top: 4px;

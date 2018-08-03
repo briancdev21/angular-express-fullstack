@@ -1,24 +1,24 @@
 import { Component, Input, OnInit, HostListener, ViewChild, ElementRef, } from '@angular/core';
 import { Router } from '@angular/router';
-import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import * as moment from 'moment';
-import { AvailabilityComponent } from '../orderprofile/availability/availability.component';
-import { SharedService } from '../../../../services/shared.service';
-import { CollaboratorsService } from '../../../../services/collaborators.service';
-import { ProductsService } from '../../../../services/inventory/products.service';
-import { ProjectsService } from '../../../../services/projects.service';
+import { SharedService } from '../../../../../services/shared.service';
+import { CollaboratorsService } from '../../../../../services/collaborators.service';
+import { ProductsService } from '../../../../../services/inventory/products.service';
+import { ProjectsService } from '../../../../../services/projects.service';
+// import { AvailabilityComponent } from '../../../../collaboration/workorders/orderprofile/availability/availability.component';
+
 
 @Component({
-  selector: 'app-addworkorder',
-  templateUrl: './addworkorder.component.html',
+  selector: 'app-pmaddworkorder',
+  templateUrl: './pmaddworkorder.component.html',
   styleUrls: [
-    './addworkorder.component.css',
+    './pmaddworkorder.component.css',
   ]
 })
 
 
-export class AddWorkOrderComponent implements OnInit {
+export class PmAddWorkOrderComponent implements OnInit {
 
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
   projectsList = [

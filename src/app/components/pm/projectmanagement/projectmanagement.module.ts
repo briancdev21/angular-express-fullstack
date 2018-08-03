@@ -32,13 +32,17 @@ import {
     ProgressProjectInformationComponent
   } from './pmprogress/progressoverview/progressprojectinformation/progressprojectinformation.component';
 import { ProgressProjectBriefComponent } from './pmprogress/progressprojectbrief/progressprojectbrief.component';
+import { PmAddWorkOrderComponent } from './pmschedule/pmaddworkorder/pmaddworkorder.component';
 
 import { CommonCmpModule } from '../../../components/common/common.module';
 import { ProfileCmpModule } from '../../profile/profile.module';
 import { BreadcrumbModule } from '../../../components/breadcrumb/breadcrumb.module';
+import { WorkOrdersCmpModule } from '../../collaboration/workorders/workorders.module';
 import { ProgressProductLogCmpModule } from './pmprogress/progressproductlog/progressproductlog.module';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { DragulaModule } from 'ng2-dragula';
+import { OrderProfileCmpModule } from '../../../components/collaboration/workorders/orderprofile/orderprofile.module';
+import { SharedPipesModule } from '../../../pipes/sharedpipes.module';
 
 import { TabModule } from 'angular-tabs-component';
 import { FormsModule } from '@angular/forms';
@@ -88,7 +92,8 @@ export const MY_NATIVE_FORMATS = {
     TaskStableMapToKeysPipe,
     ProgressOverviewComponent,
     ProgressProjectInformationComponent,
-    ProgressProjectBriefComponent
+    ProgressProjectBriefComponent,
+    PmAddWorkOrderComponent
   ],
   imports: [
     BrowserModule,
@@ -108,7 +113,10 @@ export const MY_NATIVE_FORMATS = {
     DpDatePickerModule,
     Ng2CompleterModule,
     ProjectFinancialsTableCmpModule,
-    PMBreadcrumbModule
+    PMBreadcrumbModule,
+    WorkOrdersCmpModule,
+    OrderProfileCmpModule,
+    SharedPipesModule
   ],
   exports: [
     PmBreadcrumbBarComponent,
@@ -120,7 +128,8 @@ export const MY_NATIVE_FORMATS = {
     AddDetailedTaskComponent,
     SubTasksManagementComponent,
     GanttChartComponent,
-    TaskStableMapToKeysPipe
+    TaskStableMapToKeysPipe,
+    PmAddWorkOrderComponent
   ],
   providers: [
     ProjectManagementService,

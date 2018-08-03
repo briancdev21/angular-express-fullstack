@@ -1,23 +1,23 @@
-<div class="content" *ngIf="workOrdersList">
+<div class="content" *ngIf="workOrdersInfo">
   <table class="work-order-table">
     <tr>
       <th (click)="sortArray('workOrderNumber')">WORK ORDER #</th>
       <th (click)="sortArray('workOrderName')">NAME OF WORK ORDER</th>
       <th (click)="sortArray('customerName')">CUSTOMER NAME</th>
       <th (click)="sortStarteDateArray('startDate')">START DATE</th> 
-      <th (click)="sortArray('scheduledStart')">SCHEDULED</th>
+      <th (click)="sortArray('startTime')">SCHEDULED</th>
       <th >COLLABORATORS</th>
       <th (click)="sortArray('completion')">WORK ORDER COMPLETION</th>
     </tr>
-    <tr *ngFor="let workorder of workOrdersList; let i = index" (click)="redirectTo(workorder.id)">
+    <tr *ngFor="let workorder of workOrdersInfo; let i = index" (click)="redirectTo(workorder.id)">
       <td>{{workorder.id}}</td>
       <td>{{workorder.name}}</td>
       <td>{{workorder.contactName}}</td>
       <td>{{workorder.startDate}}</td>
-      <td>{{workorder.scheduledStart}} - {{workorder.scheduledEnd}}</td>
+      <td>{{workorder.startTime}} - {{workorder.endTime}}</td>
       <td class="collaborators">
-        <div *ngFor="let col of workorder.collaborators" >
-          <img [src]="col.imgUrl">
+        <div *ngFor="let col of workorder.collaboratorsData" >
+          <img [src]="col.pictureURI">
         </div>
       </td>
       <td class="work-order-completion"><app-horizontalbar [barInfo]="workorder.barInfo"></app-horizontalbar></td>

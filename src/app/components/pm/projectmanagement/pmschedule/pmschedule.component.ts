@@ -1,8 +1,11 @@
 import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProjectManagementService } from '../projectmanagement.service';
 import { PmTasksData, TaskModel, SubTaskModel } from '../../../../models/pmtasksdata.model';
 import * as moment from 'moment';
+import { SharedService } from '../../../../services/shared.service';
+import { CollaboratorsService } from '../../../../services/collaborators.service';
+import { ProjectsService } from '../../../../services/projects.service';
 
 @Component({
   selector: 'app-pmschedule',
@@ -24,8 +27,41 @@ export class PmScheduleComponent implements OnInit {
   pmBoardTableData = [];
   tabActiveFirst = true;
   tabActiveSecond = false;
+  saveFilterModalCollapsed = true;
+  showSaveFilterModal = false;
+  filterClicked = false;
+  backUpWorkOrders: any;
+  openSavedFiltersList = false;
+  savedFiltersListCollapsed = true;
+  savedFiltersArr = [];
+  filterAvaliableTo: any;
+  filterName = '';
+  workorderTypes: any;
+  usersList = [];
+  contactsList = [];
+  workOrdersList: any;
+  currentProjectId: any;
+  contactName: any;
 
-  constructor( private pmService: ProjectManagementService ) {
+  public workorderStatus = ['Not started', 'Not complete', 'Delivered', 'In progress', 'Complete'];
+
+  public filters  = {
+    startedFrom: '',
+    startedTo: '',
+    updatedFrom: '',
+    updatedTo: '',
+    selectTag: '',
+    selectStatus: '',
+  };
+
+  public collaborators: Array<string> = [
+  ];
+
+  public workOrdersInfo = [];
+
+  constructor( private pmService: ProjectManagementService, private sharedService: SharedService,
+    private collaboratorsService: CollaboratorsService, private route: ActivatedRoute, private projectsService: ProjectsService   ) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
     this.subscription = this.pmService.openDetailedTaskModal().subscribe(data => {
       this.showDetailedTaskModal = data.openModal;
       this.updatingTaskPosition = data.milestone;
@@ -39,6 +75,39 @@ export class PmScheduleComponent implements OnInit {
         this.showDetailedTaskModal = false;
         this.pmBoardTableData[data[0]].tasks.splice(data[1], 1);
       }
+    });
+
+    this.sharedService.getUsers().subscribe(user => {
+      this.usersList = user;
+      this.sharedService.getContacts().subscribe(data => {
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.collaboratorsService.getProjectWorkOrders(this.currentProjectId).subscribe(res => {
+          this.workOrdersList = res.results;
+          this.workOrdersList.forEach(element => {
+            const colArr = [];
+            element.startTime = moment(element.startDate).format('hh:mm a');
+            element.endTime = moment(element.endDate).format('hh:mm a');
+            element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+            element.contactName = this.getContactNameFromId(element.contactId);
+            element.barInfo = {
+              title: element.completion + '%',
+              completeness: element.completion
+            };
+            element.collaborators.forEach(col => {
+              colArr.push(this.usersList.filter(u => u.username === col)[0]);
+            });
+            element.collaboratorsData = colArr;
+          });
+          console.log('work order list: ', this.workOrdersList);
+        });
+
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+          console.log('project info: ', res);
+          this.contactName = this.contactsList.filter(c => c.id === res.data.contactId)[0].name;
+          console.log('project info: ', this.contactName);
+        });
+      });
     });
   }
 
@@ -116,5 +185,21 @@ export class PmScheduleComponent implements OnInit {
       }
     }
     this.tasks = tasks;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
   }
 }

@@ -23,8 +23,8 @@
 		<div class="not-started-content">
 			<div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='notStarted'>
 				<div *ngFor="let task of notStarted; let i = index;">
-					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
-						<span>{{task.description}}</span>
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)" id={{task.id}}>
+						<span>{{task.name}}</span>
 						<span class="estimated">
 							<span>Estimated</span>
 							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
@@ -32,14 +32,14 @@
 						</span>
 						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
 					</div>
-					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)" id={{task.id}}>
 						<div>
-							<input placeholder="Type your task here" [(ngModel)]="task.description" [value]="task.description">
-							<span class="create-date">{{task.createdDate}}</span>
+							<input placeholder="Type your task here" [(ngModel)]="task.name" >
+							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div>
 							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
-							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<!-- <img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();"> -->
 							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
 							<!-- Start Small Dialog when clicking images to add time -->
 							<div 
@@ -55,17 +55,17 @@
 							<!--End Add time -->
 							<!-- Start Small Dialog when clicking images to add dependency -->
 							
-							<div 
+							<!-- <div 
 								class="dependency-modal"
 								[ngClass]="{'show-modal': dependencyModalCollapsed[i], 'hide-modal': !dependencyModalCollapsed[i] }"
 								(clickOutside)="closeDependencyModal(i)">
 								<div class="dependency-mdl-content">
 									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
 										<option [value]="'default'">Select Dependency</option>
-										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.name}}</option>
 									</select>
 								</div>
-							</div>
+							</div> -->
 							<!--End Add Dependency -->
 							<!-- Start Small Dialog when clicking images to add Priority -->
 							
@@ -74,11 +74,10 @@
 								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
 								(clickOutside)="closePriorityModal(i)">
 								<div class="priority-mdl-content">
-									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
-										<option [value]="'default'">Select Priority</option>
-										<option [value]="'level1'">Level 1</option>
-										<option [value]="'level2'">Level 2</option>
-										<option [value]="'level3'">Level 3</option>
+									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
+										<option [value]="'1'">Level 1</option>
+										<option [value]="'2'">Level 2</option>
+										<option [value]="'3'">Level 3</option>
 									</select>
 								</div>
 							</div>
@@ -91,8 +90,8 @@
 		<div class="in-progress-content">
 			<div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='inProgress'>
 				<div *ngFor="let task of inProgress; let i = index;" >
-					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
-						<span>{{task.description}}</span>
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)" id={{task.id}}>
+						<span>{{task.name}}</span>
 						<span class="estimated">
 							<span>Estimated</span>
 							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
@@ -100,14 +99,14 @@
 						</span>
 						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
 					</div>
-					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)" id={{task.id}}>
 						<div>
-							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
-							<span class="create-date">{{task.createdDate}}</span>
+							<input [(ngModel)]="task.name"  placeholder="Type your task here">
+							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div>
 							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
-							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<!-- <img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();"> -->
 							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
 							<!-- Start Small Dialog when clicking images to edit tickets -->
 							
@@ -130,7 +129,7 @@
 								<div class="dependency-mdl-content">
 									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
 										<option [value]="'default'">Select Dependency</option>
-										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.name}}</option>
 									</select>
 								</div>
 							</div>
@@ -142,11 +141,11 @@
 								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
 								(clickOutside)="closePriorityModal(i)">
 								<div class="priority-mdl-content">
-									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
-										<option [value]="'default'">Select Priority</option>
-										<option [value]="'level1'">Level 1</option>
-										<option [value]="'level2'">Level 2</option>
-										<option [value]="'level3'">Level 3</option>
+									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
+										
+										<option [value]="'1'">Level 1</option>
+										<option [value]="'2'">Level 2</option>
+										<option [value]="'3'">Level 3</option>
 									</select>
 								</div>
 							</div>
@@ -159,8 +158,8 @@
 		<div class="complete-content">
 			<div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='complete'>
 				<div *ngFor="let task of complete; let i = index;" >
-					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
-						<span>{{task.description}}</span>
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)" id={{task.id}}>
+						<span>{{task.name}}</span>
 						<span class="estimated">
 							<span>Estimated</span>
 							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
@@ -168,14 +167,14 @@
 						</span>
 						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
 					</div>
-					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)" id={{task.id}}>
 						<div>
-							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
-							<span class="create-date">{{task.createdDate}}</span>
+							<input [(ngModel)]="task.name"  placeholder="Type your task here">
+							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div>
 							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
-							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<!-- <img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();"> -->
 							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
 							<!-- Start Small Dialog when clicking images to edit tickets -->
 							
@@ -198,7 +197,7 @@
 								<div class="dependency-mdl-content">
 									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
 										<option [value]="'default'">Select Dependency</option>
-										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.name}}</option>
 									</select>
 								</div>
 							</div>
@@ -210,11 +209,11 @@
 								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
 								(clickOutside)="closePriorityModal(i)">
 								<div class="priority-mdl-content">
-									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
-										<option [value]="'default'">Select Priority</option>
-										<option [value]="'level1'">Level 1</option>
-										<option [value]="'level2'">Level 2</option>
-										<option [value]="'level3'">Level 3</option>
+									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
+										
+										<option [value]="'1'">Level 1</option>
+										<option [value]="'2'">Level 2</option>
+										<option [value]="'3'">Level 3</option>
 									</select>
 								</div>
 							</div>
@@ -227,8 +226,8 @@
 		<div class="not-complete-content">
 			<div [dragula]="'dragItem'"  class="draggable-column" [dragulaModel]='notComplete'>
 				<div *ngFor="let task of notComplete; let i = index;">
-					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)">
-						<span>{{task.description}}</span>
+					<div class="draggable" [ngClass]="getColor(task)" *ngIf="task.visibility" (dblclick)="changeVisibility(task)" id={{task.id}}>
+						<span>{{task.name}}</span>
 						<span class="estimated">
 							<span>Estimated</span>
 							<span *ngIf="task.estimateHour">{{task.estimateHour}} hr</span>
@@ -236,14 +235,14 @@
 						</span>
 						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteTicket(task)">
 					</div>
-					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)">
+					<div class="edit-form draggable" *ngIf="!task.visibility" (clickOutside)="onClickedOutside(i, task)" id={{task.id}}>
 						<div>
-							<input [(ngModel)]="task.description" [value]="task.description" placeholder="Type your task here">
-							<span class="create-date">{{task.createdDate}}</span>
+							<input [(ngModel)]="task.name"  placeholder="Type your task here">
+							<span class="create-date">{{task.createdAt}}</span>
 						</div>
 						<div class="img-section">
 							<img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
-							<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+							<!-- <img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, task); $event.stopPropagation();"> -->
 							<img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
 							<!-- Start Small Dialog when clicking images to edit tickets -->
 							
@@ -266,7 +265,7 @@
 								<div class="dependency-mdl-content">
 									<select [(ngModel)]="selectedDependency" (ngModelChange)="onDependencySelect($event, task)" >
 										<option [value]="'default'">Select Dependency</option>
-										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.name}}</option>
 									</select>
 								</div>
 							</div>
@@ -278,11 +277,11 @@
 								[ngClass]="{'show-modal': priorityModalCollapsed[i], 'hide-modal': !priorityModalCollapsed[i] }"
 								(clickOutside)="closePriorityModal(i)">
 								<div class="priority-mdl-content">
-									<select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
-										<option [value]="'default'">Select Priority</option>
-										<option [value]="'level1'">Level 1</option>
-										<option [value]="'level2'">Level 2</option>
-										<option [value]="'level3'">Level 3</option>
+									<select [(ngModel)]="task.priority" (ngModelChange)="onPrioritySelect($event, task)" >
+										
+										<option [value]="'1'">Level 1</option>
+										<option [value]="'2'">Level 2</option>
+										<option [value]="'3'">Level 3</option>
 									</select>
 								</div>
 							</div>
@@ -299,17 +298,18 @@
 						<span>{{issue.description}}</span>
 						<div class="time-imgs">
 							<span class="estimated">
-								<span>{{issue.createdDate}}</span>
+								<span>{{issue.createdAt}}</span>
 							</span>
 							<img src="assets/images/attachment.png" class="img-attachment" (click)="downloadAttachment(issue)">
 						</div>
+						<img src="assets/images/x-sign-red.png" class="delete-ticket" (click)="deleteIssue(issue)">
 					</div>
 					<div class="issue-ticket-column issue-style edit-form draggable" *ngIf="!issue.visibility" (clickOutside)="onIssueClickedOutside(i, issue)">
 						<input [(ngModel)]="issue.description" [value]="issue.description" placeholder="Type your issue here">
 						<div class="img-section">
-							<span class="create-date">{{issue.createdDate}}</span>
+							<span class="create-date">{{issue.createdAt}}</span>
 							<div>
-								<img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, issue); $event.stopPropagation();">
+								<!-- <img src="assets/images/hierarchical-structure.png" (click)="openDependencyModal(i, issue); $event.stopPropagation();"> -->
 								<img src="assets/images/attachment.png" (click)="addAttachment(i, issue); $event.stopPropagation();">
 							</div>
 						</div>
@@ -322,7 +322,7 @@
 								<div class="dependency-mdl-content">
 									<select [(ngModel)]="selectedDependency" (ngModelChange)="onIssueDependencySelect($event, issue)" >
 										<option [value]="'default'">Select Dependency</option>
-										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.description}}</option>
+										<option *ngFor="let task of taskTicketInfo;" [value]="task.id">{{task.name}}</option>
 									</select>
 								</div>
 							</div>
