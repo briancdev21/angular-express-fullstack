@@ -69,6 +69,7 @@ export class OrderProfileComponent implements OnInit {
         this.addContactName(this.contactsList);
         this.collaboratorsService.getIndividualWorkOrder(this.currentWorkOrderId).subscribe(response => {
           console.log('work order details: ', response.data);
+          const collaboratorsDetails = [];
           this.orderProfileInfo = response.data;
           this.orderProfileInfo.contactName = this.getContactNameFromId(response.data.contactId);
           this.orderProfileInfo.selectedContact = this.selectedContact;
@@ -88,6 +89,14 @@ export class OrderProfileComponent implements OnInit {
             });
           } else {
             this.orderProfileInfo.followersDetails = [];
+          }
+
+          if (this.orderProfileInfo.collaborators) {
+            this.orderProfileInfo.collaborators.forEach(element => {
+              const selectedUser = this.usersList.filter(u => u.username === element)[0];
+              collaboratorsDetails.push(selectedUser);
+            });
+            this.orderProfileInfo.collaboratorsDetails = collaboratorsDetails;
           }
 
           this.orderProfileInfo.followersDetails = this.followersDetails;

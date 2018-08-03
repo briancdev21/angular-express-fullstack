@@ -90,4 +90,11 @@
   color: #6FEBCA;
   font-size: 25px;
   font-weight: 300;
+  margin-left: 10px;
+}
+
+.col-img img {
+  width: 28px;
+  border-radius: 50%;
+  margin-left: 10px;
 }
