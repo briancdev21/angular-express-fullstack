@@ -38,7 +38,7 @@
 		<div class="start-date">
 			<span>Start Date</span>
 			<div>
-				<input [owlDateTimeTrigger]="startDate" [owlDateTime]="startDate"  (dateTimeChange)="onStartDate($event)" [max]="startMax" [(ngModel)]="startDateValue" dateA11yLabel>
+				<input [owlDateTimeTrigger]="startDate" [owlDateTime]="startDate"  (dateTimeChange)="onStartDate($event)" [max]="startMax" [min]="startMin" [(ngModel)]="startDateValue" dateA11yLabel>
 				<owl-date-time [pickerType]="'calendar'" #startDate ></owl-date-time>
 			</div>
 		</div>

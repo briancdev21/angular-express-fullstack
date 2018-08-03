@@ -21,7 +21,8 @@ export class OrderDetailsComponent implements OnInit {
   country = '';
   zipcode = '';
   public endMin;
-  public startMax = new Date();
+  public startMax: any;
+  startMin = new Date();
   startDateValue: Date;
   endDateValue: Date;
   startTimeValue: any;
@@ -83,6 +84,7 @@ export class OrderDetailsComponent implements OnInit {
 
   onEndDate(event) {
     this.endDateValue = event.value;
+    this.startMax = this.endDateValue;
     this.orderService.postTimelineData({title: this.endDateValue.toDateString(), type: 'endDate'});
   }
 
