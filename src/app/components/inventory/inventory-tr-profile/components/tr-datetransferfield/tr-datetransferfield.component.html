@@ -1,7 +1,6 @@
 <div class="flex" >
     <div class="orderinfo-label" >Date Transferred</div>
     <div class="orderinfo-input" >
-      <input [owlDateTimeTrigger]="datecreated" [owlDateTime]="datecreated" (dateTimeChange)="selectCreatedFrom($event)" [(ngModel)]="transferdate" >
-      <owl-date-time [pickerType]="'calendar'" #datecreated ></owl-date-time>
+      <input type="text" class="" readonly [value]="transferdate | date: 'MMM dd, yyyy' " />
     </div>
   </div>
