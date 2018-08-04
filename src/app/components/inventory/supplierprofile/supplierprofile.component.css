@@ -248,3 +248,26 @@ tab select {
   background-position: right 10px center;
   background-size: 2%;
 }
+
+.breadcrumb-bar {
+  width: 100%;
+  border-bottom: 1px solid #d3d3d3;
+  padding: 15px 30px;
+  display: flex;
+  font-size: 19px;
+  align-items: center;
+}
+
+.base-link {
+  color: #6EB1DD;
+}
+
+.right-arrow { 
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 40px;
+  font-weight: 200;
+  line-height: 1em;
+  margin-top: -7.5px;
+  color: #464646;
+}

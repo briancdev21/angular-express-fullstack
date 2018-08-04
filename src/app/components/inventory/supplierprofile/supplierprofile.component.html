@@ -1,5 +1,11 @@
 <div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
-  <app-breadcrumbbar [userInfo]='userInfo' *ngIf="userInfo"></app-breadcrumbbar>
+  <!-- <app-breadcrumbbar [userInfo]='userInfo' *ngIf="userInfo"></app-breadcrumbbar> -->
+  <div class="breadcrumb-bar" *ngIf="userInfo">
+    <span class="base-link" (click)="redirectToSuppliers()">Suppliers</span>
+    <span class="right-arrow">&#8250;</span>
+    <span>{{userInfo.name}}</span>
+  </div>
+
   <div class="content">
     <div class="profile-info">
       <app-supplierprofileinfobar [userInfo]='userInfo'  *ngIf="userInfo"></app-supplierprofileinfobar>
@@ -13,7 +19,7 @@
           <div class="recent-activities">
             Recent Activities
           </div>
-          <div class="editor" >
+          <!-- <div class="editor" >
             <tabs (currentTabChange)="tabChanged($event); emailsubject.value='' " >
               <tab tabTitle="Notes"  >
                 <textarea placeholder="Start tying..." #textarea1 (input)="activity.content=textarea1.value" (keyup.enter)="addNewTimelineItem(); textarea1.value=''" ></textarea>
@@ -38,14 +44,15 @@
                 <textarea placeholder="Start tying..." #textarea3 (input)="activity.content=textarea3.value" (keyup.enter)="addNewTimelineItem(); textarea3.value=''"></textarea>
               </tab>
             </tabs>
-          </div>
+          </div> -->
           <div class="v-timeline" >
             <app-ng2timeline [timelineData]="timelineData" ></app-ng2timeline>
           </div>
         </div>  
-        <div class="right-sidebar">
+        <div class="right-sidebar" >
           <app-supplierprofilecards 
-            [cardsInfo]="cards">
+            [cardsInfo]="cards"
+            *ngIf="userInfo">
           </app-supplierprofilecards>
         </div>
       </div>
