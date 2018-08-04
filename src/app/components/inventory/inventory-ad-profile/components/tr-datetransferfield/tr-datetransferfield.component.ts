@@ -6,13 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./tr-datetransferfield.component.css']
 })
 export class TRDateTransferFieldComponent implements OnInit {
-  @Input() set transferdate (val) {
-    if (val) {
-      this.today = val;
-    } else {
-      this.today = new Date();
-    }
-  };
+  @Input() transferdate;
   today: Date;
 
   ngOnInit() {
