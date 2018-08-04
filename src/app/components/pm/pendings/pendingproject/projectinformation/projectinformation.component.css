@@ -329,6 +329,13 @@ span.title {
   width: 60%;
 }
 
+.contact-asso {
+  width: 100%;
+  border: 1px solid lightgray;
+  height: 34px;
+  display: block;
+}
+
 @media screen and (max-width: 1550px) {
   .info-right {
     width: 35%;

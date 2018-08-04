@@ -50,7 +50,7 @@
     <div>
       <span class="title">Start Date</span>
       <div class="start-date content-info" [ngClass]="{'validation-required': invalidStartDate}">
-        <div class="formated-date" [owlDateTimeTrigger]="startDate">
+        <div class="formated-date">
           <span >{{formattedStart}}</span>
           <img src="assets/images/calendar-plain.png">
         </div>
@@ -68,7 +68,7 @@
     <div>
       <span class="title">End Date</span>
       <div class="start-date content-info" [ngClass]="{'validation-required': invalidEndDate}">
-        <div class="formated-date" [owlDateTimeTrigger]="endDate">
+        <div class="formated-date">
           <span >{{formattedEnd}}</span>
           <img src="assets/images/calendar-plain.png">
         </div>
@@ -88,9 +88,9 @@
       <div class="content-info">
         <div class="followers"  (click)="editablePm=true;$event.stopPropagation()" *ngIf="projectInformation.projectManager" (clickOutside)="closePmEditableModal()"> 
           <div class="follower" *ngFor="let user of projectInformation.projectManager; let i = index" >
-            <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editablePm=true;$event.stopPropagation()"/></a>
+            <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editablePm=false;$event.stopPropagation()"/></a>
           </div> 
-          <div class="edit-followers" *ngIf="editablePm" (click)="editablePm=true;$event.stopPropagation()" >
+          <div class="edit-followers" *ngIf="editablePm" (click)="editablePm=false;$event.stopPropagation()" >
             <ul>
               <li *ngFor="let user of projectInformation.projectManager; let i = index">{{user.name}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
               <li style="background: none; width: 100%; margin: 0;">
@@ -116,9 +116,9 @@
       <div class="content-info">
         <div class="followers"  (click)="editableAm=true;$event.stopPropagation()" *ngIf="projectInformation.accountManager" (clickOutside)="closeAmEditableModal()"> 
           <div class="follower" *ngFor="let user of projectInformation.accountManager; let i = index" >
-            <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editableAm=true;$event.stopPropagation()"/></a>
+            <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editableAm=false;$event.stopPropagation()"/></a>
           </div> 
-          <div class="edit-followers" *ngIf="editableAm" (click)="editableAm=true;$event.stopPropagation()" >
+          <div class="edit-followers" *ngIf="editableAm" (click)="editableAm=false;$event.stopPropagation()" >
             <ul>
               <li *ngFor="let user of projectInformation.accountManager; let i = index">{{user.name}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
               <li style="background: none; width: 100%; margin: 0;">
@@ -142,12 +142,13 @@
     <div>
       <span class="title">Contact Association</span>
       <div class="text-autocomp">
-        <app-ng2completer 
+        <!-- <app-ng2completer 
           [itemsList]="associationList" 
           (selectedItem)="onSelectAssociation($event)" 
           class="contact-content-info"
           [searchStr]="selectAssociation">
-        </app-ng2completer>
+        </app-ng2completer> -->
+        <span class="contact-asso"></span>
       </div>
     </div>
 
