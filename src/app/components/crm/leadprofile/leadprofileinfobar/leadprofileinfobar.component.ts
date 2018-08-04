@@ -280,67 +280,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
   }
 
   confirmChange() {
-    console.log('phone : ', this.userInfo, this.phoneNumberValidation(this.userInfo.primaryPhone));
-    if (!this.phoneNumberValidation(this.userInfo.primaryphone)) {
-
-      this.invalidPrimaryPhone = true;
-    } else {
-      this.invalidPrimaryPhone = false;
-    }
-    if (!this.phoneNumberValidation(this.userInfo.mobilephone)) {
-      this.invalidSecondaryPhone = true;
-    } else {
-      this.invalidSecondaryPhone = false;
-    }
-    if (this.billingAddressChanged) {
-      this.userInfo.billingAddress[this.eventData.target.id] = this.eventData.target.value;
-      this.billingAddressChanged = false;
-    } else if (this.shippingAddressChanged) {
-      this.userInfo.shippingAddress[this.eventData.target.id] = this.eventData.target.value;
-      this.shippingAddressChanged = false;
-    } else if (this.shippingProvinceChanged) {
-      this.userInfo.shippingAddress.province = this.selectedProvince;
-      this.shippingProvinceChanged = false;
-    } else if (this.shippingCountryChanged) {
-      this.userInfo.shippingAddress.country = this.selectedCountry;
-      this.shippingProvinceChanged = false;
-    } else if (this.billingProvinceChanged) {
-      this.userInfo.billingAddress.province = this.selectedBillingProvince;
-      this.billingProvinceChanged = false;
-    } else if (this.shippingAddressChanged) {
-      this.userInfo.billingAddress.country = this.selectedBillingCountry;
-      this.billingCountryChanged = false;
-    } else {
-      this.userInfo[this.eventData.target.id] = this.eventData.target.value;
-    }
-    this.eventData = undefined;
-    this.changedUserInfo.emit({'data': this.userInfo});
   }
-
-  // cancelChange() {
-  //   if (this.billingAddressChanged) {
-  //     this.eventData.target.value = this.userInfo.billingAddress[this.eventData.target.id];
-  //     this.billingAddressChanged = false;
-  //   } else if (this.shippingAddressChanged) {
-  //     this.eventData.target.value = this.userInfo.shippingAddress[this.eventData.target.id];
-  //     this.shippingAddressChanged = false;
-  //   } else if (this.shippingProvinceChanged) {
-  //     this.selectedProvince = this.userInfo.shippingAddress.province;
-  //     this.shippingProvinceChanged = false;
-  //   } else if (this.shippingCountryChanged) {
-  //     this.selectedCountry = this.userInfo.shippingAddress.country;
-  //     this.shippingProvinceChanged = false;
-  //   } else if (this.billingProvinceChanged) {
-  //     this.selectedBillingProvince = this.userInfo.billingAddress.province;
-  //     this.billingProvinceChanged = false;
-  //   } else if (this.shippingAddressChanged) {
-  //     this.selectedBillingCountry = this.userInfo.billingAddress.country;
-  //     this.billingCountryChanged = false;
-  //   } else {
-  //     this.eventData.target.value = this.userInfo[this.eventData.target.id];
-  //   }
-  //   this.eventData = undefined;
-  // }
 
   changeImage() {
     this.showEditImageModal = true;

@@ -1,8 +1,8 @@
 <div class="name editable">
-  <input  class="supplier-name" (keyup.enter)="showConfirmModal($event)" contentEditable [(ngModel)]="userInfo.name" />
+  <input  class="supplier-name" (keyup.enter)="updateProfile()" contentEditable [(ngModel)]="userInfo.name" (blur)="updateProfile()" placeholder="Supplier name" [ngClass]="{'validation-required': invalidName}"/>
 </div>
 <div class="role editable">
-  <input [(ngModel)]="userInfo.contactName" id="role" (keyup.enter)="showConfirmModal($event)" >
+  <input [(ngModel)]="userInfo.contactName" id="role" (keyup.enter)="updateProfile()" (blur)="updateProfile()" placeholder="First name" [ngClass]="{'validation-required': invalidContactName}">
 </div>
 <!-- <div class="logo">
   <img [src]='userInfo.profileLink' />
@@ -10,13 +10,15 @@
 </div> -->
 <div class="email editable">
   <img src="assets/images/envelope.png" />
-  <a href="mailto: {{userInfo.email}}"><textarea value="{{userInfo.email}}" id="email" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea></a>
+  <input [(ngModel)]="userInfo.contactEmail" id="email" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidEmail}">
 </div>
+<span class="alert-email" *ngIf="invalidEmail">Wrong Email Format</span>
 <div class="phone editable">
   <img src="assets/images/ringing.png" />
   <div>
     <span>
-      <input value="{{userInfo.primaryphone}}" id="primaryphone" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" >
+      <input [(ngModel)]="userInfo.phoneNumber" id="phoneNumber" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidPhoneNumber}"
+              placeholder="XXX-XXX-XXXX">
     </span>
   </div>
   <!-- <span>{{formatPhoneNumber(userInfo.primaryphone)}}&nbsp;(Primary Contact)<br/>{{formatPhoneNumber(userInfo.mobilephone)}}&nbsp;(Mobile)</span> -->
@@ -25,13 +27,105 @@
 <h5>Shipping</h5>
 <div class="shipping editable">
   <img src="assets/images/placeholder.png" />
-  <textarea value="{{userInfo.shippingaddress}}" id="shippingaddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea>
+  <!-- <textarea value="{{userInfo.shippingAddress}}" id="shippingAddress" (keyup.enter)="updateProfile()" (blur)="updateProfile()" ></textarea> -->
+  <div class="shipping-address-container">
+    <input 
+      class="address" 
+      [(ngModel)]="userInfo.shippingAddress.address" 
+      (keyup.enter)="updateProfile()" 
+      (blur)="updateProfile()"
+      placeholder="Address"
+      id="address"
+      [ngClass]="{'validation-required': invalidShippingAddress}">
+    <div class="city-state-country">
+      <input 
+        class="city" 
+        [(ngModel)]="userInfo.shippingAddress.city" 
+        (keyup.enter)="updateProfile()" 
+        (blur)="updateProfile()"
+        placeholder="City"
+        id="city"
+        [ngClass]="{'validation-required': invalidShippingCity}">
+      <ng2-completer 
+        [(ngModel)]="shippingProvince" 
+        [ngClass]="{'validation-required': invalidShippingProvince}" 
+        [datasource]="provincesSource" 
+        [minSearchLength]="0" 
+        (keyup.enter)="onEnter()" 
+        (selected)="onSelectShippingProvince($event)"
+        [placeholder]="'Select Province'">
+      </ng2-completer>
+      <ng2-completer 
+        [(ngModel)]="shippingCountry" 
+        [ngClass]="{'validation-required': invalidShippingCountry}" 
+        [datasource]="countriesSource" 
+        [minSearchLength]="0" 
+        (keyup.enter)="onEnter()" 
+        (selected)="onSelectShippingCountry($event)"
+        [placeholder]="'Select Country'">
+      </ng2-completer>
+    </div>
+    <input 
+      class="postal-code" 
+      [(ngModel)]="userInfo.shippingAddress.postalCode" 
+      (keyup.enter)="updateProfile()" 
+      (blur)="updateProfile()"
+      placeholder="Postal Code"
+      id="postalCode"
+      [ngClass]="{'validation-required': invalidShippingPostalCode}">
+  </div>
 </div>
 
 <h5>Billing Address</h5>
 <div class="billing-address editable">
   <img src="assets/images/placeholder.png" />
-  <textarea value="{{userInfo.billingaddress}}" id="billingaddress" (keyup.enter)="showConfirmModal($event)" (blur)="showConfirmModal($event)" ></textarea>
+  <!-- <textarea value="{{userInfo.billingAddress}}" id="billingAddress" (keyup.enter)="updateProfile()" (blur)="updateProfile()" ></textarea> -->
+  <div class="shipping-address-container">
+    <input 
+      class="address" 
+      [(ngModel)]="userInfo.billingAddress.address" 
+      (keyup.enter)="updateProfile()" 
+      (blur)="updateProfile()"
+      placeholder="Address"
+      id="address"
+      [ngClass]="{'validation-required': invalidBillingAddress}">
+    <div class="city-state-country">
+      <input 
+        class="city" 
+        [(ngModel)]="userInfo.billingAddress.city" 
+        (keyup.enter)="updateProfile()" 
+        (blur)="updateProfile()"
+        placeholder="City"
+        id="city"
+        [ngClass]="{'validation-required': invalidBillingCity}">
+      <ng2-completer 
+        [(ngModel)]="billingProvince" 
+        [ngClass]="{'validation-required': invalidBillingProvince}" 
+        [datasource]="provincesBillingSource" 
+        [minSearchLength]="0" 
+        (keyup.enter)="onEnter()" 
+        (selected)="onSelectBillingProvince($event)"
+        [placeholder]="'Select Province'">
+      </ng2-completer>
+      <ng2-completer 
+        [(ngModel)]="billingCountry" 
+        [ngClass]="{'validation-required': invalidBillingCountry}" 
+        [datasource]="countriesSource" 
+        [minSearchLength]="0" 
+        (keyup.enter)="onEnter()" 
+        (selected)="onSelectBillingCountry($event)"
+        [placeholder]="'Select Country'">
+      </ng2-completer>
+    </div>
+    <input 
+      class="postal-code" 
+      [(ngModel)]="userInfo.billingAddress.postalCode" 
+      (keyup.enter)="updateProfile()" 
+      (blur)="updateProfile()"
+      placeholder="Postal Code"
+      id="postalCode"
+      [ngClass]="{'validation-required': invalidBillingPostalCode}">
+  </div>
 </div>
 
 <h4>Supplier tags</h4>
@@ -41,11 +135,11 @@
 
 <h4>Supplier Notes</h4>
 <div class="customer-notes">
-    <textarea></textarea>
+    <textarea [(ngModel)]="userInfo.note" id="customerNotes" (blur)="updateProfile()"></textarea>
 </div>
 
 <!-- Confirm Alert Box -->
-<div class="confirm-modal-wrapper" *ngIf="showModal" ></div>
+<!-- <div class="confirm-modal-wrapper" *ngIf="showModal" ></div>
 <div [ngClass]="{'confirm-modal': showModal, 'confirm-modal-hide': !showModal }">
   <div class="header">
     <span>Confirm</span>
@@ -64,7 +158,7 @@
       </button>
     </div>
   </div>
-</div>  
+</div>   -->
 
 
 <!-- Image Edit Modal -->

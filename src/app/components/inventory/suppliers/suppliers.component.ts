@@ -123,7 +123,7 @@ export class SuppliersComponent implements OnInit {
       results.forEach(ele => {
         const currency = this.currencies.filter(currencyItem => currencyItem.id === ele.currencyId).pop();
         console.log('currency:', currency);
-        const contact = this.contacts.filter(contactItem => contactItem.id === ele.contactId).pop();
+        // const contact = this.contacts.filter(contactItem => contactItem.id === ele.contactId).pop();
         const term = this.terms.filter(termItem => termItem.id === ele.termId).pop();
         const supplierListItem = {
           id: ele.id,

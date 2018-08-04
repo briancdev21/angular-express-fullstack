@@ -23,7 +23,7 @@
               <select [(ngModel)]="contactName" [ngClass]="{'validation-required': invalidContactName, 'not-edited': !contactName}" class="contactNameField" 
                  >
                 <option value="" disabled selected class="default-option">Enter last name</option>
-                <option *ngFor="let contact of contacts" [value]="contact.id">{{contact.person.firstName + ' ' + contact.person.lastName}}</option>
+                <option *ngFor="let contact of contacts" [value]="contact.id">{{contact.name}}</option>
               </select>
             </div>
           </div>

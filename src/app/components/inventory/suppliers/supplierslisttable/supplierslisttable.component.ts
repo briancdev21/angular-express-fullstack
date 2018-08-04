@@ -59,7 +59,7 @@ export class SuppliersListTableComponent implements OnInit {
   }
 
   redirectTo(id) {
-    this.router.navigate([`./inventory/supplier-profile/${id}`]);
+    this.router.navigate([`./inventory/supplier-profile/`, {id: id}]);
   }
 
   selectedFilterEventHandler(filteredList) {
@@ -128,6 +128,18 @@ export class SuppliersListTableComponent implements OnInit {
     const usaList = this.suppliersListInfo.filter(s => s.country === 'USA');
     this.sortGeneralList('state', usaList);
     this.suppliersListInfo = cadList.concat(usaList);
+  }
+
+  sortArrayWithString(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    if (!cmp.sortScoreClicked) {
+      this.suppliersListInfo.sort( function(name1, name2) {
+        return name1[field].localeCompare(name2[field]);
+      });
+    } else {
+      this.suppliersListInfo.reverse();
+    }
   }
 
   addNewTimelineItem() {

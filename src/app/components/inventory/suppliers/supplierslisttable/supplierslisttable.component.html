@@ -1,13 +1,13 @@
 <div class="content">
   <table>
     <tr>
-      <th (click)="sortArray('supplierName')">SUPPLIER NAME</th>
-      <th (click)="sortArray('contactName')">CONTACT NAME</th>
+      <th (click)="sortArrayWithString('supplierName')">SUPPLIER NAME</th>
+      <th (click)="sortArrayWithString('contactName')">CONTACT NAME</th>
       <th (click)="sortArray('term')">TERMS</th>
-      <th >ACCOUNT NUMBER</th>
-      <th (click)="sortArray('currency')">CURRENCY</th>
-      <th (click)="sortArray('country')">COUNTRY</th>
-      <th (click)="sortStateArray('state')">STATE <img src="assets/images/Edit.png"></th>
+      <th (click)="sortArrayWithString('accountNumber')">ACCOUNT NUMBER</th>
+      <th (click)="sortArrayWithString('currency')">CURRENCY</th>
+      <th (click)="sortArrayWithString('country')">COUNTRY</th>
+      <th (click)="sortArrayWithString('state')">STATE <img src="assets/images/Edit.png"></th>
     </tr>
     <tr *ngFor="let supplier of suppliersListInfo; let i = index" (click)="redirectTo(supplier.id)">
       <td>
