@@ -339,3 +339,6 @@ app-submenu {
 	padding: 15px 10px 15px 15px;
 }
 
+.po-new-btn.purchaseorderlist-btn {
+	width: 150px;
+}
