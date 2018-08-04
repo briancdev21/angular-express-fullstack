@@ -130,6 +130,18 @@ export class SuppliersListTableComponent implements OnInit {
     this.suppliersListInfo = cadList.concat(usaList);
   }
 
+  sortArrayWithString(field) {
+    const cmp = this;
+    cmp.sortScoreClicked = ! cmp.sortScoreClicked;
+    if (!cmp.sortScoreClicked) {
+      this.suppliersListInfo.sort( function(name1, name2) {
+        return name1[field].localeCompare(name2[field]);
+      });
+    } else {
+      this.suppliersListInfo.reverse();
+    }
+  }
+
   addNewTimelineItem() {
     const date = new Date();
     const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
