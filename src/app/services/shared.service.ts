@@ -543,6 +543,16 @@ export class SharedService {
     return this.http.delete<any>(url);
   }
 
+  addSupplierActivity (id, body): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/suppliers${id}/recent-activities`;
+    return this.http.post<any>(url, body);
+  }
+
+  getSupplierActivities (id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/suppliers/${id}/recent-activities`;
+    return this.http.get<any>(url);
+  }
+
   getProjectTypes(): Observable<any> {
     const url = `${environment.apiUrl}/organization/project-types`;
     return this.http.get(url);

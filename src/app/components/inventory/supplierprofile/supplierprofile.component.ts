@@ -14,6 +14,7 @@ import { DocumentsComponent } from '../../profile/cards/documents/documents.comp
 import { CollaboratorsComponent } from '../../profile/cards/collaborators/collaborators.component';
 import { SharedService } from '../../../services/shared.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-supplierprofile',
@@ -31,7 +32,7 @@ export class SupplierProfileComponent implements OnInit {
   menuCollapsed = true;
   currentSupplierId: any;
 
-  constructor(private sharedSevice: SharedService, private route: ActivatedRoute) {
+  constructor(private sharedSevice: SharedService, private route: ActivatedRoute, private router: Router) {
 
     this.currentSupplierId = this.route.snapshot.paramMap.get('id');
     this.getSupplierInfo();
@@ -41,71 +42,15 @@ export class SupplierProfileComponent implements OnInit {
 
   userInfo: any;
   public chartSetData: Array<Object> = [
-    // {
-    //   title: 'Supplier Rating',
-    //   percentage: '120',
-    // },
-    // {
-    //   title: 'Sensitivity Rating',
-    //   percentage: '90',
-    // },
-    // {
-    //   title: 'PO Ratio',
-    //   percentage: '70',
-    // },
-    // {
-    //   title: 'Efficiency Ratio',
-    //   percentage: '50',
-    // }
   ];
    /**
     * Each item will have title,content,complete flag and icon
     * which will be displayed on the side. Icon is in html
     */
-  public timelineData: Array<Object> = [
-    {
-      title: 'Meeting',
-      icon: 'fa-home',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
-       Below please find the currnet status of the sale',
-      timelineBtnColor: 'green-btn',
-      buttontitle: 'More Info',
-      date: '2018-1-9',
-      buttonClickEventHandlerName: 'getMoreInfo'
-    },
-    {
-      title: 'Send Document to Mike',
-      icon: 'fa-file-text-o',
-      content: 'Conference on the sales for the previous year. Monica please examine sales trends in marketing and products.\
-       Below please find the currnet status of the sale',
-      timelineBtnColor: 'lime-btn',
-      buttontitle: 'Download document',
-      date: '2018-1-9',
-      buttonClickEventHandlerName: 'downloadDoc'
-    },
-    {
-      title: 'Coffee Break',
-      icon: 'fa-coffee',
-      content: 'Conference on the sales for the previous year. Monica please examine sales\
-       trends in marketing and products. Below please find the currnet status of the sale',
-      timelineBtnColor: 'blue-btn',
-      buttontitle: 'Read more',
-      date: '2018-1-8',
-      buttonClickEventHandlerName: 'readMoreCoffee'
-    },
-    {
-      title: 'Phone with Jeronimo',
-      icon: 'fa-phone',
-      content: 'Following step to complete',
-      timelineBtnColor: 'orange-btn',
-      buttontitle: 'Download doc',
-      date: '2018-1-7',
-      buttonClickEventHandlerName: 'downloadDoc'
-    }
-  ];
+  public timelineData = [];
   public cards =
     {
-      lifeTimeStatus: 41566.24,
+      lifeTimeStatus: undefined,
       orderList: [
         {
           orderNumber: 'PO 88031234',
@@ -253,42 +198,54 @@ export class SupplierProfileComponent implements OnInit {
   }
 
   addNewTimelineItem() {
-    const date = new Date();
-    const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    // const date = new Date();
+    // const today = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
-    const nitem = {
-      title: this.activity.title,
-      content: this.activity.content,
-      icon: 'fa fa-home',
-      timelineBtnColor: 'green-btn',
-      buttontitle: 'More Info',
-      date: today,
-      buttonClickEventHandlerName: 'getMoreInfo',
-      subject: this.activity.subject,
-      contact: this.activity.contact
-    };
+    // const nitem = {
+    //   title: this.activity.title,
+    //   content: this.activity.content,
+    //   icon: 'fa fa-home',
+    //   timelineBtnColor: 'green-btn',
+    //   buttontitle: 'More Info',
+    //   date: today,
+    //   buttonClickEventHandlerName: 'getMoreInfo',
+    //   subject: this.activity.subject,
+    //   contact: this.activity.contact,
+    //   type: this.activity.title
+    // };
 
-    switch (nitem.title) {
-      case 'Notes':
-        nitem.icon = 'fa-file-text-o';
-        nitem.timelineBtnColor = 'lime-btn';
-        break;
-      case 'Email':
-        nitem.icon = 'fa fa-envelope-o';
-        nitem.timelineBtnColor = 'orangered-btn';
-      break;
-      case 'Call':
-        nitem.icon = 'fa fa-phone';
-        nitem.timelineBtnColor = 'orange-btn';
-      break;
-      default:
-        nitem.icon = 'fa fa-home';
-        break;
-    }
-    this.timelineData.unshift(nitem);
-    this.activity.subject = undefined;
-    this.activity.contact = undefined;
-    this.activity.title = undefined;
+    // switch (nitem.title) {
+    //   case 'Notes':
+    //     nitem.icon = 'fa-file-text-o';
+    //     nitem.timelineBtnColor = 'lime-btn';
+    //     break;
+    //   case 'Email':
+    //     nitem.icon = 'fa fa-envelope-o';
+    //     nitem.timelineBtnColor = 'orangered-btn';
+    //   break;
+    //   case 'Call':
+    //     nitem.icon = 'fa fa-phone';
+    //     nitem.timelineBtnColor = 'orange-btn';
+    //   break;
+    //   default:
+    //     nitem.icon = 'fa fa-home';
+    //     break;
+    // }
+
+    // const savingActivityInfo = {
+    //   'contactId':  nitem.contact ? parseInt(nitem.contact, 10) : undefined,
+    //   'emailSubject': nitem.subject,
+    //   'leadId': this.userInfo.id,
+    //   'type': nitem.title,
+    //   'detail': nitem.content
+    // };
+
+    // this.sharedSevice.addSupplierActivity(this.userInfo.id, savingActivityInfo).subscribe( res => {
+    //   console.log('activity created: ', res);
+    // });
+
+    // this.timelineData.unshift(nitem);
+    // this.activity.subject = undefined;
   }
 
   toggleMenubar(data: boolean) {
@@ -299,24 +256,66 @@ export class SupplierProfileComponent implements OnInit {
     this.sharedSevice.getSupplier(this.currentSupplierId).subscribe(res => {
       console.log('current supplier: ', res);
       this.userInfo = res.data;
+      this.cards.lifeTimeStatus = this.userInfo.lifeTimeStatus;
       this.chartSetData = [
-            {
-              title: 'Supplier Rating',
-              percentage: this.userInfo.supplierRating,
-            },
-            {
-              title: 'Sensitivity Rating',
-              percentage: this.userInfo.sensitivityRating,
-            },
-            {
-              title: 'PO Ratio',
-              percentage: this.userInfo.purchaseOrderRatio,
-            },
-            {
-              title: 'Efficiency Ratio',
-              percentage: this.userInfo.efficiencyRatio,
-            }];
+        {
+          title: 'Supplier Rating',
+          percentage: this.userInfo.supplierRating,
+        },
+        {
+          title: 'Sensitivity Rating',
+          percentage: this.userInfo.sensitivityRating,
+        },
+        {
+          title: 'PO Ratio',
+          percentage: this.userInfo.purchaseOrderRatio,
+        },
+        {
+          title: 'Efficiency Ratio',
+          percentage: this.userInfo.efficiencyRatio,
+        }];
+
+        this.sharedSevice.getSupplierActivities(this.userInfo.id).subscribe(response => {
+          const activities = response.results;
+          this.timelineData = activities.reverse();
+          console.log('time line: ', response);
+          // Update time line data
+          this.timelineData.map(a => {
+            a['title'] = a['type'];
+            a['content'] = a['detail'];
+            a['buttontitle'] = 'More Info';
+            a['date'] = moment(a['createdAt']).format('YYYY-MM-DD');
+            a['buttonClickEventHandlerName'] = 'getMoreInfo';
+            a['subject'] = a['emailSubject'];
+            // a['contact'] = a['']
+
+            switch (a['title']) {
+              case 'NOTE':
+                a['icon'] = 'fa-file-text-o';
+                a['timelineBtnColor'] = 'lime-btn';
+                break;
+              case 'EMAIL':
+                a['icon'] = 'fa fa-envelope-o';
+                a['timelineBtnColor'] = 'orangered-btn';
+              break;
+              case 'CALL':
+                a['icon'] = 'fa fa-phone';
+                a['timelineBtnColor'] = 'orange-btn';
+              break;
+              default:
+                a['icon'] = 'fa fa-home';
+                a['timelineBtnColor'] = 'orange-btn';
+                break;
+            }
+            console.log('time line: ', this.timelineData);
+          });
+
+        });
     });
 
+  }
+
+  redirectToSuppliers() {
+    this.router.navigate([`./inventory/suppliers`]);
   }
 }
