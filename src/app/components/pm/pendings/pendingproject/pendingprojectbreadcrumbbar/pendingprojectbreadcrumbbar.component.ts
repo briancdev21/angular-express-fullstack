@@ -50,11 +50,11 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
           this.projectInformation = res.data;
           const followersData = [];
-          console.log('projectInformation: ', this.projectInformation);
           if (this.projectInformation.followers) {
             this.projectInformation.followers.forEach(element => {
-              const selectedUser = this.usersList.filter(u => u.username = element)[0];
+              const selectedUser = this.usersList.filter(u => u.username === element)[0];
               followersData.push(selectedUser);
+              this.items2 = this.items2.filter(i => i.label !== element);
             });
             followersData.forEach(ele => {
               ele.label = ele.name;
@@ -83,11 +83,21 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
       return obj.label !== item.label;
     });
     this.projectInformation.followersData.push(item);
-    const savingData = this.projectInformation;
+    const savingData = {
+      'projectManager': this.projectInformation.projectManager,
+      'accountManager': this.projectInformation.accountManager,
+      'clientProjectManagerId': parseInt(this.projectInformation.clientProjectManagerId.slice(-1), 10),
+      'accountReceivableId': parseInt(this.projectInformation.accountReceivableId.slice(-1), 10),
+      'status': this.projectInformation.status,
+      'internalNote': this.projectInformation.internalNote,
+      'followers': []
+    };
     savingData.followers = this.projectInformation.followersData.map(f => f.username);
     if (!savingData.internalNote) {
       savingData.internalNote = '';
     }
+    savingData.clientProjectManagerId = parseInt(this.projectInformation.clientProjectManagerId.slice(-1), 10);
+    savingData.accountReceivableId = parseInt(this.projectInformation.accountReceivableId.slice(-1), 10);
     this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
       console.log('updated: ', res);
     });
@@ -111,7 +121,15 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
     this.items2.push(item);
     this.projectInformation.followersData.splice(i, 1);
     this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
-    const savingData = this.projectInformation;
+    const savingData = {
+      'projectManager': this.projectInformation.projectManager,
+      'accountManager': this.projectInformation.accountManager,
+      'clientProjectManagerId': parseInt(this.projectInformation.clientProjectManagerId.slice(-1), 10),
+      'accountReceivableId': parseInt(this.projectInformation.accountReceivableId.slice(-1), 10),
+      'status': this.projectInformation.status,
+      'internalNote': this.projectInformation.internalNote,
+      'followers': []
+    };
     savingData.followers = this.projectInformation.followersData.map(f => f.username);
     this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
       console.log('updated: ', res);
