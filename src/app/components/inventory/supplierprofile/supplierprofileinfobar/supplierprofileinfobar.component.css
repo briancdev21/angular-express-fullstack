@@ -311,3 +311,17 @@ span.phone-numbers {
   padding: 2px 5px;
   display: flex;
 }
+
+.mails-sec {
+  display: flex;
+  flex-direction: column;
+  margin-top: 3px;
+}
+
+.mails-sec input {
+  margin-bottom: 6px;
+}
+
+#phoneNumber {
+  margin-top: 4px;
+}

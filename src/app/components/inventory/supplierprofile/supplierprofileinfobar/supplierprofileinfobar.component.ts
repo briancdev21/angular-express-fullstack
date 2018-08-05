@@ -55,6 +55,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
   invalidEmail = false;
   invalidPhoneNumber = false;
   invalidName = false;
+  invalidPayableEmail = false;
   // croppedImage = this.userInfo.profileLink;
 
   fileChangeEvent(event: any): void {
@@ -181,6 +182,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
 
   getKeywords(event) {
     console.log('keyWords: ', event);
+    this.userInfo.keywordIds = event.map(e => e.id);
   }
 
   loadImageFailed() {
@@ -209,12 +211,17 @@ export class SupplierProfileInfoBarComponent implements OnInit {
     this.invalidBillingProvince = false;
     this.invalidBillingCountry = false;
     this.invalidBillingPostalCode = false;
+    this.invalidPayableEmail = false;
     this.invalidEmail = !this.checkEmailValidation(this.userInfo.contactEmail);
     this.invalidPhoneNumber = !this.phoneNumberValidation(this.userInfo.phoneNumber);
+    if (this.userInfo.accountPayableEmail) {
+      this.invalidPayableEmail = !this.checkEmailValidation(this.userInfo.accountPayableEmail);
+    }
     console.log('user info: ', this.userInfo);
     if (this.userInfo.contactName !== '' && this.userInfo.contactEmail !== '' && !this.invalidEmail && this.userInfo.name &&
       this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
-      !this.invalidPhoneNumber && this.userInfo.phoneNumber && this.billingProvince !== '' && this.billingCountry !== '') {
+      !this.invalidPhoneNumber && this.userInfo.phoneNumber && this.billingProvince !== '' && this.billingCountry !== '' &&
+      !this.invalidPayableEmail) {
         if (this.userInfo.billingAddress) {
           if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode) {
             this.saveData();
@@ -283,8 +290,11 @@ export class SupplierProfileInfoBarComponent implements OnInit {
       contactName: this.userInfo.contactName,
       keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
       note: this.userInfo.note ? this.userInfo.note : '',
-      billingAddress: this.userInfo.billingAddress
+      billingAddress: this.userInfo.billingAddress,
+      accountPayableEmail: this.userInfo.accountPayableEmail
     };
+
+    Object.keys(savingData).forEach((key) => (savingData[key] == null) && delete savingData[key]);
     console.log('saving Data: ', savingData);
     this.sharedService.updateSupplier(this.userInfo.id, savingData).subscribe(res => {
       console.log('supplier update: ', res);
