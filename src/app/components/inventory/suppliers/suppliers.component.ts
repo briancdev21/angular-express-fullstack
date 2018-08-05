@@ -92,28 +92,28 @@ export class SuppliersComponent implements OnInit {
   }
 
   addNewSupplier(event) {
-    console.log('event data:', event.data);
-    const newSupplier = {
-      name: event.data.name,
-      contactId: parseInt(event.data.contactId, 10),
-      termId: parseInt(event.data.termId, 10),
-      currencyId: parseInt(event.data.currencyId, 10),
-      shippingAddress: {
-        address: event.data.shippingAddress.address,
-        city: event.data.shippingAddress.city,
-        province: event.data.shippingAddress.province,
-        country: event.data.shippingAddress.country,
-        postalCode: event.data.shippingAddress.postalCode
-      },
-      businessNumber: event.data.businessNumber,
-      accountNumber: event.data.accountNumber,
-      keywords: event.data.keywords,
-    };
-    this.sharedService.addSupplier(newSupplier).subscribe(res => {
+    console.log('supplier adding data:', event.data);
+    // const newSupplier = {
+    //   name: event.data.name,
+    //   contactId: parseInt(event.data.contactId, 10),
+    //   termId: parseInt(event.data.termId, 10),
+    //   currencyId: parseInt(event.data.currencyId, 10),
+    //   shippingAddress: {
+    //     address: event.data.shippingAddress.address,
+    //     city: event.data.shippingAddress.city,
+    //     province: event.data.shippingAddress.province,
+    //     country: event.data.shippingAddress.country,
+    //     postalCode: event.data.shippingAddress.postalCode
+    //   },
+    //   businessNumber: event.data.businessNumber,
+    //   accountNumber: event.data.accountNumber,
+    //   keywords: event.data.keywords,
+    // };
+    this.sharedService.addSupplier(event).subscribe(res => {
       console.log('supplier added:', res.data);
       this.getSuppliers();
     });
-    this.allTags = this.allTags.concat(event.data.tag);
+    // this.allTags = this.allTags.concat(event.tag);
   }
 
   getSuppliers() {
