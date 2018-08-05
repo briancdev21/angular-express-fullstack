@@ -104,6 +104,7 @@ export class POTableComponent implements OnInit {
       this.sharedService.deleteInventoryAdjustmentProduct(this.ad_id,
         this.productDetails[index].transferProductId).subscribe(res => {
         this.productDetails.splice(index, 1);
+        this.priceChange.emit(null);
       });
     }
   }
@@ -136,6 +137,7 @@ export class POTableComponent implements OnInit {
         this.productDetails[index].total = resp.data.total;
         this.productDetails[index].unitOfMeasure = resp.data.unitOfMeasure;
         this.productDetails[index].quantity = resp.data.quantity;
+        this.priceChange.emit(null);
       });
     });
     if (index === this.productDetails.length - 1) {

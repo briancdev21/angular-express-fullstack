@@ -101,6 +101,7 @@ export class POTableComponent implements OnInit {
       const product = res.data;
       this.productDetails[index].sku = item.originalObject.sku;
       this.productDetails[index].readonly = true;
+      this.productDetails[index].quantityError = false;
       this.productDetails[index].taxRateId = this.taxRateOptions[0].id;
       this.selectedTaxRateId = this.taxRateOptions[0].id;
       this.productDetails[index].taxrate = this.taxRateOptions[0].rate;
@@ -121,10 +122,11 @@ export class POTableComponent implements OnInit {
         quantity: 1
       };
       this.sharedService.addPurchaseOrderProduct(this.po_id, this.poProductModel).subscribe(resp => {
-        this.productDetails[index].purchaseOrderProductId = resp.data.id;
+        this.productDetails[index].id = resp.data.id;
         this.productDetails[index].quantity = resp.data.quantity;
         this.productDetails[index].total = resp.data.total;
         this.productDetails[index].unitOfMeasure = resp.data.unitOfMeasure;
+        this.priceChange.emit(null);
       });
     });
     if (index === this.productDetails.length - 1) {
@@ -166,22 +168,32 @@ export class POTableComponent implements OnInit {
     if (this.productDetails[index].quantity === undefined) {
       this.productDetails[index].quantity = 0;
     }
-    this.poProductModel = {
-      sku: this.productDetails[index].sku,
-      taxRateId: this.selectedTaxRateId,
-      supplierId: this.productDetails[index].supplierId,
-      discount: {
-        value: parseInt(this.productDetails[index].discount, 10),
-        unit: 'PERCENT'
-      },
-      received: 0,
-      quantity: parseInt(this.productDetails[index].quantity, 10)
-    };
-    this.sharedService.updatePurchaseOrderProduct(this.po_id, this.productDetails[index].purchaseOrderProductId, this.poProductModel)
-    .subscribe(res => {
-      this.productDetails[index].total = res.data.total;
-      this.priceChange.emit(null);
-    });
+
+    let canUpdate = true;
+    this.productDetails[index].quantityError = false;
+    if (this.productDetails[index].quantity === undefined || !this.productDetails[index].quantity ||  this.productDetails[index].quantity < 1 ) {
+      canUpdate = false;
+      this.productDetails[index].quantityError = true;
+    }
+    if (canUpdate) {
+          this.poProductModel = {
+        sku: this.productDetails[index].sku,
+        taxRateId: this.productDetails[index].taxRateId ? parseInt(this.productDetails[index].taxRateId, 10) : this.taxRateOptions[0].id,
+        supplierId: this.productDetails[index].supplierId,
+        discount: {
+          value: parseInt(this.productDetails[index].discount, 10),
+          unit: 'PERCENT'
+        },
+        received: parseInt(this.productDetails[index].received, 10) || 0,
+        quantity: parseInt(this.productDetails[index].quantity, 10)
+      };
+      
+      this.sharedService.updatePurchaseOrderProduct(this.po_id, this.productDetails[index].id, this.poProductModel)
+      .subscribe(res => {
+        this.productDetails[index].total = res.data.total;
+        this.priceChange.emit(null);
+      });
+    }
   }
 }
 
