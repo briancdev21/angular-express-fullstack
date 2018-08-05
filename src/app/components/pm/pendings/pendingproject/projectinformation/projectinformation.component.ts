@@ -63,6 +63,7 @@ export class ProjectInformationComponent implements OnInit {
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
           this.projectInformation = res.data;
           const followersData = [];
+          const contactAssociationData = [];
           // if (this.projectInformation.followers) {
           //   this.projectInformation.followers.forEach(element => {
           //     const selectedUser = this.usersList.filter(u => u.username === element)[0];
@@ -79,10 +80,16 @@ export class ProjectInformationComponent implements OnInit {
           this.projectInformation.accountManagerData = this.usersList.filter(u => u.username === this.projectInformation.accountManager)[0];
           this.formattedStart = moment(this.projectInformation.startDate).format('MMMM DD, YYYY');
           this.formattedEnd = moment(this.projectInformation.endDate).format('MMMM DD, YYYY');
-          const clientProjectManagerId = parseInt(this.projectInformation.clientProjectManagerId.slice(-1), 10);
-          const accountReceivableId = parseInt(this.projectInformation.accountReceivableId.slice(-1), 10);
+          const clientProjectManagerId = parseInt(this.projectInformation.clientProjectManagerId.split('-').pop(), 10);
+          const accountReceivableId = parseInt(this.projectInformation.accountReceivableId.split('-').pop(), 10);
           this.projectInformation.accountReceivableName = this.contactsList.filter(c => c.id === accountReceivableId)[0].name;
           this.projectInformation.clientProjectManagerName = this.contactsList.filter(c => c.id === clientProjectManagerId)[0].name;
+          if (this.projectInformation.contactAssociationIds) {
+            this.projectInformation.contactAssociationIds.forEach(element => {
+              contactAssociationData.push(this.contactsList.filter(c => c.id === element)[0]);
+            });
+            this.projectInformation.contactAssociationData = contactAssociationData;
+          }
           console.log('projectInformation: ', this.projectInformation);
         });
       });
@@ -161,7 +168,24 @@ export class ProjectInformationComponent implements OnInit {
   }
 
   toProjectScope() {
-    this.router.navigate(['./pm/pending-project/pending-scope']);
+    const savingData = {
+      'projectManager': this.projectInformation.projectManager,
+      'accountManager': this.projectInformation.accountManager,
+      'clientProjectManagerId': this.projectInformation.clientProjectManager ?
+        this.projectInformation.clientProjectManager : Number(this.projectInformation.clientProjectManagerId.split('-').pop()),
+      'accountReceivableId': this.projectInformation.clientProjectManager ?
+        this.projectInformation.clientProjectManager : Number(this.projectInformation.accountReceivableId.split('-').pop()),
+      'status': this.projectInformation.status,
+      'internalNote': this.projectInformation.internalNote,
+      'followers': this.projectInformation.followers
+    };
+    if (!savingData.internalNote) {
+      savingData.internalNote = '';
+    }
+    this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
+      console.log('updated: ', res);
+      this.router.navigate(['./pm/pending-project/pending-scope']);
+    });
   }
 
   toPendingProject() {
@@ -173,11 +197,12 @@ export class ProjectInformationComponent implements OnInit {
   }
 
   onSelectPmManager(event) {
-    this.projectInformation.contactProjectManager = event;
+    console.log('project manager', event);
+    this.projectInformation.clientProjectManager = event.originalObject.id;
   }
 
   onSelectAccountReceivable(event) {
-    this.projectInformation.contactAccountReceivable = event;
+    this.projectInformation.contactAccountReceivable = event.originalObject.id;
   }
 
   addContactName(data) {

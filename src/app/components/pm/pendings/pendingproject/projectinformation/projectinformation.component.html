@@ -107,14 +107,14 @@
 
     <div>
       <span class="title">Contact Association</span>
-      <div class="text-autocomp">
+      <div class="contact-asso">
         <!-- <app-ng2completer 
           [itemsList]="associationList" 
           (selectedItem)="onSelectAssociation($event)" 
           class="contact-content-info"
           [searchStr]="selectAssociation">
         </app-ng2completer> -->
-        <span class="contact-asso"></span>
+        <span class="individual-asso" *ngFor="let asso of projectInformation.contactAssociationData">{{asso.name}}</span>
       </div>
     </div>
 
