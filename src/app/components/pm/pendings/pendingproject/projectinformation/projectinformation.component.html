@@ -1,50 +1,50 @@
-<div class="project-information">
+<div class="project-information" *ngIf="projectInformation">
   <div class="info-left">
     <span class="info-title">PROJECT INFORMATION</span>
     <div class="customer-project-name">
       <div class="customer-name">
         <span class="title">Customter Name</span>
-        <div class="content-info">{{projectInformation.customerName}}</div>
+        <div class="content-info">{{projectInformation.contactName}}</div>
       </div>
       <div class="project-name">
         <span class="title">Project</span>
-        <div class="content-info">{{projectInformation.projectName}}</div>
+        <div class="content-info">{{projectInformation.name}}</div>
       </div>
     </div>
     <div class="shipping-address">
       <span class="title">Shipping Address</span>
-      <div class="street content-info">{{projectInformation.shippingAddress.street}}</div>
+      <div class="street content-info">{{projectInformation.shippingAddress.address}}</div>
       <div class="city-state">
         <div class="content-info">{{projectInformation.shippingAddress.city}}</div>
-        <div class="content-info">{{projectInformation.shippingAddress.state}}</div>
+        <div class="content-info">{{projectInformation.shippingAddress.provice}}</div>
       </div>
       <div class="country-zipcode">
         <div class="content-info">{{projectInformation.shippingAddress.country}}</div>
-        <div class="content-info">{{projectInformation.shippingAddress.zipcode}}</div>
+        <div class="content-info">{{projectInformation.shippingAddress.postalCode}}</div>
       </div>
     </div>
     <div class="billing-address">
       <span class="title">Billing Address</span>
-      <div class="street content-info">{{projectInformation.billingaddress.street}}</div>
+      <div class="street content-info">{{projectInformation.billingAddress.address}}</div>
       <div class="city-state">
-        <div class="content-info">{{projectInformation.billingaddress.city}}</div>
-        <div class="content-info">{{projectInformation.billingaddress.state}}</div>
+        <div class="content-info">{{projectInformation.billingAddress.city}}</div>
+        <div class="content-info">{{projectInformation.billingAddress.province}}</div>
       </div>
       <div class="country-zipcode">
-        <div class="content-info">{{projectInformation.billingaddress.country}}</div>
-        <div class="content-info">{{projectInformation.billingaddress.zipcode}}</div>
+        <div class="content-info">{{projectInformation.billingAddress.country}}</div>
+        <div class="content-info">{{projectInformation.billingAddress.postalCode}}</div>
       </div>
     </div>
   </div>
   <div class="info-right">
     <div>
       <span class="title">Project #</span>
-      <div class="content-info">{{projectInformation.projectNumber}}</div>
+      <div class="content-info">{{projectInformation.id}}</div>
     </div>
 
     <div>
       <span class="title">Proposal #</span>
-      <div class="content-info">{{projectInformation.proposalNumber}}</div>
+      <div class="content-info">{{projectInformation.proposalId}}</div>
     </div>
 
     <div>
@@ -86,27 +86,10 @@
     <div class="project-manager">
       <span class="title">Project Manager</span>
       <div class="content-info">
-        <div class="followers"  (click)="editablePm=true;$event.stopPropagation()" *ngIf="projectInformation.projectManager" (clickOutside)="closePmEditableModal()"> 
-          <div class="follower" *ngFor="let user of projectInformation.projectManager; let i = index" >
-            <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editablePm=false;$event.stopPropagation()"/></a>
+        <div class="followers" > 
+          <div class="follower">
+            <img [src]='projectInformation.projectManagerData.pictureURI'/>
           </div> 
-          <div class="edit-followers" *ngIf="editablePm" (click)="editablePm=false;$event.stopPropagation()" >
-            <ul>
-              <li *ngFor="let user of projectInformation.projectManager; let i = index">{{user.name}}<span (click)="removeProjectManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
-              <li style="background: none; width: 100%; margin: 0;">
-                  <ng-select *ngIf="isAutocompleteUpdated1" [items]="items2"
-                    bindLabel="config2.sourceField"
-                    [clearSearchOnAdd]="false"
-                    (add)="onSelectProjectManager($event)" >
-                  </ng-select>
-                  <ng-select *ngIf="!isAutocompleteUpdated1" [items]="items2"
-                    bindLabel="config2.sourceField"
-                    [clearSearchOnAdd]="false"
-                    (add)="onSelectProjectManager($event)">
-                  </ng-select>
-                </li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
@@ -114,26 +97,9 @@
     <div class="account-manager">
       <span class="title">Account Manager</span>
       <div class="content-info">
-        <div class="followers"  (click)="editableAm=true;$event.stopPropagation()" *ngIf="projectInformation.accountManager" (clickOutside)="closeAmEditableModal()"> 
-          <div class="follower" *ngFor="let user of projectInformation.accountManager; let i = index" >
-            <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editableAm=false;$event.stopPropagation()"/></a>
-          </div> 
-          <div class="edit-followers" *ngIf="editableAm" (click)="editableAm=false;$event.stopPropagation()" >
-            <ul>
-              <li *ngFor="let user of projectInformation.accountManager; let i = index">{{user.name}}<span (click)="removeAccountManager(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
-              <li style="background: none; width: 100%; margin: 0;">
-                  <ng-select *ngIf="isAutocompleteUpdated2" [items]="items3"
-                    bindLabel="config2.sourceField"
-                    [clearSearchOnAdd]="false"
-                    (add)="onSelectAccountManager($event)" >
-                  </ng-select>
-                  <ng-select *ngIf="!isAutocompleteUpdated2" [items]="items3"
-                    bindLabel="config2.sourceField"
-                    [clearSearchOnAdd]="false"
-                    (add)="onSelectAccountManager($event)">
-                  </ng-select>
-              </li>
-            </ul>
+        <div class="followers"> 
+          <div class="follower">
+            <a [title]='projectInformation.accountManagerData.username' ><img [src]='projectInformation.accountManagerData.pictureURI'/></a>
           </div>
         </div>
       </div>
@@ -155,33 +121,37 @@
     <div>
       <span class="title">Contact Project Manager</span>
       <div class="text-autocomp">
-        <app-ng2completer 
-          [itemsList]="pmList" 
-          (selectedItem)="onSelectPmManager($event)" 
+        <ng2-completer 
+          [dataService]="pmList" 
+          (selected)="onSelectPmManager($event)" 
           class="contact-content-info"
-          [searchStr]="selectPmManager">
-        </app-ng2completer>
+          [(ngModel)]="projectInformation.clientProjectManagerName"
+          [minSearchLength]="0"
+          *ngIf="contactsList">
+        </ng2-completer>
       </div>
     </div>
 
     <div>
       <span class="title">Contact Account Receivable</span>
       <div class="text-autocomp">
-        <app-ng2completer 
-          [itemsList]="accountReceivableList" 
-          (selectedItem)="onSelectAccountReceivable($event)" 
+        <ng2-completer 
+          [dataService]="accountReceivableList" 
+          (selected)="onSelectAccountReceivable($event)" 
           class="contact-content-info"
-          [searchStr]="selectAccountReceivable">
-        </app-ng2completer>
+          [(ngModel)]="projectInformation.accountReceivableName"
+          [minSearchLength]="0"
+          *ngIf="contactsList">
+        </ng2-completer>
       </div>
     </div>
   </div>
 </div>
 
-<div class="text-editor-sec">
+<div class="text-editor-sec" *ngIf="projectInformation">
   <div class="scope-description-change">
     <div class="editor-title">CLIENT NOTES</div>
-    <quill-editor [(ngModel)]="projectInformation.clientNotes">
+    <quill-editor [(ngModel)]="projectInformation.clientNote">
     </quill-editor>
   </div>
 </div>

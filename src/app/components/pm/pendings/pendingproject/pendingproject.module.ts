@@ -27,6 +27,7 @@ import { FormsModule } from '@angular/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { QuillModule } from 'ngx-quill';
 import { DpDatePickerModule } from 'ng2-date-picker';
+import { Ng2CompleterModule } from 'ng2-completer';
 
 import { PendingProjectService } from './pendingproject.service';
 
@@ -64,7 +65,8 @@ export const MY_NATIVE_FORMATS = {
     QuillModule,
     ProjectManagementCmpModule,
     DpDatePickerModule,
-    ProjectFinancialsTableCmpModule
+    ProjectFinancialsTableCmpModule,
+    Ng2CompleterModule
   ],
   exports: [
   ],
