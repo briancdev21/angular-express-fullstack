@@ -39,7 +39,7 @@
           <div class="tab-row">
             <div>
               <span>Supplier Phone  <span *ngIf="invalidSupplierPhone" class="wrong-format"> : Wrong Phone Number Format!</span></span>
-              <input placeholder="Enter supplier phone" [ngClass]="{'validation-required': invalidSupplierPhone}" [(ngModel)]="supplierPhone" >
+              <input placeholder="xxx-xxx-xxxx" [ngClass]="{'validation-required': invalidSupplierPhone}" [(ngModel)]="supplierPhone" >
             </div>
             <div>
               <span>Contact Email (*required) <span *ngIf="wrongEmailFormat" class="wrong-format"> : Wrong Email Format!</span></span>
@@ -58,14 +58,14 @@
             </div>
             <div>
               <span>Contact Phone  <span *ngIf="invalidContactPhone" class="wrong-format"> : Wrong Phone Number Format!</span></span>
-              <input placeholder="Enter contact phone" [(ngModel)]="contactPhone" >
+              <input placeholder="xxx-xxx-xxxx" [(ngModel)]="contactPhone" >
             </div>
           </div>
 
           <div class="tab-row">
             <div>
               <span>Account Payable Phone</span>
-              <input placeholder="Enter account payable phone" [(ngModel)]="payablePhone" [ngClass]="{'validation-required': invalidPayablePhone}">
+              <input placeholder="xxx-xxx-xxxx" [(ngModel)]="payablePhone" [ngClass]="{'validation-required': invalidPayablePhone}">
             </div>
             <div>
               <span>Business Number</span>
