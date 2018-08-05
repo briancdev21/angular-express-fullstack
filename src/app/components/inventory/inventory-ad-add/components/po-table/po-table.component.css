@@ -278,3 +278,12 @@ td.sku {
 td.measure input {
   outline: none;
 }
+
+
+td.unitprice input {
+  outline:none;
+}
+
+td.total input {
+  outline:none;
+}
