@@ -287,6 +287,7 @@ export class SupplierProfileComponent implements OnInit {
             a['date'] = moment(a['createdAt']).format('YYYY-MM-DD');
             a['buttonClickEventHandlerName'] = 'getMoreInfo';
             a['subject'] = a['emailSubject'];
+            a['type'] = 'NOTE';
             // a['contact'] = a['']
 
             switch (a['title']) {
@@ -307,7 +308,6 @@ export class SupplierProfileComponent implements OnInit {
                 a['timelineBtnColor'] = 'orange-btn';
                 break;
             }
-            console.log('time line: ', this.timelineData);
           });
 
         });

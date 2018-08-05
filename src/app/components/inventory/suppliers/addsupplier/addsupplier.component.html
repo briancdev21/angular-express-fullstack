@@ -16,71 +16,99 @@
           <div class="tab-row">
             <div>
               <span>Supplier Name (*required)</span>
-              <input placeholder="Enter supplier name" [ngClass]="{'validation-required': invalidSupplierName}" [(ngModel)]="supplierName" [value]="supplierName">
+              <input placeholder="Enter supplier name" [ngClass]="{'validation-required': invalidSupplierName}" [(ngModel)]="supplierName">
             </div>
             <div>
               <span>Contact Name (*required)</span>
-              <select [(ngModel)]="contactName" [ngClass]="{'validation-required': invalidContactName, 'not-edited': !contactName}" class="contactNameField" 
+              <!-- <select [(ngModel)]="contactName" [ngClass]="{'validation-required': invalidContactName, 'not-edited': !contactName}" class="contactNameField" 
                  >
                 <option value="" disabled selected class="default-option">Enter last name</option>
                 <option *ngFor="let contact of contacts" [value]="contact.id">{{contact.name}}</option>
-              </select>
+              </select> -->
+              <ng2-completer
+                [dataService]="customersList" 
+                (selected)="onSelectCustomer($event)" 
+                [(ngModel)]="selectName"
+                [minSearchLength]="0"
+                *ngIf="contacts"
+                [ngClass]="{'validation-required-name': invalidContactName}" >
+              </ng2-completer>
             </div>
           </div>
 
           <div class="tab-row">
             <div>
-              <span>Supplier Phone (*required)</span>
-              <input placeholder="Enter supplier phone" type="number" [ngClass]="{'validation-required': invalidSupplierPhone}" [(ngModel)]="supplierPhone" [value]="supplierPhone">
+              <span>Supplier Phone  <span *ngIf="invalidSupplierPhone" class="wrong-format"> : Wrong Phone Number Format!</span></span>
+              <input placeholder="xxx-xxx-xxxx" [ngClass]="{'validation-required': invalidSupplierPhone}" [(ngModel)]="supplierPhone" >
             </div>
             <div>
-              <span>Contact Email (*required) <span *ngIf="!wrongEmailFormat" class="wrong-format"> : Wrong Email Format!</span></span>
+              <span>Contact Email (*required) <span *ngIf="wrongEmailFormat" class="wrong-format"> : Wrong Email Format!</span></span>
               <input
-                placeholder="Enter contact email" 
-                type="email" 
+                placeholder="Enter contact email"
                 [ngClass]="{'validation-required': invalidContactEmail}" 
                 [(ngModel)]="contactEmail" 
-                [value]="contactEmail"
               >
             </div>
           </div>
 
           <div class="tab-row">
             <div>
-              <span>Account Payable Email</span>
-              <input placeholder="Enter account payable email" [(ngModel)]="payableEmail" [value]="payableEmail">
+              <span>Account Payable Email <span *ngIf="invalidPayableEmail" class="wrong-format"> : Wrong Email Format!</span></span>
+              <input placeholder="Enter account payable email" [(ngModel)]="payableEmail" [ngClass]="{'validation-required': invalidPayableEmail}" >
             </div>
             <div>
-              <span>Contact Phone</span>
-              <input placeholder="Enter contact phone" [(ngModel)]="contactPhone" [value]="contactPhone">
+              <span>Contact Phone  <span *ngIf="invalidContactPhone" class="wrong-format"> : Wrong Phone Number Format!</span></span>
+              <input placeholder="xxx-xxx-xxxx" [(ngModel)]="contactPhone" >
             </div>
           </div>
 
           <div class="tab-row">
             <div>
               <span>Account Payable Phone</span>
-              <input placeholder="Enter account payable phone" [(ngModel)]="payablePhone" [value]="payablePhone">
+              <input placeholder="xxx-xxx-xxxx" [(ngModel)]="payablePhone" [ngClass]="{'validation-required': invalidPayablePhone}">
             </div>
             <div>
-              <span>Business Number (*required)</span>
-              <input placeholder="Enter business number" [(ngModel)]="businessNumber" [value]="businessNumber"
-                [ngClass]="{'validation-required': invalidBusinessNumber}">
+              <span>Business Number</span>
+              <input placeholder="Enter business number" [(ngModel)]="businessNumber">
             </div>
           </div>
 
           <div class="shipping-address ">
             <div class="desc">
-              <span>Address</span>
+              <span>Address (*required)</span>
             </div>
-            <input placeholder="Enter Shipping Address" class="address" [ngClass]="{'validation-required': invalidAddress}" [(ngModel)]="newAddress" >
+            <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="address" [ngClass]="{'validation-required': invalidAddress}" >
 
             <div class="city-state">
-              <input placeholder="Enter City" [(ngModel)]="newCity" [ngClass]="{'validation-required': invalidAddress}">
-              <input placeholder="Enter State" [(ngModel)]="newState" [ngClass]="{'validation-required': invalidAddress}">
+
+              <input placeholder="Enter City" [(ngModel)]="city" [ngClass]="{'validation-required': invalidCity}" >
+              <!-- <input placeholder="Enter State" [(ngModel)]="province" [ngClass]="{'validation-required': invalidProvince}" > -->
+
+              <ng2-completer 
+                [(ngModel)]="province" 
+                [ngClass]="{'validation-required': invalidProvince}" 
+                [datasource]="provincesSource" 
+                [minSearchLength]="0" 
+                (keyup.enter)="onEnter()" 
+                (selected)="onSelectProvince($event)"
+                [placeholder]="'Enter Provice'">
+              </ng2-completer>
+
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country" [(ngModel)]="newCountry" [ngClass]="{'validation-required': invalidAddress}">
-              <input placeholder="Enter Zipcode" [(ngModel)]="newZipcode" [ngClass]="{'validation-required': invalidAddress}">
+
+              <ng2-completer 
+                [(ngModel)]="country" 
+                [ngClass]="{'validation-required': invalidCountry}" 
+                [datasource]="countriesSource" 
+                [minSearchLength]="0" 
+                (keyup.enter)="onEnter()" 
+                (selected)="onSelectCountry($event)"
+                [placeholder]="'Enter Country'">
+              </ng2-completer>
+
+              <!-- <input placeholder="Enter Country" [(ngModel)]="country" [ngClass]="{'validation-required': invalidCountry}" > -->
+              <input placeholder="Enter Zipcode" [(ngModel)]="postalCode" [ngClass]="{'validation-required': invalidPostalCode}" >
             </div>
           </div>
 
@@ -98,19 +126,17 @@
         <div class="tab-two">
           <div class="tab-row">
             <div>
-              <span>Account Number (*required)</span>
+              <span>Account Number</span>
               <input 
-                placeholder="Enter your account number for this supplier" 
-                [ngClass]="{'validation-required': invalidAccountNumber}" 
+                placeholder="Enter your account number for this supplier"
                 [(ngModel)]="accountNumber" 
                 [value]="accountNumber"
               >
             </div>
             <div>
-              <span>Default terms (*required)</span>
+              <span>Account terms (*required)</span>
               <div>
                 <select [(ngModel)]="defaultTerm" [ngClass]="{'validation-required': invalidDefaultTerm}" >
-                  <option value="" disabled selected class="default-option">Choose the default terms</option>
                   <option *ngFor="let term of supplierTerm" [value]="term.id">{{term.name}}</option>
                 </select>
               </div>
@@ -119,14 +145,13 @@
           </div>
 					<div class="tab-row">
             <div>
-              <span>Account Payable Phone</span>
-              <input placeholder="Enter account payable phone" [(ngModel)]="payablePhone" [value]="payablePhone">
+              <span>Website</span>
+              <input placeholder="Enter suppliers website" [(ngModel)]="website" [ngClass]="{'validation-required': invalidUrl}">
             </div>
             <div>
-              <span>Default currency (*required)</span>
+              <span>Currency (*required)</span>
               <div>
                 <select [(ngModel)]="defaultCurrency" [ngClass]="{'validation-required': invalidDefaultCurrency}">
-                  <option value="" disabled selected class="default-option">Choose the default currency</option>
                   <option *ngFor="let currency of supplierCurrencies" [value]="currency.id">{{currency.currencyCode}}</option>
                 </select>
               </div>
@@ -134,8 +159,8 @@
           </div>
 					<div class="tab-row">
             <div>
-              <span>Account Payable Phone</span>
-              <input placeholder="Enter account payable phone" [(ngModel)]="payablePhone" [value]="payablePhone">
+              <span>Prepared Shipping</span>
+              <input placeholder="Enter supplier's prepaid shipping cost" [(ngModel)]="shippingCost" type="number">
             </div>
             <div></div>
           </div>
@@ -148,7 +173,7 @@
           <div class="product-tags">
             <span>tags</span>
             <div class="keywords">
-              <app-multikeywordselect [keywords]="keywords" ></app-multikeywordselect>
+              <app-multikeywordselect [keywords]="keywords"  (sendKeywords)="getKeywords($event)"></app-multikeywordselect>
             </div>
           </div>
           <div class="btn-section" >

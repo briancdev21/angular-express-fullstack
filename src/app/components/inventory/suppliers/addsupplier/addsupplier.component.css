@@ -160,7 +160,7 @@ tab select {
 	background-size: 3%;
 	height: 35px;
 	font-size: 12px;
-	color: #D3D3D3;
+	color: #646464;
 }
 
 .tab-one .desc {
@@ -208,24 +208,24 @@ input::placeholder {
 }
 
 .keywords {
-   	border: 1px solid #F5F5F5;
+	border: 1px solid #F5F5F5;
 	padding-left: 5px;
-    min-height: 35px;
-    margin-top: 5px;
-    display: flex;
+	min-height: 35px;
+	margin-top: 5px;
+	display: flex;
 	align-items: center;
 	margin-bottom: 20px;
 }
 
 
 .keywords span {
-    background-color: #F7F7F7;
+  background-color: #F7F7F7;
 	padding: 4px 7px;
 	margin-right: 5px;
 	display: inline-block;
 	margin: 2px;
-    font-size: 11px;
-    color: #464646;
+	font-size: 11px;
+	color: #464646;
 }
 
 .customer-notes {
@@ -235,11 +235,11 @@ input::placeholder {
 }
 
 .customer-notes textarea {
-    margin-top: 5px;
-    border: 1px solid #F7F7F7;
-    font-size: 13px;
-    resize: vertical;
-    min-height: 90px;
+	margin-top: 5px;
+	border: 1px solid #F7F7F7;
+	font-size: 13px;
+	resize: vertical;
+	min-height: 90px;
 	padding: 7px;
 }
 
@@ -297,4 +297,122 @@ app-multikeywordselect {
 
 .contactNameField.not-edited {
 	color: lightgray !important;
+}
+
+
+.city-state, .country-zip {
+	display: flex;
+	justify-content: space-between
+}
+
+.city-state input, .country-zip input {
+	width: 48%;
+	margin-bottom: 15px;
+}
+
+.city-state ng2-completer, .country-zip ng2-completer {
+	width: 48%;
+	margin-bottom: 15px;
+	display: block;
+}
+
+.address {
+	margin-bottom: 15px;
+}
+
+.collaborators>div {
+	width: 100%;
+	border: 1px solid lightgray;
+}
+
+.btn-section {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.contact-associations {
+  border: 1px solid #F5F5F5;
+	padding-left: 5px;
+	height: 35px;
+	margin-top: 5px;
+	display: flex;
+	align-items: center;
+}
+
+
+.keywords span, .contact-associations span {
+  background-color: #F7F7F7;
+	padding: 4px 7px;
+	margin-right: 5px;
+	display: inline-block;
+	margin: 2px;
+	font-size: 11px;
+	color: #464646;
+}
+
+.customer-notes {
+	display: flex;
+	flex-direction: column;
+
+}
+
+.customer-notes textarea {
+	margin-top: 5px;
+	border: 1px solid #F7F7F7;
+	font-size: 13px;
+	resize: vertical;
+	min-height: 90px;
+	margin-bottom: 20px;
+	padding: 7px;
+}
+
+.customer-notes textarea::placeholder {
+	color: #D3D3D3;
+}
+
+.customer-notes textarea {
+	color: #646464;
+}
+
+app-multikeywordselect {
+	width: 100%;
+}
+
+:host ::ng-deep .editable {
+	border: transparent !important;
+}
+:host ::ng-deep .add-keyword {
+	display: none !important;
+}
+
+.tab-row .keywords {
+	min-height: 35px;
+	height: auto;
+	margin-top: 0;
+}
+
+:host ::ng-deep .content-box ul li {
+	color: #484848;
+	background: #F7F7F7!important;
+}
+
+:host ::ng-deep .content-box ul li:last-child {
+	color: #484848;
+	background: none!important;
+}
+
+.validation-required {
+	border: 1px solid red !important;
+}
+
+.account-type select {
+	color: #646464;
+}
+
+:host ::ng-deep ng2-completer .completer-holder input::placeholder {
+	color: #d3d3d3;
+}
+
+:host ::ng-deep ng2-completer.validation-required-name .completer-input {
+	border: 1px solid red !important;
 }

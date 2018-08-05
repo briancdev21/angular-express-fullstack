@@ -10,7 +10,11 @@
 </div> -->
 <div class="email editable">
   <img src="assets/images/envelope.png" />
-  <input [(ngModel)]="userInfo.contactEmail" id="email" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidEmail}">
+  <div class="mails-sec">
+    <input [(ngModel)]="userInfo.contactEmail" id="email" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidEmail}" placeholder="Contact Email">
+    <input [(ngModel)]="userInfo.accountPayableEmail" id="payableEmail" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidPayableEmail}" placeholder="Payable Email">
+  </div>
+  
 </div>
 <span class="alert-email" *ngIf="invalidEmail">Wrong Email Format</span>
 <div class="phone editable">
@@ -129,8 +133,8 @@
 </div>
 
 <h4>Supplier tags</h4>
-<div class="keywords">
-  <app-multikeywordselect [keywords]="userInfo.keywords" (sendKeywords)="getKeywords($event)"></app-multikeywordselect>
+<div class="keywords" *ngIf="userInfo">
+  <app-multikeywordselect [keywords]="userInfo.keywordIds" (sendKeywords)="getKeywords($event)"></app-multikeywordselect>
 </div>
 
 <h4>Supplier Notes</h4>
