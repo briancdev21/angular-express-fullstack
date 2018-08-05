@@ -20,15 +20,27 @@ export class TRLocationFromToComponent implements OnInit {
   @Output() selectedLocation: EventEmitter<any> = new EventEmitter();
   from_locations_local = [];
   to_locations_local = [];
+  fromLocationError: boolean;
+  toLocationError: boolean;
 
 
   onchangeToLocation (event) {
     this.toLocation = event.target.value;
-    this.emitData();
+    if (this.toLocation === this.fromLocation) {
+      this.toLocationError = true;
+    } else {
+      this.toLocationError = false;
+      this.emitData();
+    }
   }
   onchangeFromLocation (event) {
     this.fromLocation = event.target.value;
-    this.emitData();
+    if (this.toLocation === this.fromLocation) {
+      this.fromLocationError = true;
+    } else {
+      this.fromLocationError = false;
+      this.emitData();
+    }
   }
 
   emitData() {

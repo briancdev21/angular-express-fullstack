@@ -109,6 +109,15 @@ td.sku {
   padding: 5px 0.7em;
 }
 
+td.unitprice input {
+  outline:none;
+}
+
+td.total input {
+  outline:none;
+}
+
+
  td.model {
   width: 150px;
   padding: 5px 0.7em;

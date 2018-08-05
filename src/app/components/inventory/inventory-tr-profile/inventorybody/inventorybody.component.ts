@@ -27,6 +27,8 @@ export class InventoryBodyComponent {
       this.tr_id = `TR-${this.tr_mock.id}`;
       if (_trdata.status === 'TRANSFERRED') {
         this.commonService.showAlertModal.next(true);
+      } else {
+        this.commonService.showAlertModal.next(false);
       }
       if (this.tr_mock.id !== undefined) {
         this.sharedService.getTransferProducts(this.tr_mock.id).subscribe( productRes => {
@@ -43,7 +45,8 @@ export class InventoryBodyComponent {
     }
   }
 
-  locations: string[] = [];
+  fromLocations: string[] = [];
+  toLocations: string[] = [];
   productDetails = [];
   internalMemo = undefined;
   tr_id = '';
@@ -70,7 +73,12 @@ export class InventoryBodyComponent {
       RMA: true
     }
     this.sharedService.getLocationsWithParams(params).subscribe(locationRes => {
-      this.locations = locationRes.results;
+      this.toLocations = this.toLocations.concat(locationRes.results);
+    });
+    this.sharedService.getLocations().subscribe(locationRes => {
+      this.fromLocations = locationRes.results;
+      this.toLocations = this.toLocations.concat(locationRes.results);
+      console.log('to locations:',this.toLocations);
     });
   }
 

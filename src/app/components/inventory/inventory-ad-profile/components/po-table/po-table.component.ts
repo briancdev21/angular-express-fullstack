@@ -104,6 +104,7 @@ export class POTableComponent implements OnInit {
       this.sharedService.deleteInventoryAdjustmentProduct(this.ad_id,
         this.productDetails[index].transferProductId).subscribe(res => {
         this.productDetails.splice(index, 1);
+        this.priceChange.emit(null);
       });
     }
   }
@@ -126,7 +127,6 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].unitPrice = item.originalObject.cost;
       this.productDetails[index].name = product.name;
       this.productDetails[index].quantity = 1;
-      this.productDetails[index].measure = product.unitOfMeasure.quantity;
       this.trProductModel = {
         sku: item.originalObject.sku,
         taxRateId: this.taxRateOptions[0].id,
@@ -135,6 +135,9 @@ export class POTableComponent implements OnInit {
       this.sharedService.addInventoryAdjustmentProduct(this.ad_id, this.trProductModel).subscribe(resp => {
         this.productDetails[index].transferProductId = resp.data.id;
         this.productDetails[index].total = resp.data.total;
+        this.productDetails[index].unitOfMeasure = resp.data.unitOfMeasure;
+        this.productDetails[index].quantity = resp.data.quantity;
+        this.priceChange.emit(null);
       });
     });
     if (index === this.productDetails.length - 1) {

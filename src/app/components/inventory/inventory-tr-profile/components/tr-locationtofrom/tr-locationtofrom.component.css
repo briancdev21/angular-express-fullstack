@@ -63,3 +63,6 @@ select:invalid {
 }
 
 
+.has-error {
+  border: solid 2px red;
+}
