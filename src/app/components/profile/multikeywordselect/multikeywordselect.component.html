@@ -10,7 +10,7 @@
     <ul *ngIf="keywords">
       <li *ngFor="let keyword of keywords; let i = index" >{{keyword.name}}<span (click)="deleteKeyword(keyword.id)">&nbsp;&nbsp;x</span></li><br/>
       <li style="background: none; width: 100%; margin: 0;" >
-        <input placeholder="Type Here..." #box [(ngModel)]="newKeyword" class="add-keyword-input" type="text" (keyup.enter)="addNewKeyword(newKeyword)"/></li>
+        <input placeholder="Type Here..." #box [(ngModel)]="newKeyword" class="add-keyword-input" type="text" (keyup.enter)="addNewKeyword(newKeyword)" (blur)="addNewKeyword(newKeyword)"/></li>
     </ul>
   </div>
 </div>

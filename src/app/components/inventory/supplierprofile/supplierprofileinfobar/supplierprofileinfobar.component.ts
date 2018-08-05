@@ -56,6 +56,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
   invalidPhoneNumber = false;
   invalidName = false;
   invalidPayableEmail = false;
+  tagsArr: any;
   // croppedImage = this.userInfo.profileLink;
 
   fileChangeEvent(event: any): void {
@@ -182,7 +183,8 @@ export class SupplierProfileInfoBarComponent implements OnInit {
 
   getKeywords(event) {
     console.log('keyWords: ', event);
-    this.userInfo.keywordIds = event.map(e => e.id);
+    this.tagsArr = event.map(e => e.id);
+    this.updateProfile();
   }
 
   loadImageFailed() {
@@ -288,7 +290,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
       phoneNumber: this.userInfo.phoneNumber,
       name: this.userInfo.name,
       contactName: this.userInfo.contactName,
-      keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
+      keywordIds: this.tagsArr ? this.tagsArr : [],
       note: this.userInfo.note ? this.userInfo.note : '',
       billingAddress: this.userInfo.billingAddress,
       accountPayableEmail: this.userInfo.accountPayableEmail
