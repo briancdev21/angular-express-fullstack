@@ -94,9 +94,11 @@ export class PmScheduleComponent implements OnInit {
               title: element.completion + '%',
               completeness: element.completion
             };
-            element.collaborators.forEach(col => {
-              colArr.push(this.usersList.filter(u => u.username === col)[0]);
-            });
+            if (element.collaborators) {
+              element.collaborators.forEach(col => {
+                colArr.push(this.usersList.filter(u => u.username === col)[0]);
+              });
+            }
             element.collaboratorsData = colArr;
           });
           console.log('work order list: ', this.workOrdersList);
