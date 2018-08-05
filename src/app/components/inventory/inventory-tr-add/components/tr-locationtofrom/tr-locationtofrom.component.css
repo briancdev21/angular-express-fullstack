@@ -62,4 +62,6 @@ select:invalid {
   color: #d3d3d3;
 }
 
-
+.has-error {
+  border: solid 2px red;
+}
