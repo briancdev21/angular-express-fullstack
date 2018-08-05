@@ -86,8 +86,8 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
     const savingData = {
       'projectManager': this.projectInformation.projectManager,
       'accountManager': this.projectInformation.accountManager,
-      'clientProjectManagerId': parseInt(this.projectInformation.clientProjectManagerId.slice(-1), 10),
-      'accountReceivableId': parseInt(this.projectInformation.accountReceivableId.slice(-1), 10),
+      'clientProjectManagerId': parseInt(this.projectInformation.clientProjectManagerId.split('-').pop(), 10),
+      'accountReceivableId': parseInt(this.projectInformation.accountReceivableId.split('-').pop(), 10),
       'status': this.projectInformation.status,
       'internalNote': this.projectInformation.internalNote,
       'followers': []
@@ -96,8 +96,8 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
     if (!savingData.internalNote) {
       savingData.internalNote = '';
     }
-    savingData.clientProjectManagerId = parseInt(this.projectInformation.clientProjectManagerId.slice(-1), 10);
-    savingData.accountReceivableId = parseInt(this.projectInformation.accountReceivableId.slice(-1), 10);
+    savingData.clientProjectManagerId = parseInt(this.projectInformation.clientProjectManagerId.split('-').pop(), 10);
+    savingData.accountReceivableId = parseInt(this.projectInformation.accountReceivableId.split('-').pop(), 10);
     this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
       console.log('updated: ', res);
     });
@@ -124,8 +124,8 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
     const savingData = {
       'projectManager': this.projectInformation.projectManager,
       'accountManager': this.projectInformation.accountManager,
-      'clientProjectManagerId': parseInt(this.projectInformation.clientProjectManagerId.slice(-1), 10),
-      'accountReceivableId': parseInt(this.projectInformation.accountReceivableId.slice(-1), 10),
+      'clientProjectManagerId': parseInt(this.projectInformation.clientProjectManagerId.split('-').pop(), 10),
+      'accountReceivableId': parseInt(this.projectInformation.accountReceivableId.split('-').pop(), 10),
       'status': this.projectInformation.status,
       'internalNote': this.projectInformation.internalNote,
       'followers': []
