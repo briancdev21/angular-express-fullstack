@@ -135,6 +135,7 @@ export class POTableComponent implements OnInit {
         this.productDetails[index].transferProductId = resp.data.id;
         this.productDetails[index].total = resp.data.total;
         this.productDetails[index].unitOfMeasure = resp.data.unitOfMeasure;
+        this.productDetails[index].quantity = resp.data.quantity;
       });
     });
     if (index === this.productDetails.length - 1) {

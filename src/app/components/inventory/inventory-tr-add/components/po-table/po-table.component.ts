@@ -93,6 +93,9 @@ export class POTableComponent implements OnInit {
       };
       this.sharedService.addTransferProduct(this.tr_id, this.trProductModel).subscribe(resp => {
         this.productDetails[index].transferProductId = resp.data.id;
+        this.productDetails[index].unitOfMeasure = resp.data.unitOfMeasure;
+        this.productDetails[index].quantity = resp.data.quantity;
+        this.productDetails[index].total = resp.data.total;
       });
     });
     if (index === this.productDetails.length - 1) {
