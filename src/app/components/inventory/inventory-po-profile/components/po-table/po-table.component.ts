@@ -109,7 +109,7 @@ export class POTableComponent implements OnInit {
       this.productDetails[index].unitPrice = item.originalObject.cost;
       this.productDetails[index].name = product.name;
       this.productDetails[index].quantity = 1;
-      this.productDetails[index].measure = product.unitOfMeasure.quantity;
+      // this.productDetails[index].measure = product.unitOfMeasure.quantity;
       this.poProductModel = {
         sku: item.originalObject.sku,
         taxRateId: this.taxRateOptions[0].id,
@@ -124,7 +124,7 @@ export class POTableComponent implements OnInit {
         this.productDetails[index].purchaseOrderProductId = resp.data.id;
         this.productDetails[index].quantity = resp.data.quantity;
         this.productDetails[index].total = resp.data.total;
-        
+        this.productDetails[index].unitOfMeasure = resp.data.unitOfMeasure;
       });
     });
     if (index === this.productDetails.length - 1) {
