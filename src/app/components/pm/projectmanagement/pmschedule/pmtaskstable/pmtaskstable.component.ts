@@ -138,18 +138,15 @@ export class PmTasksTableComponent implements OnInit {
 
   private onDropModel(args) {
     const [sourceItem, targetContainer, sourceContainer, targetItem] = args;
-    console.log('drop model called', args);
     const sourceItemIndex = parseInt(sourceItem.id, 10);
     // const targetItemIndex = parseInt(targetItem.id, 10);
 
     const targetPanelIndex = parseInt(targetContainer.id, 10);
     const sourcePanelIndex = parseInt(sourceContainer.id, 10);
-    console.log('on drop happened:', targetPanelIndex, sourcePanelIndex);
     // const selectedPanel = this.panels.filter(p => p.id === parseInt(source.id, 10))[0];
     // const selectedTask = selectedPanel.tasks.filter( t => t.id === parseInt(el.id, 10));
     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === sourcePanelIndex.toString()).pop();
     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === sourceItemIndex.toString()).pop();
-    console.log('selected drag data: ', sourceItemIndex, sourcePanelIndex, selectedTaskData);
     if (targetContainer !== sourceContainer) {
     }
 
@@ -166,7 +163,6 @@ export class PmTasksTableComponent implements OnInit {
     selectedTaskData.subtaskIds = selectedTaskData.subtaskIds  !== null ? selectedTaskData.subtaskIds : [];
     selectedTaskData.note = selectedTaskData.note !== null ? selectedTaskData.note : '';
     selectedTaskData.startDate = moment(selectedTaskData.startDate).format('YYYY-MM-DD');
-    console.log('selected task data', selectedTaskData);
     if (sourceItemIndex.toString() !== localStorage.getItem('sourceItemIndex')) {
       localStorage.setItem('sourceItemIndex', sourceItemIndex.toString());
       this.pmTasksService.createTask(targetPanelIndex, selectedTaskData).subscribe(res => {
@@ -255,7 +251,6 @@ export class PmTasksTableComponent implements OnInit {
         this.dependencyModalCollapsed[i] = new Array();
         this.showSettingsModal[i] = new Array();
         this.showDeleteConfirmModal[i] = new Array();
-        console.log('milestones length:', this.milestones[i]);
         if (this.milestones[i].taskIds !== null) {
           for (let j = 0; j < this.milestones[i].taskIds.length; j++) {
             this.ownerModalCollapsed[i][j] = false;
@@ -266,7 +261,6 @@ export class PmTasksTableComponent implements OnInit {
           this.pmTasksService.getTasks(this.milestones[i].id).subscribe(taskData => {
             this.milestones[i].tasks = taskData.results;
             this.dependencyList = this.dependencyList.concat(taskData.results);
-            console.log('fetching dat all tasks a:', i);
             this.milestones[i].tasks.forEach(element => {
               element.assigneeInfo = this.getUserInfo(element.assignee);
               element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
@@ -582,7 +576,6 @@ export class PmTasksTableComponent implements OnInit {
     this.updateTask(milestoneId, taskId, selectedTaskData);
   }
   updateTask(milestoneId, taskId, taskData) {
-    console.log('task data: ', taskData);
     taskData.startDate = moment(taskData.startDate).format('YYYY-MM-DD');
     taskData.dependencyIds = taskData.dependency ? taskData.dependency : [];
     taskData.followers = taskData.followers ? taskData.followers : [];
@@ -596,7 +589,6 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   confirmDeleteMainTask(event) {
-    console.log('delete main task:,', event);
     const milestoneId = parseInt(event.srcElement.parentElement.querySelector('input.taskGroupId').value, 10);
     const taskId = parseInt(event.srcElement.parentElement.querySelector('input.taskId').value, 10);
     this.pmTasksService.deleteIndividualtask(milestoneId, taskId).subscribe(res => {
@@ -635,11 +627,13 @@ export class PmTasksTableComponent implements OnInit {
 
   updateTaskOrderNumber() {
     for ( let i = 0; i < this.copyMilestones.length; i++) {
+      if (!this.copyMilestones[i].tasks) {
+        this.copyMilestones[i].tasks = [];
+      }
       for ( let j = 0; j < this.copyMilestones[i].tasks.length; j++) {
         const task = this.copyMilestones[i].tasks[j];
         const element = document.getElementById('' + task.id) as HTMLDivElement;
         if (element === null) {
-          console.log('element order', task.id, element);
         } else {
           element.querySelector('.task-id-value').innerHTML = `${task.order}. `;
         }
