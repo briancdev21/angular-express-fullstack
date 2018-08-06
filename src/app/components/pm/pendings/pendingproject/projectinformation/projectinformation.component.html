@@ -151,7 +151,7 @@
 <div class="text-editor-sec" *ngIf="projectInformation">
   <div class="scope-description-change">
     <div class="editor-title">CLIENT NOTES</div>
-    <quill-editor [(ngModel)]="projectInformation.clientNote">
+    <quill-editor [(ngModel)]="projectInformation.clientNote" [readOnly]="true">
     </quill-editor>
   </div>
 </div>

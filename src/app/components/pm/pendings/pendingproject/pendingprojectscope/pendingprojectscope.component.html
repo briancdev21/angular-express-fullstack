@@ -9,7 +9,7 @@
 <div class="text-editor-sec">
   <div class="scope-description-change" *ngIf="projectInformation">
     <div class="editor-title">SCOPE OF WORK</div>
-    <quill-editor [(ngModel)]="projectInformation.scopeOfWork">
+    <quill-editor [(ngModel)]="projectInformation.scopeOfWork" [readOnly]="true">
     </quill-editor>
   </div>
 </div>
