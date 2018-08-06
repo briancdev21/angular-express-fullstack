@@ -68,8 +68,8 @@ export class AddSupplierComponent implements OnInit {
   contactEmail: any;
   contactPhone: any;
   accountNumber = '';
-  defaultTerm = 1;
-  defaultCurrency = 1;
+  defaultTerm: any;
+  defaultCurrency: any;
   sourceValue = true;
   address = '';
   country = '';
@@ -134,12 +134,12 @@ export class AddSupplierComponent implements OnInit {
     this.invalidProvince = false;
     this.invalidPostalCode = false;
     this.invalidCountry = false;
-    this.wrongEmailFormat = !this.checkEmailValidation(this.contactEmail);
+    this.invalidSupplierPhone = !this.phoneNumberValidation(this.supplierPhone);
+    if (this.contactEmail) {
+      this.wrongEmailFormat = !this.checkEmailValidation(this.contactEmail);
+    }
     if (this.payableEmail) {
       this.invalidPayableEmail = !this.checkEmailValidation(this.payableEmail);
-    }
-    if (this.supplierPhone) {
-      this.invalidSupplierPhone = !this.phoneNumberValidation(this.supplierPhone);
     }
     if (this.contactPhone) {
       this.invalidContactPhone = !this.phoneNumberValidation(this.contactPhone);
@@ -148,7 +148,7 @@ export class AddSupplierComponent implements OnInit {
       this.invalidPayablePhone = !this.phoneNumberValidation(this.payablePhone);
     }
 
-    if (this.supplierName && this.contactName && this.contactEmail && this.address
+    if (this.supplierName && this.supplierPhone && this.address
         && this.country && this.province && this.city && this.province && !this.wrongEmailFormat &&
         !this.invalidPayableEmail && !this.invalidSupplierPhone && !this.invalidContactPhone && !this.invalidPayablePhone) {
 
@@ -158,11 +158,8 @@ export class AddSupplierComponent implements OnInit {
       if (!this.supplierName) {
         this.invalidSupplierName = true;
       }
-      if (!this.contactName) {
-        this.invalidContactName = true;
-      }
-      if (!this.contactEmail) {
-        this.invalidContactEmail = true;
+      if (!this.supplierPhone) {
+        this.invalidSupplierPhone = true;
       }
       if (!this.address) {
         this.invalidAddress = true;
@@ -178,9 +175,6 @@ export class AddSupplierComponent implements OnInit {
       }
       if (!this.province) {
         this.invalidPostalCode = true;
-      }
-      if (!this.wrongEmailFormat) {
-        this.invalidContactEmail = true;
       }
     }
   }
@@ -237,12 +231,12 @@ export class AddSupplierComponent implements OnInit {
         this.invalidProvince = false;
         this.invalidPostalCode = false;
         this.invalidCountry = false;
-        this.wrongEmailFormat = !this.checkEmailValidation(this.contactEmail);
+        this.invalidSupplierPhone = !this.phoneNumberValidation(this.supplierPhone);
         if (this.payableEmail) {
           this.invalidPayableEmail = !this.checkEmailValidation(this.payableEmail);
         }
-        if (this.supplierPhone) {
-          this.invalidSupplierPhone = !this.phoneNumberValidation(this.supplierPhone);
+        if (this.contactEmail) {
+          this.wrongEmailFormat = !this.checkEmailValidation(this.contactEmail);
         }
         if (this.contactPhone) {
           this.invalidContactPhone = !this.phoneNumberValidation(this.contactPhone);
@@ -251,11 +245,11 @@ export class AddSupplierComponent implements OnInit {
           this.invalidPayablePhone = !this.phoneNumberValidation(this.payablePhone);
         }
 
-        if (this.supplierName && this.contactName && this.contactEmail &&
+        if (this.supplierName && this.supplierPhone &&
             this.address && this.country && this.province && this.city && this.province && !this.wrongEmailFormat &&
             !this.invalidPayableEmail && !this.invalidSupplierPhone && !this.invalidContactPhone && !this.invalidPayablePhone) {
-          this.tabActiveFirst = false;
-          this.tabActiveSecond = true;
+              this.tabActiveFirst = false;
+              this.tabActiveSecond = true;
           break;
         } else {
           setTimeout(() => {
@@ -265,11 +259,8 @@ export class AddSupplierComponent implements OnInit {
           if (!this.supplierName) {
             this.invalidSupplierName = true;
           }
-          if (!this.contactName) {
-            this.invalidContactName = true;
-          }
-          if (!this.contactEmail) {
-            this.invalidContactEmail = true;
+          if (!this.supplierPhone) {
+            this.invalidSupplierPhone = true;
           }
           if (!this.address) {
             this.invalidAddress = true;
@@ -293,7 +284,7 @@ export class AddSupplierComponent implements OnInit {
   }
   clickSaveSupplier() {
     const newSupplier = {
-      'termId': Number(this.defaultTerm),
+      'termId': this.defaultTerm,
       'currencyId': this.defaultCurrency,
       'keywordIds': this.keywordsIdList,
       'name': this.supplierName,
@@ -324,7 +315,7 @@ export class AddSupplierComponent implements OnInit {
     }
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
-    if (this.defaultTerm && this.defaultCurrency && this.accountNumber && !this.invalidUrl) {
+    if (this.defaultTerm && this.defaultCurrency && !this.invalidUrl) {
       this.addSupplierModalCollapsed = true;
       this.showAddSupplierModal = false;
       this.tabActiveFirst = true;

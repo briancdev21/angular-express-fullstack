@@ -19,7 +19,7 @@
               <input placeholder="Enter supplier name" [ngClass]="{'validation-required': invalidSupplierName}" [(ngModel)]="supplierName">
             </div>
             <div>
-              <span>Contact Name (*required)</span>
+              <span>Contact Name</span>
               <!-- <select [(ngModel)]="contactName" [ngClass]="{'validation-required': invalidContactName, 'not-edited': !contactName}" class="contactNameField" 
                  >
                 <option value="" disabled selected class="default-option">Enter last name</option>
@@ -30,19 +30,18 @@
                 (selected)="onSelectCustomer($event)" 
                 [(ngModel)]="selectName"
                 [minSearchLength]="0"
-                *ngIf="contacts"
-                [ngClass]="{'validation-required-name': invalidContactName}" >
+                *ngIf="contacts">
               </ng2-completer>
             </div>
           </div>
 
           <div class="tab-row">
             <div>
-              <span>Supplier Phone  <span *ngIf="invalidSupplierPhone" class="wrong-format"> : Wrong Phone Number Format!</span></span>
+              <span>Supplier Phone (*required) <span *ngIf="invalidSupplierPhone" class="wrong-format"> : Wrong Phone Number Format!</span></span>
               <input placeholder="xxx-xxx-xxxx" [ngClass]="{'validation-required': invalidSupplierPhone}" [(ngModel)]="supplierPhone" >
             </div>
             <div>
-              <span>Contact Email (*required) <span *ngIf="wrongEmailFormat" class="wrong-format"> : Wrong Email Format!</span></span>
+              <span>Contact Email <span *ngIf="wrongEmailFormat" class="wrong-format"> : Wrong Email Format!</span></span>
               <input
                 placeholder="Enter contact email"
                 [ngClass]="{'validation-required': invalidContactEmail}" 
@@ -137,6 +136,7 @@
               <span>Account terms (*required)</span>
               <div>
                 <select [(ngModel)]="defaultTerm" [ngClass]="{'validation-required': invalidDefaultTerm}" >
+                  <option value="" disabled>Select currency</option>
                   <option *ngFor="let term of supplierTerm" [value]="term.id">{{term.name}}</option>
                 </select>
               </div>
@@ -146,12 +146,13 @@
 					<div class="tab-row">
             <div>
               <span>Website</span>
-              <input placeholder="Enter suppliers website" [(ngModel)]="website" [ngClass]="{'validation-required': invalidUrl}">
+              <input placeholder="Enter supplier's website" [(ngModel)]="website" [ngClass]="{'validation-required': invalidUrl}">
             </div>
             <div>
               <span>Currency (*required)</span>
               <div>
                 <select [(ngModel)]="defaultCurrency" [ngClass]="{'validation-required': invalidDefaultCurrency}">
+                  <option value="" disabled>Select currency</option>
                   <option *ngFor="let currency of supplierCurrencies" [value]="currency.id">{{currency.currencyCode}}</option>
                 </select>
               </div>
