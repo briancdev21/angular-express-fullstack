@@ -167,12 +167,14 @@ export class AddProposalComponent implements OnInit {
   clientNoteContent = '';
   customersData: CompleterData;
   projectsData: CompleterData;
+  contactsData: CompleterData;
   projectsList: any;
   projectId = '';
   proposalsList = [];
   taxRateList = [];
   leadsList = [];
   needlessDate: any;
+  contactSelected = true;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
     private proposalsService: ProposalsService, private projectsService: ProjectsService, private salesService: SalesService,
@@ -192,6 +194,7 @@ export class AddProposalComponent implements OnInit {
         console.log('userlist: ', data);
         this.customerList = data;
         this.customerList = this.addContactName(this.customerList);
+        this.contactsData = this.completerService.local(this.customerList, 'name', 'name');
         this.crmService.getLeadsList().subscribe(lead => {
           this.leadsList = lead.results;
           if (this.leadsList.length) {
@@ -282,6 +285,11 @@ export class AddProposalComponent implements OnInit {
   onSelectCustomer(event) {
     console.log('select customer: ', event);
     this.proposalDetails.contactId = event.originalObject.id;
+    if (event.originalObject.leadId) {
+      this.contactSelected = false;
+    } else {
+      this.contactSelected = true;
+    }
     this.selectedCustomer = this.customerList.filter( c => c.id === event.originalObject.id)[0];
   }
 
@@ -612,7 +620,6 @@ export class AddProposalComponent implements OnInit {
     this.invalidScopeEditorContent = false;
     const collaborators = this.proposalDetails.collaborators.map(collaborator => collaborator.username);
     const savingProposalData = {
-      'currencyId': 1,
       'contactId': this.proposalDetails.contactId,
       'leadId': this.proposalDetails.contactId,
       'projectId': this.proposalDetails.projectId,
