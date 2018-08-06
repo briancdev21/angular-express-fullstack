@@ -313,7 +313,7 @@ span.title {
 
 
 
-:host ::ng-deep .text-autocomp ng2-completer.ng2completer .completer-input {
+:host ::ng-deep .text-autocomp ng2-completer .completer-input {
   font-size: 14px;
   color: #646464;
   border: 1px solid #D3D3d3;
@@ -327,6 +327,20 @@ span.title {
 
 .text-autocomp {
   width: 60%;
+}
+
+.contact-asso {
+  width: 60%;
+  border: 1px solid lightgray;
+  height: 34px;
+  display: block;
+  display: flex;
+  align-items: center;
+}
+
+.individual-asso {
+  background: #d3d3d3;
+  height: 28px;
 }
 
 @media screen and (max-width: 1550px) {

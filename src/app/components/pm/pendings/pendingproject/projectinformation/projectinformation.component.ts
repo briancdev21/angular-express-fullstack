@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PendingProjectService } from '../pendingproject.service';
-import * as moment from 'moment';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { ProjectsService } from '../../../../../services/projects.service';
+import { SharedService } from '../../../../../services/shared.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-projectinformation',
@@ -14,62 +16,7 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 
 export class ProjectInformationComponent implements OnInit {
 
-  projectInformation = {
-    customerName: 'John Moss',
-    projectName: 'Remodel with a Nu Life',
-    shippingAddress: {
-      street: '301, 1615 10th Ave SW',
-      city: 'Calgary',
-      state: 'Alberta',
-      country: 'Canada',
-      zipcode: 'T3C 0J7'
-    },
-    billingaddress: {
-      street: '301, 1615 10th Ave SW',
-      city: 'Calgary',
-      state: 'Alberta',
-      country: 'Canada',
-      zipcode: 'T3C 0J7'
-    },
-    projectNumber: 'NU8802-0159',
-    proposalNumber: 'PR123460',
-    startDate: '2016-12-05',
-    endDate: '2017-02-24',
-    keywords: [
-      'control4',
-      'theatre',
-      'renovation'
-    ],
-    contactUser: 'Hayati Homes',
-    subAssoUsers: [
-      'Danny Shibley',
-      'John Stephen'
-    ],
-    accountManager: [{
-      imageUrl: 'assets/users/user1.png',
-      name: 'Michael'
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      name: 'Joseph'
-    }],
-    projectManager: [{
-      imageUrl: 'assets/users/user1.png',
-      name: 'Michael'
-    }],
-    followers: [{
-      imageUrl: 'assets/users/user1.png',
-      name: 'Michael'
-    },
-    {
-      imageUrl: 'assets/users/user2.png',
-      name: 'Joseph'
-    }],
-    contactAssociation: '',
-    contactProjectManager: '',
-    contactAccountReceivable: '',
-    clientNotes: ''
-  };
+  projectInformation: any;
 
   formattedStart = '';
   formattedEnd = '';
@@ -81,20 +28,12 @@ export class ProjectInformationComponent implements OnInit {
   selectedItem: any = '';
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   items2: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
-    {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
   ];
   items3: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Dennis', imageUrl: 'assets/users/user3.png'},
-    {id: 3, label: 'Sepher', imageUrl: 'assets/users/man.png'},
   ];
   associationList = ['John Moss', 'Latif', 'Dennis'];
-  pmList = ['John Moss', 'Latif', 'Dennis'];
-  accountReceivableList = ['John Moss', 'Latif', 'Dennis'];
+  pmList: CompleterData;
+  accountReceivableList: CompleterData;
   invalidStartDate = false;
   invalidEndDate = false;
   selectAssociation: any;
@@ -102,26 +41,78 @@ export class ProjectInformationComponent implements OnInit {
   selectAccountReceivable: any;
   isAutocompleteUpdated1 = false;
   isAutocompleteUpdated2 = false;
+  contactsList = [];
+  usersList = [];
+  currentProjectId: any;
 
-  constructor( private router: Router, private pendingProjectService: PendingProjectService ) {
+  constructor( private router: Router, private pendingProjectService: PendingProjectService, private projectsService: ProjectsService,
+    private sharedService: SharedService, private completerService: CompleterService ) {
+    this.sharedService.getUsers().subscribe(user => {
+      this.usersList = user;
+      this.items2 = this.usersList;
+      this.items2.forEach(ele => {
+        ele.label = ele.username;
+      });
+
+      this.sharedService.getContacts().subscribe(data => {
+        this.currentProjectId = localStorage.getItem('current_projectId');
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.pmList = completerService.local(this.contactsList, 'name', 'name');
+        this.accountReceivableList = completerService.local(this.contactsList, 'name', 'name');
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+          this.projectInformation = res.data;
+          const followersData = [];
+          const contactAssociationData = [];
+          // if (this.projectInformation.followers) {
+          //   this.projectInformation.followers.forEach(element => {
+          //     const selectedUser = this.usersList.filter(u => u.username === element)[0];
+          //     followersData.push(selectedUser);
+          //   });
+          //   followersData.forEach(ele => {
+          //     ele.label = ele.name;
+          //   });
+          // }
+          this.projectInformation.followersData = followersData;
+          this.projectInformation.contactName = this.contactsList.filter(c => c.id === this.projectInformation.contactId)[0].name;
+          this.projectInformation.projectManagerData = this.usersList.filter(u => u.username === this.projectInformation.projectManager)[0];
+          console.log('projectInformation: ', this.projectInformation.projectManagerData);
+          this.projectInformation.accountManagerData = this.usersList.filter(u => u.username === this.projectInformation.accountManager)[0];
+          this.formattedStart = moment(this.projectInformation.startDate).format('MMMM DD, YYYY');
+          this.formattedEnd = moment(this.projectInformation.endDate).format('MMMM DD, YYYY');
+          const clientProjectManagerId = this.projectInformation.clientProjectManagerId.split('-').pop();
+          const accountReceivableId = this.projectInformation.accountReceivableId.split('-').pop();
+          console.log('3333: ', this.projectInformation, accountReceivableId);
+          this.projectInformation.accountReceivableName = this.contactsList.filter(c => c.id === accountReceivableId)[0].name;
+          this.projectInformation.clientProjectManagerName = this.contactsList.filter(c => c.id === clientProjectManagerId)[0].name;
+          if (this.projectInformation.contactAssociationIds) {
+            this.projectInformation.contactAssociationIds.forEach(element => {
+              contactAssociationData.push(this.contactsList.filter(c => c.id === element)[0]);
+            });
+            this.projectInformation.contactAssociationData = contactAssociationData;
+          }
+          console.log('projectInformation: ', this.projectInformation);
+        });
+      });
+    });
   }
 
   ngOnInit() {
-    this.formattedStart = moment(this.projectInformation.startDate).format('MMMM DD, YYYY');
-    this.formattedEnd = moment(this.projectInformation.endDate).format('MMMM DD, YYYY');
-    this.startMax = this.projectInformation.endDate;
-    this.endMin = this.projectInformation.startDate;
-    const cmp = this;
-    for (let i = 0; i < this.projectInformation.projectManager.length; i++) {
-      this.items2 = this.items2.filter(function( obj ) {
-        return obj.name !== cmp.projectInformation.projectManager[i].name;
-      });
-    }
-    for (let j = 0; j < this.projectInformation.accountManager.length; j++) {
-      this.items3 = this.items3.filter(function( obj ) {
-        return obj.name !== cmp.projectInformation.accountManager[j].name;
-      });
-    }
+    // this.formattedStart = moment(this.projectInformation.startDate).format('MMMM DD, YYYY');
+    // this.formattedEnd = moment(this.projectInformation.endDate).format('MMMM DD, YYYY');
+    // this.startMax = this.projectInformation.endDate;
+    // this.endMin = this.projectInformation.startDate;
+    // const cmp = this;
+    // for (let i = 0; i < this.projectInformation.projectManager.length; i++) {
+    //   this.items2 = this.items2.filter(function( obj ) {
+    //     return obj.name !== cmp.projectInformation.projectManager[i].name;
+    //   });
+    // }
+    // for (let j = 0; j < this.projectInformation.accountManager.length; j++) {
+    //   this.items3 = this.items3.filter(function( obj ) {
+    //     return obj.name !== cmp.projectInformation.accountManager[j].name;
+    //   });
+    // }
   }
 
   selectStartDate(event) {
@@ -178,7 +169,24 @@ export class ProjectInformationComponent implements OnInit {
   }
 
   toProjectScope() {
-    this.router.navigate(['./pm/pending-project/pending-scope']);
+    const savingData = {
+      'projectManager': this.projectInformation.projectManager,
+      'accountManager': this.projectInformation.accountManager,
+      'clientProjectManagerId': this.projectInformation.clientProjectManager ?
+        this.projectInformation.clientProjectManager : this.projectInformation.clientProjectManagerId.split('-').pop(),
+      'accountReceivableId': this.projectInformation.clientProjectManager ?
+        this.projectInformation.clientProjectManager : this.projectInformation.accountReceivableId.split('-').pop(),
+      'status': this.projectInformation.status,
+      'internalNote': this.projectInformation.internalNote,
+      'followers': this.projectInformation.followers
+    };
+    if (!savingData.internalNote) {
+      savingData.internalNote = '';
+    }
+    this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
+      console.log('updated: ', res);
+      this.router.navigate(['./pm/pending-project/pending-scope']);
+    });
   }
 
   toPendingProject() {
@@ -190,11 +198,23 @@ export class ProjectInformationComponent implements OnInit {
   }
 
   onSelectPmManager(event) {
-    this.projectInformation.contactProjectManager = event;
+    console.log('project manager', event);
+    this.projectInformation.clientProjectManager = event.originalObject.id;
   }
 
   onSelectAccountReceivable(event) {
-    this.projectInformation.contactAccountReceivable = event;
+    this.projectInformation.contactAccountReceivable = event.originalObject.id;
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 
 }

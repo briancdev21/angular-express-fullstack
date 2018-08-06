@@ -2,6 +2,9 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { ProjectsService } from '../../../../../services/projects.service';
+import { SharedService } from '../../../../../services/shared.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-pendingprojectbreadcrumbbar',
@@ -11,35 +14,67 @@ import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
   ]
 })
 export class PendingProjectBreadcrumbBarComponent implements OnInit {
-  @Input() projectInformation;
   editable: boolean;
   newKeyword: string;
   selectedItem: any = '';
   inputChanged: any = '';
-  data = ['Projects', 'Remodel with a Nu life'];
+  data = ['Projects', ''];
+  link = '/pm/pending-projects';
   items2: any[] = [
-    {id: 0, label: 'Michael', imageUrl: 'assets/users/user1.png'},
-    {id: 1, label: 'Joseph', imageUrl: 'assets/users/user2.png'},
-    {id: 2, label: 'Danny', imageUrl: 'assets/users/user1.png'},
-    {id: 3, label: 'John', imageUrl: 'assets/users/user3.png'},
   ];
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   isAutocompleteUpdated = false;
+  projectInformation: any;
+  contactsList = [];
+  usersList = [];
+  currentProjectId: any;
 
-  constructor() {
+  constructor(private projectsService: ProjectsService, private router: Router,
+    private sharedService: SharedService) {
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
+    });
+
+    this.sharedService.getUsers().subscribe(user => {
+      this.usersList = user;
+      this.items2 = this.usersList;
+      this.items2.forEach(ele => {
+        ele.label = ele.username;
+      });
+
+      this.sharedService.getContacts().subscribe(data => {
+        this.currentProjectId = localStorage.getItem('current_projectId');
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+          this.projectInformation = res.data;
+          const followersData = [];
+          if (this.projectInformation.followers) {
+            this.projectInformation.followers.forEach(element => {
+              const selectedUser = this.usersList.filter(u => u.username === element)[0];
+              followersData.push(selectedUser);
+              this.items2 = this.items2.filter(i => i.label !== element);
+            });
+            followersData.forEach(ele => {
+              ele.label = ele.name;
+            });
+          }
+          this.projectInformation.followersData = followersData;
+          this.projectInformation.contactName = this.contactsList.filter(c => c.id === this.projectInformation.contactId)[0].name;
+          this.data = ['Projects', this.projectInformation.name];
+        });
+      });
     });
   }
 
   ngOnInit() {
     this.editable = false;
-    this.projectInformation.followers.forEach(element => {
-      this.items2 = this.items2.filter(function( obj ) {
-        return obj.label !== element.name;
-      });
-    });
+    // this.projectInformation.followers.forEach(element => {
+    //   this.items2 = this.items2.filter(function( obj ) {
+    //     return obj.label !== element.name;
+    //   });
+    // });
   }
 
   onSelect(item: any) {
@@ -47,7 +82,25 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
     this.items2 = this.items2.filter(function( obj ) {
       return obj.label !== item.label;
     });
-    this.projectInformation.followers.push({name: item.label, imageUrl: item.imageUrl });
+    this.projectInformation.followersData.push(item);
+    const savingData = {
+      'projectManager': this.projectInformation.projectManager,
+      'accountManager': this.projectInformation.accountManager,
+      'clientProjectManagerId': this.projectInformation.clientProjectManagerId.split('-').pop(),
+      'accountReceivableId': this.projectInformation.accountReceivableId.split('-').pop(),
+      'status': this.projectInformation.status,
+      'internalNote': this.projectInformation.internalNote,
+      'followers': []
+    };
+    savingData.followers = this.projectInformation.followersData.map(f => f.username);
+    if (!savingData.internalNote) {
+      savingData.internalNote = '';
+    }
+    savingData.clientProjectManagerId = this.projectInformation.clientProjectManagerId.split('-').pop();
+    savingData.accountReceivableId = this.projectInformation.accountReceivableId.split('-').pop();
+    this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
+      console.log('updated: ', res);
+    });
   }
 
 
@@ -64,13 +117,37 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
   }
 
   removeUser(i: number) {
-    const item = this.projectInformation.followers[i];
-    this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
-    this.projectInformation.followers.splice(i, 1);
+    const item = this.projectInformation.followersData[i];
+    this.items2.push(item);
+    this.projectInformation.followersData.splice(i, 1);
     this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
+    const savingData = {
+      'projectManager': this.projectInformation.projectManager,
+      'accountManager': this.projectInformation.accountManager,
+      'clientProjectManagerId': this.projectInformation.clientProjectManagerId.split('-').pop(),
+      'accountReceivableId': this.projectInformation.accountReceivableId.split('-').pop(),
+      'status': this.projectInformation.status,
+      'internalNote': this.projectInformation.internalNote,
+      'followers': []
+    };
+    savingData.followers = this.projectInformation.followersData.map(f => f.username);
+    this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
+      console.log('updated: ', res);
+    });
   }
 
   tabChange(event) {
     console.log('event: ', event);
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

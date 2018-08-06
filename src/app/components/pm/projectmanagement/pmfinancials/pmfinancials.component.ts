@@ -41,11 +41,12 @@ export class PmFinancialsComponent implements OnInit {
   projectInfo: any;
   contactsList: any;
   summaryInfo: any;
+  usedBudget: any;
 
   constructor( private pmService: PmService, private router: Router, private sharedService: SharedService,
     private projectsService: ProjectsService, private route: ActivatedRoute ) {
     this.currentProjectId = localStorage.getItem('current_projectId');
-
+    this.getUnusedBudget();
     if (this.currentProjectId !== '') {
       this.sharedService.getContacts().subscribe(data => {
         this.contactsList = data;
@@ -53,7 +54,6 @@ export class PmFinancialsComponent implements OnInit {
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
 
           this.projectInfo = res.data;
-          this.unusedBudget = this.projectInfo.budget - this.projectInfo.budgetUsed;
           this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
           // Initial cost total
           this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.inventoryCost + this.projectInfo.labourCost;
@@ -149,7 +149,7 @@ export class PmFinancialsComponent implements OnInit {
 
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
           this.projectInfo = data.data;
-          this.unusedBudget = this.projectInfo.budget - this.projectInfo.budgetUsed;
+          this.getUnusedBudget();
         });
       });
 
@@ -164,7 +164,7 @@ export class PmFinancialsComponent implements OnInit {
       console.log('budgetdeleted : ', res);
       this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
         this.projectInfo = data.data;
-        this.unusedBudget = this.projectInfo.budget - this.projectInfo.budgetUsed;
+        this.getUnusedBudget();
       });
     });
     this.additionalCosts.splice(index, 1);
@@ -180,34 +180,49 @@ export class PmFinancialsComponent implements OnInit {
     // }, 0);
   }
 
+  getUnusedBudget() {
+
+    this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+      this.projectInfo = res.data;
+      this.projectsService.getProjectBudget(this.currentProjectId).subscribe( response => {
+        this.budgetList = response.results;
+        this.usedBudget = 0;
+        this.budgetList.forEach(element => {
+          this.usedBudget = this.usedBudget + element.amount;
+        });
+        this.unusedBudget = this.projectInfo.budget - this.usedBudget;
+        console.log('un---budget: ', this.unusedBudget);
+      });
+    });
+  }
+
   addBudget(budgetDate, budgetAmount) {
     this.invalidDate = false;
     budgetDate = moment(budgetDate).format('MMMM, YYYY');
     const selectedMonthes = this.budgetList.map(b => b.date);
     if (!selectedMonthes.includes(budgetDate)) {
       if (budgetDate && budgetAmount) {
-        this.budgetList.push({
-          'date': budgetDate,
-          'amount': budgetAmount
-        });
-        const savingData = {
-          'date': moment(budgetDate).format('YYYY-MM-DD'),
-          'amount': budgetAmount
-        };
-        this.projectsService.createProjectBudget(this.currentProjectId, savingData).subscribe(res => {
-          console.log('budgetCreated : ', res);
-          // calc unused budget
-          this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
-            this.projectInfo = data.data;
-            this.unusedBudget = this.projectInfo.budget - this.projectInfo.budgetUsed;
-          });
-        });
+
         // unused budget color change
-        if (this.unusedBudget < 0) {
-          this.budgetList.pop();
-          this.invalidBudget = true;
+        if (this.unusedBudget > budgetAmount) {
+          this.budgetList.push({
+            'date': budgetDate,
+            'amount': budgetAmount
+          });
+          const savingData = {
+            'date': moment(budgetDate).format('YYYY-MM-DD'),
+            'amount': budgetAmount
+          };
+          this.projectsService.createProjectBudget(this.currentProjectId, savingData).subscribe(res => {
+            console.log('budgetCreated : ', res);
+            // calc unused budget
+            this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
+              this.projectInfo = data.data;
+              this.getUnusedBudget();
+            });
+          });
         } else {
-          this.invalidBudget = false;
+          this.invalidBudget = true;
         }
         // refresh inputs
         this.budgetAmount = undefined;
@@ -223,7 +238,7 @@ export class PmFinancialsComponent implements OnInit {
       // calc unused budget
       this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
         this.projectInfo = data.data;
-        this.unusedBudget = this.projectInfo.budget - this.projectInfo.budgetUsed;
+        this.getUnusedBudget();
       });
     });
     this.budgetList.splice(index, 1);

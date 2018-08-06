@@ -1,13 +1,13 @@
-<div class="breadcrumb-bar" >
+<div class="breadcrumb-bar" *ngIf="projectInformation">
   <div class="breadcrumb-section">
-    <app-breadcrumb [data]="data"></app-breadcrumb>
+    <app-breadcrumb [data]="data" [link]="link"></app-breadcrumb>
   </div>
   <div class="title-name">
-    <span>{{projectInformation.projectNumber}}</span>
-    <span>{{projectInformation.customerName}}</span>
+    <span>{{projectInformation.id}}</span>
+    <span>{{projectInformation.contactName}}</span>
   </div>
 </div>
-<div class="router-followers">
+<div class="router-followers" *ngIf="projectInformation">
   <div class="pm-routers">
     <a routerLink="pending-information" routerLinkActive="active-link">Project Information</a>
     <a routerLink="pending-scope" routerLinkActive="active-link">Project Scope</a>
@@ -16,15 +16,15 @@
   </div>
 
   <div class="followers" > 
-    <div class="follower" *ngFor="let user of projectInformation.followers; let i = index">
-      <a [routerLink]='user.profileLink' [title]='user.name' ><img [src]='user.imageUrl'/></a>
+    <div class="follower" *ngFor="let user of projectInformation.followersData; let i = index">
+      <a [routerLink]='user.profileLink' [title]='user.username' ><img [src]='user.pictureURI'/></a>
     </div> 
     <div class="follower add-follower" >
       <a (click)='addUser()' title='user.name' (click)="editable=true;$event.stopPropagation()" ><img src='assets/images/Add-Button.svg'/></a>
     </div> 
     <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
         <ul>
-          <li *ngFor="let user of projectInformation.followers; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+          <li *ngFor="let user of projectInformation.followersData; let i = index">{{user.username}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
           <li style="background: none; width: 100%; margin: 0;">
             <ng-select *ngIf="isAutocompleteUpdated" [items]="items2"
               bindLabel="config2.sourceField"

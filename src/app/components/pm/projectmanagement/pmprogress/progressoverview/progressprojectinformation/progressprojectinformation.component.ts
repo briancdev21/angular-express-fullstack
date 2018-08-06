@@ -311,7 +311,7 @@ export class ProgressProjectInformationComponent implements OnInit {
     // id format is PROJECT-PR-4-C-10 so need to split it to get id number
     const splitedArr = id.split('-');
     const idNumber = splitedArr[splitedArr.length - 1];
-    return parseInt(idNumber, 10);
+    return idNumber;
   }
 
   updateProject() {
