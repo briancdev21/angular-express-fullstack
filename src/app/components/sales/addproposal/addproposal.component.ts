@@ -25,6 +25,7 @@ export class AddProposalComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
   today = new Date();
+  tomorrow = new Date();
   public proposalInfo;
 
   proposalDetails = {
@@ -177,6 +178,7 @@ export class AddProposalComponent implements OnInit {
     private proposalsService: ProposalsService, private projectsService: ProjectsService, private salesService: SalesService,
     private router: Router) {
     const comp = this;
+    this.tomorrow = new Date(this.today.getTime() + (24 * 60 * 60 * 1000));
 
     document.addEventListener('click', function() {
       comp.editable = false;
@@ -614,8 +616,8 @@ export class AddProposalComponent implements OnInit {
       'contactId': this.proposalDetails.contactId,
       'leadId': this.proposalDetails.contactId,
       'projectId': this.proposalDetails.projectId,
-      'projectTypeId': parseInt(this.proposalDetails.projectType, 10),
-      'pricingCategoryId': this.proposalDetails.pricing ? parseInt(this.proposalDetails.pricing, 10) : undefined,
+      'projectTypeId': this.proposalDetails.projectType,
+      'pricingCategoryId': this.proposalDetails.pricing ? this.proposalDetails.pricing : undefined,
       'categoryIds': this.proposalDetails.projectCategoriesAll,
       'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
       'accountManager': this.proposalDetails.accountManager.username,
@@ -641,7 +643,7 @@ export class AddProposalComponent implements OnInit {
         'unit': this.proposalDetails.discount.type
       },
       'collaborators': collaborators,
-      'taxRateId': parseInt(this.proposalDetails.taxRate.toString(), 10)
+      'taxRateId': this.proposalDetails.taxRate.toString()
     };
 
     if (this.selectedCustomer.leadId) {
