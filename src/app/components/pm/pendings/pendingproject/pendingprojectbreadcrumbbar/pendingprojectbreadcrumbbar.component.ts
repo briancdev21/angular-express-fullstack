@@ -44,7 +44,7 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
       });
 
       this.sharedService.getContacts().subscribe(data => {
-        this.currentProjectId = localStorage.getItem('current_pending_projectId');
+        this.currentProjectId = localStorage.getItem('pending_projectId');
         this.contactsList = data;
         this.addContactName(this.contactsList);
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {

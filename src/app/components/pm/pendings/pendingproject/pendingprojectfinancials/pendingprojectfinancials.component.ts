@@ -53,7 +53,7 @@ export class PendingProjectFinancialsComponent implements OnInit {
 
   constructor( private pendingProjectService: PendingProjectService, private router: Router, private sharedService: SharedService,
     private projectsService: ProjectsService, private commonService: CommonService) {
-    this.currentProjectId = localStorage.getItem('current_pending_projectId');
+    this.currentProjectId = localStorage.getItem('pending_projectId');
 
     if (this.currentProjectId !== '') {
       this.sharedService.getContacts().subscribe(data => {

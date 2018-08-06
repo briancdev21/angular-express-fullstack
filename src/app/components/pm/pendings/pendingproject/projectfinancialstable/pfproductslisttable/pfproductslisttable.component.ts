@@ -89,7 +89,7 @@ export class PfProductsListTableComponent implements OnInit {
     private completerService: CompleterService,
     private projectsService: ProjectsService,
     private pmService: PmService ) {
-      this.currentProjectId = localStorage.getItem('current_pending_projectId');
+      this.currentProjectId = localStorage.getItem('pending_projectId');
   }
 
   ngOnInit() {
