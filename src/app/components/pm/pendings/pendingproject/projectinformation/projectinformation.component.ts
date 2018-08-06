@@ -80,8 +80,9 @@ export class ProjectInformationComponent implements OnInit {
           this.projectInformation.accountManagerData = this.usersList.filter(u => u.username === this.projectInformation.accountManager)[0];
           this.formattedStart = moment(this.projectInformation.startDate).format('MMMM DD, YYYY');
           this.formattedEnd = moment(this.projectInformation.endDate).format('MMMM DD, YYYY');
-          const clientProjectManagerId = parseInt(this.projectInformation.clientProjectManagerId.split('-').pop(), 10);
-          const accountReceivableId = parseInt(this.projectInformation.accountReceivableId.split('-').pop(), 10);
+          const clientProjectManagerId = this.projectInformation.clientProjectManagerId.split('-').pop();
+          const accountReceivableId = this.projectInformation.accountReceivableId.split('-').pop();
+          console.log('3333: ', this.projectInformation, accountReceivableId);
           this.projectInformation.accountReceivableName = this.contactsList.filter(c => c.id === accountReceivableId)[0].name;
           this.projectInformation.clientProjectManagerName = this.contactsList.filter(c => c.id === clientProjectManagerId)[0].name;
           if (this.projectInformation.contactAssociationIds) {
@@ -172,9 +173,9 @@ export class ProjectInformationComponent implements OnInit {
       'projectManager': this.projectInformation.projectManager,
       'accountManager': this.projectInformation.accountManager,
       'clientProjectManagerId': this.projectInformation.clientProjectManager ?
-        this.projectInformation.clientProjectManager : Number(this.projectInformation.clientProjectManagerId.split('-').pop()),
+        this.projectInformation.clientProjectManager : this.projectInformation.clientProjectManagerId.split('-').pop(),
       'accountReceivableId': this.projectInformation.clientProjectManager ?
-        this.projectInformation.clientProjectManager : Number(this.projectInformation.accountReceivableId.split('-').pop()),
+        this.projectInformation.clientProjectManager : this.projectInformation.accountReceivableId.split('-').pop(),
       'status': this.projectInformation.status,
       'internalNote': this.projectInformation.internalNote,
       'followers': this.projectInformation.followers

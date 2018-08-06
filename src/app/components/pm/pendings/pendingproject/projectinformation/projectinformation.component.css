@@ -313,7 +313,7 @@ span.title {
 
 
 
-:host ::ng-deep .text-autocomp ng2-completer.ng2completer .completer-input {
+:host ::ng-deep .text-autocomp ng2-completer .completer-input {
   font-size: 14px;
   color: #646464;
   border: 1px solid #D3D3d3;
