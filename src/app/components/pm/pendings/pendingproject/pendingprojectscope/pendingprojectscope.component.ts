@@ -39,14 +39,17 @@ export class PendingProjectScopeComponent implements OnInit {
     const savingData = {
       'projectManager': this.projectInformation.projectManager,
       'accountManager': this.projectInformation.accountManager,
-      'clientProjectManagerId': Number(this.projectInformation.clientProjectManagerId.split('-').pop()),
-      'accountReceivableId': Number(this.projectInformation.accountReceivableId.split('-').pop()),
+      'clientProjectManagerId': this.projectInformation.clientProjectManagerId.split('-').pop(),
+      'accountReceivableId': this.projectInformation.accountReceivableId.split('-').pop(),
       'status': this.projectInformation.status,
       'internalNote': this.projectInformation.internalNote,
       'followers': this.projectInformation.followers
     };
     if (!savingData.internalNote) {
       savingData.internalNote = '';
+    }
+    if (!savingData.followers) {
+      savingData.followers = [];
     }
     this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
       console.log('updated: ', res);
