@@ -137,7 +137,7 @@ export class ProposalComponent implements OnInit {
   }
 
   getContactNameFromId(id) {
-    const idCroped = id.slice(-1);
+    const idCroped = id.split('-').pop();
     const selectedContact = this.contactsList.filter(c => c.id.toString() === idCroped)[0];
     if (selectedContact.type === 'PERSON') {
       return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
