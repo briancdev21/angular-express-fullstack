@@ -55,7 +55,7 @@ export class ProjectInformationComponent implements OnInit {
       });
 
       this.sharedService.getContacts().subscribe(data => {
-        this.currentProjectId = localStorage.getItem('pending_projectId');
+        this.currentProjectId = localStorage.getItem('current_projectId');
         this.contactsList = data;
         this.addContactName(this.contactsList);
         this.pmList = completerService.local(this.contactsList, 'name', 'name');

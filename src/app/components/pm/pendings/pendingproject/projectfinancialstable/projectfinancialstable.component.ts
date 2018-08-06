@@ -60,7 +60,7 @@ export class ProjectFinancialsTableComponent implements OnInit {
     private productsService: ProductsService) {
 
     this.filterAvaliableTo = 'everyone';
-    this.currentProjectId = localStorage.getItem('pending_projectId');
+    this.currentProjectId = localStorage.getItem('current_projectId');
 
     this.productsService.getProductCatalog().subscribe(data => {
       this.catalogsList = data.results;

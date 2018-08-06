@@ -20,7 +20,7 @@ export class PendingProjectScopeComponent implements OnInit {
   currentProjectId: any;
 
   constructor( private router: Router, private pendingProjectService: PendingProjectService, private projectsService: ProjectsService ) {
-    this.currentProjectId = localStorage.getItem('pending_projectId');
+    this.currentProjectId = localStorage.getItem('current_projectId');
     this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
       this.projectInformation = res.data;
       console.log('projectInformation: ', this.projectInformation);
