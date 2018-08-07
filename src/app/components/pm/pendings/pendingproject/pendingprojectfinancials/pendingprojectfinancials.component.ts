@@ -299,7 +299,7 @@ export class PendingProjectFinancialsComponent implements OnInit {
   }
 
   getContactIdFromString(str) {
-    return parseInt(str.slice(-1), 10);
+    return str.slice(-1);
   }
 
 }

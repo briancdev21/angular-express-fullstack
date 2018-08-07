@@ -118,13 +118,16 @@ export class InventoryBodyComponent {
   onSelectUser(selectedIndex: string) {
     this.customerAddress = this.contactList[selectedIndex].shippingAddress;
     this.contactId = this.contactList[selectedIndex].id;
-    this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id, 10);
+    // this.po_mock.contactId = parseInt(this.contactList[selectedIndex].id, 10);
+    this.po_mock.contactId = this.contactList[selectedIndex].id;
   }
 
   onSelectLocation(selectedLocationId: string) {
     console.log('selected location:', selectedLocationId);
     this.errors.locationChanged = true;
-    this.po_mock.location = parseInt(selectedLocationId, 10);
+    // this.po_mock.location = parseInt(selectedLocationId, 10);
+    this.po_mock.location = selectedLocationId;
+    
     const selectedLocation = this.locations.filter(location => location.id.toString() === selectedLocationId);
     console.log('address:', selectedLocation[0].address);
     this.shippingAddress = selectedLocation[0].address;
@@ -133,7 +136,8 @@ export class InventoryBodyComponent {
   onSelectTerm(selectedTermId: string) {
     console.log('selected term:', selectedTermId);
     this.errors.termChanged = true;
-    this.po_mock.term = parseInt(selectedTermId, 10);
+    // this.po_mock.term = parseInt(selectedTermId, 10);
+    this.po_mock.term = selectedTermId;
     this.updatePO();
   }
 

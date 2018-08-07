@@ -2,7 +2,7 @@ export class PurchaseOrderModel {
   id: number;
   status: string;
   projectId: string;
-  contactId: number;
+  contactId: string;
   shippingAddress: {
     address: string;
     city: string;
@@ -10,10 +10,10 @@ export class PurchaseOrderModel {
     postalCode: string;
     country: string
   };
-  location: number;
-  term: number;
-  termId: number;
-  freightCost: number;
+  location: string;
+  term: string;
+  termId: string;
+  freightCost: string;
   createdAt: Date;
   dueDate: string;
   discount: {

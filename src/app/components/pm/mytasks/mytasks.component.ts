@@ -214,11 +214,9 @@ export class MyTasksComponent implements OnInit {
 
   private onDropModel(args) {
     const [el, target, source] = args;
-    const taskIndex = parseInt(el.id, 10);
-    const targetPanelIndex = parseInt(target.id, 10);
-    const sourcePanelIndex = parseInt(source.id, 10);
-    // const selectedPanel = this.panels.filter(p => p.id === parseInt(source.id, 10))[0];
-    // const selectedTask = selectedPanel.tasks.filter( t => t.id === parseInt(el.id, 10));
+    const taskIndex = el.id;
+    const targetPanelIndex = target.id;
+    const sourcePanelIndex = source.id;
     const selectedTaskData = this.panels[sourcePanelIndex].tasks[taskIndex];
     console.log('selected drag data: ', selectedTaskData, this.panels);
     if (target !== source) {

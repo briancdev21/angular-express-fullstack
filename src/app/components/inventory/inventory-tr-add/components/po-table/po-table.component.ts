@@ -17,7 +17,7 @@ import { SharedService } from '../../../../../services/shared.service';
 export class POTableComponent implements OnInit {
   @Input() productDetails;
   @Input() set trId(_id: string) {
-    this.tr_id = parseInt(_id.replace('TR-', ''), 10);
+    this.tr_id = _id.replace('TR-', '');
   }
 
   @Output() priceChange: EventEmitter<any> = new EventEmitter();
@@ -26,9 +26,9 @@ export class POTableComponent implements OnInit {
   private skuService: CompleterData;
   private skus = [];
   private originSkus = [];
-  tr_id: number;
+  tr_id: string;
   taxRateOptions = [];
-  selectedTaxRateId: number;
+  selectedTaxRateId: string;
   trProductModel: any;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService) {

@@ -67,7 +67,7 @@ export class InventoryBodyComponent implements OnDestroy {
 
   onSelectLocation(event) {
     this.errors.locationChanged = true;
-    this.ad_mock.adjustedLocation = parseInt(event, 10);
+    this.ad_mock.adjustedLocation = event;
     this.updateAD();
   }
 

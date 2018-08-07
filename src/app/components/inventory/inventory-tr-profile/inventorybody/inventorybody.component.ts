@@ -92,10 +92,10 @@ export class InventoryBodyComponent {
   onSelectLocation(event) {
     console.log('event data;', event);
     if (event.fromLocation !== 'default') {
-      this.tr_mock.fromLocation = parseInt(event.fromLocation, 10);
+      this.tr_mock.fromLocation = event.fromLocation;
     }
     if (event.toLocation !== 'default') {
-      this.tr_mock.toLocation = parseInt(event.toLocation, 10);
+      this.tr_mock.toLocation = event.toLocation;
     }
     console.log('mock:', this.tr_mock);
     this.updateTR();
