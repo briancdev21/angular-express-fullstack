@@ -67,9 +67,9 @@ export class AddContactComponent implements OnInit {
   firstName = '';
   lastName = '';
   businessName = '';
-  defaultTerm = 2;
-  defaultCurrency = 1;
-  defaultPricing = 1;
+  defaultTerm: any;
+  defaultCurrency: any;
+  defaultPricing: any;
   primaryNumber = '';
   invalidDefaultTerm = false;
   invalidDefaultCurrency = false;
@@ -617,10 +617,10 @@ export class AddContactComponent implements OnInit {
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
       if (this.businessType === 'PERSON') {
         this.newContact = {
-          'currencyId': Number(this.defaultCurrency),
-          'termId': Number(this.defaultTerm),
-          'sourceId': Number(this.selectedSourceId),
-          'pricingCategoryId': Number(this.defaultPricing),
+          'currencyId': this.defaultCurrency,
+          'termId': this.defaultTerm,
+          'sourceId': this.selectedSourceId,
+          'pricingCategoryId': this.defaultPricing,
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -632,7 +632,7 @@ export class AddContactComponent implements OnInit {
             'lastName': this.lastName,
             'jobTitle': this.jobTitle ? this.jobTitle : 'a',
             'department': this.captain ? this.captain : 'a',
-            'businessAssociation': parseInt(this.businessAssociation, 10),
+            'businessAssociation': this.businessAssociation,
           },
           'shippingAddress': {
             'address': this.address,
@@ -664,10 +664,10 @@ export class AddContactComponent implements OnInit {
         };
       } else {
         this.newContact = {
-          'currencyId': Number(this.defaultCurrency),
-          'termId': Number(this.defaultTerm),
-          'sourceId': Number(this.selectedSourceId),
-          'pricingCategoryId': Number(this.defaultPricing),
+          'currencyId': this.defaultCurrency,
+          'termId': this.defaultTerm,
+          'sourceId': this.selectedSourceId,
+          'pricingCategoryId': this.defaultPricing,
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -676,7 +676,7 @@ export class AddContactComponent implements OnInit {
           'type': this.businessType,
           'business': {
             'name': this.businessName,
-            'headContact': parseInt(this.headContact, 10),
+            'headContact': this.headContact,
             'accountReceivable': 1,
             'personAssociations': [
               1
