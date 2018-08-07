@@ -31,7 +31,7 @@
         <div class="card-header">
           <span>NEW LEADS</span>
         </div>
-        <app-newleadline [morrisLineChartInfo]="newLeadsLine"></app-newleadline>
+        <app-newleadline [morrisLineChartInfo]="newLeadsLine" *ngIf="newLeadsLine"></app-newleadline>
       </div>
       <div class="card top-customer-card">
         <div class="card-header">

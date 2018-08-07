@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
+import { SharedService } from '../../../services/shared.service';
 
 
 @Component({
@@ -15,29 +16,7 @@ import * as _ from 'lodash';
 
 export class CrmDashboardComponent implements OnInit {
 
-  public newLeadsLine = [
-    {
-      period: 'Jun',
-      lead: 3,
-    }, {
-      period: 'JUL',
-      lead: 4,
-    }, {
-      period: 'AUG',
-      lead: 3,
-    }, {
-      period: 'SEP',
-      lead: 5,
-    }, {
-      period: 'OCT',
-      lead: 3,
-    }, {
-      period: 'NOV',
-      lead: 6,
-    }, {
-      period: 'DEC',
-      lead: 4,
-    }];
+  public newLeadsLine: any;
 
   public morrisDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
@@ -216,6 +195,17 @@ export class CrmDashboardComponent implements OnInit {
   salesPipelineTime = 'month';
   salesConversionTime = 'month';
   wonVsLost = (this.conversionRatio.wonDeals - this.conversionRatio.lostDeals) * 100 / this.conversionRatio.newLeads;
+
+  constructor( private sharedService: SharedService) {
+    this.sharedService.getCrmStatistics(5, 0, 'MONTHLY', 'newLeadsOverTime').subscribe(res => {
+      console.log('chart: ', res);
+      this.newLeadsLine = res.newLeadsOverTime;
+      this.newLeadsLine.forEach(ele => {
+        ele.period = ele.frameUnit.toUpperCase().slice(0, 3);
+        ele.lead = ele.frameValue;
+      });
+    });
+  }
 
   ngOnInit() {
     const arr = this.morrisDonutInfo.map( v => v.value);
