@@ -158,8 +158,9 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     for (let i = 0; i <= this.selectedRows.length - 1; i += 1) {
       sendData.push(this.productsInfoAll.filter(p => p.sku === this.selectedRows[i])[0]);
     }
+    console.log('send data: ', sendData, this.selectedRows);
     if (sendData.length === 1) {
-      this.sendIndividualProduct(sendData[0][0]);
+      this.sendIndividualProduct(sendData[0]);
     } else {
       // set option field as undefined for resolving conflice when expand table
       // sendData.map( s => s[0].option = undefined );
@@ -206,6 +207,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   openAttachmentModal(product) {
+    console.log('selected product: ', product);
     this.addAttachmentModalCollapsed = false;
     this.selectedProduct = product;
     this.selectedProduct.brandName = this.brandsList.filter(brand => brand.id === this.selectedProduct.brandId)[0].name;
