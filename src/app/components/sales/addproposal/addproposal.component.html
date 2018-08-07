@@ -152,10 +152,28 @@
 
             <div class="city-state">
               <input placeholder="Enter City" [(ngModel)]="proposalDetails.city" [ngClass]="{'validation-required': invalidCity}">
-              <input placeholder="Enter State" [(ngModel)]="proposalDetails.state" [ngClass]="{'validation-required': invalidState}">
+              <!-- <input placeholder="Enter State" [(ngModel)]="proposalDetails.state" [ngClass]="{'validation-required': invalidState}"> -->
+              <ng2-completer 
+                [(ngModel)]="province" 
+                [ngClass]="{'validation-required': invalidProvince}" 
+                [datasource]="provincesSource" 
+                [minSearchLength]="0" 
+                (keyup.enter)="onEnter()" 
+                (selected)="onSelectProvince($event)"
+                [placeholder]="'Enter Provice'">
+              </ng2-completer>
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country" [(ngModel)]="proposalDetails.country" [ngClass]="{'validation-required': invalidCountry}">
+              <!-- <input placeholder="Enter Country" [(ngModel)]="proposalDetails.country" [ngClass]="{'validation-required': invalidCountry}"> -->
+              <ng2-completer 
+                [(ngModel)]="country" 
+                [ngClass]="{'validation-required': invalidCountry}" 
+                [datasource]="countriesSource" 
+                [minSearchLength]="0" 
+                (keyup.enter)="onEnter()" 
+                (selected)="onSelectCountry($event)"
+                [placeholder]="'Enter Country'">
+              </ng2-completer>
               <input placeholder="Enter Zipcode" [(ngModel)]="proposalDetails.zipcode" [ngClass]="{'validation-required': invalidZipcode}">
             </div>
           </div>
