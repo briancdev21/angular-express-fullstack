@@ -57,6 +57,7 @@ span.phone-numbers {
 .editable input {
   border: 0;
   width: 100%;
+  height: 22px;
 }
 
 .email, .phone, .shipping, .billing-address {
@@ -98,10 +99,11 @@ span.phone-numbers {
 .name.editable input {
   font-size: 30px;
   color: #646464;
+  height: 22px;
 }
 
 .shipping, .billing-address {
-  width: 70%;
+  width: 100%;
 }
 
 @media screen and (max-width: 1350px) {

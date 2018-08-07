@@ -226,6 +226,15 @@ export class ProfileComponent implements OnInit {
       this.userInfo.mobilephone = res.data.phoneNumbers.secondary;
       this.userInfo.keywords = res.data.keywordIds ? res.data.keywordIds : [];
       this.userInfo.followers = res.data.followers ? res.data.followers : [];
+      if (!this.userInfo.billingAddress) {
+        this.userInfo.billingAddress = {
+          address: '',
+          city: '',
+          province: '',
+          country: '',
+          postalCode: ''
+        };
+      }
       this.cards.statusRevenue = this.userInfo.revenue;
       this.cards.statusPoints = this.userInfo.points;
       if (this.userInfo.type === 'PERSON') {
