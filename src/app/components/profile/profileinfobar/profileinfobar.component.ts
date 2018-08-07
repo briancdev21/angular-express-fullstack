@@ -255,14 +255,22 @@ export class ProfileInfoBarComponent implements OnInit {
     if (this.userInfo.phoneNumbers.secondary) {
       this.invalidSecondaryPhone = !this.phoneNumberValidation(this.userInfo.phoneNumbers.secondary);
     }
+    // if (this.userInfo.billingAddress.address === '' && this.userInfo.billingAddress.city === '' &&
+    //   this.userInfo.billingAddress.postalCode === '' && this.userInfo.billingAddress.province === '' &&
+    //   this.userInfo.billingAddress.country === '') {
+    //     console.log('user info 123: ', this.userInfo);
+    //     this.userInfo.billingAddress = undefined;
+    // }
     console.log('user info: ', this.userInfo);
     if (this.userInfo.type === 'PERSON') {
       if (this.userInfo.person.firstName !== '' && this.userInfo.person.lastName !== '' && this.userInfo.email !== '' && !this.invalidEmail
         && this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
-        !this.invalidPrimaryPhone && this.userInfo.phoneNumbers.primary && !this.invalidSecondaryPhone && this.billingProvince !== '' &&
-        this.billingCountry !== '') {
-          if (this.userInfo.billingAddress) {
-            if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode) {
+        !this.invalidPrimaryPhone && this.userInfo.phoneNumbers.primary && !this.invalidSecondaryPhone) {
+          if (this.userInfo.billingAddress.address !== '' || this.userInfo.billingAddress.city !== '' ||
+              this.userInfo.billingAddress.postalCode !== '' || this.userInfo.billingAddress.province !== '' ||
+              this.userInfo.billingAddress.country !== '') {
+            if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode  &&
+              this.billingProvince !== '' && this.billingCountry !== '') {
               this.saveData();
             } else {
               if (this.userInfo.billingAddress.address === ''  || this.userInfo.billingAddress.address === undefined) {
@@ -319,8 +327,11 @@ export class ProfileInfoBarComponent implements OnInit {
       if (this.userInfo.business.name && this.userInfo.email && !this.invalidEmail &&
         this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
         !this.invalidPrimaryPhone && this.userInfo.phoneNumbers.primary && !this.invalidSecondaryPhone) {
-          if (this.userInfo.billingAddress) {
-            if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode) {
+          if (this.userInfo.billingAddress.address !== '' || this.userInfo.billingAddress.city !== '' ||
+              this.userInfo.billingAddress.postalCode !== '' || this.userInfo.billingAddress.province !== '' ||
+              this.userInfo.billingAddress.country !== '') {
+            if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode  &&
+              this.billingProvince !== '' && this.billingCountry !== '') {
               this.saveData();
             } else {
               if (this.userInfo.billingAddress.address === ''  || this.userInfo.billingAddress.address === undefined) {
@@ -373,6 +384,14 @@ export class ProfileInfoBarComponent implements OnInit {
 
   saveData() {
     let savingData;
+    let billingAddress = null;
+    if (this.userInfo.billingAddress.address === '' && this.userInfo.billingAddress.city === '' &&
+      this.userInfo.billingAddress.postalCode === '' && this.userInfo.billingAddress.province === '' &&
+      this.userInfo.billingAddress.country === '') {
+        console.log('user info 123: ', this.userInfo);
+    } else {
+      billingAddress = this.userInfo.billingAddress;
+    }
     if (this.userInfo.type === 'PERSON') {
       savingData = {
         type: this.userInfo.type,
@@ -389,7 +408,7 @@ export class ProfileInfoBarComponent implements OnInit {
         },
         keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
         note: this.userInfo.note ? this.userInfo.note : '',
-        billingAddress: this.userInfo.billingAddress
+        billingAddress: billingAddress
       };
     } else {
       savingData = {
@@ -406,11 +425,14 @@ export class ProfileInfoBarComponent implements OnInit {
         },
         keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
         note: this.userInfo.note ? this.userInfo.note : '',
-        billingAddress: this.userInfo.billingAddress
+        billingAddress: billingAddress
       };
     }
     if (!savingData.phoneNumbers.secondary) {
       delete(savingData.phoneNumbers.secondary);
+    }
+    if (savingData.billingAddress === null) {
+      delete(savingData.billingAddress);
     }
     this.crmService.updateIndividualContact(this.userInfo.id, savingData).subscribe(res => {
       console.log('contact update: ', res);

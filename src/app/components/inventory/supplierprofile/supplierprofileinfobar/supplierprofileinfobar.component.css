@@ -95,7 +95,7 @@ span, input {
 }
 
 .shipping, .billing-address {
-  width: 70%;
+  width: 100%;
 }
 
 .supplier-name {
@@ -312,10 +312,14 @@ span.phone-numbers {
   display: flex;
 }
 
-.mails-sec {
+.mails-sec, .phones-sec {
   display: flex;
   flex-direction: column;
   margin-top: 3px;
+}
+
+.mails-sec>div, .phones-sec>div {
+  display: flex;
 }
 
 .mails-sec input {

@@ -57,6 +57,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
   invalidName = false;
   invalidPayableEmail = false;
   tagsArr: any;
+  invalidContactPhoneNumber = false;
   // croppedImage = this.userInfo.profileLink;
 
   fileChangeEvent(event: any): void {
@@ -202,7 +203,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
 
   updateProfile() {
     this.invalidContactName = false;
-    this.invalidContactName = false;
+    this.invalidName = false;
     this.invalidShippingAddress = false;
     this.invalidShippingCity = false;
     this.invalidShippingPostalCode = false;
@@ -214,18 +215,27 @@ export class SupplierProfileInfoBarComponent implements OnInit {
     this.invalidBillingCountry = false;
     this.invalidBillingPostalCode = false;
     this.invalidPayableEmail = false;
-    this.invalidEmail = !this.checkEmailValidation(this.userInfo.contactEmail);
+    this.invalidContactPhoneNumber = false;
+    if (this.userInfo.contactEmail) {
+      this.invalidEmail = !this.checkEmailValidation(this.userInfo.contactEmail);
+    }
     this.invalidPhoneNumber = !this.phoneNumberValidation(this.userInfo.phoneNumber);
     if (this.userInfo.accountPayableEmail) {
       this.invalidPayableEmail = !this.checkEmailValidation(this.userInfo.accountPayableEmail);
     }
+    if (this.userInfo.contactPhoneNumber) {
+      this.invalidContactPhoneNumber = !this.phoneNumberValidation(this.userInfo.contactPhoneNumber);
+    }
     console.log('user info: ', this.userInfo);
-    if (this.userInfo.contactName !== '' && this.userInfo.contactEmail !== '' && !this.invalidEmail && this.userInfo.name &&
+    if (!this.invalidEmail && this.userInfo.name && !this.invalidContactPhoneNumber &&
       this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
       !this.invalidPhoneNumber && this.userInfo.phoneNumber && this.billingProvince !== '' && this.billingCountry !== '' &&
       !this.invalidPayableEmail) {
-        if (this.userInfo.billingAddress) {
-          if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode) {
+        if (this.userInfo.billingAddress.address !== '' || this.userInfo.billingAddress.city !== '' ||
+            this.userInfo.billingAddress.postalCode !== '' || this.userInfo.billingAddress.province !== '' ||
+            this.userInfo.billingAddress.country !== '') {
+          if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode  &&
+            this.billingProvince !== '' && this.billingCountry !== '') {
             this.saveData();
           } else {
             if (this.userInfo.billingAddress.address === ''  || this.userInfo.billingAddress.address === undefined) {
@@ -249,15 +259,9 @@ export class SupplierProfileInfoBarComponent implements OnInit {
         }
     } else {
       console.log('check again: ', this.userInfo);
-      if (this.userInfo.contactName === undefined || this.userInfo.contactName === '') {
-        this.invalidContactName = true;
-      }
       if (this.userInfo.name === '') {
         console.log('check again agai: ', this.userInfo, this.shippingProvince);
         this.invalidName = true;
-      }
-      if (!this.userInfo.contactEmail) {
-        this.invalidEmail = true;
       }
       if (this.userInfo.shippingAddress.address === ''  || this.userInfo.shippingAddress.address === undefined) {
         this.invalidShippingAddress = true;
@@ -282,6 +286,14 @@ export class SupplierProfileInfoBarComponent implements OnInit {
 
   saveData() {
     let savingData;
+    let billingAddress = null;
+    if (this.userInfo.billingAddress.address === '' && this.userInfo.billingAddress.city === '' &&
+      this.userInfo.billingAddress.postalCode === '' && this.userInfo.billingAddress.province === '' &&
+      this.userInfo.billingAddress.country === '') {
+        console.log('user info 123: ', this.userInfo);
+    } else {
+      billingAddress = this.userInfo.billingAddress;
+    }
     savingData = {
       currencyId: this.userInfo.currencyId,
       termId: this.userInfo.termId,
@@ -292,7 +304,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
       contactName: this.userInfo.contactName,
       keywordIds: this.tagsArr ? this.tagsArr : [],
       note: this.userInfo.note ? this.userInfo.note : '',
-      billingAddress: this.userInfo.billingAddress,
+      billingAddress: billingAddress,
       accountPayableEmail: this.userInfo.accountPayableEmail
     };
 

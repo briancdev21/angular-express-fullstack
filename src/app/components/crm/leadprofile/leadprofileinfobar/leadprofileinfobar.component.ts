@@ -314,8 +314,11 @@ export class LeadProfileInfoBarComponent implements OnInit {
         && this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
         !this.invalidPrimaryPhone && this.userInfo.phoneNumbers.primary && !this.invalidSecondaryPhone && this.billingProvince !== '' &&
         this.billingCountry !== '') {
-          if (this.userInfo.billingAddress) {
-            if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode) {
+          if (this.userInfo.billingAddress.address !== '' || this.userInfo.billingAddress.city !== '' ||
+              this.userInfo.billingAddress.postalCode !== '' || this.userInfo.billingAddress.province !== '' ||
+              this.userInfo.billingAddress.country !== '') {
+            if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode  &&
+              this.billingProvince !== '' && this.billingCountry !== '') {
               this.saveData();
             } else {
               if (this.userInfo.billingAddress.address === ''  || this.userInfo.billingAddress.address === undefined) {
@@ -372,10 +375,12 @@ export class LeadProfileInfoBarComponent implements OnInit {
       if (this.userInfo.business.name && this.userInfo.email && !this.invalidEmail &&
         this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
         !this.invalidPrimaryPhone && this.userInfo.phoneNumbers.primary && !this.invalidSecondaryPhone) {
-          if (this.userInfo.billingAddress) {
-            if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode) {
+          if (this.userInfo.billingAddress.address !== '' || this.userInfo.billingAddress.city !== '' ||
+              this.userInfo.billingAddress.postalCode !== '' || this.userInfo.billingAddress.province !== '' ||
+              this.userInfo.billingAddress.country !== '') {
+            if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode  &&
+              this.billingProvince !== '' && this.billingCountry !== '') {
               this.saveData();
-            } else {
               if (this.userInfo.billingAddress.address === ''  || this.userInfo.billingAddress.address === undefined) {
                 this.invalidBillingAddress = true;
               }
@@ -426,6 +431,14 @@ export class LeadProfileInfoBarComponent implements OnInit {
 
   saveData() {
     let savingData;
+    let billingAddress = null;
+    if (this.userInfo.billingAddress.address === '' && this.userInfo.billingAddress.city === '' &&
+      this.userInfo.billingAddress.postalCode === '' && this.userInfo.billingAddress.province === '' &&
+      this.userInfo.billingAddress.country === '') {
+        console.log('user info 123: ', this.userInfo);
+    } else {
+      billingAddress = this.userInfo.billingAddress;
+    }
     if (this.userInfo.type === 'PERSON') {
       savingData = {
         type: this.userInfo.type,
@@ -442,7 +455,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
         },
         keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
         note: this.userInfo.note ? this.userInfo.note : '',
-        billingAddress: this.userInfo.billingAddress
+        billingAddress: billingAddress
       };
     } else {
       savingData = {
@@ -459,11 +472,14 @@ export class LeadProfileInfoBarComponent implements OnInit {
         },
         keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
         note: this.userInfo.note ? this.userInfo.note : '',
-        billingAddress: this.userInfo.billingAddress
+        billingAddress: billingAddress
       };
     }
     if (!savingData.phoneNumbers.secondary) {
       delete(savingData.phoneNumbers.secondary);
+    }
+    if (savingData.billingAddress === null) {
+      delete(savingData.billingAddress);
     }
     console.log('saving Data: ', savingData);
     this.crmService.updateIndividualLead(this.userInfo.id, savingData).subscribe(res => {

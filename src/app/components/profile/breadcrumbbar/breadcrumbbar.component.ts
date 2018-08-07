@@ -32,7 +32,7 @@ export class BreadcrumbBarComponent implements AfterViewInit {
   public link = '/crm/contacts';
   items2: any[] = [
   ];
-  config2: any = {'placeholder': 'Type here', 'sourceField': 'username'};
+  config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
   isAutocompleteUpdated = false;
   usersList: any;
 
@@ -49,6 +49,9 @@ export class BreadcrumbBarComponent implements AfterViewInit {
       this.sharedService.getUsers().subscribe(res => {
         this.usersList = res;
         this.items2 = res;
+        this.items2.forEach( element => {
+          element.label = element.username;
+        });
         this._userInfo.followers.forEach(element => {
           fData.push(this.items2.filter(u => u.username === element)[0]);
         });

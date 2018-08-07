@@ -92,7 +92,7 @@ export class SuppliersComponent implements OnInit {
   }
 
   addNewSupplier(event) {
-    console.log('supplier adding data:', event.data);
+    console.log('supplier adding data:', event);
     // const newSupplier = {
     //   name: event.data.name,
     //   contactId: parseInt(event.data.contactId, 10),

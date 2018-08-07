@@ -256,6 +256,15 @@ export class SupplierProfileComponent implements OnInit {
     this.sharedSevice.getSupplier(this.currentSupplierId).subscribe(res => {
       console.log('current supplier: ', res);
       this.userInfo = res.data;
+      if (!this.userInfo.billingAddress) {
+        this.userInfo.billingAddress = {
+          address: '',
+          city: '',
+          province: '',
+          country: '',
+          postalCode: ''
+        };
+      }
       this.cards.lifeTimeStatus = this.userInfo.lifeTimeStatus;
       this.chartSetData = [
         {

@@ -2,30 +2,40 @@
   <input  class="supplier-name" (keyup.enter)="updateProfile()" contentEditable [(ngModel)]="userInfo.name" (blur)="updateProfile()" placeholder="Supplier name" [ngClass]="{'validation-required': invalidName}"/>
 </div>
 <div class="role editable">
-  <input [(ngModel)]="userInfo.contactName" id="role" (keyup.enter)="updateProfile()" (blur)="updateProfile()" placeholder="First name" [ngClass]="{'validation-required': invalidContactName}">
+  <input [(ngModel)]="userInfo.contactName" id="role" (keyup.enter)="updateProfile()" (blur)="updateProfile()" placeholder="Contact name" [ngClass]="{'validation-required': invalidContactName}">
 </div>
 <!-- <div class="logo">
   <img [src]='userInfo.profileLink' />
   <img src="assets/images/Cloud.png" class="img-settings" (click)="changeImage()"/>
 </div> -->
+<span class="alert-email" *ngIf="invalidEmail || invalidPayableEmail">Wrong Email Format</span>
 <div class="email editable">
   <img src="assets/images/envelope.png" />
   <div class="mails-sec">
-    <input [(ngModel)]="userInfo.contactEmail" id="email" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidEmail}" placeholder="Contact Email">
-    <input [(ngModel)]="userInfo.accountPayableEmail" id="payableEmail" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidPayableEmail}" placeholder="Payable Email">
+    <div>
+      <input [(ngModel)]="userInfo.contactEmail" id="email" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidEmail}" placeholder="Contact Email">
+      <span>  (Contact)</span>
+    </div>
+    <div>
+      <input [(ngModel)]="userInfo.accountPayableEmail" id="payableEmail" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidPayableEmail}" placeholder="Payable Email">
+      <span>  (Payable)</span>
+    </div>
   </div>
   
 </div>
-<span class="alert-email" *ngIf="invalidEmail">Wrong Email Format</span>
 <div class="phone editable">
   <img src="assets/images/ringing.png" />
-  <div>
-    <span>
-      <input [(ngModel)]="userInfo.phoneNumber" id="phoneNumber" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidPhoneNumber}"
-              placeholder="XXX-XXX-XXXX">
-    </span>
+  <div class="phones-sec">
+    <div>
+      <input [(ngModel)]="userInfo.phoneNumber" id="phoneNumber" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidPhoneNumber}" placeholder="XXX-XXX-XXXX">
+      <span>  (Supplier)</span>
+    </div>
+    <div>
+      <input [(ngModel)]="userInfo.contactPhoneNumber" id="phoneNumber" (keyup.enter)="updateProfile()" (blur)="updateProfile()" [ngClass]="{'validation-required': invalidPayablePhone}" placeholder="XXX-XXX-XXXX">
+      <span>  (Contact)</span>
+    </div>
   </div>
-  <!-- <span>{{formatPhoneNumber(userInfo.primaryphone)}}&nbsp;(Primary Contact)<br/>{{formatPhoneNumber(userInfo.mobilephone)}}&nbsp;(Mobile)</span> -->
+
 </div>
 
 <h5>Shipping</h5>
