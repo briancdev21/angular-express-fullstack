@@ -238,7 +238,11 @@ export class LeadsListTableComponent implements OnInit {
 
     // Remove empty/null field from object.
     Object.keys(lead).forEach((key) => (lead[key] == null) && delete lead[key]);
-    Object.keys(lead.person).forEach((key) => (lead.person[key] == null) && delete lead.person[key]);
+    if (lead.type === 'PERSON') {
+      Object.keys(lead.person).forEach((key) => (lead.person[key] == null) && delete lead.person[key]);
+    } else {
+      Object.keys(lead.business).forEach((key) => (lead.business[key] == null) && delete lead.business[key]);
+    }
     Object.keys(lead.phoneNumbers).forEach((key) => (lead.phoneNumbers[key] == null) && delete lead.phoneNumbers[key]);
     this.clonedRowLead = lead;
     this.leadModalInfoCollapsed[index] = false;
@@ -258,6 +262,7 @@ export class LeadsListTableComponent implements OnInit {
     this.crmService.createLead(JSON.stringify(this.clonedRowLead)).subscribe(res => {
       this.crmService.getLeadsList().subscribe(data => {
         this.leadsListInfo = data.results;
+        this.addContactName(this.leadsListInfo);
       });
     });
   }
@@ -266,6 +271,7 @@ export class LeadsListTableComponent implements OnInit {
     this.crmService.deleteIndividualLead(this.deletedRowIndex).subscribe(res => {
       this.crmService.getLeadsList().subscribe(data => {
         this.leadsListInfo = data.results;
+        this.addContactName(this.leadsListInfo);
       });
     });
   }
