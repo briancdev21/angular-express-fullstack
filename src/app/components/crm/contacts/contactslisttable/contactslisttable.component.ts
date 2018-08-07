@@ -201,7 +201,11 @@ export class ContactsListTableComponent implements OnInit {
     };
     // Remove empty/null field from object.
     Object.keys(contact).forEach((key) => (contact[key] == null) && delete contact[key]);
-    Object.keys(contact.person).forEach((key) => (contact.person[key] == null) && delete contact.person[key]);
+    if (contact.type === 'PERSON') {
+      Object.keys(contact.person).forEach((key) => (contact.person[key] == null) && delete contact.person[key]);
+    } else {
+      Object.keys(contact.business).forEach((key) => (contact.business[key] == null) && delete contact.business[key]);
+    }
     Object.keys(contact.phoneNumbers).forEach((key) => (contact.phoneNumbers[key] == null) && delete contact.phoneNumbers[key]);
     this.clonedRowIndex = index;
     this.clonedRowContact = contact;
@@ -221,6 +225,7 @@ export class ContactsListTableComponent implements OnInit {
     this.crmService.createContact(JSON.stringify(this.clonedRowContact)).subscribe(res => {
       this.crmService.getContactsList().subscribe(data => {
         this.contactsListInfo = data.results;
+        this.addContactName(this.contactsListInfo);
       });
     });
   }
@@ -229,6 +234,7 @@ export class ContactsListTableComponent implements OnInit {
     this.crmService.deleteIndividualContact(this.deletedRowIndex).subscribe(res => {
       this.crmService.getContactsList().subscribe(data => {
         this.contactsListInfo = data.results;
+        this.addContactName(this.contactsListInfo);
       });
     });
   }
@@ -270,6 +276,17 @@ export class ContactsListTableComponent implements OnInit {
     const s2 = ('' + s).replace(/\D/g, '');
     const m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
     return (!m) ? null : '(' + m[1] + ') ' + m[2] + '-' + m[3];
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }
 
