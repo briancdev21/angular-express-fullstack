@@ -8,7 +8,7 @@
   <img [src]='userInfo.profileLink' />
   <img src="assets/images/Cloud.png" class="img-settings" (click)="changeImage()"/>
 </div> -->
-<span class="alert-email" *ngIf="invalidEmail">Wrong Email Format</span>
+<span class="alert-email" *ngIf="invalidEmail || invalidPayableEmail">Wrong Email Format</span>
 <div class="email editable">
   <img src="assets/images/envelope.png" />
   <div class="mails-sec">

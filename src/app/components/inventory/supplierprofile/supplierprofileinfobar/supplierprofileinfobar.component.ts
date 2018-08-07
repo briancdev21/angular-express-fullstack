@@ -231,8 +231,11 @@ export class SupplierProfileInfoBarComponent implements OnInit {
       this.userInfo.shippingAddress.address && this.userInfo.shippingAddress.city && this.userInfo.shippingAddress.postalCode &&
       !this.invalidPhoneNumber && this.userInfo.phoneNumber && this.billingProvince !== '' && this.billingCountry !== '' &&
       !this.invalidPayableEmail) {
-        if (this.userInfo.billingAddress) {
-          if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode) {
+        if (this.userInfo.billingAddress.address !== '' || this.userInfo.billingAddress.city !== '' ||
+            this.userInfo.billingAddress.postalCode !== '' || this.userInfo.billingAddress.province !== '' ||
+            this.userInfo.billingAddress.country !== '') {
+          if (this.userInfo.billingAddress.address && this.userInfo.billingAddress.city && this.userInfo.billingAddress.postalCode  &&
+            this.billingProvince !== '' && this.billingCountry !== '') {
             this.saveData();
           } else {
             if (this.userInfo.billingAddress.address === ''  || this.userInfo.billingAddress.address === undefined) {
@@ -283,6 +286,14 @@ export class SupplierProfileInfoBarComponent implements OnInit {
 
   saveData() {
     let savingData;
+    let billingAddress = null;
+    if (this.userInfo.billingAddress.address === '' && this.userInfo.billingAddress.city === '' &&
+      this.userInfo.billingAddress.postalCode === '' && this.userInfo.billingAddress.province === '' &&
+      this.userInfo.billingAddress.country === '') {
+        console.log('user info 123: ', this.userInfo);
+    } else {
+      billingAddress = this.userInfo.billingAddress;
+    }
     savingData = {
       currencyId: this.userInfo.currencyId,
       termId: this.userInfo.termId,
@@ -293,7 +304,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
       contactName: this.userInfo.contactName,
       keywordIds: this.tagsArr ? this.tagsArr : [],
       note: this.userInfo.note ? this.userInfo.note : '',
-      billingAddress: this.userInfo.billingAddress,
+      billingAddress: billingAddress,
       accountPayableEmail: this.userInfo.accountPayableEmail
     };
 

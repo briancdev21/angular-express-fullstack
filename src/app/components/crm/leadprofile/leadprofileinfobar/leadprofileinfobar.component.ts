@@ -455,7 +455,7 @@ export class LeadProfileInfoBarComponent implements OnInit {
         },
         keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
         note: this.userInfo.note ? this.userInfo.note : '',
-        billingAddress: this.userInfo.billingAddress
+        billingAddress: billingAddress
       };
     } else {
       savingData = {
@@ -472,11 +472,14 @@ export class LeadProfileInfoBarComponent implements OnInit {
         },
         keywordIds: this.userInfo.keywordIds ? this.userInfo.keywordIds : [],
         note: this.userInfo.note ? this.userInfo.note : '',
-        billingAddress: this.userInfo.billingAddress
+        billingAddress: billingAddress
       };
     }
     if (!savingData.phoneNumbers.secondary) {
       delete(savingData.phoneNumbers.secondary);
+    }
+    if (savingData.billingAddress === null) {
+      delete(savingData.billingAddress);
     }
     console.log('saving Data: ', savingData);
     this.crmService.updateIndividualLead(this.userInfo.id, savingData).subscribe(res => {
