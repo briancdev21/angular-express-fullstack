@@ -186,9 +186,17 @@ export class PmAddWorkOrderComponent implements OnInit {
   followers = [];
   newCreatedWorkOrderId: any;
   availableProductsList = [];
+  currentProjectId: any;
+  currentProject: any;
+  today = new Date();
+  tomorrow = new Date();
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private projectsService: ProjectsService,
     private collaboratorsService: CollaboratorsService, private productsService: ProductsService) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
+    this.today = new Date();
+    this.tomorrow.setDate(this.today.getDate() + 1);
+
     const comp = this;
     document.addEventListener('click', function() {
       comp.editable = false;
@@ -197,8 +205,18 @@ export class PmAddWorkOrderComponent implements OnInit {
     this.sharedService.getContacts().subscribe(data => {
       this.contactsList = data;
       this.addContactName(this.contactsList);
-      console.log('contacts: ', this.contactsList);
+
+      this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+        this.currentProject = res.data;
+        console.log('current project: ', res);
+        this.currentProject.contactName = this.contactsList.filter(c => c.id === this.currentProject.contactId)[0].name;
+      });
       this.customerList = completerService.local(this.contactsList, 'name', 'name');
+    });
+
+    this.projectsService.getProjectChangeLogs(this.currentProjectId).subscribe(res => {
+      this.openChangeLogs = res.results.filter(c => c.status === 'IN_PROGRESS' || c.status === 'NEW');
+      console.log('openChangeLogs: ', this.openChangeLogs);
     });
 
     this.sharedService.getUsers().subscribe(data => {
@@ -379,12 +397,12 @@ export class PmAddWorkOrderComponent implements OnInit {
     const timeAddedEnd = this.workorderDetails.endDate + 'T' + timeEnd;
     const isoFormatEnd = new Date (timeAddedEnd).toISOString();
     const savingWorkOrderData = {
-      contactId: this.workorderDetails.contactId,
+      contactId: this.currentProject.contactId,
       name: this.workorderDetails.workorderName,
       startDate: isoFormatStart,
       endDate: isoFormatEnd,
       followers: this.followers.length > 0 ? this.followers : undefined,
-      projectId: this.workorderDetails.selectedProject ? this.workorderDetails.selectedProject : undefined,
+      projectId: this.currentProject.id,
       changelogId: this.workorderDetails.changeLog ? parseInt(this.workorderDetails.changeLog, 10) : null,
       description: this.workorderDetails.description
     };
@@ -453,10 +471,6 @@ export class PmAddWorkOrderComponent implements OnInit {
 
   onSelectProject(event) {
     console.log('selected project: ', event);
-    this.projectsService.getProjectChangeLogs(event).subscribe(res => {
-      this.openChangeLogs = res.results.filter(c => c.status === 'IN_PROGRESS' || c.status === 'NEW');
-      console.log('openChangeLogs: ', this.openChangeLogs);
-    });
     // this.openDependencies = this.projectInfo[index].dependency;
     // this.openMilestones = this.projectInfo[index].milestone;
     // this.openChangeLogs = this.projectInfo[index].changeLog;

@@ -1,6 +1,10 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
+import * as moment from 'moment';
+import { SharedService } from '../../../../../services/shared.service';
+import { CollaboratorsService } from '../../../../../services/collaborators.service';
+import { ProjectsService } from '../../../../../services/projects.service';
 
 @Component({
   selector: 'app-pendingworkorderslisttable',
@@ -14,69 +18,71 @@ import * as _ from 'lodash';
 
 export class PendingWorkOrdersListTableComponent implements OnInit {
 
-  projectsListInfo = [
-    {
-      workOrderNumber: 'WO12345',
-      workOrderName: 'Work Order Title Here',
-      customerName: 'John Moss',
-      startDate: '2017-11-20',
-      scheduleStart: '8:00 AM',
-      scheduleEnd: '6:30 PM',
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        }
-      ],
-      completion: 0
-    },
-    {
-      workOrderNumber: 'WO12344',
-      workOrderName: 'Work Order Title Here',
-      customerName: 'John Moss',
-      startDate: '2017-11-19',
-      scheduleStart: '12:00 PM',
-      scheduleEnd: '6:30 PM',
-      collaborators: [
-        {
-          name: 'John Moss',
-          imgUrl: 'assets/users/user1.png'
-        },
-        {
-          name: 'Steve Jobs',
-          imgUrl: 'assets/users/user2.png'
-        }
-      ],
-      completion: 0
-    },
-  ];
+  projectsListInfo = [];
   public barInfo: any;
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
+  usersList = [];
+  contactsList = [];
+  workOrdersList = [];
+  currentProjectId: any;
+  contactName: any;
 
-  constructor( private router: Router ) {
-  }
+  constructor( private router: Router, private sharedService: SharedService,
+    private collaboratorsService: CollaboratorsService, private route: ActivatedRoute, private projectsService: ProjectsService ) {
 
-  ngOnInit() {
-    this.projectsListInfo.map(i => i['barInfo'] = {
-      title: i.completion + '%',
-      completeness: i.completion
+    this.currentProjectId = localStorage.getItem('current_pending_projectId');
+
+    this.sharedService.getUsers().subscribe(user => {
+      this.usersList = user;
+      this.sharedService.getContacts().subscribe(data => {
+        this.contactsList = data;
+        this.addContactName(this.contactsList);
+        this.collaboratorsService.getProjectWorkOrders(this.currentProjectId).subscribe(res => {
+          this.workOrdersList = res.results;
+          this.workOrdersList.forEach(element => {
+            const colArr = [];
+            element.startTime = moment(element.startDate).format('hh:mm a');
+            element.endTime = moment(element.endDate).format('hh:mm a');
+            element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+            element.contactName = this.getContactNameFromId(element.contactId);
+            element.barInfo = {
+              title: element.completion + '%',
+              completeness: element.completion
+            };
+            if (element.collaborators) {
+              element.collaborators.forEach(col => {
+                colArr.push(this.usersList.filter(u => u.username === col)[0]);
+              });
+              element.collaboratorsData = colArr;
+            } else {
+              element.collaboratorsData = [];
+            }
+          });
+          console.log('work order list: ', this.workOrdersList);
+        });
+
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+          console.log('project info: ', res);
+          this.contactName = this.contactsList.filter(c => c.id === res.data.contactId)[0].name;
+          console.log('project info: ', this.contactName);
+        });
+      });
     });
   }
 
-  getStatus() {
+  ngOnInit() {
   }
 
-  redirectTo(id) {
-    this.router.navigate(['../projectslist/' + id]);
+  getStatus() {
   }
 
   sortArray(field) {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.projectsListInfo.sort( function(name1, name2) {
+      this.workOrdersList.sort( function(name1, name2) {
         if ( name1[field] < name2[field] ) {
           return -1;
         } else if ( name1[field] > name2[field]) {
@@ -86,7 +92,7 @@ export class PendingWorkOrdersListTableComponent implements OnInit {
         }
       });
     } else {
-      this.projectsListInfo.reverse();
+      this.workOrdersList.reverse();
     }
   }
 
@@ -106,7 +112,7 @@ export class PendingWorkOrdersListTableComponent implements OnInit {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.projectsListInfo.sort( function(name1, name2) {
+      this.workOrdersList.sort( function(name1, name2) {
         if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
           return -1;
         } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
@@ -116,12 +122,32 @@ export class PendingWorkOrdersListTableComponent implements OnInit {
         }
       });
     } else {
-      this.projectsListInfo.reverse();
+      this.workOrdersList.reverse();
     }
   }
 
   getDateColor(days) {
     return days <= 6 ? 'green' : days <= 14 ? 'orange' : 'red';
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getContactNameFromId(id) {
+    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
+
+  redirectTo(id) {
+    this.router.navigate(['../collaboration/order-profile', {id: id}]);
   }
 
 }

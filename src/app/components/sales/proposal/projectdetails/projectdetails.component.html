@@ -81,7 +81,7 @@
                   <div class="edit-followers" *ngIf="editable" (click)="editable=true;$event.stopPropagation()" >
                     <ul>
                       <span *ngIf="!proposalDetails.collaboratorsData.length" class="type-here">Type collaborator's name</span>
-                      <li *ngFor="let user of proposalDetails.collaboratorsData; let i = index">{{user.name}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
+                      <li *ngFor="let user of proposalDetails.collaboratorsData; let i = index">{{user.username}}<span (click)="removeUser(i)" class="closebtn">&nbsp;&nbsp;x</span></li><br/>
                       <li style="background: none; width: 100%; margin: 0;">
                         <ng-select *ngIf="isAutocompleteUpdated2" [items]="items3"
                           bindLabel="config2.sourceField"

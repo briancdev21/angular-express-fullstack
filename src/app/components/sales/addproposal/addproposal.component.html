@@ -27,9 +27,9 @@
               <!-- <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectCustomer($event)" [ngClass]="{'validation-required-name': invalidCustomerName}" [searchStr]="selectName"></app-in-customer-name> -->
             </div>
             <div class="collaborators">
-              <span>Collaborators (*required)</span>
+              <span>Collaborators</span>
               <div *ngIf="customerList">
-                <div class="followers"  (click)="editable=true;$event.stopPropagation()" *ngIf="proposalDetails.collaborators" [ngClass]="{'validation-required': invalidCollaborators}"> 
+                <div class="followers"  (click)="editable=true;$event.stopPropagation()" *ngIf="proposalDetails.collaborators"> 
                   <div class="follower" *ngFor="let user of proposalDetails.collaborators; let i = index" >
                     <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editable=true;$event.stopPropagation()"/></a>
                   </div> 
@@ -60,14 +60,14 @@
             <div>
               <div class="desc">
                 <span>Project Management (*required)</span>
-                <div>
+                <div *ngIf="contactSelected">
                   <img src="assets/images/switch.png" *ngIf="switchIconManagement" (click)="clickIconManagement()">
                   <img src="assets/images/switch-off.png" *ngIf="!switchIconManagement" (click)="clickIconManagement()">
                   <span>Same as customer</span>
                 </div>
               </div>
               <ng2-completer 
-                [dataService]="customersData" 
+                [dataService]="contactsData" 
                 [minSearchLength]="0" 
                 (selected)="onSelectProjectManagementContact($event)" 
                 [(ngModel)]="selectProject" 
@@ -80,14 +80,14 @@
             <div>
               <div class="desc">
                 <span>Account Receivable (*required)</span>
-                <div>
+                <div  *ngIf="contactSelected">
                   <img src="assets/images/switch.png" *ngIf="switchIconReceivable" (click)="clickIconReceivable()">
                   <img src="assets/images/switch-off.png" *ngIf="!switchIconReceivable" (click)="clickIconReceivable()">
                   <span>Same as customer</span>
                 </div>
               </div>
               <ng2-completer 
-                [dataService]="customersData" 
+                [dataService]="contactsData" 
                 [minSearchLength]="0" 
                 (selected)="onSelectAccountReceivable($event)" 
                 [(ngModel)]="selectReceivable" 
@@ -152,10 +152,28 @@
 
             <div class="city-state">
               <input placeholder="Enter City" [(ngModel)]="proposalDetails.city" [ngClass]="{'validation-required': invalidCity}">
-              <input placeholder="Enter State" [(ngModel)]="proposalDetails.state" [ngClass]="{'validation-required': invalidState}">
+              <!-- <input placeholder="Enter State" [(ngModel)]="proposalDetails.state" [ngClass]="{'validation-required': invalidState}"> -->
+              <ng2-completer 
+                [(ngModel)]="province" 
+                [ngClass]="{'validation-required': invalidProvince}" 
+                [datasource]="provincesSource" 
+                [minSearchLength]="0" 
+                (keyup.enter)="onEnter()" 
+                (selected)="onSelectProvince($event)"
+                [placeholder]="'Enter Provice'">
+              </ng2-completer>
             </div>
             <div class="country-zip">
-              <input placeholder="Enter Country" [(ngModel)]="proposalDetails.country" [ngClass]="{'validation-required': invalidCountry}">
+              <!-- <input placeholder="Enter Country" [(ngModel)]="proposalDetails.country" [ngClass]="{'validation-required': invalidCountry}"> -->
+              <ng2-completer 
+                [(ngModel)]="country" 
+                [ngClass]="{'validation-required': invalidCountry}" 
+                [datasource]="countriesSource" 
+                [minSearchLength]="0" 
+                (keyup.enter)="onEnter()" 
+                (selected)="onSelectCountry($event)"
+                [placeholder]="'Enter Country'">
+              </ng2-completer>
               <input placeholder="Enter Zipcode" [(ngModel)]="proposalDetails.zipcode" [ngClass]="{'validation-required': invalidZipcode}">
             </div>
           </div>

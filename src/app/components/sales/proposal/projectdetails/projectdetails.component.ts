@@ -361,6 +361,8 @@ projectDetails = {
       this.proposalDetails['collaboratorsData'] = [];
       this.proposalDetails.collaborators.forEach(ele => {
         const selectUser = this.usersList.filter(u => u.username === ele)[0];
+        selectUser.label = selectUser.username;
+        selectUser.imageUrl = selectUser.pictureURI;
         this.proposalDetails['collaboratorsData'].push(selectUser);
       });
       this.proposalDetails.address = this.proposalInfo.shippingAddress.address;
@@ -384,7 +386,6 @@ projectDetails = {
       this.proposalDetails.projectSubCategoriesAll = this.proposalDetails.subcategoryIds;
       this.proposalDetails.accountReceivable = this.getIdFromString(this.proposalDetails.accountReceivableId);
       this.proposalDetails.projectManagementContact = this.getIdFromString(this.proposalDetails.clientProjectManagerId);
-      
       console.log('$$$ ', this.proposalDetails, this.scheduleRemain);
     });
   }
@@ -697,9 +698,8 @@ projectDetails = {
         'contactId': this.getIdFromString(this.proposalDetails.contactId),
         // 'leadId': 0,
         'projectId': this.proposalDetails.projectId,
-        'projectTypeId': parseInt(this.proposalDetails.projectTypeId, 10),
-        'pricingCategoryId': this.proposalDetails.pricingCategoryId ?
-          parseInt(this.proposalDetails.pricingCategoryId.toString(), 10) : undefined,
+        'projectTypeId': this.proposalDetails.projectTypeId,
+        'pricingCategoryId': this.proposalDetails.pricingCategoryId ? this.proposalDetails.pricingCategoryId : undefined,
         'categoryIds': this.proposalDetails.projectCategoriesAll,
         'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
         'accountManager': this.proposalDetails.accountManager.username,
@@ -725,7 +725,7 @@ projectDetails = {
           'unit': this.proposalDetails.discount.unit
         },
         'collaborators': collaboratorData,
-        'taxRateId': parseInt(this.proposalDetails.taxRateId.toString(), 10)
+        'taxRateId': this.proposalDetails.taxRateId
       };
 
       this.proposalsService.updateIndividualProposal(this.proposalId, savingData).subscribe(res => {
@@ -929,7 +929,7 @@ projectDetails = {
 
   getIdFromString(str) {
     const data = str.split('-').pop();
-    return parseInt(data, 10);
+    return data;
   }
 
   addContactName(data) {
@@ -944,13 +944,13 @@ projectDetails = {
   }
 
   getContactNameFromId(id) {
-    const updatedId = parseInt(id.split('-').pop(), 10);
+    const updatedId = id.split('-').pop();
     const selectedContact = this.customerList.filter(c => c.id === updatedId)[0];
     return selectedContact.name;
   }
 
   getContactCustomerNameFromId(id) {
-    const updatedId = parseInt(id.split('-').pop(), 10);
+    const updatedId = id.split('-').pop();
     this.selectedCustomer = this.customerList.filter(c => c.id === updatedId)[0];
     return this.selectedCustomer.name;
   }

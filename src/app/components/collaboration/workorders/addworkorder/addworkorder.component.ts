@@ -221,8 +221,7 @@ export class AddWorkOrderComponent implements OnInit {
 
     this.projectsService.getProjectsList().subscribe(res => {
       this.projectsList = res.results;
-      console.log('projects List: ', this.projectsList);
-      // this.openProjects = this.projectsList.filter(p => p.)
+      this.projectsList = this.projectsList.filter(p => p.status === 'IN_PROGRESS' || p.status === 'PENDING');
     });
   }
 

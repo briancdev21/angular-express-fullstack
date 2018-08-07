@@ -11,6 +11,8 @@ import { ProposalService } from '../proposal/proposal.service';
 import { ProjectsService } from '../../../services/projects.service';
 import { SalesService } from '../sales.service';
 import { CrmService } from '../../../services/crm.service';
+import { countries } from '../../../../assets/json/countries';
+import { provinces } from '../../../../assets/json/provinces';
 
 @Component({
   selector: 'app-addproposal',
@@ -25,6 +27,7 @@ export class AddProposalComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
   today = new Date();
+  tomorrow = new Date();
   public proposalInfo;
 
   proposalDetails = {
@@ -112,14 +115,11 @@ export class AddProposalComponent implements OnInit {
   scheduleRemain: number;
   projectIDCount = [];
   invalidCustomerName = false;
-  invalidCollaborators = false;
   invalidPricing = false;
   invalidProjectType = false;
   invalidProjectName = false;
   invalidAddress = false;
   invalidCity = false;
-  invalidState = false;
-  invalidCountry = false;
   invalidZipcode = false;
   invalidProjectId = false;
   invalidSchedule = false;
@@ -166,17 +166,34 @@ export class AddProposalComponent implements OnInit {
   clientNoteContent = '';
   customersData: CompleterData;
   projectsData: CompleterData;
+  contactsData: CompleterData;
   projectsList: any;
   projectId = '';
   proposalsList = [];
   taxRateList = [];
   leadsList = [];
   needlessDate: any;
+  contactSelected = true;
+  country = '';
+  province = '';
+  invalidProvince = false;
+  invalidCountry = false;
+  countriesSource: CompleterData;
+  provincesSource: CompleterData;
+  selectedCountry: any;
+  selectedProvince: any;
+  countriesNameList = countries.map(c => c.name);
+  provincesNameList = provinces.map(p => p.name);
+  provinceNotIncluded = false;
+  selectedProvincesNameList = [];
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private crmService: CrmService,
     private proposalsService: ProposalsService, private projectsService: ProjectsService, private salesService: SalesService,
     private router: Router) {
     const comp = this;
+    this.tomorrow = new Date(this.today.getTime() + (24 * 60 * 60 * 1000));
+    this.countriesSource = completerService.local(countries, 'name', 'name');
+    this.provincesSource = completerService.local(provinces, 'name', 'name');
 
     document.addEventListener('click', function() {
       comp.editable = false;
@@ -190,6 +207,7 @@ export class AddProposalComponent implements OnInit {
         console.log('userlist: ', data);
         this.customerList = data;
         this.customerList = this.addContactName(this.customerList);
+        this.contactsData = this.completerService.local(this.customerList, 'name', 'name');
         this.crmService.getLeadsList().subscribe(lead => {
           this.leadsList = lead.results;
           if (this.leadsList.length) {
@@ -250,9 +268,11 @@ export class AddProposalComponent implements OnInit {
     this.switchIconShipping = !this.switchIconShipping;
     this.proposalDetails.shippingAddress = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.address : '';
     this.proposalDetails.city = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.city : '';
-    this.proposalDetails.state = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.province : '';
-    this.proposalDetails.country = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.country : '';
+    this.selectedProvince = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.province : '';
+    this.selectedCountry = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.country : '';
     this.proposalDetails.zipcode = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.postalCode : '';
+    this.province = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.province : '';
+    this.country = (this.switchIconShipping) ? this.selectedCustomer.shippingAddress.country : '';
   }
 
   clickIconManagement() {
@@ -280,6 +300,11 @@ export class AddProposalComponent implements OnInit {
   onSelectCustomer(event) {
     console.log('select customer: ', event);
     this.proposalDetails.contactId = event.originalObject.id;
+    if (event.originalObject.leadId) {
+      this.contactSelected = false;
+    } else {
+      this.contactSelected = true;
+    }
     this.selectedCustomer = this.customerList.filter( c => c.id === event.originalObject.id)[0];
   }
 
@@ -428,6 +453,20 @@ export class AddProposalComponent implements OnInit {
     // this.formattedStartDate = moment(start.value).format('MMMM DD, YYYY');
   }
 
+  onSelectCountry(event) {
+    console.log('country select: ', event);
+    this.selectedCountry = event.originalObject.code;
+    const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
+    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+  }
+
+  onSelectProvince(event) {
+    this.selectedProvince = event.originalObject.short;
+    // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
+    this.selectedCountry = event.originalObject.country;
+    this.country = countries.filter(c => c.code === this.selectedCountry)[0].name;
+  }
+
   tabChange(event) {
     switch (event.tabTitle) {
       case 'CLIENT DETAILS': {
@@ -456,20 +495,26 @@ export class AddProposalComponent implements OnInit {
   clickNext(pos) {
     if (pos === 'tab-one') {
       this.invalidCustomerName = false;
-      this.invalidCollaborators = false;
       this.invalidProjectName = false;
       this.invalidAddress = false;
       this.invalidCity = false;
-      this.invalidState = false;
+      this.invalidProvince = false;
       this.invalidCountry = false;
       this.invalidZipcode = false;
       this.invalidProjectType = false;
       this.invalidAccountReceivable = false;
       this.invalidClientProjectManager = false;
       this.invalidDesigner = false;
-      if (this.proposalDetails.contactId && this.proposalDetails.collaborators.length
-        && this.proposalDetails.projectName && this.proposalDetails.shippingAddress && this.proposalDetails.city
-        && this.proposalDetails.state && this.proposalDetails.country && this.proposalDetails.zipcode && this.proposalDetails.projectType) {
+      if (!this.countriesNameList.includes(this.country)) {
+        this.provinceNotIncluded = true;
+        this.invalidCountry = true;
+      } else if (!this.provincesNameList.includes(this.province)) {
+        this.provinceNotIncluded = true;
+        this.invalidProvince = true;
+      }
+      if (this.proposalDetails.contactId && this.proposalDetails.projectName
+        && this.proposalDetails.shippingAddress && this.proposalDetails.city
+        && this.province && this.country && this.proposalDetails.zipcode && this.proposalDetails.projectType) {
           this.tabActiveSecond = true;
           this.tabActiveFirst = false;
           this.tabActiveThird = false;
@@ -478,9 +523,6 @@ export class AddProposalComponent implements OnInit {
         console.log('tabone-click1: ', this.proposalDetails);
         if (!this.proposalDetails.contactId) {
           this.invalidCustomerName = true;
-        }
-        if (!this.proposalDetails.collaborators.length) {
-          this.invalidCollaborators = true;
         }
         if (!this.proposalDetails.projectName) {
           this.invalidProjectName = true;
@@ -491,10 +533,10 @@ export class AddProposalComponent implements OnInit {
         if (!this.proposalDetails.city) {
           this.invalidCity = true;
         }
-        if (!this.proposalDetails.state) {
-          this.invalidState = true;
+        if (!this.province) {
+          this.invalidProvince = true;
         }
-        if (!this.proposalDetails.country) {
+        if (!this.country) {
           this.invalidCountry = true;
         }
         if (!this.proposalDetails.zipcode) {
@@ -610,12 +652,11 @@ export class AddProposalComponent implements OnInit {
     this.invalidScopeEditorContent = false;
     const collaborators = this.proposalDetails.collaborators.map(collaborator => collaborator.username);
     const savingProposalData = {
-      'currencyId': 1,
       'contactId': this.proposalDetails.contactId,
       'leadId': this.proposalDetails.contactId,
       'projectId': this.proposalDetails.projectId,
-      'projectTypeId': parseInt(this.proposalDetails.projectType, 10),
-      'pricingCategoryId': this.proposalDetails.pricing ? parseInt(this.proposalDetails.pricing, 10) : undefined,
+      'projectTypeId': this.proposalDetails.projectType,
+      'pricingCategoryId': this.proposalDetails.pricing ? this.proposalDetails.pricing : undefined,
       'categoryIds': this.proposalDetails.projectCategoriesAll,
       'subcategoryIds': this.proposalDetails.projectSubCategoriesAll,
       'accountManager': this.proposalDetails.accountManager.username,
@@ -627,9 +668,9 @@ export class AddProposalComponent implements OnInit {
       'shippingAddress': {
         'address': this.proposalDetails.shippingAddress,
         'city': this.proposalDetails.city,
-        'province': this.proposalDetails.state,
+        'province': this.selectedProvince,
         'postalCode': this.proposalDetails.zipcode,
-        'country': this.proposalDetails.country
+        'country': this.selectedCountry
       },
       'paymentSchedule': this.proposalDetails.paymentSchedule,
       'scopeOfWork': this.scopeEditorContent,
@@ -641,7 +682,7 @@ export class AddProposalComponent implements OnInit {
         'unit': this.proposalDetails.discount.type
       },
       'collaborators': collaborators,
-      'taxRateId': parseInt(this.proposalDetails.taxRate.toString(), 10)
+      'taxRateId': this.proposalDetails.taxRate.toString()
     };
 
     if (this.selectedCustomer.leadId) {

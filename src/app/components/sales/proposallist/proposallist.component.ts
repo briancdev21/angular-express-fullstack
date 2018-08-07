@@ -173,6 +173,6 @@ export class ProposalListComponent implements OnInit {
 
   getContactIdFromString(str) {
     const strArr = str.split('-');
-    return parseInt(strArr[strArr.length - 1], 10);
+    return strArr[strArr.length - 1];
   }
 }

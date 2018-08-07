@@ -19,26 +19,17 @@
               <!-- <ng2-completer
                 [dataService]="customerList" 
                 (selected)="onSelectCustomer($event)" 
-                [ngClass]="{'validation-required-name': invalidCustomerName}" 
                 [(ngModel)]="selectName"
                 [minSearchLength]="0"
                 *ngIf="contactsList">
               </ng2-completer> -->
-              <ng2-completer
-              [dataService]="customerList" 
-              (selected)="onSelectCustomer($event)" 
-              [(ngModel)]="selectName"
-              [minSearchLength]="0"
-              *ngIf="contactsList">
-            </ng2-completer>
+              <input [(ngModel)]="currentProject.contactName" disabled *ngIf="currentProject">
             </div>
             <div class="workorder-project">
               <span>Project</span>
-              <select [(ngModel)]="workorderDetails.selectedProject" (ngModelChange)="onSelectProject($event)">
-                <option *ngFor="let project of projectsList" [value]="project.id">
-                  {{project.name}}
-                </option>
-              </select>
+              <div>
+                <input [(ngModel)]="currentProject.name" disabled *ngIf="currentProject">
+              </div>
             </div>
           </div>
 
@@ -72,7 +63,8 @@
                     [owlDateTimeTrigger]="startDate" 
                     [owlDateTime]="startDate" 
                     placeholder="Choose a start date" 
-                    (dateTimeChange)="selectStartDate($event)">
+                    (dateTimeChange)="selectStartDate($event)"
+                    [min]="tomorrow">
                   <owl-date-time [pickerType]="'calendar'" #startDate></owl-date-time>
                 </div>
               </div>

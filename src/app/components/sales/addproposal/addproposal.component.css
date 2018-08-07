@@ -193,6 +193,17 @@ input::placeholder {
 	margin-bottom: 15px;
 }
 
+.city-state ng2-completer, .country-zip ng2-completer {
+	width: 48%;
+	margin-bottom: 15px;
+	display: block;
+	margin-top: 4px;
+}
+
+:host ::ng-deep ng2-completer .completer-holder input::placeholder {
+	color: #d3d3d3;
+}
+
 .address {
 	margin-bottom: 15px;
 }

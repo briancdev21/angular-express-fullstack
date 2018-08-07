@@ -181,9 +181,9 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
     } else {
       if (product.quantity && (product.discount.value !== null)) {
         const updatingData = {
-          'categoryId': product.categoryId ? parseInt(product.categoryId, 10) : undefined,
-          'subcategoryId': product.subcategoryId ? parseInt(product.subcategoryId, 10) : undefined,
-          'pricingCategoryId': parseInt(product.pricingCategoryId, 10),
+          'categoryId': product.categoryId ? product.categoryId : undefined,
+          'subcategoryId': product.subcategoryId ? product.subcategoryId : undefined,
+          'pricingCategoryId': product.pricingCategoryId,
           'priceAdjustment': {
             'value': product.priceAdjustment.value,
             'unit': product.priceAdjustment.unit

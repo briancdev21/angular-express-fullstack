@@ -1,7 +1,7 @@
-<div class="progress" [ngStyle]="{'background': barInfo.backgroundColor}">
-  <div class="progress-bar " role="progressbar" [attr.aria-valuenow]="barInfo.completeness" aria-valuemin="0" aria-valuemax ="100" 
-    [ngStyle]="{'background-color': barInfo.filledColor}" [style.width]="(barInfo.completeness/100)*100 + '%'">
-    <span class="progress-title" *ngIf="barInfo.completeness < 80">{{barInfo.title}}</span>
-    <span class="progress-title-long" *ngIf="barInfo.completeness > 80">{{barInfo.title}}</span>
+<div class="progress" [ngStyle]="{'background': _barInfo.backgroundColor}">
+  <div class="progress-bar " role="progressbar" [attr.aria-valuenow]="_barInfo.completeness" aria-valuemin="0" aria-valuemax ="100" 
+    [ngStyle]="{'background-color': _barInfo.filledColor}" [style.width]="(_barInfo.completeness/100)*100 + '%'">
+    <span class="progress-title" *ngIf="_barInfo.completeness < 80">{{_barInfo.title}}</span>
+    <span class="progress-title-long" *ngIf="_barInfo.completeness > 80">{{_barInfo.title}}</span>
   </div>
 </div>

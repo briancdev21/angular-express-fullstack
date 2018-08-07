@@ -99,7 +99,7 @@ table i {
 
 :host ::ng-deep .work-order-table span.progress-title {
   font-size: 14px;
-  left: 85%;
+  left: 15%;
   color: #464646;
   margin-top: -2px;
 }
