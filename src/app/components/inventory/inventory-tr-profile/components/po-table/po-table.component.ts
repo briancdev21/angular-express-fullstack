@@ -62,14 +62,14 @@ export class POTableComponent implements OnInit {
     }
   }
   @Input() set trId(_id: string) {
-    this.po_id = parseInt(_id.replace('TR-', ''), 10);
+    this.po_id = _id.replace('TR-', '');
   }
   @Output() priceChange: EventEmitter<any> = new EventEmitter();
   private selectedSku: string;
   private skuService: CompleterData;
   private skus = [];
   private originSkus = [];
-  po_id: number;
+  po_id: string;
   taxRateOptions = [];
   selectedTaxRateId: number;
   trProductModel: any;
@@ -172,7 +172,7 @@ export class POTableComponent implements OnInit {
     }
 
     this.trProductModel = {
-      taxRateId: this.productDetails[index].taxRateId ? parseInt(this.productDetails[index].taxRateId, 10) : this.taxRateOptions[0].id,
+      taxRateId: this.productDetails[index].taxRateId ? this.productDetails[index].taxRateId : this.taxRateOptions[0].id,
       quantity: parseInt(this.productDetails[index].quantity, 10)
     };
     if (canUpdate) {

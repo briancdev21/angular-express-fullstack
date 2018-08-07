@@ -16,7 +16,7 @@ export class POCustomerNameComponent implements OnInit {
       console.log('userlist:', this.users);
       const user = this.index;
       if (typeof user === 'string') {
-        const selectedContactInfo = this.users.filter(userInfo => userInfo.id === parseInt(user.split('-').pop(), 10)).pop();
+        const selectedContactInfo = this.users.filter(userInfo => userInfo.id.toString() === user.split('-').pop()).pop();
         // console.log('selected Contact Info: ', selectedContactInfo);
         this.index = selectedContactInfo['index'];
       }
@@ -29,7 +29,7 @@ export class POCustomerNameComponent implements OnInit {
     if (user !== undefined) {
       console.log('contacted:', user);
       if (typeof user === 'string' && this.users.length !== 0 || user instanceof String && this.users.length !== 0) {
-        const selectedContactInfo = this.users.filter(userInfo => userInfo.id === parseInt(user.split('-').pop(), 10)).pop();
+        const selectedContactInfo = this.users.filter(userInfo => userInfo.id.toString() === user.split('-').pop()).pop();
         // console.log('selected Contact Info: ', selectedContactInfo);
         this.index = selectedContactInfo['index'];
       } else {

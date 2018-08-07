@@ -7,7 +7,7 @@ export class PurchaseOrderCreateModel {
     postalCode:  string,
     country:  string
   };
-  location: number;
+  locationId: number;
   freightCost: number;
   term: number;
   discount: any = {

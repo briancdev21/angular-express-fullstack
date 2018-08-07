@@ -17,14 +17,15 @@ import { SharedService } from '../../../../../services/shared.service';
 export class POTableComponent implements OnInit {
   @Input() productDetails;
   @Input() set poId(_id: string) {
-    this.po_id = parseInt(_id.replace('PO-', ''), 10);
+    // this.po_id = parseInt(_id.replace('PO-', ''), 10);
+    this.po_id = _id.replace('PO-', '');
   }
   @Output() priceChange: EventEmitter<any> = new EventEmitter();
   private selectedSku: string;
   private skuService: CompleterData;
   private skus = [];
   private originSkus = [];
-  po_id: number;
+  po_id: string;
   taxRateOptions = [];
   selectedTaxRateId: number;
   poProductModel: any;

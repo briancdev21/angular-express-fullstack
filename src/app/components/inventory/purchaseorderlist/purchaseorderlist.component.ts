@@ -38,8 +38,8 @@ export class PurchaseOrderListComponent implements OnInit {
         res.results.forEach(ele => {
           let contactName = '';
           if (ele.contactId) {
-            const contactId = parseInt(ele.contactId.split('-').pop(), 10);
-            contactName = this.contactList.filter(contact => contact.id === contactId).pop().name;
+            const contactId = ele.contactId.split('-').pop();
+            contactName = this.contactList.filter(contact => contact.id.toString() === contactId.toString()).pop().name;
           } else {
             contactName = '';
           }

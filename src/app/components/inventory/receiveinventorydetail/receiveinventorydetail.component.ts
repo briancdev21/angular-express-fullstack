@@ -72,12 +72,12 @@ export class ReceiveInventoryDetailComponent implements OnInit {
             let brandId;
             this.sharedService.getInventoryProductsWithParams(params).subscribe(res => {
               console.log('inventory products by skus:', res.results);
-              brandId = parseInt(res.results.pop().brandId, 10);
-              if (this.brandList.filter(brand => brand.id === brandId).pop() !== undefined) {
+              brandId = res.results.pop().brandId;
+              if (this.brandList.filter(brand => brand.id.toString() === brandId.toString()).pop() !== undefined) {
                 product.brand = this.brandList.filter(brand => brand.id === brandId).pop().name;
               }
             });
-            if (this.supplierList.filter(supplier => supplier.id === product.supplierId).pop() !== undefined) {
+            if (this.supplierList.filter(supplier => supplier.id.toString() === product.supplierId.toString()).pop() !== undefined) {
               product.supplier = this.supplierList.filter(supplier => supplier.id === product.supplierId).pop().name;
             }
             product.lastUpdated = moment(product.updatedAt).format('MMMM DD, YYYY');
