@@ -361,6 +361,8 @@ projectDetails = {
       this.proposalDetails['collaboratorsData'] = [];
       this.proposalDetails.collaborators.forEach(ele => {
         const selectUser = this.usersList.filter(u => u.username === ele)[0];
+        selectUser.label = selectUser.username;
+        selectUser.imageUrl = selectUser.pictureURI;
         this.proposalDetails['collaboratorsData'].push(selectUser);
       });
       this.proposalDetails.address = this.proposalInfo.shippingAddress.address;
@@ -927,7 +929,7 @@ projectDetails = {
 
   getIdFromString(str) {
     const data = str.split('-').pop();
-    return parseInt(data, 10);
+    return data;
   }
 
   addContactName(data) {
