@@ -113,7 +113,6 @@ export class AddProposalComponent implements OnInit {
   scheduleRemain: number;
   projectIDCount = [];
   invalidCustomerName = false;
-  invalidCollaborators = false;
   invalidPricing = false;
   invalidProjectType = false;
   invalidProjectName = false;
@@ -466,7 +465,6 @@ export class AddProposalComponent implements OnInit {
   clickNext(pos) {
     if (pos === 'tab-one') {
       this.invalidCustomerName = false;
-      this.invalidCollaborators = false;
       this.invalidProjectName = false;
       this.invalidAddress = false;
       this.invalidCity = false;
@@ -477,8 +475,8 @@ export class AddProposalComponent implements OnInit {
       this.invalidAccountReceivable = false;
       this.invalidClientProjectManager = false;
       this.invalidDesigner = false;
-      if (this.proposalDetails.contactId && this.proposalDetails.collaborators.length
-        && this.proposalDetails.projectName && this.proposalDetails.shippingAddress && this.proposalDetails.city
+      if (this.proposalDetails.contactId && this.proposalDetails.projectName
+        && this.proposalDetails.shippingAddress && this.proposalDetails.city
         && this.proposalDetails.state && this.proposalDetails.country && this.proposalDetails.zipcode && this.proposalDetails.projectType) {
           this.tabActiveSecond = true;
           this.tabActiveFirst = false;
@@ -488,9 +486,6 @@ export class AddProposalComponent implements OnInit {
         console.log('tabone-click1: ', this.proposalDetails);
         if (!this.proposalDetails.contactId) {
           this.invalidCustomerName = true;
-        }
-        if (!this.proposalDetails.collaborators.length) {
-          this.invalidCollaborators = true;
         }
         if (!this.proposalDetails.projectName) {
           this.invalidProjectName = true;

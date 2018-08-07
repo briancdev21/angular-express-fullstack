@@ -27,9 +27,9 @@
               <!-- <app-in-customer-name [userList]="customerList" (selectedUser)="onSelectCustomer($event)" [ngClass]="{'validation-required-name': invalidCustomerName}" [searchStr]="selectName"></app-in-customer-name> -->
             </div>
             <div class="collaborators">
-              <span>Collaborators (*required)</span>
+              <span>Collaborators</span>
               <div *ngIf="customerList">
-                <div class="followers"  (click)="editable=true;$event.stopPropagation()" *ngIf="proposalDetails.collaborators" [ngClass]="{'validation-required': invalidCollaborators}"> 
+                <div class="followers"  (click)="editable=true;$event.stopPropagation()" *ngIf="proposalDetails.collaborators"> 
                   <div class="follower" *ngFor="let user of proposalDetails.collaborators; let i = index" >
                     <a [title]='user.name' ><img [src]='user.imageUrl'  (click)="editable=true;$event.stopPropagation()"/></a>
                   </div> 
