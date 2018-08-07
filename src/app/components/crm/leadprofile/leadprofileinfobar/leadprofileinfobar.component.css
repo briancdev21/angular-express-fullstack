@@ -52,6 +52,7 @@ span, input {
 .editable input {
   border: 0;
   width: 100%;
+  height: 22px;
 }
 
 .email, .phone, .shipping, .billing-address {

@@ -209,6 +209,15 @@ export class LeadProfileComponent implements OnInit {
       this.userInfo.mobilephone = res.data.phoneNumbers.secondary;
       this.userInfo.keywords = res.data.keywordIds ? res.data.keywordIds : [];
       this.userInfo.followers = res.data.followers ? res.data.followers : [];
+      if (!this.userInfo.billingAddress) {
+        this.userInfo.billingAddress = {
+          address: '',
+          city: '',
+          province: '',
+          country: '',
+          postalCode: ''
+        };
+      }
       if (this.userInfo.type === 'PERSON') {
         this.userInfo.name = this.userInfo.person.firstName + ' ' + this.userInfo.person.lastName;
       } else {
