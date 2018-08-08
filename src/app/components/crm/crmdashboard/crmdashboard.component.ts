@@ -262,7 +262,11 @@ export class CrmDashboardComponent implements OnInit {
 
         this.sharedService.getCrmStatistics(0, 0, unit, 'dealsLostOverTime').subscribe(lost => {
           this.conversionRatio.lostDeals = lost.dealsLostOverTime[0].frameValue;
-          this.wonVsLost = (this.conversionRatio.wonDeals / this.conversionRatio.lostDeals * 100).toFixed(1);
+          if (this.conversionRatio.lostDeals === 0) {
+            this.wonVsLost = this.conversionRatio.wonDeals;
+          } else {
+            this.wonVsLost = (this.conversionRatio.wonDeals / this.conversionRatio.lostDeals * 100).toFixed(1);
+          }
         });
       });
     });
