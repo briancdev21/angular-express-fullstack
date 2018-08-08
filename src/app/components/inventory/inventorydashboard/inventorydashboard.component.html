@@ -64,8 +64,8 @@
               <th>DUE DATE</th>
             </tr>
             <tr *ngFor="let order of pendingOrders">
-              <td>{{order.orderNumber}}</td>
-              <td>{{order.dueDate}}</td>
+              <td>{{order.id}}</td>
+              <td>{{order.formatedDueDate}}</td>
             </tr>
           </table>
         </div>

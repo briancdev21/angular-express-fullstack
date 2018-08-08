@@ -29,24 +29,7 @@ export class InventoryDashboardComponent implements OnInit {
     belowLevel: 650
   };
 
-  public pendingOrders = [
-    {
-      orderNumber: 'PO 88031234',
-      dueDate: '2018-02-12'
-    }, {
-      orderNumber: 'PO 88031235',
-      dueDate: '2018-03-12'
-    }, {
-      orderNumber: 'PO 88031236',
-      dueDate: '2018-03-28'
-    }, {
-      orderNumber: 'PO 88031237',
-      dueDate: '2018-04-12'
-    }, {
-      orderNumber: 'PO 88031238',
-      dueDate: '2018-05-30'
-    },
-  ];
+  public pendingOrders = [];
 
   public areaChartInfo = [
     {
@@ -207,6 +190,15 @@ export class InventoryDashboardComponent implements OnInit {
         ele.revenue = ele.frameValue;
       });
     });
+
+    this.sharedService.getPurchaseOrders().subscribe(res => {
+      this.pendingOrders = res.results;
+      this.pendingOrders = this.pendingOrders.filter(o => o.status === 'OPEN');
+      this.sortDateArray('dueDate');
+      this.pendingOrders.forEach(element => {
+        element.formatedDueDate = moment(element.dueDate).format('MMMM DD, YYYY');
+      });
+    });
   }
 
   ngOnInit() {
@@ -220,5 +212,18 @@ export class InventoryDashboardComponent implements OnInit {
     // this.morrisDonutInfo.forEach(ele => {
     //   ele.value = Math.floor(ele.value * 100 / total);
     // });
+  }
+
+  sortDateArray(field) {
+    this.pendingOrders.sort( function(name1, name2) {
+      if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
+        return -1;
+      } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    this.pendingOrders.reverse();
   }
 }
