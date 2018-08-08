@@ -58,7 +58,7 @@
         <div class="card sales-conversion">
           <div class="card-header">
             <span>SALES CONVERSION</span>
-            <select [(ngModel)]="salesConversionTime">
+            <select [(ngModel)]="salesConversionTime" (ngModelChange)="salesConversionChange(salesConversionTime)">
               <option value="WEEKLY">This Week</option>
               <option value="MONTHLY">This Month</option>
               <option value="QUARTERLY">This Quarter</option>
@@ -75,11 +75,11 @@
                 <th>CONVERSION RATE</th>
               </tr>
               <tr *ngFor="let conversion of salesConversion">
-                <td>{{conversion.member}}</td>
+                <td>{{conversion.username}}</td>
                 <td>{{conversion.newLeads}}</td>
-                <td>${{conversion.opportunity}}</td>
+                <td>${{conversion.opportunities}}</td>
                 <td>{{conversion.wonDeals}}</td>
-                <td>{{conversion.conversionRate}}%</td>
+                <td>{{conversion.total}}%</td>
               </tr>
             </table>
           </div>

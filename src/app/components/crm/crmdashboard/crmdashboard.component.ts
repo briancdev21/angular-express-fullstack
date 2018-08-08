@@ -60,27 +60,6 @@ export class CrmDashboardComponent implements OnInit {
   ];
 
   public salesConversion = [
-    {
-      member: 'Michael Yue',
-      newLeads: 30,
-      opportunity: 20,
-      wonDeals: 5,
-      conversionRate: 17
-    },
-    {
-      member: 'Tyler labonte',
-      newLeads: 100,
-      opportunity: 30,
-      wonDeals: 5,
-      conversionRate: 5
-    },
-    {
-      member: 'Sam Olson',
-      newLeads: 400,
-      opportunity: 150,
-      wonDeals: 10,
-      conversionRate: 4
-    }
   ];
 
   public conversionRatio = {
@@ -194,6 +173,8 @@ export class CrmDashboardComponent implements OnInit {
 
     this.fetchConversionRatioTableData('MONTHLY');
 
+    this.fetchSalesConversionData('MONTHLY');
+
   }
 
   ngOnInit() {
@@ -287,6 +268,12 @@ export class CrmDashboardComponent implements OnInit {
     });
   }
 
+  fetchSalesConversionData(unit) {
+    this.sharedService.getCrmStatistics(0, 0, unit, 'userProposalPerformance').subscribe(sales => {
+      this.salesConversion = sales.userProposalPerformance;
+    });
+  }
+
   leadConversionChange(unit) {
     this.fetchLeadConversionData(unit);
   }
@@ -297,6 +284,10 @@ export class CrmDashboardComponent implements OnInit {
 
   conversionRatioChange(unit) {
     this.fetchConversionRatioTableData(unit);
+  }
+
+  salesConversionChange(unit) {
+    this.fetchSalesConversionData(unit);
   }
 
   sortArray(field) {
