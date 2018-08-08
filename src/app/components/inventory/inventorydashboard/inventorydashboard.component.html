@@ -79,19 +79,15 @@
             <div class="legend-sec">
               <div class="row">
                 <div class="square blue"></div>
-                <span>Created</span>
+                <span>Actual</span>
               </div>
               <div class="row">
-                <div class="square green"></div>
-                <span>Complete</span>
-              </div>
-              <div class="row">
-                <div class="square red"></div>
-                <span>Incomplete</span>
+                <div class="square yellow"></div>
+                <span>Estimate</span>
               </div>
             </div>
           </div>
-          <app-morrisareachart [areaChartInfo]="areaChartInfo"></app-morrisareachart>
+          <app-morrisareachart [areaChartInfo]="areaChartInfo" *ngIf="areaChartInfo"></app-morrisareachart>
         </div>
 
         <div class="pipeline-ratio">
