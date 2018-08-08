@@ -2,6 +2,7 @@ import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
   selector: 'app-inventorydashboard',
@@ -126,29 +127,7 @@ export class InventoryDashboardComponent implements OnInit {
 
   public morrisDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
-  public morrisLineChartInfo = [
-    {
-      period: 'Jun',
-      revenue: 67000,
-    }, {
-      period: 'JUL',
-      revenue: 54000,
-    }, {
-      period: 'AUG',
-      revenue: 35203,
-    }, {
-      period: 'SEP',
-      revenue: 62652,
-    }, {
-      period: 'OCT',
-      revenue: 802520,
-    }, {
-      period: 'NOV',
-      revenue: 152000,
-    }, {
-      period: 'DEC',
-      revenue: 152003,
-    }];
+  public morrisLineChartInfo: any;
 
   public activitiesInfo = [
     {
@@ -220,16 +199,26 @@ export class InventoryDashboardComponent implements OnInit {
   menuCollapsed = true;
   donutTimePeriod = 'month';
 
+  constructor( private sharedService: SharedService) {
+    this.sharedService.getInventoryStatistics(5, 0, 'MONTHLY', 'purchaseOrderValuesOverTime').subscribe(res => {
+      this.morrisLineChartInfo = res.purchaseOrderValuesOverTime;
+      this.morrisLineChartInfo.forEach(ele => {
+        ele.period = ele.frameUnit.toUpperCase().slice(0, 3);
+        ele.revenue = ele.frameValue;
+      });
+    });
+  }
+
   ngOnInit() {
-    this.pendingOrders.map( p => p.dueDate = moment(p.dueDate).format('MMMM DD, YYYY'));
-    // change to percentage
-    const arr = this.morrisDonutInfo.map( v => v.value);
-    let total = 0;
-    arr.forEach(element => {
-      total = total + element;
-    });
-    this.morrisDonutInfo.forEach(ele => {
-      ele.value = Math.floor(ele.value * 100 / total);
-    });
+    // this.pendingOrders.map( p => p.dueDate = moment(p.dueDate).format('MMMM DD, YYYY'));
+    // // change to percentage
+    // const arr = this.morrisDonutInfo.map( v => v.value);
+    // let total = 0;
+    // arr.forEach(element => {
+    //   total = total + element;
+    // });
+    // this.morrisDonutInfo.forEach(ele => {
+    //   ele.value = Math.floor(ele.value * 100 / total);
+    // });
   }
 }
