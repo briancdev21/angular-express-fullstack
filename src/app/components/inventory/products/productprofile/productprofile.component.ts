@@ -32,24 +32,7 @@ export class ProductProfileComponent implements OnInit {
   ];
 
   productPathInfo = ['Product', 'Home Controller 800'];
-  public chartSetData: Array<Object> = [
-    {
-      title: 'Unit Cycle Time',
-      percentage: 10,
-    },
-    {
-      title: 'Average Lead Time',
-      percentage: 0,
-    },
-    {
-      title: 'Average Unit Cost',
-      percentage: 0,
-    },
-    {
-      title: 'QTY Project Ratio',
-      percentage: 0,
-    }
-  ];
+  public chartSetData: any;
    /**
     * Each item will have title,content,complete flag and icon
     * which will be displayed on the side. Icon is in html
@@ -92,6 +75,7 @@ export class ProductProfileComponent implements OnInit {
       this.brandsList = res.results;
 
       this.productsService.getIndividualProduct(this.productInfoIndex).subscribe(response => {
+        console.log('individual product: ', response);
 
         this.productInfo = response.data;
         this.productInfo['brandName'] = this.getBrandNameFromId(response.data.brandId);
@@ -100,6 +84,25 @@ export class ProductProfileComponent implements OnInit {
         this.productsService.getVariantsList(this.productInfoIndex).subscribe(data => {
           this.productVariants = data.results;
         });
+
+        this.chartSetData = [
+          {
+            title: 'Unit Cycle Time',
+            percentage: this.productInfo.unitCycleTime,
+          },
+          {
+            title: 'Average Lead Time',
+            percentage: this.productInfo.averageLeadTime,
+          },
+          {
+            title: 'Average Unit Cost',
+            percentage: this.productInfo.averageUnitCost,
+          },
+          {
+            title: 'QTY Project Ratio',
+            percentage: this.productInfo.qtyProjectRatio * 100,
+          }
+        ];
 
       });
     });

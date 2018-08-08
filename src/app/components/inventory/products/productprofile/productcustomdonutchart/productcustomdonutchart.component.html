@@ -3,7 +3,7 @@
     <div>{{title}}</div>
   </div>
   <div class="content">
-    <svg viewBox="0 0 120 120">
+    <svg viewBox="0 0 120 120" style="display: none">
       <filter id="dropshadow" height="130%">
         <feGaussianBlur in="SourceAlpha" stdDeviation="1"/> <!-- stdDeviation is how much to blur -->
         <feOffset dx="1" dy="1" result="offsetblur"/> <!-- how much to offset -->
@@ -37,6 +37,6 @@
       </svg>
       <!-- end -->
       <div class="text" >
-        {{percentage}}%
+        {{percentage | number: '1.0-0'}} <span class="unit" *ngIf="title === 'Unit Cycle Time' || title === 'Average Lead Time'">Hrs</span><span class="unit" *ngIf="title === 'Average Unit Cost'">$</span>
       </div>
   </div>
