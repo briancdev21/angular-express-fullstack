@@ -24,29 +24,7 @@ export class CrmDashboardComponent implements OnInit {
 
   public morrisSalesDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
-  public morrisSalesDonutInfo = [
-    {
-      label: 'New',
-      value: 49,
-    }, {
-      label: 'Follow Up',
-      value: 35
-    }, {
-      label: 'Seen',
-      value: 8
-    }, {
-      label: 'Demo',
-      value: 25
-    }, {
-      label: 'Negotiation',
-      value: 35
-    }, {
-      label: 'Won',
-      value: 15
-    }, {
-      label: 'Lost',
-      value: 5
-    }];
+  public morrisSalesDonutInfo = [];
 
   public topCustomers = [
     {
@@ -190,6 +168,7 @@ export class CrmDashboardComponent implements OnInit {
   opportunityLeadsDonut: any;
   wonLeadsDonut: any;
   showChart = true;
+  showSalesPipeChart = true;
 
   constructor( private sharedService: SharedService) {
     this.sharedService.getCrmStatistics(5, 0, 'MONTHLY', 'newLeadsOverTime').subscribe(res => {
@@ -202,6 +181,8 @@ export class CrmDashboardComponent implements OnInit {
     });
 
     this.fetchLeadConversionData('MONTHLY');
+
+    this.fetchSalesPipelineData('MONTHLY');
 
   }
 
@@ -268,7 +249,24 @@ export class CrmDashboardComponent implements OnInit {
     });
   }
 
+  fetchSalesPipelineData(unit) {
+    this.sharedService.getCrmStatistics(0, 0, unit, 'leadStatusOverTime').subscribe(oppo => {
+      this.morrisSalesDonutInfo = oppo.leadStatusOverTime;
+      this.showSalesPipeChart = false;
+      setTimeout(() => {
+        this.showSalesPipeChart = true;
+      });
+      this.morrisSalesDonutInfo.forEach(element => {
+        element.label = element.status;
+      });
+    });
+  }
+
   leadConversionChange(unit) {
     this.fetchLeadConversionData(unit);
+  }
+
+  salesPipeInfoChange(unit) {
+    this.fetchSalesPipelineData(unit);
   }
 }
