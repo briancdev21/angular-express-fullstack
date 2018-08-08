@@ -32,14 +32,13 @@ export class PurchaseOrderListComponent implements OnInit {
     this.sharedService.getContacts().subscribe(contactRes => {
       contactRes = this.addContactName(contactRes);
       this.contactList = contactRes;
-
       this.sharedService.getPurchaseOrders().subscribe(res => {
         console.log('purchase orders:', res.results);
         res.results.forEach(ele => {
           let contactName = '';
           if (ele.contactId) {
-            const contactId = ele.contactId.split('-').pop();
-            contactName = this.contactList.filter(contact => contact.id.toString() === contactId.toString()).pop().name;
+            const contactId = ele.contactId;
+            contactName = this.contactList.filter(contact => contact.id.toString() === contactId.toString()).pop().name || '';
           } else {
             contactName = '';
           }
