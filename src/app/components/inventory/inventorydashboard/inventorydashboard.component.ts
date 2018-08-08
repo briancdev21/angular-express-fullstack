@@ -87,26 +87,7 @@ export class InventoryDashboardComponent implements OnInit {
         Estimate: 30000,
     }];
 
-  public morrisDonutInfo = [
-    {
-      label: 'Supplier 1',
-      value: 49,
-    }, {
-      label: 'Supplier 2',
-      value: 35
-    }, {
-      label: 'Supplier 3',
-      value: 8
-    }, {
-      label: 'Supplier 4',
-      value: 12
-    }, {
-      label: 'Supplier 5',
-      value: 8
-    }, {
-      label: 'Others',
-      value: 99
-    }];
+  public morrisDonutInfo = [];
 
   public morrisDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
@@ -180,7 +161,8 @@ export class InventoryDashboardComponent implements OnInit {
   ];
 
   menuCollapsed = true;
-  donutTimePeriod = 'month';
+  donutTimePeriod = 'MONTHLY';
+  showDonutChart = true;
 
   constructor( private sharedService: SharedService) {
     this.sharedService.getInventoryStatistics(5, 0, 'MONTHLY', 'purchaseOrderValuesOverTime').subscribe(res => {
@@ -199,6 +181,8 @@ export class InventoryDashboardComponent implements OnInit {
         element.formatedDueDate = moment(element.dueDate).format('MMMM DD, YYYY');
       });
     });
+
+    this.fetchSupplierPurchaseData('MONTHLY');
   }
 
   ngOnInit() {
@@ -225,5 +209,22 @@ export class InventoryDashboardComponent implements OnInit {
       }
     });
     this.pendingOrders.reverse();
+  }
+
+  fetchSupplierPurchaseData(unit) {
+    this.sharedService.getInventoryStatistics(0, 0, unit, 'supplierPurchasesOverTime').subscribe(sales => {
+      this.morrisDonutInfo = sales.supplierPurchasesOverTime;
+      this.showDonutChart = false;
+      setTimeout(() => {
+        this.showDonutChart = true;
+      });
+      this.morrisDonutInfo.forEach(element => {
+        element.label = element.supplier;
+      });
+    });
+  }
+
+  donutTimeChange(unit) {
+    this.fetchSupplierPurchaseData(unit);
   }
 }
