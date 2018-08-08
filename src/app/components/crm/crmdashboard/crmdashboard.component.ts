@@ -84,8 +84,8 @@ export class CrmDashboardComponent implements OnInit {
   ];
 
   public conversionRatio = {
-    newLeads: 100,
-    wonDeals: 5,
+    newLeads: 0,
+    wonDeals: 0,
     lostDeals: 0
   };
 
@@ -162,7 +162,7 @@ export class CrmDashboardComponent implements OnInit {
   conversionRatioTime = 'MONTHLY';
   salesPipelineTime = 'MONTHLY';
   salesConversionTime = 'MONTHLY';
-  wonVsLost = (this.conversionRatio.wonDeals - this.conversionRatio.lostDeals) * 100 / this.conversionRatio.newLeads;
+  wonVsLost: any;
 
   newLeadsDonut: any;
   opportunityLeadsDonut: any;
@@ -191,6 +191,8 @@ export class CrmDashboardComponent implements OnInit {
       console.log('this.concats: ', this.contactsList);
       this.sortArray('revenue');
     });
+
+    this.fetchConversionRatioTableData('MONTHLY');
 
   }
 
@@ -270,12 +272,31 @@ export class CrmDashboardComponent implements OnInit {
     });
   }
 
+  fetchConversionRatioTableData(unit) {
+    this.sharedService.getCrmStatistics(0, 0, unit, 'newLeadsOverTime').subscribe(lead => {
+      this.conversionRatio.newLeads = lead.newLeadsOverTime[0].frameValue;
+
+      this.sharedService.getCrmStatistics(0, 0, unit, 'dealsWonOverTime').subscribe(won => {
+        this.conversionRatio.wonDeals = won.dealsWonOverTime[0].frameValue;
+
+        this.sharedService.getCrmStatistics(0, 0, unit, 'dealsLostOverTime').subscribe(lost => {
+          this.conversionRatio.lostDeals = lost.dealsLostOverTime[0].frameValue;
+          this.wonVsLost = (this.conversionRatio.wonDeals / this.conversionRatio.lostDeals * 100).toFixed(1);
+        });
+      });
+    });
+  }
+
   leadConversionChange(unit) {
     this.fetchLeadConversionData(unit);
   }
 
   salesPipeInfoChange(unit) {
     this.fetchSalesPipelineData(unit);
+  }
+
+  conversionRatioChange(unit) {
+    this.fetchConversionRatioTableData(unit);
   }
 
   sortArray(field) {

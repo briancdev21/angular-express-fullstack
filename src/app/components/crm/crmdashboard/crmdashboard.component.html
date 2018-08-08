@@ -110,8 +110,8 @@
           </div>
           <div class="card conversion-card">
               <div class="card-header">
-                <span>Conversion Ratio</span>
-                <select [(ngModel)]="conversionRatioTime">
+                <span>CONVERSION RATIO</span>
+                <select [(ngModel)]="conversionRatioTime" (ngModelChange)="conversionRatioChange(conversionRatioTime)">
                   <option value="WEEKLY">This Week</option>
                   <option value="MONTHLY">This Month</option>
                   <option value="QUARTERLY">This Quarter</option>
