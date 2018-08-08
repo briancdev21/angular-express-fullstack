@@ -131,4 +131,8 @@ export class ProductProfileComponent implements OnInit {
     const selectedBrand = this.brandsList.filter(b => b.id === id)[0];
     return selectedBrand.name;
   }
+
+  redirectToProducts() {
+    this.router.navigate([`./inventory/products`]);
+  }
 }

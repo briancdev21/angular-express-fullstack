@@ -1,6 +1,11 @@
 <div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" >
   <div class="top-bar">
-    <app-breadcrumb [data]='productPathInfo' ></app-breadcrumb>
+    <!-- <app-breadcrumb [data]='productPathInfo' ></app-breadcrumb> -->
+    <div class="breadcrumb-bar" *ngIf="productInfo">
+      <span class="base-link" (click)="redirectToProducts()">Product</span>
+      <span class="right-arrow">&#8250;</span>
+      <span>{{productInfo.name}}</span>
+    </div>
     <div class="add-btn" (click)="openEditProductModal()">Edit</div>
   </div>
   
