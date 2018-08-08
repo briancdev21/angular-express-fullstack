@@ -169,6 +169,7 @@ export class CrmDashboardComponent implements OnInit {
   wonLeadsDonut: any;
   showChart = true;
   showSalesPipeChart = true;
+  contactsList: any;
 
   constructor( private sharedService: SharedService) {
     this.sharedService.getCrmStatistics(5, 0, 'MONTHLY', 'newLeadsOverTime').subscribe(res => {
@@ -183,6 +184,13 @@ export class CrmDashboardComponent implements OnInit {
     this.fetchLeadConversionData('MONTHLY');
 
     this.fetchSalesPipelineData('MONTHLY');
+
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res;
+      this.addContactName(this.contactsList);
+      console.log('this.concats: ', this.contactsList);
+      this.sortArray('revenue');
+    });
 
   }
 
@@ -268,5 +276,29 @@ export class CrmDashboardComponent implements OnInit {
 
   salesPipeInfoChange(unit) {
     this.fetchSalesPipelineData(unit);
+  }
+
+  sortArray(field) {
+    this.contactsList.sort( function(name1, name2) {
+      if ( Math.abs(name1[field]) < Math.abs(name2[field])) {
+        return -1;
+      } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    this.contactsList.reverse();
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

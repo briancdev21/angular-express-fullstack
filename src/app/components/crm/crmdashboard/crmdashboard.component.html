@@ -38,16 +38,16 @@
           <span>TOP CUSTOMERS IN VALUE</span>
         </div>
         <div class="card-content">
-          <table>
+          <table *ngIf="contactsList">
             <tr>
               <th>CUSTOMER NAME</th>
               <th>CUSTOMER RATING</th>
               <th>TOTAL VALUE</th>
             </tr>
-            <tr *ngFor="let customer of topCustomers">
-              <td>{{customer.customerName}}</td>
-              <td>{{customer.customerRating}}%</td>
-              <td>${{customer.totalValue | number: '1.2-2'}}</td>
+            <tr *ngFor="let customer of contactsList">
+              <td>{{customer.name}}</td>
+              <td>{{customer.accountRating}}%</td>
+              <td>${{customer.revenue | number: '1.2-2'}}</td>
             </tr>
           </table>
         </div>
