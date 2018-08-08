@@ -4,7 +4,7 @@
       <div class="card">
         <div class="card-header">
           <span>LEAD CONVERSION</span>
-          <select [(ngModel)]="donutTimePeriod">
+          <select [(ngModel)]="donutTimePeriod" (ngModelChange)="leadConversionChange(donutTimePeriod)">
             <option value="WEEKLY">This Week</option>
             <option value="MONTHLY">This Month</option>
             <option value="QUARTERLY">This Quarter</option>
@@ -12,7 +12,7 @@
           </select>
         </div>
         <div class="card-content">
-          <div class="card-content-left" >
+          <div class="card-content-left" *ngIf="morrisDonutInfo && showChart" >
             <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
           </div>
           <div class="card-centent-right">
@@ -22,7 +22,7 @@
             </div>
             <div class="conversion">
               <span>Conversion Rate</span>
-              <span class="conversion-value">{{conversionRate}}%</span>
+              <span class="conversion-value">0000 %</span>
             </div>
           </div>
         </div>
@@ -88,8 +88,8 @@
         <div class="pipeline-ratio">
           <div class="card sales-pipeline">
             <div class="card-header">
-              <span>LEAD CONVERSION</span>
-              <select [(ngModel)]="donutTimePeriod">
+              <span>SALES PIPELINE</span>
+              <select [(ngModel)]="salesPipelineTime">
                 <option value="WEEKLY">This Week</option>
                 <option value="MONTHLY">This Month</option>
                 <option value="QUARTERLY">This Quarter</option>

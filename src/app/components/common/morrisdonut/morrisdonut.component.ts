@@ -10,14 +10,19 @@ declare const Morris: any;
 })
 export class MorrisDonutComponent implements OnInit {
 
-@Input() morrisDonutInfo;
-@Input() morrisDonutColors;
+  @Input() set morrisDonutInfo(val) {
+    this._morrisDonutInfo = val;
+    console.log('donut ***: ', this._morrisDonutInfo);
+  }
+  @Input() morrisDonutColors;
+  _morrisDonutInfo: any;
+
   constructor() { }
   ngOnInit() {
 // Morris donut chart
     Morris.Donut({
       element: 'm_donut_chart',
-      data: this.morrisDonutInfo,
+      data: this._morrisDonutInfo,
       resize: true,
       colors: this.morrisDonutColors,
       formatter: function (x) { return x + '%'; }

@@ -20,17 +20,7 @@ export class CrmDashboardComponent implements OnInit {
 
   public morrisDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
-  public morrisDonutInfo = [
-    {
-      label: 'New Leads',
-      value: 49,
-    }, {
-      label: 'Opportunity',
-      value: 35
-    }, {
-      label: 'Won',
-      value: 8
-    }];
+  public morrisDonutInfo: any;
 
   public morrisSalesDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
@@ -189,12 +179,17 @@ export class CrmDashboardComponent implements OnInit {
   ];
 
   menuCollapsed = true;
-  donutTimePeriod = 'month';
+  donutTimePeriod = 'MONTHLY';
   conversionRate = undefined;
-  conversionRatioTime = 'month';
-  salesPipelineTime = 'month';
-  salesConversionTime = 'month';
+  conversionRatioTime = 'MONTHLY';
+  salesPipelineTime = 'MONTHLY';
+  salesConversionTime = 'MONTHLY';
   wonVsLost = (this.conversionRatio.wonDeals - this.conversionRatio.lostDeals) * 100 / this.conversionRatio.newLeads;
+
+  newLeadsDonut: any;
+  opportunityLeadsDonut: any;
+  wonLeadsDonut: any;
+  showChart = true;
 
   constructor( private sharedService: SharedService) {
     this.sharedService.getCrmStatistics(5, 0, 'MONTHLY', 'newLeadsOverTime').subscribe(res => {
@@ -205,20 +200,75 @@ export class CrmDashboardComponent implements OnInit {
         ele.lead = ele.frameValue;
       });
     });
+
+    this.fetchLeadConversionData('MONTHLY');
+
   }
 
   ngOnInit() {
-    const arr = this.morrisDonutInfo.map( v => v.value);
-    let total = 0;
-    const wonLead = this.morrisDonutInfo.filter( e => e.label === 'Won');
-    arr.forEach(element => {
-      total = total + element;
+    // const arr = this.morrisDonutInfo.map( v => v.value);
+    // let total = 0;
+    // const wonLead = this.morrisDonutInfo.filter( e => e.label === 'Won');
+    // arr.forEach(element => {
+    //   total = total + element;
+    // });
+    // if (total) {
+    //   this.conversionRate = Math.floor(wonLead[0].value * 100 / total);
+    // }
+    // this.morrisDonutInfo.forEach(ele => {
+    //   ele.value = Math.floor(ele.value * 100 / total);
+    // });
+  }
+
+  fetchLeadConversionData(unit) {
+    this.sharedService.getCrmStatistics(0, 0, unit, 'newLeadsOverTime').subscribe(res => {
+      const frameUnit = res.newLeadsOverTime[0].frameUnit;
+      let newLeadsValueTotal = 0;
+      this.newLeadsDonut = res.newLeadsOverTime;
+      this.newLeadsDonut.forEach(element => {
+        newLeadsValueTotal = newLeadsValueTotal + element.frameValue;
+      });
+      // this.newLeadsDonut.forEach(ele => {
+      //   ele.period = ele.frameUnit.toUpperCase().slice(0, 3);
+      //   ele.lead = ele.frameValue;
+      // });
+      this.sharedService.getCrmStatistics(0, 0, unit, 'oppertunityLeadsOverTime').subscribe(oppo => {
+        this.opportunityLeadsDonut = oppo.oppertunityLeadsOverTime;
+        let oppoLeadsValueTotal = 0;
+        this.opportunityLeadsDonut.forEach(element => {
+          oppoLeadsValueTotal = oppoLeadsValueTotal + element.frameValue;
+        });
+
+        this.sharedService.getCrmStatistics(0, 0, unit, 'leadsWonOverTime').subscribe(won => {
+          this.wonLeadsDonut = won.leadsWonOverTime;
+          this.showChart = false;
+          setTimeout(() => {
+            this.showChart = true;
+          });
+          let wonLeadsValueTotal = 0;
+          this.wonLeadsDonut.forEach(element => {
+            wonLeadsValueTotal = wonLeadsValueTotal + element.frameValue;
+          });
+          const total = newLeadsValueTotal + oppoLeadsValueTotal + wonLeadsValueTotal;
+          this.morrisDonutInfo = [
+            {
+              label: 'New Leads',
+              value: (newLeadsValueTotal / total * 100).toFixed(0),
+            }, {
+              label: 'Opportunity',
+              value: (oppoLeadsValueTotal / total * 100).toFixed(0)
+            }, {
+              label: 'Won',
+              value: (wonLeadsValueTotal / total * 100).toFixed(0)
+            }
+          ];
+
+        });
+      });
     });
-    if (total) {
-      this.conversionRate = Math.floor(wonLead[0].value * 100 / total);
-    }
-    this.morrisDonutInfo.forEach(ele => {
-      ele.value = Math.floor(ele.value * 100 / total);
-    });
+  }
+
+  leadConversionChange(unit) {
+    this.fetchLeadConversionData(unit);
   }
 }
