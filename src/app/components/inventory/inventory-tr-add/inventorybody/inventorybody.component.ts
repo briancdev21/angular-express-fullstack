@@ -60,10 +60,10 @@ export class InventoryBodyComponent {
   }
 
   onMemoChanged(event) {
-    if (event) {
+    // if (event) {
       this.tr_mock.internalMemo = event;
       this.updateTR();
-    }
+    // }
   }
 
   onSelectLocation(event) {

@@ -40,6 +40,7 @@ export class InventoryBodyComponent implements OnDestroy {
       this.adjustedLocation = _addata.adjustedLocationId;
       this.ad_mock.adjustedLocation = _addata.adjustedLocationId;
       this.internalMemo = _addata.internalMemo;
+      this.commonService.showAlertModal.next(false);
       if (_addata.status == 'ADJUSTED') {
         this.commonService.showAlertModal.next(true);
       }
@@ -93,11 +94,10 @@ export class InventoryBodyComponent implements OnDestroy {
 
   onMemoChanged(event) {
 
-    if (event) {
       this.errors.memoChanged = true;
       this.ad_mock.internalMemo = event;
       this.updateAD();
-    }
+  
   }
 
   onCancel() {

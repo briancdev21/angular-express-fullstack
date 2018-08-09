@@ -32,74 +32,9 @@ export class PurchaseOrderListComponent implements OnInit {
     this.sharedService.getContacts().subscribe(contactRes => {
       contactRes = this.addContactName(contactRes);
       this.contactList = contactRes;
-      this.sharedService.getPurchaseOrders().subscribe(res => {
-        console.log('purchase orders:', res.results);
-        res.results.forEach(ele => {
-          let contactName = '';
-          if (ele.contactId) {
-            const contactId = ele.contactId;
-            contactName = this.contactList.filter(contact => contact.id.toString() === contactId.toString()).pop().name || '';
-          } else {
-            contactName = '';
-          }
-          const purchaseOrdersInfoItem = {
-            itemType: 'PO',
-            projectNumber: ele.id,
-            purchaseOrderNumber: `PO${ele.id}`,
-            source: contactName,
-            type: 'Purchase Order',
-            status: ele.status,
-            quantity: ele.quantity,
-            received: ele.recieved,
-            totalCost: ele.total,
-            dueDate: this.formatDate(new Date(ele.dueDate)),
-            lastUpdated: this.formatDate(new Date(ele.updatedAt))
-          };
-          this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
-        });
-        this.sortArray('purchaseOrderNumber');
-      });
-      this.sharedService.getTransfers().subscribe(res => {
-        console.log('transfers:', res.results);
-        res.results.forEach(ele => {
-
-          const purchaseOrdersInfoItem = {
-            itemType: 'TR',
-            projectNumber: ele.id,
-            purchaseOrderNumber: `TR${ele.id}`,
-            source: '',
-            type: 'Stock Control',
-            status: ele.status,
-            quantity: ele.quantity,
-            received: ele.recieved,
-            totalCost: ele.total,
-            dueDate: '',
-            lastUpdated: this.formatDate(new Date(ele.updatedAt))
-          };
-          this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
-        });
-        this.sortArray('purchaseOrderNumber');
-      });
-      this.sharedService.getInventoryAdjustments().subscribe(res => {
-        console.log('adjustments:', res.results);
-        res.results.forEach(ele => {
-          const purchaseOrdersInfoItem = {
-            itemType: 'AD',
-            projectNumber: ele.id,
-            purchaseOrderNumber: `AD${ele.id}`,
-            source: '',
-            type: 'Stock Control',
-            status: ele.status,
-            quantity: ele.quantity,
-            received: ele.recieved,
-            totalCost: ele.total,
-            dueDate: '',
-            lastUpdated: this.formatDate(new Date(ele.updatedAt))
-          };
-          this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
-        });
-        this.sortArray('purchaseOrderNumber');
-      });
+      this.getPurchaseOrders();
+      this.getStockTransfers();
+      this.getAdjustments();
     });
   }
 
@@ -187,6 +122,116 @@ export class PurchaseOrderListComponent implements OnInit {
 
   ngOnInit() {
     this.backUpPurchaseOrders = this.purchaseOrdersInfo;
+  }
+
+  getPurchaseOrders(total = 0, limit = 50, offset = 0) {
+    const params = {
+      limit: limit,
+      offset: offset
+    };
+    this.sharedService.getPurchaseOrdersWithParams(params).subscribe(res => {
+      console.log('purchase orders:', res.results);
+      total = res.total;
+      offset = res.offset;
+      res.results.forEach(ele => {
+        let contactName = '';
+        if (ele.contactId) {
+          const contactId = ele.contactId;
+          const getContactObj = this.contactList.filter(contact => contact.id.toString() === contactId.toString()).pop();
+          contactName = getContactObj !== undefined ? getContactObj.name: '';
+        } else {
+          contactName = '';
+        }
+        const purchaseOrdersInfoItem = {
+          itemType: 'PO',
+          projectNumber: ele.id,
+          purchaseOrderNumber: `PO${ele.id}`,
+          source: contactName,
+          type: 'Purchase Order',
+          status: ele.status,
+          quantity: ele.quantity,
+          received: ele.recieved,
+          totalCost: ele.total,
+          dueDate: this.formatDate(new Date(ele.dueDate)),
+          lastUpdated: this.formatDate(new Date(ele.updatedAt))
+        };
+        this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+      });
+      this.sortArray('purchaseOrderNumber');
+      offset += limit;
+      if (offset <= total) {
+        this.getPurchaseOrders(total, limit, offset);
+      }
+    });
+  }
+
+  getStockTransfers(total = 0, limit = 50, offset = 0) {
+    const params = {
+      limit: limit,
+      offset: offset
+    };
+    this.sharedService.getTransfersWithParams(params).subscribe(res => {
+      console.log('transfers:', res.results);
+      offset = res.offset;
+      limit = res.limit;
+      total = res.total;
+      res.results.forEach(ele => {
+
+        const purchaseOrdersInfoItem = {
+          itemType: 'TR',
+          projectNumber: ele.id,
+          purchaseOrderNumber: `TR${ele.id}`,
+          source: '',
+          type: 'Stock Control',
+          status: ele.status,
+          quantity: ele.quantity,
+          received: ele.recieved,
+          totalCost: ele.total,
+          dueDate: '',
+          lastUpdated: this.formatDate(new Date(ele.updatedAt))
+        };
+        this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+      });
+      this.sortArray('purchaseOrderNumber');
+      offset += limit;
+      if (offset <= total) {
+        this.getStockTransfers(total, limit, offset);
+      }
+    });
+  }
+
+  getAdjustments(total = 0, limit = 50, offset = 0) {
+    const params = {
+      limit: limit,
+      offset: offset
+    };
+    this.sharedService.getInventoryAdjustmentsWithParmas(params).subscribe(res => {
+      console.log('adjustments:', res.results);
+      offset = res.offset;
+      limit = res.limit;
+      total = res.total;
+      res.results.forEach(ele => {
+        const purchaseOrdersInfoItem = {
+          itemType: 'AD',
+          projectNumber: ele.id,
+          purchaseOrderNumber: `AD${ele.id}`,
+          source: '',
+          type: 'Stock Control',
+          status: ele.status,
+          quantity: ele.quantity,
+          received: ele.recieved,
+          totalCost: ele.total,
+          dueDate: '',
+          lastUpdated: this.formatDate(new Date(ele.updatedAt))
+        };
+        this.purchaseOrdersInfo.push(purchaseOrdersInfoItem);
+      });
+      this.sortArray('purchaseOrderNumber');
+      offset += limit;
+      if (offset <= total) {
+        this.getAdjustments(total, limit, offset);
+      }
+    });
   }
 
   getFilter(event) {

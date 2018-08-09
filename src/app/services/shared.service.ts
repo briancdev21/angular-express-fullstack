@@ -356,6 +356,11 @@ export class SharedService {
     return this.http.get<any>(url);
   }
 
+  getPurchaseOrdersWithParams (params): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders`;
+    return this.http.get<any>(url, {params: params});
+  }
+
   getPurchaseOrder (id): Observable<any> {
     const url = `${environment.apiUrl}/inventory/purchase-orders/${id}`;
     return this.http.get<any>(url);
@@ -430,6 +435,11 @@ export class SharedService {
     return this.http.get<any>(url);
   }
 
+  getTransfersWithParams (params): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-transfers`;
+    return this.http.get<any>(url, {params: params});
+  }
+
   getTransfer (id): Observable<any> {
     const url = `${environment.apiUrl}/inventory/stock-transfers/${id}`;
     return this.http.get<any>(url);
@@ -480,6 +490,12 @@ export class SharedService {
     const url = `${environment.apiUrl}/inventory/stock-adjustments`;
     return this.http.get<any>(url);
   }
+
+  getInventoryAdjustmentsWithParmas (params): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/stock-adjustments`;
+    return this.http.get<any>(url, {params: params});
+  }
+
   getInventoryAdjustment (id): Observable<any> {
     const url = `${environment.apiUrl}/inventory/stock-adjustments/${id}`;
     return this.http.get<any>(url);
