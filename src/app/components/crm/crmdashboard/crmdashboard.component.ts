@@ -204,8 +204,8 @@ export class CrmDashboardComponent implements OnInit {
       //   ele.period = ele.frameUnit.toUpperCase().slice(0, 3);
       //   ele.lead = ele.frameValue;
       // });
-      this.sharedService.getCrmStatistics(0, 0, unit, 'oppertunityLeadsOverTime').subscribe(oppo => {
-        this.opportunityLeadsDonut = oppo.oppertunityLeadsOverTime;
+      this.sharedService.getCrmStatistics(0, 0, unit, 'opportunityLeadsOverTime').subscribe(oppo => {
+        this.opportunityLeadsDonut = oppo.opportunityLeadsOverTime;
         let oppoLeadsValueTotal = 0;
         this.opportunityLeadsDonut.forEach(element => {
           oppoLeadsValueTotal = oppoLeadsValueTotal + element.frameValue;
