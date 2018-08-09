@@ -17,10 +17,10 @@ import { SharedService } from '../../../services/shared.service';
 export class PmDashboardComponent implements OnInit {
 
   public projectTasks = {
-    dueToday: 12,
-    dueThisWeek: 24,
-    dueNextWeek: 16,
-    overDue: 5
+    dueToday: 0,
+    dueThisWeek: 0,
+    dueNextWeek: 0,
+    overDue: 0
   };
 
   public projectsInfo = {
@@ -207,6 +207,22 @@ export class PmDashboardComponent implements OnInit {
         ele.period = ele.frameUnit.toUpperCase().slice(0, 3);
         ele.revenue = ele.frameValue;
       });
+    });
+
+    this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'projectTasksDueToday').subscribe(res => {
+      this.projectTasks.dueToday = res.projectTasksDueToday;
+    });
+
+    this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'projectTasksDueThisWeek').subscribe(res => {
+      this.projectTasks.dueThisWeek = res.projectTasksDueThisWeek;
+    });
+
+    this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'projectTasksDueNextWeek').subscribe(res => {
+      this.projectTasks.dueNextWeek = res.projectTasksDueNextWeek;
+    });
+
+    this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'overDueProjectTasks').subscribe(res => {
+      this.projectTasks.overDue = res.overDueProjectTasks;
     });
   }
   ngOnInit() {
