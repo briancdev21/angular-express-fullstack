@@ -1,13 +1,13 @@
 <div class="schedule-content" [ngClass]="{'cal-small': showSidebar}">
   <div class="resources-available">
     <span>Nu Automation</span>
-    <div class="resources-list">
-      <div *ngFor="let resource of resourcesInfo " class="resource-style">
+    <div class="resources-list" *ngIf="calendarEvents">
+      <div class="resource-style">
         <div class="item"> 
           <!-- <img src="{{resource.imageUrl}}"> -->
-          <div [ngStyle]="{'background-color': themeColor}" class="heading-img" *ngIf="!editing"></div>
+          <div [ngStyle]="{'background-color': currentCalendar.colour}" class="heading-img" *ngIf="!editing"></div>
           <i class="fa fa-gear" *ngIf="editing" (click)="changeColor()"></i>
-          <input [(ngModel)]="resource.name" (focus)="editingTitle()">
+          <input [(ngModel)]="currentUser" (focus)="editingTitle()" disabled>
         </div>
         <div class="colors-panel" *ngIf="changingColor">
           <div [ngStyle]="{'background-color': color}" *ngFor="let color of eventColors" (click)="selectColor(color)"></div>

@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import * as $ from 'jquery';
 import 'fullcalendar';
 import {Options} from 'fullcalendar';
+import { CollaboratorsService } from '../../../services/collaborators.service';
 
 @Component({
   selector: 'app-personalschedule',
@@ -126,88 +127,27 @@ export class PersonalScheduleComponent implements OnInit, AfterViewInit {
             start: '2018-04-09T06:00:00',
             end: '2018-04-09T08:00:00',
             color: ''
-          },
-          {
-            index: 1,
-            title: 'Sam\'s Birthday',
-            start: '2018-04-09T08:00:00',
-            end: '2018-04-09T09:30:00',
-            color: ''
-          },
-          {
-            index: 2,
-            title: 'Meeting',
-            start: '2018-04-09T09:30:00',
-            end: '2018-04-09T11:30:00',
-            color: ''
-
-          },
-          {
-            index: 3,
-            title: 'Lunch',
-            start: '2018-04-09T11:30:00',
-            end: '2018-04-09T13:30:00',
-            color: ''
-          },
-          {
-            index: 4,
-            title: 'Smartadmin Open Day',
-            start: '2018-04-09T13:30:00',
-            end: '2018-04-09T15:30:00',
-            color: ''
-          },
-          {
-            index: 5,
-            title: 'Repeating Event',
-            start: '2018-04-09T15:30:00',
-            end: '2018-04-09T17:30:00',
-            color: ''
-          },
-          {
-            index: 6,
-            title: 'Teaching Piano',
-            start: '2018-03-30T09:30:00',
-            end: '2018-03-30T11:30:00',
-            color: ''
-          },
-          {
-            index: 7,
-            title: 'Long Event',
-            start: '2018-04-09T17:30:00',
-            color: ''
-          },
-          {
-            index: 8,
-            title: 'Work Order',
-            start: '2018-2-17',
-            end: '2018-2-17',
-            color: 'lightgray'
-          },
-          {
-            index: 9,
-            title: 'Repeating Event',
-            start: '2018-04-09T16:00:00',
-            color: ''
-          },
-          {
-            index: 10,
-            title: 'Repeating Event',
-            start: '2018-04-09T16:30:00',
-            color: ''
-          },
-          {
-            index: 11,
-            title: 'Click for Google',
-            url: 'http://google.com/',
-            start: '2016-09-28',
-            color: ''
           }
         ]
       }
     }
   ];
 
-  constructor(private collaborationService: CollaborationService) {
+  currentUser: any;
+  currentCalendar: any;
+  calendarEvents: any;
+
+  constructor(private collaborationService: CollaborationService, private collaboratorsService: CollaboratorsService) {
+    this.currentUser = 'koridor-dev';
+    this.collaboratorsService.getCalendars().subscribe(res => {
+      this.currentCalendar = res.results.filter(c => c.owner === this.currentUser)[0];
+      this.collaboratorsService.getCalendarEvents(this.currentCalendar.id).subscribe(event => {
+        this.calendarEvents = event.results;
+        console.log('calender event: ', this.calendarEvents);
+      });
+
+      console.log('current calendar: ', this.currentCalendar);
+    });
   }
 
   ngOnInit() {
