@@ -6,7 +6,7 @@
           <span>INVENTORY VALUES</span>
         </div>
         <div class="card-content">
-          <div class="card-content-left">
+          <div class="card-content-left" *ngIf="inventoryValues">
             <div>
               <span class="title">Aging Inventory 0 - 30 Days</span>
               <span class="font-color-green">{{inventoryValues.lessThirty}}</span>
@@ -20,7 +20,7 @@
               <span class="font-color-red">{{inventoryValues.overSixty}}</span>
             </div>
           </div>
-          <div class="card-content-right">
+          <div class="card-content-right" *ngIf="inventoryValues">
             <span class="due-tasks-title">Inventory Turnover</span>
             <span class="font-color-black">{{inventoryValues.turnover}}</span>
           </div>
@@ -34,20 +34,20 @@
         <div class="card-content">
           <div class="card-content-left">
             <div>
-              <span class="title">Number of New Projects</span>
+              <span class="title">No stock level</span>
               <span>{{inventoryLevel.noStock | number}}</span>
             </div>
             <div>
-              <span class="title">Number of Active Projects</span>
+              <span class="title">Place order levels</span>
               <span>{{inventoryLevel.placeOrder | number}}</span>
             </div>
             <div>
-              <span class="title">Number of Completed Projects</span>
+              <span class="title">Total number of physical Inventory</span>
               <span>{{inventoryLevel.totalPhysical | number}}</span>
             </div>
           </div>
           <div class="card-content-right">
-            <span class="due-tasks-title">Pending Projects</span>
+            <span class="due-tasks-title">Below stock level</span>
             <span>{{inventoryLevel.belowLevel}}</span>
           </div>
         </div>

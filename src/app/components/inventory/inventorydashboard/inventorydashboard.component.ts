@@ -15,18 +15,13 @@ import { SharedService } from '../../../services/shared.service';
 
 
 export class InventoryDashboardComponent implements OnInit {
-  public inventoryValues = {
-    lessThirty: 12,
-    thirtyToSixty: 24,
-    overSixty: 16,
-    turnover: 18
-  };
+  public inventoryValues: any;
 
   public inventoryLevel = {
-    noStock: 15530,
-    placeOrder: 265,
-    totalPhysical: 253230,
-    belowLevel: 650
+    noStock: 0,
+    placeOrder: 0,
+    totalPhysical: 0,
+    belowLevel: 0
   };
 
   public pendingOrders = [];
@@ -142,6 +137,34 @@ export class InventoryDashboardComponent implements OnInit {
     });
 
     this.fetchSupplierPurchaseData('MONTHLY');
+
+    this.sharedService.getInventoryStatistics(0, 0, 'MONTHLY', 'noStockLevel').subscribe(res => {
+      this.inventoryLevel.noStock = res.noStockLevel;
+    });
+
+    this.sharedService.getInventoryStatistics(0, 0, 'MONTHLY', 'placeOrderLevel').subscribe(res => {
+      this.inventoryLevel.placeOrder = res.placeOrderLevel;
+    });
+
+    this.sharedService.getInventoryStatistics(0, 0, 'MONTHLY', 'physicalInventory').subscribe(res => {
+      this.inventoryLevel.totalPhysical = res.physicalInventory;
+    });
+
+    this.sharedService.getInventoryStatistics(0, 0, 'MONTHLY', 'belowStockLevel').subscribe(res => {
+      this.inventoryLevel.belowLevel = res.belowStockLevel;
+    });
+
+    this.sharedService.getInventoryStatistics(0, 0, 'MONTHLY', 'agingInventory').subscribe(res => {
+      this.inventoryValues = {
+        lessThirty: res.agingInventory['30'],
+        thirtyToSixty: res.agingInventory['60'],
+        overSixty: res.agingInventory['90'],
+      };
+    });
+
+    this.sharedService.getInventoryStatistics(0, 0, 'MONTHLY', 'inventoryTurnOver').subscribe(res => {
+      this.inventoryValues.turnover = res.inventoryTurnOver;
+    });
   }
 
   ngOnInit() {
