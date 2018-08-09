@@ -122,9 +122,9 @@
           </div>
           <div class="card">
             <div class="card-header">
-              <span>NEW LEADS</span>
+              <span>REVENUE FROM PROJECTS</span>
             </div>
-            <app-morrislinechart [morrisLineChartInfo]="morrisLineChartInfo"></app-morrislinechart>
+            <app-morrislinechart [morrisLineChartInfo]="morrisLineChartInfo" *ngIf="morrisLineChartInfo"></app-morrislinechart>
           </div>
         </div>
       </div>
