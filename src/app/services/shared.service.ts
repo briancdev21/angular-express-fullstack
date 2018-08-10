@@ -143,6 +143,7 @@ export class SharedService {
     const url = `${environment.apiUrl}/users/`;
     return this.http.get(url).map(data => data['results']);
   }
+
   getUser (username): Observable<any> {
     const url = `${environment.apiUrl}/users/${username}`;
     return this.http.get(url);
@@ -179,18 +180,23 @@ export class SharedService {
     return this.http.get(url).map(data => data['results']);
   }
 
-  getContact(id) {
+  getMulipleContacts(ids: any): Observable<any> {
+    const url = `${environment.apiUrl}/crm/contacts/?ids=${ids}`;
+    return this.http.get(url).map(data => data['results']);
+  }
+
+  getContact(id): Observable<any> {
     const url = `${environment.apiUrl}/crm/contacts/${id}`;
     return this.http.get(url);
   }
 
   createContact (body): Observable<any> {
-    const url = `${environment.apiUrl}/users/`;
+    const url = `${environment.apiUrl}/contacts/`;
     return this.http.post<any>(url, body);
   }
 
   updateContact (body): Observable<any> {
-    const url = `${environment.apiUrl}/users/`;
+    const url = `${environment.apiUrl}/contacts/`;
     return this.http.put<any>(url, body);
   }
 
