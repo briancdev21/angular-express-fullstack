@@ -72,7 +72,8 @@
                     [owlDateTimeTrigger]="startDate" 
                     [owlDateTime]="startDate" 
                     placeholder="Choose a start date" 
-                    (dateTimeChange)="selectStartDate($event)">
+                    (dateTimeChange)="selectStartDate($event)"
+                    [min]="today">
                   <owl-date-time [pickerType]="'calendar'" #startDate></owl-date-time>
                 </div>
               </div>
