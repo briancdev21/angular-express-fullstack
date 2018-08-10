@@ -98,7 +98,7 @@ table i {
   position: relative;
 }
 
-:host ::ng-deep .work-order-table span.progress-title {
+:host ::ng-deep .work-order-table span.progress-title, :host ::ng-deep .work-order-table span.progress-title-long  {
   font-size: 14px;
   left: 15%;
   color: #464646;
