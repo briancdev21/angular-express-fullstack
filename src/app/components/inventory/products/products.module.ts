@@ -15,7 +15,6 @@ import { ProposalCmpModule } from '../../sales/proposal/proposal.module';
 import { FilterService } from './filter.service';
 import { ProductsListTableComponent } from './productslisttable/productslisttable.component';
 import { ProductFilterComponent } from './productfilter/productfilter.component';
-import { AddProductComponent } from './addproduct/addproduct.component';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { QuillModule } from 'ngx-quill';
@@ -25,7 +24,6 @@ import { QuillModule } from 'ngx-quill';
   declarations: [
     ProductsListTableComponent,
     ProductFilterComponent,
-    AddProductComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +44,6 @@ import { QuillModule } from 'ngx-quill';
   exports: [
     ProductsListTableComponent,
     ProductFilterComponent,
-    AddProductComponent,
   ],
   providers: [FilterService]
 })
