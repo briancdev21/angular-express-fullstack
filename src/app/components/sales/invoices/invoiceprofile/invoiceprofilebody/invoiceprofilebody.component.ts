@@ -120,7 +120,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
     }
   ];
 
-  currentInvoiceId: number;
+  currentInvoiceId: string;
   saveInvoiceData: any;
   currentOwner: string;
   invoiceStatus = 'NEW';
@@ -128,7 +128,8 @@ export class InvoiceProfileBodyComponent implements OnInit {
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
               private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService) {
 
-    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.currentInvoiceId = this.route.snapshot.paramMap.get('id');
+    console.log('invoice currency id:', this.currentInvoiceId);
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
       this.invoiceStatus = res.data.status;
       this.sharedService.getContacts()
@@ -177,7 +178,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
 
       this.saveInvoiceData = res.data;
       // change contact id to number
-      this.saveInvoiceData.contactId = res.data.contactId ? parseInt(res.data.contactId.split('-').pop(), 10) : undefined;
+      this.saveInvoiceData.contactId = res.data.contactId ? res.data.contactId : undefined;
 
       this.discountType = res.data.discount.unit;
       this.discountAmount = res.data.discount.value;
@@ -236,13 +237,13 @@ export class InvoiceProfileBodyComponent implements OnInit {
 
     const idList = list.map( c => c.id);
     const pos = idList.indexOf(id);
-    return list[pos].shippingAddress;
+    return list[pos] !== undefined ? list[pos].shippingAddress : '';
   }
 
   getCustomerName(list, id) {
     const idList = list.map( c => c.id);
     const pos = idList.indexOf(id);
-    return list[pos].name;
+    return list[pos] !== undefined ? list[pos].name : '';
   }
 
   onCustomerSelected(user) {
@@ -285,11 +286,11 @@ export class InvoiceProfileBodyComponent implements OnInit {
   }
 
   onChangeTerm(event) {
-    this.saveInvoiceData['termId'] = parseInt(event, 10);
+    this.saveInvoiceData['termId'] = event;
   }
 
   onDepositChange(event) {
-    this.saveInvoiceData.deposit = parseInt(event, 10);
+    this.saveInvoiceData.deposit = event;
   }
 
   getShippingAddress(event) {
