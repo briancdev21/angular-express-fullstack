@@ -40,6 +40,7 @@ export class InventoryBodyComponent {
     this.internalMemo = this.po_mock.internalMemo;
     this.supplierNote = this.po_mock.supplierNote;
     this.selectedProject = this.po_mock.projectId;
+    this.commonService.showAlertModal.next(false);
     if (_podata.status == 'FULFILLED') {
       this.commonService.showAlertModal.next(true);
     }
@@ -215,26 +216,24 @@ export class InventoryBodyComponent {
     this.updatePO();
   }
   onNoteChanged(event) {
-    if (event) {
+    // if (event) {
       this.errors.noteToSupplierChanged = true;
 
       this.po_mock.supplierNote = event;
       this.updatePO();
-    } else {
-      this.errors.noteToSupplierChanged = false;
-    }
+    // } else {
+    //   this.errors.noteToSupplierChanged = false;
+    // }
   }
 
   onMemoChanged(event) {
-    if (event) {
+    // if (event) {
       this.errors.memoChanged = true;
 
       this.po_mock.internalMemo = event;
       this.updatePO();
 
-    } else {
-      this.errors.memoChanged = false;
-    }
+    //
 
   }
   onShippingAddressChanged(event) {

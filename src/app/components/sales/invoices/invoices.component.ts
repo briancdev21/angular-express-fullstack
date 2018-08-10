@@ -111,9 +111,9 @@ export class InvoicesComponent implements OnInit {
 
         this.invoicesListInfo.map(i => {
           if (i['contactId']) {
-            i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].split('-').pop(), 10));
+            i['customerName'] = this.getCustomerName(this.contactsList, i['contactId']);
           } else {
-            i['customerName'] = this.getCustomerName(this.leadsList, parseInt(i['leadId'].split('-').pop(), 10));
+            i['customerName'] = this.getCustomerName(this.leadsList, ['leadId']);
           }
           return i;
         });
@@ -168,8 +168,8 @@ export class InvoicesComponent implements OnInit {
   getCustomerName(list, id) {
     const idList = list.map( c => c.id);
     const pos = idList.indexOf(id);
-    console.log('customer name:', list[pos].name);
-    return list[pos].name;
+    // console.log('customer name:', list[pos].name);
+    return list[pos] !== undefined ? list[pos].name : '';
   }
 
   closeModal() {

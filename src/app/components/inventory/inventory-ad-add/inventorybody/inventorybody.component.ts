@@ -73,11 +73,11 @@ export class InventoryBodyComponent implements OnDestroy {
 
   onMemoChanged(event) {
     // console.log('event memo changed');
-    if (event) {
+    // if (event) {
       this.errors.memoChanged = true;
       this.ad_mock.internalMemo = event;
       this.updateAD();
-    }
+    // }
   }
 
   onCancel() {

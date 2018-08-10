@@ -1,4 +1,4 @@
 export class AdjustmentCreateModel {
-  adjustedLocation: number;
+  adjustedLocationId: number;
   internalMemo: string;
 }

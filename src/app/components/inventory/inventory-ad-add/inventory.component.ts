@@ -18,7 +18,7 @@ export class InventoryAdAddComponent implements OnInit {
     }
     this.sharedService.getLocationsWithParams(params).subscribe(locationRes => {
       const locations = locationRes.results;
-      ad_create_mock.adjustedLocation = locations[0].id;
+      ad_create_mock.adjustedLocationId = locations[0].id;
       ad_create_mock.internalMemo = '';
       this.sharedService.createInventoryAdjustment(ad_create_mock).subscribe(ad_res => {
         this.ad_mock = ad_res.data;

@@ -34,7 +34,7 @@ export class InvoiceProfileFooterComponent implements OnInit {
   chargeFeeUnit: string;
   chargeFeeValue: number;
   chargeSwitchOn: false;
-  currentInvoiceId: number;
+  currentInvoiceId: string;
   reminderSwitchOn = false;
   recurringSwitchOn = false;
   creditSwitchOn = false;
@@ -55,7 +55,7 @@ export class InvoiceProfileFooterComponent implements OnInit {
   ngOnInit() {
     console.log('created invoice: ', this.createdInvoice);
     // this.chargeFeeUnit = this.createdInvoice.
-    this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.currentInvoiceId = this.route.snapshot.paramMap.get('id');
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
       this.chargeFeeUnit = res.data.lateFee.unit;
       this.chargeFeeValue = res.data.lateFee.value;

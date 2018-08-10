@@ -42,9 +42,9 @@ export class InvoicesListTableComponent implements OnInit {
   }
 
   redirectTo(data) {
-    const contactId = data.contactId ? data.contactId.slice(0, 7) : data.leadId.slice(0, 7) ;
+    const contactId = data.contactId ? data.contactId.slice(0, 2) : data.leadId.slice(0, 2) ;
     console.log('contactid..: ', contactId, data);
-    if (contactId === 'INVOICE') {
+    if (contactId === 'IN') {
       this.router.navigate([`invoice-profile/${data.id}`]);
     } else {
       this.router.navigate([`estimate-profile/${data.id}`]);
