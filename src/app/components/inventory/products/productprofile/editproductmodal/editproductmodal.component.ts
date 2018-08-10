@@ -149,10 +149,14 @@ export class EditProductModalComponent implements OnInit {
         this.addedProduct.productDesc = response.data.description;
         this.addedProduct.measureUnit = response.data.unitOfMeasure.unit;
         this.addedProduct.measureCount = response.data.unitOfMeasure.quantity;
-        this.addedProduct.expirationType = backedData.expiration.unit;
-        this.addedProduct.expirationCount = backedData.expiration.duration;
-        this.addedProduct.leadTimeUnit = response.data.leadTime.unit;
-        this.addedProduct.leadTimeCount = response.data.leadTime.duration;
+        if (backedData.expiration) {
+          this.addedProduct.expirationType = backedData.expiration.unit;
+          this.addedProduct.expirationCount = backedData.expiration.duration;
+        }
+        if (response.data.leadTime) {
+          this.addedProduct.leadTimeUnit = response.data.leadTime.unit;
+          this.addedProduct.leadTimeCount = response.data.leadTime.duration;
+        }
         this.addedProduct.model = response.data.model;
 
 

@@ -25,6 +25,9 @@ export class ProductsComponent implements OnInit {
   savedFiltersArr = [];
   filterAvaliableTo: any;
   filterName = '';
+  public showAddProductModal = false;
+  public addProductModalCollapsed = true;
+  productsInfoAll: any;
 
   constructor( private filterService: FilterService, private productsService: ProductsService ) {
     this.filterAvaliableTo = 'everyone';
@@ -128,5 +131,10 @@ export class ProductsComponent implements OnInit {
     this.productsListInfo = this.backUpProducts;
     this.savedFiltersListCollapsed = true;
     this.openSavedFiltersList = false;
+  }
+
+  openAddProductModal() {
+    this.showAddProductModal = true;
+    this.addProductModalCollapsed = false;
   }
 }
