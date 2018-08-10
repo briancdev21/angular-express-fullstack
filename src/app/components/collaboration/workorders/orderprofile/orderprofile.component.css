@@ -360,3 +360,7 @@ span.progress-title {
 :host ::ng-deep .one-side-timeline-panel {
   background: #F5F5F5 !important;
 }
+
+.closebtn {
+  cursor: pointer;
+}

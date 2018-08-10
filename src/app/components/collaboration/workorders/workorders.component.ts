@@ -31,7 +31,7 @@ export class WorkOrdersComponent implements OnInit {
   filterName = '';
   workorderTypes: any;
   usersList = [];
-  contactsList = [];
+  contactsList: any;
   workOrdersList: any;
 
   constructor( private filterService: FilterService, private sharedService: SharedService,
@@ -40,31 +40,33 @@ export class WorkOrdersComponent implements OnInit {
 
     this.sharedService.getUsers().subscribe(user => {
       this.usersList = user;
-      this.sharedService.getContacts().subscribe(data => {
-        this.contactsList = data;
-        this.addContactName(this.contactsList);
         this.collaboratorsService.getWorkOrders().subscribe(res => {
           this.workOrdersList = res.results;
-          this.workOrdersList.forEach(element => {
-            const colArr = [];
-            element.startTime = moment(element.startDate).format('hh:mm a');
-            element.endTime = moment(element.endDate).format('hh:mm a');
-            element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
-            element.contactName = this.getContactNameFromId(element.contactId);
-            element.barInfo = {
-              title: element.completion + '%',
-              completeness: element.completion
-            };
-            if (element.collaborators) {
-              element.collaborators.forEach(col => {
-                colArr.push(this.usersList.filter(u => u.username === col)[0]);
-              });
-            }
-            element.collaboratorsData = colArr;
+          const workOrderContactIds = this.workOrdersList.map(w => w.contactId);
+          this.sharedService.getMulipleContacts(workOrderContactIds).subscribe(contact => {
+            this.contactsList = contact;
+            this.addContactName(this.contactsList);
+
+            this.workOrdersList.forEach(element => {
+              const colArr = [];
+              element.startTime = moment(element.startDate).format('hh:mm a');
+              element.endTime = moment(element.endDate).format('hh:mm a');
+              element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+              element.contactName = this.getContactNameFromId(element.contactId);
+              element.barInfo = {
+                title: element.completion + '%',
+                completeness: element.completion
+              };
+              if (element.collaborators) {
+                element.collaborators.forEach(col => {
+                  colArr.push(this.usersList.filter(u => u.username === col)[0]);
+                });
+              }
+              element.collaboratorsData = colArr;
+            });
+            console.log('work order list: ', this.workOrdersList);
           });
-          console.log('work order list: ', this.workOrdersList);
         });
-      });
     });
   }
 

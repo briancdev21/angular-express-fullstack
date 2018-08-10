@@ -11,11 +11,11 @@
     </div>
 
     <div class="order-details">
-      <app-orderdetails [orderProfileInfo]="orderProfileInfo" *ngIf="orderProfileInfo"></app-orderdetails>
+      <app-orderdetails [orderProfileInfo]="orderProfileInfo" *ngIf="currentContactInfo"></app-orderdetails>
     </div>
 
     <div class="draggable-ticket">
-      <app-draggableticket [(orderProfileInfo)]="orderProfileInfo"  *ngIf="orderProfileInfo"></app-draggableticket>
+      <app-draggableticket [(orderProfileInfo)]="orderProfileInfo"  *ngIf="currentContactInfo"></app-draggableticket>
     </div>
 
     <div class="delivery-description">

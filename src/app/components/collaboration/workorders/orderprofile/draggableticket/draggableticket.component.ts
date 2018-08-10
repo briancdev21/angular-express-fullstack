@@ -47,7 +47,7 @@ export class DraggableTicketComponent implements OnInit {
       this.onDropModel(value.slice(1));
     });
 
-    this.currentWorkOrderId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.currentWorkOrderId = this.route.snapshot.paramMap.get('id');
 
     this.collaboratorsService.getWorkOrderTasks(this.currentWorkOrderId).subscribe(res => {
       this.workOrderTasks = res.results;
@@ -78,7 +78,7 @@ export class DraggableTicketComponent implements OnInit {
 
   private onDropModel(args) {
     const [el, target, source] = args;
-    const selectedTaskId = parseInt(el.firstElementChild.id, 10);
+    const selectedTaskId = el.firstElementChild.id;
     const targetParentClassName = target.parentElement.className;
     let selectedColumn;
 
