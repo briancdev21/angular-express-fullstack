@@ -1,6 +1,9 @@
 <div class="text-align-left" >
   <div class="completer-label" >Category</div>
   <div class="input-box">
-    <ng2-completer [dataService]="dataService" [minSearchLength]="0" [(ngModel)]="currentCategory" (selected)="onSelected($event)" class="ng2completer" ></ng2-completer>
+    <!-- <ng2-completer [dataService]="dataService" [minSearchLength]="0" [(ngModel)]="currentCategory" (selected)="onSelected($event)" class="ng2completer" ></ng2-completer> -->
+    <select  [(ngModel)]="currentCategory" (change)="onSelected($event)"> 
+      <option *ngFor="let class of categories" [value]="class.value" >{{class.name}}</option>
+    </select>
   </div>
 </div>

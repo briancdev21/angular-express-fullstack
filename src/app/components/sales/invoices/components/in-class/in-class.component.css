@@ -33,3 +33,19 @@ ng2-completer.ng2completer .completer-input {
 .input-box {
   width: 200px;
 }
+
+select {
+  background: none;
+    -webkit-appearance: none;
+    background: url(/assets/images/down-arrow.png) no-repeat;
+    background-position: right 10px center;
+    background-size: 10px;
+    height: 32px;
+    font-size: 12px;
+    border-radius: 0;
+    border: 1px solid #f5f5f5;
+    padding-left: 1em;
+    padding-right: 50px;
+    width: 100%;
+    color: #646464;
+}

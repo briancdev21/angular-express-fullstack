@@ -21,15 +21,16 @@ export class InClassComponent implements OnInit {
 
 
   constructor(private completerService: CompleterService) {
-    this.dataService = completerService.local(this.classifications, 'name', 'name');
+    // this.dataService = completerService.local(this.classifications, 'name', 'name');
   }
 
   ngOnInit() {
   }
 
-  onSelected(item: CompleterItem) {
+  onSelected(item) {
+    console.log('current class:', this.currentClass);
     if (item) {
-      this.selectedClass.emit(item.originalObject.value);
+      this.selectedClass.emit(item.target.value);
     }
   }
 

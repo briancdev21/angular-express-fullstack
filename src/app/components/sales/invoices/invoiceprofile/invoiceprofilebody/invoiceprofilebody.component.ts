@@ -160,13 +160,13 @@ export class InvoiceProfileBodyComponent implements OnInit {
       this.sharedService.getClassifications().subscribe(data => {
         this.classList = data.results;
         const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
-        this.currentClass = this.classList[classPos].name;
+        this.currentClass = this.classList[classPos].id;
       });
 
       this.sharedService.getInvoiceCategories().subscribe(data => {
         this.categoryList = data.results;
         const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
-        this.currentCategory = this.categoryList[categoryPos].name;
+        this.currentCategory = this.categoryList[categoryPos].id;
       });
 
       this.invoicesService.getInvoiceProducts(this.currentInvoiceId).subscribe(data => {
