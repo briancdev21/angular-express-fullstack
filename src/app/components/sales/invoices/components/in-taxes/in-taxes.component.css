@@ -25,6 +25,7 @@ span {
 .dollar span {
     padding-left: 1.5em;
     text-align: right;
+    border: none;
 }
 
 .dollar:before {
