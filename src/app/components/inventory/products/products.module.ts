@@ -10,20 +10,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ProfileCmpModule } from '../../profile/profile.module';
 import { CommonCmpModule } from '../../common/common.module';
+import { ProposalCmpModule } from '../../sales/proposal/proposal.module';
 
 import { FilterService } from './filter.service';
 import { ProductsListTableComponent } from './productslisttable/productslisttable.component';
 import { ProductFilterComponent } from './productfilter/productfilter.component';
-import { AddProductComponent } from './addproduct/addproduct.component';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { QuillModule } from 'ngx-quill';
 
 
 @NgModule({
   declarations: [
     ProductsListTableComponent,
     ProductFilterComponent,
-    AddProductComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,11 +38,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
     CommonCmpModule,
     Ng2CompleterModule,
     NgSelectModule,
+    ProposalCmpModule,
+    QuillModule
   ],
   exports: [
     ProductsListTableComponent,
     ProductFilterComponent,
-    AddProductComponent,
   ],
   providers: [FilterService]
 })

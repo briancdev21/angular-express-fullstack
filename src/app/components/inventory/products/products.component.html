@@ -21,7 +21,7 @@
 
     <div class="products-btn-group">
       <div class="products-add-btn">
-        <app-addproduct [productsListInfo]="productsListInfo" [productTags]="productTags" [productStatus]="productStatus " (addToProductsList)="addNewProduct($event)"></app-addproduct>
+        <div class="btn-add-product" (click)="openAddProductModal();">Add product</div>
       </div>
       <div class="products-import-btn">Import products</div>
     </div>
@@ -80,3 +80,7 @@
   </div>
 </div>
 
+<div class="add-product-modal-wrapper" *ngIf="showAddProductModal"></div>
+<div class="add-product-modal"  [ngClass]="{'show-add-product-modal': !addProductModalCollapsed, 'hide-add-product-modal': addProductModalCollapsed }">
+  <app-addproductmodal [showAddProductModal]="showAddProductModal" [addProductModalCollapsed]="addProductModalCollapsed" [productsInfoAll]="productsInfoAll"></app-addproductmodal>
+</div>

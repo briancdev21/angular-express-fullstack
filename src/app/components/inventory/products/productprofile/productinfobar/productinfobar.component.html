@@ -4,16 +4,16 @@
   <img src="assets/images/Cloud.png" class="img-settings" (click)="changeImage()"/>
 </div>
 <div class="product-info" *ngIf="productInfo">
-  <span>{{productInfo.name}}</span>
+  <span class="product-name">{{productInfo.name}}</span>
   <span>{{productInfo.brandName}}</span>
   <span>{{productInfo.model}}</span>
   <span class="title">Product Description</span>
   <textarea disabled>{{productInfo.description}}</textarea>
-  <span class="title">Primary Price</span>
+  <!-- <span class="title">Primary Price</span>
   <div class="price-value">
     <span>$</span>
     <span>price</span>
-  </div>
+  </div> -->
   <span class="title">Unit of Measure</span>
   <div class="unit-measure" *ngIf="productInfo.unitOfMeasure">
     <div class="left-border-box">{{productInfo.unitOfMeasure.unit}}</div>
@@ -29,11 +29,11 @@
   </div>
   <span class="title">Inventory Type</span>
   <div class="left-border-box">{{productInfo.inventoryType}}</div>
-  <span class="title">Expiration</span>
+  <!-- <span class="title">Expiration</span>
   <div class="measure" *ngIf="productInfo.expiration">
     <div class="left-border-box">{{productInfo.expiration.unit}}</div>
     <div class="border-box">{{productInfo.expiration.duration}}</div>
-  </div>
+  </div> -->
 </div>
 
 

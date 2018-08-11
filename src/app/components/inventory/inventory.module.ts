@@ -20,6 +20,7 @@ import { ProductsCmpModule } from './products/products.module';
 import { PurchaseOrderListCmpModule } from './purchaseorderlist/purchaseorderlist.module';
 import { SuppliersCmpModule } from './suppliers/suppliers.module';
 import { SupplierProfileCmpModule } from './supplierprofile/supplierprofile.module';
+import { ProposalCmpModule } from '../sales/proposal/proposal.module';
 
 import { InventoryService } from './inventory.service';
 import { Ng2CompleterModule } from 'ng2-completer';
@@ -70,7 +71,8 @@ import { ReceiveInventoryDetailModule } from './receiveinventorydetail/receivein
     InventoryADProfileModule,
     InventoryTRProfileModule,
     ReceiveInventoryModule,
-    ReceiveInventoryDetailModule
+    ReceiveInventoryDetailModule,
+    ProposalCmpModule
   ],
   exports: [
     MatInputModule,

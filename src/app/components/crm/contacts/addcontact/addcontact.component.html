@@ -168,6 +168,7 @@
               <span>Default pricing (*required)</span>
               <div *ngIf="pricingCategoriesList">
                 <select [(ngModel)]="defaultPricing" [ngClass]="{'validation-required': invalidDefaultPricing}">
+                  <option value="" disabled>Select Pricing Category</option>
                   <option *ngFor="let pricing of pricingCategoriesList" [value]="pricing.id" class="default-option">{{pricing.name}}</option>
                 </select>
               </div>
@@ -176,8 +177,8 @@
               <span>Default currency (*required)</span>
               <div *ngIf="currencyList">
                 <select [(ngModel)]="defaultCurrency" [ngClass]="{'validation-required': invalidDefaultCurrency}" *ngIf="currencyList">
+                  <option value="" disabled>Select Currency</option>
                   <option *ngFor="let currency of currencyList; let i = index " [value]="currency.id">{{currency.currencyCode}}</option>
-
                 </select>
               </div>
             </div>
@@ -187,6 +188,7 @@
               <span>Default terms (*required)</span>
               <div *ngIf="termsList">
                 <select [(ngModel)]="defaultTerm" [ngClass]="{'validation-required': invalidDefaultTerm}">
+                  <option value="" disabled>Select Term</option>
                   <option *ngFor="let term of termsList" class="default-option" [value]="term.id">{{term.name}}</option>
                 </select>
               </div>

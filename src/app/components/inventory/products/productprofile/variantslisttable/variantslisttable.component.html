@@ -8,8 +8,8 @@
       <th (click)="sortArray('cost')">COST</th> 
       <th (click)="sortArray('priceAdjustment')">PRICE ADJUST</th>
       <th (click)="sortArray('quantity')">QTY</th>
-      <th (click)="sortArray('reOrder')">RE-ORDER</th>
-      <th (click)="sortArray('po')">PO</th>
+      <th (click)="sortArray('reorderQuantity')">RE-ORDER</th>
+      <th (click)="sortArray('placeOrderQuantity')">PO</th>
       <th (click)="sortArray('reserved')">RESERVED</th>
     </tr>
     <tr *ngFor="let product of productVariants; let i = index">
@@ -20,8 +20,8 @@
       <td>$ {{product.cost | number: '1.2-2'}}</td>
       <td>$ {{product.priceAdjustment | number: '1.2-2'}}</td>
       <td>{{product.quantity}}</td>
-      <td>{{product.reOrder}}</td>
-      <td>{{product.po}}</td>
+      <td>{{product.reorderQuantity}}</td>
+      <td>{{product.placeOrderQuantity}}</td>
       <td>
         <span [ngClass]="getStockColor(product.stock, product.reorderPoint)">{{product.reserved}}</span> 
       </td> 
