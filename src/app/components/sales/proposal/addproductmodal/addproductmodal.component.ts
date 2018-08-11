@@ -193,12 +193,13 @@ export class AddProductModalComponent implements OnInit {
 
   cancelNewProduct() {
     this.proposalService.closeModal(true);
-    this.productsService.deleteIndividualProduct(this.newProductId).subscribe(res => {
-      console.log('deleted: ', res);
-    });
+    // this.productsService.deleteIndividualProduct(this.newProductId).subscribe(res => {
+    //   console.log('deleted: ', res);
+    // });
   }
 
   clickNext(pos) {
+    this.tabActiveFirst = this.tabActiveThird = this.tabActiveSecond = this.tabActiveFour = false;
     if (pos === 'tab-one') {
       this.invalidModelNumber = false;
       this.invalidProductType = false;
@@ -206,13 +207,9 @@ export class AddProductModalComponent implements OnInit {
       this.invalidProductName = false;
       this.invalidManufacturer = false;
       this.invalidProductDescription = false;
-
       if (this.addedProduct.modelNumber && this.addedProduct.type && this.supplier && this.brand
         && this.addedProduct.productName && this.addedProduct.productDesc) {
         this.tabActiveSecond = true;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = false;
-        this.tabActiveFour = false;
       } else {
         if (!this.addedProduct.modelNumber) {
           this.invalidModelNumber = true;
@@ -233,67 +230,60 @@ export class AddProductModalComponent implements OnInit {
           this.invalidManufacturer = true;
         }
         setTimeout(() => {
-          this.tabActiveSecond = false;
           this.tabActiveFirst = true;
-          this.tabActiveThird = false;
-          this.tabActiveFour = false;
         });
       }
     } else if (pos === 'tab-two') {
-      const savingProductMd = {
-        'brandId': this.selectedBrandId,
-        'productTypeId': this.selectedProductTypeId,
-        'supplierId': this.selectedSupplierId,
-        'keywordIds': this.selectedKeywordsId,
-        'model': this.addedProduct.modelNumber,
-        'name': this.addedProduct.productName,
-        'description': this.addedProduct.productDesc,
-        'inventoryType': this.addedProduct.inventoryType,
-        'unitOfMeasure': {
-          'quantity': this.addedProduct.measureCount ? this.addedProduct.measureCount : 0,
-          'unit': this.addedProduct.measure
-        },
-        'expiration': {
-          'duration': this.addedProduct.expiration ? this.addedProduct.expiration : 0,
-          'unit': this.addedProduct.expirationType
-        },
-        'leadTime': {
-          'duration': this.addedProduct.leadTimeCount ? this.addedProduct.leadTimeCount : 0,
-          'unit': this.addedProduct.leadTime
-        }
-      };
-      const savingProductData = JSON.stringify(savingProductMd);
-      this.productsService.createProduct(savingProductData).subscribe(res => {
-        this.newCreatedProductId = res.data.id;
-        console.log('product created: ', res);
-        this.tabActiveThird = true;
-        this.tabActiveFirst = false;
-        this.tabActiveSecond = false;
-        this.tabActiveFour = false;
+      this.tabActiveThird = true;
+    } else if (pos === 'tab-three') {
+      this.tabActiveFour = true;
+    }
+  }
 
-        // Get search modal data
-        this.productsService.getProductsList().subscribe(response => {
-          this.productsAll = response.results;
-          console.log('products All: ', response);
+  createProduct() {
+    const savingProductMd = {
+      'brandId': this.selectedBrandId,
+      'productTypeId': this.selectedProductTypeId,
+      'supplierId': this.selectedSupplierId,
+      'keywordIds': this.selectedKeywordsId,
+      'model': this.addedProduct.modelNumber,
+      'name': this.addedProduct.productName,
+      'description': this.addedProduct.productDesc,
+      'inventoryType': this.addedProduct.inventoryType,
+      'unitOfMeasure': {
+        'quantity': this.addedProduct.measureCount ? this.addedProduct.measureCount : 0,
+        'unit': this.addedProduct.measure
+      },
+      'expiration': {
+        'duration': this.addedProduct.expiration ? this.addedProduct.expiration : 0,
+        'unit': this.addedProduct.expirationType
+      },
+      'leadTime': {
+        'duration': this.addedProduct.leadTimeCount ? this.addedProduct.leadTimeCount : 0,
+        'unit': this.addedProduct.leadTime
+      }
+    };
+    const savingProductData = JSON.stringify(savingProductMd);
+    this.productsService.createProduct(savingProductData).subscribe(res => {
+      this.newCreatedProductId = res.data.id;
+      console.log('product created: ', res);
 
-          this.productsService.getProductCatalog().subscribe(data => {
-            this.availableProductsAll = data.results;
-            console.log('availableproudcts : ', this.availableProductsAll);
-            this.availableProductsAll = this.availableProductsAll.filter(p => p.id !== this.newCreatedProductId);
-            this.availableProductsAll.forEach(ele => {
-              ele.pictureURI = this.productsAll.filter(p => p.id === ele.productId)[0].pictureURI;
-              ele.brandId =  this.productsAll.filter(p => p.id === ele.productId)[0].brandId;
-            });
+      // Get search modal data
+      this.productsService.getProductsList().subscribe(response => {
+        this.productsAll = response.results;
+        console.log('products All: ', response);
+
+        this.productsService.getProductCatalog().subscribe(data => {
+          this.availableProductsAll = data.results;
+          console.log('availableproudcts : ', this.availableProductsAll);
+          this.availableProductsAll = this.availableProductsAll.filter(p => p.id !== this.newCreatedProductId);
+          this.availableProductsAll.forEach(ele => {
+            ele.pictureURI = this.productsAll.filter(p => p.id === ele.productId)[0].pictureURI;
+            ele.brandId =  this.productsAll.filter(p => p.id === ele.productId)[0].brandId;
           });
         });
       });
-
-    } else if (pos === 'tab-three') {
-      this.tabActiveFour = true;
-      this.tabActiveFirst = false;
-      this.tabActiveThird = false;
-      this.tabActiveSecond = false;
-    }
+    });
   }
 
   clickNextEditVariant() {
@@ -318,21 +308,13 @@ export class AddProductModalComponent implements OnInit {
   }
 
   clickBack(pos) {
+    this.tabActiveFirst = this.tabActiveThird = this.tabActiveSecond = this.tabActiveFour = false;
     if (pos === 'tab-three') {
       this.tabActiveSecond = true;
-      this.tabActiveFirst = false;
-      this.tabActiveThird = false;
-      this.tabActiveFour = false;
     } else if (pos === 'tab-four') {
       this.tabActiveThird = true;
-      this.tabActiveFirst = false;
-      this.tabActiveSecond = false;
-      this.tabActiveFour = false;
     } else if (pos === 'tab-two') {
-      this.tabActiveFour = false;
       this.tabActiveFirst = true;
-      this.tabActiveThird = false;
-      this.tabActiveSecond = false;
     }
   }
 
@@ -419,33 +401,22 @@ export class AddProductModalComponent implements OnInit {
   }
 
   tabChange(event) {
+    this.tabActiveFirst = this.tabActiveThird = this.tabActiveSecond = this.tabActiveFour = false;
     switch (event.tabTitle) {
       case 'PRODUCT DETAILS': {
-        this.tabActiveSecond = false;
         this.tabActiveFirst = true;
-        this.tabActiveThird = false;
-        this.tabActiveFour = false;
         break;
       }
       case 'PRODUCT VALUES': {
         this.tabActiveSecond = true;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = false;
-        this.tabActiveFour = false;
         this.clickNext('tab-one');
         break;
       }
       case 'PRODUCT VARIANCE': {
-        this.tabActiveSecond = false;
-        this.tabActiveFirst = false;
         this.tabActiveThird = true;
-        this.tabActiveFour = false;
         break;
       }
       case 'ACCESSORIES & ALTERNATIVES': {
-        this.tabActiveSecond = false;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = false;
         this.tabActiveFour = true;
         break;
       }

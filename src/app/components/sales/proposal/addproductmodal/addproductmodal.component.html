@@ -11,11 +11,11 @@
           <div class="number-type-drag">
             <div class="content-left">
               <div>
-                <span>Model Number</span>
+                <span>Model Number (*required)</span>
                 <input placeholder="Enter the product model number" [ngClass]="{'validation-required': invalidModelNumber}"  [(ngModel)]="addedProduct.modelNumber" [value]="addedProduct.modelNumber">
               </div>
               <div>
-                <span>Product Type</span>
+                <span>Product Type (*required)</span>
                 <ng2-completer [(ngModel)]="addedProduct.type" [ngClass]="{'completer-validation-required': invalidProductType}" placeholder="Add or search for product type" [datasource]="productTypeNames" [minSearchLength]="0" class="auto-comp" (selected)="productTypeIdSelected($event)"></ng2-completer>
               </div>
             </div>
@@ -34,20 +34,20 @@
           </div>
           <div class="supplier-brand">
             <div>
-              <span>Supplier</span>
+              <span>Supplier (*required)</span>
               <ng2-completer [(ngModel)]="supplier" [ngClass]="{'completer-validation-required': invalidSupplier}" placeholder="Add or search for a supplier" [datasource]="suppliers" [minSearchLength]="0" class="auto-comp" (selected)="supplierIdSelected($event)"></ng2-completer>
             </div>
             <div>
-              <span>Brand</span>
+              <span>Brand (*required)</span>
               <ng2-completer [(ngModel)]="brand" [ngClass]="{'completer-validation-required': invalidManufacturer}" placeholder="Add or search for manufacturer" [datasource]="brands" [minSearchLength]="0" class="auto-comp" (selected)="brandIdSelected($event)"></ng2-completer>
             </div>
           </div>
           <div class="product-name">
-            <span>Product Name</span>
+            <span>Product Name (*required)</span>
             <input placeholder="Enter the product title" [ngClass]="{'validation-required': invalidProductName}" maxlength="100" [(ngModel)]="addedProduct.productName">
           </div>
           <div class="product-desc">
-            <span>Product Description</span>
+            <span>Product Description (*required)</span>
             <textarea placeholder="Enter product description" [ngClass]="{'validation-required': invalidProductDescription}" [(ngModel)]="addedProduct.productDesc" [value]="addedProduct.productDesc"></textarea>
           </div>
           <div class="tags" *ngIf="showAddProductModal">
@@ -155,7 +155,7 @@
               </div>
             </div>
           </div>
-          <div class="sku-supplier-upc">
+          <!-- <div class="sku-supplier-upc">
             <div class="sku-supplier">
               <div class="sku">
                 <div>
@@ -179,7 +179,7 @@
                 <input [ngClass]="{'greyed-layer': greyedService}" placeholder="Type in or scan for the UPC number" [(ngModel)]="addedProduct.upc" [value]="addedProduct.upc" type="number">
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="page-divider"></div>
           <div class="friend-royalty-retail" *ngIf="pricingCategoriesListInfo">
             <div class="friend" *ngFor="let pricing of pricingCategoriesListInfo; let i = index">
