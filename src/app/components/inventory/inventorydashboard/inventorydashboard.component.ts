@@ -160,10 +160,9 @@ export class InventoryDashboardComponent implements OnInit {
         thirtyToSixty: res.agingInventory['60'],
         overSixty: res.agingInventory['90'],
       };
-    });
-
-    this.sharedService.getInventoryStatistics(0, 0, 'MONTHLY', 'inventoryTurnOver').subscribe(res => {
-      this.inventoryValues.turnover = res.inventoryTurnOver;
+      this.sharedService.getInventoryStatistics(0, 0, 'MONTHLY', 'inventoryTurnOver').subscribe(res => {
+        this.inventoryValues.turnover = res.inventoryTurnOver;
+      });
     });
   }
 
