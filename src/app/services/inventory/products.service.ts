@@ -167,5 +167,10 @@ export class ProductsService {
     const url = `${apiUrl}inventory/products/${id}/alternatives/${sku}`;
     return this.http.delete(url,  this.options);
   }
+
+  generateSku(): Observable<any>  {
+    const url = `${apiUrl}inventory/generate-sku`;
+    return this.http.get(url);
+  }
 }
 

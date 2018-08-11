@@ -51,6 +51,7 @@
             <textarea placeholder="Enter product description" [ngClass]="{'validation-required': invalidProductDescription}" [(ngModel)]="addedProduct.productDesc" [value]="addedProduct.productDesc"></textarea>
           </div>
           <div class="tags" *ngIf="showAddProductModal">
+            <span>Tags</span>
             <app-multikeywordselect [keywords]="productTags" placeholder="Enter tags for the product" (sendKeywords)="getKeywordIds($event)"></app-multikeywordselect>
           </div>
         </div>
@@ -155,7 +156,7 @@
               </div>
             </div>
           </div>
-          <!-- <div class="sku-supplier-upc">
+          <div class="sku-supplier-upc">
             <div class="sku-supplier">
               <div class="sku">
                 <div>
@@ -166,20 +167,20 @@
                     <span>Auto-Generate</span>
                   </div>
                 </div>
-                <input placeholder="Enter the sku number" [(ngModel)]="addedProduct.skuNumber" [value]="addedProduct.skuNumber" type="number">
+                <input placeholder="Enter the sku number" [(ngModel)]="addedProduct.skuNumber" (ngModelChange)="skuChange($event)" type="number">
               </div>
-              <div class="supplier">
+              <!-- <div class="supplier">
                 <span>Supplier Code</span>
                 <input placeholder="Enter the supplier code" [(ngModel)]="addedProduct.supplierCode" [value]="addedProduct.supplierCode">
-              </div>
+              </div> -->
             </div>
-            <div class="upc">
+            <!-- <div class="upc">
               <span>UPC Number</span>
               <div class="greyed-input">
                 <input [ngClass]="{'greyed-layer': greyedService}" placeholder="Type in or scan for the UPC number" [(ngModel)]="addedProduct.upc" [value]="addedProduct.upc" type="number">
               </div>
-            </div>
-          </div> -->
+            </div> -->
+          </div>
           <div class="page-divider"></div>
           <div class="friend-royalty-retail" *ngIf="pricingCategoriesListInfo">
             <div class="friend" *ngFor="let pricing of pricingCategoriesListInfo; let i = index">
@@ -248,7 +249,7 @@
                 <img src="assets/images/garbage.png" (click)="removeVariantList(i);" class="remove-variants" [ngClass]="getVisibility(i)">
               </div>
             </div>
-            <div class="add-values-section" (click)="addNewVariants()">
+            <div class="add-values-section" (click)="addNewVariants()" *ngIf="addedProduct.variantValue.length < 3">
               <img src="assets/images/Add-Button.svg" >
             </div>
           </div>

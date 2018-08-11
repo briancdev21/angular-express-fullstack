@@ -365,15 +365,23 @@ export class AddProductModalComponent implements OnInit {
   }
 
   autoGenerate() {
-    const randNum = Math.floor(Math.random() * 899999 + 100000);
+    // const randNum = Math.floor(Math.random() * 899999 + 100000);
+    let randNum;
     if (!this.switch) {
-      this.addedProduct.skuNumber = randNum;
-    } else {
-      this.addedProduct.skuNumber = 0;
+      this.productsService.generateSku().subscribe(res => {
+        console.log('sku: ', res);
+        randNum = res.sku;
+        this.addedProduct.skuNumber = randNum;
+      });
     }
     this.switch = !this.switch;
     this.randSku = randNum;
     return randNum;
+  }
+
+  skuChange(event) {
+    this.randSku = event;
+    this.switch = false;
   }
 
   calcCost(value, i) {
