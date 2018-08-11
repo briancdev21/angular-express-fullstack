@@ -156,6 +156,7 @@ span {
 .conversion {
   display: flex;
   flex-direction: column;
+  padding-top: 10px;
 }
 
 table {

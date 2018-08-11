@@ -21,10 +21,10 @@
         <div class="card-header">
           <span>PROJECT HOURS</span>
           <select [(ngModel)]="barTimePeriod">
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="quarter">This Quarter</option>
-            <option value="year">This Year</option>
+            <option value="WEEKLY">This Week</option>
+            <option value="MONTHLY">This Month</option>
+            <option value="QUARTERLY">This Quarter</option>
+            <option value="YEARLY">This Year</option>
           </select>
         </div>
         <app-morrisbarchart [morrisBarChartInfo]="morrisBarChartInfo"></app-morrisbarchart>
@@ -37,10 +37,10 @@
       <div class="card-header">
         <span>SALES MARGINS</span>
         <select [(ngModel)]="barTimePeriod">
-          <option value="week">This Week</option>
-          <option value="month">This Month</option>
-          <option value="quarter">This Quarter</option>
-          <option value="year">This Year</option>
+          <option value="WEEKLY">This Week</option>
+          <option value="MONTHLY">This Month</option>
+          <option value="QUARTERLY">This Quarter</option>
+          <option value="YEARLY">This Year</option>
         </select>
       </div>
       <app-salesmarginschart [morrisLineChartInfo]="salesMarginsLine"></app-salesmarginschart>
@@ -49,10 +49,10 @@
       <div class="card-header">
         <span>ACTIVE PROJECTS</span>
         <select [(ngModel)]="barTimePeriod">
-          <option value="week">This Week</option>
-          <option value="month">This Month</option>
-          <option value="quarter">This Quarter</option>
-          <option value="year">This Year</option>
+          <option value="WEEKLY">This Week</option>
+          <option value="MONTHLY">This Month</option>
+          <option value="QUARTERLY">This Quarter</option>
+          <option value="YEARLY">This Year</option>
         </select>
       </div>
       <app-activeprojectschart [morrisLineChartInfo]="activeProjectsLine"></app-activeprojectschart>
@@ -61,10 +61,10 @@
       <div class="card-header">
         <span>LEADS TO WIN</span>
         <select [(ngModel)]="barTimePeriod">
-          <option value="week">This Week</option>
-          <option value="month">This Month</option>
-          <option value="quarter">This Quarter</option>
-          <option value="year">This Year</option>
+          <option value="WEEKLY">This Week</option>
+          <option value="MONTHLY">This Month</option>
+          <option value="QUARTERLY">This Quarter</option>
+          <option value="YEARLY">This Year</option>
         </select>
       </div>
       <app-leadstowinchart [morrisLineChartInfo]="leadsToWinLine"></app-leadstowinchart>

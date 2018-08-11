@@ -64,6 +64,8 @@ export class ProjectInformationComponent implements OnInit {
           this.projectInformation = res.data;
           const followersData = [];
           const contactAssociationData = [];
+          let clientProjectManagerId;
+          let accountReceivableId;
           // if (this.projectInformation.followers) {
           //   this.projectInformation.followers.forEach(element => {
           //     const selectedUser = this.usersList.filter(u => u.username === element)[0];
@@ -74,14 +76,20 @@ export class ProjectInformationComponent implements OnInit {
           //   });
           // }
           this.projectInformation.followersData = followersData;
-          this.projectInformation.contactName = this.contactsList.filter(c => c.id === this.projectInformation.contactId)[0].name;
+          if (this.projectInformation.contactId) {
+            this.projectInformation.contactName = this.contactsList.filter(c => c.id === this.projectInformation.contactId)[0].name;
+          }
           this.projectInformation.projectManagerData = this.usersList.filter(u => u.username === this.projectInformation.projectManager)[0];
           console.log('projectInformation: ', this.projectInformation.projectManagerData);
           this.projectInformation.accountManagerData = this.usersList.filter(u => u.username === this.projectInformation.accountManager)[0];
           this.formattedStart = moment(this.projectInformation.startDate).format('MMMM DD, YYYY');
           this.formattedEnd = moment(this.projectInformation.endDate).format('MMMM DD, YYYY');
-          const clientProjectManagerId = this.projectInformation.clientProjectManagerId.split('-').pop();
-          const accountReceivableId = this.projectInformation.accountReceivableId.split('-').pop();
+          if ( this.projectInformation.clientProjectManagerId ) {
+            clientProjectManagerId = this.projectInformation.clientProjectManagerId.split('-').pop();
+          }
+          if ( this.projectInformation.accountReceivableId ) {
+            accountReceivableId = this.projectInformation.accountReceivableId.split('-').pop();
+          }
           console.log('3333: ', this.projectInformation, accountReceivableId);
           this.projectInformation.accountReceivableName = this.contactsList.filter(c => c.id === accountReceivableId)[0].name;
           this.projectInformation.clientProjectManagerName = this.contactsList.filter(c => c.id === clientProjectManagerId)[0].name;

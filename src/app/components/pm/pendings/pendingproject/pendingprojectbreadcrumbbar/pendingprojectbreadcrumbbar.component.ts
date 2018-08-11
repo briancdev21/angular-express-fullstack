@@ -61,7 +61,9 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
             });
           }
           this.projectInformation.followersData = followersData;
-          this.projectInformation.contactName = this.contactsList.filter(c => c.id === this.projectInformation.contactId)[0].name;
+          if (this.projectInformation.contactId) {
+            this.projectInformation.contactName = this.contactsList.filter(c => c.id === this.projectInformation.contactId)[0].name;
+          }
           this.data = ['Projects', this.projectInformation.name];
         });
       });

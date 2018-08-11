@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
+import { SharedService } from '../../../services/shared.service';
 
 
 @Component({
@@ -15,69 +16,15 @@ import * as _ from 'lodash';
 
 export class CrmDashboardComponent implements OnInit {
 
-  public newLeadsLine = [
-    {
-      period: 'Jun',
-      lead: 3,
-    }, {
-      period: 'JUL',
-      lead: 4,
-    }, {
-      period: 'AUG',
-      lead: 3,
-    }, {
-      period: 'SEP',
-      lead: 5,
-    }, {
-      period: 'OCT',
-      lead: 3,
-    }, {
-      period: 'NOV',
-      lead: 6,
-    }, {
-      period: 'DEC',
-      lead: 4,
-    }];
+  public newLeadsLine: any;
 
   public morrisDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
-  public morrisDonutInfo = [
-    {
-      label: 'New Leads',
-      value: 49,
-    }, {
-      label: 'Opportunity',
-      value: 35
-    }, {
-      label: 'Won',
-      value: 8
-    }];
+  public morrisDonutInfo: any;
 
   public morrisSalesDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
-  public morrisSalesDonutInfo = [
-    {
-      label: 'New',
-      value: 49,
-    }, {
-      label: 'Follow Up',
-      value: 35
-    }, {
-      label: 'Seen',
-      value: 8
-    }, {
-      label: 'Demo',
-      value: 25
-    }, {
-      label: 'Negotiation',
-      value: 35
-    }, {
-      label: 'Won',
-      value: 15
-    }, {
-      label: 'Lost',
-      value: 5
-    }];
+  public morrisSalesDonutInfo = [];
 
   public topCustomers = [
     {
@@ -113,32 +60,11 @@ export class CrmDashboardComponent implements OnInit {
   ];
 
   public salesConversion = [
-    {
-      member: 'Michael Yue',
-      newLeads: 30,
-      opportunity: 20,
-      wonDeals: 5,
-      conversionRate: 17
-    },
-    {
-      member: 'Tyler labonte',
-      newLeads: 100,
-      opportunity: 30,
-      wonDeals: 5,
-      conversionRate: 5
-    },
-    {
-      member: 'Sam Olson',
-      newLeads: 400,
-      opportunity: 150,
-      wonDeals: 10,
-      conversionRate: 4
-    }
   ];
 
   public conversionRatio = {
-    newLeads: 100,
-    wonDeals: 5,
+    newLeads: 0,
+    wonDeals: 0,
     lostDeals: 0
   };
 
@@ -210,25 +136,185 @@ export class CrmDashboardComponent implements OnInit {
   ];
 
   menuCollapsed = true;
-  donutTimePeriod = 'month';
+  donutTimePeriod = 'MONTHLY';
   conversionRate = undefined;
-  conversionRatioTime = 'month';
-  salesPipelineTime = 'month';
-  salesConversionTime = 'month';
-  wonVsLost = (this.conversionRatio.wonDeals - this.conversionRatio.lostDeals) * 100 / this.conversionRatio.newLeads;
+  conversionRatioTime = 'MONTHLY';
+  salesPipelineTime = 'MONTHLY';
+  salesConversionTime = 'MONTHLY';
+  wonVsLost: any;
+
+  newLeadsDonut: any;
+  opportunityLeadsDonut: any;
+  wonLeadsDonut: any;
+  showChart = true;
+  showSalesPipeChart = true;
+  contactsList: any;
+
+  constructor( private sharedService: SharedService) {
+    this.sharedService.getCrmStatistics(5, 0, 'MONTHLY', 'newLeadsOverTime').subscribe(res => {
+      console.log('chart: ', res);
+      this.newLeadsLine = res.newLeadsOverTime;
+      this.newLeadsLine.forEach(ele => {
+        ele.period = ele.frameUnit.toUpperCase().slice(0, 3);
+        ele.lead = ele.frameValue;
+      });
+    });
+
+    this.fetchLeadConversionData('MONTHLY');
+
+    this.fetchSalesPipelineData('MONTHLY');
+
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res;
+      this.addContactName(this.contactsList);
+      console.log('this.concats: ', this.contactsList);
+      this.sortArray('revenue');
+    });
+
+    this.fetchConversionRatioTableData('MONTHLY');
+
+    this.fetchSalesConversionData('MONTHLY');
+
+  }
 
   ngOnInit() {
-    const arr = this.morrisDonutInfo.map( v => v.value);
-    let total = 0;
-    const wonLead = this.morrisDonutInfo.filter( e => e.label === 'Won');
-    arr.forEach(element => {
-      total = total + element;
+    // const arr = this.morrisDonutInfo.map( v => v.value);
+    // let total = 0;
+    // const wonLead = this.morrisDonutInfo.filter( e => e.label === 'Won');
+    // arr.forEach(element => {
+    //   total = total + element;
+    // });
+    // if (total) {
+    //   this.conversionRate = Math.floor(wonLead[0].value * 100 / total);
+    // }
+    // this.morrisDonutInfo.forEach(ele => {
+    //   ele.value = Math.floor(ele.value * 100 / total);
+    // });
+  }
+
+  fetchLeadConversionData(unit) {
+    this.sharedService.getCrmStatistics(0, 0, unit, 'newLeadsOverTime').subscribe(res => {
+      const frameUnit = res.newLeadsOverTime[0].frameUnit;
+      let newLeadsValueTotal = 0;
+      this.newLeadsDonut = res.newLeadsOverTime;
+      this.newLeadsDonut.forEach(element => {
+        newLeadsValueTotal = newLeadsValueTotal + element.frameValue;
+      });
+      // this.newLeadsDonut.forEach(ele => {
+      //   ele.period = ele.frameUnit.toUpperCase().slice(0, 3);
+      //   ele.lead = ele.frameValue;
+      // });
+      this.sharedService.getCrmStatistics(0, 0, unit, 'opportunityLeadsOverTime').subscribe(oppo => {
+        this.opportunityLeadsDonut = oppo.opportunityLeadsOverTime;
+        let oppoLeadsValueTotal = 0;
+        this.opportunityLeadsDonut.forEach(element => {
+          oppoLeadsValueTotal = oppoLeadsValueTotal + element.frameValue;
+        });
+
+        this.sharedService.getCrmStatistics(0, 0, unit, 'leadsWonOverTime').subscribe(won => {
+          this.wonLeadsDonut = won.leadsWonOverTime;
+          this.showChart = false;
+          setTimeout(() => {
+            this.showChart = true;
+          });
+          let wonLeadsValueTotal = 0;
+          this.wonLeadsDonut.forEach(element => {
+            wonLeadsValueTotal = wonLeadsValueTotal + element.frameValue;
+          });
+          const total = newLeadsValueTotal + oppoLeadsValueTotal + wonLeadsValueTotal;
+          this.morrisDonutInfo = [
+            {
+              label: 'New Leads',
+              value: (newLeadsValueTotal / total * 100).toFixed(0),
+            }, {
+              label: 'Opportunity',
+              value: (oppoLeadsValueTotal / total * 100).toFixed(0)
+            }, {
+              label: 'Won',
+              value: (wonLeadsValueTotal / total * 100).toFixed(0)
+            }
+          ];
+
+        });
+      });
     });
-    if (total) {
-      this.conversionRate = Math.floor(wonLead[0].value * 100 / total);
-    }
-    this.morrisDonutInfo.forEach(ele => {
-      ele.value = Math.floor(ele.value * 100 / total);
+  }
+
+  fetchSalesPipelineData(unit) {
+    this.sharedService.getCrmStatistics(0, 0, unit, 'leadStatusOverTime').subscribe(oppo => {
+      this.morrisSalesDonutInfo = oppo.leadStatusOverTime;
+      this.showSalesPipeChart = false;
+      setTimeout(() => {
+        this.showSalesPipeChart = true;
+      });
+      this.morrisSalesDonutInfo.forEach(element => {
+        element.label = element.status;
+      });
     });
+  }
+
+  fetchConversionRatioTableData(unit) {
+    this.sharedService.getCrmStatistics(0, 0, unit, 'newLeadsOverTime').subscribe(lead => {
+      this.conversionRatio.newLeads = lead.newLeadsOverTime[0].frameValue;
+
+      this.sharedService.getCrmStatistics(0, 0, unit, 'dealsWonOverTime').subscribe(won => {
+        this.conversionRatio.wonDeals = won.dealsWonOverTime[0].frameValue;
+
+        this.sharedService.getCrmStatistics(0, 0, unit, 'dealsLostOverTime').subscribe(lost => {
+          this.conversionRatio.lostDeals = lost.dealsLostOverTime[0].frameValue;
+          if (this.conversionRatio.lostDeals === 0) {
+            this.wonVsLost = this.conversionRatio.wonDeals;
+          } else {
+            this.wonVsLost = (this.conversionRatio.wonDeals / this.conversionRatio.lostDeals * 100).toFixed(1);
+          }
+        });
+      });
+    });
+  }
+
+  fetchSalesConversionData(unit) {
+    this.sharedService.getCrmStatistics(0, 0, unit, 'userProposalPerformance').subscribe(sales => {
+      this.salesConversion = sales.userProposalPerformance;
+    });
+  }
+
+  leadConversionChange(unit) {
+    this.fetchLeadConversionData(unit);
+  }
+
+  salesPipeInfoChange(unit) {
+    this.fetchSalesPipelineData(unit);
+  }
+
+  conversionRatioChange(unit) {
+    this.fetchConversionRatioTableData(unit);
+  }
+
+  salesConversionChange(unit) {
+    this.fetchSalesConversionData(unit);
+  }
+
+  sortArray(field) {
+    this.contactsList.sort( function(name1, name2) {
+      if ( Math.abs(name1[field]) < Math.abs(name2[field])) {
+        return -1;
+      } else if ( Math.abs(name1[field]) > Math.abs(name2[field])) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    this.contactsList.reverse();
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
   }
 }

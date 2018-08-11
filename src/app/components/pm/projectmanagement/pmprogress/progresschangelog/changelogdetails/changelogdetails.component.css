@@ -97,11 +97,11 @@ img {
   width: 60%;
 }
 
-.start-date input, .end-date input {
+/* .start-date input, .end-date input {
   background: url(/assets/images/down-arrow.png) no-repeat;
   background-position: right 8px center;
   background-size: 6%;
-}
+} */
 
 .content-right select {
   background: none;

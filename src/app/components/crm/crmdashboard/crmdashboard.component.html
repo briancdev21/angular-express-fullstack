@@ -4,15 +4,15 @@
       <div class="card">
         <div class="card-header">
           <span>LEAD CONVERSION</span>
-          <select [(ngModel)]="donutTimePeriod">
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="quarter">This Quarter</option>
-            <option value="year">This Year</option>
+          <select [(ngModel)]="donutTimePeriod" (ngModelChange)="leadConversionChange(donutTimePeriod)">
+            <option value="WEEKLY">This Week</option>
+            <option value="MONTHLY">This Month</option>
+            <option value="QUARTERLY">This Quarter</option>
+            <option value="YEARLY">This Year</option>
           </select>
         </div>
         <div class="card-content">
-          <div class="card-content-left" >
+          <div class="card-content-left" *ngIf="morrisDonutInfo && showChart" >
             <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
           </div>
           <div class="card-centent-right">
@@ -22,7 +22,7 @@
             </div>
             <div class="conversion">
               <span>Conversion Rate</span>
-              <span class="conversion-value">{{conversionRate}}%</span>
+              <span class="conversion-value">0000 %</span>
             </div>
           </div>
         </div>
@@ -31,23 +31,23 @@
         <div class="card-header">
           <span>NEW LEADS</span>
         </div>
-        <app-newleadline [morrisLineChartInfo]="newLeadsLine"></app-newleadline>
+        <app-newleadline [morrisLineChartInfo]="newLeadsLine" *ngIf="newLeadsLine"></app-newleadline>
       </div>
       <div class="card top-customer-card">
         <div class="card-header">
           <span>TOP CUSTOMERS IN VALUE</span>
         </div>
         <div class="card-content">
-          <table>
+          <table *ngIf="contactsList">
             <tr>
               <th>CUSTOMER NAME</th>
               <th>CUSTOMER RATING</th>
               <th>TOTAL VALUE</th>
             </tr>
-            <tr *ngFor="let customer of topCustomers">
-              <td>{{customer.customerName}}</td>
-              <td>{{customer.customerRating}}%</td>
-              <td>${{customer.totalValue | number: '1.2-2'}}</td>
+            <tr *ngFor="let customer of contactsList">
+              <td>{{customer.name}}</td>
+              <td>{{customer.accountRating}}%</td>
+              <td>${{customer.revenue | number: '1.2-2'}}</td>
             </tr>
           </table>
         </div>
@@ -58,11 +58,11 @@
         <div class="card sales-conversion">
           <div class="card-header">
             <span>SALES CONVERSION</span>
-            <select [(ngModel)]="salesConversionTime">
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="quarter">This Quarter</option>
-              <option value="year">This Year</option>
+            <select [(ngModel)]="salesConversionTime" (ngModelChange)="salesConversionChange(salesConversionTime)">
+              <option value="WEEKLY">This Week</option>
+              <option value="MONTHLY">This Month</option>
+              <option value="QUARTERLY">This Quarter</option>
+              <option value="YEARLY">This Year</option>
             </select>
           </div>
           <div class="card-content">
@@ -75,9 +75,9 @@
                 <th>CONVERSION RATE</th>
               </tr>
               <tr *ngFor="let conversion of salesConversion">
-                <td>{{conversion.member}}</td>
+                <td>{{conversion.username}}</td>
                 <td>{{conversion.newLeads}}</td>
-                <td>${{conversion.opportunity}}</td>
+                <td>${{conversion.opportunities}}</td>
                 <td>{{conversion.wonDeals}}</td>
                 <td>{{conversion.conversionRate}}%</td>
               </tr>
@@ -88,16 +88,16 @@
         <div class="pipeline-ratio">
           <div class="card sales-pipeline">
             <div class="card-header">
-              <span>LEAD CONVERSION</span>
-              <select [(ngModel)]="donutTimePeriod">
-                <option value="week">This Week</option>
-                <option value="month">This Month</option>
-                <option value="quarter">This Quarter</option>
-                <option value="year">This Year</option>
+              <span>SALES PIPELINE</span>
+              <select [(ngModel)]="salesPipelineTime" (ngModelChange)="salesPipeInfoChange(salesPipelineTime)">
+                <option value="WEEKLY">This Week</option>
+                <option value="MONTHLY">This Month</option>
+                <option value="QUARTERLY">This Quarter</option>
+                <option value="YEARLY">This Year</option>
               </select>
             </div>
             <div class="card-content">
-              <div class="card-content-left" >
+              <div class="card-content-left" *ngIf="morrisSalesDonutInfo && showSalesPipeChart">
                 <app-pipelinechart [morrisSalesDonutInfo]="morrisSalesDonutInfo" [morrisSalesDonutColors]="morrisSalesDonutColors"></app-pipelinechart>
               </div>
               <div class="card-centent-right">
@@ -110,12 +110,12 @@
           </div>
           <div class="card conversion-card">
               <div class="card-header">
-                <span>PROJECT TASKS</span>
-                <select [(ngModel)]="conversionRatioTime">
-                  <option value="week">This Week</option>
-                  <option value="month">This Month</option>
-                  <option value="quarter">This Quarter</option>
-                  <option value="year">This Year</option>
+                <span>CONVERSION RATIO</span>
+                <select [(ngModel)]="conversionRatioTime" (ngModelChange)="conversionRatioChange(conversionRatioTime)">
+                  <option value="WEEKLY">This Week</option>
+                  <option value="MONTHLY">This Month</option>
+                  <option value="QUARTERLY">This Quarter</option>
+                  <option value="YEARLY">This Year</option>
                 </select>
               </div>
               <div class="card-content">
