@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { OrderService } from '../order.service';
 import * as moment from 'moment';
 import { CollaboratorsService } from '../../../../../services/collaborators.service';
+import { SharedService } from '../../../../../services/shared.service';
 
 @Component({
   selector: 'app-orderdetails',
@@ -30,16 +31,19 @@ export class OrderDetailsComponent implements OnInit {
   currentWorkOrderId: any;
   showStartTime = true;
   showEndTime = true;
+  currentContactId: any;
 
   constructor( private orderService: OrderService, private router: Router, private collaboratorsService: CollaboratorsService,
-    private route: ActivatedRoute ) {
+    private route: ActivatedRoute, private sharedService: SharedService ) {
     this.orderService.saveWorkOrder.subscribe(res => {
       // this.router.navigate(['../collaboration/work-order']);
       this.currentWorkOrderId = this.route.snapshot.paramMap.get('id');
       console.log('save: ', res);
-      if (res['sendSaveDataToDetails']) {
-        this.orderProfileInfo.isBillable = res['sendSaveDataToDetails']['isBillable'];
-        this.checkValidation();
+      if (res.sendSaveDataToDetails) {
+        if (res.sendSaveDataToDetails.saveClicked) {
+          this.orderProfileInfo.isBillable = res['sendSaveDataToDetails']['isBillable'];
+          this.checkValidation();
+        }
       }
     });
   }
@@ -50,6 +54,11 @@ export class OrderDetailsComponent implements OnInit {
     // const midVal = new Intl.DateTimeFormat('en-US', dateA11yLabel).format(this.orderProfileInfo.startDate);
     // this.startDateValue = new Date(midVal);
     console.log('order info: ', this.orderProfileInfo);
+
+    this.sharedService.getMulipleContacts(this.orderProfileInfo.contactId).subscribe(res => {
+      this.currentContactId = res.id;
+      console.log('current contact: ', res);
+    });
     this.startDateValue = new Date(this.orderProfileInfo.startDate);
     this.endDateValue = new Date(this.orderProfileInfo.endDate);
     this.startTimeValue = moment(this.orderProfileInfo.startDate).format('hh:mm:ss a');
@@ -104,19 +113,26 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   checkValidation() {
+    console.log('saving: ', this.orderProfileInfo);
     if (this.orderProfileInfo.shippingAddress.address && this.orderProfileInfo.shippingAddress.city
       && this.orderProfileInfo.shippingAddress.province && this.orderProfileInfo.shippingAddress.country &&
-      this.orderProfileInfo.shippingAddress.postalCode && this.orderProfileInfo.contactId && this.startDateValue && this.endDateValue &&
-      this.orderProfileInfo.note && this.orderProfileInfo.description) {
+      this.orderProfileInfo.shippingAddress.postalCode && this.orderProfileInfo.contactId && this.startDateValue && this.endDateValue) {
         this.saveWorkOrder();
     }
   }
 
   saveWorkOrder() {
     const savingData = this.orderProfileInfo;
-    savingData.startDate = moment(this.startDateValue).format('YYYY-MM-DD');
-    savingData.endDate = moment(this.endDateValue).format('YYYY-MM-DD');
+    const startDate = moment(this.startDateValue).format('YYYY-MM-DD') + 'T' + moment(this.orderProfileInfo.startDate).format('hh:mm:ss');
+    console.log('start date', startDate);
+    savingData.startDate = new Date (startDate).toISOString();
+    const endDate = moment(this.endDateValue).format('YYYY-MM-DD') + 'T' + moment(this.orderProfileInfo.endDate).format('hh:mm:ss');
+    savingData.endDate = new Date (endDate).toISOString();
+
     savingData.followers = this.orderProfileInfo.followersDetails.map(f => f.name);
+    savingData.note = this.orderProfileInfo.note ? this.orderProfileInfo.note : '';
+    savingData.description = this.orderProfileInfo.description ? this.orderProfileInfo.description : '';
+    Object.keys(savingData).forEach((key) => (savingData[key] == null) && delete savingData[key]);
     console.log('saving Data: ', savingData);
     this.collaboratorsService.updateIndividualWorkOrder(this.currentWorkOrderId, savingData).subscribe(res => {
       console.log('saving workorder: ', res);

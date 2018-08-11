@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderService } from '../order.service';
 
@@ -9,7 +9,7 @@ import { OrderService } from '../order.service';
     './ordersettings.component.css'
   ]
 })
-export class OrderSettingsComponent {
+export class OrderSettingsComponent implements OnDestroy {
   @Input() set orderProfileInfo (val) {
     this.switchOn = val.isBillable;
   }
@@ -37,5 +37,13 @@ export class OrderSettingsComponent {
 
   cancelWorkOrder() {
     this.router.navigate(['../collaboration/work-order']);
+  }
+
+  ngOnDestroy() {
+    const sendSaveDataToDetails = {
+      isBillable: false,
+      saveClicked: false
+    };
+    this.orderService.saveWorkOrder.next(sendSaveDataToDetails);
   }
 }

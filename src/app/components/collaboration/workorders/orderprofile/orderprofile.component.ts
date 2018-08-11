@@ -363,6 +363,7 @@ export class OrderProfileComponent implements OnInit {
       return obj.label !== item.label;
     });
     this.orderProfileInfo.followersDetails.push({name: item.label, imageUrl: item.imageUrl });
+    this.orderProfileInfo.followers = this.orderProfileInfo.followersDetails.map(f => f.username);
   }
 
 
