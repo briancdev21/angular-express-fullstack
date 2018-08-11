@@ -67,7 +67,7 @@
               <th>DUE DATE</th>
             </tr>
             <tr *ngFor="let project of activeProjects">
-              <td>{{project.projectName}}</td>
+              <td>{{project.name}}</td>
               <td>{{project.dueDate}}</td>
             </tr>
           </table>
@@ -82,26 +82,22 @@
             <div class="legend-sec">
               <div class="row">
                 <div class="square blue"></div>
-                <span>Created</span>
+                <span>Actual</span>
               </div>
               <div class="row">
-                <div class="square green"></div>
-                <span>Complete</span>
-              </div>
-              <div class="row">
-                <div class="square red"></div>
-                <span>Incomplete</span>
+                <div class="square yellow"></div>
+                <span>Estimate</span>
               </div>
             </div>
           </div>
-          <app-morrisareachart [areaChartInfo]="areaChartInfo"></app-morrisareachart>
+          <app-morrisareachart [areaChartInfo]="areaChartInfo" *ngIf="areaChartInfo" ></app-morrisareachart>
         </div>
 
         <div class="pipeline-ratio">
           <div class="card">
             <div class="card-header">
               <span>LEAD CONVERSION</span>
-              <select [(ngModel)]="donutTimePeriod">
+              <select [(ngModel)]="donutTimePeriod" (ngModelChange)="donutTimeChange(donutTimePeriod)">
                 <option value="WEEKLY">This Week</option>
                 <option value="MONTHLY">This Month</option>
                 <option value="QUARTERLY">This Quarter</option>
@@ -110,7 +106,7 @@
             </div>
             <div class="card-content">
               <div class="card-content-left" >
-                <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
+                <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors" *ngIf="morrisDonutInfo && showDonutChart"></app-morrisdonut>
               </div>
               <div class="card-centent-right">
                 <div class="row" *ngFor="let project of morrisDonutInfo; let i = index">

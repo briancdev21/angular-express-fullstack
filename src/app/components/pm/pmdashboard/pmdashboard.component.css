@@ -21,7 +21,7 @@
 }
 
 .blue {
-  background: #4A90E2;
+  background: #dffaf3;
 }
 
 .green {
@@ -30,6 +30,10 @@
 
 .red {
   background: #E66A4D;
+}
+
+.yellow {
+  background: #fdeed8
 }
 
 span {
@@ -220,7 +224,7 @@ td {
 
 .legend-sec {
   display: flex;
-  width: 280px;
+  width: 150px;
   justify-content: space-between;
   margin-right: 30px;
 }
