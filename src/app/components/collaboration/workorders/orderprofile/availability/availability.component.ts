@@ -241,6 +241,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     this.resourcesInfo.map( r => r.available = this.checkAvailability(r));
     // default should be false
     this.resouceSelected.emit(false);
+
+    console.log('start times: ', this.startTime, this.startDate);
   }
 
   ngAfterViewInit() {
