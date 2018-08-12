@@ -149,6 +149,11 @@ export class SharedService {
     return this.http.get(url);
   }
 
+  getUsersByTime(startTime: any, endTime: any): Observable<any> {
+    const url = `${environment.apiUrl}/users?availabilityStartDate=${startTime}&availabilityEndDate=${endTime}`;
+    return this.http.get(url);
+  }
+
   createUser (body): Observable<any> {
     const url = `${environment.apiUrl}/users/`;
     return this.http.post<any>(url, body);
