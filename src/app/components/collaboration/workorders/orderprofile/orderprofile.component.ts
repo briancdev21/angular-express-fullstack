@@ -39,6 +39,7 @@ export class OrderProfileComponent implements OnInit {
   usersList: any;
   selectedContact: any;
   followersDetails = [];
+  currentContactInfo: any;
 
   items2 = [];
   config2: any = {'placeholder': 'Type here', 'sourceField': 'label'};
@@ -64,21 +65,22 @@ export class OrderProfileComponent implements OnInit {
       console.log('item2:', this.items2);
 
       this.currentWorkOrderId = this.route.snapshot.paramMap.get('id');
-      this.sharedService.getContacts().subscribe(data => {
-        this.contactsList = data;
-        this.addContactName(this.contactsList);
         this.collaboratorsService.getIndividualWorkOrder(this.currentWorkOrderId).subscribe(response => {
           console.log('work order details: ', response.data);
+          this.sharedService.getContact(response.data.contactId).subscribe(contact => {
+            this.currentContactInfo = contact.data;
+            console.log('contact details: ', contact);
+            this.orderProfileInfo.contactName = this.getContactName(this.currentContactInfo);
+          });
           const collaboratorsDetails = [];
           this.orderProfileInfo = response.data;
-          this.orderProfileInfo.contactName = this.getContactNameFromId(response.data.contactId);
           this.orderProfileInfo.selectedContact = this.selectedContact;
           // remove selected users from list
 
           if (this.orderProfileInfo.followers) {
             this.orderProfileInfo.followers.forEach(element => {
               this.items2 = this.items2.filter(function( obj ) {
-                return obj.username !== element.username;
+                return obj.userName !== element;
               });
               const selectedUser = this.usersList.filter(u => u.username === element)[0];
               this.followersDetails.push({
@@ -105,7 +107,6 @@ export class OrderProfileComponent implements OnInit {
           this.originalInternalNotes = this.orderProfileInfo.note;
           this.originalWorkOrderDesc = this.orderProfileInfo.description;
         });
-      });
 
       this.getDeliveryData();
     });
@@ -362,6 +363,7 @@ export class OrderProfileComponent implements OnInit {
       return obj.label !== item.label;
     });
     this.orderProfileInfo.followersDetails.push({name: item.label, imageUrl: item.imageUrl });
+    this.orderProfileInfo.followers = this.orderProfileInfo.followersDetails.map(f => f.username);
   }
 
 
@@ -371,9 +373,10 @@ export class OrderProfileComponent implements OnInit {
 
   removeUser(i: number) {
     const item = this.orderProfileInfo.followers[i];
-    this.orderService.postTimelineData({title: item.name, type: 'removeStaff'});
+    // this.orderService.postTimelineData({title: item.name, type: 'removeStaff'});
     this.items2.push({id: this.items2.length, label: item.name, imageUrl: item.imageUrl});
     this.orderProfileInfo.followers.splice(i, 1);
+    this.orderProfileInfo.followersDetails.splice(i, 1);
     this.isAutocompleteUpdated = !this.isAutocompleteUpdated;
   }
 
@@ -424,14 +427,12 @@ export class OrderProfileComponent implements OnInit {
     return this.selectedContact.name;
   }
 
-  addContactName(data) {
-    data.forEach(element => {
-      if (element.type === 'PERSON') {
-        element.name = element.person.firstName + ' ' + element.person.lastName;
-      } else {
-        element.name = element.business.name;
-      }
-    });
-    return data;
+  getContactName(data) {
+    if (data.type === 'PERSON') {
+      data.name = data.person.firstName + ' ' + data.person.lastName;
+    } else {
+      data.name = data.business.name;
+    }
+    return data.name;
   }
 }

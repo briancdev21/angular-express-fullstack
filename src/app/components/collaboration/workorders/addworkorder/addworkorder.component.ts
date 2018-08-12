@@ -186,6 +186,10 @@ export class AddWorkOrderComponent implements OnInit {
   followers = [];
   newCreatedWorkOrderId: any;
   availableProductsList = [];
+  isoFormatStart: any;
+  isoFormatEnd: any;
+  savingWorkOrderData: any;
+  today = new Date();
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private projectsService: ProjectsService,
     private collaboratorsService: CollaboratorsService, private productsService: ProductsService) {
@@ -253,12 +257,11 @@ export class AddWorkOrderComponent implements OnInit {
     let month: any;
     let year: any;
     let count: any;
-    const today = new Date();
-    month = today.getMonth() + 1;
+    month = this.today.getMonth() + 1;
     if (month.toString().length) {
       month = '0' + month;
     }
-    year = today.getFullYear().toString().slice(-2);
+    year = this.today.getFullYear().toString().slice(-2);
     if (this.projectIDCount.length > 0) {
       count = this.projectIDCount[this.projectIDCount.length] + 1;
     } else {
@@ -314,7 +317,27 @@ export class AddWorkOrderComponent implements OnInit {
       this.invalidStartTime = this.invalidStartDate = this.invalidEndDate = this.invalidEndTime = this.invalidName = false;
       if (this.workorderDetails.startTime && this.workorderDetails.workorderName &&
           this.workorderDetails.startDate && this.workorderDetails.endDate && this.workorderDetails.endTime)  {
-            this.createNewWorkOrder();
+            this.tabActiveSecond = true;
+            this.tabActiveFirst = false;
+            this.tabActiveThird = false;
+            this.visibleAvail = true;
+
+            const timeStart = moment(this.workorderDetails.startTime).format('hh:mm:ss');
+            const timeAddedStart = this.workorderDetails.startDate + 'T' + timeStart;
+            this.isoFormatStart = new Date (timeAddedStart).toISOString();
+            const timeEnd = moment(this.workorderDetails.endTime).format('hh:mm:ss');
+            const timeAddedEnd = this.workorderDetails.endDate + 'T' + timeEnd;
+            this.isoFormatEnd = new Date (timeAddedEnd).toISOString();
+            this.savingWorkOrderData = {
+              contactId: this.workorderDetails.contactId,
+              name: this.workorderDetails.workorderName,
+              startDate: this.isoFormatStart,
+              endDate: this.isoFormatEnd,
+              followers: this.followers.length > 0 ? this.followers : undefined,
+              projectId: this.workorderDetails.selectedProject ? this.workorderDetails.selectedProject : undefined,
+              changelogId: this.workorderDetails.changeLog ? this.workorderDetails.changeLog : null,
+              description: this.workorderDetails.description
+            };
       } else {
         if (!this.workorderDetails.endDate) {
           this.invalidEndDate = true;
@@ -370,38 +393,17 @@ export class AddWorkOrderComponent implements OnInit {
 
   createNewWorkOrder() {
     console.log('saving work orders: ', this.workorderDetails);
-    const timeStart = moment(this.workorderDetails.startTime).format('hh:mm:ss');
-    const timeAddedStart = this.workorderDetails.startDate + 'T' + timeStart;
-    const isoFormatStart = new Date (timeAddedStart).toISOString();
-
-    const timeEnd = moment(this.workorderDetails.endTime).format('hh:mm:ss');
-    const timeAddedEnd = this.workorderDetails.endDate + 'T' + timeEnd;
-    const isoFormatEnd = new Date (timeAddedEnd).toISOString();
-    const savingWorkOrderData = {
-      contactId: this.workorderDetails.contactId,
-      name: this.workorderDetails.workorderName,
-      startDate: isoFormatStart,
-      endDate: isoFormatEnd,
-      followers: this.followers.length > 0 ? this.followers : undefined,
-      projectId: this.workorderDetails.selectedProject ? this.workorderDetails.selectedProject : undefined,
-      changelogId: this.workorderDetails.changeLog ? parseInt(this.workorderDetails.changeLog, 10) : null,
-      description: this.workorderDetails.description
-    };
 
     // remove undefined and null fields
-    Object.keys(savingWorkOrderData).forEach((key) =>
-      (savingWorkOrderData[key] == null || savingWorkOrderData[key] === undefined) && delete savingWorkOrderData[key]);
+    Object.keys(this.savingWorkOrderData).forEach((key) =>
+      (this.savingWorkOrderData[key] == null || this.savingWorkOrderData[key] === undefined) && delete this.savingWorkOrderData[key]);
 
-    this.collaboratorsService.createWorkOrder(savingWorkOrderData).subscribe(res => {
+    this.collaboratorsService.createWorkOrder(this.savingWorkOrderData).subscribe(res => {
       if (res.error) {
         console.log('error: ', res);
       } else {
         console.log('successfully created: ', res);
         this.newCreatedWorkOrderId = res.data.id;
-        this.tabActiveSecond = true;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = false;
-        this.visibleAvail = true;
       }
     });
   }
