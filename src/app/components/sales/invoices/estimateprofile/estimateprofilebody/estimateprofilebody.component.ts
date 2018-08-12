@@ -10,6 +10,7 @@ import { FilterService } from '../../filter.service';
 import { EstimatesService } from '../../../../../services/estimates.service';
 import * as moment from 'moment';
 import { ProjectsService } from '../../../../../services/projects.service';
+import { CommonService } from '../../../../common/common.service';
 
 @Component({
   selector: 'app-estimateprofilebody',
@@ -31,6 +32,7 @@ export class EstimateProfileBodyComponent implements OnInit {
   labelText = 'Use customer address';
   title = 'Terms of the Estimate';
   dueDateTitle = 'Expiry Date';
+  modalContent = "You can only generate Invoices for WON proposals.";
   invoiceNumberTitle = 'Estimate #';
   subtotalServices = undefined;
   shippingAddress = {
@@ -125,13 +127,17 @@ export class EstimateProfileBodyComponent implements OnInit {
   estimateStatus = 'NEW';
 
   constructor(private sharedService: SharedService, private estimatesService: EstimatesService, private invoicesServices: InvoicesService,
-    private route: ActivatedRoute, private filterService: FilterService, private router: Router, private projectsService: ProjectsService) {
+    private route: ActivatedRoute, private filterService: FilterService, private router: Router, private projectsService: ProjectsService, private commonService: CommonService) {
     this.createdDate = new Date().toJSON();
 
     //
     this.currentInvoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
     this.estimatesService.getIndividualEstimate(this.currentInvoiceId).subscribe(res => {
       this.estimateStatus = res.data.status;
+      this.commonService.showAlertModal.next(false);
+      if ( this.estimateStatus !== 'WON') {
+        this.commonService.showAlertModal.next(true);
+      }
       this.sharedService.getContacts()
       .subscribe(data => {
         data = this.addContactName(data);

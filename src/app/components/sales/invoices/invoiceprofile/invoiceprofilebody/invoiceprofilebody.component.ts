@@ -10,6 +10,7 @@ import { FilterService } from '../../filter.service';
 import * as moment from 'moment';
 import { RecurseVisitor } from '@angular/compiler/src/i18n/i18n_ast';
 import { ProjectsService } from '../../../../../services/projects.service';
+import { CommonService } from '../../../../common/common.service';
 
 @Component({
   selector: 'app-invoiceprofilebody',
@@ -124,14 +125,20 @@ export class InvoiceProfileBodyComponent implements OnInit {
   saveInvoiceData: any;
   currentOwner: string;
   invoiceStatus = 'NEW';
+  modalContent = "You cannot update a PAID or VOID Invoice";
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
-              private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService) {
+              private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService, private commonService: CommonService) {
 
     this.currentInvoiceId = this.route.snapshot.paramMap.get('id');
     console.log('invoice currency id:', this.currentInvoiceId);
+
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
       this.invoiceStatus = res.data.status;
+      this.commonService.showAlertModal.next(false);
+      if (this.invoiceStatus == 'PAID' || this.invoiceStatus == 'VOID' ) {
+        this.commonService.showAlertModal.next(true);
+      }
       this.sharedService.getContacts()
       .subscribe(data => {
         data = this.addContactName(data);
@@ -153,13 +160,13 @@ export class InvoiceProfileBodyComponent implements OnInit {
       this.sharedService.getClassifications().subscribe(data => {
         this.classList = data.results;
         const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
-        this.currentClass = this.classList[classPos].name;
+        this.currentClass = this.classList[classPos].id;
       });
 
       this.sharedService.getInvoiceCategories().subscribe(data => {
         this.categoryList = data.results;
         const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
-        this.currentCategory = this.categoryList[categoryPos].name;
+        this.currentCategory = this.categoryList[categoryPos].id;
       });
 
       this.invoicesService.getInvoiceProducts(this.currentInvoiceId).subscribe(data => {
