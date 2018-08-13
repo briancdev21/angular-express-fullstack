@@ -133,6 +133,21 @@ export class ProductsService {
     return this.http.get(url);
   }
 
+  getDeliverableProducts(): Observable<any>  {
+    const url = `${apiUrl}inventory/deliverable-products`;
+    return this.http.get(url);
+  }
+
+  getDeliverableProductsByContactId(contactId: any): Observable<any> {
+    const url = `${apiUrl}inventory/deliverable-products?contactId=${contactId}`;
+    return this.http.get(url);
+  }
+
+  getDeliverableProductsByProjectId(projectId: any): Observable<any> {
+    const url = `${apiUrl}inventory/deliverable-products?contactId=${projectId}`;
+    return this.http.get(url);
+  }
+
   createAlternative (id, body): Observable<any> {
     const url = `${apiUrl}inventory/products/${id}/alternatives`;
     return this.http.post(url, body, this.options);
