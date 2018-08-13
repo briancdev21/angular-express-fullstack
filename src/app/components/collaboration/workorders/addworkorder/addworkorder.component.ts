@@ -27,61 +27,7 @@ export class AddWorkOrderComponent implements OnInit {
   projectInfo = [
   ];
 
-  taskTicketInfo: Array<object> = [
-    {
-      id: 0,
-      description: 'Install TV in Kitchen',
-      status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '60',
-      priority: 'Level 1',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 1,
-      description: 'Install TV in Kitchen',
-      status: 'inProgress',
-      estimateHour: '',
-      estimateMin: '25',
-      priority: 'Level 1',
-      createdDate: 'December 17, 2017 at 5:42 PM'
-    },
-    {
-      id: 2,
-      description: 'Install TV in home',
-      status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '25',
-      priority: 'Level 3',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 3,
-      description: 'Walking',
-      status: 'inProgress',
-      estimateHour: '',
-      estimateMin: '30',
-      priority: 'Level 2',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 4,
-      description: 'Install TV in Masterbedroom',
-      status: 'complete',
-      estimateHour: '1',
-      estimateMin: '45',
-      priority: 'Level 1',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 5,
-      description: 'Walking through fuctioinality with the client',
-      status: 'complete',
-      estimateHour: '',
-      estimateMin: '20',
-      priority: 'Level 2',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
+  taskTicketInfo: Array<any> = [
   ];
 
   deliveryProducts: Array<object> = [];
@@ -108,7 +54,7 @@ export class AddWorkOrderComponent implements OnInit {
   associationList = ['Associatioin 1', 'Associatioin 2', 'Associatioin 3'];
   workorderPricingList = ['Friend & Family', 'Royalty Program', 'Retail', 'Builders Program', 'Wholesale', 'Cost'];
   projectTypeList = ['Project Type 1', 'Project Type 2', 'Project Type 3'];
-  priorityList = ['Level 1', 'Level 2', 'Level 3'];
+  priorityList = ['1', '2', '3'];
 
   sidebarCollapsed = true;
   WorkorderInfoModalCollapsed = true;
@@ -162,19 +108,21 @@ export class AddWorkOrderComponent implements OnInit {
   config2: any = {'placeholder': 'No Result', 'sourceField': 'label'};
   items2: any[] = [
   ];
+  newPriority = '3';
+  newEstimateHour = 0;
+  newEstimateMin = 0;
 
-  searchableList = ['name'];
+  searchableList = ['name', 'sku'];
   newProduct = {
     id: 0,
     description: this.newTaskDescription,
     status: 'notStarted',
-    estimateHour: '',
-    estimateMin: '',
-    priority: 'Level 1',
+    estimateHour: 0,
+    estimateMin: 0,
+    priority: '1',
     createdDate: '',
     visibility: true,
     new: true,
-    dependency: ''
   };
 
   selectName: any;
@@ -190,6 +138,10 @@ export class AddWorkOrderComponent implements OnInit {
   isoFormatEnd: any;
   savingWorkOrderData: any;
   today = new Date();
+  formattedToday = moment(this.today).format('YYYY-MM-DD');
+  deliverableProducts = [];
+  invalidCustomerProject = false;
+  selectedProject: any;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private projectsService: ProjectsService,
     private collaboratorsService: CollaboratorsService, private productsService: ProductsService) {
@@ -201,7 +153,6 @@ export class AddWorkOrderComponent implements OnInit {
     this.sharedService.getContacts().subscribe(data => {
       this.contactsList = data;
       this.addContactName(this.contactsList);
-      console.log('contacts: ', this.contactsList);
       this.customerList = completerService.local(this.contactsList, 'name', 'name');
     });
 
@@ -220,7 +171,6 @@ export class AddWorkOrderComponent implements OnInit {
 
     this.productsService.getProductCatalog().subscribe(data => {
       this.availableProductsList = data.results;
-      console.log('proudctslist: ', data);
     });
 
     this.projectsService.getProjectsList().subscribe(res => {
@@ -233,7 +183,7 @@ export class AddWorkOrderComponent implements OnInit {
 
     this.editable = false;
     this.workorderDetails.workorderNumber = this.generateAutoId();
-    this.taskTicketInfo.map( t => t['visibility'] = true);
+    // this.taskTicketInfo.map( t => t['visibility'] = true);
   }
 
   onSelectCustomer(event) {
@@ -315,8 +265,13 @@ export class AddWorkOrderComponent implements OnInit {
       console.log('workorder name: ', this.workorderDetails.workorderName);
       this.invalidCustomerName = false;
       this.invalidStartTime = this.invalidStartDate = this.invalidEndDate = this.invalidEndTime = this.invalidName = false;
-      if (this.workorderDetails.startTime && this.workorderDetails.workorderName &&
-          this.workorderDetails.startDate && this.workorderDetails.endDate && this.workorderDetails.endTime)  {
+      if (this.workorderDetails.contactId || this.selectedProject) {
+        this.invalidCustomerProject = false;
+      } else {
+        this.invalidCustomerProject = true;
+      }
+      if (this.workorderDetails.startTime && this.workorderDetails.workorderName && this.workorderDetails.startDate &&
+         this.workorderDetails.endDate && this.workorderDetails.endTime && !this.invalidCustomerProject)  {
             this.tabActiveSecond = true;
             this.tabActiveFirst = false;
             this.tabActiveThird = false;
@@ -336,8 +291,20 @@ export class AddWorkOrderComponent implements OnInit {
               followers: this.followers.length > 0 ? this.followers : undefined,
               projectId: this.workorderDetails.selectedProject ? this.workorderDetails.selectedProject : undefined,
               changelogId: this.workorderDetails.changeLog ? this.workorderDetails.changeLog : null,
-              description: this.workorderDetails.description
+              description: this.workorderDetails.description,
             };
+
+            if (this.selectedProject) {
+              this.productsService.getDeliverableProductsByProjectId(this.selectedProject).subscribe(res => {
+                this.deliverableProducts = res.objects;
+                console.log('deliverable by project: ', res);
+              });
+            } else {
+              this.productsService.getDeliverableProductsByContactId(this.workorderDetails.contactId).subscribe(res => {
+                this.deliverableProducts = res.objects;
+                console.log('deliverable by contact: ', res);
+              });
+            }
       } else {
         if (!this.workorderDetails.endDate) {
           this.invalidEndDate = true;
@@ -393,17 +360,50 @@ export class AddWorkOrderComponent implements OnInit {
 
   createNewWorkOrder() {
     console.log('saving work orders: ', this.workorderDetails);
+    const savingWorkOrderProducts = [];
+    const savingWorkOrderTasks = [];
 
     // remove undefined and null fields
     Object.keys(this.savingWorkOrderData).forEach((key) =>
       (this.savingWorkOrderData[key] == null || this.savingWorkOrderData[key] === undefined) && delete this.savingWorkOrderData[key]);
 
+    this.addedDeliveryProducts.forEach(ele => {
+      const product = {
+        sku: ele.sku,
+        quantity: Number(ele.addedQuantity),
+        invoiceId: ele.outgoingId
+      };
+      savingWorkOrderProducts.push(product);
+    });
+    Object.keys(savingWorkOrderProducts).forEach((key) =>
+    (savingWorkOrderProducts[key] == null || savingWorkOrderProducts[key] === undefined) && delete savingWorkOrderProducts[key]);
+
+    this.taskTicketInfo.forEach(element => {
+      const task = {
+        name: element.description,
+        duration: element.estimateHour * 60 + element.estimateMin,
+        priority: element.priority
+      };
+      savingWorkOrderTasks.push(task);
+    });
+
     this.collaboratorsService.createWorkOrder(this.savingWorkOrderData).subscribe(res => {
       if (res.error) {
         console.log('error: ', res);
       } else {
-        console.log('successfully created: ', res);
+        console.log('successfully created: ', res, );
         this.newCreatedWorkOrderId = res.data.id;
+        savingWorkOrderTasks.forEach(element => {
+          this.collaboratorsService.createWorkOrderTask(this.newCreatedWorkOrderId, element).subscribe(task => {
+            console.log('task added: ', task);
+          });
+        });
+
+        savingWorkOrderProducts.forEach(product => {
+          this.collaboratorsService.createWorkOrderProduct(this.newCreatedWorkOrderId, product).subscribe(data => {
+            console.log('product added: ', data);
+          });
+        });
       }
     });
   }
@@ -417,16 +417,17 @@ export class AddWorkOrderComponent implements OnInit {
   }
 
   finishAddWorkorder() {
+    this.createNewWorkOrder();
     console.log('added productslist: ', this.addedDeliveryProducts);
-    this.addedDeliveryProducts.forEach(ele => {
-      const savingData = {
-        sku: ele.sku,
-        quantity: ele.addedQuantity
-      };
-      this.collaboratorsService.createWorkOrderProduct(this.newCreatedWorkOrderId, savingData).subscribe(res => {
-        console.log('succeesuflly created: ', res);
-      });
-    });
+    // this.addedDeliveryProducts.forEach(ele => {
+    //   const savingData = {
+    //     sku: ele.sku,
+    //     quantity: ele.addedQuantity
+    //   };
+    //   this.collaboratorsService.createWorkOrderProduct(this.newCreatedWorkOrderId, savingData).subscribe(res => {
+    //     console.log('succeesuflly created: ', res);
+    //   });
+    // });
     this.tabActiveThird = false;
     this.tabActiveFirst = true;
     this.tabActiveSecond = false;
@@ -454,6 +455,7 @@ export class AddWorkOrderComponent implements OnInit {
 
   onSelectProject(event) {
     console.log('selected project: ', event);
+    this.selectedProject = event;
     this.projectsService.getProjectChangeLogs(event).subscribe(res => {
       this.openChangeLogs = res.results.filter(c => c.status === 'IN_PROGRESS' || c.status === 'NEW');
       console.log('openChangeLogs: ', this.openChangeLogs);
@@ -473,12 +475,12 @@ export class AddWorkOrderComponent implements OnInit {
   }
 
   getColor(task) {
-    if (task.priority === 'Level 1') {
-      return 'green';
-    } else if (task.priority === 'Level 2') {
+    if (task.priority === '1') {
+      return 'red';
+    } else if (task.priority === '2') {
       return 'orange';
     } else {
-      return 'red';
+      return 'green';
     }
   }
 
@@ -552,19 +554,21 @@ export class AddWorkOrderComponent implements OnInit {
       id: newId,
       description: this.newTaskDescription,
       status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '',
-      priority: 'Level 1',
-      createdDate: newDate,
+      estimateHour: this.newEstimateHour ? this.newEstimateHour : 0 ,
+      estimateMin: this.newEstimateMin ? this.newEstimateMin : 0,
+      priority: this.newPriority,
+      createdDate: this.formattedToday,
       visibility: true,
       new: true,
-      dependency: '',
     };
     this.newProduct.new = true;
     if (this.newTaskDescription) {
       this.taskTicketInfo.push(this.newProduct);
     }
     this.newTaskDescription = '';
+    this.newPriority = '3';
+    this.newEstimateHour = 0;
+    this.newEstimateMin = 0;
   }
 
   checkAvailability (available, quantity, index) {
@@ -593,20 +597,21 @@ export class AddWorkOrderComponent implements OnInit {
 
   getAvailability(event) {
     console.log('avail: ', event);
-    if (event) {
+    this.savingWorkOrderData.collaborators = event;
+    if (event.length) {
       this.resourceSelected = true;
     } else {
       this.resourceSelected = false;
     }
   }
 
-  newDependencySelect(task, i) {
-    this.newProduct.dependency = task.id;
-    this.topDependencyModal = false;
-  }
+  // newDependencySelect(task, i) {
+  //   this.newProduct.dependency = task.id;
+  //   this.topDependencyModal = false;
+  // }
 
   newPrioritySelect(priority, i) {
-    this.newProduct.priority = priority;
+    this.newPriority = priority;
     this.topPriorityModal = false;
   }
 

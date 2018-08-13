@@ -9,7 +9,7 @@
         [ngClass]="{'red': !resource.available, 'green': resource.available, 'gray': resource.selected}"
         (click)="selectResource(resource)">
         <div> 
-          <img src="{{resource.imageUrl}}">
+          <img src="{{resource.imageUrl}}" class="user-picture">
           <span>{{resource.name}}</span>
         </div>
         <div>
