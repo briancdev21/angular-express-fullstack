@@ -8,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { InvoiceModel } from '../../../../../models/invoice.model';
 import { FilterService } from '../../filter.service';
 import { ProjectsService } from '../../../../../services/projects.service';
+import { CrmService } from '../../../../../services/crm.service';
 
 @Component({
   selector: 'app-addinvoicebody',
@@ -74,7 +75,7 @@ export class AddInvoiceBodyComponent implements OnInit {
   depositsAmount = undefined;
   in_id = '';
   createdDate: any;
-  contactList: any  ;
+  contactList: any = [];
   noteToSupplier: string;
 
   emailAddresses = [];
@@ -143,14 +144,27 @@ export class AddInvoiceBodyComponent implements OnInit {
   saveInvoiceData: any;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
-    private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService) {
+    private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService, private crmService: CrmService) {
     this.createdDate = new Date().toJSON();
     this.dueDate = new Date().toJSON();
-    this.sharedService.getContacts()
-      .subscribe(data => {
-        data = this.addContactName(data);
-        this.contactList = data;
-        this.userList = this.contactList;
+    // this.sharedService.getContacts()
+    //   .subscribe(data => {
+    //     data = this.addContactName(data);
+    //     this.contactList = data;
+    //     this.userList = this.contactList;
+    //   });
+
+    this.crmService.getLeadsList().subscribe( leadsRes => {
+      const leadList = this.addContactName(leadsRes.results, 'lead');
+      this.contactList = this.contactList.concat(leadList);
+      this.sharedService.getContacts()
+        .subscribe(data => {
+          console.log('userlist: ', data);
+          data = this.addContactName(data);
+          this.contactList = this.contactList.concat(data);
+          this.userList = this.contactList;
+          console.log('lead list: ', leadsRes.results, this.contactList);
+        });
       });
 
     // this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
@@ -309,8 +323,9 @@ export class AddInvoiceBodyComponent implements OnInit {
       this.showModal = true;
     }
   }
-  addContactName(data) {
+  addContactName(data, contactType = 'contact') {
     data.forEach(element => {
+      element.contactType = contactType;
       if (element.type === 'PERSON') {
         element.name = element.person.firstName + ' ' + element.person.lastName;
       } else {
