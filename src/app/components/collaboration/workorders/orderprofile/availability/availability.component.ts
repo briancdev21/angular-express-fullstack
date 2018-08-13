@@ -5,6 +5,7 @@ import { Options } from 'fullcalendar';
 import * as $ from 'jquery';
 import 'fullcalendar';
 import * as moment from 'moment';
+import { SharedService } from '../../../../../services/shared.service';
 
 @Component({
   selector: 'app-availability',
@@ -16,9 +17,7 @@ import * as moment from 'moment';
 })
 export class AvailabilityComponent implements OnInit, AfterViewInit {
   @Input() startDate;
-  @Input() startTime;
   @Input() endDate;
-  @Input() endTime;
   @Output() resouceSelected: EventEmitter<any> = new EventEmitter;
   searchableList: any;
   selectedData: any = [];
@@ -27,210 +26,99 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   queryString: any;
 
   public resourcesInfo = [
-    {
-      name: 'Sepehr Shoarinejad',
-      imageUrl: 'assets/users/man.png',
-      available: true,
-      selected: false,
-      resourceEvents: {
-        height: 600,
-        header: {
-          left:  'prev,next today',
-          center: 'title',
-          right:  'month, agendaWeek, agendaDay'
-        },
-        defaultView: 'agendaWeek',
-        events: [
-          {
-            title: 'All Day Event',
-            start: '2018-04-20'
-          },
-          {
-            title: 'Long Event',
-            start: '2018-4-09',
-            end: '2018-4-09'
-          },
-          {
-            title: 'Work Order',
-            start: '2018-4-17',
-            end: '2018-4-17',
-            color: 'lightgray'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2018-04-09T16:00:00'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2018-04-09T16:00:00'
-          },
-          {
-            title: 'Conference',
-            start: '2018-04-09',
-            end: '2018-04-13'
-          },
-          {
-            title: 'Meeting',
-            start: '2018-04-12T10:30:00',
-            end: '2018-05-01T12:30:00'
-          },
-          {
-            title: 'Lunch',
-            start: '2018-04-09T12:00:00'
-          },
-          {
-            title: 'Click for Google',
-            url: 'http://google.com/',
-            start: '2016-09-28'
-          }
-        ]
-      }
-    },
-    {
-      name: 'Tyler Labonte',
-      imageUrl: 'assets/users/user2.png',
-      available: true,
-      selected: false,
-      resourceEvents: {
-        height: 600,
-        header: {
-          left:  'prev,next today',
-          center: 'title',
-          right:  'month, agendaWeek, agendaDay'
-        },
-        defaultView: 'agendaWeek',
-        events: [
-          {
-            title: 'Work Order',
-            start: '2018-4-18',
-            color: 'lightgray'
-          },
-          {
-            id: 995,
-            title: 'Repeating Event',
-            start: '2018-04-09T12:00:00'
-          },
-          {
-            id: 995,
-            title: 'Repeating Event',
-            start: '2018-04-09T12:00:00'
-          },
-          {
-            title: 'Conference',
-            start: '2018-04-18',
-            end: '2018-04-09'
-          },
-          {
-            title: 'Meeting',
-            start: '2018-04-12T10:30:00',
-            end: '2018-04-13T12:30:00'
-          },
-          {
-            title: 'Lunch',
-            start: '2018-04-09T13:00:00'
-          },
-        ]
-      }
-    },
-    {
-      name: 'Michael Yuen',
-      imageUrl: 'assets/users/user3.png',
-      available: true,
-      selected: false,
-      resourceEvents: {
-        height: 500,
-        header: {
-          left:  'prev,next today',
-          center: 'title',
-          right:  'month, agendaWeek, agendaDay'
-        },
-        defaultView: 'agendaWeek',
-        events: [
-          {
-            title: 'Work Order',
-            start: '2018-4-17',
-            end: '2018-4-17',
-            color: 'lightgray'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2018-04-09T19:00:00'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2018-04-09T19:00:00'
-          },
-          {
-            title: 'Test',
-            start: '2018-04-18',
-            end: '2018-06-18'
-          },
-          {
-            title: 'Meeting',
-            start: '2018-04-16T10:30:00',
-            end: '2018-04-17T12:30:00'
-          },
-          {
-            title: 'Lunch',
-            start: '2018-04-20T12:00:00'
-          },
-        ]
-      }
-    },
-    {
-      name: 'Huisman Contracting',
-      imageUrl: 'assets/users/user1.png',
-      available: true,
-      selected: false,
-      resourceEvents: {
-        height: 500,
-        header: {
-          left:  'prev,next today',
-          center: 'title',
-          right:  'month, agendaWeek, agendaDay'
-        },
-        defaultView: 'agendaWeek',
-        events: [
-          {
-            title: 'Long Event',
-            start: '2018-4-06',
-            end: '2018-4-09'
-          },
-          {
-            title: 'Work Order',
-            start: '2018-4-18',
-            end: '2018-4-18',
-            color: 'lightgray'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2018-04-09T16:00:00'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2018-04-09T16:00:00'
-          },
-          {
-            title: 'Lunch',
-            start: '2018-04-09T12:00:00'
-          },
-          {
-            title: 'Click for Google',
-            url: 'http://google.com/',
-            start: '2017-04-21'
-          }
-        ]
-      }
-    }
+    // {
+    //   name: 'Sepehr Shoarinejad',
+    //   imageUrl: 'assets/users/man.png',
+    //   available: true,
+    //   selected: false,
+    //   resourceEvents: {
+    //     height: 600,
+    //     header: {
+    //       left:  'prev,next today',
+    //       center: 'title',
+    //       right:  'month, agendaWeek, agendaDay'
+    //     },
+    //     defaultView: 'agendaWeek',
+    //     events: [
+    //       {
+    //         title: 'All Day Event',
+    //         start: '2018-04-20'
+    //       }
+    //     ]
+    //   }
+    // },
+    // {
+    //   name: 'Tyler Labonte',
+    //   imageUrl: 'assets/users/user2.png',
+    //   available: true,
+    //   selected: false,
+    //   resourceEvents: {
+    //     height: 600,
+    //     header: {
+    //       left:  'prev,next today',
+    //       center: 'title',
+    //       right:  'month, agendaWeek, agendaDay'
+    //     },
+    //     defaultView: 'agendaWeek',
+    //     events: [
+    //       {
+    //         title: 'Work Order',
+    //         start: '2018-4-18',
+    //         color: 'lightgray'
+    //       }
+    //     ]
+    //   }
+    // },
+    // {
+    //   name: 'Michael Yuen',
+    //   imageUrl: 'assets/users/user3.png',
+    //   available: true,
+    //   selected: false,
+    //   resourceEvents: {
+    //     height: 500,
+    //     header: {
+    //       left:  'prev,next today',
+    //       center: 'title',
+    //       right:  'month, agendaWeek, agendaDay'
+    //     },
+    //     defaultView: 'agendaWeek',
+    //     events: [
+    //       {
+    //         title: 'Work Order',
+    //         start: '2018-4-17',
+    //         end: '2018-4-17',
+    //         color: 'lightgray'
+    //       }
+    //     ]
+    //   }
+    // },
+    // {
+    //   name: 'Huisman Contracting',
+    //   imageUrl: 'assets/users/user1.png',
+    //   available: true,
+    //   selected: false,
+    //   resourceEvents: {
+    //     height: 500,
+    //     header: {
+    //       left:  'prev,next today',
+    //       center: 'title',
+    //       right:  'month, agendaWeek, agendaDay'
+    //     },
+    //     defaultView: 'agendaWeek',
+    //     events: [
+    //       {
+    //         title: 'Long Event',
+    //         start: '2018-4-06',
+    //         end: '2018-4-09'
+    //       }
+    //     ]
+    //   }
+    // }
   ];
 
-  constructor(private orderService: OrderService) {
+  usersList = [];
+
+  constructor(private orderService: OrderService, private sharedService: SharedService) {
     this.selectedData = this.resourcesInfo || [];
     this.searchableList = ['name'];
     this.availableStaff = this.resourcesInfo.filter( s => s.selected === true); // updated from '== true'
@@ -238,19 +126,45 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.resourcesInfo.map( r => r.available = this.checkAvailability(r));
+    // this.resourcesInfo.map( r => r.available = this.checkAvailability(r));
     // default should be false
     this.resouceSelected.emit(false);
 
-    console.log('start times: ', this.startTime, this.startDate);
+    console.log('start times: ', this.startDate);
+
+    this.sharedService.getUsersByTime(this.startDate, this.endDate).subscribe(res => {
+      this.usersList = res.results;
+      console.log('users: ', res);
+      for (let i = 0; i < this.usersList.length; i ++) {
+        const resource = {
+          username: this.usersList[i].username,
+          name: this.usersList[i].firstName + ' ' + this.usersList[i].lastName,
+          imageUrl: this.usersList[i].pictureURI,
+          available: this.usersList[i].isAvailable,
+          selected: false,
+          resourceEvents: {
+            height: 500,
+            header: {
+              left:  'prev,next today',
+              center: 'title',
+              right:  'month, agendaWeek, agendaDay'
+            },
+            defaultView: 'agendaWeek',
+            events: []
+          }
+        };
+        this.resourcesInfo.push(resource);
+      }
+      setTimeout( () => {
+        this.res = this.resourcesInfo[0];
+        $('#calendar').fullCalendar(this.res.resourceEvents);
+        $('#calendar').fullCalendar('gotoDate', this.startDate);
+      });
+    });
   }
 
   ngAfterViewInit() {
-    setTimeout( () => {
-      this.res = this.resourcesInfo[0];
-      $('#calendar').fullCalendar(this.res.resourceEvents);
-      $('#calendar').fullCalendar('gotoDate', this.startDate);
-    });
+
   }
 
   addResource(index) {
@@ -263,7 +177,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
       };
       this.availableStaff.push(addedStaff);
       this.orderService.postAvailableStaff(this.availableStaff);
-      this.resouceSelected.emit(true);
+      const availableUsers = this.resourcesInfo.filter(r => r.selected === true).map(r => r.username);
+      this.resouceSelected.emit(availableUsers);
     }
   }
 
@@ -273,9 +188,8 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     this.availableStaff.splice(removedIndex, 1);
     this.orderService.postRemovedStaff(this.availableStaff);
     const checkSelected = this.resourcesInfo.every(element => element.selected === false);
-    if (checkSelected) {
-      this.resouceSelected.emit(false);
-    }
+    const availableUsers = this.resourcesInfo.filter(r => r.selected === true).map(r => r.username);
+    this.resouceSelected.emit(availableUsers);
   }
 
   selectResource(resource) {
@@ -284,16 +198,16 @@ export class AvailabilityComponent implements OnInit, AfterViewInit {
     $('#calendar').fullCalendar('addEventSource', resource.resourceEvents);
   }
 
-  checkAvailability(resource) {
-    const exactStartTime = moment(this.startDate).format('YYYY-MM-DD') + 'T' + moment(this.startTime).format('HH:mm:ss');
-    const exactEndTime = moment(this.endDate).format('YYYY-MM-DD') + 'T' + moment(this.endTime).format('HH:mm:ss');
-    let flag = true;
-    resource.resourceEvents.events.forEach(event => {
-      if ((event.start >= exactStartTime) && (event.start <= exactEndTime) ||
-          (exactStartTime >= event.start) && (exactStartTime <= event.end)) {
-        flag = false;
-      }
-    });
-    return flag;
-  }
+  // checkAvailability(resource) {
+  //   const exactStartTime = moment(this.startDate).format('YYYY-MM-DD') + 'T' + moment(this.startTime).format('HH:mm:ss');
+  //   const exactEndTime = moment(this.endDate).format('YYYY-MM-DD') + 'T' + moment(this.endTime).format('HH:mm:ss');
+  //   let flag = true;
+  //   resource.resourceEvents.events.forEach(event => {
+  //     if ((event.start >= exactStartTime) && (event.start <= exactEndTime) ||
+  //         (exactStartTime >= event.start) && (exactStartTime <= event.end)) {
+  //       flag = false;
+  //     }
+  //   });
+  //   return flag;
+  // }
 }

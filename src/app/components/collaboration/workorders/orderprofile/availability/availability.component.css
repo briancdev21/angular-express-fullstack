@@ -40,6 +40,7 @@ input::placeholder {
 .resources-list img {
   width: 28px;
   height: 28px;
+  border-radius: 50%;
 }
 
 .resources-list span {
