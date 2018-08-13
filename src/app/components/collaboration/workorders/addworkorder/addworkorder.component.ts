@@ -28,60 +28,6 @@ export class AddWorkOrderComponent implements OnInit {
   ];
 
   taskTicketInfo: Array<object> = [
-    {
-      id: 0,
-      description: 'Install TV in Kitchen',
-      status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '60',
-      priority: 'Level 1',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 1,
-      description: 'Install TV in Kitchen',
-      status: 'inProgress',
-      estimateHour: '',
-      estimateMin: '25',
-      priority: 'Level 1',
-      createdDate: 'December 17, 2017 at 5:42 PM'
-    },
-    {
-      id: 2,
-      description: 'Install TV in home',
-      status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '25',
-      priority: 'Level 3',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 3,
-      description: 'Walking',
-      status: 'inProgress',
-      estimateHour: '',
-      estimateMin: '30',
-      priority: 'Level 2',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 4,
-      description: 'Install TV in Masterbedroom',
-      status: 'complete',
-      estimateHour: '1',
-      estimateMin: '45',
-      priority: 'Level 1',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 5,
-      description: 'Walking through fuctioinality with the client',
-      status: 'complete',
-      estimateHour: '',
-      estimateMin: '20',
-      priority: 'Level 2',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
   ];
 
   deliveryProducts: Array<object> = [];
@@ -108,7 +54,7 @@ export class AddWorkOrderComponent implements OnInit {
   associationList = ['Associatioin 1', 'Associatioin 2', 'Associatioin 3'];
   workorderPricingList = ['Friend & Family', 'Royalty Program', 'Retail', 'Builders Program', 'Wholesale', 'Cost'];
   projectTypeList = ['Project Type 1', 'Project Type 2', 'Project Type 3'];
-  priorityList = ['Level 1', 'Level 2', 'Level 3'];
+  priorityList = ['1', '2', '3'];
 
   sidebarCollapsed = true;
   WorkorderInfoModalCollapsed = true;
@@ -162,19 +108,21 @@ export class AddWorkOrderComponent implements OnInit {
   config2: any = {'placeholder': 'No Result', 'sourceField': 'label'};
   items2: any[] = [
   ];
+  newPriority = '3';
+  newEstimateHour = 0;
+  newEstimateMin = 0;
 
   searchableList = ['name'];
   newProduct = {
     id: 0,
     description: this.newTaskDescription,
     status: 'notStarted',
-    estimateHour: '',
-    estimateMin: '',
-    priority: 'Level 1',
+    estimateHour: 0,
+    estimateMin: 0,
+    priority: '1',
     createdDate: '',
     visibility: true,
     new: true,
-    dependency: ''
   };
 
   selectName: any;
@@ -190,6 +138,7 @@ export class AddWorkOrderComponent implements OnInit {
   isoFormatEnd: any;
   savingWorkOrderData: any;
   today = new Date();
+  formattedToday = moment(this.today).format('YYYY-MM-DD');
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private projectsService: ProjectsService,
     private collaboratorsService: CollaboratorsService, private productsService: ProductsService) {
@@ -336,7 +285,7 @@ export class AddWorkOrderComponent implements OnInit {
               followers: this.followers.length > 0 ? this.followers : undefined,
               projectId: this.workorderDetails.selectedProject ? this.workorderDetails.selectedProject : undefined,
               changelogId: this.workorderDetails.changeLog ? this.workorderDetails.changeLog : null,
-              description: this.workorderDetails.description
+              description: this.workorderDetails.description,
             };
       } else {
         if (!this.workorderDetails.endDate) {
@@ -473,12 +422,12 @@ export class AddWorkOrderComponent implements OnInit {
   }
 
   getColor(task) {
-    if (task.priority === 'Level 1') {
-      return 'green';
-    } else if (task.priority === 'Level 2') {
+    if (task.priority === '1') {
+      return 'red';
+    } else if (task.priority === '2') {
       return 'orange';
     } else {
-      return 'red';
+      return 'green';
     }
   }
 
@@ -552,19 +501,21 @@ export class AddWorkOrderComponent implements OnInit {
       id: newId,
       description: this.newTaskDescription,
       status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '',
-      priority: 'Level 1',
-      createdDate: newDate,
+      estimateHour: this.newEstimateHour ? this.newEstimateHour : 0 ,
+      estimateMin: this.newEstimateMin ? this.newEstimateMin : 0,
+      priority: this.newPriority,
+      createdDate: this.formattedToday,
       visibility: true,
       new: true,
-      dependency: '',
     };
     this.newProduct.new = true;
     if (this.newTaskDescription) {
       this.taskTicketInfo.push(this.newProduct);
     }
     this.newTaskDescription = '';
+    this.newPriority = '3';
+    this.newEstimateHour = 0;
+    this.newEstimateMin = 0;
   }
 
   checkAvailability (available, quantity, index) {
@@ -593,20 +544,21 @@ export class AddWorkOrderComponent implements OnInit {
 
   getAvailability(event) {
     console.log('avail: ', event);
-    if (event) {
+    this.savingWorkOrderData.collaborators = event;
+    if (event.length) {
       this.resourceSelected = true;
     } else {
       this.resourceSelected = false;
     }
   }
 
-  newDependencySelect(task, i) {
-    this.newProduct.dependency = task.id;
-    this.topDependencyModal = false;
-  }
+  // newDependencySelect(task, i) {
+  //   this.newProduct.dependency = task.id;
+  //   this.topDependencyModal = false;
+  // }
 
   newPrioritySelect(priority, i) {
-    this.newProduct.priority = priority;
+    this.newPriority = priority;
     this.topPriorityModal = false;
   }
 

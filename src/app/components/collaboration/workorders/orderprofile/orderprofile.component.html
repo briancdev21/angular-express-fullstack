@@ -106,7 +106,7 @@
       <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showAvailabilityModal=false" />
     </div>
     <div class="content" >
-      <app-availability></app-availability>
+      <app-availability [startDate]="orderProfileInfo.startDate" [endDate]="orderProfileInfo.endDate" *ngIf="orderProfileInfo"></app-availability>
       <div class="modal-btn-section" >
         <button class="cancel-btn" (click)="showAvailabilityModal=false;" >
           Cancel
