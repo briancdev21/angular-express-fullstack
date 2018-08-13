@@ -275,7 +275,11 @@ export class AddWorkOrderComponent implements OnInit {
             this.tabActiveSecond = true;
             this.tabActiveFirst = false;
             this.tabActiveThird = false;
-            this.visibleAvail = true;
+
+            this.visibleAvail = false;
+            setTimeout(() => {
+              this.visibleAvail = true;
+            });
 
             const timeStart = moment(this.workorderDetails.startTime).format('hh:mm:ss');
             const timeAddedStart = this.workorderDetails.startDate + 'T' + timeStart;
