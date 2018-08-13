@@ -4,14 +4,14 @@
       <div class="card revenue-area-chart">
         <div class="card-header">
           <span>REVENUE</span>
-          <select [(ngModel)]="revenueTime">
+          <select [(ngModel)]="revenueTime" (ngModelChange)="fetchRevenueData(revenueTime)">
             <option value="WEEKLY">This Week</option>
             <option value="MONTHLY">This Month</option>
             <option value="QUARTERLY">This Quarter</option>
             <option value="YEARLY">This Year</option>
           </select>
         </div>
-        <div class="card-content">
+        <div class="card-content" *ngIf="showAreaChart && revenueAreaChartInfo">
           <app-revenueareachart [revenueAreaChartInfo]="revenueAreaChartInfo" ></app-revenueareachart>
         </div>
       </div>
@@ -32,12 +32,12 @@
             </div>
             <div>
               <span class="title">Number of Proposals</span>
-              <span>{{invoicingInfo.proposalCount}}</span>
+              <span>{{invoicingInfo.proposalsTotal}}</span>
             </div>
           </div>
           <div class="card-content-right">
             <span class="due-tasks-title">Outstanding Invoices</span>
-            <span style="color: #FF7E7E">{{invoicingInfo.openInvoice}}</span>
+            <span style="color: #FF7E7E">{{invoicingInfo.outstandingInvoices}}</span>
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@
             <span>SALES</span>
           </div>
           <div class="card-content">
-            <table>
+            <table *ngIf="salesInfo">
               <tr>
                 <th>MEMBER</th>
                 <th>PROPOSALS VALUE</th>
@@ -58,10 +58,10 @@
                 <th>TOTAL MARGIN</th>
               </tr>
               <tr *ngFor="let sale of salesInfo">
-                <td>{{sale.member}}</td>
-                <td>${{sale.proposalsValue}}</td>
-                <td>${{sale.approvedValue}}</td>
-                <td>{{sale.totalMargin}}%</td>
+                <td>{{sale.username}}</td>
+                <td>$ {{sale.total}}</td>
+                <td>$ {{sale.approvedTotal}}</td>
+                <td>{{sale.margin}} %</td>
               </tr>
             </table>
           </div>
@@ -71,7 +71,7 @@
           <div class="card">
             <div class="card-header">
               <span>SALES PIPELINE PERCENTAGE</span>
-              <select [(ngModel)]="donutTimePeriod">
+              <select [(ngModel)]="donutTimePeriod" (ngModelChange)="fetchPipelineData(donutTimePeriod)">
                 <option value="WEEKLY">This Week</option>
                 <option value="MONTHLY">This Month</option>
                 <option value="QUARTERLY">This Quarter</option>
@@ -79,7 +79,7 @@
               </select>
             </div>
             <div class="card-content">
-              <div class="card-content-left" >
+              <div class="card-content-left" *ngIf="morrisDonutInfo && showDonutChart">
                 <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
               </div>
               <div class="card-centent-right">

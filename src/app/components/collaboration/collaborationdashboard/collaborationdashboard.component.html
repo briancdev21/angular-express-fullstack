@@ -4,7 +4,7 @@
       <div class="card">
         <div class="card-header">
           <span>TEAM HOURS</span>
-          <select [(ngModel)]="donutTimePeriod">
+          <select [(ngModel)]="teamTimePeriod" (ngModelChange)="fetchTeamTimeData(teamTimePeriod)">
             <option value="WEEKLY">This Week</option>
             <option value="MONTHLY">This Month</option>
             <option value="QUARTERLY">This Quarter</option>
@@ -12,7 +12,7 @@
           </select>
         </div>
         <div class="card-content">
-          <div class="card-content-left" >
+          <div class="card-content-left" *ngIf="showTeamChart && morrisDonutInfo">
             <app-morrisdonut [morrisDonutInfo]="morrisDonutInfo" [morrisDonutColors]="morrisDonutColors"></app-morrisdonut>
           </div>
           <div class="card-centent-right">
@@ -27,6 +27,12 @@
       <div class="card conversion-card">
         <div class="card-header">
           <span>WORK ORDER TASKS</span>
+          <select [(ngModel)]="tasksTimePeriod" (ngModelChange)="fetchTasksData(tasksTimePeriod)">
+            <option value="WEEKLY">This Week</option>
+            <option value="MONTHLY">This Month</option>
+            <option value="QUARTERLY">This Quarter</option>
+            <option value="YEARLY">This Year</option>
+          </select>
         </div>
         <div class="card-content">
           <div class="card-content-left">
@@ -35,11 +41,11 @@
               <span>{{orderTasks.totalTasks | number}}</span>
             </div>
             <div>
-              <span class="title">Number of Active Projects</span>
+              <span class="title">Total Tasks Complete</span>
               <span>{{orderTasks.taskCompleted | number}}</span>
             </div>
             <div>
-              <span class="title">Number of Completed Projects</span>
+              <span class="title">Average Tasks per Work Order</span>
               <span>{{orderTasks.averageTasks | number}}</span>
             </div>
           </div>
@@ -61,8 +67,8 @@
               <th>TIME LAPSED</th>
             </tr>
             <tr *ngFor="let order of pendingOrders">
-              <td>{{order.orderNumber}}</td>
-              <td>{{order.timeLapsed}}</td>
+              <td>{{order.id}}</td>
+              <td>{{order.endDate}}</td>
             </tr>
           </table>
         </div>
@@ -72,7 +78,7 @@
       <div class="multi-charts-left">
         <div class="card area-chart">
           <div class="card-header">
-            <span>GROSS MARGIN</span>
+            <span>HOURS DISTRIBUTION</span>
             <div class="legend-sec">
               <div class="row">
                 <div class="square blue"></div>
@@ -88,14 +94,14 @@
               </div>
             </div>
           </div>
-          <app-morrismultilinechart [morrisMultiLineChartInfo]="morrisMultiLineChartInfo"></app-morrismultilinechart>
+          <app-morrismultilinechart [morrisMultiLineChartInfo]="morrisMultiLineChartInfo" *ngIf="morrisMultiLineChartInfo"></app-morrismultilinechart>
         </div>
 
         <div class="pipeline-ratio">
           <div class="card">
             <div class="card-header">
               <span>AVERAGE WORK ORDER HOURS</span>
-              <select [(ngModel)]="donutTimePeriod">
+              <select [(ngModel)]="workOrderTimePeriod" (ngModelChange)="fetchAverageTimeData(workOrderTimePeriod)">
                 <option value="WEEKLY">This Week</option>
                 <option value="MONTHLY">This Month</option>
                 <option value="QUARTERLY">This Quarter</option>
@@ -103,7 +109,7 @@
               </select>
             </div>
             <div class="card-content">
-              <div class="card-content-left" >
+              <div class="card-content-left" *ngIf="showAverageChart && workOrderDonutInfo">
                 <app-workorderdonutchart [workOrderDonutInfo]="workOrderDonutInfo" [workOrderDonutColors]="workOrderDonutColors"></app-workorderdonutchart>
               </div>
               <div class="card-centent-right">
@@ -117,8 +123,14 @@
           <div class="card">
             <div class="card-header">
               <span>WORK ORDER BACKLOG</span>
+              <select [(ngModel)]="backLogTimePeriod" (ngModelChange)="fetchBacklogTimeData(backLogTimePeriod)">
+                <option value="WEEKLY">This Week</option>
+                <option value="MONTHLY">This Month</option>
+                <option value="QUARTERLY">This Quarter</option>
+                <option value="YEARLY">This Year</option>
+              </select>
             </div>
-            <app-backloglinechart [morrisLineChartInfo]="morrisLineChartInfo"></app-backloglinechart>
+            <app-backloglinechart [morrisLineChartInfo]="morrisLineChartInfo" *ngIf="morrisLineChartInfo && showBacklogChart"></app-backloglinechart>
           </div>
         </div>
       </div>

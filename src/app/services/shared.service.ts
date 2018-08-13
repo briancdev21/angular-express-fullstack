@@ -615,9 +615,9 @@ export class SharedService {
     return this.http.get(url, {params: params});
   }
 
-  getTasksStatistics(start, end, interval, fields): Observable<any> {
+  getCollaboratorsStatistics(start, end, interval, fields): Observable<any> {
     const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
-    const url = `${environment.apiUrl}/organization/statistics/tasks`;
+    const url = `${environment.apiUrl}/organization/statistics/collaborators`;
     return this.http.get(url, {params: params});
   }
 

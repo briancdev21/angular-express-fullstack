@@ -265,7 +265,7 @@ export class CrmDashboardComponent implements OnInit {
           if (this.conversionRatio.lostDeals === 0) {
             this.wonVsLost = this.conversionRatio.wonDeals;
           } else {
-            this.wonVsLost = (this.conversionRatio.wonDeals / this.conversionRatio.lostDeals * 100).toFixed(1);
+            this.wonVsLost = (this.conversionRatio.wonDeals / this.conversionRatio.lostDeals).toFixed(1);
           }
         });
       });
