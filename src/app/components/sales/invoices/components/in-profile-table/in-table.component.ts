@@ -22,6 +22,9 @@ export class InProfileTableComponent implements OnInit {
     if (val !== undefined) {
       this.productStatus = val.status;
       this._productDetails = val.products;
+      this._productDetails.forEach(product => {
+        product.readonly = true;
+      })
       this.addNewProduct();
     }
   }

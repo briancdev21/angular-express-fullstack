@@ -47,10 +47,10 @@
   height: 30px;
   padding: 0 .5em;
 }
-
+/* 
 .price-table ng2-completer .completer-input:focus {
   outline: auto orange;
-}
+} */
 
 .price-table input:focus {
   outline: auto orange;
@@ -300,4 +300,12 @@ td.handle-bar {
     font-size: 1em;
     padding: 10px 5px;
   }
+}
+
+input.total:focus {
+  outline: none;
+}
+
+input.unitprice:focus {
+  outline: none;
 }

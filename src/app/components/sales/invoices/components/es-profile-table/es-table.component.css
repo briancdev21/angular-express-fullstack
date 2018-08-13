@@ -301,3 +301,11 @@ td.handle-bar {
     padding: 10px 5px;
   }
 }
+
+input.total:focus {
+  outline: none;
+}
+
+input.unitprice:focus {
+  outline: none;
+}

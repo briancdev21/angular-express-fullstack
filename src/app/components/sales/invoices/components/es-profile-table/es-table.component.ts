@@ -23,6 +23,9 @@ export class EsProfileTableComponent implements OnInit {
     if (val !== undefined) {
       this._productDetails = val.products;
       this.estimateStatus = val.status;
+      this._productDetails.forEach(product => {
+        product.readonly = true;
+      });
       this.addNewProduct();
     }
   }
