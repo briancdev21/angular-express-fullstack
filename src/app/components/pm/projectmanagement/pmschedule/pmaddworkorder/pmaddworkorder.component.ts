@@ -32,56 +32,11 @@ export class PmAddWorkOrderComponent implements OnInit {
       id: 0,
       description: 'Install TV in Kitchen',
       status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '60',
-      priority: 'Level 1',
+      estimateHour: 5,
+      estimateMin: 40,
+      priority: '1',
       createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 1,
-      description: 'Install TV in Kitchen',
-      status: 'inProgress',
-      estimateHour: '',
-      estimateMin: '25',
-      priority: 'Level 1',
-      createdDate: 'December 17, 2017 at 5:42 PM'
-    },
-    {
-      id: 2,
-      description: 'Install TV in home',
-      status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '25',
-      priority: 'Level 3',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 3,
-      description: 'Walking',
-      status: 'inProgress',
-      estimateHour: '',
-      estimateMin: '30',
-      priority: 'Level 2',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 4,
-      description: 'Install TV in Masterbedroom',
-      status: 'complete',
-      estimateHour: '1',
-      estimateMin: '45',
-      priority: 'Level 1',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
-    {
-      id: 5,
-      description: 'Walking through fuctioinality with the client',
-      status: 'complete',
-      estimateHour: '',
-      estimateMin: '20',
-      priority: 'Level 2',
-      createdDate: 'December 17, 2016 at 5:42 PM'
-    },
+    }
   ];
 
   deliveryProducts: Array<object> = [];
@@ -164,18 +119,6 @@ export class PmAddWorkOrderComponent implements OnInit {
   ];
 
   searchableList = ['name'];
-  newProduct = {
-    id: 0,
-    description: this.newTaskDescription,
-    status: 'notStarted',
-    estimateHour: '',
-    estimateMin: '',
-    priority: 'Level 1',
-    createdDate: '',
-    visibility: true,
-    new: true,
-    dependency: ''
-  };
 
   selectName: any;
   topTimeEstimationModal = false;
@@ -189,7 +132,19 @@ export class PmAddWorkOrderComponent implements OnInit {
   currentProjectId: any;
   currentProject: any;
   today = new Date();
+  formatedToday = moment(this.today).format('YYYY-MM-DD');
   tomorrow = new Date();
+  newProduct = {
+    id: 0,
+    description: this.newTaskDescription,
+    status: 'notStarted',
+    estimateHour: 0,
+    estimateMin: 0,
+    priority: '3',
+    createdDate: this.formatedToday,
+    visibility: true,
+    new: true,
+  };
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private projectsService: ProjectsService,
     private collaboratorsService: CollaboratorsService, private productsService: ProductsService) {
@@ -486,12 +441,12 @@ export class PmAddWorkOrderComponent implements OnInit {
   }
 
   getColor(task) {
-    if (task.priority === 'Level 1') {
-      return 'green';
-    } else if (task.priority === 'Level 2') {
+    if (task.priority === '1') {
+      return 'red';
+    } else if (task.priority === '2') {
       return 'orange';
     } else {
-      return 'red';
+      return 'green';
     }
   }
 
@@ -565,13 +520,12 @@ export class PmAddWorkOrderComponent implements OnInit {
       id: newId,
       description: this.newTaskDescription,
       status: 'notStarted',
-      estimateHour: '',
-      estimateMin: '',
-      priority: 'Level 1',
+      estimateHour: 0,
+      estimateMin: 0,
+      priority: '3',
       createdDate: newDate,
       visibility: true,
       new: true,
-      dependency: '',
     };
     this.newProduct.new = true;
     if (this.newTaskDescription) {
@@ -613,13 +567,13 @@ export class PmAddWorkOrderComponent implements OnInit {
     }
   }
 
-  newDependencySelect(task, i) {
-    this.newProduct.dependency = task.id;
-    this.topDependencyModal = false;
-  }
+  // newDependencySelect(task, i) {
+  //   this.newProduct.dependency = task.id;
+  //   this.topDependencyModal = false;
+  // }
 
   newPrioritySelect(priority, i) {
-    this.newProduct.priority = priority;
+    this.newProduct.priority = i.toString();
     this.topPriorityModal = false;
   }
 

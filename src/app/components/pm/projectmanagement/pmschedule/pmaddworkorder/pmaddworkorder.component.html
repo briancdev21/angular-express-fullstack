@@ -193,10 +193,8 @@
       <tab tabTitle="SCHEDULER" class="tab-won" [(active)]="tabActiveSecond">
         <div class="tab-two">
           <app-availability *ngIf="visibleAvail" 
-            [startDate]="workorderDetails.startDate" 
-            [startTime]="workorderDetails.startTime" 
-            [endDate]="workorderDetails.endDate" 
-            [endTime]="workorderDetails.endTime" 
+            [startDate]="workorderDetails.startDate"
+            [endDate]="workorderDetails.endDate"
             (resouceSelected)="getAvailability($event)">
           </app-availability>
           <div class="btn-section" >
@@ -218,7 +216,7 @@
                 <div class="add-task">
                   <input placeholder="Type checklist here..." (keyup.enter)="addTicket()" [(ngModel)]="newTaskDescription">
                   <img src="assets/images/warning.svg" (click)="topPriorityModal=true; $event.stopPropagation(); topDependencyModal=false; topTimeEstimationModal=false;">
-                  <img src="assets/images/link.png" (click)="topDependencyModal=true; $event.stopPropagation(); topTimeEstimationModal=false; topPriorityModal=false;">
+                  <!-- <img src="assets/images/link.png" (click)="topDependencyModal=true; $event.stopPropagation(); topTimeEstimationModal=false; topPriorityModal=false;"> -->
                   <img src="assets/images/time.png" (click)="topTimeEstimationModal=true; $event.stopPropagation(); topDependencyModal=false; topPriorityModal=false;">
                   <!-- Start Small Dialog when clicking images to add time -->
                   <div 
@@ -289,7 +287,7 @@
                       </div>
                       <div>
                         <img src="assets/images/warning.svg" (click)="openPriorityModal(i, task); $event.stopPropagation();">
-                        <img src="assets/images/link.png" (click)="openDependencyModal(i, task); $event.stopPropagation();">
+                        <!-- <img src="assets/images/link.png" (click)="openDependencyModal(i, task); $event.stopPropagation();"> -->
                         <img src="assets/images/time.png" (click)="openTimeEstimationModal(i, task); $event.stopPropagation();">
                         <!-- Start Small Dialog when clicking images to add time -->
                         <div 
@@ -325,10 +323,9 @@
                           (clickOutside)="closePriorityModal(i)">
                           <div class="priority-mdl-content">
                             <select [(ngModel)]="selectedPriority" (ngModelChange)="onPrioritySelect($event, task)" >
-                              <option [value]="'default'">Select Priority</option>
-                              <option [value]="'level1'">Level 1</option>
-                              <option [value]="'level2'">Level 2</option>
-                              <option [value]="'level3'">Level 3</option>
+                              <option [value]="'1'">Level 1</option>
+                              <option [value]="'2'">Level 2</option>
+                              <option [value]="'3'">Level 3</option>
                             </select>
                           </div>
                         </div>
