@@ -2,6 +2,8 @@ import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { SharedService } from '../../../services/shared.service';
+import { CollaboratorsService } from '../../../services/collaborators.service';
 
 @Component({
   selector: 'app-collaborationdashboard',
@@ -22,163 +24,26 @@ export class CollaborationDashboardComponent implements OnInit {
   };
 
   public orderTasks = {
-    totalTasks: 356,
-    taskCompleted: 348,
-    averageTasks: 15,
-    incompleteTasks: 8
+    totalTasks: 0,
+    taskCompleted: 0,
+    averageTasks: 0,
+    incompleteTasks: 0
   };
 
   public pendingOrders = [
-    {
-      orderNumber: 'WO 88031234',
-      timeLapsed: '5'
-    }, {
-      orderNumber: 'PO 88031235',
-      timeLapsed: '3'
-    }, {
-      orderNumber: 'PO 88031236',
-      timeLapsed: '3'
-    }, {
-      orderNumber: 'PO 88031237',
-      timeLapsed: '2'
-    }, {
-      orderNumber: 'PO 88031238',
-      timeLapsed: '1'
-    },
   ];
 
-  public morrisMultiLineChartInfo = [
-    {
-        period: 'JAN',
-        totalHour: 10,
-        projectHour: 2,
-        billableHour: 8
-    }, {
-        period: 'FEB',
-        totalHour: 20,
-        projectHour: 15,
-        billableHour: 8
-    }, {
-        period: 'MAR',
-        totalHour: 30,
-        projectHour: 28,
-        billableHour: 2
-    }, {
-        period: 'APR',
-        totalHour: 20,
-        projectHour: 20,
-        billableHour: 0
-    }, {
-        period: 'MAY',
-        totalHour: 10,
-        projectHour: 2,
-        billableHour: 0
-    }, {
-        period: 'JUN',
-        totalHour: 10,
-        projectHour: 21,
-        billableHour: 18
-    }, {
-        period: 'JUL',
-        totalHour: 10,
-        projectHour: 2,
-        billableHour: 8
-    }, {
-        period: 'AUG',
-        totalHour: 10,
-        projectHour: 4,
-        billableHour: 8
-    }, {
-        period: 'SEP',
-        totalHour: 16,
-        projectHour: 2,
-        billableHour: 4
-    }, {
-        period: 'OCT',
-        totalHour: 25,
-        projectHour: 25,
-        billableHour: 8
-    }, {
-        period: 'NOV',
-        totalHour: 35,
-        projectHour: 35,
-        billableHour: 0
-    }, {
-        period: 'DEC',
-        totalHour: 20,
-        projectHour: 20,
-        billableHour: 0
-    }];
+  public morrisMultiLineChartInfo: any;
 
-  public morrisDonutInfo = [
-    {
-      label: 'Steve Rogers',
-      value: 49,
-    }, {
-      label: 'James Toa',
-      value: 35
-    }, {
-      label: 'Smith Will',
-      value: 8
-    }, {
-      label: 'Alpha Beta',
-      value: 12
-    }, {
-      label: 'Bruce Banner',
-      value: 8
-    }, {
-      label: 'Other',
-      value: 9
-    }];
+  public morrisDonutInfo: any;
 
   public morrisDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
-  public morrisLineChartInfo = [
-    {
-      period: 'Jun',
-      value: 2,
-    }, {
-      period: 'JUL',
-      value: 3,
-    }, {
-      period: 'AUG',
-      value: 3,
-    }, {
-      period: 'SEP',
-      value: 2,
-    }, {
-      period: 'OCT',
-      value: 1,
-    }, {
-      period: 'NOV',
-      value: 2,
-    }, {
-      period: 'DEC',
-      value: 3,
-    }];
+  public morrisLineChartInfo: any;
 
   public workOrderDonutColors = ['#ffd97f', '#fab2c0', '#80dad8', '#a1abb8', '#38849B', '#6EB1DD', '#FF7E7E', '#F79E5D', '#6F7B83'];
 
-  public workOrderDonutInfo = [
-    {
-      label: 'Steve Rogers',
-      value: 49,
-    }, {
-      label: 'James Toa',
-      value: 35
-    }, {
-      label: 'Smith Will',
-      value: 8
-    }, {
-      label: 'Alpha Beta',
-      value: 12
-    }, {
-      label: 'Bruce Banner',
-      value: 8
-    }, {
-      label: 'Other',
-      value: 9
-    }];
+  public workOrderDonutInfo: any;
 
   public activitiesInfo = [
     {
@@ -248,18 +113,125 @@ export class CollaborationDashboardComponent implements OnInit {
   ];
 
   menuCollapsed = true;
-  donutTimePeriod = 'month';
+  teamTimePeriod = 'MONTHLY';
+  tasksTimePeriod = 'MONTHLY';
+  backLogTimePeriod = 'MONTHLY';
+  workOrderTimePeriod = 'MONTHLY';
+  showTeamChart = true;
+  showAverageChart = true;
+  showBacklogChart = true;
+
+  constructor(private sharedService: SharedService, private collaboratorsService: CollaboratorsService) {
+    this.fetchTasksData('MONTHLY');
+
+    this.fetchTeamTimeData('MONTHLY');
+
+    this.fetchAverageTimeData('MONTHLY');
+
+    this.fetchBacklogTimeData('MONTHLY');
+    this.collaboratorsService.getWorkOrders().subscribe(res => {
+      const orders = res.results;
+      this.pendingOrders = orders.filter(o => o.status === 'IN_PROGRESS');
+      this.sortDateArray('endDate');
+      this.pendingOrders.forEach(element => {
+        element.endDate = moment(element.endDate).format('MMMM DD, YYYY');
+      });
+    });
+
+    this.sharedService.getCollaboratorsStatistics(11, 0, 'MONTHLY', 'totalHoursOverTime').subscribe(res => {
+      const totalData = res.totalHoursOverTime;
+      this.sharedService.getCollaboratorsStatistics(11, 0, 'MONTHLY', 'totalBillableHoursOverTime').subscribe(billing => {
+        const billingData = billing.totalBillableHoursOverTime;
+        this.sharedService.getCollaboratorsStatistics(11, 0, 'MONTHLY', 'totalProjectHoursOverTime').subscribe(est => {
+          const projectData = est.totalProjectHoursOverTime;
+          this.morrisMultiLineChartInfo = [];
+          for (let i = 0; i < 12; i ++) {
+            const addingIndi = {
+              totalHour: totalData[i].frameValue,
+              projectHour: projectData[i].frameValue,
+              billableHour: billingData[i].frameValue,
+              period: totalData[i].frameUnit.toUpperCase().slice(0, 3)
+            };
+            this.morrisMultiLineChartInfo.push(addingIndi);
+          }
+        console.log('###: ', this.morrisMultiLineChartInfo);
+        });
+      });
+    });
+  }
 
   ngOnInit() {
-    this.pendingOrders.map( p => p.timeLapsed = moment(p.timeLapsed).format('MMMM DD, YYYY'));
-    // change to percentage
-    const arr = this.morrisDonutInfo.map( v => v.value);
-    let total = 0;
-    arr.forEach(element => {
-      total = total + element;
+  }
+
+  fetchTasksData(unit) {
+    this.sharedService.getCollaboratorsStatistics(0, 0, unit, 'workOrderTasksTotalOverTime').subscribe(res => {
+      this.orderTasks.totalTasks = res.workOrderTasksTotalOverTime[0].frameValue;
     });
-    this.morrisDonutInfo.forEach(ele => {
-      ele.value = Math.floor(ele.value * 100 / total);
+    this.sharedService.getCollaboratorsStatistics(0, 0, unit, 'workOrderTasksCompletedOverTime').subscribe(res => {
+      this.orderTasks.taskCompleted = res.workOrderTasksCompletedOverTime[0].frameValue;
     });
+    this.sharedService.getCollaboratorsStatistics(0, 0, unit, 'averageTasksCompletedPerWorkOrderOverTime').subscribe(res => {
+      this.orderTasks.averageTasks = res.averageTasksCompletedPerWorkOrderOverTime[0].frameValue;
+    });
+    this.sharedService.getCollaboratorsStatistics(0, 0, unit, 'incompleteWorkOverTasksOverTime').subscribe(res => {
+      this.orderTasks.incompleteTasks = res.incompleteWorkOverTasksOverTime[0].frameValue;
+    });
+  }
+
+  fetchTeamTimeData(unit) {
+    this.sharedService.getCollaboratorsStatistics(0, 0, unit, 'teamHoursTotalOverTime').subscribe(res => {
+      this.morrisDonutInfo = res.teamHoursTotalOverTime;
+      this.showTeamChart = false;
+      const total = this.morrisDonutInfo.map(h => h.value).reduce((a, b) => a + b, 0);
+      setTimeout(() => {
+        this.showTeamChart = true;
+      });
+      this.morrisDonutInfo.forEach(element => {
+        element.label = element.name;
+        element.value = (element.value / total * 100).toFixed(1);
+      });
+    });
+  }
+
+  fetchAverageTimeData(unit) {
+    this.sharedService.getCollaboratorsStatistics(0, 0, unit, 'usersAverageWorkOrderHours').subscribe(res => {
+      this.workOrderDonutInfo = res.usersAverageWorkOrderHours;
+      this.showAverageChart = false;
+      const total = this.workOrderDonutInfo.map(h => h.value).reduce((a, b) => a + b, 0);
+      setTimeout(() => {
+        this.showAverageChart = true;
+      });
+      this.workOrderDonutInfo.forEach(element => {
+        element.label = element.name;
+        element.value = (element.value / total * 100).toFixed(1);
+      });
+    });
+  }
+
+  fetchBacklogTimeData(unit) {
+    this.sharedService.getCollaboratorsStatistics(5, 0, unit, 'workOrderBackLogOverTime').subscribe(res => {
+      this.morrisLineChartInfo = res.workOrderBackLogOverTime;
+      this.showBacklogChart = false;
+      setTimeout(() => {
+        this.showBacklogChart = true;
+      });
+      this.morrisLineChartInfo.forEach(element => {
+        element.period = element.frameUnit;
+        element.value = element.frameValue;
+      });
+    });
+  }
+
+  sortDateArray(field) {
+    this.pendingOrders.sort( function(name1, name2) {
+      if ( Date.parse(name1[field]) < Date.parse(name2[field]) ) {
+        return -1;
+      } else if ( Date.parse(name1[field]) > Date.parse(name2[field])) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    this.pendingOrders.reverse();
   }
 }
