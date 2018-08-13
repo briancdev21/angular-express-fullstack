@@ -37,10 +37,9 @@ export class ProposalListComponent implements OnInit {
     this.filterAvaliableTo = 'everyone';
     this.sharedService.getUsers().subscribe(user => {
       this.usersList = user;
-      this.sharedService.getContacts().subscribe(res => {
-        this.contactsList = res;
-        this.retrieveData();
-      });
+
+      this.retrieveData();
+
     });
 
 
@@ -78,18 +77,22 @@ export class ProposalListComponent implements OnInit {
   retrieveData() {
     this.proposalsService.getProposals().subscribe(res => {
       this.proposalListInfo = res.results;
-      this.proposalListInfo.forEach(ele => {
-        ele['contactName'] = this.getContactName(this.getContactIdFromString(ele.contactId));
-        let owners = [];
-        const ownersDetails = [];
-        owners.push(ele.designer);
-        owners.push(ele.projectManager);
-        owners.push(ele.accountManager);
-        owners = Array.from(new Set(owners));
-        owners.forEach(owner => {
-          ownersDetails.push(this.usersList.filter(u => u.username === owner)[0]);
+      const contactIds = this.proposalListInfo.map(p => p.contactId);
+      this.sharedService.getMulipleContacts(contactIds).subscribe(contact => {
+        this.contactsList = contact;
+        this.proposalListInfo.forEach(ele => {
+          ele['contactName'] = this.getContactName(ele.contactId);
+          let owners = [];
+          const ownersDetails = [];
+          owners.push(ele.designer);
+          owners.push(ele.projectManager);
+          owners.push(ele.accountManager);
+          owners = Array.from(new Set(owners));
+          owners.forEach(owner => {
+            ownersDetails.push(this.usersList.filter(u => u.username === owner)[0]);
+          });
+          ele.owners = ownersDetails;
         });
-        ele.owners = ownersDetails;
       });
     });
   }
