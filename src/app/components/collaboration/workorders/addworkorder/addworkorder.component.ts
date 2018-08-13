@@ -27,7 +27,7 @@ export class AddWorkOrderComponent implements OnInit {
   projectInfo = [
   ];
 
-  taskTicketInfo: Array<object> = [
+  taskTicketInfo: Array<any> = [
   ];
 
   deliveryProducts: Array<object> = [];
@@ -112,7 +112,7 @@ export class AddWorkOrderComponent implements OnInit {
   newEstimateHour = 0;
   newEstimateMin = 0;
 
-  searchableList = ['name'];
+  searchableList = ['name', 'sku'];
   newProduct = {
     id: 0,
     description: this.newTaskDescription,
@@ -139,6 +139,9 @@ export class AddWorkOrderComponent implements OnInit {
   savingWorkOrderData: any;
   today = new Date();
   formattedToday = moment(this.today).format('YYYY-MM-DD');
+  deliverableProducts = [];
+  invalidCustomerProject = false;
+  selectedProject: any;
 
   constructor(private completerService: CompleterService, private sharedService: SharedService, private projectsService: ProjectsService,
     private collaboratorsService: CollaboratorsService, private productsService: ProductsService) {
@@ -150,7 +153,6 @@ export class AddWorkOrderComponent implements OnInit {
     this.sharedService.getContacts().subscribe(data => {
       this.contactsList = data;
       this.addContactName(this.contactsList);
-      console.log('contacts: ', this.contactsList);
       this.customerList = completerService.local(this.contactsList, 'name', 'name');
     });
 
@@ -169,7 +171,6 @@ export class AddWorkOrderComponent implements OnInit {
 
     this.productsService.getProductCatalog().subscribe(data => {
       this.availableProductsList = data.results;
-      console.log('proudctslist: ', data);
     });
 
     this.projectsService.getProjectsList().subscribe(res => {
@@ -182,7 +183,7 @@ export class AddWorkOrderComponent implements OnInit {
 
     this.editable = false;
     this.workorderDetails.workorderNumber = this.generateAutoId();
-    this.taskTicketInfo.map( t => t['visibility'] = true);
+    // this.taskTicketInfo.map( t => t['visibility'] = true);
   }
 
   onSelectCustomer(event) {
@@ -264,8 +265,13 @@ export class AddWorkOrderComponent implements OnInit {
       console.log('workorder name: ', this.workorderDetails.workorderName);
       this.invalidCustomerName = false;
       this.invalidStartTime = this.invalidStartDate = this.invalidEndDate = this.invalidEndTime = this.invalidName = false;
-      if (this.workorderDetails.startTime && this.workorderDetails.workorderName &&
-          this.workorderDetails.startDate && this.workorderDetails.endDate && this.workorderDetails.endTime)  {
+      if (this.workorderDetails.contactId || this.selectedProject) {
+        this.invalidCustomerProject = false;
+      } else {
+        this.invalidCustomerProject = true;
+      }
+      if (this.workorderDetails.startTime && this.workorderDetails.workorderName && this.workorderDetails.startDate &&
+         this.workorderDetails.endDate && this.workorderDetails.endTime && !this.invalidCustomerProject)  {
             this.tabActiveSecond = true;
             this.tabActiveFirst = false;
             this.tabActiveThird = false;
@@ -287,6 +293,18 @@ export class AddWorkOrderComponent implements OnInit {
               changelogId: this.workorderDetails.changeLog ? this.workorderDetails.changeLog : null,
               description: this.workorderDetails.description,
             };
+
+            if (this.selectedProject) {
+              this.productsService.getDeliverableProductsByProjectId(this.selectedProject).subscribe(res => {
+                this.deliverableProducts = res.objects;
+                console.log('deliverable by project: ', res);
+              });
+            } else {
+              this.productsService.getDeliverableProductsByContactId(this.workorderDetails.contactId).subscribe(res => {
+                this.deliverableProducts = res.objects;
+                console.log('deliverable by contact: ', res);
+              });
+            }
       } else {
         if (!this.workorderDetails.endDate) {
           this.invalidEndDate = true;
@@ -342,17 +360,50 @@ export class AddWorkOrderComponent implements OnInit {
 
   createNewWorkOrder() {
     console.log('saving work orders: ', this.workorderDetails);
+    const savingWorkOrderProducts = [];
+    const savingWorkOrderTasks = [];
 
     // remove undefined and null fields
     Object.keys(this.savingWorkOrderData).forEach((key) =>
       (this.savingWorkOrderData[key] == null || this.savingWorkOrderData[key] === undefined) && delete this.savingWorkOrderData[key]);
 
+    this.addedDeliveryProducts.forEach(ele => {
+      const product = {
+        sku: ele.sku,
+        quantity: Number(ele.addedQuantity),
+        invoiceId: ele.outgoingId
+      };
+      savingWorkOrderProducts.push(product);
+    });
+    Object.keys(savingWorkOrderProducts).forEach((key) =>
+    (savingWorkOrderProducts[key] == null || savingWorkOrderProducts[key] === undefined) && delete savingWorkOrderProducts[key]);
+
+    this.taskTicketInfo.forEach(element => {
+      const task = {
+        name: element.description,
+        duration: element.estimateHour * 60 + element.estimateMin,
+        priority: element.priority
+      };
+      savingWorkOrderTasks.push(task);
+    });
+
     this.collaboratorsService.createWorkOrder(this.savingWorkOrderData).subscribe(res => {
       if (res.error) {
         console.log('error: ', res);
       } else {
-        console.log('successfully created: ', res);
+        console.log('successfully created: ', res, );
         this.newCreatedWorkOrderId = res.data.id;
+        savingWorkOrderTasks.forEach(element => {
+          this.collaboratorsService.createWorkOrderTask(this.newCreatedWorkOrderId, element).subscribe(task => {
+            console.log('task added: ', task);
+          });
+        });
+
+        savingWorkOrderProducts.forEach(product => {
+          this.collaboratorsService.createWorkOrderProduct(this.newCreatedWorkOrderId, product).subscribe(data => {
+            console.log('product added: ', data);
+          });
+        });
       }
     });
   }
@@ -366,16 +417,17 @@ export class AddWorkOrderComponent implements OnInit {
   }
 
   finishAddWorkorder() {
+    this.createNewWorkOrder();
     console.log('added productslist: ', this.addedDeliveryProducts);
-    this.addedDeliveryProducts.forEach(ele => {
-      const savingData = {
-        sku: ele.sku,
-        quantity: ele.addedQuantity
-      };
-      this.collaboratorsService.createWorkOrderProduct(this.newCreatedWorkOrderId, savingData).subscribe(res => {
-        console.log('succeesuflly created: ', res);
-      });
-    });
+    // this.addedDeliveryProducts.forEach(ele => {
+    //   const savingData = {
+    //     sku: ele.sku,
+    //     quantity: ele.addedQuantity
+    //   };
+    //   this.collaboratorsService.createWorkOrderProduct(this.newCreatedWorkOrderId, savingData).subscribe(res => {
+    //     console.log('succeesuflly created: ', res);
+    //   });
+    // });
     this.tabActiveThird = false;
     this.tabActiveFirst = true;
     this.tabActiveSecond = false;
@@ -403,6 +455,7 @@ export class AddWorkOrderComponent implements OnInit {
 
   onSelectProject(event) {
     console.log('selected project: ', event);
+    this.selectedProject = event;
     this.projectsService.getProjectChangeLogs(event).subscribe(res => {
       this.openChangeLogs = res.results.filter(c => c.status === 'IN_PROGRESS' || c.status === 'NEW');
       console.log('openChangeLogs: ', this.openChangeLogs);
