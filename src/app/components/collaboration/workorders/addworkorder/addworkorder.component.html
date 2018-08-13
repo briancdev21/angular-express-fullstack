@@ -14,8 +14,8 @@
       <tab tabTitle="DETAILS" [(active)]="tabActiveFirst">
         <div class="tab-one">
           <div class="name-col tab-row">
-            <div>
-              <span>Customer Name</span>
+            <div [ngClass]="{'validation-required-name': invalidCustomerProject}" >
+              <span>Customer Name</span><span *ngIf="invalidCustomerProject"> (A contact or project should be selected)</span>
               <!-- <ng2-completer
                 [dataService]="customerList" 
                 (selected)="onSelectCustomer($event)" 
@@ -25,16 +25,17 @@
                 *ngIf="contactsList">
               </ng2-completer> -->
               <ng2-completer
-              [dataService]="customerList" 
-              (selected)="onSelectCustomer($event)" 
-              [(ngModel)]="selectName"
-              [minSearchLength]="0"
-              *ngIf="contactsList">
-            </ng2-completer>
+                [dataService]="customerList" 
+                (selected)="onSelectCustomer($event)" 
+                [(ngModel)]="selectName"
+                [minSearchLength]="0"
+                *ngIf="contactsList">
+              </ng2-completer>
             </div>
             <div class="workorder-project">
-              <span>Project</span>
-              <select [(ngModel)]="workorderDetails.selectedProject" (ngModelChange)="onSelectProject($event)">
+              <span>Project</span> <span *ngIf="invalidCustomerProject"> (A contact or project should be selected)</span>
+              <select [(ngModel)]="workorderDetails.selectedProject" (ngModelChange)="onSelectProject($event)" [ngClass]="{'validation-required': invalidCustomerProject}">
+                <option value="undefined">Select Project</option>
                 <option *ngFor="let project of projectsList" [value]="project.id">
                   {{project.name}}
                 </option>
@@ -346,13 +347,13 @@
               </div>
             </div>
             <div class="Delivery-sec">
-              <div class="top-sec" *ngIf="availableProductsList">
+              <div class="top-sec" *ngIf="deliverableProducts">
                 <span class="top-title">PRODUCT DELIVERY</span>
                 <div class="add-task">
                   <input placeholder="Search product delivery options for Work Order..." [(ngModel)]="queryString" (ngModelChange)="showAvailModal=true;">
                 </div>
                 <div class="available-product-list-modal" *ngIf="showAvailModal;" (clickOutside)="showAvailModal=false; $event.stopPropagation();">
-                  <div *ngFor="let product of availableProductsList | SearchPipe: queryString : searchableList; let i = index;" class="products-list" (click)="addToAddedList(product)">
+                  <div *ngFor="let product of deliverableProducts | SearchPipe: queryString : searchableList; let i = index;" class="products-list" (click)="addToAddedList(product)">
                     <span class="description-in-modal">{{product.name}}</span> (<span class="product-number">{{product.sku}}</span>)
                   </div>
                 </div>
