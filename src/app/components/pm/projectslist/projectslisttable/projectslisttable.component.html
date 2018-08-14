@@ -1,5 +1,5 @@
 <div class="content">
-  <table class="work-order-table">
+  <table class="work-order-table" *ngIf="contactsList">
     <tr>
       <th (click)="sortArray('projectNumber')">PROJECT #</th>
       <th (click)="sortArray('name')">NAME OF PROJECT</th>

@@ -25,15 +25,18 @@ export class ProjectsListTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
-  contactsList = [];
+  contactsList: any;
 
   constructor( private filterService: FilterService, private router: Router, private projectsService: ProjectsService,
     private sharedService: SharedService, private pmService: PmService ) {
-    this.sharedService.getContacts().subscribe(data => {
-      this.contactsList = data;
-      this.addContactName(this.contactsList);
+
       this.projectsService.getProjectsList().subscribe(res => {
         this.projectsListInfo = res.results;
+        const projectIds = this.projectsListInfo.map(p => p.contactId);
+        this.sharedService.getMulipleContacts(projectIds).subscribe(contact => {
+          this.contactsList = contact;
+          this.addContactName(this.contactsList);
+        });
         this.projectsListInfo.forEach(element => {
           element.endDate = moment(element.endDate).format('MMMM DD, YYYY');
           element.barInfo = {
@@ -44,7 +47,7 @@ export class ProjectsListTableComponent implements OnInit {
         this.projectsListInfo = this.projectsListInfo.filter(p => p.status === 'IN_PROGRESS');
         console.log('projectslist: ', res);
       });
-    });
+
 
   }
 
