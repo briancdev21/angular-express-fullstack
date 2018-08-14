@@ -140,6 +140,7 @@ export class PmBoardComponent implements OnInit {
   tasksTemp = [];
   currentProjectId: any;
   contactsList = [];
+  selectedContact: any;
 
   constructor(private sharedService: SharedService, private pmService: ProjectManagementService,  private pmTasksService: PmTasksService,
     private projectsService: ProjectsService ) {
@@ -150,19 +151,18 @@ export class PmBoardComponent implements OnInit {
 
     this.currentProjectId = localStorage.getItem('current_projectId');
     if (this.currentProjectId !== '') {
-      this.sharedService.getContacts().subscribe(data => {
-        this.contactsList = data;
-        this.addContactName(this.contactsList);
-        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
-          console.log('Individual project: ', res);
-          this.projectInfo = res.data;
-          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
-          this.barInfo = {
-            title: 'Project health is at ' + this.projectInfo.health + '%',
-            completeness: this.projectInfo.health,
-          };
-        });
 
+      this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+        console.log('Individual project: ', res);
+        this.projectInfo = res.data;
+        this.sharedService.getMulipleContacts(this.projectInfo.contactId).subscribe(data => {
+          this.selectedContact = data[0];
+          this.projectInfo.contactName = this.getContactNameFromId(this.selectedContact);
+        });
+        this.barInfo = {
+          title: 'Project health is at ' + this.projectInfo.health + '%',
+          completeness: this.projectInfo.health,
+        };
       });
     } else {
       console.error('product id error');
@@ -270,9 +270,12 @@ export class PmBoardComponent implements OnInit {
     return data;
   }
 
-  getContactNameFromId(id) {
-    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
-    console.log('selected: ', id, selectedContact, this.contactsList);
+  getContactNameFromId(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
     return selectedContact.name;
   }
 }

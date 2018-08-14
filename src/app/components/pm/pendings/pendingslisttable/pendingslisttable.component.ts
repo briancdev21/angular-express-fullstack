@@ -22,16 +22,18 @@ export class PendingsListTableComponent implements OnInit {
   sortClicked = true;
   clicked = false;
   sortScoreClicked = true;
-  contactsList = [];
+  contactsList: any;
 
   constructor( private filterService: FilterService, private router: Router, private projectsService: ProjectsService,
     private sharedService: SharedService ) {
-    this.sharedService.getContacts().subscribe(data => {
-      console.log('contactslist: ', data);
-      this.contactsList = data;
-      this.addContactName(this.contactsList);
+
       this.projectsService.getProjectsList().subscribe(res => {
         this.pendingsListInfo = res.results;
+        const contactIds = this.pendingsListInfo.map(p => p.contactId);
+        this.sharedService.getMulipleContacts(contactIds).subscribe(contact => {
+          this.contactsList = contact;
+          this.addContactName(this.contactsList);
+        });
         this.pendingsListInfo.forEach(element => {
           element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
           element.timePassed = this.calcTimePassedDays(element.startDate, element.status);
@@ -39,7 +41,7 @@ export class PendingsListTableComponent implements OnInit {
         this.pendingsListInfo = this.pendingsListInfo.filter(p => p.status === 'OPEN');
         console.log('pendingprojectslist: ', this.pendingsListInfo);
       });
-    });
+
 
   }
 

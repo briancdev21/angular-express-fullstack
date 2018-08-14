@@ -135,7 +135,10 @@ export class ProgressProjectInformationComponent implements OnInit {
           this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
 
             this.projectInfo = res.data;
-            this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+            this.sharedService.getMulipleContacts(res.data.contactId).subscribe(contact => {
+              const selectedContact = contact[0];
+              this.projectInfo.contactName = this.getContactName(selectedContact);
+            });
             console.log('indi project: ', this.projectInfo);
             this.formattedStart = moment(this.projectInfo.startDate).format('MMMM DD, YYYY');
             this.formattedEnd = moment(this.projectInfo.endDate).format('MMMM DD, YYYY');
@@ -144,16 +147,22 @@ export class ProgressProjectInformationComponent implements OnInit {
 
             this.internalNote = this.projectInfo.internalNote;
             // one for display data, one for saving data for account receivable
-            this.selectAccountReceivable = this.contactsList.filter(c =>
-              c.id === this.changeContactIdFormat(this.projectInfo.accountReceivableId))[0].name;
-            this.projectInfo.contactAccountReceivable = this.contactsList.filter(c =>
-              c.id === this.changeContactIdFormat(this.projectInfo.accountReceivableId))[0].id;
+            this.sharedService.getMulipleContacts(this.projectInfo.accountReceivableId).subscribe(contact => {
+              const selectedContact = contact[0];
+              this.selectAccountReceivable = this.getContactName(selectedContact);
+              this.projectInfo.contactAccountReceivable = contact[0].id;
+            });
 
             // one for display data, one for saving data for account receivable
-            this.selectPmManager = this.contactsList.filter(c =>
-              c.id === this.changeContactIdFormat(this.projectInfo.clientProjectManagerId))[0].name;
-            this.projectInfo.contactProjectManager = this.contactsList.filter(c =>
-              c.id === this.changeContactIdFormat(this.projectInfo.clientProjectManagerId))[0].id;
+            // this.selectPmManager = this.contactsList.filter(c =>
+            //   c.id === this.changeContactIdFormat(this.projectInfo.clientProjectManagerId))[0].name;
+            // this.projectInfo.contactProjectManager = this.contactsList.filter(c =>
+            //   c.id === this.changeContactIdFormat(this.projectInfo.clientProjectManagerId))[0].id;
+            this.sharedService.getMulipleContacts(this.projectInfo.clientProjectManagerId).subscribe(contact => {
+              const selectedContact = contact[0];
+              this.selectPmManager = this.getContactName(selectedContact);
+              this.projectInfo.contactProjectManager = contact[0].id;
+            });
 
             // Contact association
             this.items4 = this.contactsList;
@@ -312,6 +321,15 @@ export class ProgressProjectInformationComponent implements OnInit {
     const splitedArr = id.split('-');
     const idNumber = splitedArr[splitedArr.length - 1];
     return idNumber;
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
+    return selectedContact.name;
   }
 
   updateProject() {
