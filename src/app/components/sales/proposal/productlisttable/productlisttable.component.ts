@@ -130,14 +130,16 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         ele.productType = this.getProductTypeFromId(ele.productTypeId);
         ele.taxRate = this.getTaxRateNameFromId(ele.taxRateId);
         ele.categoryId = ele.categoryId ? ele.categoryId : 0;
-        if (!this.proposalCategoryList.includes(ele.categoryId)) {
+        const categoryIds = this.proposalCategoryList.map(c => c.id);
+        const subcategoryIds = this.proposalSubCategoryList.map(c => c.id);
+        if (!categoryIds.includes(ele.categoryId)) {
           ele.categoryId = 0;
           ele.categoryName = '';
         } else {
-          ele.categoryName = this.categoryListAll.filter(c => c.id === ele.catetoryId)[0].name;
+          ele.categoryName = this.categoryListAll.filter(c => c.id === ele.categoryId)[0].name;
         }
         ele.subcategoryId = ele.subcategoryId ? ele.subcategoryId : 0;
-        if (!this.proposalSubCategoryList.includes(ele.subcategoryId)) {
+        if (!subcategoryIds.includes(ele.subcategoryId)) {
           ele.subcategoryId = 0;
           ele.subCategoryName = '';
         } else {
