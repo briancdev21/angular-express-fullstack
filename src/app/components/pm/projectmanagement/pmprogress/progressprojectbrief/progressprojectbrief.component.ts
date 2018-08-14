@@ -26,7 +26,10 @@ export class ProgressProjectBriefComponent implements OnInit {
       this.addContactName(this.contactsList);
       this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
         this.projectInfo = res.data;
-        this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+        this.sharedService.getMulipleContacts(res.data.contactId).subscribe(contact => {
+          const selectedContact = contact[0];
+          this.projectInfo.contactName = this.getContactName(selectedContact);
+        });
       });
     });
   }
@@ -53,5 +56,14 @@ export class ProgressProjectBriefComponent implements OnInit {
 
   onChangeInternalNotes(event) {
     this.projectManagementService.progressInternalNoteChange.next(event);
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
+    return selectedContact.name;
   }
 }

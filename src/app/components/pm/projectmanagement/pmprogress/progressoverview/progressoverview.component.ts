@@ -122,7 +122,7 @@ export class ProgressOverviewComponent implements OnInit {
     });
 
     this.sharedService.getProjectsStatistics(0, 0, 'MONTHLY', 'overDueProjectTasks').subscribe(res => {
-      this.overdue = res.overDueProjectTasksOverTime[0].frameValue;
+      this.overdue = res.overDueProjectTasks;
     });
 
     this.currentProjectId = localStorage.getItem('current_projectId');
@@ -133,7 +133,10 @@ export class ProgressOverviewComponent implements OnInit {
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
 
           this.projectInfo = res.data;
-          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+          this.sharedService.getMulipleContacts(res.data.contactId).subscribe(contact => {
+            const selectedContact = contact[0];
+            this.projectInfo.contactName = this.getContactName(selectedContact);
+          });
           this.barInfo = {
             title: 'Project health is at ' + this.projectInfo.health + '%',
             completeness: this.projectInfo.health,
@@ -179,6 +182,15 @@ export class ProgressOverviewComponent implements OnInit {
   getContactNameFromId(id) {
     const selectedContact = this.contactsList.filter(c => c.id === id)[0];
     console.log('selected: ', id, selectedContact, this.contactsList);
+    return selectedContact.name;
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
     return selectedContact.name;
   }
 
