@@ -166,7 +166,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       // sendData.map( s => s[0].option = undefined );
       // this.proposalService.insertToTable(sendData);
       sendData.forEach(ele => {
-        ele.quantity = parseInt(ele.quantity, 10);
+        ele.quantity = parseInt(ele.addingQty, 10);
         if ( this.proposalInfo.dealStatus === 'WON') {
           this.commonService.showAlertModal.next(true);
         } else {
@@ -338,7 +338,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.alterQueryString = '';
     this.addAttachmentModalCollapsed = true;
     this.sidebarCollapsed = true;
-    this.selectedProduct.quantity = parseInt(this.selectedProduct.quantity, 10);
+    this.selectedProduct.quantity = parseInt(this.selectedProduct.addingQty, 10);
     this.proposalsService.createProposalProduct(this.proposalId, this.selectedProduct).subscribe(res => {
       this.proposalService.insertToTable([[this.selectedProduct]]);
     });

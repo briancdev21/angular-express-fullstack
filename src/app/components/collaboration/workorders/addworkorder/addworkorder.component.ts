@@ -247,14 +247,14 @@ export class AddWorkOrderComponent implements OnInit {
         break;
       }
       case 'CHECKLIST': {
-        this.tabActiveSecond = false;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = true;
         if (this.tabActiveFirst) {
           this.clickNext('tab-one');
         } else {
           this.clickNext('tab-two');
         }
+        this.tabActiveSecond = false;
+        this.tabActiveFirst = false;
+        this.tabActiveThird = true;
         break;
       }
     }
