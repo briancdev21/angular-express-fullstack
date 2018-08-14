@@ -165,7 +165,7 @@ export class PmAddWorkOrderComponent implements OnInit {
         this.currentProject = res.data;
         console.log('current project: ', res);
         this.sharedService.getMulipleContacts(res.data.contactId).subscribe(contact => {
-          const selectedContact = data[0];
+          const selectedContact = contact[0];
           this.currentProject.contactName = this.getContactName(selectedContact);
         });
       });

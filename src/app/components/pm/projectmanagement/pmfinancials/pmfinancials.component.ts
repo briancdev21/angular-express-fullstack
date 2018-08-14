@@ -54,7 +54,10 @@ export class PmFinancialsComponent implements OnInit {
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
 
           this.projectInfo = res.data;
-          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
+          this.sharedService.getMulipleContacts(res.data.contactId).subscribe(contact => {
+            const selectedContact = contact[0];
+            this.projectInfo.contactName = this.getContactName(selectedContact);
+          });
           // Initial cost total
           this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.inventoryCost + this.projectInfo.labourCost;
           console.log('indi project: ', this.projectInfo);
@@ -291,6 +294,15 @@ export class PmFinancialsComponent implements OnInit {
       }
     });
     return data;
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
+    return selectedContact.name;
   }
 
 }
