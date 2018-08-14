@@ -164,7 +164,10 @@ export class PmAddWorkOrderComponent implements OnInit {
       this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
         this.currentProject = res.data;
         console.log('current project: ', res);
-        this.currentProject.contactName = this.contactsList.filter(c => c.id === this.currentProject.contactId)[0].name;
+        this.sharedService.getMulipleContacts(res.data.contactId).subscribe(contact => {
+          const selectedContact = data[0];
+          this.currentProject.contactName = this.getContactName(selectedContact);
+        });
       });
       this.customerList = completerService.local(this.contactsList, 'name', 'name');
     });
@@ -590,6 +593,15 @@ export class PmAddWorkOrderComponent implements OnInit {
 
   getContactNameFromId(id) {
     const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
     return selectedContact.name;
   }
 }
