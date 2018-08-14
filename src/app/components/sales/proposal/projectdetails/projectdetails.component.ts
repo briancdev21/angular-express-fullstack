@@ -355,9 +355,18 @@ projectDetails = {
     this.proposalsService.getIndividualProposal(this.proposalId).subscribe(response => {
       this.proposalInfo = response.data;
       this.proposalDetails = response.data;
-      this.selectName = this.getContactCustomerNameFromId(this.proposalDetails.contactId);
-      this.selectProject = this.getContactNameFromId(this.proposalDetails.clientProjectManagerId);
-      this.selectReceivable = this.getContactNameFromId(this.proposalDetails.accountReceivableId);
+      this.sharedService.getMulipleContacts(this.proposalInfo.contactId).subscribe(contact => {
+        this.selectedCustomer = contact[0];
+        this.selectName = this.getContactName(contact[0]);
+      });
+      // this.selectProject = this.getContactNameFromId(this.proposalDetails.clientProjectManagerId);
+      this.sharedService.getMulipleContacts(this.proposalInfo.clientProjectManagerId).subscribe(contact => {
+        this.selectProject = this.getContactName(contact[0]);
+      });
+      // this.selectReceivable = this.getContactNameFromId(this.proposalDetails.accountReceivableId);
+      this.sharedService.getMulipleContacts(this.proposalInfo.accountReceivableId).subscribe(contact => {
+        this.selectReceivable = this.getContactName(contact[0]);
+      });
       this.proposalDetails['collaboratorsData'] = [];
       this.proposalDetails.collaborators.forEach(ele => {
         const selectUser = this.usersList.filter(u => u.username === ele)[0];
@@ -401,13 +410,27 @@ projectDetails = {
 
   clickIconManagement() {
     this.proposalDetails.projectManagementContact = (!this.switchIconManagement) ? this.proposalDetails.contactId : '';
-    this.selectProject = (!this.switchIconManagement) ? this.getContactNameFromId( this.proposalDetails.contactId) : '';
+    if (!this.switchIconManagement) {
+      this.sharedService.getMulipleContacts(this.proposalDetails.contactId).subscribe(contact => {
+        this.selectProject = this.getContactName(contact[0]);
+      });
+    } else {
+      this.selectProject = '';
+    }
+    // this.selectProject = (!this.switchIconManagement) ? this.getContactNameFromId( this.proposalDetails.contactId) : '';
     this.switchIconManagement = !this.switchIconManagement;
   }
 
   clickIconReceivable() {
     this.proposalDetails.accountReceivable = (!this.switchIconReceivable) ? this.proposalDetails.contactId : '';
-    this.selectReceivable = (!this.switchIconReceivable) ? this.getContactNameFromId( this.proposalDetails.contactId) : '';
+    // this.selectReceivable = (!this.switchIconReceivable) ? this.getContactNameFromId( this.proposalDetails.contactId) : '';
+    if (!this.switchIconReceivable) {
+      this.sharedService.getMulipleContacts(this.proposalDetails.contactId).subscribe(contact => {
+        this.selectReceivable = this.getContactName(contact[0]);
+      });
+    } else {
+      this.selectProject = '';
+    }
     this.switchIconReceivable = !this.switchIconReceivable;
   }
 
@@ -944,15 +967,27 @@ projectDetails = {
   }
 
   getContactNameFromId(id) {
-    const updatedId = id.split('-').pop();
-    const selectedContact = this.customerList.filter(c => c.id === updatedId)[0];
-    return selectedContact.name;
+    let selectedContact;
+    let name;
+    this.sharedService.getMulipleContacts(id)
+      .subscribe(res => {
+        selectedContact = res[0];
+        console.log('44444', id, res);
+        if (selectedContact.type === 'PERSON') {
+          name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+        } else {
+          name = selectedContact.business.name;
+        }
+        return name;
+      });
   }
 
-  getContactCustomerNameFromId(id) {
-    const updatedId = id.split('-').pop();
-    this.selectedCustomer = this.customerList.filter(c => c.id === updatedId)[0];
-    return this.selectedCustomer.name;
+  getContactName(selectedCustomer) {
+    if (this.selectedCustomer.type === 'PERSON') {
+      return this.selectedCustomer.person.firstName + ' ' + this.selectedCustomer.person.lastName;
+    } else {
+      return this.selectedCustomer.business.name;
+    }
   }
 
 }
