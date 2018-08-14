@@ -64,8 +64,6 @@ export class ProjectInformationComponent implements OnInit {
           this.projectInformation = res.data;
           const followersData = [];
           const contactAssociationData = [];
-          let clientProjectManagerId;
-          let accountReceivableId;
           // if (this.projectInformation.followers) {
           //   this.projectInformation.followers.forEach(element => {
           //     const selectedUser = this.usersList.filter(u => u.username === element)[0];
@@ -77,7 +75,10 @@ export class ProjectInformationComponent implements OnInit {
           // }
           this.projectInformation.followersData = followersData;
           if (this.projectInformation.contactId) {
-            this.projectInformation.contactName = this.contactsList.filter(c => c.id === this.projectInformation.contactId)[0].name;
+            this.sharedService.getMulipleContacts(this.projectInformation.contactId).subscribe(contact => {
+              const selectedContact = contact[0];
+              this.projectInformation.contactName = this.getContactName(selectedContact);
+            });
           }
           this.projectInformation.projectManagerData = this.usersList.filter(u => u.username === this.projectInformation.projectManager)[0];
           console.log('projectInformation: ', this.projectInformation.projectManagerData);
@@ -85,14 +86,20 @@ export class ProjectInformationComponent implements OnInit {
           this.formattedStart = moment(this.projectInformation.startDate).format('MMMM DD, YYYY');
           this.formattedEnd = moment(this.projectInformation.endDate).format('MMMM DD, YYYY');
           if ( this.projectInformation.clientProjectManagerId ) {
-            clientProjectManagerId = this.projectInformation.clientProjectManagerId.split('-').pop();
+            // clientProjectManagerId = this.projectInformation.clientProjectManagerId.split('-').pop();
+            this.sharedService.getMulipleContacts(this.projectInformation.clientProjectManagerId).subscribe(contact => {
+              const selectedContact = contact[0];
+              this.projectInformation.clientProjectManagerName = this.getContactName(selectedContact);
+            });
           }
           if ( this.projectInformation.accountReceivableId ) {
-            accountReceivableId = this.projectInformation.accountReceivableId.split('-').pop();
+            this.sharedService.getMulipleContacts(this.projectInformation.accountReceivableId).subscribe(contact => {
+              const selectedContact = contact[0];
+              this.projectInformation.accountReceivableName = this.getContactName(selectedContact);
+            });
           }
-          console.log('3333: ', this.projectInformation, accountReceivableId);
-          this.projectInformation.accountReceivableName = this.contactsList.filter(c => c.id === accountReceivableId)[0].name;
-          this.projectInformation.clientProjectManagerName = this.contactsList.filter(c => c.id === clientProjectManagerId)[0].name;
+          // this.projectInformation.accountReceivableName = this.contactsList.filter(c => c.id === accountReceivableId)[0].name;
+          // this.projectInformation.clientProjectManagerName = this.contactsList.filter(c => c.id === clientProjectManagerId)[0].name;
           if (this.projectInformation.contactAssociationIds) {
             this.projectInformation.contactAssociationIds.forEach(element => {
               contactAssociationData.push(this.contactsList.filter(c => c.id === element)[0]);
@@ -181,9 +188,9 @@ export class ProjectInformationComponent implements OnInit {
       'projectManager': this.projectInformation.projectManager,
       'accountManager': this.projectInformation.accountManager,
       'clientProjectManagerId': this.projectInformation.clientProjectManager ?
-        this.projectInformation.clientProjectManager : this.projectInformation.clientProjectManagerId.split('-').pop(),
-      'accountReceivableId': this.projectInformation.clientProjectManager ?
-        this.projectInformation.clientProjectManager : this.projectInformation.accountReceivableId.split('-').pop(),
+        this.projectInformation.clientProjectManager : this.projectInformation.clientProjectManagerId,
+      'accountReceivableId': this.projectInformation.contactAccountReceivable ?
+        this.projectInformation.contactAccountReceivable : this.projectInformation.accountReceivableId,
       'status': this.projectInformation.status,
       'internalNote': this.projectInformation.internalNote,
       'followers': this.projectInformation.followers
@@ -223,6 +230,15 @@ export class ProjectInformationComponent implements OnInit {
       }
     });
     return data;
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
+    return selectedContact.name;
   }
 
 }

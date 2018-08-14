@@ -36,39 +36,44 @@ export class PendingWorkOrdersListTableComponent implements OnInit {
 
     this.sharedService.getUsers().subscribe(user => {
       this.usersList = user;
-      this.sharedService.getContacts().subscribe(data => {
-        this.contactsList = data;
-        this.addContactName(this.contactsList);
+
         this.collaboratorsService.getProjectWorkOrders(this.currentProjectId).subscribe(res => {
           this.workOrdersList = res.results;
-          this.workOrdersList.forEach(element => {
-            const colArr = [];
-            element.startTime = moment(element.startDate).format('hh:mm a');
-            element.endTime = moment(element.endDate).format('hh:mm a');
-            element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
-            element.contactName = this.getContactNameFromId(element.contactId);
-            element.barInfo = {
-              title: element.completion + '%',
-              completeness: element.completion
-            };
-            if (element.collaborators) {
-              element.collaborators.forEach(col => {
-                colArr.push(this.usersList.filter(u => u.username === col)[0]);
-              });
-              element.collaboratorsData = colArr;
-            } else {
-              element.collaboratorsData = [];
-            }
+          const contactIds = this.workOrdersList.map(p => p.contactId);
+          this.sharedService.getMulipleContacts(contactIds).subscribe(contact => {
+            this.contactsList = contact;
+            this.addContactName(this.contactsList);
+
+            this.workOrdersList.forEach(element => {
+              const colArr = [];
+              element.startTime = moment(element.startDate).format('hh:mm a');
+              element.endTime = moment(element.endDate).format('hh:mm a');
+              element.startDate = moment(element.startDate).format('MMMM DD, YYYY');
+              element.contactName = this.getContactNameFromId(element.contactId);
+              element.barInfo = {
+                title: element.completion + '%',
+                completeness: element.completion
+              };
+              if (element.collaborators) {
+                element.collaborators.forEach(col => {
+                  colArr.push(this.usersList.filter(u => u.username === col)[0]);
+                });
+                element.collaboratorsData = colArr;
+              } else {
+                element.collaboratorsData = [];
+              }
+            });
+            console.log('work order list: ', this.workOrdersList);
           });
-          console.log('work order list: ', this.workOrdersList);
         });
 
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
-          console.log('project info: ', res);
-          this.contactName = this.contactsList.filter(c => c.id === res.data.contactId)[0].name;
-          console.log('project info: ', this.contactName);
+          this.sharedService.getMulipleContacts(res.data.contactId).subscribe(data => {
+            const selectedContact = data[0];
+            this.contactName = this.getContactName(selectedContact);
+          });
         });
-      });
+
     });
   }
 
@@ -143,6 +148,15 @@ export class PendingWorkOrdersListTableComponent implements OnInit {
 
   getContactNameFromId(id) {
     const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+    return selectedContact.name;
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
     return selectedContact.name;
   }
 

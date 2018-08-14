@@ -56,45 +56,45 @@ export class PendingProjectFinancialsComponent implements OnInit {
     this.currentProjectId = localStorage.getItem('current_projectId');
 
     if (this.currentProjectId !== '') {
-      this.sharedService.getContacts().subscribe(data => {
-        this.contactsList = data;
-        this.addContactName(this.contactsList);
-        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
 
-          this.projectInfo = res.data;
-          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
-          console.log('indi project: ', this.projectInfo);
-          // Initial cost total
-          this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.inventoryCost + this.projectInfo.labourCost;
+      this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
 
-          this.projectsService.getProjectCostSummary(this.currentProjectId).subscribe( response => {
-            this.summaryInfo = response.results;
-            console.log('cost summary: ', response);
-            this.projectInfo['purchaseOrderTotal'] = this.summaryInfo[0].amount;
-          });
+        this.projectInfo = res.data;
+        this.sharedService.getMulipleContacts(res.data.contactId).subscribe(contact => {
+          const selectedContact = contact[0];
+          this.projectInfo.contactName = this.getContactName(selectedContact);
         });
+        console.log('indi project: ', this.projectInfo);
+        // Initial cost total
+        this.costTotal = this.projectInfo.purchaseOrderTotal + this.projectInfo.inventoryCost + this.projectInfo.labourCost;
 
-        this.projectsService.getProjectBudget(this.currentProjectId).subscribe( response => {
-          this.budgetList = response.results;
-          this.budgetList.forEach(element => {
-            element.date = moment(element.createdAt).format('MMMM, YYYY');
-          });
-          console.log('budget: ', response);
+        this.projectsService.getProjectCostSummary(this.currentProjectId).subscribe( response => {
+          this.summaryInfo = response.results;
+          console.log('cost summary: ', response);
+          this.projectInfo['purchaseOrderTotal'] = this.summaryInfo[0].amount;
         });
-
-        this.projectsService.getProjectPaymentSchedule(this.currentProjectId).subscribe( response => {
-          this.paymentSchedule = response.results;
-          this.paymentSchedule.forEach(element => {
-            if (element.date) {
-              element.date = moment(element.date).format('MMMM DD, YYYY');
-            } else {
-              element.date = 'set due date';
-            }
-          });
-          console.log('schedule: ', response);
-        });
-
       });
+
+      this.projectsService.getProjectBudget(this.currentProjectId).subscribe( response => {
+        this.budgetList = response.results;
+        this.budgetList.forEach(element => {
+          element.date = moment(element.createdAt).format('MMMM, YYYY');
+        });
+        console.log('budget: ', response);
+      });
+
+      this.projectsService.getProjectPaymentSchedule(this.currentProjectId).subscribe( response => {
+        this.paymentSchedule = response.results;
+        this.paymentSchedule.forEach(element => {
+          if (element.date) {
+            element.date = moment(element.date).format('MMMM DD, YYYY');
+          } else {
+            element.date = 'set due date';
+          }
+        });
+        console.log('schedule: ', response);
+      });
+
     } else {
       console.error('product id error');
     }
@@ -300,6 +300,15 @@ export class PendingProjectFinancialsComponent implements OnInit {
 
   getContactIdFromString(str) {
     return str.slice(-1);
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
+    return selectedContact.name;
   }
 
 }

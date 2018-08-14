@@ -62,7 +62,11 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
           }
           this.projectInformation.followersData = followersData;
           if (this.projectInformation.contactId) {
-            this.projectInformation.contactName = this.contactsList.filter(c => c.id === this.projectInformation.contactId)[0].name;
+            // this.projectInformation.contactName = this.contactsList.filter(c => c.id === this.projectInformation.contactId)[0].name;
+            this.sharedService.getMulipleContacts(this.projectInformation.contactId).subscribe(contact => {
+              const selectedContact = contact[0];
+              this.projectInformation.contactName = this.getContactName(selectedContact);
+            });
           }
           this.data = ['Projects', this.projectInformation.name];
         });
@@ -88,8 +92,8 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
     const savingData = {
       'projectManager': this.projectInformation.projectManager,
       'accountManager': this.projectInformation.accountManager,
-      'clientProjectManagerId': this.projectInformation.clientProjectManagerId.split('-').pop(),
-      'accountReceivableId': this.projectInformation.accountReceivableId.split('-').pop(),
+      'clientProjectManagerId': this.projectInformation.clientProjectManagerId,
+      'accountReceivableId': this.projectInformation.accountReceivableId,
       'status': this.projectInformation.status,
       'internalNote': this.projectInformation.internalNote,
       'followers': []
@@ -98,8 +102,8 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
     if (!savingData.internalNote) {
       savingData.internalNote = '';
     }
-    savingData.clientProjectManagerId = this.projectInformation.clientProjectManagerId.split('-').pop();
-    savingData.accountReceivableId = this.projectInformation.accountReceivableId.split('-').pop();
+    savingData.clientProjectManagerId = this.projectInformation.clientProjectManagerId;
+    savingData.accountReceivableId = this.projectInformation.accountReceivableId;
     this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
       console.log('updated: ', res);
     });
@@ -126,8 +130,8 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
     const savingData = {
       'projectManager': this.projectInformation.projectManager,
       'accountManager': this.projectInformation.accountManager,
-      'clientProjectManagerId': this.projectInformation.clientProjectManagerId.split('-').pop(),
-      'accountReceivableId': this.projectInformation.accountReceivableId.split('-').pop(),
+      'clientProjectManagerId': this.projectInformation.clientProjectManagerId,
+      'accountReceivableId': this.projectInformation.accountReceivableId,
       'status': this.projectInformation.status,
       'internalNote': this.projectInformation.internalNote,
       'followers': []
@@ -151,5 +155,14 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
       }
     });
     return data;
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
+    return selectedContact.name;
   }
 }
