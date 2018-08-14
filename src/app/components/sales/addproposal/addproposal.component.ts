@@ -261,6 +261,7 @@ export class AddProposalComponent implements OnInit {
 
     this.sharedService.getTaxRates().subscribe(res => {
       this.taxRateList = res.results;
+      this.proposalDetails.taxRate = res.results[0].id;
     });
   }
 
