@@ -84,7 +84,6 @@ export class ProposalComponent implements OnInit {
       data = this.addContactName(data);
       this.contactsList = data;
       this.proposalsService.getIndividualProposal(this.proposalId).subscribe(res => {
-        console.log('proposals service: ', res);
         // this.getCategoryDetails(res.data.categoryIds);
         // this.getSubCategoryDetails(res.data.subcategoryIds);
         this.proposalDetails = res.data;
@@ -131,19 +130,20 @@ export class ProposalComponent implements OnInit {
   }
 
   getMassEditedList(data) {
-    console.log('44444', data);
     this.proposalProductList = data;
     this.proposalService.massEditedList(this.proposalProductList);
   }
 
   getContactNameFromId(id) {
-    const idCroped = id.split('-').pop();
-    const selectedContact = this.contactsList.filter(c => c.id.toString() === idCroped)[0];
-    if (selectedContact.type === 'PERSON') {
-      return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
-    } else {
-      return selectedContact.business.name;
-    }
+    let selectedContact;
+    this.sharedService.getMulipleContacts(id).subscribe(res => {
+      selectedContact = res[0];
+      if (selectedContact.type === 'PERSON') {
+        return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+      } else {
+        return selectedContact.business.name;
+      }
+    });
   }
 
   getProductTypeNameFromId(id) {

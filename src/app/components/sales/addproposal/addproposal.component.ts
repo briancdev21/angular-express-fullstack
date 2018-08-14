@@ -27,7 +27,7 @@ export class AddProposalComponent implements OnInit {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
 
   today = new Date();
-  tomorrow = new Date();
+  tomorrow = new Date(this.today.getTime() + (24 * 60 * 60 * 1000));
   public proposalInfo;
 
   proposalDetails = {
@@ -37,7 +37,7 @@ export class AddProposalComponent implements OnInit {
     },
     contactId : '',
     projectId: '',
-    completionDate: moment(this.today).format('YYYY-MM-DD'),
+    completionDate: moment(this.tomorrow).format('YYYY-MM-DD'),
     paymentSchedule: [],
     projectCategoriesAll: [],
     projectSubCategoriesAll: [],
@@ -191,7 +191,7 @@ export class AddProposalComponent implements OnInit {
     private proposalsService: ProposalsService, private projectsService: ProjectsService, private salesService: SalesService,
     private router: Router) {
     const comp = this;
-    this.tomorrow = new Date(this.today.getTime() + (24 * 60 * 60 * 1000));
+    // this.tomorrow = new Date(this.today.getTime() + (24 * 60 * 60 * 1000));
     this.countriesSource = completerService.local(countries, 'name', 'name');
     this.provincesSource = completerService.local(provinces, 'name', 'name');
 
@@ -261,6 +261,7 @@ export class AddProposalComponent implements OnInit {
 
     this.sharedService.getTaxRates().subscribe(res => {
       this.taxRateList = res.results;
+      this.proposalDetails.taxRate = res.results[0].id;
     });
   }
 

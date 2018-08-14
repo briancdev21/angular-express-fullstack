@@ -247,14 +247,14 @@ export class AddWorkOrderComponent implements OnInit {
         break;
       }
       case 'CHECKLIST': {
-        this.tabActiveSecond = false;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = true;
         if (this.tabActiveFirst) {
           this.clickNext('tab-one');
         } else {
           this.clickNext('tab-two');
         }
+        this.tabActiveSecond = false;
+        this.tabActiveFirst = false;
+        this.tabActiveThird = true;
         break;
       }
     }
@@ -275,7 +275,11 @@ export class AddWorkOrderComponent implements OnInit {
             this.tabActiveSecond = true;
             this.tabActiveFirst = false;
             this.tabActiveThird = false;
-            this.visibleAvail = true;
+
+            this.visibleAvail = false;
+            setTimeout(() => {
+              this.visibleAvail = true;
+            });
 
             const timeStart = moment(this.workorderDetails.startTime).format('hh:mm:ss');
             const timeAddedStart = this.workorderDetails.startDate + 'T' + timeStart;
