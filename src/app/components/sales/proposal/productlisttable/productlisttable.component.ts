@@ -152,7 +152,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         if (ele.accessories) {
           ele.accessories.forEach(element => {
             const selectedItem = this.originProposalProductList.filter(p => p.id === element)[0];
-            if (element.useProductInProject) {
+            if (selectedItem.useProductInProject) {
               ele.parentTotalPrice = ele.parentTotalPrice + selectedItem.total;
             }
             this.proposalProductOrdered  = this.proposalProductOrdered.concat(selectedItem);
@@ -170,6 +170,7 @@ export class ProductListTableComponent implements OnInit, OnDestroy {
         element.index = index;
         index = index + 1;
       });
+      console.log('proposal product ordered: ', this.proposalProductOrdered);
       this.backUp = this.proposalProductOrdered;
     });
   }

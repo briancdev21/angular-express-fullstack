@@ -84,7 +84,6 @@ export class ProposalComponent implements OnInit {
       data = this.addContactName(data);
       this.contactsList = data;
       this.proposalsService.getIndividualProposal(this.proposalId).subscribe(res => {
-        console.log('proposals service: ', res);
         // this.getCategoryDetails(res.data.categoryIds);
         // this.getSubCategoryDetails(res.data.subcategoryIds);
         this.proposalDetails = res.data;
@@ -139,7 +138,6 @@ export class ProposalComponent implements OnInit {
     let selectedContact;
     this.sharedService.getMulipleContacts(id).subscribe(res => {
       selectedContact = res[0];
-      console.log('44444', id, res);
       if (selectedContact.type === 'PERSON') {
         return selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
       } else {
