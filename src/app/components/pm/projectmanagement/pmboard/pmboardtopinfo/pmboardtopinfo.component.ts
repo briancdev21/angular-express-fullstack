@@ -26,30 +26,31 @@ export class PmBoardTopInfoComponent implements OnInit {
   projectInfo: any;
   today = new Date();
   nearest: any;
-
+  selectedContact: any;
 
   constructor( private router: Router, private sharedService: SharedService, private pmService: PmService,
     private projectsService: ProjectsService, private route: ActivatedRoute) {
     this.currentProjectId = localStorage.getItem('current_projectId');
     if (this.currentProjectId !== '') {
-      this.sharedService.getContacts().subscribe(data => {
-        this.contactsList = data;
-        this.addContactName(this.contactsList);
-        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
 
-          this.projectInfo = res.data;
-          this.projectInfo.contactName = this.getContactNameFromId(res.data.contactId);
-          this.projectInfo.startDate = moment(this.projectInfo.startDate).format('MMM DD, YYYY');
-          this.projectInfo.endDate = moment(this.projectInfo.endDate).format('MMM DD, YYYY');
+      this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
 
-          this.pmService.getNearestSchedule(this.currentProjectId).subscribe(schedule => {
-            console.log('nearest : ', schedule);
-            this.nearest = schedule.results[0];
-            this.projectInfo.nextPaymentDate = moment(this.nearest.date).format('MMM DD, YYYY');
-          });
+        this.projectInfo = res.data;
+        this.sharedService.getMulipleContacts(this.projectInfo.contactId).subscribe(data => {
+          this.selectedContact = data[0];
+          this.projectInfo.contactName = this.getContactNameFromId(this.selectedContact);
         });
+        this.projectInfo.startDate = moment(this.projectInfo.startDate).format('MMM DD, YYYY');
+        this.projectInfo.endDate = moment(this.projectInfo.endDate).format('MMM DD, YYYY');
 
+        this.pmService.getNearestSchedule(this.currentProjectId).subscribe(schedule => {
+          console.log('nearest : ', schedule);
+          this.nearest = schedule.results[0];
+          this.projectInfo.nextPaymentDate = moment(this.nearest.date).format('MMM DD, YYYY');
+        });
       });
+
+
     } else {
       console.error('product id error');
     }
@@ -94,8 +95,12 @@ export class PmBoardTopInfoComponent implements OnInit {
     return data;
   }
 
-  getContactNameFromId(id) {
-    const selectedContact = this.contactsList.filter(c => c.id === id)[0];
+  getContactNameFromId(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
     return selectedContact.name;
   }
 
