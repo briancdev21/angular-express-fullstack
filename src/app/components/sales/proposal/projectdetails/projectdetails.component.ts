@@ -393,8 +393,8 @@ projectDetails = {
       });
       this.proposalDetails.projectCategoriesAll = this.proposalDetails.categoryIds;
       this.proposalDetails.projectSubCategoriesAll = this.proposalDetails.subcategoryIds;
-      this.proposalDetails.accountReceivable = this.getIdFromString(this.proposalDetails.accountReceivableId);
-      this.proposalDetails.projectManagementContact = this.getIdFromString(this.proposalDetails.clientProjectManagerId);
+      this.proposalDetails.accountReceivable = this.proposalDetails.accountReceivableId;
+      this.proposalDetails.projectManagementContact = this.proposalDetails.clientProjectManagerId;
       console.log('$$$ ', this.proposalDetails, this.scheduleRemain);
     });
   }
@@ -718,7 +718,7 @@ projectDetails = {
       });
       const savingData = {
         'currencyId': this.proposalDetails.currencyId,
-        'contactId': this.getIdFromString(this.proposalDetails.contactId),
+        'contactId': this.proposalDetails.contactId,
         // 'leadId': 0,
         'projectId': this.proposalDetails.projectId,
         'projectTypeId': this.proposalDetails.projectTypeId,
