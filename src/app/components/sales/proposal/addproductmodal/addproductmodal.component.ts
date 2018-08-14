@@ -100,7 +100,10 @@ export class AddProductModalComponent implements OnInit {
   selectedKeywordsId: any;
   newCreatedProductId: number;
   availableProductsAll: any;
-  productsAll: any;
+  productsAll = [];
+  allSku = [];
+  invalidSku = [];
+  missingSku = false;
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
@@ -138,6 +141,26 @@ export class AddProductModalComponent implements OnInit {
       this.productTypeNames = completerService.local(this.productTypesListInfo, 'type', 'type');
     });
 
+    this.productsService.getProductsList().subscribe(res => {
+      this.productsAll = res.results;
+      this.productsAll.forEach(ele => {
+        if (ele.skus) {
+          this.allSku = this.allSku.concat(ele.skus);
+        }
+      });
+
+      // Get search modal data
+
+      this.productsService.getProductCatalog().subscribe(data => {
+        this.availableProductsAll = data.results;
+        console.log('availableproudcts : ', this.availableProductsAll);
+        this.availableProductsAll.forEach(ele => {
+          ele.pictureURI = this.productsAll.filter(p => p.id === ele.productId)[0].pictureURI;
+          ele.brandId =  this.productsAll.filter(p => p.id === ele.productId)[0].brandId;
+        });
+      });
+    });
+
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.addedProduct = {
       productType: this.type,
@@ -168,11 +191,11 @@ export class AddProductModalComponent implements OnInit {
       variantProducts: []
     };
 
-    this.searchableList = ['name', 'model', 'productType'];
+    this.searchableList = ['name', 'model', 'sku'];
     // this.variants = this.addedProduct.variantValue;
   }
   ngOnInit() {
-
+    this.autoGenerate();
   }
 
   closeModal() {
@@ -240,52 +263,6 @@ export class AddProductModalComponent implements OnInit {
     }
   }
 
-  createProduct() {
-    const savingProductMd = {
-      'brandId': this.selectedBrandId,
-      'productTypeId': this.selectedProductTypeId,
-      'supplierId': this.selectedSupplierId,
-      'keywordIds': this.selectedKeywordsId,
-      'model': this.addedProduct.modelNumber,
-      'name': this.addedProduct.productName,
-      'description': this.addedProduct.productDesc,
-      'inventoryType': this.addedProduct.inventoryType,
-      'unitOfMeasure': {
-        'quantity': this.addedProduct.measureCount ? this.addedProduct.measureCount : 0,
-        'unit': this.addedProduct.measure
-      },
-      'expiration': {
-        'duration': this.addedProduct.expiration ? this.addedProduct.expiration : 0,
-        'unit': this.addedProduct.expirationType
-      },
-      'leadTime': {
-        'duration': this.addedProduct.leadTimeCount ? this.addedProduct.leadTimeCount : 0,
-        'unit': this.addedProduct.leadTime
-      }
-    };
-    const savingProductData = JSON.stringify(savingProductMd);
-    this.productsService.createProduct(savingProductData).subscribe(res => {
-      this.newCreatedProductId = res.data.id;
-      console.log('product created: ', res);
-
-      // Get search modal data
-      this.productsService.getProductsList().subscribe(response => {
-        this.productsAll = response.results;
-        console.log('products All: ', response);
-
-        this.productsService.getProductCatalog().subscribe(data => {
-          this.availableProductsAll = data.results;
-          console.log('availableproudcts : ', this.availableProductsAll);
-          this.availableProductsAll = this.availableProductsAll.filter(p => p.id !== this.newCreatedProductId);
-          this.availableProductsAll.forEach(ele => {
-            ele.pictureURI = this.productsAll.filter(p => p.id === ele.productId)[0].pictureURI;
-            ele.brandId =  this.productsAll.filter(p => p.id === ele.productId)[0].brandId;
-          });
-        });
-      });
-    });
-  }
-
   clickNextEditVariant() {
     const variantSuppliercode = this.addedProduct.variantProducts.map(v => v.supplierCode);
     if (variantSuppliercode.filter(s => s === '').length > 0) {
@@ -299,10 +276,20 @@ export class AddProductModalComponent implements OnInit {
     } else {
       this.missingUpcNumber = false;
     }
-    if (this.missingUpcNumber || this.missingSupplierCode) {
+
+    if (this.invalidSku.filter(s => s === true).length > 0) {
+      this.missingSku = true;
+    } else {
+      this.missingSku = false;
+    }
+    if (this.missingUpcNumber || this.missingSupplierCode || this.missingSku) {
       return;
     } else {
-      this.createVariants();
+      // this.createVariants();
+      this.tabActiveFour = true;
+      this.tabActiveFirst = false;
+      this.tabActiveThird = false;
+      this.tabActiveSecond = false;
 
     }
   }
@@ -318,20 +305,12 @@ export class AddProductModalComponent implements OnInit {
     }
   }
 
-  createVariants() {
-    console.log('variants list: ', this.addedProduct.variantProducts);
-    this.addedProduct.variantProducts.forEach(element => {
-      element.quantity = element.qty;
-      element.upc = element.upcNumber;
-      element.priceAdjustment = element.priceAdjust;
-      this.productsService.createVariants(this.newCreatedProductId, JSON.stringify(element)).subscribe(res => {
-        console.log('variants created: ', res);
-      });
-    });
-    this.tabActiveFour = true;
-    this.tabActiveFirst = false;
-    this.tabActiveThird = false;
-    this.tabActiveSecond = false;
+  checkSkuValidation(event, index) {
+    if (this.allSku.includes(event.toString())) {
+      this.invalidSku[index] = true;
+    } else {
+      this.invalidSku[index] = false;
+    }
   }
 
   supplierIdSelected(event) {
@@ -369,18 +348,18 @@ export class AddProductModalComponent implements OnInit {
     let randNum;
     if (!this.switch) {
       this.productsService.generateSku().subscribe(res => {
-        console.log('sku: ', res);
         randNum = res.sku;
-        this.addedProduct.skuNumber = randNum;
+        this.addedProduct.skuNumber = Number(randNum);
+        console.log('sku: ', randNum);
+        this.randSku = Number(randNum);
       });
     }
     this.switch = !this.switch;
-    this.randSku = randNum;
-    return randNum;
   }
 
   skuChange(event) {
     this.randSku = event;
+    console.log('this randSku: ', this.randSku);
     this.switch = false;
   }
 
@@ -474,17 +453,23 @@ export class AddProductModalComponent implements OnInit {
     this.editVariant = true;
     const allArrays = this.addedProduct.variantValue.map(e => e.data);
     this.possibleCombination = this.allPossibleCases(allArrays);
-    const skuNumber = this.autoGenerate();
+    const skuNumber = Number(this.randSku);
+    console.log('sku number: ', skuNumber);
     for ( let i = 0; i < this.possibleCombination.length; i++) {
       this.addedProduct.variantProducts[i] = {
         name: this.possibleCombination[i],
-        qty: 0,
+        qty: 1,
         sku: skuNumber + i,
         cost: this.addedProduct.unitCost,
         supplierCode: '',
         priceAdjust: this.addedProduct.priceAdjust,
         upcNumber: ''
       };
+      if (this.allSku.includes(this.addedProduct.variantProducts[i].sku.toString())) {
+        this.invalidSku[i] = true;
+      } else {
+        this.invalidSku[i] = false;
+      }
     }
   }
 
@@ -600,6 +585,53 @@ export class AddProductModalComponent implements OnInit {
     return filterBrandName.name;
   }
 
+  createProduct() {
+    const savingProductMd = {
+      'brandId': this.selectedBrandId,
+      'productTypeId': this.selectedProductTypeId,
+      'supplierId': this.selectedSupplierId,
+      'keywordIds': this.selectedKeywordsId,
+      'model': this.addedProduct.modelNumber,
+      'name': this.addedProduct.productName,
+      'description': this.addedProduct.productDesc,
+      'inventoryType': this.addedProduct.inventoryType,
+      'unitOfMeasure': {
+        'quantity': this.addedProduct.measureCount ? this.addedProduct.measureCount : 0,
+        'unit': this.addedProduct.measure
+      },
+      'expiration': {
+        'duration': this.addedProduct.expiration ? this.addedProduct.expiration : 0,
+        'unit': this.addedProduct.expirationType
+      },
+      'leadTime': {
+        'duration': this.addedProduct.leadTimeCount ? this.addedProduct.leadTimeCount : 0,
+        'unit': this.addedProduct.leadTime
+      }
+    };
+    const savingProductData = JSON.stringify(savingProductMd);
+    this.productsService.createProduct(savingProductData).subscribe(res => {
+      this.newCreatedProductId = res.data.id;
+      console.log('product created: ', res);
+
+      this.createVariants();
+      this.saveAlterAcc();
+
+    });
+  }
+
+  createVariants() {
+    console.log('variants list: ', this.addedProduct.variantProducts);
+    this.addedProduct.variantProducts.forEach(element => {
+      element.quantity = element.qty;
+      element.upc = element.upcNumber;
+      element.priceAdjustment = element.priceAdjust;
+      element.sku = element.sku.toString();
+      this.productsService.createVariants(this.newCreatedProductId, JSON.stringify(element)).subscribe(res => {
+        console.log('variants created: ', res);
+      });
+    });
+  }
+
   saveAlterAcc() {
     this.proposalService.closeModal(true);
     this.tabActiveFirst = true;
@@ -611,7 +643,7 @@ export class AddProductModalComponent implements OnInit {
     this.addedAlterList.forEach(ele => {
       const savingAlter = {
         sku: ele.skuNumber,
-        quantity: ele.qty
+        quantity: Number(ele.qty)
       };
       this.productsService.createAlternative(this.newCreatedProductId, savingAlter).subscribe(res => {
         console.log('saved alter: ', res);
@@ -621,10 +653,10 @@ export class AddProductModalComponent implements OnInit {
     this.addedAccList.forEach(ele => {
       const savingAcc = {
         sku: ele.skuNumber,
-        quantity: ele.qty,
+        quantity: Number(ele.qty),
         option: ele.option
       };
-      this.productsService.createAlternative(this.newCreatedProductId, savingAcc).subscribe(res => {
+      this.productsService.createAccessory(this.newCreatedProductId, savingAcc).subscribe(res => {
         console.log('saved acc: ', res);
       });
     });

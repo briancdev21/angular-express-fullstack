@@ -269,7 +269,7 @@
             <tr *ngFor="let variant of addedProduct.variantProducts; let i = index">
               <td>{{variant.name}}</td>
               <td><input placeholder="" [(ngModel)]="variant.qty" type="number"></td>
-              <td><input placeholder="" [(ngModel)]="variant.sku" ></td>
+              <td><input placeholder="" [(ngModel)]="variant.sku" (ngModelChange)="checkSkuValidation($event, i)" [ngClass]="{'supplier-code-validation': invalidSku[i]}" type="number"></td>
               <td>
                 <div class="td-input">
                   <span style="margin-right: 5px">$</span>
@@ -429,7 +429,7 @@
             <button class="cancel-btn" (click)="clickBack('tab-four')">
               Back
             </button>
-            <button class="save-btn" (click)="saveAlterAcc()">
+            <button class="save-btn" (click)="createProduct()">
               Finish
             </button>
           </div>
