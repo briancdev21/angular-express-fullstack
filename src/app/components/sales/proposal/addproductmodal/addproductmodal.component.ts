@@ -100,7 +100,10 @@ export class AddProductModalComponent implements OnInit {
   selectedKeywordsId: any;
   newCreatedProductId: number;
   availableProductsAll: any;
-  productsAll: any;
+  productsAll = [];
+  allSku = [];
+  invalidSku = [];
+  missingSku = false;
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
      private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
@@ -138,6 +141,26 @@ export class AddProductModalComponent implements OnInit {
       this.productTypeNames = completerService.local(this.productTypesListInfo, 'type', 'type');
     });
 
+    this.productsService.getProductsList().subscribe(res => {
+      this.productsAll = res.results;
+      this.productsAll.forEach(ele => {
+        if (ele.skus) {
+          this.allSku = this.allSku.concat(ele.skus);
+        }
+      });
+
+      // Get search modal data
+
+      this.productsService.getProductCatalog().subscribe(data => {
+        this.availableProductsAll = data.results;
+        console.log('availableproudcts : ', this.availableProductsAll);
+        this.availableProductsAll.forEach(ele => {
+          ele.pictureURI = this.productsAll.filter(p => p.id === ele.productId)[0].pictureURI;
+          ele.brandId =  this.productsAll.filter(p => p.id === ele.productId)[0].brandId;
+        });
+      });
+    });
+
     this.dataService = completerService.local(this.searchData, 'color', 'color');
     this.addedProduct = {
       productType: this.type,
@@ -168,11 +191,11 @@ export class AddProductModalComponent implements OnInit {
       variantProducts: []
     };
 
-    this.searchableList = ['name', 'model', 'productType'];
+    this.searchableList = ['name', 'model', 'sku'];
     // this.variants = this.addedProduct.variantValue;
   }
   ngOnInit() {
-
+    this.autoGenerate();
   }
 
   closeModal() {
@@ -193,12 +216,13 @@ export class AddProductModalComponent implements OnInit {
 
   cancelNewProduct() {
     this.proposalService.closeModal(true);
-    this.productsService.deleteIndividualProduct(this.newProductId).subscribe(res => {
-      console.log('deleted: ', res);
-    });
+    // this.productsService.deleteIndividualProduct(this.newProductId).subscribe(res => {
+    //   console.log('deleted: ', res);
+    // });
   }
 
   clickNext(pos) {
+    this.tabActiveFirst = this.tabActiveThird = this.tabActiveSecond = this.tabActiveFour = false;
     if (pos === 'tab-one') {
       this.invalidModelNumber = false;
       this.invalidProductType = false;
@@ -206,13 +230,9 @@ export class AddProductModalComponent implements OnInit {
       this.invalidProductName = false;
       this.invalidManufacturer = false;
       this.invalidProductDescription = false;
-
       if (this.addedProduct.modelNumber && this.addedProduct.type && this.supplier && this.brand
         && this.addedProduct.productName && this.addedProduct.productDesc) {
         this.tabActiveSecond = true;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = false;
-        this.tabActiveFour = false;
       } else {
         if (!this.addedProduct.modelNumber) {
           this.invalidModelNumber = true;
@@ -233,66 +253,13 @@ export class AddProductModalComponent implements OnInit {
           this.invalidManufacturer = true;
         }
         setTimeout(() => {
-          this.tabActiveSecond = false;
           this.tabActiveFirst = true;
-          this.tabActiveThird = false;
-          this.tabActiveFour = false;
         });
       }
     } else if (pos === 'tab-two') {
-      const savingProductMd = {
-        'brandId': this.selectedBrandId,
-        'productTypeId': this.selectedProductTypeId,
-        'supplierId': this.selectedSupplierId,
-        'keywordIds': this.selectedKeywordsId,
-        'model': this.addedProduct.modelNumber,
-        'name': this.addedProduct.productName,
-        'description': this.addedProduct.productDesc,
-        'inventoryType': this.addedProduct.inventoryType,
-        'unitOfMeasure': {
-          'quantity': this.addedProduct.measureCount ? this.addedProduct.measureCount : 0,
-          'unit': this.addedProduct.measure
-        },
-        'expiration': {
-          'duration': this.addedProduct.expiration ? this.addedProduct.expiration : 0,
-          'unit': this.addedProduct.expirationType
-        },
-        'leadTime': {
-          'duration': this.addedProduct.leadTimeCount ? this.addedProduct.leadTimeCount : 0,
-          'unit': this.addedProduct.leadTime
-        }
-      };
-      const savingProductData = JSON.stringify(savingProductMd);
-      this.productsService.createProduct(savingProductData).subscribe(res => {
-        this.newCreatedProductId = res.data.id;
-        console.log('product created: ', res);
-        this.tabActiveThird = true;
-        this.tabActiveFirst = false;
-        this.tabActiveSecond = false;
-        this.tabActiveFour = false;
-
-        // Get search modal data
-        this.productsService.getProductsList().subscribe(response => {
-          this.productsAll = response.results;
-          console.log('products All: ', response);
-
-          this.productsService.getProductCatalog().subscribe(data => {
-            this.availableProductsAll = data.results;
-            console.log('availableproudcts : ', this.availableProductsAll);
-            this.availableProductsAll = this.availableProductsAll.filter(p => p.id !== this.newCreatedProductId);
-            this.availableProductsAll.forEach(ele => {
-              ele.pictureURI = this.productsAll.filter(p => p.id === ele.productId)[0].pictureURI;
-              ele.brandId =  this.productsAll.filter(p => p.id === ele.productId)[0].brandId;
-            });
-          });
-        });
-      });
-
+      this.tabActiveThird = true;
     } else if (pos === 'tab-three') {
       this.tabActiveFour = true;
-      this.tabActiveFirst = false;
-      this.tabActiveThird = false;
-      this.tabActiveSecond = false;
     }
   }
 
@@ -309,47 +276,41 @@ export class AddProductModalComponent implements OnInit {
     } else {
       this.missingUpcNumber = false;
     }
-    if (this.missingUpcNumber || this.missingSupplierCode) {
+
+    if (this.invalidSku.filter(s => s === true).length > 0) {
+      this.missingSku = true;
+    } else {
+      this.missingSku = false;
+    }
+    if (this.missingUpcNumber || this.missingSupplierCode || this.missingSku) {
       return;
     } else {
-      this.createVariants();
+      // this.createVariants();
+      this.tabActiveFour = true;
+      this.tabActiveFirst = false;
+      this.tabActiveThird = false;
+      this.tabActiveSecond = false;
 
     }
   }
 
   clickBack(pos) {
+    this.tabActiveFirst = this.tabActiveThird = this.tabActiveSecond = this.tabActiveFour = false;
     if (pos === 'tab-three') {
       this.tabActiveSecond = true;
-      this.tabActiveFirst = false;
-      this.tabActiveThird = false;
-      this.tabActiveFour = false;
     } else if (pos === 'tab-four') {
       this.tabActiveThird = true;
-      this.tabActiveFirst = false;
-      this.tabActiveSecond = false;
-      this.tabActiveFour = false;
     } else if (pos === 'tab-two') {
-      this.tabActiveFour = false;
       this.tabActiveFirst = true;
-      this.tabActiveThird = false;
-      this.tabActiveSecond = false;
     }
   }
 
-  createVariants() {
-    console.log('variants list: ', this.addedProduct.variantProducts);
-    this.addedProduct.variantProducts.forEach(element => {
-      element.quantity = element.qty;
-      element.upc = element.upcNumber;
-      element.priceAdjustment = element.priceAdjust;
-      this.productsService.createVariants(this.newCreatedProductId, JSON.stringify(element)).subscribe(res => {
-        console.log('variants created: ', res);
-      });
-    });
-    this.tabActiveFour = true;
-    this.tabActiveFirst = false;
-    this.tabActiveThird = false;
-    this.tabActiveSecond = false;
+  checkSkuValidation(event, index) {
+    if (this.allSku.includes(event.toString())) {
+      this.invalidSku[index] = true;
+    } else {
+      this.invalidSku[index] = false;
+    }
   }
 
   supplierIdSelected(event) {
@@ -383,15 +344,23 @@ export class AddProductModalComponent implements OnInit {
   }
 
   autoGenerate() {
-    const randNum = Math.floor(Math.random() * 899999 + 100000);
+    // const randNum = Math.floor(Math.random() * 899999 + 100000);
+    let randNum;
     if (!this.switch) {
-      this.addedProduct.skuNumber = randNum;
-    } else {
-      this.addedProduct.skuNumber = 0;
+      this.productsService.generateSku().subscribe(res => {
+        randNum = res.sku;
+        this.addedProduct.skuNumber = Number(randNum);
+        console.log('sku: ', randNum);
+        this.randSku = Number(randNum);
+      });
     }
     this.switch = !this.switch;
-    this.randSku = randNum;
-    return randNum;
+  }
+
+  skuChange(event) {
+    this.randSku = event;
+    console.log('this randSku: ', this.randSku);
+    this.switch = false;
   }
 
   calcCost(value, i) {
@@ -419,33 +388,22 @@ export class AddProductModalComponent implements OnInit {
   }
 
   tabChange(event) {
+    this.tabActiveFirst = this.tabActiveThird = this.tabActiveSecond = this.tabActiveFour = false;
     switch (event.tabTitle) {
       case 'PRODUCT DETAILS': {
-        this.tabActiveSecond = false;
         this.tabActiveFirst = true;
-        this.tabActiveThird = false;
-        this.tabActiveFour = false;
         break;
       }
       case 'PRODUCT VALUES': {
         this.tabActiveSecond = true;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = false;
-        this.tabActiveFour = false;
         this.clickNext('tab-one');
         break;
       }
       case 'PRODUCT VARIANCE': {
-        this.tabActiveSecond = false;
-        this.tabActiveFirst = false;
         this.tabActiveThird = true;
-        this.tabActiveFour = false;
         break;
       }
       case 'ACCESSORIES & ALTERNATIVES': {
-        this.tabActiveSecond = false;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = false;
         this.tabActiveFour = true;
         break;
       }
@@ -495,17 +453,23 @@ export class AddProductModalComponent implements OnInit {
     this.editVariant = true;
     const allArrays = this.addedProduct.variantValue.map(e => e.data);
     this.possibleCombination = this.allPossibleCases(allArrays);
-    const skuNumber = this.autoGenerate();
+    const skuNumber = Number(this.randSku);
+    console.log('sku number: ', skuNumber);
     for ( let i = 0; i < this.possibleCombination.length; i++) {
       this.addedProduct.variantProducts[i] = {
         name: this.possibleCombination[i],
-        qty: 0,
+        qty: 1,
         sku: skuNumber + i,
         cost: this.addedProduct.unitCost,
         supplierCode: '',
         priceAdjust: this.addedProduct.priceAdjust,
         upcNumber: ''
       };
+      if (this.allSku.includes(this.addedProduct.variantProducts[i].sku.toString())) {
+        this.invalidSku[i] = true;
+      } else {
+        this.invalidSku[i] = false;
+      }
     }
   }
 
@@ -621,6 +585,53 @@ export class AddProductModalComponent implements OnInit {
     return filterBrandName.name;
   }
 
+  createProduct() {
+    const savingProductMd = {
+      'brandId': this.selectedBrandId,
+      'productTypeId': this.selectedProductTypeId,
+      'supplierId': this.selectedSupplierId,
+      'keywordIds': this.selectedKeywordsId,
+      'model': this.addedProduct.modelNumber,
+      'name': this.addedProduct.productName,
+      'description': this.addedProduct.productDesc,
+      'inventoryType': this.addedProduct.inventoryType,
+      'unitOfMeasure': {
+        'quantity': this.addedProduct.measureCount ? this.addedProduct.measureCount : 0,
+        'unit': this.addedProduct.measure
+      },
+      'expiration': {
+        'duration': this.addedProduct.expiration ? this.addedProduct.expiration : 0,
+        'unit': this.addedProduct.expirationType
+      },
+      'leadTime': {
+        'duration': this.addedProduct.leadTimeCount ? this.addedProduct.leadTimeCount : 0,
+        'unit': this.addedProduct.leadTime
+      }
+    };
+    const savingProductData = JSON.stringify(savingProductMd);
+    this.productsService.createProduct(savingProductData).subscribe(res => {
+      this.newCreatedProductId = res.data.id;
+      console.log('product created: ', res);
+
+      this.createVariants();
+      this.saveAlterAcc();
+
+    });
+  }
+
+  createVariants() {
+    console.log('variants list: ', this.addedProduct.variantProducts);
+    this.addedProduct.variantProducts.forEach(element => {
+      element.quantity = element.qty;
+      element.upc = element.upcNumber;
+      element.priceAdjustment = element.priceAdjust;
+      element.sku = element.sku.toString();
+      this.productsService.createVariants(this.newCreatedProductId, JSON.stringify(element)).subscribe(res => {
+        console.log('variants created: ', res);
+      });
+    });
+  }
+
   saveAlterAcc() {
     this.proposalService.closeModal(true);
     this.tabActiveFirst = true;
@@ -632,7 +643,7 @@ export class AddProductModalComponent implements OnInit {
     this.addedAlterList.forEach(ele => {
       const savingAlter = {
         sku: ele.skuNumber,
-        quantity: ele.qty
+        quantity: Number(ele.qty)
       };
       this.productsService.createAlternative(this.newCreatedProductId, savingAlter).subscribe(res => {
         console.log('saved alter: ', res);
@@ -642,10 +653,10 @@ export class AddProductModalComponent implements OnInit {
     this.addedAccList.forEach(ele => {
       const savingAcc = {
         sku: ele.skuNumber,
-        quantity: ele.qty,
+        quantity: Number(ele.qty),
         option: ele.option
       };
-      this.productsService.createAlternative(this.newCreatedProductId, savingAcc).subscribe(res => {
+      this.productsService.createAccessory(this.newCreatedProductId, savingAcc).subscribe(res => {
         console.log('saved acc: ', res);
       });
     });

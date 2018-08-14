@@ -117,7 +117,7 @@ tab input, tab select, tab textarea {
 	color: #646464;
 	height: 34px;
 	margin-top: 6px;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 }
 
 tab select {
@@ -816,6 +816,10 @@ input::placeholder, textarea::placeholder {
 	border: 1px solid red !important;
 }
 
+:host ::ng-deep .completer-holder input::placeholder{
+	color: #d3d3d3;
+}
+
 .main-content {
 	padding: 25px;
 	display: flex;
@@ -846,6 +850,11 @@ select {
 
 input.upc-validation, input.supplier-code-validation {
 	border: 1px solid red!important;
+}
+
+.supplier-brand {
+	margin-top: 5px;
+	margin-bottom: 10px;
 }
 
 

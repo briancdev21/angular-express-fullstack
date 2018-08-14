@@ -8,7 +8,7 @@
       <th (click)="sortArray('stock')">AVAILABLE</th>
       <th (click)="sortArray('status')">STATUS</th>
     </tr>
-    <tr *ngFor="let product of productsListInfo; let i = index" (click)="redirectTo(product.id)">
+    <tr *ngFor="let product of _productsListInfo; let i = index" (click)="redirectTo(product.id)">
       <td><img src="{{product.pictureURI}}"></td>
       <td>{{product.name}}</td>
       <td>{{product.model}}</td>
