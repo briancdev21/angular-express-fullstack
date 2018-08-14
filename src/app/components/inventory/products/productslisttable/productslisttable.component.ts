@@ -16,7 +16,10 @@ import * as _ from 'lodash';
 
 export class ProductsListTableComponent implements OnInit {
 
-  @Input() productsListInfo;
+  @Input() set productsListInfo(val) {
+    this._productsListInfo = val;
+  }
+  _productsListInfo: any;
   addLogModalCollapsed = true;
   showAddLogModal = false;
   showProductModalInfo = false;
@@ -100,7 +103,7 @@ export class ProductsListTableComponent implements OnInit {
     const cmp = this;
     cmp.sortScoreClicked = ! cmp.sortScoreClicked;
     if (!cmp.sortScoreClicked) {
-      this.productsListInfo.sort( function(name1, name2) {
+      this._productsListInfo.sort( function(name1, name2) {
         if ( name1[field] < name2[field] ) {
           return -1;
         } else if ( name1[field] > name2[field]) {
@@ -110,7 +113,7 @@ export class ProductsListTableComponent implements OnInit {
         }
       });
     } else {
-      this.productsListInfo.reverse();
+      this._productsListInfo.reverse();
     }
   }
 

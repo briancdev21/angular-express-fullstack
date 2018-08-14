@@ -33,15 +33,14 @@ export class ProductsComponent implements OnInit {
   constructor( private filterService: FilterService, private productsService: ProductsService, private proposalService: ProposalService ) {
     this.filterAvaliableTo = 'everyone';
 
-    this.productsService.getProductsList().subscribe(res => {
-      this.productsListInfo = res.results;
-      console.log('productslist: ', res);
-    });
+    this.retrieveProductsListData();
 
     this.proposalService.onModalStatus.subscribe(res => {
       if (res) {
         this.showAddProductModal = false;
         this.addProductModalCollapsed = true;
+
+        this.retrieveProductsListData();
       }
     });
   }
@@ -70,6 +69,13 @@ export class ProductsComponent implements OnInit {
   public productTypes = ['Individual', 'Business'];
   ngOnInit() {
     this.backUpProducts = this.productsListInfo;
+  }
+
+  retrieveProductsListData() {
+    this.productsService.getProductsList().subscribe(res => {
+      this.productsListInfo = res.results;
+      console.log('productslist: ', res);
+    });
   }
 
   getFilter(event) {
