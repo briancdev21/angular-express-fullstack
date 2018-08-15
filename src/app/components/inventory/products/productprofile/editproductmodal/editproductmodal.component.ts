@@ -107,9 +107,9 @@ export class EditProductModalComponent implements OnInit {
   productTypesListInfo: any;
   productTypeNames: any;
   _productInfo: any;
-  selectedProductTypeId: number;
-  selectedBrandId: number;
-  selectedSupplierId: number;
+  selectedProductTypeId: any;
+  selectedBrandId: any;
+  selectedSupplierId: any;
   selectedKeywordsId: any;
   keywordsListInfo: any;
   variantsInfo: any;
@@ -141,7 +141,6 @@ export class EditProductModalComponent implements OnInit {
         this.brand = this.getBrandNameFromId(response.data.brandId);
         this.addedProduct = response.data;
         this.selectedBrandId = response.data.brandId;
-        this.selectedBrandId = response.data.brandId;
         this.selectedProductTypeId = response.data.productTypeId;
         this.selectedSupplierId = response.data.supplierId;
         this.selectedKeywordsId = response.data.keywordIds;
@@ -149,6 +148,9 @@ export class EditProductModalComponent implements OnInit {
         this.addedProduct.productDesc = response.data.description;
         this.addedProduct.measureUnit = response.data.unitOfMeasure.unit;
         this.addedProduct.measureCount = response.data.unitOfMeasure.quantity;
+        // for variant group add
+        this.addedProduct.variantValue = [{id: 1, data: []}];
+        this.addedProduct.varuantProducts = [];
         if (backedData.expiration) {
           this.addedProduct.expirationType = backedData.expiration.unit;
           this.addedProduct.expirationCount = backedData.expiration.duration;
@@ -158,7 +160,7 @@ export class EditProductModalComponent implements OnInit {
           this.addedProduct.leadTimeCount = response.data.leadTime.duration;
         }
         this.addedProduct.model = response.data.model;
-
+        this.autoGenerate();
 
         // get variant info
         this.productsService.getVariantsList(this.productId).subscribe(data => {
@@ -236,6 +238,7 @@ export class EditProductModalComponent implements OnInit {
     // this.variants = this.addedProduct.variantValue;
   }
   ngOnInit() {
+    // this.autoGenerate();
   }
 
   closeModal() {
@@ -295,35 +298,6 @@ export class EditProductModalComponent implements OnInit {
         });
       }
     } else if (pos === 'tab-two') {
-      const savingProductMd = {
-        'brandId': this.selectedBrandId,
-        'productTypeId': this.selectedProductTypeId,
-        'supplierId': this.selectedSupplierId,
-        'keywordIds': this.selectedKeywordsId,
-        'model': this.addedProduct.model,
-        'name': this.addedProduct.productName,
-        'description': this.addedProduct.productDesc,
-        'inventoryType': this.addedProduct.inventoryType,
-        'unitOfMeasure': {
-          'quantity': this.addedProduct.measureCount ? this.addedProduct.measureCount : 0,
-          'unit': this.addedProduct.measureUnit
-        },
-        'expiration': {
-          'duration': this.addedProduct.expirationCount ? this.addedProduct.expirationCount : 0,
-          'unit': this.addedProduct.expirationType
-        },
-        'leadTime': {
-          'duration': this.addedProduct.leadTimeCount ? this.addedProduct.leadTimeCount : 0,
-          'unit': this.addedProduct.leadTimeUnit
-        }
-      };
-      // let savingProductData = JSON.stringify(savingProductMd);
-      if (savingProductMd.keywordIds === null) {
-        delete savingProductMd.keywordIds;
-      }
-      this.productsService.updateIndividualProduct(this.productId, savingProductMd).subscribe(res => {
-        console.log('saving edits: ', res);
-      });
       this.tabActiveThird = true;
       this.tabActiveFirst = false;
       this.tabActiveSecond = false;
@@ -334,6 +308,50 @@ export class EditProductModalComponent implements OnInit {
       this.tabActiveThird = false;
       this.tabActiveSecond = false;
     }
+  }
+
+  updateProduct() {
+    const savingProductMd = {
+      'brandId': this.selectedBrandId,
+      'productTypeId': this.selectedProductTypeId,
+      'supplierId': this.selectedSupplierId,
+      'currencyId': this.addedProduct.currencyId,
+      'keywordIds': this.selectedKeywordsId,
+      'model': this.addedProduct.model,
+      'name': this.addedProduct.productName,
+      'description': this.addedProduct.productDesc,
+      'inventoryType': this.addedProduct.inventoryType,
+      'status': this.addedProduct.status,
+      'unitOfMeasure': {
+        'quantity': this.addedProduct.measureCount,
+        'unit': this.addedProduct.measureUnit
+      },
+      'expiration': {
+        'duration': this.addedProduct.expirationCount,
+        'unit': this.addedProduct.expirationType
+      },
+      'leadTime': {
+        'duration': this.addedProduct.leadTimeCount,
+        'unit': this.addedProduct.leadTimeUnit
+      }
+    };
+    // let savingProductData = JSON.stringify(savingProductMd);
+    if (savingProductMd.keywordIds === null) {
+      delete savingProductMd.keywordIds;
+    }
+
+    if (!savingProductMd.expiration.duration || !savingProductMd.expiration.unit) {
+      delete savingProductMd.expiration;
+    }
+
+    if (!savingProductMd.leadTime.duration || !savingProductMd.leadTime.unit) {
+      delete savingProductMd.leadTime;
+    }
+
+    Object.keys(savingProductMd).forEach((key) => (savingProductMd[key] == null) && delete savingProductMd[key]);
+    this.productsService.updateIndividualProduct(this.productId, savingProductMd).subscribe(res => {
+      console.log('saving edits: ', res);
+    });
   }
 
   clickNextEditVariant() {
@@ -397,15 +415,22 @@ export class EditProductModalComponent implements OnInit {
   }
 
   autoGenerate() {
-    const randNum = Math.floor(Math.random() * 899999 + 100000);
+    let randNum;
     if (!this.switch) {
-      this.addedProduct.skuNumber = randNum;
-    } else {
-      this.addedProduct.skuNumber = 0;
+      this.productsService.generateSku().subscribe(res => {
+        randNum = res.sku;
+        this.addedProduct.skuNumber = Number(randNum);
+        console.log('sku: ', randNum);
+        this.randSku = Number(randNum);
+      });
     }
     this.switch = !this.switch;
-    this.randSku = randNum;
-    return randNum;
+  }
+
+  skuChange(event) {
+    this.randSku = event;
+    console.log('this randSku: ', this.randSku);
+    this.switch = false;
   }
 
   calcCost(value, i) {
@@ -433,33 +458,22 @@ export class EditProductModalComponent implements OnInit {
   }
 
   tabChange(event) {
+    this.tabActiveFirst = this.tabActiveThird = this.tabActiveSecond = this.tabActiveFour = false;
     switch (event.tabTitle) {
       case 'PRODUCT DETAILS': {
-        this.tabActiveSecond = false;
         this.tabActiveFirst = true;
-        this.tabActiveThird = false;
-        this.tabActiveFour = false;
         break;
       }
       case 'PRODUCT VALUES': {
         this.tabActiveSecond = true;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = false;
-        this.tabActiveFour = false;
         this.clickNext('tab-one');
         break;
       }
       case 'PRODUCT VARIANCE': {
-        this.tabActiveSecond = false;
-        this.tabActiveFirst = false;
         this.tabActiveThird = true;
-        this.tabActiveFour = false;
         break;
       }
       case 'ACCESSORIES & ALTERNATIVES': {
-        this.tabActiveSecond = false;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = false;
         this.tabActiveFour = true;
         break;
       }
@@ -509,7 +523,7 @@ export class EditProductModalComponent implements OnInit {
     this.editVariant = true;
     const allArrays = this.addedProduct.variantValue.map(e => e.data);
     this.possibleCombination = this.allPossibleCases(allArrays);
-    const skuNumber = this.autoGenerate();
+    const skuNumber = Number(this.randSku);
     for ( let i = 0; i < this.possibleCombination.length; i++) {
       this.addedProduct.variantProducts[i] = {
         name: this.possibleCombination[i],
@@ -632,18 +646,22 @@ export class EditProductModalComponent implements OnInit {
 
   onProductTypeSelected(item) {
     this.selectedProductTypeId = item.originalObject.id;
+    this.updateProduct();
   }
 
   onSupplierSelected(item) {
     this.selectedSupplierId = item.originalObject.id;
+    this.updateProduct();
   }
 
   onBrandSelected(item) {
     this.selectedBrandId = item.originalObject.id;
+    this.updateProduct();
   }
 
   getKeywordsId(event) {
     this.selectedKeywordsId = event.map(e => e.id);
+    this.updateProduct();
   }
 
   getKeywordsName(val) {
