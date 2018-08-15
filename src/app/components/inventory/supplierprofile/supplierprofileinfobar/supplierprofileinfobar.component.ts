@@ -56,6 +56,7 @@ export class SupplierProfileInfoBarComponent implements OnInit {
   invalidPhoneNumber = false;
   invalidName = false;
   invalidPayableEmail = false;
+  invalidPayablePhone = false;
   tagsArr: any;
   invalidContactPhoneNumber = false;
   // croppedImage = this.userInfo.profileLink;
@@ -97,6 +98,9 @@ export class SupplierProfileInfoBarComponent implements OnInit {
   public onReturnData(data: any) {
     // Do what you want to do
     console.warn(JSON.parse(data));
+  }
+
+  onEnter() {
   }
 
   cancelCrop() {

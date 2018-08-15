@@ -218,4 +218,21 @@ export class PmScheduleComponent implements OnInit {
     }
     return selectedContact.name;
   }
+
+  removeFilter() {
+  }
+
+  getFilter(event) {
+  }
+
+  closeModal() {
+
+  }
+
+  onChangeAcailable(id) {
+
+  }
+  saveFilter() {
+
+  }
 }
