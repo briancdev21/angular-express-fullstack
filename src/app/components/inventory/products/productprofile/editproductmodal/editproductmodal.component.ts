@@ -217,6 +217,22 @@ export class EditProductModalComponent implements OnInit {
           });
           console.log('accessories: ', data);
         });
+
+        this.productsService.getProductAlternativesList(this.productId).subscribe(data => {
+          this.productAlternatives = data.results;
+          console.log('alternatives: ', data);
+          this.productAlternatives.forEach(element => {
+            this.addedAlterList.push({
+              skuNumber: element.variant.sku,
+              productName: element.variant.name,
+              modelNumber: this.productsAll.filter(p => p.id === element.productId)[0].model,
+              brandId: this.productsAll.filter(p => p.id === element.productId)[0].brandId,
+              brandName: this.getBrandNameFromId(this.productsAll.filter(p => p.id === element.productId)[0].brandId),
+              qty: element.quantity,
+              price: element.variant.cost
+            });
+          });
+        });
       });
     });
 
@@ -227,11 +243,6 @@ export class EditProductModalComponent implements OnInit {
     this.sharedService.getPricingCategories().subscribe(res => {
       this.pricingCategoriesListInfo = res.results;
       this.pricingCategoriesListInfo.map(p => p['price'] = 0);
-    });
-
-    this.productsService.getProductAlternativesList(this.productId).subscribe(data => {
-      this.productAlternatives = data.results;
-      console.log('alternatives: ', data);
     });
 
     this.searchableList = ['productName', 'model', 'brand'];
