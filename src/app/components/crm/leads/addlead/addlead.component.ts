@@ -70,9 +70,9 @@ export class AddLeadComponent implements OnInit {
   firstName = '';
   lastName = '';
   businessName = '';
-  defaultTerm = 2;
-  defaultCurrency = 1;
-  defaultPricing = 1;
+  defaultTerm = '';
+  defaultCurrency = '';
+  defaultPricing = '';
   primaryNumber = '';
   invalidDefaultTerm = false;
   invalidDefaultCurrency = false;
@@ -131,14 +131,17 @@ export class AddLeadComponent implements OnInit {
   ngOnInit() {
     this.sharedService.getCurrencies().subscribe(data => {
       this.currencyList = data.results;
+      this.defaultCurrency = data.results[0].id;
     });
 
     this.sharedService.getTerms().subscribe(res => {
       this.termsList = res.results;
+      this.defaultTerm = res.results[0].id;
     });
 
     this.sharedService.getPricingCategories().subscribe (res => {
       this.pricingCategoriesList = res.results;
+      this.defaultPricing = res.results[0].id;
     });
 
     this.sharedService.getContacts().subscribe(res => {
@@ -564,9 +567,9 @@ export class AddLeadComponent implements OnInit {
     this.firstName = '';
     this.lastName = '';
     this.businessName = '';
-    this.defaultTerm = 2;
-    this.defaultCurrency = 1;
-    this.defaultPricing = 1;
+    this.defaultTerm = '';
+    this.defaultCurrency = '';
+    this.defaultPricing = '';
     this.primaryNumber = '';
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
@@ -602,10 +605,10 @@ export class AddLeadComponent implements OnInit {
     if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
       if (this.businessType === 'PERSON') {
         this.newLead = {
-          'currencyId': Number(this.defaultCurrency),
-          'termId': Number(this.defaultTerm),
-          'sourceId': Number(this.selectedSourceId),
-          'pricingCategoryId': Number(this.defaultPricing),
+          'currencyId': this.defaultCurrency,
+          'termId': this.defaultTerm,
+          'sourceId': this.selectedSourceId,
+          'pricingCategoryId': this.defaultPricing,
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -652,10 +655,10 @@ export class AddLeadComponent implements OnInit {
         }
       } else {
         this.newLead = {
-          'currencyId': Number(this.defaultCurrency),
-          'termId': Number(this.defaultTerm),
-          'sourceId': Number(this.selectedSourceId),
-          'pricingCategoryId': Number(this.defaultPricing),
+          'currencyId': this.defaultCurrency,
+          'termId': this.defaultTerm,
+          'sourceId': this.selectedSourceId,
+          'pricingCategoryId': this.defaultPricing,
           'keywordIds': this.keywordsIdList,
           'owner': 'string',
           'followers': [
@@ -664,7 +667,7 @@ export class AddLeadComponent implements OnInit {
           'type': this.businessType,
           'business': {
             'name': this.businessName,
-            'headContact': parseInt(this.headContact, 10),
+            'headContact': this.headContact,
             'accountReceivable': 1,
             'personAssociations': [
               1
