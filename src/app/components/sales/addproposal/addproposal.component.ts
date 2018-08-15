@@ -325,6 +325,9 @@ export class AddProposalComponent implements OnInit {
     this.proposalDetails.association = event;
   }
 
+  onEnter() {
+  }
+
   onSelectProjectType(event) {
     this.proposalDetails.projectType = event;
   }
