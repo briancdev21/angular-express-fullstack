@@ -130,14 +130,17 @@ export class AddContactComponent implements OnInit {
 
     this.sharedService.getCurrencies().subscribe(data => {
       this.currencyList = data.results;
+      this.defaultCurrency = data.results[0].id;
     });
 
     this.sharedService.getTerms().subscribe(res => {
       this.termsList = res.results;
+      this.defaultTerm = res.results[0].id;
     });
 
     this.sharedService.getPricingCategories().subscribe (res => {
       this.pricingCategoriesList = res.results;
+      this.defaultPricing = res.results[0].id;
     });
 
     this.sharedService.getContacts().subscribe(res => {
@@ -570,9 +573,9 @@ export class AddContactComponent implements OnInit {
     this.firstName = '';
     this.lastName = '';
     this.businessName = '';
-    this.defaultTerm = 2;
-    this.defaultCurrency = 1;
-    this.defaultPricing = 1;
+    this.defaultTerm = '';
+    this.defaultCurrency = '';
+    this.defaultPricing = '';
     this.primaryNumber = '';
     this.invalidDefaultTerm = false;
     this.invalidDefaultCurrency = false;
@@ -677,9 +680,9 @@ export class AddContactComponent implements OnInit {
           'business': {
             'name': this.businessName,
             'headContact': this.headContact,
-            'accountReceivable': 1,
+            'accountReceivable': '',
             'personAssociations': [
-              1
+              ''
             ]
           },
           'shippingAddress': {

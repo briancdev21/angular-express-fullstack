@@ -107,9 +107,11 @@ export class AddSupplierComponent implements OnInit {
     });
     this.sharedService.getTerms().subscribe(terms => {
       this.supplierTerm = terms.results;
+      this.defaultTerm = terms.results[0].id;
     });
     this.sharedService.getCurrencies().subscribe(currencies => {
       this.supplierCurrencies = currencies.results;
+      this.defaultCurrency = currencies.results[0].id;
     });
   }
 
