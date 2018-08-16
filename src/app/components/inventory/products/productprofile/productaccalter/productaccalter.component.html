@@ -2,7 +2,7 @@
   <div class="product-acce-list">
     <div class="acce-title">ACCESSORIES</div>
     <div class="acce-content">
-      <table>
+      <table *ngIf="productAccessories">
         <tr>
           <th (click)="sortArray('sku')">SKU</th>
           <th (click)="sortArray('productName')">PRODUCT NAME</th>
@@ -27,7 +27,7 @@
   <div class="product-acce-list">
     <div class="title">ALTERNATIVES</div>
     <div class="alter-content">
-      <table>
+      <table *ngIf="productAlternatives">
         <tr>
           <th (click)="sortArray('sku')">SKU</th>
           <th (click)="sortArray('productName')">PRODUCT NAME</th>
