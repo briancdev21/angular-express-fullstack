@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ProductsService } from '../../../../services/inventory/products.service';
 import { SharedService } from '../../../../services/shared.service';
 import * as moment from 'moment';
+import { ProductProfileService } from './productprofile.service';
 
 @Component({
   selector: 'app-productprofile',
@@ -68,9 +69,24 @@ export class ProductProfileComponent implements OnInit {
 
   dataRetrieved = false;
   constructor(private router: Router, private route: ActivatedRoute, private productsService: ProductsService,
-    private sharedService: SharedService) {
+    private sharedService: SharedService, private productProfileService: ProductProfileService) {
     this.productInfoIndex = this.route.snapshot.paramMap.get('id');
+    this.retrieveVariantsData();
 
+    this.productProfileService.editModalClosed.subscribe(res => {
+      if (res) {
+        this.retrieveVariantsData();
+      }
+    });
+
+    this.productProfileService.productDetailsUpdate.subscribe(res => {
+      if (res) {
+        this.retrieveVariantsData();
+      }
+    });
+  }
+
+  retrieveVariantsData() {
     this.sharedService.getBrands().subscribe(res => {
       this.brandsList = res.results;
 

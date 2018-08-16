@@ -15,8 +15,8 @@ import { ProductProfileService } from '../productprofile.service';
 })
 
 export class ProductAccAlterComponent {
-  productAccessories = [];
-  productAlternatives = [];
+  productAccessories: any;
+  productAlternatives: any;
   productInfoIndex: any;
   pricingCategoriesListInfo = [];
   productsList = [];

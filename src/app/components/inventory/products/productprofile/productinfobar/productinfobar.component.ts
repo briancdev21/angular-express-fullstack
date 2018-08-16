@@ -14,7 +14,9 @@ import { ProductsService } from '../../../../../services/inventory/products.serv
 })
 export class ProductInfoBarComponent implements OnInit {
 
-  @Input() productInfo;
+  @Input() set productInfo(val) {
+    this._productInfo = val;
+  }
   data1: any;
   showEditImageModal = false;
   keywordsList;
@@ -22,6 +24,7 @@ export class ProductInfoBarComponent implements OnInit {
   imageChangedEvent: any = '';
   croppedImage: any = '';
   selectedUncroppedFile: any;
+  _productInfo: any;
   // croppedImage = this.productInfo.profileLink;
 
   constructor(private router: Router, private sharedService: SharedService, private productsService: ProductsService) {

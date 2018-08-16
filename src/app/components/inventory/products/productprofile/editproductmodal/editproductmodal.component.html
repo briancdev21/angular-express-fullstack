@@ -209,7 +209,7 @@
           <div class="page-divider"></div>
           <div class="friend-royalty-retail" *ngIf="pricingCategoriesListInfo">
             <div class="friend" *ngFor="let pricing of pricingCategoriesListInfo; let i = index">
-              <span>{{pricing.name}}</span>
+              <span>{{pricing.category}}</span>
               <div class="price-margin">
                 <div class="price-box">
                   <span>$</span>
@@ -276,13 +276,13 @@
                 <img src="assets/images/garbage.png" (click)="removeVariantList(i);" class="remove-variants" [ngClass]="getVisibility(i)">
               </div>
             </div>
-            <div class="add-values-section" (click)="addNewVariants()">
+            <div class="add-values-section" (click)="addNewVariants()" *ngIf="addedProduct.variantValue.length < 3">
               <img src="assets/images/Add-Button.svg" >
             </div>
           </div>
         </div>
         <div class="edit-variant"  *ngIf="editVariant">
-          <span>Edit Variant</span>
+          <span>New Variants</span>
           <table>
             <tr>
               <th>VARIANT NAME</th>
@@ -293,26 +293,60 @@
               <th>PRICE ADJUST</th>
               <th>UPC NUMBER</th>
             </tr>
-            <tr *ngFor="let variant of variantsInfo; let i = index">
+            <tr *ngFor="let variant of addedProduct.variantProducts; let i = index">
               <td>{{variant.name}}</td>
-              <td><input placeholder="" [(ngModel)]="variant.quantity" type="number"></td>
-              <td><input placeholder="" [(ngModel)]="variant.sku" ></td>
+              <td><input placeholder="" [(ngModel)]="variant.qty" type="number"></td>
+              <td><input placeholder="" [(ngModel)]="variant.sku" (ngModelChange)="checkSkuValidation($event, i)" [ngClass]="{'supplier-code-validation': invalidSku[i]}" type="number" ></td>
               <td>
                 <div class="td-input">
                   <span style="margin-right: 5px">$</span>
-                  <!-- <input placeholder="0.00" [(ngModel)]="variant.cost" type="number" *ngIf="variableCostEditable" (blur)="variableCostEditable=false"> -->
-                  <span *ngIf="!variableCostEditable" >{{variant.cost | number: '1.2-2'}}</span>
+                  <input placeholder="0.00" [(ngModel)]="variant.cost" type="number" *ngIf="variableCostEditable" (blur)="variableCostEditable=false">
+                  <span *ngIf="!variableCostEditable" (click)="variableCostEditable=true" style="width: 70px">{{variant.cost | number: '1.2-2'}}</span>
                 </div>  
               </td>
               <td><input placeholder="Supplier code here" [(ngModel)]="variant.supplierCode" [ngClass]="{'supplier-code-validation': !variant.supplierCode && missingSupplierCode}"></td>
               <td>
                 <div class="td-input">
                   <span style="margin-right: 5px">$</span>
-                  <!-- <input placeholder="0.00" [(ngModel)]="variant.priceAdjust" type="number" *ngIf="variablePriceEditable" (blur)="variablePriceEditable=false"> -->
-                  <span *ngIf="!variablePriceEditable" >{{variant.priceAdjustment | number: '1.2-2'}}</span>
+                  <input placeholder="0.00" [(ngModel)]="variant.priceAdjust" type="number" *ngIf="variablePriceEditable" (blur)="variablePriceEditable=false">
+                  <span *ngIf="!variablePriceEditable" (click)="variablePriceEditable=true" style="width: 70px; height: 17px;">{{variant.priceAdjust | number: '1.2-2'}}</span>
                 </div>
               </td>
-              <td><input placeholder="UPC number here" disabled [(ngModel)]="variant.upc" [ngClass]="{'upc-validation': !variant.upcNumber && missingUpcNumber}"></td>
+              <td><input placeholder="UPC number here" [(ngModel)]="variant.upcNumber" [ngClass]="{'upc-validation': !variant.upcNumber && missingUpcNumber}"></td>
+            </tr>
+          </table>
+
+          <span>Edit Variants</span>
+          <table>
+            <tr>
+              <th>VARIANT NAME</th>
+              <th>QTY</th>
+              <th>SKU</th>
+              <th>COST</th>
+              <th>SUPPLIER CODE</th>
+              <th>PRICE ADJUST</th>
+              <th>UPC NUMBER</th>
+            </tr>
+            <tr *ngFor="let variant of oldVariantsInfo; let i = index">
+              <td>{{variant.name}}</td>
+              <td><input placeholder="" [(ngModel)]="variant.quantity" type="number"></td>
+              <td><input placeholder="" [(ngModel)]="variant.sku" ></td>
+              <td>
+                <div class="td-input">
+                  <span style="margin-right: 5px">$</span>
+                  <input placeholder="0.00" [(ngModel)]="variant.cost" type="number" >
+                  <!-- <span *ngIf="!variableCostEditable" >{{variant.cost | number: '1.2-2'}}</span> -->
+                </div>  
+              </td>
+              <td><input placeholder="Supplier code here" [(ngModel)]="variant.supplierCode" [ngClass]="{'supplier-code-validation': !variant.supplierCode && missingSupplierCode}"></td>
+              <td>
+                <div class="td-input">
+                  <span style="margin-right: 5px">$</span>
+                  <input placeholder="0.00" [(ngModel)]="variant.priceAdjustment" type="number" >
+                  <!-- <span *ngIf="!variablePriceEditable" >{{variant.priceAdjustment | number: '1.2-2'}}</span> -->
+                </div>
+              </td>
+              <td><input placeholder="UPC number here" [(ngModel)]="variant.upc" ></td>
             </tr>
           </table>
         </div>

@@ -1,38 +1,38 @@
 
 <div class="logo">
-  <img [src]='productInfo.pictureURI' alt = "Add Profile Image Here"/>
+  <img [src]='_productInfo.pictureURI' alt = "Add Profile Image Here"/>
   <img src="assets/images/Cloud.png" class="img-settings" (click)="changeImage()"/>
 </div>
-<div class="product-info" *ngIf="productInfo">
-  <span class="product-name">{{productInfo.name}}</span>
-  <span>{{productInfo.brandName}}</span>
-  <span>{{productInfo.model}}</span>
+<div class="product-info" *ngIf="_productInfo">
+  <span class="product-name">{{_productInfo.name}}</span>
+  <span>{{_productInfo.brandName}}</span>
+  <span>{{_productInfo.model}}</span>
   <span class="title">Product Description</span>
-  <textarea disabled>{{productInfo.description}}</textarea>
+  <textarea disabled>{{_productInfo.description}}</textarea>
   <!-- <span class="title">Primary Price</span>
   <div class="price-value">
     <span>$</span>
     <span>price</span>
   </div> -->
   <span class="title">Unit of Measure</span>
-  <div class="unit-measure" *ngIf="productInfo.unitOfMeasure">
-    <div class="left-border-box">{{productInfo.unitOfMeasure.unit}}</div>
-    <div class="border-box">{{productInfo.unitOfMeasure.quantity}}</div>
+  <div class="unit-measure" *ngIf="_productInfo.unitOfMeasure">
+    <div class="left-border-box">{{_productInfo.unitOfMeasure.unit}}</div>
+    <div class="border-box">{{_productInfo.unitOfMeasure.quantity}}</div>
   </div>
   <span class="title">Product Tags</span>
   <div class="left-border-box keywords-list" *ngIf="keywordsList">
-    <div *ngFor="let tag of productInfo.keywordIds" class="keyword">{{getTagName(tag)}}</div>
+    <div *ngFor="let tag of _productInfo.keywordIds" class="keyword">{{getTagName(tag)}}</div>
   </div>
   <span class="title">Product Status</span>
   <div class="status">
-    <div class="left-border-box">{{productInfo.status}}</div>
+    <div class="left-border-box">{{_productInfo.status}}</div>
   </div>
   <span class="title">Inventory Type</span>
-  <div class="left-border-box">{{productInfo.inventoryType}}</div>
+  <div class="left-border-box">{{_productInfo.inventoryType}}</div>
   <!-- <span class="title">Expiration</span>
-  <div class="measure" *ngIf="productInfo.expiration">
-    <div class="left-border-box">{{productInfo.expiration.unit}}</div>
-    <div class="border-box">{{productInfo.expiration.duration}}</div>
+  <div class="measure" *ngIf="_productInfo.expiration">
+    <div class="left-border-box">{{_productInfo.expiration.unit}}</div>
+    <div class="border-box">{{_productInfo.expiration.duration}}</div>
   </div> -->
 </div>
 

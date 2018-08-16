@@ -109,17 +109,17 @@ export class ProductsService {
   }
 
   getProductIndividualVariant(id, sku): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/pricing-categories/${sku}`;
+    const url = `${apiUrl}inventory/products/${id}/variants/${sku}`;
     return this.http.get(url);
   }
 
   updateProductIndividualVariant(id, sku, body): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/pricing-categories/${sku}`;
+    const url = `${apiUrl}inventory/products/${id}/variants/${sku}`;
     return this.http.put(url, body);
   }
 
   deleteProductIndividualVariant(id, sku): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/pricing-categories/${sku}`;
+    const url = `${apiUrl}inventory/products/${id}/variants/${sku}`;
     return this.http.delete(url);
   }
 
