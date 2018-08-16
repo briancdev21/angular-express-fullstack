@@ -8,6 +8,7 @@ import { EstimatesService } from '../../../services/estimates.service';
 import { EstimateModel } from '../../../models/estimate.model';
 import { SharedService } from '../../../services/shared.service';
 import { CrmService } from '../../../services/crm.service';
+import { CompleterService, CompleterData } from 'ng2-completer';
 
 @Component({
   selector: 'app-invoices',
@@ -36,6 +37,7 @@ export class InvoicesComponent implements OnInit {
   invoiceTypes: any;
   today = moment().format('YYYY-MM-DD');
   contactsList: any;
+  contactsSource: CompleterData;
 
   public filters  = {
     createdFrom: '',
@@ -56,6 +58,10 @@ export class InvoicesComponent implements OnInit {
 
   newInvoice = {};
   newEstimate = {};
+  contactId: any;
+  contactName: any;
+  showInvoiceCreateModal = false;
+  invoiceModal = true;
 
   constructor(
     private filterService: FilterService,
@@ -63,7 +69,8 @@ export class InvoicesComponent implements OnInit {
     private invoicesService: InvoicesService,
     private estimatesService: EstimatesService,
     private sharedService: SharedService,
-    private crmService: CrmService
+    private crmService: CrmService,
+    private completerService: CompleterService
   ) {
 
     this.filterAvaliableTo = 'everyone';
@@ -112,6 +119,12 @@ export class InvoicesComponent implements OnInit {
       // });
       console.log('invoiceslist: ', this.invoicesListInfo);
 
+    });
+
+    this.sharedService.getContacts().subscribe(res => {
+      const contacts = res;
+      this.addContactName(contacts);
+      this.contactsSource = this.completerService.local(contacts, 'name', 'name');
     });
   }
 
@@ -254,5 +267,30 @@ export class InvoicesComponent implements OnInit {
   }
 
   getCustomerNameFromLead(id) {
+  }
+
+  onSelectCustomerBeforeCreate(selectedIndex: any) {
+    this.contactId = selectedIndex.originalObject.id;
+  }
+
+  createInvoice() {
+    if (this.contactId) {
+      const creatingData = {
+        contactId: this.contactId
+      };
+      if (this.invoiceModal) {
+        this.invoicesService.createInvoice(creatingData).subscribe(res => {
+          console.log('invoice created: ', res);
+          this.router.navigate([`./invoice-profile/${res.data.id}`]);
+          this.showInvoiceCreateModal = false;
+        });
+      } else {
+        this.estimatesService.createEstimate(creatingData).subscribe(res => {
+          console.log('estimate created: ', res);
+          this.router.navigate([`./estimate-profile/${res.data.id}`]);
+          this.showInvoiceCreateModal = false;
+        });
+      }
+    }
   }
 }
