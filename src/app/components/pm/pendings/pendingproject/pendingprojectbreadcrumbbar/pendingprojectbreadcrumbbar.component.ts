@@ -137,6 +137,9 @@ export class PendingProjectBreadcrumbBarComponent implements OnInit {
       'followers': []
     };
     savingData.followers = this.projectInformation.followersData.map(f => f.username);
+    if (!savingData.followers) {
+      savingData.followers = [];
+    }
     this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
       console.log('updated: ', res);
     });

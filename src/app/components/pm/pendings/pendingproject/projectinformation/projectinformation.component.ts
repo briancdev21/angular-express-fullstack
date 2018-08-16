@@ -193,7 +193,7 @@ export class ProjectInformationComponent implements OnInit {
         this.projectInformation.contactAccountReceivable : this.projectInformation.accountReceivableId,
       'status': this.projectInformation.status,
       'internalNote': this.projectInformation.internalNote,
-      'followers': this.projectInformation.followers
+      'followers': this.projectInformation.followers ? this.projectInformation.followers : []
     };
     if (!savingData.internalNote) {
       savingData.internalNote = '';
@@ -201,6 +201,26 @@ export class ProjectInformationComponent implements OnInit {
     this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
       console.log('updated: ', res);
       this.router.navigate(['./pm/pending-project/pending-scope']);
+    });
+  }
+
+  saveProjectInfo() {
+    const savingData = {
+      'projectManager': this.projectInformation.projectManager,
+      'accountManager': this.projectInformation.accountManager,
+      'clientProjectManagerId': this.projectInformation.clientProjectManager ?
+        this.projectInformation.clientProjectManager : this.projectInformation.clientProjectManagerId,
+      'accountReceivableId': this.projectInformation.contactAccountReceivable ?
+        this.projectInformation.contactAccountReceivable : this.projectInformation.accountReceivableId,
+      'status': this.projectInformation.status,
+      'internalNote': this.projectInformation.internalNote,
+      'followers': this.projectInformation.followers ? this.projectInformation.followers : []
+    };
+    if (!savingData.internalNote) {
+      savingData.internalNote = '';
+    }
+    this.projectsService.updateIndividualProject(this.currentProjectId, savingData).subscribe(res => {
+      console.log('updated: ', res);
     });
   }
 
@@ -215,10 +235,12 @@ export class ProjectInformationComponent implements OnInit {
   onSelectPmManager(event) {
     console.log('project manager', event);
     this.projectInformation.clientProjectManager = event.originalObject.id;
+    this.saveProjectInfo();
   }
 
   onSelectAccountReceivable(event) {
     this.projectInformation.contactAccountReceivable = event.originalObject.id;
+    this.saveProjectInfo();
   }
 
   addContactName(data) {
