@@ -10,8 +10,8 @@
       <th (click)="sortArray('status')">STATUS</th>
     </tr>
     <tr *ngFor="let invoice of invoicesListInfo; let i = index" (click)="redirectTo(invoice)">
-      <td *ngIf="invoice.isInvoice">IN - {{invoice.id}}</td>
-      <td *ngIf="!invoice.isInvoice">ES - {{invoice.id}}</td>
+      <td *ngIf="invoice.isInvoice">IN - {{invoice.number}}</td>
+      <td *ngIf="!invoice.isInvoice">ES - {{invoice.number}}</td>
       <td>{{invoice.customerName}}</td>
       <td><span *ngIf="invoice.isInvoice">$ </span>{{invoice.balance | number: '1.2-2'}}</td>
       <td>$ {{invoice.total | number: '1.2-2'}}</td>
