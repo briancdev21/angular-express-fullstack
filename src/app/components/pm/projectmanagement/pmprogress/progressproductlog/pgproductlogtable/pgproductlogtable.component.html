@@ -21,7 +21,7 @@
   </div>
   <table class="reserved-inventory-table" *ngIf="brandsList">
     <tr>
-      <th></th>
+      <!-- <th></th> -->
       <th (click)="sortArray('name', reservedInventoryList)">PRODUCT NAME</th>
       <th (click)="sortArray('model', reservedInventoryList)">MODEL NUMBER</th>
       <th (click)="sortArray('brand', reservedInventoryList)">BRAND</th>
@@ -31,7 +31,7 @@
       <th (click)="sortArray('status', reservedInventoryList)">STATUS</th>
     </tr>
     <tr *ngFor="let inventory of reservedInventoryList; let i = index">
-      <td><img [src]="inventory.imgUrl"></td>
+      <!-- <td><img [src]="inventory.imgUrl"></td> -->
       <td>{{inventory.name}}</td>
       <td>{{inventory.model}}</td>
       <td>{{getBrandName(inventory.brandId)}}</td>
