@@ -78,6 +78,12 @@ export class ProductProfileComponent implements OnInit {
         this.retrieveVariantsData();
       }
     });
+
+    this.productProfileService.productDetailsUpdate.subscribe(res => {
+      if (res) {
+        this.retrieveVariantsData();
+      }
+    });
   }
 
   retrieveVariantsData() {
