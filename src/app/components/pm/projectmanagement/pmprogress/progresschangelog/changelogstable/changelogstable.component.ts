@@ -24,6 +24,8 @@ export class ChangeLogsTableComponent implements OnInit {
   usersList = [];
   currentProjectId: any;
   changeLogsInfo: any;
+  currentProjectInfo: any;
+  contactName = '';
 
   constructor( private router: Router, private sharedService: SharedService,
     private projectsService: ProjectsService, private route: ActivatedRoute  ) {
@@ -31,6 +33,13 @@ export class ChangeLogsTableComponent implements OnInit {
       this.sharedService.getUsers().subscribe(data => {
         this.usersList = data;
         this.addUserRealName(this.usersList);
+        this.projectsService.getIndividualProject(this.currentProjectId).subscribe(project => {
+          this.currentProjectInfo = project.data;
+          this.sharedService.getMulipleContacts(project.data.contactId).subscribe(contact => {
+            const selectedContact = contact[0];
+            this.contactName = this.getContactName(selectedContact);
+          });
+        });
         this.projectsService.getProjectChangeLogs(this.currentProjectId).subscribe(res => {
           this.changeLogsInfo = res.results;
           console.log('changslogs: ', this.changeLogsInfo);
@@ -153,6 +162,15 @@ export class ChangeLogsTableComponent implements OnInit {
 
   addChangeLog() {
     this.router.navigate(['./pm/pm-details/pm-log-add/']);
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
+    return selectedContact.name;
   }
 
 }
