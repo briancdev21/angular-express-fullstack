@@ -372,6 +372,7 @@ export class EditProductModalComponent implements OnInit {
     Object.keys(savingProductMd).forEach((key) => (savingProductMd[key] == null) && delete savingProductMd[key]);
     this.productsService.updateIndividualProduct(this.productId, savingProductMd).subscribe(res => {
       console.log('saving edits: ', res);
+      this.productProfileService.productDetailsUpdate.next(true);
     });
   }
 
@@ -474,6 +475,7 @@ export class EditProductModalComponent implements OnInit {
       this.productsService.updateProductIndividualCategory(this.productId, this.pricingCategoriesListInfo[i].id, updatingData)
         .subscribe(res => {
           console.log('pricing category updated: ', res);
+          this.productProfileService.productPricingCategoryUpdate.next(true);
         });
     }
     if ((this.pricingCategoriesListInfo[i].margin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
@@ -486,6 +488,7 @@ export class EditProductModalComponent implements OnInit {
       this.productsService.updateProductIndividualCategory(this.productId, this.pricingCategoriesListInfo[i].id, updatingData)
         .subscribe(res => {
           console.log('pricing category updated: ', res);
+          this.productProfileService.productPricingCategoryUpdate.next(true);
         });
     }
   }
