@@ -42,7 +42,8 @@ export class EditProductModalComponent implements OnInit {
     // this.addedProduct.leadTimeCount = val.leadTime.duration;
   }
   @Input() set productVariants (val: any) {
-    this.variantsInfo = val;
+    this.oldVariantsInfo = val;
+    console.log('old variants: ', val);
   }
   searchModalCollapsed = true;
   searchAlterModalCollapsed = true;
@@ -113,12 +114,16 @@ export class EditProductModalComponent implements OnInit {
   selectedKeywordsId: any;
   keywordsListInfo: any;
   variantsInfo: any;
+  oldVariantsInfo: any;
   productId: any;
   brandsList = [];
   availableProductsAll = [];
   productsAll = [];
   productAccessories = [];
   productAlternatives = [];
+  allSku = [];
+  invalidSku = [];
+  missingSku = false;
 
   constructor(private productProfileService: ProductProfileService, private completerService: CompleterService,
     private route: ActivatedRoute, private suppliersService: SuppliersService,
@@ -148,9 +153,10 @@ export class EditProductModalComponent implements OnInit {
         this.addedProduct.productDesc = response.data.description;
         this.addedProduct.measureUnit = response.data.unitOfMeasure.unit;
         this.addedProduct.measureCount = response.data.unitOfMeasure.quantity;
+        this.addedProduct.unitCost = this.addedProduct.unitCost ? this.addedProduct.unitCost : 0;
         // for variant group add
         this.addedProduct.variantValue = [{id: 1, data: []}];
-        this.addedProduct.varuantProducts = [];
+        this.addedProduct.variantProducts = [];
         if (backedData.expiration) {
           this.addedProduct.expirationType = backedData.expiration.unit;
           this.addedProduct.expirationCount = backedData.expiration.duration;
@@ -185,11 +191,20 @@ export class EditProductModalComponent implements OnInit {
           // this.productTags = this.getKeywordsName(this.addedProduct.keywordIds);
           this.productTags = this.addedProduct.keywordIds;
         });
+
+        this.productsService.getProductCategoriesList(this.productId).subscribe(data => {
+          this.pricingCategoriesListInfo = data.results;
+          this.pricingCategoriesListInfo.map(p => p['price'] = this.addedProduct.unitCost * p.margin);
+        });
       });
 
       this.productsService.getProductsList().subscribe(response => {
         this.productsAll = response.results;
-        console.log('products All: ', response);
+        this.productsAll.forEach(ele => {
+          if (ele.skus) {
+            this.allSku = this.allSku.concat(ele.skus);
+          }
+        });
 
         this.productsService.getProductCatalog().subscribe(data => {
           this.availableProductsAll = data.results;
@@ -238,11 +253,6 @@ export class EditProductModalComponent implements OnInit {
 
     this.sharedService.getCurrencies().subscribe(res => {
       this.currenciesListInfo = res.results;
-    });
-
-    this.sharedService.getPricingCategories().subscribe(res => {
-      this.pricingCategoriesListInfo = res.results;
-      this.pricingCategoriesListInfo.map(p => p['price'] = 0);
     });
 
     this.searchableList = ['productName', 'model', 'brand'];
@@ -368,26 +378,32 @@ export class EditProductModalComponent implements OnInit {
   clickNextEditVariant() {
     // Skip variants edit for now
 
-    // const variantSuppliercode = this.addedProduct.variantProducts.map(v => v.supplierCode);
-    // if (variantSuppliercode.filter(s => s === '').length > 0) {
-    //   this.missingSupplierCode = true;
-    // } else {
-    //   this.missingSupplierCode = false;
-    // }
-    // const variantUpcNumber = this.addedProduct.variantProducts.map(v => v.upcNumber);
-    // if (variantUpcNumber.filter(s => s === '').length > 0) {
-    //   this.missingUpcNumber = true;
-    // } else {
-    //   this.missingUpcNumber = false;
-    // }
-    // if (this.missingUpcNumber || this.missingSupplierCode) {
-    //   return;
-    // } else {
+    const variantSuppliercode = this.addedProduct.variantProducts.map(v => v.supplierCode);
+    if (variantSuppliercode.filter(s => s === '').length > 0) {
+      this.missingSupplierCode = true;
+    } else {
+      this.missingSupplierCode = false;
+    }
+    const variantUpcNumber = this.addedProduct.variantProducts.map(v => v.upcNumber);
+    if (variantUpcNumber.filter(s => s === '').length > 0) {
+      this.missingUpcNumber = true;
+    } else {
+      this.missingUpcNumber = false;
+    }
+
+    if (this.invalidSku.filter(s => s === true).length > 0) {
+      this.missingSku = true;
+    } else {
+      this.missingSku = false;
+    }
+    if (this.missingUpcNumber || this.missingSupplierCode || this.missingSku) {
+      return;
+    } else {
       this.tabActiveFour = true;
       this.tabActiveFirst = false;
       this.tabActiveThird = false;
       this.tabActiveSecond = false;
-    // }
+    }
   }
 
   clickBack(pos) {
@@ -452,11 +468,25 @@ export class EditProductModalComponent implements OnInit {
                                                   this.pricingCategoriesListInfo[i].price) * 100;
       // show 2 decimal places
       this.pricingCategoriesListInfo[i].margin = parseFloat(this.pricingCategoriesListInfo[i].margin).toFixed(2);
+      const updatingData = {
+        price: Number(this.pricingCategoriesListInfo[i].price)
+      };
+      this.productsService.updateProductIndividualCategory(this.productId, this.pricingCategoriesListInfo[i].id, updatingData)
+        .subscribe(res => {
+          console.log('pricing category updated: ', res);
+        });
     }
     if ((this.pricingCategoriesListInfo[i].margin !== undefined) && (this.addedProduct.unitCost !== undefined) && (value === 'margin')) {
       this.pricingCategoriesListInfo[i].price = this.addedProduct.unitCost * 100 / (100 - this.pricingCategoriesListInfo[i].margin);
       // show 2 decimal places
       this.pricingCategoriesListInfo[i].price = parseFloat(this.pricingCategoriesListInfo[i].price).toFixed(2);
+      const updatingData = {
+        margin: Number(this.pricingCategoriesListInfo[i].margin),
+      };
+      this.productsService.updateProductIndividualCategory(this.productId, this.pricingCategoriesListInfo[i].id, updatingData)
+        .subscribe(res => {
+          console.log('pricing category updated: ', res);
+        });
     }
   }
 
@@ -538,13 +568,18 @@ export class EditProductModalComponent implements OnInit {
     for ( let i = 0; i < this.possibleCombination.length; i++) {
       this.addedProduct.variantProducts[i] = {
         name: this.possibleCombination[i],
-        qty: 0,
+        qty: 1,
         sku: skuNumber + i,
         cost: this.addedProduct.unitCost,
         supplierCode: '',
-        priceAdjust: this.addedProduct.price,
+        priceAdjust: this.addedProduct.priceAdjust,
         upcNumber: ''
       };
+      if (this.allSku.includes(this.addedProduct.variantProducts[i].sku.toString())) {
+        this.invalidSku[i] = true;
+      } else {
+        this.invalidSku[i] = false;
+      }
     }
   }
 
@@ -604,7 +639,7 @@ export class EditProductModalComponent implements OnInit {
   }
 
   getSkuCheckColor(acc) {
-    if (acc.option === 'optional') {
+    if (acc.option === 'OPTIONAL') {
       return 'gray';
     } else {
       return 'green';
@@ -692,7 +727,34 @@ export class EditProductModalComponent implements OnInit {
   onUploadStateChanged(event) {
   }
 
+  createVariants() {
+    console.log('variants list: ', this.addedProduct.variantProducts);
+    this.addedProduct.variantProducts.forEach(element => {
+      element.quantity = element.qty;
+      element.upc = element.upcNumber;
+      element.priceAdjustment = element.priceAdjust;
+      element.sku = element.sku.toString();
+      this.productsService.createVariants(this.addedProduct.id, JSON.stringify(element)).subscribe(res => {
+        console.log('variants created: ', res);
+      });
+    });
+  }
+
+  updateVariants() {
+
+    this.oldVariantsInfo.forEach(element => {
+      element.quantity = Number(element.quantity);
+      element.sku = element.sku.toString();
+      this.productsService.updateProductIndividualVariant(this.addedProduct.id, element.sku, JSON.stringify(element)).subscribe(res => {
+        console.log('variants updated: ', res);
+      });
+    });
+  }
+
   saveAlterAcc() {
+    this.createVariants();
+    this.updateVariants();
+    this.productProfileService.editModalClosed.next(true);
     this.closeEditProductModal.emit({'close': true});
     this.tabActiveFirst = true;
     this.tabActiveSecond = this.tabActiveThird = this.tabActiveFour = false;
@@ -703,7 +765,7 @@ export class EditProductModalComponent implements OnInit {
     this.addedAlterList.forEach(ele => {
       const savingAlter = {
         sku: ele.skuNumber,
-        quantity: ele.qty
+        quantity: Number(ele.qty)
       };
       this.productsService.createAlternative(this.productId, savingAlter).subscribe(res => {
         console.log('saved alter: ', res);
@@ -713,12 +775,11 @@ export class EditProductModalComponent implements OnInit {
     this.addedAccList.forEach(ele => {
       const savingAcc = {
         sku: ele.skuNumber,
-        quantity: ele.qty,
+        quantity: Number(ele.qty),
         option: ele.option
       };
       this.productsService.createAlternative(this.productId, savingAcc).subscribe(res => {
         console.log('saved acc: ', res);
-        this.productProfileService.editModalClosed.next(true);
       });
     });
   }
