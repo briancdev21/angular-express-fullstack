@@ -17,7 +17,7 @@ import { ProductsService } from '../../../../../services/inventory/products.serv
 })
 export class ProgressProductLogComponent implements OnInit {
 
-  @Input() reservedInventoryList;
+  @Input() reservedInventoryList = [];
   @Input() purchaseOrdersList = [];
   menuCollapsed = true;
   saveFilterModalCollapsed = true;
@@ -65,6 +65,7 @@ export class ProgressProductLogComponent implements OnInit {
       this.catalogsList = data.results;
       this.pmService.getProductsList(this.currentProjectId).subscribe(res => {
         this.reservedInventoryList = res.results;
+        this.reservedInventoryList = this.reservedInventoryList.filter(i => i.reservedQuantity > 0 || i.deliveredQuantity > 0);
         this.reservedInventoryList.forEach(element => {
           const matchElement = this.catalogsList.filter(c => c.sku === element.sku)[0];
           element.imgUrl = matchElement.pictureURI;

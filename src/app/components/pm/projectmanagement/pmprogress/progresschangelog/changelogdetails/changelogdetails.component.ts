@@ -63,6 +63,11 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
       this.switchIconPm = res.data.updateProjectManager;
     });
 
+    this.sharedService.getContacts().subscribe(res => {
+      this.contactsList = res;
+      this.contactsList = this.addContactName(this.contactsList);
+    });
+
     const savingMockData = {
       title: '',
       description: '',
@@ -72,7 +77,7 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
     this.projectManagementService.saveChangeLog.subscribe(data => {
       if (data['saveClicked']) {
         let savingData = {
-          'additionalContactId': this.ccContact ? parseInt(this.ccContact, 10) : this.createdChangeLog.contactId,
+          'additionalContactId': this.ccContact ? this.ccContact : this.createdChangeLog.contactId,
           'title': this.title,
           'useContactAddress': this.switchIconAddress,
           'updateProjectManager': this.switchIconPm,
@@ -109,25 +114,26 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
     //   console.log('createdChangeLog', data);
     // });
 
-    this.sharedService.getContacts().subscribe(data => {
-      this.contactsList = data;
-      this.addContactName(this.contactsList);
 
-      this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
-        this.projectInfo = res.data;
-        console.log('project info: ', this.currentProjectId, this.projectInfo);
-        this.customerName = this.getContactNameFromId(this.projectInfo.contactId);
-        this.projectName = this.projectInfo.name;
-        this.address = this.projectInfo.shippingAddress.address;
-        this.city = this.projectInfo.shippingAddress.city;
-        this.province = this.projectInfo.shippingAddress.province;
-        this.country = this.projectInfo.shippingAddress.country;
-        this.postalCode = this.projectInfo.shippingAddress.postalCode;
-        this.requestedBy = this.projectInfo.projectManager;
-        this.createdAt = moment(this.projectInfo.createdAt).format('MMMM DD, YYYY');
-        this.updatedAt = moment(this.projectInfo.updatedAt).format('MMMM DD, YYYY');
+
+    this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
+      this.projectInfo = res.data;
+      console.log('project info: ', this.currentProjectId, this.projectInfo);
+      this.sharedService.getMulipleContacts(res.data.contactId).subscribe(contact => {
+        this.selectedContact = contact[0];
+        this.customerName = this.getContactName(this.selectedContact);
       });
+      this.projectName = this.projectInfo.name;
+      this.address = this.projectInfo.shippingAddress.address;
+      this.city = this.projectInfo.shippingAddress.city;
+      this.province = this.projectInfo.shippingAddress.province;
+      this.country = this.projectInfo.shippingAddress.country;
+      this.postalCode = this.projectInfo.shippingAddress.postalCode;
+      this.requestedBy = this.projectInfo.projectManager;
+      this.createdAt = moment(this.projectInfo.createdAt).format('MMMM DD, YYYY');
+      this.updatedAt = moment(this.projectInfo.updatedAt).format('MMMM DD, YYYY');
     });
+
 
     this.sharedService.getUsers().subscribe(res => {
       this.usersList = res;
@@ -188,5 +194,14 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
   getCustomerNameFromUsername(username) {
     const selectedUser = this.usersList.filter(c => c.username === username)[0];
     return selectedUser.name;
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
+    return selectedContact.name;
   }
 }

@@ -106,8 +106,10 @@ export class AddChangeLogDetailsComponent implements OnInit {
 
       this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
         this.projectInfo = res.data;
+        this.sharedService.getMulipleContacts(this.projectInfo.contactId).subscribe(contact => {
+          this.customerName = this.getContactNameFromId(contact[0]);
+        });
         console.log('project info: ', this.currentProjectId, this.projectInfo);
-        this.customerName = this.getContactNameFromId(this.projectInfo.contactId);
         this.projectName = this.projectInfo.name;
         this.address = this.projectInfo.shippingAddress.address;
         this.city = this.projectInfo.shippingAddress.city;
@@ -222,9 +224,13 @@ export class AddChangeLogDetailsComponent implements OnInit {
     this.updatePm = this.switchIconPm;
   }
 
-  getContactNameFromId(id) {
-    this.selectedContact = this.contactsList.filter(c => c.id === id)[0];
-    return this.selectedContact.name;
+  getContactNameFromId(contact) {
+    if (contact.type === 'PERSON') {
+      contact.name = contact.person.firstName + ' ' + contact.person.lastName;
+    } else {
+      contact.name = contact.business.name;
+    }
+    return contact.name;
   }
 
   getCustomerNameFromUsername(username) {
