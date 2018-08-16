@@ -65,18 +65,6 @@ export class InvoicesComponent implements OnInit {
     private sharedService: SharedService,
     private crmService: CrmService
   ) {
-    this.sharedService.getContacts()
-    .subscribe(data => {
-      data = this.addContactName(data);
-      console.log('userlist: ', data);
-      this.contactsList = data;
-    });
-    this.crmService.getLeadsList()
-    .subscribe(data => {
-      data = data.results;
-      data = this.addContactName(data);
-      this.leadsList = data;
-    });
 
     this.filterAvaliableTo = 'everyone';
     this.invoicesService.getInvoices().subscribe(res => {
@@ -86,6 +74,34 @@ export class InvoicesComponent implements OnInit {
         return element;
       });
       this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
+      const contactIds = this.invoicesListInfo.map(i => i['contactId']);
+      this.sharedService.getMulipleContacts(contactIds).subscribe(contact => {
+        this.contactsList = contact;
+        this.addContactName(this.contactsList);
+
+        this.estimatesService.getEstimates().subscribe(data => {
+          this.estimatesListInfo = data.results;
+          this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['expiryDate'], i['status']));
+          this.estimatesListInfo = this.estimatesListInfo.map(element => {
+            element['isInvoice'] = false;
+            return element;
+          });
+          this.invoicesListInfo = this.invoicesListInfo.concat(this.estimatesListInfo);
+          this.invoicesListInfo.forEach(element => {
+            element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
+            element['balance'] = element['total'] - element['receivedPayment'] - element['deposit'];
+          });
+          this.invoicesListInfo = this.sortDateArray('createdAt');
+          this.invoicesListInfo.map(i => {
+            if (i['contactId']) {
+              i['customerName'] = this.getCustomerName(this.contactsList, i['contactId']);
+            } else if (i['leadId']) {
+              i['customerName'] = this.getCustomerNameFromLead(i['leadId']);
+            }
+            return i;
+          });
+        });
+      });
       // this.invoicesListInfo.map(i => {
       //   if (i['contactId']) {
       //     i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].split('-').pop(), 10));
@@ -94,31 +110,7 @@ export class InvoicesComponent implements OnInit {
       //   }
       //   return i;
       // });
-
-      this.estimatesService.getEstimates().subscribe(data => {
-        this.estimatesListInfo = data.results;
-        this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['expiryDate'], i['status']));
-        this.estimatesListInfo = this.estimatesListInfo.map(element => {
-          element['balance'] = 0;
-          element['isInvoice'] = false;
-          return element;
-        });
-        this.invoicesListInfo = this.invoicesListInfo.concat(this.estimatesListInfo);
-        this.invoicesListInfo.forEach(element => {
-          element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
-        });
-        this.invoicesListInfo = this.sortDateArray('createdAt');
-
-        this.invoicesListInfo.map(i => {
-          if (i['contactId']) {
-            i['customerName'] = this.getCustomerName(this.contactsList, i['contactId']);
-          } else {
-            i['customerName'] = this.getCustomerName(this.leadsList, ['leadId']);
-          }
-          return i;
-        });
-      });
-            console.log('invoiceslist: ', this.invoicesListInfo);
+      console.log('invoiceslist: ', this.invoicesListInfo);
 
     });
   }
@@ -259,5 +251,8 @@ export class InvoicesComponent implements OnInit {
       }
     });
     return data;
+  }
+
+  getCustomerNameFromLead(id) {
   }
 }
