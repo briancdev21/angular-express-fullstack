@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { SharedService } from '../../../services/shared.service';
+import { ProjectsService } from '../../../services/projects.service';
 
 @Component({
   selector: 'app-inventorydashboard',
@@ -104,8 +105,9 @@ export class InventoryDashboardComponent implements OnInit {
   menuCollapsed = true;
   donutTimePeriod = 'MONTHLY';
   showDonutChart = true;
+  projectsList = [];
 
-  constructor( private sharedService: SharedService) {
+  constructor( private sharedService: SharedService, private projectsService: ProjectsService) {
     this.sharedService.getInventoryStatistics(5, 0, 'MONTHLY', 'purchaseOrderValuesOverTime').subscribe(res => {
       this.morrisLineChartInfo = res.purchaseOrderValuesOverTime;
       this.morrisLineChartInfo.forEach(ele => {
@@ -114,13 +116,19 @@ export class InventoryDashboardComponent implements OnInit {
       });
     });
 
-    this.sharedService.getPurchaseOrders().subscribe(res => {
-      this.pendingOrders = res.results;
-      this.pendingOrders = this.pendingOrders.filter(o => o.status === 'OPEN');
-      this.sortDateArray('dueDate');
-      this.pendingOrders.forEach(element => {
-        element.formatedDueDate = moment(element.dueDate).format('MMMM DD, YYYY');
+    this.projectsService.getProjectsList().subscribe(projects => {
+      this.projectsList = projects.results.filter(p => p.status === 'IN_PROGRESS');
+      console.log('in progress pro: ', this.projectsList);
+      this.projectsList.forEach(ele => {
+        this.sharedService.getPurchaseOrdersByProjectId(ele.id).subscribe(res => {
+          this.pendingOrders = this.pendingOrders.concat(res.results);
+          this.pendingOrders.forEach(element => {
+            element.formatedDueDate = moment(element.dueDate).format('MMMM DD, YYYY');
+          });
+        });
       });
+      console.log('pendingOrders: ', this.pendingOrders);
+      this.sortDateArray('dueDate');
     });
 
     this.sharedService.getInventoryStatistics(11, 0, 'MONTHLY', 'grossMarginsOverTime').subscribe(res => {
