@@ -152,6 +152,10 @@ export class PmFinancialsComponent implements OnInit {
 
         this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
           this.projectInfo = data.data;
+          this.sharedService.getMulipleContacts(data.data.contactId).subscribe(contact => {
+            const selectedContact = contact[0];
+            this.projectInfo.contactName = this.getContactName(selectedContact);
+          });
           this.getUnusedBudget();
         });
       });
@@ -167,6 +171,10 @@ export class PmFinancialsComponent implements OnInit {
       console.log('budgetdeleted : ', res);
       this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
         this.projectInfo = data.data;
+        this.sharedService.getMulipleContacts(data.data.contactId).subscribe(contact => {
+          const selectedContact = contact[0];
+          this.projectInfo.contactName = this.getContactName(selectedContact);
+        });
         this.getUnusedBudget();
       });
     });
@@ -187,6 +195,10 @@ export class PmFinancialsComponent implements OnInit {
 
     this.projectsService.getIndividualProject(this.currentProjectId).subscribe(res => {
       this.projectInfo = res.data;
+      this.sharedService.getMulipleContacts(res.data.contactId).subscribe(contact => {
+        const selectedContact = contact[0];
+        this.projectInfo.contactName = this.getContactName(selectedContact);
+      });
       this.projectsService.getProjectBudget(this.currentProjectId).subscribe( response => {
         this.budgetList = response.results;
         this.usedBudget = 0;
@@ -208,6 +220,7 @@ export class PmFinancialsComponent implements OnInit {
 
         // unused budget color change
         if (this.unusedBudget > budgetAmount) {
+          this.invalidBudget = false;
           this.budgetList.push({
             'date': budgetDate,
             'amount': budgetAmount
@@ -221,6 +234,10 @@ export class PmFinancialsComponent implements OnInit {
             // calc unused budget
             this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
               this.projectInfo = data.data;
+              this.sharedService.getMulipleContacts(data.data.contactId).subscribe(contact => {
+                const selectedContact = contact[0];
+                this.projectInfo.contactName = this.getContactName(selectedContact);
+              });
               this.getUnusedBudget();
             });
           });
@@ -237,10 +254,15 @@ export class PmFinancialsComponent implements OnInit {
   }
 
   removeBudget(index) {
+    this.invalidBudget = false;
     this.projectsService.deleteIndividualProjectBudget(this.currentProjectId, this.budgetList[index].id).subscribe(res => {
       // calc unused budget
       this.projectsService.getIndividualProject(this.currentProjectId).subscribe(data => {
         this.projectInfo = data.data;
+        this.sharedService.getMulipleContacts(data.data.contactId).subscribe(contact => {
+          const selectedContact = contact[0];
+          this.projectInfo.contactName = this.getContactName(selectedContact);
+        });
         this.getUnusedBudget();
       });
     });
