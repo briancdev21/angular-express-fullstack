@@ -1,6 +1,7 @@
 <div class="title-sec">
   <input class="title" [(ngModel)]="title" (ngModelChange)="onChangeTitle($event)" placeholder="Type Change log title here">
   <select [(ngModel)]="changeLogStatus" (ngModelChange)="onChangeStatus($event)">
+    <option value="NEW">NEW</option>
     <option value="IN_PROGRESS">IN PROGRESS</option>
     <option value="REJECTED">NOT APPROVED</option>
     <option value="APPROVED">APPROVED</option>

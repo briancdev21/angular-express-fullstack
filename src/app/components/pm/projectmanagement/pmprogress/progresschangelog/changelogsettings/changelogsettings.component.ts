@@ -32,7 +32,6 @@ export class ChangeLogSettingsComponent implements OnDestroy {
     };
 
     this.projectManagementService.saveChangeLog.next(sendSaveData);
-    this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
   }
 
   cancelChangeLog() {
