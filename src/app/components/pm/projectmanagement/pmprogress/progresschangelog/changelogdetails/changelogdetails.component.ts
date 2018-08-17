@@ -4,6 +4,7 @@ import { ProjectManagementService } from '../../../projectmanagement.service';
 import { SharedService } from '../../../../../../services/shared.service';
 import { ProjectsService } from '../../../../../../services/projects.service';
 import * as moment from 'moment';
+import { CommonService } from '../../../../../common/common.service';
 
 @Component({
   selector: 'app-changelogdetails',
@@ -49,9 +50,10 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
   currentChangeLogId: any;
   _descriptionChange: any;
   _detailsChange: any;
+  modalContent = 'Cannot update Approved or Rejected Change log';
 
   constructor( private projectManagementService: ProjectManagementService, private sharedService: SharedService,
-    private projectsService: ProjectsService, private route: ActivatedRoute  ) {
+    private projectsService: ProjectsService, private route: ActivatedRoute, private commonService: CommonService, private router: Router) {
     this.currentProjectId = localStorage.getItem('current_projectId');
     this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
 
@@ -61,6 +63,9 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
       this.title = res.data.title;
       this.logStatus = res.data.status;
       this.switchIconPm = res.data.updateProjectManager;
+      if ( this.createdChangeLog.status === 'APPROVED' || this.createdChangeLog.status  === 'REJECTED') {
+        this.commonService.showAlertModal.next(true);
+      }
     });
 
     this.sharedService.getContacts().subscribe(res => {
@@ -76,24 +81,29 @@ export class ChangeLogDetailsComponent implements OnInit, OnDestroy {
 
     this.projectManagementService.saveChangeLog.subscribe(data => {
       if (data['saveClicked']) {
-        let savingData = {
-          'additionalContactId': this.ccContact ? this.ccContact : this.createdChangeLog.contactId,
-          'title': this.title,
-          'useContactAddress': this.switchIconAddress,
-          'updateProjectManager': this.switchIconPm,
-          'description': this._descriptionChange ? this._descriptionChange : this.createdChangeLog.description,
-          'newScopeOfWork': this._detailsChange ? this._detailsChange : this.createdChangeLog.newScopeOfWork,
-          'status': this.logStatus
-        };
+        if ( this.createdChangeLog.status === 'APPROVED' || this.createdChangeLog.status  === 'REJECTED') {
+          this.commonService.showAlertModal.next(true);
+        } else {
+          let savingData = {
+            'additionalContactId': this.ccContact ? this.ccContact : this.createdChangeLog.contactId,
+            'title': this.title,
+            'useContactAddress': this.switchIconAddress,
+            'updateProjectManager': this.switchIconPm,
+            'description': this._descriptionChange ? this._descriptionChange : this.createdChangeLog.description,
+            'newScopeOfWork': this._detailsChange ? this._detailsChange : this.createdChangeLog.newScopeOfWork,
+            'status': this.logStatus
+          };
 
-        // savingData.keys(obj).forEach(k => (!obj[k] && obj[k] !== undefined) && delete obj[k]);
-        savingData = JSON.parse(JSON.stringify(savingData));
-        this.currentProjectId = localStorage.getItem('current_projectId');
-        this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
-        this.projectsService.updateIndividualChangeLog(this.currentProjectId, this.createdChangeLog.id, savingData)
-          .subscribe(res => {
-            data['saveClicked'] = false;
-          });
+          // savingData.keys(obj).forEach(k => (!obj[k] && obj[k] !== undefined) && delete obj[k]);
+          savingData = JSON.parse(JSON.stringify(savingData));
+          this.currentProjectId = localStorage.getItem('current_projectId');
+          this.currentChangeLogId = this.route.snapshot.paramMap.get('id');
+          this.projectsService.updateIndividualChangeLog(this.currentProjectId, this.createdChangeLog.id, savingData)
+            .subscribe(res => {
+              data['saveClicked'] = false;
+            });
+          this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
+        }
       }
     });
 

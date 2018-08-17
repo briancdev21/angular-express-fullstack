@@ -120,6 +120,11 @@ export class ProjectsService {
     return this.http.put(url, body);
   }
 
+  deleteIndividualChangeLog(id, logId): Observable<any> {
+    const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs/${logId}`;
+    return this.http.delete(url);
+  }
+
   sendChangelogEmail(id, logId): Observable<any>  {
     const url = `${environment.apiUrl}/project-management/projects/${id}/change-logs/${logId}/email`;
     return this.http.get(url);

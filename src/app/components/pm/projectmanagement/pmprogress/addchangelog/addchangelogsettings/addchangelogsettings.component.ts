@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectManagementService } from '../../../projectmanagement.service';
+import { ProjectsService } from '../../../../../../services/projects.service';
 
 @Component({
   selector: 'app-addchangelogsettings',
@@ -14,8 +15,15 @@ export class AddChangeLogSettingsComponent implements OnDestroy {
   settingsCollapsed = true;
   showReminderModal = false;
   switchOn = false;
+  newChangeLogData: any;
+  currentProjectId: any;
 
-  constructor(private router: Router, private projectManagementService: ProjectManagementService) {
+  constructor(private router: Router, private projectManagementService: ProjectManagementService,
+    private projectsService: ProjectsService) {
+    this.currentProjectId = localStorage.getItem('current_projectId');
+    this.projectManagementService.createdChangeLogData.subscribe(res => {
+      this.newChangeLogData = res;
+    });
   }
 
   saveChangeLog() {
@@ -36,7 +44,10 @@ export class AddChangeLogSettingsComponent implements OnDestroy {
   }
 
   deleteChangeLog() {
-
+    this.projectsService.deleteIndividualChangeLog(this.currentProjectId, this.newChangeLogData.id).subscribe(res => {
+      console.log('deleted: ', res);
+      this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
+    });
   }
 
   ngOnDestroy() {

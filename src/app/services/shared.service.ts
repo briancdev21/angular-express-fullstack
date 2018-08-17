@@ -367,6 +367,11 @@ export class SharedService {
     return this.http.get<any>(url);
   }
 
+  getPurchaseOrdersByProjectId (id): Observable<any> {
+    const url = `${environment.apiUrl}/inventory/purchase-orders?projectId=${id}`;
+    return this.http.get<any>(url);
+  }
+
   getPurchaseOrdersWithParams (params): Observable<any> {
     const url = `${environment.apiUrl}/inventory/purchase-orders`;
     return this.http.get<any>(url, {params: params});

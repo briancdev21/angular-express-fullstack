@@ -32,7 +32,6 @@ export class ChangeLogSettingsComponent implements OnDestroy {
     };
 
     this.projectManagementService.saveChangeLog.next(sendSaveData);
-    this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
   }
 
   cancelChangeLog() {
@@ -40,6 +39,10 @@ export class ChangeLogSettingsComponent implements OnDestroy {
   }
 
   deleteChangeLog() {
+    this.projectsService.deleteIndividualChangeLog(this.currentProjectId, this.currentChangeLogId).subscribe(res => {
+      console.log('deleted: ', res);
+      this.router.navigate(['./pm/pm-details/pm-progress/pm-logs-table/']);
+    });
   }
 
   onClickSendCustomer() {
