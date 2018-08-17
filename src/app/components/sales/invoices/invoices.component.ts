@@ -283,12 +283,14 @@ export class InvoicesComponent implements OnInit {
           console.log('invoice created: ', res);
           this.router.navigate([`./invoice-profile/${res.data.id}`]);
           this.showInvoiceCreateModal = false;
+          this.contactId = undefined;
         });
       } else {
         this.estimatesService.createEstimate(creatingData).subscribe(res => {
           console.log('estimate created: ', res);
           this.router.navigate([`./estimate-profile/${res.data.id}`]);
           this.showInvoiceCreateModal = false;
+          this.contactId = undefined;
         });
       }
     }
