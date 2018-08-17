@@ -15,7 +15,7 @@
 </div>
 
 <div class="text-editor-sec">
-  <div class="scope-description-change" *ngIf="projectInformation">
+  <div class="scope-description-change" *ngIf="projectInformation" (clickOutside)="updateProjectInfo()">
     <div class="editor-title">INTERNAL NOTES</div>
     <quill-editor [(ngModel)]="projectInformation.internalNote">
     </quill-editor>
