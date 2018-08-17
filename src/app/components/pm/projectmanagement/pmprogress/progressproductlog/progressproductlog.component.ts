@@ -77,6 +77,10 @@ export class ProgressProductLogComponent implements OnInit {
       .finally(() => this.getProducts())
       .subscribe(res => {
         this.purchaseOrders = res.results;
+        this.purchaseOrders = this.purchaseOrders.filter(ele => ele.quantity > ele.received);
+        this.purchaseOrders.forEach(element => {
+          element.quantity = element.quantity - element.received;
+        });
         console.log('purchaseOrders: ', this.purchaseOrders);
       });
     });
