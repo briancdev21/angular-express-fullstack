@@ -254,7 +254,18 @@ export class MyTasksComponent implements OnInit {
       title: ''
     };
     this.pmTasksService.createTask(panel.id, newMockTask).subscribe(res => {
-      this.refreshTable();
+      console.log('task added: ', panel, res, this.panels);
+      const newTask = res.data;
+      console.log('task added1: ', this.panels);
+      newTask.assigneeInfo = this.getUserInfo(newTask.assignee);
+      console.log('task added2: ', newTask);
+      newTask.startDate = moment(newTask.startDate).format('MMMM DD, YYYY');
+      newTask.taskTitle = newTask.title;
+      newTask.dependency = newTask.dependencyIds ? newTask.dependencyIds : [];
+      console.log('task added3: ', this.panels);
+      // this.refreshTable();
+      const panelIndex = this.panels.map(p => p.id).indexOf(panel.id);
+      this.panels[panelIndex].tasks.push(newTask);
     });
   }
 
@@ -274,7 +285,10 @@ export class MyTasksComponent implements OnInit {
       this.newPanelTitle = '';
       this.addPanelClicked = !this.addPanelClicked;
       this.pmTasksService.createTaskGroup(newPanel).subscribe(res => {
-        this.refreshTable();
+        // this.refreshTable();
+        console.log('new panel: ', res, this.panels);
+        const newGroup = res.data;
+        // this.panels.push()
       });
     }
   }
