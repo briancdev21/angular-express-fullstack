@@ -101,7 +101,7 @@
                     <!-- <input [value]="task.id" type="hidden" class="taskId" >
                     <input [value]="milestone.id" type="hidden" class="taskGroupId" > -->
                     <div (click)="showDeleteConfirmModal[i][j]= true;">Delete Task</div>
-                    <div (click)="copyTask(panel, task)">Copy Task</div>
+                    <div (click)="copyTask(panel, task, i, j)">Copy Task</div>
                     <!-- <div>Mark as Waiting On</div> -->
                   </div>
                   <!-- Confirm delete modal wrapper -->
@@ -118,7 +118,7 @@
                         <div class="center-btn-section" >
                           <!-- <input [value]="task.id" type="hidden" class="taskId" >
                           <input [value]="milestone.id" type="hidden" class="taskGroupId" >   -->
-                          <button class="confirm-btn" (click)="confirmDeleteMainTask(panel, task); showDeleteConfirmModal[i][j]=false;" >
+                          <button class="confirm-btn" (click)="confirmDeleteMainTask(panel, task, i, j); showDeleteConfirmModal[i][j]=false;" >
                             Confirm
                           </button>
                           <button class="cancel-btn" (click)="showDeleteConfirmModal[i][j]=false" >

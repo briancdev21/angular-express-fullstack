@@ -479,14 +479,17 @@ export class MyTasksComponent implements OnInit {
       permission: this.panels[index].permission,
     };
     this.pmTasksService.updateIndividualTaskGroup(this.panels[index].id, body).subscribe(res => {
-      this.refreshTable();
+      // this.refreshTable();
     });
   }
 
   confirmDeleteTaskGroup(milestoneId) {
     // console.log('taskgroup deleted');
     this.pmTasksService.deleteIndividualTaskGroup(milestoneId).subscribe(res => {
-      this.refreshTable();
+      // this.refreshTable();
+      const pos = this.panels.map(p => p.id).indexOf(milestoneId);
+      this.panels.splice(pos, 1);
+      console.log('removed: ', milestoneId, this.panels);
     });
   }
 
@@ -498,13 +501,14 @@ export class MyTasksComponent implements OnInit {
     }
   }
 
-  confirmDeleteMainTask(panel, task) {
+  confirmDeleteMainTask(panel, task, i, j) {
     this.pmTasksService.deleteIndividualtask(panel.id, task.id).subscribe(res => {
       this.refreshTable();
     });
   }
 
-  copyTask(panel, task) {
+  copyTask(panel, task, i, j) {
+    console.log('copy: ', panel, task, i, j);
     const savingData = task;
     savingData.startDate = moment(task.startDate).format('YYYY-MM-DD');
     // remove null
