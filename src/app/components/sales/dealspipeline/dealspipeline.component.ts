@@ -2,6 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
 import { DragulaService } from 'ng2-dragula';
+import { SharedService } from '../../../services/shared.service';
+import { InvoicesService } from '../../../services/invoices.service';
+import { EstimatesService } from '../../../services/estimates.service';
+import { ProposalsService } from '../../../services/proposals.service';
+import { CrmService } from '../../../services/crm.service';
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-dealspipeline',
   templateUrl: './dealspipeline.component.html',
@@ -42,120 +49,154 @@ export class DealsPipelineComponent implements OnInit {
   thisYearEndTime: number;
   filteredDealsInfo = [];
 
-  public dealsInfo = [
-    {
-      name: 'Diana Ilic',
-      title: 'Living your Nu Life',
-      total: 24202.37,
-      id: 123465,
-      created: 'Jan 19, 2018',
-      status: 'new',
-    },
-    {
-      name: 'John Moss',
-      title: 'Home Theater Expansion',
-      total: 9579.38,
-      id: 123459,
-      created: 'Feb 26, 2018',
-      status: 'followUp',
-    },
-    {
-      name: 'John Smith',
-      title: 'The Smith Residence',
-      total: 37552.37,
-      id: 123463,
-      created: 'Dec 15, 2017',
-      status: 'followUp',
-    },
-    {
-      name: 'Greg Johnson',
-      title: 'Living your Nu Life',
-      total: 56230.37,
-      id: 123464,
-      created: 'Jan 17, 2017',
-      status: 'seen',
-    },
-    {
-      name: 'Hayati Homes',
-      title: 'Project Show Home',
-      total: 24683.21,
-      id: 123415,
-      created: 'Jan 19, 2017',
-      status: 'demo',
-    },
-    {
-      name: 'Tyler Petak',
-      title: 'Living your Nu Life',
-      total: 42323.37,
-      id: 123462,
-      created: 'Jan 11, 2017',
-      status: 'demo',
-    },
-    {
-      name: 'John Moss',
-      title: 'Upgrade Security',
-      total: 12552.37,
-      id: 123460,
-      created: 'Jan 19, 2017',
-      status: 'negotiation',
-    },
-    {
-      name: 'John Moss',
-      title: 'Control System Upgrade',
-      total: 3110.33,
-      id: 123457,
-      created: 'Dec 23, 2016',
-      status: 'won',
-    },
-    {
-      name: 'John Moss',
-      title: 'Remodel with a Nu Life',
-      total: 22323.67,
-      id: 123456,
-      created: 'Dec 15, 2016',
-      status: 'won',
-    },
-    {
-      name: 'Rockwood Homes',
-      title: 'Wood\'s residence',
-      total: 123110.33,
-      id: 123412,
-      created: 'Dec 12, 2016',
-      status: 'won',
-    },
-  ];
+  public dealsInfo = [];
 
-  constructor( private dragulaService: DragulaService, private filterService: FilterService ) {
+  invoicesList = [];
+  estimatesList = [];
+  proposalsList = [];
+  contactsList = [];
+  leadsList = [];
+  estContactsList = [];
+  estLeadsList = [];
+  updatingCard: any;
+
+  constructor( private dragulaService: DragulaService, private filterService: FilterService, private sharedService: SharedService,
+    private invoicesService: InvoicesService, private estimatesService: EstimatesService, private proposalsService: ProposalsService,
+    private crmService: CrmService ) {
     dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });
+
+    this.invoicesService.getInvoices().subscribe(res => {
+      console.log('invoice: ', res);
+      // this.sharedService.getMulipleContacts()
+    });
+
+    this.proposalsService.getProposals().subscribe(res => {
+      console.log('proposals: ', res);
+      this.proposalsList = res.results;
+      const contactIds = res.results.filter(data => data.contactId).map(data => data.contactId);
+      const leadIds = res.results.filter(data => data.leadId).map(data => data.leadId);
+
+      this.sharedService.getMulipleContacts(contactIds).subscribe(contact => {
+        this.contactsList = this.contactsList.concat(contact);
+        this.addContactName(this.contactsList);
+
+        this.crmService.getMulipleLeads(leadIds).subscribe(lead => {
+          this.leadsList = this.leadsList.concat(lead);
+          this.addContactName(this.leadsList);
+
+          this.proposalsList.forEach(element => {
+            const indiItem = {
+              name: 'test name',
+              title: 'Proposal',
+              total: element.total,
+              id: element.number,
+              created: moment(element.createdAt).format('MMM DD, YYYY'),
+              status: element.status,
+            };
+            if (element.contactId) {
+              indiItem.name = this.getContactNameFromId(this.contactsList, element.contactId);
+            } else {
+              indiItem.name = this.getLeadNameFromId(this.leadsList, element.leadId);
+            }
+            this.dealsInfo.push(indiItem);
+            for (let i = 0; i < this.dealsInfo.length; i ++) {
+              this.dealsInfo[i].index = i;
+            }
+          });
+          this.categorizeDealsInfo();
+        });
+      });
+    });
+
+    this.estimatesService.getEstimates().subscribe(est => {
+      console.log('estimates: ', est);
+      this.estimatesList = est.results;
+      const estContactIds = est.results.filter(data => data.contactId).map(data => data.contactId);
+      const estLeadIds = est.results.filter(data => data.leadId).map(data => data.leadId);
+
+      this.categorizeDealsInfo();
+
+      this.sharedService.getMulipleContacts(estContactIds).subscribe(contact => {
+        this.contactsList = this.contactsList.concat(contact);
+        this.addContactName(this.contactsList);
+        console.log('whole contacts: ', this.contactsList);
+
+        this.crmService.getMulipleLeads(estLeadIds).subscribe(lead => {
+          this.leadsList = this.leadsList.concat(lead);
+          this.addContactName(this.leadsList);
+          console.log('whole leads: ', this.leadsList);
+
+          this.estimatesList.forEach(estimate => {
+            const indiItem = {
+              name: 'test name',
+              title: 'Estimate',
+              total: estimate.total,
+              id: estimate.number,
+              created: moment(estimate.createdAt).format('MMM DD, YYYY'),
+              status: estimate.status,
+            };
+            if (estimate.contactId) {
+              indiItem.name = this.getContactNameFromId(this.contactsList, estimate.contactId);
+            } else {
+              indiItem.name = this.getLeadNameFromId(this.leadsList, estimate.leadId);
+            }
+            this.dealsInfo.push(indiItem);
+            for (let i = 0; i < this.dealsInfo.length; i ++) {
+              this.dealsInfo[i].index = i;
+            }
+          });
+          this.categorizeDealsInfo();
+        });
+      });
+    });
+  }
+
+  categorizeDealsInfo() {
+    this.newDeals = this.dealsInfo.filter(d => d.status === 'NEW');
+    this.followUpDeals = this.dealsInfo.filter(d => d.status === 'FOLLOW_UP');
+    this.seenDeals = this.dealsInfo.filter(d => d.status === 'SEEN');
+    this.demoDeals = this.dealsInfo.filter(d => d.status === 'DEMO');
+    this.negotiationDeals = this.dealsInfo.filter(d => d.status === 'NEGOTIATION');
+    this.wonDeals = this.dealsInfo.filter(d => d.status === 'WON');
+    this.lostDeals = this.dealsInfo.filter(d => d.status === 'LOST');
   }
 
   private onDropModel(args) {
     const [el, target, source] = args;
-    this.newDeals.map(t => t.status = 'new');
-    this.followUpDeals.map(t => t.status = 'followUp');
-    this.seenDeals.map(t => t.status = 'seen');
-    this.demoDeals.map(t => t.status = 'demo');
-    this.negotiationDeals.map(t => t.status = 'negotiation');
-    this.wonDeals.map(t => t.status = 'won');
-    this.lostDeals.map(t => t.status = 'lost');
+    const selectedIndex = Number(el.id);
+    const targetStatus = target.id;
+    const sourceStatus = source.id;
+    const selectedDeal = this.dealsInfo[selectedIndex];
+    if (selectedDeal.title === 'Estimate') {
+      this.updatingCard = this.estimatesList.filter(e => e.number === selectedDeal.id)[0];
+    } else {
+      this.updatingCard = this.proposalsList.filter(p => p.number === selectedDeal.id)[0];
+    }
+    console.log('updating card: ', this.updatingCard);
+
+    this.updatingDeal(selectedDeal.title, this.updatingCard, targetStatus);
+
+
+
+    console.log('****', args);
+    this.newDeals.map(t => t.status = 'NEW');
+    this.followUpDeals.map(t => t.status = 'FOLLOW_UP');
+    this.seenDeals.map(t => t.status = 'SEEN');
+    this.demoDeals.map(t => t.status = 'DEMO');
+    this.negotiationDeals.map(t => t.status = 'NEGOTIATION');
+    this.wonDeals.map(t => t.status = 'WON');
+    this.lostDeals.map(t => t.status = 'LOST');
   }
 
   ngOnInit() {
-    this.newDeals = this.dealsInfo.filter(d => d.status === 'new');
-    this.followUpDeals = this.dealsInfo.filter(d => d.status === 'followUp');
-    this.seenDeals = this.dealsInfo.filter(d => d.status === 'seen');
-    this.demoDeals = this.dealsInfo.filter(d => d.status === 'demo');
-    this.negotiationDeals = this.dealsInfo.filter(d => d.status === 'negotiation');
-    this.wonDeals = this.dealsInfo.filter(d => d.status === 'won');
-    this.lostDeals = this.dealsInfo.filter(d => d.status === 'lost');
 
     this.todayTime = this.current.getTime();
     this.weekStartTime = new Date(this.current.setDate(this.current.getDate() - this.current.getDay())).getTime();
     this.weekEndTime = new Date(this.current.setDate(this.current.getDate() - this.current.getDay() + 6)).getTime();
-    this.monthStartTime = new Date(this.current.getFullYear(), this.current.getMonth() - 1, 1).getTime();
-    this.monthEndTime = new Date(this.current.getFullYear(), this.current.getMonth(), 0).getTime();
+    this.monthStartTime = new Date(this.current.getFullYear(), this.current.getMonth(), 1).getTime();
+    this.monthEndTime = new Date(this.current.getFullYear(), this.current.getMonth() + 1, 0).getTime();
     const quarter = Math.floor((this.current.getMonth() / 3));
     this.quarterStartTime = new Date(this.current.getFullYear(), quarter * 3, 1).getTime();
     this.quarterEndTime = new Date(this.current.getFullYear(), quarter * 3 + 3, 0).getTime();
@@ -165,7 +206,6 @@ export class DealsPipelineComponent implements OnInit {
     this.thisYearEndTime = new Date(this.current.getFullYear() + 1, 0, 1).getTime();
     this.lastYearStartTime = new Date(this.current.getFullYear() - 1, 0, 1).getTime();
     this.lastYearEndTime = new Date(this.current.getFullYear(), 0, 1).getTime();
-
   }
 
   toggleMenubar(data: boolean) {
@@ -181,7 +221,7 @@ export class DealsPipelineComponent implements OnInit {
   }
 
   onChangeFilter(filter) {
-    console.log('filter: ', filter);
+
     this.filteredDealsInfo = this.dealsInfo;
 
     switch (filter) {
@@ -226,13 +266,57 @@ export class DealsPipelineComponent implements OnInit {
       default:
         console.log('default');
     }
-    this.newDeals = this.filteredDealsInfo.filter(d => d.status === 'new');
-    this.followUpDeals = this.filteredDealsInfo.filter(d => d.status === 'followUp');
-    this.seenDeals = this.filteredDealsInfo.filter(d => d.status === 'seen');
-    this.demoDeals = this.filteredDealsInfo.filter(d => d.status === 'demo');
-    this.negotiationDeals = this.filteredDealsInfo.filter(d => d.status === 'negotiation');
-    this.wonDeals = this.filteredDealsInfo.filter(d => d.status === 'won');
-    this.lostDeals = this.filteredDealsInfo.filter(d => d.status === 'lost');
+    console.log('filtered: ', this.filteredDealsInfo);
+    this.newDeals = this.filteredDealsInfo.filter(d => d.status === 'NEW');
+    this.followUpDeals = this.filteredDealsInfo.filter(d => d.status === 'FOLLOW_UP');
+    this.seenDeals = this.filteredDealsInfo.filter(d => d.status === 'SEEN');
+    this.demoDeals = this.filteredDealsInfo.filter(d => d.status === 'DEMO');
+    this.negotiationDeals = this.filteredDealsInfo.filter(d => d.status === 'NEGOTIATION');
+    this.wonDeals = this.filteredDealsInfo.filter(d => d.status === 'WON');
+    this.lostDeals = this.filteredDealsInfo.filter(d => d.status === 'LOST');
+  }
+
+  addContactName(data) {
+    data.forEach(element => {
+      if (element.type === 'PERSON') {
+        element.name = element.person.firstName + ' ' + element.person.lastName;
+      } else {
+        element.name = element.business.name;
+      }
+    });
+    return data;
+  }
+
+  getContactName(selectedContact) {
+    if (selectedContact.type === 'PERSON') {
+      selectedContact.name = selectedContact.person.firstName + ' ' + selectedContact.person.lastName;
+    } else {
+      selectedContact.name = selectedContact.business.name;
+    }
+    return selectedContact.name;
+  }
+
+  getContactNameFromId (list, id) {
+    const selectedContact = list.filter(c => c.id === id)[0];
+    return this.getContactName(selectedContact);
+  }
+
+  getLeadNameFromId (list, id) {
+    const selectedLead = list.filter(c => c.id === id)[0];
+    return this.getContactName(selectedLead);
+  }
+
+  updatingDeal(type, deal, status) {
+    deal.status = status;
+    if (type === 'Estimate') {
+      this.estimatesService.updateEstimate(deal.id, deal).subscribe(res => {
+        console.log('updated: ', res);
+      });
+    } else {
+      this.proposalsService.updateIndividualProposal(deal.id, deal).subscribe(res => {
+        console.log('updated: ', res);
+      });
+    }
   }
 
 }
