@@ -128,6 +128,7 @@ app-in-discount {
   display: flex;
   align-items: center;
   margin-top: 3px;
+  justify-content: space-between;
 }
 
 .log-number {
@@ -230,4 +231,93 @@ app-in-termsfield, app-in-duedatefield, app-in-class {
   margin-top: 5px;
   color: #646464;
   font-size: 12px;
+}
+
+.customer-name {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  color: #95989a;
+  font-size: 13px;
+  padding-top: 8px;
+}
+
+.customer-name span {
+  margin-bottom: 3px;
+}
+
+:host ::ng-deep ng2-completer .completer-holder input::placeholder {
+	color: #d3d3d3;
+}
+
+:host ::ng-deep ng2-completer .completer-holder input {
+	height: 32px;
+}
+
+.city-state, .country-zip {
+	display: flex;
+	justify-content: space-between
+}
+
+.city-state input, .country-zip input {
+	width: 48%;
+  margin-bottom: 8px;
+  border: 1px solid #f5f5f5;
+  padding-left: 10px;
+  color: #646464;
+}
+
+.city-state ng2-completer, .country-zip ng2-completer {
+	width: 48%;
+	margin-bottom: 8px;
+	display: block;
+}
+
+.desc {
+	display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.switch-bar {
+	display: flex;
+	align-items: center;
+	margin-left: 5%;
+}
+
+.switch-bar img {
+	margin-right: 7px;
+}
+
+img {
+	width: 20px;
+	height: 20px;
+}
+
+.shipping-address {
+  margin-top: 10px;
+  color: #95989a;
+  font-size: 13px;
+}
+
+.address {
+  width: 100%;
+  border: 1px solid #f5f5f5;
+  height: 32px;
+  margin-bottom: 8px;
+  padding-left: 10px;
+  color: #646464;
+}
+
+.uneditable-input {
+  border: 1px solid #f5f5f5;
+  width: 48%;
+  height: 32px;
+  padding-left: 10px;
+  display: flex;
+}
+
+/deep/ ng2-completer .completer-dropdown {
+  height: 130px !important;
+  overflow: auto;
 }

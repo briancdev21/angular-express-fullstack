@@ -11,6 +11,9 @@ import * as moment from 'moment';
 import { RecurseVisitor } from '@angular/compiler/src/i18n/i18n_ast';
 import { ProjectsService } from '../../../../../services/projects.service';
 import { CommonService } from '../../../../common/common.service';
+import { CompleterService, CompleterData } from 'ng2-completer';
+import { countries } from '../../../../../../assets/json/countries';
+import { provinces } from '../../../../../../assets/json/provinces';
 
 @Component({
   selector: 'app-invoiceprofilebody',
@@ -125,30 +128,66 @@ export class InvoiceProfileBodyComponent implements OnInit {
   saveInvoiceData: any;
   currentOwner: string;
   invoiceStatus = 'NEW';
-  modalContent = "You cannot update a PAID or VOID Invoice";
+  modalContent = 'You cannot update a PAID or VOID Invoice';
+
+  contactsSource: CompleterData;
+  currentInvoice: any;
+  customerName: any;
+  countriesSource: CompleterData;
+  provincesSource: CompleterData;
+  projectName: any;
+  changeLogName: any;
+  address = '';
+  city = '';
+  province = '';
+  postalCode = '';
+  country = '';
+  invalidAddress = false;
+  invalidCity = false;
+  invalidProvince = false;
+  invalidCountry = false;
+  invalidPostalCode = false;
+  switchIconShipping = true;
+  selectedContact: any;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
-              private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService, private commonService: CommonService) {
+              private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService,
+              private commonService: CommonService, private completerService: CompleterService ) {
 
     this.currentInvoiceId = this.route.snapshot.paramMap.get('id');
-    console.log('invoice currency id:', this.currentInvoiceId);
+    this.countriesSource = completerService.local(countries, 'name', 'name');
+    this.provincesSource = completerService.local(provinces, 'name', 'name');
 
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      console.log('current invoice', res);
+      this.currentInvoice = res.data;
       this.invoiceStatus = res.data.status;
       this.commonService.showAlertModal.next(false);
-      if (this.invoiceStatus == 'PAID' || this.invoiceStatus == 'VOID' ) {
+      if (this.invoiceStatus === 'PAID' || this.invoiceStatus === 'CLOSED' ) {
         this.commonService.showAlertModal.next(true);
       }
+      this.sharedService.getMulipleContacts(this.currentInvoice.contactId).subscribe(contact => {
+        this.selectedContact = contact[0];
+        this.customerName = this.getContactName(this.selectedContact);
+        if (this.switchIconShipping) {
+          this.address = this.selectedContact.shippingAddress.address;
+          this.country = this.selectedContact.shippingAddress.country;
+          this.city = this.selectedContact.shippingAddress.city;
+          this.province = this.selectedContact.shippingAddress.province;
+          this.postalCode = this.selectedContact.shippingAddress.postalCode;
+        }
+      });
       this.sharedService.getContacts()
       .subscribe(data => {
         data = this.addContactName(data);
         this.contactList = data;
-        this.userList = this.contactList;
-        if (res.data.contactId) {
-          this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
-          this.currentOwner = this.getCustomerName(this.contactList, res.data.contactId);
-          console.log('current owner:', this.currentOwner);
-        }
+        this.contactsSource = this.completerService.local(this.contactList, 'name', 'name');
+        // this.userList = this.contactList;
+        // if (res.data.contactId) {
+        //   this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
+        //   this.currentOwner = this.getCustomerName(this.contactList, res.data.contactId);
+        //   console.log('current owner:', this.currentOwner);
+        // }
       });
 
       this.sharedService.getTerms().subscribe(data => {
@@ -254,6 +293,9 @@ export class InvoiceProfileBodyComponent implements OnInit {
   }
 
   onCustomerSelected(user) {
+  }
+
+  onEnter() {
   }
 
   onSelectUser(selectedIndex: any) {
@@ -369,9 +411,49 @@ export class InvoiceProfileBodyComponent implements OnInit {
     return data;
   }
 
+  getContactName(contact) {
+    if (contact.type === 'PERSON') {
+      contact.name = contact.person.firstName + ' ' + contact.person.lastName;
+    } else {
+      contact.name = contact.business.name;
+    }
+    return contact.name;
+  }
+
   deleteService() {
     this.invoicesService.deleteIndividualInvoice(this.currentInvoiceId).subscribe(res => {
       this.router.navigate(['./sales/invoices']);
     });
+  }
+
+  onSelectCustomer(event) {
+    if (event) {
+      const selectedCustomerId = event.originalObject.id;
+      this.selectedContact = this.contactList.filter(c => c.id === selectedCustomerId)[0];
+      if (this.switchIconShipping) {
+        this.address = this.selectedContact.shippingAddress.address;
+        this.country = this.selectedContact.shippingAddress.country;
+        this.city = this.selectedContact.shippingAddress.city;
+        this.province = this.selectedContact.shippingAddress.province;
+        this.postalCode = this.selectedContact.shippingAddress.postalCode;
+      }
+    }
+  }
+
+  clickIconShipping() {
+    this.switchIconShipping = !this.switchIconShipping;
+    if (this.switchIconShipping) {
+      this.address = this.selectedContact.shippingAddress.address;
+      this.country = this.selectedContact.shippingAddress.country;
+      this.city = this.selectedContact.shippingAddress.city;
+      this.province = this.selectedContact.shippingAddress.province;
+      this.postalCode = this.selectedContact.shippingAddress.postalCode;
+    } else {
+      this.address = '';
+      this.country = '';
+      this.city = '';
+      this.province = '';
+      this.postalCode = '';
+    }
   }
 }
