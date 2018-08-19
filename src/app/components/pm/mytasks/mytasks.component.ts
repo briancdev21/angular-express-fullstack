@@ -138,7 +138,7 @@ export class MyTasksComponent implements OnInit {
 
       for (let i = 0; i < this.panels.length; i++) {
 
-        this.panels[i].color = this.colors[i];
+        this.panels[i].color = this.colors[i % 10];
         this.panels[i].editTitle = false;
         this.ownerModalCollapsed[i] = new Array();
         this.dependencyModalCollapsed[i] = new Array();
@@ -254,16 +254,11 @@ export class MyTasksComponent implements OnInit {
       title: ''
     };
     this.pmTasksService.createTask(panel.id, newMockTask).subscribe(res => {
-      console.log('task added: ', panel, res, this.panels);
       const newTask = res.data;
-      console.log('task added1: ', this.panels);
       newTask.assigneeInfo = this.getUserInfo(newTask.assignee);
-      console.log('task added2: ', newTask);
       newTask.startDate = moment(newTask.startDate).format('MMMM DD, YYYY');
       newTask.taskTitle = newTask.title;
       newTask.dependency = newTask.dependencyIds ? newTask.dependencyIds : [];
-      console.log('task added3: ', this.panels);
-      // this.refreshTable();
       const panelIndex = this.panels.map(p => p.id).indexOf(panel.id);
       this.panels[panelIndex].tasks.push(newTask);
     });
@@ -273,7 +268,6 @@ export class MyTasksComponent implements OnInit {
     if (!this.addPanelClicked) {
       this.addPanelClicked = !this.addPanelClicked;
     }
-
   }
 
   handleKeyDown(event) {
@@ -286,8 +280,10 @@ export class MyTasksComponent implements OnInit {
       this.addPanelClicked = !this.addPanelClicked;
       this.pmTasksService.createTaskGroup(newPanel).subscribe(res => {
         // this.refreshTable();
-        console.log('new panel: ', res, this.panels);
         const newGroup = res.data;
+        newGroup.color = this.colors[this.panels.length % 10];
+        newGroup.editTitle = false;
+        this.panels.push(newGroup);
         // this.panels.push()
       });
     }
