@@ -49,6 +49,11 @@ export class CrmService {
     return this.http.get(url);
   }
 
+  getMulipleLeads(ids: any): Observable<any> {
+    const url = `${environment.apiUrl}/crm/leads/?ids=${ids}`;
+    return this.http.get(url).map(data => data['results']);
+  }
+
   deleteIndividualLead(id): Observable<any>  {
     const url = `${environment.apiUrl}/crm/leads/${id}`;
     return this.http.delete(url);
