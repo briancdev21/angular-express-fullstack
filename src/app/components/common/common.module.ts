@@ -14,6 +14,7 @@ import { AgendaBoxComponent } from './agendabox/agendabox.component';
 import { TasksBoxComponent } from './tasksbox/tasksbox.component';
 import { ActivitiesBoxComponent } from './activitiesbox/activitiesbox.component';
 import { AlertModalComponent } from './alertmodal/alertmodal.component';
+import { YnModalComponent } from './ynmodal/ynmodal.component';
 import { MatInputModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModule } from '@angular/material';
 
 import { CommonService } from './common.service';
@@ -29,7 +30,8 @@ import { CommonService } from './common.service';
     AgendaBoxComponent,
     TasksBoxComponent,
     ActivitiesBoxComponent,
-    AlertModalComponent
+    AlertModalComponent,
+    YnModalComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,8 @@ import { CommonService } from './common.service';
     AgendaBoxComponent,
     TasksBoxComponent,
     ActivitiesBoxComponent,
-    AlertModalComponent
+    AlertModalComponent,
+    YnModalComponent
   ],
   providers: [
     CommonService
