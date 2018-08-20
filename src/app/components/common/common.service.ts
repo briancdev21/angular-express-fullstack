@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class CommonService {
 
   showAlertModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  showYnModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
   constructor() {
   }
 

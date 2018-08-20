@@ -85,8 +85,8 @@
     <div class="draggable-table-content">
       <!--New column-->
       <div class="new-content">
-        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='newDeals'>
-          <div *ngFor="let deal of newDeals; let i = index;" class="individual">
+        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='newDeals' id="NEW">
+          <div *ngFor="let deal of newDeals; let i = index;" class="individual" id={{deal.index}}>
             <div class="draggable">
               <div class="deal-content">
                 <span>{{deal.name}}</span>
@@ -103,8 +103,8 @@
       </div>
       <!-- Follow-Up column -->
       <div class="follow-up-content">
-        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='followUpDeals'>
-          <div *ngFor="let deal of followUpDeals; let i = index;" class="individual">
+        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='followUpDeals' id="FOLLOW_UP">
+          <div *ngFor="let deal of followUpDeals; let i = index;" class="individual" id={{deal.index}}>
             <div class="draggable">
               <div class="deal-content">
                 <span>{{deal.name}}</span>
@@ -121,8 +121,8 @@
       </div>
       <!--seen column-->
       <div class="seen-content">
-        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='seenDeals'>
-          <div *ngFor="let deal of seenDeals; let i = index;" class="individual">
+        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='seenDeals' id="SEEN">
+          <div *ngFor="let deal of seenDeals; let i = index;" class="individual" id={{deal.index}}>
             <div class="draggable">
               <div class="deal-content">
                 <span>{{deal.name}}</span>
@@ -139,8 +139,8 @@
       </div>
       <!--demo column-->
       <div class="demo-content">
-        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='demoDeals'>
-          <div *ngFor="let deal of demoDeals; let i = index;" class="individual">
+        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='demoDeals' id="DEMO">
+          <div *ngFor="let deal of demoDeals; let i = index;" class="individual"  id={{deal.index}}>
             <div class="draggable">
               <div class="deal-content">
                 <span>{{deal.name}}</span>
@@ -157,8 +157,8 @@
       </div>
       <!--negotiation column-->
       <div class="negotiation-content">
-        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='negotiationDeals'>
-          <div *ngFor="let deal of negotiationDeals; let i = index;" class="individual">
+        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='negotiationDeals' id="NEGOTIATION">
+          <div *ngFor="let deal of negotiationDeals; let i = index;" class="individual" id={{deal.index}}>
             <div class="draggable">
               <div class="deal-content">
                 <span>{{deal.name}}</span>
@@ -175,8 +175,8 @@
       </div>
       <!--won column-->
       <div class="won-content">
-        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='wonDeals'>
-          <div *ngFor="let deal of wonDeals; let i = index;" class="individual">
+        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='wonDeals' id="WON">
+          <div *ngFor="let deal of wonDeals; let i = index;" class="individual" id={{deal.index}}>
             <div class="draggable">
               <div class="deal-content">
                 <span>{{deal.name}}</span>
@@ -193,8 +193,8 @@
       </div>
       <!--lost column-->
       <div class="lost-content">
-        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='lostDeals'>
-          <div *ngFor="let deal of lostDeals; let i = index;" class="individual">
+        <div [dragula]="'dragItem'" class="draggable-column" [dragulaModel]='lostDeals' id="LOST">
+          <div *ngFor="let deal of lostDeals; let i = index;" class="individual" id={{deal.index}}>
             <div class="draggable">
               <div class="deal-content">
                 <span>{{deal.name}}</span>
@@ -212,7 +212,8 @@
       
     </div>
   </div>
-
-  
 </div>
 
+<div>
+  <app-ynmodal [(modalContent)]="modalContent" (confirmClicked)="onSelect($event)"></app-ynmodal>
+</div>
