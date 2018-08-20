@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
+import { CommonService } from '../../common/common.service';
 import { FilterService } from './filter.service';
 import { DragulaService } from 'ng2-dragula';
 import { SharedService } from '../../../services/shared.service';
@@ -21,7 +22,7 @@ import * as moment from 'moment';
   ],
   providers: [FilterService]
 })
-export class DealsPipelineComponent implements OnInit {
+export class DealsPipelineComponent implements OnInit, OnDestroy {
 
   menuCollapsed = true;
   filterOptions = ['This Week', 'This Month', 'This Quarter', '90 Days', 'Last Quarter', 'This Year', 'Last Year', 'All time'];
@@ -59,21 +60,23 @@ export class DealsPipelineComponent implements OnInit {
   estContactsList = [];
   estLeadsList = [];
   updatingCard: any;
+  modalContent = 'Are you sure you want to set the status to WON? \r\n You cannot undo this action.';
+  targetStatus: any;
+  sourceStatus: any;
+  selectedDeal: any;
 
   constructor( private dragulaService: DragulaService, private filterService: FilterService, private sharedService: SharedService,
     private invoicesService: InvoicesService, private estimatesService: EstimatesService, private proposalsService: ProposalsService,
-    private crmService: CrmService ) {
+    private crmService: CrmService, private commonService: CommonService ) {
     dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });
 
     this.invoicesService.getInvoices().subscribe(res => {
-      console.log('invoice: ', res);
       // this.sharedService.getMulipleContacts()
     });
 
     this.proposalsService.getProposals().subscribe(res => {
-      console.log('proposals: ', res);
       this.proposalsList = res.results;
       const contactIds = res.results.filter(data => data.contactId).map(data => data.contactId);
       const leadIds = res.results.filter(data => data.leadId).map(data => data.leadId);
@@ -111,7 +114,6 @@ export class DealsPipelineComponent implements OnInit {
     });
 
     this.estimatesService.getEstimates().subscribe(est => {
-      console.log('estimates: ', est);
       this.estimatesList = est.results;
       const estContactIds = est.results.filter(data => data.contactId).map(data => data.contactId);
       const estLeadIds = est.results.filter(data => data.leadId).map(data => data.leadId);
@@ -121,12 +123,10 @@ export class DealsPipelineComponent implements OnInit {
       this.sharedService.getMulipleContacts(estContactIds).subscribe(contact => {
         this.contactsList = this.contactsList.concat(contact);
         this.addContactName(this.contactsList);
-        console.log('whole contacts: ', this.contactsList);
 
         this.crmService.getMulipleLeads(estLeadIds).subscribe(lead => {
           this.leadsList = this.leadsList.concat(lead);
           this.addContactName(this.leadsList);
-          console.log('whole leads: ', this.leadsList);
 
           this.estimatesList.forEach(estimate => {
             const indiItem = {
@@ -166,28 +166,19 @@ export class DealsPipelineComponent implements OnInit {
   private onDropModel(args) {
     const [el, target, source] = args;
     const selectedIndex = Number(el.id);
-    const targetStatus = target.id;
-    const sourceStatus = source.id;
-    const selectedDeal = this.dealsInfo[selectedIndex];
-    if (selectedDeal.title === 'Estimate') {
-      this.updatingCard = this.estimatesList.filter(e => e.number === selectedDeal.id)[0];
+    this.targetStatus = target.id;
+    this.sourceStatus = source.id;
+    this.selectedDeal = this.dealsInfo[selectedIndex];
+    console.log('column check: ', this.newDeals, this.followUpDeals);
+    if (this.sourceStatus === 'WON') {
+      this.undoTable();
     } else {
-      this.updatingCard = this.proposalsList.filter(p => p.number === selectedDeal.id)[0];
+      if (this.targetStatus === 'WON') {
+        this.commonService.showYnModal.next(true);
+      } else {
+        this.updatingTable();
+      }
     }
-    console.log('updating card: ', this.updatingCard);
-
-    this.updatingDeal(selectedDeal.title, this.updatingCard, targetStatus);
-
-
-
-    console.log('****', args);
-    this.newDeals.map(t => t.status = 'NEW');
-    this.followUpDeals.map(t => t.status = 'FOLLOW_UP');
-    this.seenDeals.map(t => t.status = 'SEEN');
-    this.demoDeals.map(t => t.status = 'DEMO');
-    this.negotiationDeals.map(t => t.status = 'NEGOTIATION');
-    this.wonDeals.map(t => t.status = 'WON');
-    this.lostDeals.map(t => t.status = 'LOST');
   }
 
   ngOnInit() {
@@ -206,6 +197,23 @@ export class DealsPipelineComponent implements OnInit {
     this.thisYearEndTime = new Date(this.current.getFullYear() + 1, 0, 1).getTime();
     this.lastYearStartTime = new Date(this.current.getFullYear() - 1, 0, 1).getTime();
     this.lastYearEndTime = new Date(this.current.getFullYear(), 0, 1).getTime();
+  }
+
+  updatingTable() {
+    if (this.selectedDeal.title === 'Estimate') {
+      this.updatingCard = this.estimatesList.filter(e => e.number === this.selectedDeal.id)[0];
+    } else {
+      this.updatingCard = this.proposalsList.filter(p => p.number === this.selectedDeal.id)[0];
+    }
+
+    this.updatingDeal(this.selectedDeal.title, this.updatingCard, this.targetStatus);
+    this.newDeals.map(t => t.status = 'NEW');
+    this.followUpDeals.map(t => t.status = 'FOLLOW_UP');
+    this.seenDeals.map(t => t.status = 'SEEN');
+    this.demoDeals.map(t => t.status = 'DEMO');
+    this.negotiationDeals.map(t => t.status = 'NEGOTIATION');
+    this.wonDeals.map(t => t.status = 'WON');
+    this.lostDeals.map(t => t.status = 'LOST');
   }
 
   toggleMenubar(data: boolean) {
@@ -276,6 +284,23 @@ export class DealsPipelineComponent implements OnInit {
     this.lostDeals = this.filteredDealsInfo.filter(d => d.status === 'LOST');
   }
 
+  onSelect(event) {
+    console.log('selected: ', event);
+    if (event.data) {
+      this.updatingTable();
+    } else {
+      this.undoTable();
+    }
+  }
+
+  undoTable() {
+    this.selectedDeal.status = this.sourceStatus;
+    const indexArr = this.dealsInfo.map(d => d.index);
+    const pos = indexArr.indexOf(this.selectedDeal.index);
+    this.dealsInfo[pos].status = this.sourceStatus;
+    this.categorizeDealsInfo();
+  }
+
   addContactName(data) {
     data.forEach(element => {
       if (element.type === 'PERSON') {
@@ -308,6 +333,15 @@ export class DealsPipelineComponent implements OnInit {
 
   updatingDeal(type, deal, status) {
     deal.status = status;
+    if (!deal.internalNote) {
+      deal.internalNote = '';
+    }
+    if (!deal.customerNote) {
+      deal.customerNote = '';
+    }
+    if (!deal.terms) {
+      deal.terms = '';
+    }
     if (type === 'Estimate') {
       this.estimatesService.updateEstimate(deal.id, deal).subscribe(res => {
         console.log('updated: ', res);
@@ -317,6 +351,10 @@ export class DealsPipelineComponent implements OnInit {
         console.log('updated: ', res);
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.commonService.showYnModal.next(false);
   }
 
 }

@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragulaModule } from 'ng2-dragula';
 
 import { ProfileCmpModule } from '../../profile/profile.module';
+import { CommonCmpModule } from '../../common/common.module';
 
 import { FilterService } from './filter.service';
 
@@ -24,7 +25,8 @@ import { FilterService } from './filter.service';
     OwlNativeDateTimeModule,
     BrowserAnimationsModule,
     ProfileCmpModule,
-    DragulaModule
+    DragulaModule,
+    CommonCmpModule
   ],
   exports: [
   ],
