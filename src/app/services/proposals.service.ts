@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 // helpers
-import { apiUrl } from '../config';
 import { environment } from '../../environments/environment';
 
 // rxjs

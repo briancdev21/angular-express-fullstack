@@ -2,9 +2,10 @@ import { Injectable, Output, EventEmitter, Input } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 // helpers
-import { apiHeaders, apiUrl } from '../../config';
+import { apiHeaders } from '../../config';
 
 // rxjs
 import { Observable } from 'rxjs/Observable';
@@ -23,7 +24,7 @@ export class ProductsService {
   }
 
   getProductsList (limit: number = 50, offset: number = 0): Observable<any> {
-    const url = `${apiUrl}inventory/products/?limit=${limit}&offset=${offset}`;
+    const url = `${environment.apiUrl}/inventory/products/?limit=${limit}&offset=${offset}`;
     // const url = `${apiUrl}inventory/products/`;
     console.log('id_token', apiHeaders());
     return this.http.get(url);
@@ -31,7 +32,7 @@ export class ProductsService {
 
   createProduct (body): Observable<any> {
     // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
-    const url = `${apiUrl}inventory/products/`;
+    const url = `${environment.apiUrl}/inventory/products/`;
     return this.http.post(url, body, this.options)
       .map((res) => res);
 
@@ -43,133 +44,133 @@ export class ProductsService {
   }
 
   getIndividualProduct(id): Observable<any>  {
-    const url = `${apiUrl}inventory/products/${id}`;
+    const url = `${environment.apiUrl}/inventory/products/${id}`;
     return this.http.get(url);
   }
 
   updateIndividualProduct(id, body): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}`;
+    const url = `${environment.apiUrl}/inventory/products/${id}`;
     return this.http.put<any> (url, body);
   }
 
   deleteIndividualProduct (id): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}`;
+    const url = `${environment.apiUrl}/inventory/products/${id}`;
     return this.http.delete<any>(url);
   }
 
   uploadProductProfileImage (productId, body): Observable<any> {
-    const url = `${apiUrl}inventory/products/${productId}/product-picture`;
+    const url = `${environment.apiUrl}/inventory/products/${productId}/product-picture`;
     return this.http.put(url, body)
       .map((res) => res);
   }
 
   getVariantsList(productId): Observable<any>  {
-    const url = `${apiUrl}inventory/products/${productId}/variants`;
+    const url = `${environment.apiUrl}/inventory/products/${productId}/variants`;
     return this.http.get(url);
   }
 
   createVariants (productId, body): Observable<any> {
-    const url = `${apiUrl}inventory/products/${productId}/variants`;
+    const url = `${environment.apiUrl}/inventory/products/${productId}/variants`;
     return this.http.post(url, body, this.options);
   }
 
   getProductPricingsList(productId): Observable<any>  {
-    const url = `${apiUrl}inventory/products/${productId}/pricing-categories`;
+    const url = `${environment.apiUrl}/inventory/products/${productId}/pricing-categories`;
     return this.http.get(url);
   }
 
   getProductAlternativesList(productId): Observable<any>  {
-    const url = `${apiUrl}inventory/products/${productId}/alternatives`;
+    const url = `${environment.apiUrl}/inventory/products/${productId}/alternatives`;
     return this.http.get(url);
   }
 
   getProductAccessoriesList(productId): Observable<any>  {
-    const url = `${apiUrl}inventory/products/${productId}/accessories`;
+    const url = `${environment.apiUrl}/inventory/products/${productId}/accessories`;
     return this.http.get(url);
   }
 
   getProductCategoriesList(id): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/pricing-categories`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/pricing-categories`;
     return this.http.get(url);
   }
 
   getProductIndividualCategory(id, categoryId): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/pricing-categories/${categoryId}`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/pricing-categories/${categoryId}`;
     return this.http.get(url);
   }
 
   updateProductIndividualCategory(id, categoryId, body): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/pricing-categories/${categoryId}`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/pricing-categories/${categoryId}`;
     return this.http.put(url, body);
   }
 
   getProductVariantsList(id): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/variants`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/variants`;
     return this.http.get(url);
   }
 
   getProductIndividualVariant(id, sku): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/variants/${sku}`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/variants/${sku}`;
     return this.http.get(url);
   }
 
   updateProductIndividualVariant(id, sku, body): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/variants/${sku}`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/variants/${sku}`;
     return this.http.put(url, body);
   }
 
   deleteProductIndividualVariant(id, sku): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/variants/${sku}`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/variants/${sku}`;
     return this.http.delete(url);
   }
 
   updateProductImage(id, body): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/product-picture/`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/product-picture/`;
     return this.http.put(url, body);
   }
 
   getProductCatalog(): Observable<any>  {
-    const url = `${apiUrl}inventory/catalog`;
+    const url = `${environment.apiUrl}/inventory/catalog`;
     return this.http.get(url);
   }
 
   getDeliverableProducts(): Observable<any>  {
-    const url = `${apiUrl}inventory/deliverable-products`;
+    const url = `${environment.apiUrl}/inventory/deliverable-products`;
     return this.http.get(url);
   }
 
   getDeliverableProductsByContactId(contactId: any): Observable<any> {
-    const url = `${apiUrl}inventory/deliverable-products?contactId=${contactId}`;
+    const url = `${environment.apiUrl}/inventory/deliverable-products?contactId=${contactId}`;
     return this.http.get(url);
   }
 
   getDeliverableProductsByProjectId(projectId: any): Observable<any> {
-    const url = `${apiUrl}inventory/deliverable-products?contactId=${projectId}`;
+    const url = `${environment.apiUrl}/inventory/deliverable-products?contactId=${projectId}`;
     return this.http.get(url);
   }
 
   createAlternative (id, body): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/alternatives`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/alternatives`;
     return this.http.post(url, body, this.options);
   }
 
   createAccessory (id, body): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/accessories`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/accessories`;
     return this.http.post(url, body, this.options);
   }
 
   deleteIndividualAccessory (id, sku): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/accessories/${sku}`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/accessories/${sku}`;
     return this.http.delete(url,  this.options);
   }
 
   deleteIndividualAlternative (id, sku): Observable<any> {
-    const url = `${apiUrl}inventory/products/${id}/alternatives/${sku}`;
+    const url = `${environment.apiUrl}/inventory/products/${id}/alternatives/${sku}`;
     return this.http.delete(url,  this.options);
   }
 
   generateSku(): Observable<any>  {
-    const url = `${apiUrl}inventory/generate-sku`;
+    const url = `${environment.apiUrl}/inventory/generate-sku`;
     return this.http.get(url);
   }
 }

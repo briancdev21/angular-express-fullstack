@@ -4,9 +4,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
-import { apiUrl } from '../config';
-
-
 import { Observable } from 'rxjs/Observable';
 import { map, tap } from 'rxjs/operators';
 

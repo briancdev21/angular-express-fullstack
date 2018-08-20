@@ -5,7 +5,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { environment } from '../../environments/environment';
 
 // helpers
-import { apiHeaders, apiUrl } from '../config';
+import { apiHeaders } from '../config';
 
 // rxjs
 import { Observable } from 'rxjs/Observable';
@@ -151,7 +151,7 @@ export class ProjectsService {
   }
 
   updateIndividualWorkOrder (id, orderId, body): Observable<any> {
-    const url = `${apiUrl}inventory/suppliers/${id}/work-orders/${orderId}`;
+    const url = `${environment.apiUrl}/inventory/suppliers/${id}/work-orders/${orderId}`;
     return this.http.put(url, body);
   }
 

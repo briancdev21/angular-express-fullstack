@@ -10,7 +10,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 
 import { environment } from '../../../../../environments/environment';
-import { apiHeaders, apiUrl } from '../../../../config';
+import { apiHeaders} from '../../../../config';
 
 @Injectable()
 
