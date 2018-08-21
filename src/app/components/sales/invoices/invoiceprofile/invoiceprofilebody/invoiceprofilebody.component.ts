@@ -395,7 +395,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   }
 
   onPriceChanged() {
-    this.saveInvoice();
+    this.updatingInvoice();
   }
 
   onTotalPriceChange(data) {
