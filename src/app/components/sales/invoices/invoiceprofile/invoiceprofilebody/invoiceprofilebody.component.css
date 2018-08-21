@@ -230,7 +230,7 @@ app-in-termsfield, app-in-duedatefield, app-in-class {
   width: 42%;
   justify-content: center;
   border-radius: 5px;
-  margin-top: 5px;
+  margin-top: 10px;
   color: #646464;
   font-size: 12px;
   cursor: pointer;
@@ -425,4 +425,9 @@ img {
 
 .validation-required {
   border: 1px solid red !important;
+}
+
+.invalid-btn {
+  background: lightgray !important;
+  cursor: not-allowed;
 }

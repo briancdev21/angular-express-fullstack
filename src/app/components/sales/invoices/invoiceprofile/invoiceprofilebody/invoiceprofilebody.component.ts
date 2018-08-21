@@ -156,6 +156,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   deliveryStatus = 'NOT_DELIVERED';
   selectedProvince: any;
   selectedCountry: any;
+  invalidCloseButton = true;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
               private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService,
@@ -267,6 +268,10 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
       this.emails = res.data.emails;
       this.selectedProvince = res.data.shippingAddress.province;
       this.selectedCountry = res.data.shippingAddress.country;
+      if (res.data.receivedPayment === res.data.total) {
+        this.invalidCloseButton = false;
+      }
+
       if (res.data.projectId) {
         this.projectsService.getIndividualProject(res.data.projectId).subscribe(project => {
           this.projectName = project.data.name;
@@ -517,7 +522,14 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   }
 
   deliverProducts() {
+    this.currentInvoice.deliverProducts = true;
+    this.updatingInvoice();
+  }
 
+  closeInvoice() {
+    if (this.currentInvoice.receivedPayment === this.currentInvoice.total) {
+      this.currentInvoice.status = 'COMPLETE';
+    }
   }
 
   updatingInvoice() {
