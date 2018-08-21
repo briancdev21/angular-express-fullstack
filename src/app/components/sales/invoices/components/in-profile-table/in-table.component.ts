@@ -31,7 +31,7 @@ export class InProfileTableComponent implements OnInit {
   private skuService: CompleterData;
   private modelService: CompleterData;
   private nameService: CompleterData;
-  private skus = [];
+  private skus: any;
   private originSkus = [];
   public unitpriceEditable = false;
   taxRateOptions = [];
@@ -46,6 +46,7 @@ export class InProfileTableComponent implements OnInit {
       this.taxRateOptions = taxRateRes.results;
     });
     this.sharedService.getInventoryProducts().subscribe(productsRes => {
+      this.skus = [];
       productsRes.results.forEach(product => {
         this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
           this.skus = this.skus.concat(skuRes.results);
