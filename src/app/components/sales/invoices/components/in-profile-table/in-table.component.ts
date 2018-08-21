@@ -31,7 +31,7 @@ export class InProfileTableComponent implements OnInit {
   private skuService: CompleterData;
   private modelService: CompleterData;
   private nameService: CompleterData;
-  private skus = [];
+  private skus: any;
   private originSkus = [];
   public unitpriceEditable = false;
   taxRateOptions = [];
@@ -46,6 +46,7 @@ export class InProfileTableComponent implements OnInit {
       this.taxRateOptions = taxRateRes.results;
     });
     this.sharedService.getInventoryProducts().subscribe(productsRes => {
+      this.skus = [];
       productsRes.results.forEach(product => {
         this.sharedService.getInventoryProductSkus(product.id).subscribe(skuRes => {
           this.skus = this.skus.concat(skuRes.results);
@@ -150,6 +151,7 @@ export class InProfileTableComponent implements OnInit {
   selectCreatedFrom(index, event) {
     this.serviceDate = event.value;
     this._productDetails[index].serviceDate = event.value;
+    console.log('created date: ', event);
     this.updatePurchaseOrderProduct(index);
   }
 
@@ -161,13 +163,12 @@ export class InProfileTableComponent implements OnInit {
       ) {
       this.invoiceProductModel = {
         sku: this._productDetails[index].sku,
-        taxRateId: parseInt(this._productDetails[index].taxRateId, 10),
+        taxRateId: this._productDetails[index].taxRateId,
         discount: {
           value: this._productDetails[index].discountvalue ? this._productDetails[index].discountvalue : 0,
           unit: 'PERCENT'
         },
-        received: 0,
-        serviceDate: this._productDetails[index].serviceDate.toISOString().slice(0, 10),
+        serviceDate: moment(this._productDetails[index].serviceDate).format('YYYY-MM-DD'),
         quantity: this._productDetails[index].quantity
       };
       this.invoicesService.updateInvoiceProduct(this.invoiceId, this._productDetails[index].id, this.invoiceProductModel).

@@ -154,7 +154,7 @@ export class InTableComponent implements OnInit {
       ) {
       this.invoiceProductModel = {
         sku: this._productDetails[index].sku,
-        taxRateId: parseInt(this._productDetails[index].taxRateId, 10),
+        taxRateId: this._productDetails[index].taxRateId,
         discount: {
           value: this._productDetails[index].discount ? this._productDetails[index].discount : 0,
           unit: 'PERCENT'

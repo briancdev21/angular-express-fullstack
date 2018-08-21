@@ -31,29 +31,32 @@
           <div class="flex">
             <img class="remove-btn" [ngClass]="{'hide': i == 0 && _productDetails.length == 1 }" src="/assets/images/Trash Symbol.svg" (click)="removeProduct(i)"
             />
-            <ng2-completer [disableInput]="productDetailInfo.readonly" (keyup)="keyListener($event, i)" [dataService]="skuService" placeholder="Type SKU here..." [minSearchLength]="0" (selected)="onSkuSelected($event, i)" [(ngModel)]="productDetailInfo.sku" ></ng2-completer>
+            <ng2-completer [disableInput]="productDetailInfo.readonly" (keyup)="keyListener($event, i)" [dataService]="skuService" placeholder="Type SKU here..." [minSearchLength]="0" (selected)="onSkuSelected($event, i)" [(ngModel)]="productDetailInfo.sku" *ngIf="skus" ></ng2-completer>
           </div>
         </td>
         <td class="model">
-          <ng2-completer (keyup)="keyListener($event, i)" [disableInput]="productDetailInfo.readonly" [dataService]="modelService" placeholder="Type Model here..." [minSearchLength]="0" (selected)="onModelSelected($event, i)" [(ngModel)]="productDetailInfo.model" ></ng2-completer>
+          <!-- <ng2-completer (keyup)="keyListener($event, i)" [disableInput]="productDetailInfo.readonly" [dataService]="modelService" placeholder="Type Model here..." [minSearchLength]="0" (selected)="onModelSelected($event, i)" [(ngModel)]="productDetailInfo.model" ></ng2-completer> -->
+          <span>{{productDetailInfo.model}}</span>
         </td>
         <td class="name">
-            <ng2-completer (keyup)="keyListener($event, i)" [disableInput]="productDetailInfo.readonly" [dataService]="nameService" placeholder="Type NAME here..." [minSearchLength]="0" (selected)="onNameSelected($event, i)" [(ngModel)]="productDetailInfo.name" ></ng2-completer>
+            <!-- <ng2-completer (keyup)="keyListener($event, i)" [disableInput]="productDetailInfo.readonly" [dataService]="nameService" placeholder="Type NAME here..." [minSearchLength]="0" (selected)="onNameSelected($event, i)" [(ngModel)]="productDetailInfo.name" ></ng2-completer> -->
+          <span>{{productDetailInfo.name}}</span>
         </td>
         <td class="quantity">
-          <input class="quantity" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantity" (ngModelChange)="calcualteTotalPrice(i)" (change)="updatePurchaseOrderProduct(i)" (input)="checkValue($event)" />
+          <input class="quantity" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantity" (blur)="calcualteTotalPrice(i)"  (input)="checkValue($event)" />
         </td>
         <td class="unitprice">
-          <div class="dollar">
-            <input type="number" class="unitprice" step="0.01" min="0.00" placeholder="0.00" readonly [(ngModel)]="productDetailInfo.unitprice" (input)="checkValue($event)" (ngModelChange)="calcualteTotalPrice(i)" />
+          <div class="unit-price">
+            <!-- <input type="number" class="unitprice" step="0.01" min="0.00" placeholder="0.00" readonly [(ngModel)]="productDetailInfo.unitprice" (input)="checkValue($event)" (ngModelChange)="calcualteTotalPrice(i)" /> -->
+            $  <span>{{productDetailInfo.unitprice}}</span>
           </div>
         </td>
         <td class="discount">
-          <input class="discount" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.discountvalue"  (input)="checkDiscount($event)"  (ngModelChange)="calcualteTotalPrice(i)"  (change)="updatePurchaseOrderProduct(i)" />
+          <input class="discount" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.discountvalue"  (input)="checkDiscount($event)"  (blur)="calcualteTotalPrice(i)" />
         </td>
         <td class="total">
           <div class="dollar">
-            <input type="number" class="total" step="0.01" min="0.00" placeholder="0.00" [(ngModel)]="productDetailInfo.total" readonly (ngModelChange)="calcualteTotalPrice(i)" />
+            <input type="number" class="total" step="0.01" min="0.00" placeholder="0.00" [(ngModel)]="productDetailInfo.total" readonly (blur)="calcualteTotalPrice(i)" />
           </div>
         </td>
         <td class="taxrate">

@@ -156,6 +156,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   deliveryStatus = 'NOT_DELIVERED';
   selectedProvince: any;
   selectedCountry: any;
+  invalidCloseButton = true;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
               private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService,
@@ -267,6 +268,10 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
       this.emails = res.data.emails;
       this.selectedProvince = res.data.shippingAddress.province;
       this.selectedCountry = res.data.shippingAddress.country;
+      if (res.data.receivedPayment === res.data.total) {
+        this.invalidCloseButton = false;
+      }
+
       if (res.data.projectId) {
         this.projectsService.getIndividualProject(res.data.projectId).subscribe(project => {
           this.projectName = project.data.name;
@@ -303,7 +308,9 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
     this.filterService.saveClicked.next(false);
     this.filterService.saveClicked.subscribe(data => {
       if (data) {
-        this.saveInvoice();
+        this.invoicesService.sendEmail(this.currentInvoiceId).subscribe(res => {
+          console.log('email sent: ', res);
+        });
       }
     });
     this.filterService.deleteClicked.next(false);
@@ -367,6 +374,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
 
   getMultiEmails(event) {
     this.emails = event;
+    this.updatingInvoice();
   }
 
   onChangeTerm(event) {
@@ -394,7 +402,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   }
 
   onPriceChanged() {
-    this.saveInvoice();
+    this.updatingInvoice();
   }
 
   onTotalPriceChange(data) {
@@ -472,6 +480,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
         this.province = this.selectedContact.shippingAddress.province;
         this.postalCode = this.selectedContact.shippingAddress.postalCode;
       }
+      this.updatingInvoice();
     }
   }
 
@@ -490,10 +499,12 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
       this.province = '';
       this.postalCode = '';
     }
+    this.updatingInvoice();
   }
 
   selectDueDate(event) {
     this.saveInvoiceData.dueDate = moment(event).format('YYYY-MM-DD');
+    this.updatingInvoice();
   }
 
   onSelectProvince(event) {
@@ -501,6 +512,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
     // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
     this.selectedCountry = event.originalObject.country;
     this.country = countries.filter(c => c.code === this.selectedCountry)[0].name;
+    this.updatingInvoice();
   }
 
   onSelectCountry(event) {
@@ -508,10 +520,18 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
     this.selectedCountry = event.originalObject.code;
     const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
     this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+    this.updatingInvoice();
   }
 
   deliverProducts() {
+    this.currentInvoice.deliverProducts = true;
+    this.updatingInvoice();
+  }
 
+  closeInvoice() {
+    if (this.currentInvoice.receivedPayment === this.currentInvoice.total) {
+      this.currentInvoice.status = 'COMPLETE';
+    }
   }
 
   updatingInvoice() {
@@ -522,68 +542,72 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
     this.invalidPostalCode = false;
     this.invalidName = false;
 
-    if (this.address && this.province && this.city && this.country && this.postalCode && this.selectedContact) {
-      const updatingData = {
-        'contactId': this.selectedContact.id,
-        'classificationId': this.currentClassId,
-        'categoryId': this.currentCategoryId,
-        'termId': this.currentTermId,
-        'emails': this.emails,
-        'shippingAddress': {
-          'address': this.address,
-          'city': this.city,
-          'province': this.selectedProvince,
-          'postalCode': this.postalCode,
-          'country': this.selectedCountry
-        },
-        'internalNote': this.internalMemo ? this.internalMemo : '',
-        'customerNote': this.noteToSupplier ? this.noteToSupplier : '',
-        'terms': this.termsOfInvoice ? this.termsOfInvoice : '',
-        'discount': {
-          'value': this.discountAmount ? this.discountAmount : 0,
-          'unit': this.discountType ? this.discountType : 'AMOUNT'
-        },
-        'deposit': this.depositsAmount ? this.depositsAmount : 0,
-
-        'currencyId': this.currentInvoice.currencyId,
-        'pricingCategoryId': this.currentInvoice.pricingCategoryId,
-        'status': this.currentInvoice.status,
-        'startDate': this.currentInvoice.startDate,
-        'acceptOnlinePayment': this.currentInvoice.acceptOnlinePayment,
-        'chargeLateFee': this.currentInvoice.chargeLateFee,
-        'lateFee': this.currentInvoice.lateFee,
-        'reminder': this.currentInvoice.reminder ? this.currentInvoice.reminder : [],
-        'billingAddress': this.currentInvoice.billingAddress,
-        'receivedPayment': this.currentInvoice.receivedPayment,
-        'deliverProducts': this.currentInvoice.deliverProducts
-      };
-      Object.keys(updatingData).forEach((key) => (updatingData[key] == null) && delete updatingData[key]);
-      this.invoicesService.updateInvoice(this.currentInvoiceId, updatingData).subscribe(res => {
-        console.log('updated: ', res);
-      });
+    if (this.invoiceStatus === 'PAID' || this.invoiceStatus === 'CLOSED' ) {
+      this.commonService.showAlertModal.next(true);
     } else {
-      if (!this.address) {
-        this.invalidAddress = true;
-      }
-      if (!this.city) {
-        this.invalidCity = true;
-      }
-      if (!this.postalCode) {
-        this.invalidPostalCode = true;
-      }
-      if (!this.country) {
-        this.invalidCountry = true;
-      }
-      if (!this.province) {
-        this.invalidProvince = true;
-      }
-      if (!this.customerName) {
-        this.invalidName = true;
+      if (this.address && this.province && this.city && this.country && this.postalCode && this.selectedContact) {
+        const updatingData = {
+          'contactId': this.selectedContact.id,
+          'classificationId': this.currentClassId,
+          'categoryId': this.currentCategoryId,
+          'termId': this.currentTermId,
+          'emails': this.emails,
+          'shippingAddress': {
+            'address': this.address,
+            'city': this.city,
+            'province': this.selectedProvince,
+            'postalCode': this.postalCode,
+            'country': this.selectedCountry
+          },
+          'internalNote': this.internalMemo ? this.internalMemo : '',
+          'customerNote': this.noteToSupplier ? this.noteToSupplier : '',
+          'terms': this.termsOfInvoice ? this.termsOfInvoice : '',
+          'discount': {
+            'value': this.discountAmount ? this.discountAmount : 0,
+            'unit': this.discountType ? this.discountType : 'AMOUNT'
+          },
+          'deposit': this.depositsAmount ? this.depositsAmount : 0,
+          'currencyId': this.currentInvoice.currencyId,
+          'pricingCategoryId': this.currentInvoice.pricingCategoryId,
+          'status': this.currentInvoice.status,
+          'startDate': this.currentInvoice.startDate,
+          'acceptOnlinePayment': this.currentInvoice.acceptOnlinePayment,
+          'chargeLateFee': this.currentInvoice.chargeLateFee,
+          'lateFee': this.currentInvoice.lateFee,
+          'reminder': this.currentInvoice.reminder ? this.currentInvoice.reminder : [],
+          'billingAddress': this.currentInvoice.billingAddress,
+          'receivedPayment': this.currentInvoice.receivedPayment,
+          'deliverProducts': this.currentInvoice.deliverProducts
+        };
+        Object.keys(updatingData).forEach((key) => (updatingData[key] == null) && delete updatingData[key]);
+        this.invoicesService.updateInvoice(this.currentInvoiceId, updatingData).subscribe(res => {
+          console.log('updated: ', res);
+          this.subtotalproducts = res.data.productSubTotal;
+          this.subtotalServices = res.data.serviceSubTotal;
+          this.totalamountdue = res.data.total;
+        });
+      } else {
+        if (!this.address) {
+          this.invalidAddress = true;
+        }
+        if (!this.city) {
+          this.invalidCity = true;
+        }
+        if (!this.postalCode) {
+          this.invalidPostalCode = true;
+        }
+        if (!this.country) {
+          this.invalidCountry = true;
+        }
+        if (!this.province) {
+          this.invalidProvince = true;
+        }
+        if (!this.customerName) {
+          this.invalidName = true;
+        }
       }
     }
   }
-
-
 
   ngOnDestroy() {
     this.commonService.showAlertModal.next(false);
