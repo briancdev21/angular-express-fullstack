@@ -9,6 +9,7 @@ import {MyTasksModel, TaskModel} from '../../../models/mytasks.model';
 import * as moment from 'moment';
 import { PmTasksService } from '../../../services/pmtasks.service';
 import { SharedService } from '../../../services/shared.service';
+import { ProjectsService } from '../../../services/projects.service';
 
 @Component({
   selector: 'app-mytasks',
@@ -57,9 +58,10 @@ export class MyTasksComponent implements OnInit {
   showTaskGroupDeleteConfirmModal = [];
   showSettingsModal = [[]];
   showDeleteConfirmModal = [[]];
+  projectName = '';
 
   constructor( private dragulaService: DragulaService, private fb: FormBuilder, private renderer: Renderer,
-    private pmTasksService: PmTasksService, private sharedService: SharedService ) {
+    private pmTasksService: PmTasksService, private sharedService: SharedService, private projectsService: ProjectsService ) {
     dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });
@@ -145,6 +147,11 @@ export class MyTasksComponent implements OnInit {
         this.showTaskGroupDeleteConfirmModal[i] = false;
         this.showSettingsModal[i] = new Array();
         this.showDeleteConfirmModal[i] = new Array();
+        if (this.panels[i].projectId) {
+          this.projectsService.getIndividualProject(this.panels[i].projectId).subscribe(project => {
+            this.projectName = project.data.name;
+          });
+        }
 
         this.pmTasksService.getTasks(this.panels[i].id).subscribe(taskData => {
           this.panels[i].tasks = taskData.results;
@@ -154,6 +161,9 @@ export class MyTasksComponent implements OnInit {
             element.taskTitle = element.title;
             element.dependency = element.dependencyIds ? element.dependencyIds : [];
           });
+          if (i === 2) {
+            this.panels[i].tasks.map(t => t.taskPath = t.assigneeInfo.username + ' > ' + this.projectName);
+          }
           let importantTasks = [];
           importantTasks = this.panels[i].tasks.filter(t => t.isImportant === true);
           const unImportantTasks = this.panels[i].tasks.filter(t => t.isImportant === false);
@@ -168,6 +178,12 @@ export class MyTasksComponent implements OnInit {
         });
       }
       console.log('panels: ', this.panels);
+      const inbox = this.panels.filter(p => p.title === 'INBOX')[0];
+      const org = this.panels.filter(p => p.title === 'ORGANIZATION')[0];
+      const projects = this.panels.filter(p => p.title === 'PROJECTS')[0];
+      this.panels[0] = inbox;
+      this.panels[1] = org;
+      this.panels[2] = projects;
     });
   }
 
