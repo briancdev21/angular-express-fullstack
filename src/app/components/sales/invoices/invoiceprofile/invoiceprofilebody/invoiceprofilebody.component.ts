@@ -137,21 +137,25 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   provincesSource: CompleterData;
   projectName: any;
   changeLogName: any;
-  address = '';
-  city = '';
-  province = '';
-  postalCode = '';
-  country = '';
+  address: any;
+  city: any;
+  province: any;
+  postalCode: any;
+  country: any;
   invalidAddress = false;
   invalidCity = false;
   invalidProvince = false;
   invalidCountry = false;
   invalidPostalCode = false;
   switchIconShipping = true;
+  invalidEmail = false;
+  invalidName = false;
   selectedContact: any;
   invoiceNumber = '';
   today = new Date();
   deliveryStatus = 'NOT_DELIVERED';
+  selectedProvince: any;
+  selectedCountry: any;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
               private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService,
@@ -177,6 +181,12 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
           this.city = this.selectedContact.shippingAddress.city;
           this.province = this.selectedContact.shippingAddress.province;
           this.postalCode = this.selectedContact.shippingAddress.postalCode;
+        } else {
+          this.address = this.currentInvoice.shippingAddress.address;
+          this.country = this.currentInvoice.shippingAddress.country;
+          this.city = this.currentInvoice.shippingAddress.city;
+          this.province = this.currentInvoice.shippingAddress.province;
+          this.postalCode = this.currentInvoice.shippingAddress.postalCode;
         }
       });
       this.sharedService.getContacts()
@@ -254,6 +264,9 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
       this.depositsAmount = res.data.deposit;
       this.invoiceNumber = res.data.number;
       this.deliveryStatus = res.data.deliveryStatus;
+      this.emails = res.data.emails;
+      this.selectedProvince = res.data.shippingAddress.province;
+      this.selectedCountry = res.data.shippingAddress.country;
       if (res.data.projectId) {
         this.projectsService.getIndividualProject(res.data.projectId).subscribe(project => {
           this.projectName = project.data.name;
@@ -353,7 +366,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   }
 
   getMultiEmails(event) {
-    this.saveInvoiceData.emails = event;
+    this.emails = event;
   }
 
   onChangeTerm(event) {
@@ -483,12 +496,91 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
     this.saveInvoiceData.dueDate = moment(event).format('YYYY-MM-DD');
   }
 
+  onSelectProvince(event) {
+    this.selectedProvince = event.originalObject.short;
+    // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
+    this.selectedCountry = event.originalObject.country;
+    this.country = countries.filter(c => c.code === this.selectedCountry)[0].name;
+  }
+
+  onSelectCountry(event) {
+    console.log('country select: ', event);
+    this.selectedCountry = event.originalObject.code;
+    const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
+    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+  }
+
   deliverProducts() {
 
   }
 
   updatingInvoice() {
+    this.invalidAddress = false;
+    this.invalidCity = false;
+    this.invalidProvince = false;
+    this.invalidCountry = false;
+    this.invalidPostalCode = false;
+    this.invalidName = false;
 
+    if (this.address && this.province && this.city && this.country && this.postalCode && this.selectedContact) {
+      const updatingData = {
+        'contactId': this.selectedContact.id,
+        'classificationId': this.currentClassId,
+        'categoryId': this.currentCategoryId,
+        'termId': this.currentTermId,
+        'emails': this.emails,
+        'shippingAddress': {
+          'address': this.address,
+          'city': this.city,
+          'province': this.selectedProvince,
+          'postalCode': this.postalCode,
+          'country': this.selectedCountry
+        },
+        'internalNote': this.internalMemo ? this.internalMemo : '',
+        'customerNote': this.noteToSupplier ? this.noteToSupplier : '',
+        'terms': this.termsOfInvoice ? this.termsOfInvoice : '',
+        'discount': {
+          'value': this.discountAmount ? this.discountAmount : 0,
+          'unit': this.discountType ? this.discountType : 'AMOUNT'
+        },
+        'deposit': this.depositsAmount ? this.depositsAmount : 0,
+
+        'currencyId': this.currentInvoice.currencyId,
+        'pricingCategoryId': this.currentInvoice.pricingCategoryId,
+        'status': this.currentInvoice.status,
+        'startDate': this.currentInvoice.startDate,
+        'acceptOnlinePayment': this.currentInvoice.acceptOnlinePayment,
+        'chargeLateFee': this.currentInvoice.chargeLateFee,
+        'lateFee': this.currentInvoice.lateFee,
+        'reminder': this.currentInvoice.reminder ? this.currentInvoice.reminder : [],
+        'billingAddress': this.currentInvoice.billingAddress,
+        'receivedPayment': this.currentInvoice.receivedPayment,
+        'deliverProducts': this.currentInvoice.deliverProducts
+      };
+      Object.keys(updatingData).forEach((key) => (updatingData[key] == null) && delete updatingData[key]);
+      this.invoicesService.updateInvoice(this.currentInvoiceId, updatingData).subscribe(res => {
+        console.log('updated: ', res);
+      });
+    } else {
+      if (!this.address) {
+        this.invalidAddress = true;
+      }
+      if (!this.city) {
+        this.invalidCity = true;
+      }
+      if (!this.postalCode) {
+        this.invalidPostalCode = true;
+      }
+      if (!this.country) {
+        this.invalidCountry = true;
+      }
+      if (!this.province) {
+        this.invalidProvince = true;
+      }
+      if (!this.customerName) {
+        this.invalidName = true;
+      }
+    }
   }
 
 

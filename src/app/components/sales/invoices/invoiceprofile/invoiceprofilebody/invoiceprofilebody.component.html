@@ -28,7 +28,7 @@
           
           <div class="city-state">
 
-            <input placeholder="Enter City" [(ngModel)]="city" [ngClass]="{'validation-required': invalidCity}" >
+            <input placeholder="Enter City" [(ngModel)]="city" [ngClass]="{'validation-required': invalidCity}" (blur)="updatingInvoice()">
             <!-- <input placeholder="Enter State" [(ngModel)]="province" [ngClass]="{'validation-required': invalidProvince}" > -->
 
             <ng2-completer 
@@ -55,7 +55,7 @@
             </ng2-completer>
 
             <!-- <input placeholder="Enter Country" [(ngModel)]="country" [ngClass]="{'validation-required': invalidCountry}" > -->
-            <input placeholder="Enter Zipcode" [(ngModel)]="postalCode" [ngClass]="{'validation-required': invalidPostalCode}" >
+            <input placeholder="Enter Zipcode" [(ngModel)]="postalCode" [ngClass]="{'validation-required': invalidPostalCode}" (blur)="updatingInvoice()" >
           </div>
         </div>
         <div class="project-log">
@@ -161,7 +161,7 @@
                 <option value="AMOUNT">$</option>
                 <option value="PERCENT">%</option>
               </select>
-              <input [(ngModel)]="discountAmount" (blur)="updatingInvoice()">
+              <input [(ngModel)]="discountAmount" (blur)="updatingInvoice()" type="number">
             </div>
           </div>
 
@@ -177,7 +177,7 @@
             <span>Deposits / Credits</span>
             <div class="non-editable">
               <span>$</span>
-              <input [(ngModel)]="depositsAmount" (blur)="updatingInvoice()">
+              <input [(ngModel)]="depositsAmount" (blur)="updatingInvoice()" type="number">
             </div>
           </div>
 

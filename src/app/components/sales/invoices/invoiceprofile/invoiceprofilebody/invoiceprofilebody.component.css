@@ -422,3 +422,7 @@ img {
   outline: none;
   color: #95989a;
 }
+
+.validation-required {
+  border: 1px solid red !important;
+}
