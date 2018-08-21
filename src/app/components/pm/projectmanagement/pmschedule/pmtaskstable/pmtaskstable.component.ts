@@ -191,29 +191,21 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   addTask(milestone) {
-    // const newTask = {
-    //   id: 1 + milestone.tasks.length,
-    //   taskTitle: '',
-    //   profile: {
-    //     name: '',
-    //     imgUrl: '',
-    //     userId: undefined
-    //   },
-    //   progress: 0,
-    //   dueDate: '',
-    //   duration: 0,
-    //   dependency: [],
-    //   like: false,
-    //   attachment: false,
-    //   attachmentImg: '',
-    // };
-    // this.milestones.filter(m => m.title === milestone.title)[0].tasks.push(newTask);
     const newMockTask = {
       title: ''
     };
     this.pmTasksService.createTask(milestone.id, newMockTask).subscribe(res => {
 
-      this.refreshTable();
+      // this.refreshTable();
+      console.log('new task: ', res, this.milestones);
+      const newTask = res.data;
+      const pos = this.milestones.map(m => m.id).indexOf(milestone.id);
+      newTask.assigneeInfo = this.getUserInfo(newTask.assignee);
+      newTask.startDate = moment(newTask.startDate).format('MMMM DD, YYYY');
+      newTask.taskTitle = newTask.title;
+      newTask.dependency = newTask.dependencyIds ? newTask.dependencyIds : [];
+      this.milestones[pos].tasks.push(newTask);
+      this.updateDataForGanttChart();
     });
   }
 
@@ -229,11 +221,16 @@ export class PmTasksTableComponent implements OnInit {
       projectId: this.currentProjectId
     };
     if (event.key === 'Enter' && this.newMilestoneTitle ) {
-      this.milestones.push(newMilestone);
       this.newMilestoneTitle = '';
       this.addMilestoneClicked = !this.addMilestoneClicked;
       this.pmTasksService.createTaskGroup(newMilestone).subscribe(res => {
-        this.refreshTable();
+        // this.refreshTable();
+        console.log('new group: ', res, this.milestones);
+        const newGroup = res.data;
+        newGroup.color = this.colors[this.milestones.length % 10];
+        newGroup.editTitle = false;
+        this.milestones.push(newGroup);
+        this.updateDataForGanttChart();
       });
     }
   }
@@ -244,7 +241,7 @@ export class PmTasksTableComponent implements OnInit {
     this.pmTasksService.getTaskGroupsWithParams({projectId: this.currentProjectId}).subscribe(data => {
       this.milestones = data.results;
       for (let i = 0; i < this.milestones.length; i++) {
-        this.milestones[i].color = this.colors[i];
+        this.milestones[i].color = this.colors[i % 10];
         this.milestones[i].editTitle = false;
         this.ownerModalCollapsed[i] = new Array();
         this.showTaskGroupDeleteConfirmModal[i] = false;
@@ -505,42 +502,10 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   updateInfoTask (task) {
-        // const newTask = {
-    //   id: 1 + milestone.tasks.length,
-    //   taskTitle: '',
-    //   profile: {
-    //     name: '',
-    //     imgUrl: '',
-    //     userId: undefined
-    //   },
-    //   progress: 0,
-    //   dueDate: '',
-    //   duration: 0,
-    //   dependency: [],
-    //   like: false,
-    //   attachment: false,
-    //   attachmentImg: '',
-    // };
-    // this.milestones.filter(m => m.title === milestone.title)[0].tasks.push(newTask);
   }
 
   checkValidation() {
     console.log('validatioan checking');
-    // Model
-    //   id: 1 + milestone.tasks.length,
-    //   taskTitle: '',
-    //   profile: {
-    //     name: '',
-    //     imgUrl: '',
-    //     userId: undefined
-    //   },
-    //   progress: 0,
-    //   dueDate: '',
-    //   duration: 0,
-    //   dependency: [],
-    //   like: false,
-    //   attachment: false,
-    //   attachmentImg: '',
   }
   updateMilestoneTitle(index) {
     console.log('milestone index,', index);
@@ -602,9 +567,8 @@ export class PmTasksTableComponent implements OnInit {
   confirmDeleteTaskGroup(milestoneId) {
     // console.log('taskgroup deleted');
     this.pmTasksService.deleteIndividualTaskGroup(milestoneId).subscribe(res => {
-      // console.log('taskgroup deleted:');
-      const taskGroupElement = document.getElementById('' + milestoneId).parentElement as HTMLDivElement;
-      taskGroupElement.style.display = 'none';
+      const pos = this.milestones.map(p => p.id).indexOf(milestoneId);
+      this.milestones.splice(pos, 1);
       this.updateDataForGanttChart();
     });
   }
@@ -686,7 +650,7 @@ export class PmTasksTableComponent implements OnInit {
     const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
-    selectedTaskData.title = event.target.value;
+    selectedTaskData.completion = Number(event.target.value);
     this.updateTask(milestoneId, taskId, selectedTaskData);
   }
 }

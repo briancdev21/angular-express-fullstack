@@ -71,7 +71,6 @@ export class GanttChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('thistask: ', this._tasks);
     // using service to update gantt chart
     this.pmService.ganttUpdated.subscribe(data => {
       if (data.length > 0) {
