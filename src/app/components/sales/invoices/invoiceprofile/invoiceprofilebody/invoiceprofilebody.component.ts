@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ProductDetailInfo } from '../../../../../models/ProductDetailInfo.model';
 import { Ng2TimelineComponent } from '../../../../profile/ng2-timeline/ng2timeline.component';
 import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordselect/multikeywordselect.component';
@@ -20,7 +20,7 @@ import { provinces } from '../../../../../../assets/json/provinces';
   templateUrl: './invoiceprofilebody.component.html',
   styleUrls: ['./invoiceprofilebody.component.css']
 })
-export class InvoiceProfileBodyComponent implements OnInit {
+export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   // @Input() createdInvoice;
 
   @Input() set createdInvoice(_createdInvoice) {
@@ -77,9 +77,9 @@ export class InvoiceProfileBodyComponent implements OnInit {
   termsOfInvoice = '';
   emails: any;
   currentClass: string;
-  currentClassId: number;
+  currentClassId: string;
   currentCategory: string;
-  currentCategoryId: number;
+  currentCategoryId: string;
   currentTerm: string;
   currentTermId: number;
   public timelineData: Array<Object> = [
@@ -149,6 +149,9 @@ export class InvoiceProfileBodyComponent implements OnInit {
   invalidPostalCode = false;
   switchIconShipping = true;
   selectedContact: any;
+  invoiceNumber = '';
+  today = new Date();
+  deliveryStatus = 'NOT_DELIVERED';
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
               private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService,
@@ -162,7 +165,6 @@ export class InvoiceProfileBodyComponent implements OnInit {
       console.log('current invoice', res);
       this.currentInvoice = res.data;
       this.invoiceStatus = res.data.status;
-      this.commonService.showAlertModal.next(false);
       if (this.invoiceStatus === 'PAID' || this.invoiceStatus === 'CLOSED' ) {
         this.commonService.showAlertModal.next(true);
       }
@@ -178,34 +180,41 @@ export class InvoiceProfileBodyComponent implements OnInit {
         }
       });
       this.sharedService.getContacts()
-      .subscribe(data => {
-        data = this.addContactName(data);
-        this.contactList = data;
-        this.contactsSource = this.completerService.local(this.contactList, 'name', 'name');
-        // this.userList = this.contactList;
-        // if (res.data.contactId) {
-        //   this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
-        //   this.currentOwner = this.getCustomerName(this.contactList, res.data.contactId);
-        //   console.log('current owner:', this.currentOwner);
-        // }
-      });
+        .subscribe(data => {
+          data = this.addContactName(data);
+          this.contactList = data;
+          this.contactsSource = this.completerService.local(this.contactList, 'name', 'name');
+          // this.userList = this.contactList;
+          // if (res.data.contactId) {
+          //   this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
+          //   this.currentOwner = this.getCustomerName(this.contactList, res.data.contactId);
+          //   console.log('current owner:', this.currentOwner);
+          // }
+        });
 
       this.sharedService.getTerms().subscribe(data => {
         this.terms = data.results;
-        const termPos = this.terms.map(t => t.id).indexOf(this.currentTermId);
-        this.currentTerm = this.terms[termPos].name;
+        if (this.currentTermId) {
+          const termPos = this.terms.map(t => t.id).indexOf(this.currentTermId);
+          this.currentTerm = this.terms[termPos].name;
+        }
       });
 
       this.sharedService.getClassifications().subscribe(data => {
         this.classList = data.results;
-        const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
-        this.currentClass = this.classList[classPos].id;
+        if (this.currentClassId) {
+          const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
+          this.currentClass = this.classList[classPos].id;
+        }
       });
 
       this.sharedService.getInvoiceCategories().subscribe(data => {
+        console.log('category: ', data, this.currentCategoryId);
         this.categoryList = data.results;
-        const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
-        this.currentCategory = this.categoryList[categoryPos].id;
+        if (this.currentCategoryId) {
+          const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
+          this.currentCategory = this.categoryList[categoryPos].id;
+        }
       });
 
       this.invoicesService.getInvoiceProducts(this.currentInvoiceId).subscribe(data => {
@@ -243,6 +252,19 @@ export class InvoiceProfileBodyComponent implements OnInit {
       this.emailAddresses = res.data.emails;
       this.shippingAddress = res.data.shippingAddress;
       this.depositsAmount = res.data.deposit;
+      this.invoiceNumber = res.data.number;
+      this.deliveryStatus = res.data.deliveryStatus;
+      if (res.data.projectId) {
+        this.projectsService.getIndividualProject(res.data.projectId).subscribe(project => {
+          this.projectName = project.data.name;
+        });
+      }
+
+      if (res.data.changeLogid) {
+        this.projectsService.getIndividualProjectChangeLog(res.data.projectId, res.data.changeLogId).subscribe(changeLog => {
+          this.changeLogName = changeLog.data.title;
+        });
+      }
     });
 
     this.saveInvoiceData = new InvoiceModel();
@@ -455,5 +477,23 @@ export class InvoiceProfileBodyComponent implements OnInit {
       this.province = '';
       this.postalCode = '';
     }
+  }
+
+  selectDueDate(event) {
+    this.saveInvoiceData.dueDate = moment(event).format('YYYY-MM-DD');
+  }
+
+  deliverProducts() {
+
+  }
+
+  updatingInvoice() {
+
+  }
+
+
+
+  ngOnDestroy() {
+    this.commonService.showAlertModal.next(false);
   }
 }
