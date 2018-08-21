@@ -308,7 +308,9 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
     this.filterService.saveClicked.next(false);
     this.filterService.saveClicked.subscribe(data => {
       if (data) {
-        this.saveInvoice();
+        this.invoicesService.sendEmail(this.currentInvoiceId).subscribe(res => {
+          console.log('email sent: ', res);
+        });
       }
     });
     this.filterService.deleteClicked.next(false);
