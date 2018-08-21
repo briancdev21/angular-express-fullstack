@@ -168,11 +168,12 @@ export class PmScheduleComponent implements OnInit {
         // tslint:disable-next-line:whitespace
         // tslint:disable-next-line:max-line-length
         end_date: moment(this.maxDate(this.pmBoardTableData[i].tasks.map(t => moment(t.startDate).add(t.duration, 'days').format('YYYY-MM-DD')))).format('YYYY-MM-DD'),
-        progress: this.pmBoardTableData[i].completion / 100
+        progress: this.pmBoardTableData[i].completion / 100,
+        order: this.pmBoardTableData[i].order
       };
       tasks.push(midTk);
     }
-    this.tasks = tasks;
+    this.tasks = this.sortByOrder(tasks);
   }
 
   getUpdatedGanttData(event) {
@@ -186,12 +187,17 @@ export class PmScheduleComponent implements OnInit {
           start_date: moment(this.minDate(panelTasks.map(t => t.startDate))).format('YYYY-MM-DD'),
           // tslint:disable-next-line:max-line-length
           end_date: moment(this.maxDate(panelTasks.map(t => moment(t.startDate).add(t.duration, 'days').format('YYYY-MM-DD')))).format('YYYY-MM-DD'),
-          progress: event.data[i].completion / 100
+          progress: event.data[i].completion / 100,
+          order: event.data[i].order
         };
         tasks.push(midTk);
       }
     }
-    this.tasks = tasks;
+    this.tasks = this.sortByOrder(tasks);
+  }
+
+  sortByOrder(arr) {
+    return arr.sort((a, b) => a.order - b.order);
   }
 
   addContactName(data) {

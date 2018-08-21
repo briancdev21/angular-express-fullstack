@@ -9,6 +9,7 @@ import {MyTasksModel, TaskModel} from '../../../models/mytasks.model';
 import * as moment from 'moment';
 import { PmTasksService } from '../../../services/pmtasks.service';
 import { SharedService } from '../../../services/shared.service';
+import { ProjectsService } from '../../../services/projects.service';
 
 @Component({
   selector: 'app-mytasks',
@@ -57,9 +58,10 @@ export class MyTasksComponent implements OnInit {
   showTaskGroupDeleteConfirmModal = [];
   showSettingsModal = [[]];
   showDeleteConfirmModal = [[]];
+  projectName = '';
 
   constructor( private dragulaService: DragulaService, private fb: FormBuilder, private renderer: Renderer,
-    private pmTasksService: PmTasksService, private sharedService: SharedService ) {
+    private pmTasksService: PmTasksService, private sharedService: SharedService, private projectsService: ProjectsService ) {
     dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });
@@ -138,13 +140,18 @@ export class MyTasksComponent implements OnInit {
 
       for (let i = 0; i < this.panels.length; i++) {
 
-        this.panels[i].color = this.colors[i];
+        this.panels[i].color = this.colors[i % 10];
         this.panels[i].editTitle = false;
         this.ownerModalCollapsed[i] = new Array();
         this.dependencyModalCollapsed[i] = new Array();
         this.showTaskGroupDeleteConfirmModal[i] = false;
         this.showSettingsModal[i] = new Array();
         this.showDeleteConfirmModal[i] = new Array();
+        if (this.panels[i].projectId) {
+          this.projectsService.getIndividualProject(this.panels[i].projectId).subscribe(project => {
+            this.projectName = project.data.name;
+          });
+        }
 
         this.pmTasksService.getTasks(this.panels[i].id).subscribe(taskData => {
           this.panels[i].tasks = taskData.results;
@@ -154,6 +161,9 @@ export class MyTasksComponent implements OnInit {
             element.taskTitle = element.title;
             element.dependency = element.dependencyIds ? element.dependencyIds : [];
           });
+          if (i === 2) {
+            this.panels[i].tasks.map(t => t.taskPath = t.assigneeInfo.username + ' > ' + this.projectName);
+          }
           let importantTasks = [];
           importantTasks = this.panels[i].tasks.filter(t => t.isImportant === true);
           const unImportantTasks = this.panels[i].tasks.filter(t => t.isImportant === false);
@@ -168,6 +178,12 @@ export class MyTasksComponent implements OnInit {
         });
       }
       console.log('panels: ', this.panels);
+      const inbox = this.panels.filter(p => p.title === 'INBOX')[0];
+      const org = this.panels.filter(p => p.title === 'ORGANIZATION')[0];
+      const projects = this.panels.filter(p => p.title === 'PROJECTS')[0];
+      this.panels[0] = inbox;
+      this.panels[1] = org;
+      this.panels[2] = projects;
     });
   }
 
@@ -254,7 +270,13 @@ export class MyTasksComponent implements OnInit {
       title: ''
     };
     this.pmTasksService.createTask(panel.id, newMockTask).subscribe(res => {
-      this.refreshTable();
+      const newTask = res.data;
+      newTask.assigneeInfo = this.getUserInfo(newTask.assignee);
+      newTask.startDate = moment(newTask.startDate).format('MMMM DD, YYYY');
+      newTask.taskTitle = newTask.title;
+      newTask.dependency = newTask.dependencyIds ? newTask.dependencyIds : [];
+      const panelIndex = this.panels.map(p => p.id).indexOf(panel.id);
+      this.panels[panelIndex].tasks.push(newTask);
     });
   }
 
@@ -262,7 +284,6 @@ export class MyTasksComponent implements OnInit {
     if (!this.addPanelClicked) {
       this.addPanelClicked = !this.addPanelClicked;
     }
-
   }
 
   handleKeyDown(event) {
@@ -274,7 +295,12 @@ export class MyTasksComponent implements OnInit {
       this.newPanelTitle = '';
       this.addPanelClicked = !this.addPanelClicked;
       this.pmTasksService.createTaskGroup(newPanel).subscribe(res => {
-        this.refreshTable();
+        // this.refreshTable();
+        const newGroup = res.data;
+        newGroup.color = this.colors[this.panels.length % 10];
+        newGroup.editTitle = false;
+        this.panels.push(newGroup);
+        // this.panels.push()
       });
     }
   }
@@ -469,14 +495,17 @@ export class MyTasksComponent implements OnInit {
       permission: this.panels[index].permission,
     };
     this.pmTasksService.updateIndividualTaskGroup(this.panels[index].id, body).subscribe(res => {
-      this.refreshTable();
+      // this.refreshTable();
     });
   }
 
   confirmDeleteTaskGroup(milestoneId) {
     // console.log('taskgroup deleted');
     this.pmTasksService.deleteIndividualTaskGroup(milestoneId).subscribe(res => {
-      this.refreshTable();
+      // this.refreshTable();
+      const pos = this.panels.map(p => p.id).indexOf(milestoneId);
+      this.panels.splice(pos, 1);
+      console.log('removed: ', milestoneId, this.panels);
     });
   }
 
@@ -488,13 +517,14 @@ export class MyTasksComponent implements OnInit {
     }
   }
 
-  confirmDeleteMainTask(panel, task) {
+  confirmDeleteMainTask(panel, task, i, j) {
     this.pmTasksService.deleteIndividualtask(panel.id, task.id).subscribe(res => {
       this.refreshTable();
     });
   }
 
-  copyTask(panel, task) {
+  copyTask(panel, task, i, j) {
+    console.log('copy: ', panel, task, i, j);
     const savingData = task;
     savingData.startDate = moment(task.startDate).format('YYYY-MM-DD');
     // remove null

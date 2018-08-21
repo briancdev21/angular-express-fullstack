@@ -37,8 +37,7 @@
                   <input [value]="milestone.id" type="hidden" class="taskGroupId" >
                   <input 
                     [(ngModel)]="task.completion" 
-                    (change)="completionChanged($event)" 
-                    (keyup.enter)="completionChanged()"
+                    (change)="completionChanged($event)"
                     type="number"
                     size="3">%
                 </div>
