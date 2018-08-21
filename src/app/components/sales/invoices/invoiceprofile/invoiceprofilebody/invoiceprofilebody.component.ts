@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ProductDetailInfo } from '../../../../../models/ProductDetailInfo.model';
 import { Ng2TimelineComponent } from '../../../../profile/ng2-timeline/ng2timeline.component';
 import { MultiKeywordSelectComponent } from '../../../../profile/multikeywordselect/multikeywordselect.component';
@@ -11,13 +11,16 @@ import * as moment from 'moment';
 import { RecurseVisitor } from '@angular/compiler/src/i18n/i18n_ast';
 import { ProjectsService } from '../../../../../services/projects.service';
 import { CommonService } from '../../../../common/common.service';
+import { CompleterService, CompleterData } from 'ng2-completer';
+import { countries } from '../../../../../../assets/json/countries';
+import { provinces } from '../../../../../../assets/json/provinces';
 
 @Component({
   selector: 'app-invoiceprofilebody',
   templateUrl: './invoiceprofilebody.component.html',
   styleUrls: ['./invoiceprofilebody.component.css']
 })
-export class InvoiceProfileBodyComponent implements OnInit {
+export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   // @Input() createdInvoice;
 
   @Input() set createdInvoice(_createdInvoice) {
@@ -74,9 +77,9 @@ export class InvoiceProfileBodyComponent implements OnInit {
   termsOfInvoice = '';
   emails: any;
   currentClass: string;
-  currentClassId: number;
+  currentClassId: string;
   currentCategory: string;
-  currentCategoryId: number;
+  currentCategoryId: string;
   currentTerm: string;
   currentTermId: number;
   public timelineData: Array<Object> = [
@@ -125,48 +128,103 @@ export class InvoiceProfileBodyComponent implements OnInit {
   saveInvoiceData: any;
   currentOwner: string;
   invoiceStatus = 'NEW';
-  modalContent = "You cannot update a PAID or VOID Invoice";
+  modalContent = 'You cannot update a PAID or VOID Invoice';
+
+  contactsSource: CompleterData;
+  currentInvoice: any;
+  customerName: any;
+  countriesSource: CompleterData;
+  provincesSource: CompleterData;
+  projectName: any;
+  changeLogName: any;
+  address: any;
+  city: any;
+  province: any;
+  postalCode: any;
+  country: any;
+  invalidAddress = false;
+  invalidCity = false;
+  invalidProvince = false;
+  invalidCountry = false;
+  invalidPostalCode = false;
+  switchIconShipping = true;
+  invalidEmail = false;
+  invalidName = false;
+  selectedContact: any;
+  invoiceNumber = '';
+  today = new Date();
+  deliveryStatus = 'NOT_DELIVERED';
+  selectedProvince: any;
+  selectedCountry: any;
 
   constructor(private sharedService: SharedService, private invoicesService: InvoicesService, private router: Router,
-              private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService, private commonService: CommonService) {
+              private route: ActivatedRoute, private filterService: FilterService, private projectsService: ProjectsService,
+              private commonService: CommonService, private completerService: CompleterService ) {
 
     this.currentInvoiceId = this.route.snapshot.paramMap.get('id');
-    console.log('invoice currency id:', this.currentInvoiceId);
+    this.countriesSource = completerService.local(countries, 'name', 'name');
+    this.provincesSource = completerService.local(provinces, 'name', 'name');
 
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+      console.log('current invoice', res);
+      this.currentInvoice = res.data;
       this.invoiceStatus = res.data.status;
-      this.commonService.showAlertModal.next(false);
-      if (this.invoiceStatus == 'PAID' || this.invoiceStatus == 'VOID' ) {
+      if (this.invoiceStatus === 'PAID' || this.invoiceStatus === 'CLOSED' ) {
         this.commonService.showAlertModal.next(true);
       }
-      this.sharedService.getContacts()
-      .subscribe(data => {
-        data = this.addContactName(data);
-        this.contactList = data;
-        this.userList = this.contactList;
-        if (res.data.contactId) {
-          this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
-          this.currentOwner = this.getCustomerName(this.contactList, res.data.contactId);
-          console.log('current owner:', this.currentOwner);
+      this.sharedService.getMulipleContacts(this.currentInvoice.contactId).subscribe(contact => {
+        this.selectedContact = contact[0];
+        this.customerName = this.getContactName(this.selectedContact);
+        if (this.switchIconShipping) {
+          this.address = this.selectedContact.shippingAddress.address;
+          this.country = this.selectedContact.shippingAddress.country;
+          this.city = this.selectedContact.shippingAddress.city;
+          this.province = this.selectedContact.shippingAddress.province;
+          this.postalCode = this.selectedContact.shippingAddress.postalCode;
+        } else {
+          this.address = this.currentInvoice.shippingAddress.address;
+          this.country = this.currentInvoice.shippingAddress.country;
+          this.city = this.currentInvoice.shippingAddress.city;
+          this.province = this.currentInvoice.shippingAddress.province;
+          this.postalCode = this.currentInvoice.shippingAddress.postalCode;
         }
       });
+      this.sharedService.getContacts()
+        .subscribe(data => {
+          data = this.addContactName(data);
+          this.contactList = data;
+          this.contactsSource = this.completerService.local(this.contactList, 'name', 'name');
+          // this.userList = this.contactList;
+          // if (res.data.contactId) {
+          //   this.customerAddress = this.getContactAddress(this.contactList, res.data.contactId);
+          //   this.currentOwner = this.getCustomerName(this.contactList, res.data.contactId);
+          //   console.log('current owner:', this.currentOwner);
+          // }
+        });
 
       this.sharedService.getTerms().subscribe(data => {
         this.terms = data.results;
-        const termPos = this.terms.map(t => t.id).indexOf(this.currentTermId);
-        this.currentTerm = this.terms[termPos].name;
+        if (this.currentTermId) {
+          const termPos = this.terms.map(t => t.id).indexOf(this.currentTermId);
+          this.currentTerm = this.terms[termPos].name;
+        }
       });
 
       this.sharedService.getClassifications().subscribe(data => {
         this.classList = data.results;
-        const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
-        this.currentClass = this.classList[classPos].id;
+        if (this.currentClassId) {
+          const classPos = this.classList.map(t => t.id).indexOf(this.currentClassId);
+          this.currentClass = this.classList[classPos].id;
+        }
       });
 
       this.sharedService.getInvoiceCategories().subscribe(data => {
+        console.log('category: ', data, this.currentCategoryId);
         this.categoryList = data.results;
-        const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
-        this.currentCategory = this.categoryList[categoryPos].id;
+        if (this.currentCategoryId) {
+          const categoryPos = this.categoryList.map(t => t.id).indexOf(this.currentCategoryId);
+          this.currentCategory = this.categoryList[categoryPos].id;
+        }
       });
 
       this.invoicesService.getInvoiceProducts(this.currentInvoiceId).subscribe(data => {
@@ -204,6 +262,22 @@ export class InvoiceProfileBodyComponent implements OnInit {
       this.emailAddresses = res.data.emails;
       this.shippingAddress = res.data.shippingAddress;
       this.depositsAmount = res.data.deposit;
+      this.invoiceNumber = res.data.number;
+      this.deliveryStatus = res.data.deliveryStatus;
+      this.emails = res.data.emails;
+      this.selectedProvince = res.data.shippingAddress.province;
+      this.selectedCountry = res.data.shippingAddress.country;
+      if (res.data.projectId) {
+        this.projectsService.getIndividualProject(res.data.projectId).subscribe(project => {
+          this.projectName = project.data.name;
+        });
+      }
+
+      if (res.data.changeLogid) {
+        this.projectsService.getIndividualProjectChangeLog(res.data.projectId, res.data.changeLogId).subscribe(changeLog => {
+          this.changeLogName = changeLog.data.title;
+        });
+      }
     });
 
     this.saveInvoiceData = new InvoiceModel();
@@ -256,6 +330,9 @@ export class InvoiceProfileBodyComponent implements OnInit {
   onCustomerSelected(user) {
   }
 
+  onEnter() {
+  }
+
   onSelectUser(selectedIndex: any) {
     const contactIdList = this.contactList.map(c => c.id);
     const pos = contactIdList.indexOf(selectedIndex);
@@ -289,7 +366,7 @@ export class InvoiceProfileBodyComponent implements OnInit {
   }
 
   getMultiEmails(event) {
-    this.saveInvoiceData.emails = event;
+    this.emails = event;
   }
 
   onChangeTerm(event) {
@@ -369,9 +446,146 @@ export class InvoiceProfileBodyComponent implements OnInit {
     return data;
   }
 
+  getContactName(contact) {
+    if (contact.type === 'PERSON') {
+      contact.name = contact.person.firstName + ' ' + contact.person.lastName;
+    } else {
+      contact.name = contact.business.name;
+    }
+    return contact.name;
+  }
+
   deleteService() {
     this.invoicesService.deleteIndividualInvoice(this.currentInvoiceId).subscribe(res => {
       this.router.navigate(['./sales/invoices']);
     });
+  }
+
+  onSelectCustomer(event) {
+    if (event) {
+      const selectedCustomerId = event.originalObject.id;
+      this.selectedContact = this.contactList.filter(c => c.id === selectedCustomerId)[0];
+      if (this.switchIconShipping) {
+        this.address = this.selectedContact.shippingAddress.address;
+        this.country = this.selectedContact.shippingAddress.country;
+        this.city = this.selectedContact.shippingAddress.city;
+        this.province = this.selectedContact.shippingAddress.province;
+        this.postalCode = this.selectedContact.shippingAddress.postalCode;
+      }
+    }
+  }
+
+  clickIconShipping() {
+    this.switchIconShipping = !this.switchIconShipping;
+    if (this.switchIconShipping) {
+      this.address = this.selectedContact.shippingAddress.address;
+      this.country = this.selectedContact.shippingAddress.country;
+      this.city = this.selectedContact.shippingAddress.city;
+      this.province = this.selectedContact.shippingAddress.province;
+      this.postalCode = this.selectedContact.shippingAddress.postalCode;
+    } else {
+      this.address = '';
+      this.country = '';
+      this.city = '';
+      this.province = '';
+      this.postalCode = '';
+    }
+  }
+
+  selectDueDate(event) {
+    this.saveInvoiceData.dueDate = moment(event).format('YYYY-MM-DD');
+  }
+
+  onSelectProvince(event) {
+    this.selectedProvince = event.originalObject.short;
+    // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
+    this.selectedCountry = event.originalObject.country;
+    this.country = countries.filter(c => c.code === this.selectedCountry)[0].name;
+  }
+
+  onSelectCountry(event) {
+    console.log('country select: ', event);
+    this.selectedCountry = event.originalObject.code;
+    const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
+    this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
+  }
+
+  deliverProducts() {
+
+  }
+
+  updatingInvoice() {
+    this.invalidAddress = false;
+    this.invalidCity = false;
+    this.invalidProvince = false;
+    this.invalidCountry = false;
+    this.invalidPostalCode = false;
+    this.invalidName = false;
+
+    if (this.address && this.province && this.city && this.country && this.postalCode && this.selectedContact) {
+      const updatingData = {
+        'contactId': this.selectedContact.id,
+        'classificationId': this.currentClassId,
+        'categoryId': this.currentCategoryId,
+        'termId': this.currentTermId,
+        'emails': this.emails,
+        'shippingAddress': {
+          'address': this.address,
+          'city': this.city,
+          'province': this.selectedProvince,
+          'postalCode': this.postalCode,
+          'country': this.selectedCountry
+        },
+        'internalNote': this.internalMemo ? this.internalMemo : '',
+        'customerNote': this.noteToSupplier ? this.noteToSupplier : '',
+        'terms': this.termsOfInvoice ? this.termsOfInvoice : '',
+        'discount': {
+          'value': this.discountAmount ? this.discountAmount : 0,
+          'unit': this.discountType ? this.discountType : 'AMOUNT'
+        },
+        'deposit': this.depositsAmount ? this.depositsAmount : 0,
+
+        'currencyId': this.currentInvoice.currencyId,
+        'pricingCategoryId': this.currentInvoice.pricingCategoryId,
+        'status': this.currentInvoice.status,
+        'startDate': this.currentInvoice.startDate,
+        'acceptOnlinePayment': this.currentInvoice.acceptOnlinePayment,
+        'chargeLateFee': this.currentInvoice.chargeLateFee,
+        'lateFee': this.currentInvoice.lateFee,
+        'reminder': this.currentInvoice.reminder ? this.currentInvoice.reminder : [],
+        'billingAddress': this.currentInvoice.billingAddress,
+        'receivedPayment': this.currentInvoice.receivedPayment,
+        'deliverProducts': this.currentInvoice.deliverProducts
+      };
+      Object.keys(updatingData).forEach((key) => (updatingData[key] == null) && delete updatingData[key]);
+      this.invoicesService.updateInvoice(this.currentInvoiceId, updatingData).subscribe(res => {
+        console.log('updated: ', res);
+      });
+    } else {
+      if (!this.address) {
+        this.invalidAddress = true;
+      }
+      if (!this.city) {
+        this.invalidCity = true;
+      }
+      if (!this.postalCode) {
+        this.invalidPostalCode = true;
+      }
+      if (!this.country) {
+        this.invalidCountry = true;
+      }
+      if (!this.province) {
+        this.invalidProvince = true;
+      }
+      if (!this.customerName) {
+        this.invalidName = true;
+      }
+    }
+  }
+
+
+
+  ngOnDestroy() {
+    this.commonService.showAlertModal.next(false);
   }
 }

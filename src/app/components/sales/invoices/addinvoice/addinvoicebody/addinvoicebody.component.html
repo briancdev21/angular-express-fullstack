@@ -85,8 +85,108 @@
   </div>
 </div>  
 
+
+
+
+
+
+
+
+<!-- 
+
+Omaro's code
+<div>
+  <div class="main-content" >
+    <div class="main__info flex" >
+      <div class="left-sidebar">
+        <div class="flex aligntop" >
+          <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" [searchStr]="selectItem" ></app-in-customer-name>
+          <div class="email-address">
+            <span>Email address</span>
+            <app-multiemailselect [keywords]="emailAddresses" (multiEmails)="getMultiEmails($event)"></app-multiemailselect>
+          </div>
+        </div>
+        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" ></app-shippingaddress>
+        <div class="project-log">
+          <app-in-project-selector class="flex1 mr-15" [projects]="projects" (changedProject)="onChangeProject($event)" ></app-in-project-selector>
+          <div class="log-number" (change)="onChooseChangeLog($event)" >
+            <select >
+              <option selected disabled>Enter the change log number here</option>
+              <option *ngFor="let logNumber of changeLogNumbers" [value]="logNumber.id">{{logNumber.title}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="right-sidebar" *ngIf="in_id">
+        <app-in-orderidfield [in_id]="in_id" [title]="invoiceNumberTitle"></app-in-orderidfield>
+        <app-in-createddatefield [(createdDate)]="createdDate" (changedCreatedDate)="changedCreatedDate($event)"></app-in-createddatefield>
+        <app-in-termsfield [terms]="terms" [(selectedTerm)]="selectedTerm" (changedTerm)="onChangeTerm($event)"></app-in-termsfield>
+        <app-in-duedatefield [(dueDate)]="dueDate" [title]="dueDateTitle" (changedDueDate)="changedDueDate($event)"></app-in-duedatefield>
+        <app-in-class  [classList]="classList" (selectedClass)="onSelectClass($event)" ></app-in-class>
+        <app-in-category  [categoryList]="categoryList" (selectedCategory)="onSelectCategory($event)" ></app-in-category>
+      </div>
+    </div>
+    <div class="product__table" *ngIf="currentInvoiceId">
+      <app-in-table [(productDetails)]="productDetails" [invoiceId]="currentInvoiceId" (priceChange)="onPriceChanged()"></app-in-table>
+    </div>
+    <div class="sub__info">
+      <div class="notes-activity">
+        <div class="flex" >
+          <div class="internal-memo">
+            <app-in-internalmemo [(internalMemo)]="internalMemo" (changedMemo)="onChangedMemo($event)"></app-in-internalmemo>
+          </div>
+          <div class="notetosupplier">
+              <app-in-notetosupplier [(noteToSupplier)]="noteToSupplier" (changedNote)="onChangedNote($event)"></app-in-notetosupplier>
+          </div>
+          <div class="term-of-invoice">
+              <app-in-terms-of-invoice [(termsOfInvoice)]="termsOfInvoice" [(title)]="title" (changedTerm)="onChangedTermsOfInvoice($event)"></app-in-terms-of-invoice>
+          </div>
+        </div> -->
+        <!-- <div class="timeline-activity">
+          <app-ng2timeline [timelineData]="timelineData" [oneSide]="true"></app-ng2timeline>
+        </div> -->
+      <!-- </div>
+      <div class="bill-count" >
+          <app-in-subtotalproducts [subtotalproducts]="subtotalproducts" ></app-in-subtotalproducts>
+          <app-in-subtotalservices [subtotalservices]="subtotalServices" ></app-in-subtotalservices>
+          <app-in-discount [discounttype]="discountType" [discountamount]="discountAmount" (discountChange)="onTotalPriceChange($event)" ></app-in-discount>
+          <app-in-taxes [taxes]="taxes" ></app-in-taxes>
+          <app-in-deposits-credits [depositsAmount]="depositsAmount" (depositsChange)="onTotalPriceChange($event)"  ></app-in-deposits-credits>
+          <app-in-totalamountdue [totalamountdue]="totalamountdue" ></app-in-totalamountdue>
+      </div>
+    </div>
+    
+  </div>
+</div> -->
+
+<!-- alert modal -->
+<!-- 
+  
+Omaro's code  
+<div class="confirm-modal-wrapper" *ngIf="showModal" ></div>
+<div [ngClass]="{'confirm-modal': showModal, 'confirm-modal-hide': !showModal }">
+  <div class="header">
+    <span>Alert</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showModal=false" />
+  </div>
+  <div class="content" >
+    <div class="confirm-que">
+      <span *ngIf="!newCustomerName">Customer name, </span>
+      <span *ngIf="!newEmail">Email address, </span>
+      <span *ngIf="!newTermId">Term , </span>
+      <span *ngIf="!newClass">Class, </span>
+      <span *ngIf="!newCategory">Category,</span> etc fields are missing.
+    </div>
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="showModal=false" >
+        OK
+      </button>
+    </div>
+  </div>
+</div>   -->
+
 <!-- Invoice Contact Select Modal -->
-<div class="confirm-modal-wrapper" *ngIf="showInvoiceCreateModal" ></div>
+<!-- <div class="confirm-modal-wrapper" *ngIf="showInvoiceCreateModal" ></div>
 <div [ngClass]="{'confirm-modal': showInvoiceCreateModal, 'confirm-modal-hide': !showInvoiceCreateModal }">
   <div class="header">
       <h4>
@@ -102,4 +202,4 @@
       </button>
     </div>
   </div>
-</div>  
+</div>   -->

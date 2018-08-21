@@ -24,6 +24,7 @@
   display: flex;
   flex-flow: column;
   align-items: flex-end;
+  padding-top: 20px;
 }
 
 .internal-memo {
@@ -82,6 +83,7 @@ app-shippingaddress {
   flex-flow: column;
   align-items: flex-end;
   margin-top: 10px;
+  width: 40%;
 }
 
 
@@ -128,6 +130,7 @@ app-in-discount {
   display: flex;
   align-items: center;
   margin-top: 3px;
+  justify-content: space-between;
 }
 
 .log-number {
@@ -224,10 +227,202 @@ app-in-termsfield, app-in-duedatefield, app-in-class {
   background: #a9f2df;
   display: flex;
   align-items: center;
-  width: 48%;
+  width: 42%;
   justify-content: center;
   border-radius: 5px;
   margin-top: 5px;
   color: #646464;
   font-size: 12px;
+  cursor: pointer;
+}
+
+.customer-name {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  color: #95989a;
+  font-size: 13px;
+  padding-top: 8px;
+}
+
+.customer-name span {
+  margin-bottom: 3px;
+}
+
+:host ::ng-deep ng2-completer .completer-holder input::placeholder {
+	color: #d3d3d3;
+}
+
+:host ::ng-deep ng2-completer .completer-holder input {
+	height: 32px;
+}
+
+.city-state, .country-zip {
+	display: flex;
+	justify-content: space-between
+}
+
+.city-state input, .country-zip input {
+	width: 48%;
+  margin-bottom: 8px;
+  border: 1px solid #f5f5f5;
+  padding-left: 10px;
+  color: #646464;
+}
+
+.city-state ng2-completer, .country-zip ng2-completer {
+	width: 48%;
+	margin-bottom: 8px;
+	display: block;
+}
+
+.desc {
+	display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.switch-bar {
+	display: flex;
+	align-items: center;
+	margin-left: 5%;
+}
+
+.switch-bar img {
+	margin-right: 7px;
+}
+
+img {
+	width: 20px;
+	height: 20px;
+}
+
+.shipping-address {
+  margin-top: 10px;
+  color: #95989a;
+  font-size: 13px;
+}
+
+.address {
+  width: 100%;
+  border: 1px solid #f5f5f5;
+  height: 32px;
+  margin-bottom: 8px;
+  padding-left: 10px;
+  color: #646464;
+}
+
+.uneditable-input {
+  border: 1px solid #f5f5f5;
+  width: 48%;
+  height: 32px;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  color: #646464;
+}
+
+/deep/ ng2-completer .completer-dropdown {
+  height: 130px !important;
+  overflow: auto;
+}
+
+.indi-category {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 70%;
+  color: #646464;
+  margin-bottom: 15px;
+}
+
+.indi-category span {
+  color: #95989a;
+}
+
+.non-editable {
+  border: 1px solid #f5f5f5;
+  height: 32px;
+  text-align: left;
+  padding-left: 10px;
+  display: flex;
+  width: 60%;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 10px;
+}
+
+.indi-category select {
+  background: none;
+  -webkit-appearance: none;
+  background: url(/assets/images/down-arrow.png) no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
+  height: 32px;
+  font-size: 13px;
+  border-radius: 0;
+  border: 1px solid #f5f5f5;
+  padding-left: 1em;
+  padding-right: 50px;
+  width: 60%;
+  color: #646464;
+}
+
+.orderinfo-input {
+  width: 60%;
+}
+
+.orderinfo-input input{
+  width: 100%;
+  height: 32px;
+  padding-left: 10px;
+  font-size: 13px;
+  border: 1px solid #f5f5f5;
+}
+
+.indi-note {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+}
+
+.indi-note span {
+  font-size: 13px;
+  color: #646464;
+  margin-bottom: 10px;
+}
+
+.indi-note textarea {
+  padding: 8px;
+  border: 1px solid #d3d3d3;
+  height: 150px;
+}
+
+.discount { 
+  width: 80%;
+  display: flex;
+}
+
+.discount select {
+  width: 21%;
+  margin-right: 15px;
+}
+
+.discount input { 
+  width: 75%;
+  border: 1px solid #f5f5f5;
+  padding-right: 10px;
+  text-align: right;
+  color: #95989a;
+}
+
+.non-editable input {
+  border: none;
+  text-align: right;
+  outline: none;
+  color: #95989a;
+}
+
+.validation-required {
+  border: 1px solid red !important;
 }

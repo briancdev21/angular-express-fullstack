@@ -8,6 +8,7 @@ import { EstimatesService } from '../../../services/estimates.service';
 import { EstimateModel } from '../../../models/estimate.model';
 import { SharedService } from '../../../services/shared.service';
 import { CrmService } from '../../../services/crm.service';
+import { CompleterService, CompleterData } from 'ng2-completer';
 
 @Component({
   selector: 'app-invoices',
@@ -36,6 +37,7 @@ export class InvoicesComponent implements OnInit {
   invoiceTypes: any;
   today = moment().format('YYYY-MM-DD');
   contactsList: any;
+  contactsSource: CompleterData;
 
   public filters  = {
     createdFrom: '',
@@ -56,6 +58,10 @@ export class InvoicesComponent implements OnInit {
 
   newInvoice = {};
   newEstimate = {};
+  contactId: any;
+  contactName: any;
+  showInvoiceCreateModal = false;
+  invoiceModal = true;
 
   constructor(
     private filterService: FilterService,
@@ -63,20 +69,9 @@ export class InvoicesComponent implements OnInit {
     private invoicesService: InvoicesService,
     private estimatesService: EstimatesService,
     private sharedService: SharedService,
-    private crmService: CrmService
+    private crmService: CrmService,
+    private completerService: CompleterService
   ) {
-    this.sharedService.getContacts()
-    .subscribe(data => {
-      data = this.addContactName(data);
-      console.log('userlist: ', data);
-      this.contactsList = data;
-    });
-    this.crmService.getLeadsList()
-    .subscribe(data => {
-      data = data.results;
-      data = this.addContactName(data);
-      this.leadsList = data;
-    });
 
     this.filterAvaliableTo = 'everyone';
     this.invoicesService.getInvoices().subscribe(res => {
@@ -86,6 +81,34 @@ export class InvoicesComponent implements OnInit {
         return element;
       });
       this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
+      const contactIds = this.invoicesListInfo.map(i => i['contactId']);
+      this.sharedService.getMulipleContacts(contactIds).subscribe(contact => {
+        this.contactsList = contact;
+        this.addContactName(this.contactsList);
+
+        this.estimatesService.getEstimates().subscribe(data => {
+          this.estimatesListInfo = data.results;
+          this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['expiryDate'], i['status']));
+          this.estimatesListInfo = this.estimatesListInfo.map(element => {
+            element['isInvoice'] = false;
+            return element;
+          });
+          this.invoicesListInfo = this.invoicesListInfo.concat(this.estimatesListInfo);
+          this.invoicesListInfo.forEach(element => {
+            element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
+            element['balance'] = element['total'] - element['receivedPayment'] - element['deposit'];
+          });
+          this.invoicesListInfo = this.sortDateArray('createdAt');
+          this.invoicesListInfo.map(i => {
+            if (i['contactId']) {
+              i['customerName'] = this.getCustomerName(this.contactsList, i['contactId']);
+            } else if (i['leadId']) {
+              i['customerName'] = this.getCustomerNameFromLead(i['leadId']);
+            }
+            return i;
+          });
+        });
+      });
       // this.invoicesListInfo.map(i => {
       //   if (i['contactId']) {
       //     i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].split('-').pop(), 10));
@@ -94,32 +117,14 @@ export class InvoicesComponent implements OnInit {
       //   }
       //   return i;
       // });
+      console.log('invoiceslist: ', this.invoicesListInfo);
 
-      this.estimatesService.getEstimates().subscribe(data => {
-        this.estimatesListInfo = data.results;
-        this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['expiryDate'], i['status']));
-        this.estimatesListInfo = this.estimatesListInfo.map(element => {
-          element['balance'] = 0;
-          element['isInvoice'] = false;
-          return element;
-        });
-        this.invoicesListInfo = this.invoicesListInfo.concat(this.estimatesListInfo);
-        this.invoicesListInfo.forEach(element => {
-          element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
-        });
-        this.invoicesListInfo = this.sortDateArray('createdAt');
+    });
 
-        this.invoicesListInfo.map(i => {
-          if (i['contactId']) {
-            i['customerName'] = this.getCustomerName(this.contactsList, i['contactId']);
-          } else {
-            i['customerName'] = this.getCustomerName(this.leadsList, ['leadId']);
-          }
-          return i;
-        });
-      });
-            console.log('invoiceslist: ', this.invoicesListInfo);
-
+    this.sharedService.getContacts().subscribe(res => {
+      const contacts = res;
+      this.addContactName(contacts);
+      this.contactsSource = this.completerService.local(contacts, 'name', 'name');
     });
   }
 
@@ -259,5 +264,35 @@ export class InvoicesComponent implements OnInit {
       }
     });
     return data;
+  }
+
+  getCustomerNameFromLead(id) {
+  }
+
+  onSelectCustomerBeforeCreate(selectedIndex: any) {
+    this.contactId = selectedIndex.originalObject.id;
+  }
+
+  createInvoice() {
+    if (this.contactId) {
+      const creatingData = {
+        contactId: this.contactId
+      };
+      if (this.invoiceModal) {
+        this.invoicesService.createInvoice(creatingData).subscribe(res => {
+          console.log('invoice created: ', res);
+          this.router.navigate([`./invoice-profile/${res.data.id}`]);
+          this.showInvoiceCreateModal = false;
+          this.contactId = undefined;
+        });
+      } else {
+        this.estimatesService.createEstimate(creatingData).subscribe(res => {
+          console.log('estimate created: ', res);
+          this.router.navigate([`./estimate-profile/${res.data.id}`]);
+          this.showInvoiceCreateModal = false;
+          this.contactId = undefined;
+        });
+      }
+    }
   }
 }

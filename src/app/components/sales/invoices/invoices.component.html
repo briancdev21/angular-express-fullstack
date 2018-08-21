@@ -21,8 +21,8 @@
     </div>
 
     <div class="invoices-btn-group">
-      <div class="add-btn" (click)="toAddInvoice();">Add invoice</div>
-      <div class="add-btn" (click)="toAddEstimate();">Add estimate</div>
+      <div class="add-btn" (click)="showInvoiceCreateModal = true; invoiceModal = true;">Add invoice</div>
+      <div class="add-btn" (click)="showInvoiceCreateModal = true; invoiceModal = false;">Add estimate</div>
       <div class="import-btn">Import invoices</div>
     </div>
   </div>
@@ -80,3 +80,21 @@
   </div>
 </div>
 
+<div class="confirm-modal-wrapper" *ngIf="showInvoiceCreateModal" ></div>
+<div [ngClass]="{'confirm-modal': showInvoiceCreateModal, 'confirm-modal-hide': !showInvoiceCreateModal }">
+  <div class="header">
+      <h4>
+        Please select customer name
+      </h4>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="showInvoiceCreateModal=false;" />
+  </div>
+  <div class="content" >
+    <!-- <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectCustomerBeforeCreate($event)" [searchStr]="selectItem" ></app-in-customer-name> -->
+    <ng2-completer [(ngModel)]="contactName" [datasource]="contactsSource" [minSearchLength]="0" (selected)="onSelectCustomerBeforeCreate($event)" ></ng2-completer>
+    <div class="center-btn-section" >
+      <button class="done-btn" (click)="createInvoice();" >
+        OK
+      </button>
+    </div>
+  </div>
+</div>  
