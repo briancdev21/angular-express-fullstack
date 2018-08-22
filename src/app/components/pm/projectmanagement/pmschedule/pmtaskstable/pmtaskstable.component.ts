@@ -554,12 +554,16 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   confirmDeleteMainTask(event) {
-    const milestoneId = parseInt(event.srcElement.parentElement.querySelector('input.taskGroupId').value, 10);
-    const taskId = parseInt(event.srcElement.parentElement.querySelector('input.taskId').value, 10);
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
     this.pmTasksService.deleteIndividualtask(milestoneId, taskId).subscribe(res => {
       console.log('task deleted:');
-      const taskElement = document.getElementById('' + taskId) as HTMLDivElement;
-      taskElement.style.display = 'none';
+      // const taskElement = document.getElementById('' + taskId) as HTMLDivElement;
+      // taskElement.style.display = 'none';
+
+      const milestonePos = this.milestones.map(m => m.id).indexOf(milestoneId);
+      const taskPos = this.milestones[milestonePos].tasks.map(t => t.id).indexOf(taskId);
+      this.milestones[milestonePos].tasks.splice(taskPos, 1);
       this.updateDataForGanttChart();
     });
   }
