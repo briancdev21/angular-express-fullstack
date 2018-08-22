@@ -88,6 +88,14 @@ import { EstimateProfileComponent } from './components/sales/invoices/estimatepr
 import { AuthGuard } from './services/authguard.service';
 import { ReceiveInventoryComponent } from './components/inventory/receiveinventory/receiveinventory.component';
 import { ReceiveInventoryDetailComponent } from './components/inventory/receiveinventorydetail/receiveinventorydetail.component';
+import { UserProfileComponent } from './components/userprofile/userprofile.component';
+
+import { CompanySettingsComponent } from './components/settings/companysettings/companysettings.component';
+import { UserControlComponent } from './components/settings/usercontrol/usercontrol.component';
+import { CrmOptionsComponent } from './components/settings/crmoptions/crmoptions.component';
+import { SalesOptionsComponent } from './components/settings/salesoptions/salesoptions.component';
+import { InventoryOptionsComponent } from './components/settings/inventoryoptions/inventoryoptions.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -203,6 +211,17 @@ export const routes: Routes = [
       { path: 'project-reports', component: ProjectReportsComponent },
     ]
   },
+  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard],
+    children: [
+      { path: '', redirectTo: 'company-settings', pathMatch: 'full' },
+      { path: 'company-settings', component: CompanySettingsComponent },
+      { path: 'user-control', component: UserControlComponent },
+      { path: 'crmoptions', component: CrmOptionsComponent },
+      { path: 'salesoptions', component: SalesOptionsComponent },
+      { path: 'inventoryoptions', component: InventoryOptionsComponent },
+    ]
+    },
+  { path: 'userprofile', component: UserProfileComponent },
   { path: '**', redirectTo: 'home' },
 ];
 
