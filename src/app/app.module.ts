@@ -45,6 +45,8 @@ import { ServicingCmpModule } from './components/servicing/servicing.module';
 import { ReportsCmpModule } from './components/reports/reports.module';
 import { LeadProfileCmpModule } from './components/crm/leadprofile/leadprofile.module';
 import { ProductProfileCmpModule } from './components/inventory/products/productprofile/productprofile.module';
+import { UserProfileCmpModule } from './components/userprofile/userprofile.module';
+import { SettingsCmpModule } from './components/settings/settings.module';
 import { SharedPipesModule } from './pipes/sharedpipes.module';
 
 import { Pipe, PipeTransform } from '@angular/core';
@@ -109,6 +111,8 @@ import { PmTasksService } from './services/pmtasks.service';
     ReportsCmpModule,
     LeadProfileCmpModule,
     ProductProfileCmpModule,
+    UserProfileCmpModule,
+    SettingsCmpModule,
     SharedPipesModule
   ],
   exports: [

@@ -1,0 +1,51 @@
+<app-common (expandSidebar)="toggleMenubar($event)"></app-common>
+<div class="main-content" [ngClass]="{'main-content-large': menuCollapsed, 'main-content-small': !menuCollapsed }" > 
+	<div class="settings-page">
+		<div class="left-sidebar">
+
+			<ul class="clearfix">
+				<!--Apply .nav-active to active nav element-->
+				<li [routerLinkActive]="['nav-active']"  >
+					<a routerLink="/settings/company-settings" >
+						<span class="title">
+							COMPANY SETTINGS
+						</span>
+					</a>
+				</li>
+				<li [routerLinkActive]="['nav-active']"  >
+					<a routerLink="/settings/user-control" >
+						<span class="title">USER CONTROL</span>
+					</a>
+				</li>
+				<li [routerLinkActive]="['nav-active']"  >
+					<a routerLink="/settings/crmoptions" >
+						<span class="title">CRM OPTIONS</span>
+					</a>
+				</li>
+				<li [routerLinkActive]="['nav-active']"  >
+					<a routerLink="/settings/salesoptions" >
+						<span class="title">SALES OPTIONS</span>
+					</a>
+				</li>
+				<li [routerLinkActive]="['nav-active']"  >
+					<a routerLink="/settings/inventoryoptions" >
+						<span class="title">INVENTORY OPTIONS</span>
+					</a>
+				</li>
+				<li >
+					<a routerLink="/settings/user-control" >
+						<span class="title">STRIPE ACCOUNT</span>
+					</a>
+				</li>
+				<li >
+					<a routerLink="/settings/user-control" >
+						<span class="title">PLANS & BILLING</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+		
+		<router-outlet></router-outlet>
+	</div>
+	
+</div>
