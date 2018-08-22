@@ -90,7 +90,11 @@ export class ProgressProductLogComponent implements OnInit {
     for (let i = 0; i < this.purchaseOrders.length; i++) {
       this.pmService.getProductsListInPurchaseOrder(this.purchaseOrders[i].id).subscribe(res => {
         if (res.results.length) {
-          this.purchaseOrdersList = this.purchaseOrdersList.concat(res.results);
+          const products = res.results;
+          products.forEach(element => {
+            element.number = this.purchaseOrders[i].number;
+          });
+          this.purchaseOrdersList = this.purchaseOrdersList.concat(products);
           console.log('purchaseOrdersList: ', this.purchaseOrdersList);
         }
       });
