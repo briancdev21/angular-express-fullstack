@@ -2,7 +2,8 @@ import { Component, ChangeDetectorRef, Input, OnInit, HostListener, EventEmitter
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-
+import { SharedService } from '../../services/shared.service';
+import { ProjectsService } from '../../services/projects.service';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,7 @@ export class HomeComponent implements OnInit {
   currentDay = moment().format('dddd');
   currentHr = new Date().getHours();
   greeting: string;
-  barTimePeriod = 'month';
+  barTimePeriod = 'MONTHLY';
   userInfo = {
     name: 'Sepehr',
     tasksCount: 10,
@@ -158,43 +159,7 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  morrisBarChartInfo = [{
-      y: 'January',
-      revenue: 80
-    }, {
-      y: 'February',
-      revenue: 70
-    }, {
-      y: 'March',
-      revenue: 90
-    }, {
-      y: 'April',
-      revenue: 60
-    }, {
-      y: 'May',
-      revenue: 70
-    }, {
-      y: 'June',
-      revenue: 90
-    }, {
-      y: 'July',
-      revenue: 80
-    }, {
-      y: 'August',
-      revenue: 60
-    }, {
-      y: 'September',
-      revenue: 70
-    }, {
-      y: 'October',
-      revenue: 90
-    }, {
-      y: 'November',
-      revenue: 85
-    }, {
-      y: 'December',
-      revenue: 60
-    }];
+  morrisBarChartInfo = [];
 
   public activeProjectsLine = [
     {
@@ -268,7 +233,9 @@ export class HomeComponent implements OnInit {
       margin: 50,
     }];
 
-  constructor ( ) {
+  showBarChart = true;
+
+  constructor ( private sharedService: SharedService, private projectsService: ProjectsService ) {
     const m = localStorage.getItem('menu_collapsed');
     if (m === 'true') {
       this.menuCollapsed = true;
@@ -277,8 +244,23 @@ export class HomeComponent implements OnInit {
     } else {
       this.menuCollapsed = true;
     }
+
+    this.fetchRevenueBarChartData('MONTHLY');
   }
 
+  fetchRevenueBarChartData(unit) {
+    this.sharedService.getSalesStatistics(11, 0, unit, 'revenueOverTime').subscribe(sales => {
+      this.morrisBarChartInfo = sales.revenueOverTime;
+      this.showBarChart = false;
+      setTimeout(() => {
+        this.showBarChart = true;
+      });
+      this.morrisBarChartInfo.forEach(element => {
+        element.y = element.frameUnit;
+        element.revenue = element.frameValue;
+      });
+    });
+  }
 
   ngOnInit() {
     if (this.currentHr < 4) {
