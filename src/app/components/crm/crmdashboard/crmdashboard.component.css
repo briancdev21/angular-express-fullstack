@@ -229,3 +229,8 @@ app-activitiesbox {
 /deep/ app-activitiesbox .activity-content {
   max-height: none !important;
 }
+
+.card-header .period {
+  font-size: 12px;
+  margin-right: 10px;
+}
