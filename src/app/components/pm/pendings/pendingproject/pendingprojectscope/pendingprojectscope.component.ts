@@ -34,10 +34,12 @@ export class PendingProjectScopeComponent implements OnInit {
   }
 
   toProjectInfo() {
+    this.updateProjectInfo();
     this.router.navigate(['./pm/pending-project/pending-information']);
   }
 
   toProjectTasks() {
+    this.updateProjectInfo();
     this.router.navigate(['./pm/pending-project/pending-tasks']);
   }
 
