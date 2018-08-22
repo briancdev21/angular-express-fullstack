@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, Output, HostListener} from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-common',
@@ -13,7 +14,7 @@ export class CommonComponent {
   mAlertOpened = false;
   mNotificationOpened = false;
 
-  constructor () {
+  constructor (private router: Router) {
     const m = localStorage.getItem('menu_collapsed');
     if (m === 'true') {
       this.mRotateMenu = true;
@@ -57,5 +58,13 @@ export class CommonComponent {
     this.mAlertOpened = !this.mAlertOpened;
     this.mNotificationOpened = false;
     this.mProfileOpened = false;
+  }
+
+  goToUserProfile() {
+    this.router.navigate(['./userprofile']);
+  }
+
+  goToUserSettings() {
+    this.router.navigate(['./settings']);
   }
 }

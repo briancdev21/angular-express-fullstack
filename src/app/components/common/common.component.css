@@ -228,7 +228,7 @@ html,body {
 .profile-opened {
   position: absolute;
   height:0;
-  width: 320px;
+  width: 200px;
   right:0;
   margin-top: 68px;
   background: #F4F4F4;
@@ -236,13 +236,28 @@ html,body {
   transition: all 0.5s;
   overflow: hidden;
   z-index: 1;
+  font-size: 20px;
+  color: #646464;
+  text-align: center;
+}
+
+.profile-opened > div {
+  padding: 10px 0;
+}
+
+.profile-opened > div:hover {
+  box-shadow: 0px 0px 5px #95989a;
 }
 
 .profile-active {
-  height: 300px;
+  height: 195px;
 }
 
-.profile-active, .notifications-active, .alerts-active  {
+.sign-out {
+  border-top: 1px solid #95989a;
+}
+
+.notifications-active, .alerts-active  {
   width: 320px;
 }
 

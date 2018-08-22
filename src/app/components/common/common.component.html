@@ -113,4 +113,9 @@
 </div>
 <div appStopEventPropagation class="alert-opened" [ngClass]="{'alerts-active': mAlertOpened}">Alert</div>
 <div appStopEventPropagation class="notifications-opened" [ngClass]="{'notifications-active': mNotificationOpened}">Notify</div>
-<div appStopEventPropagation class="profile-opened" [ngClass]="{'profile-active': mProfileOpened}">Profile</div>
+<div appStopEventPropagation class="profile-opened" [ngClass]="{'profile-active': mProfileOpened}">
+  <div (click)="goToUserProfile()">Profile</div>
+  <div>Email Template</div>
+  <div (click)="goToUserSettings()">Settings</div>
+  <div class="sign-out" >Sign out</div>
+</div>
