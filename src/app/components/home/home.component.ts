@@ -161,79 +161,19 @@ export class HomeComponent implements OnInit {
 
   morrisBarChartInfo = [];
 
-  public activeProjectsLine = [
-    {
-      period: 'Jun',
-      project: 3,
-    }, {
-      period: 'JUL',
-      project: 4,
-    }, {
-      period: 'AUG',
-      project: 3,
-    }, {
-      period: 'SEP',
-      project: 5,
-    }, {
-      period: 'OCT',
-      project: 3,
-    }, {
-      period: 'NOV',
-      project: 6,
-    }, {
-      period: 'DEC',
-      project: 4,
-    }];
+  public activeProjectsLine = [];
 
-  public leadsToWinLine = [
-    {
-      period: 'Jun',
-      percent: 2,
-    }, {
-      period: 'JUL',
-      percent: 3,
-    }, {
-      period: 'AUG',
-      percent: 4,
-    }, {
-      period: 'SEP',
-      percent: 2,
-    }, {
-      period: 'OCT',
-      percent: 7,
-    }, {
-      period: 'NOV',
-      percent: 5,
-    }, {
-      period: 'DEC',
-      percent: 1,
-    }];
+  public leadsToWinLine = [];
 
-  public salesMarginsLine = [
-    {
-      period: 'Jun',
-      margin: 45,
-    }, {
-      period: 'JUL',
-      margin: 55,
-    }, {
-      period: 'AUG',
-      margin: 50,
-    }, {
-      period: 'SEP',
-      margin: 45,
-    }, {
-      period: 'OCT',
-      margin: 30,
-    }, {
-      period: 'NOV',
-      margin: 45,
-    }, {
-      period: 'DEC',
-      margin: 50,
-    }];
+  public salesMarginsLine = [];
 
   showBarChart = true;
+  showSalesMarginChart = true;
+  showLeadWinChart = true;
+  showActiveProjectsChart = true;
+  salesMarginPeriod = 'MONTHLY';
+  leadWinPeriod = 'MONTHLY';
+  activeProjectsPeriod = 'MONTHLY';
 
   constructor ( private sharedService: SharedService, private projectsService: ProjectsService ) {
     const m = localStorage.getItem('menu_collapsed');
@@ -246,6 +186,8 @@ export class HomeComponent implements OnInit {
     }
 
     this.fetchRevenueBarChartData('MONTHLY');
+    this.fetchSalesPipelineData('MONTHLY');
+    this.fetchLeadWinlineData('MONTHLY');
   }
 
   fetchRevenueBarChartData(unit) {
@@ -258,6 +200,48 @@ export class HomeComponent implements OnInit {
       this.morrisBarChartInfo.forEach(element => {
         element.y = element.frameUnit;
         element.revenue = element.frameValue;
+      });
+    });
+  }
+
+  fetchSalesPipelineData(unit) {
+    this.sharedService.getSalesStatistics(5, 0, unit, 'salesMarginOverTime').subscribe(oppo => {
+      this.salesMarginsLine = oppo.salesMarginOverTime;
+      this.showSalesMarginChart = false;
+      setTimeout(() => {
+        this.showSalesMarginChart = true;
+      });
+      this.salesMarginsLine.forEach(element => {
+        element.period = element.frameUnit;
+        element.margin = element.frameValue;
+      });
+    });
+  }
+
+  fetchLeadWinlineData(unit) {
+    this.sharedService.getCrmStatistics(5, 0, unit, 'opportunityLeadsOverTime').subscribe(oppo => {
+      this.leadsToWinLine = oppo.opportunityLeadsOverTime;
+      this.showLeadWinChart = false;
+      setTimeout(() => {
+        this.showLeadWinChart = true;
+      });
+      this.leadsToWinLine.forEach(element => {
+        element.period = element.frameUnit;
+        element.percent = element.frameValue;
+      });
+    });
+  }
+
+  fetchActiveProjectslineData(unit) {
+    this.sharedService.getProjectsStatistics(5, 0, unit, 'activeProjectsOverTime').subscribe(oppo => {
+      this.activeProjectsLine = oppo.activeProjectsOverTime;
+      this.showActiveProjectsChart = false;
+      setTimeout(() => {
+        this.showActiveProjectsChart = true;
+      });
+      this.activeProjectsLine.forEach(element => {
+        element.period = element.frameUnit;
+        element.project = element.frameValue;
       });
     });
   }
