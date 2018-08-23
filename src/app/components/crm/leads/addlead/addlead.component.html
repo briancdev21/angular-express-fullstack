@@ -6,7 +6,7 @@
 <div class="add-lead-modal"  [ngClass]="{'show-modal': !addLeadModalCollapsed, 'hide-modal': addLeadModalCollapsed }">
   <div class="header">
     <span>ADD LEAD</span>
-    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="addLeadModalCollapsed=true; showAddLeadModal=false; clearInputs();" />
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="close();" />
   </div>
 
   <div class="content" >
@@ -112,12 +112,11 @@
                 [minSearchLength]="0" 
                 (keyup.enter)="onEnter()" 
                 (selected)="onSelectProvince($event)"
-                [placeholder]="'Enter Provice'">
+                [placeholder]="'Enter Province'">
               </ng2-completer>
 
             </div>
             <div class="country-zip">
-
               <ng2-completer 
                 [(ngModel)]="country" 
                 [ngClass]="{'validation-required': invalidCountry}" 
@@ -159,7 +158,7 @@
           </div>
 
           <div class="btn-section" >
-            <button class="cancel-btn" (click)="addLeadModalCollapsed=true; showAddLeadModal=false"  >
+            <button class="cancel-btn" (click)="close();"  >
               Cancel
             </button>
             <button class="save-btn" (click)="clickNext()"  >
@@ -227,12 +226,13 @@
             <div class="desc">
               <span>Billing Address</span>
             </div>
-            <input placeholder="Enter Billing Address" class="address" [(ngModel)]="billingAddress">
+            <input placeholder="Enter Billing Address" class="address" [(ngModel)]="billingAddress" [ngClass]="{'validation-required': invalidAddress}">
 
             <div class="city-state">
               <input placeholder="Enter City" [(ngModel)]="billingCity">
               <ng2-completer 
-                [(ngModel)]="billingProvince" 
+                [(ngModel)]="billingProvince"
+                [ngClass]="{'validation-required': invalidProvince}"
                 [datasource]="provincesSource" 
                 [minSearchLength]="0" 
                 (keyup.enter)="onEnter()" 
@@ -242,7 +242,8 @@
             </div>
             <div class="country-zip">
               <ng2-completer 
-                [(ngModel)]="billingCountry" 
+                [(ngModel)]="billingCountry"
+                [ngClass]="{'validation-required': invalidCountry}"
                 [datasource]="countriesSource" 
                 [minSearchLength]="0" 
                 (keyup.enter)="onEnter()" 
@@ -257,13 +258,13 @@
 						<textarea placeholder="Enter customer notes here" [(ngModel)]="notes"></textarea>
 					</div>
           <div class="btn-section" >
-            <button *ngIf="tabActiveFirst" class="cancel-btn" (click)="addLeadModalCollapsed=true; showAddLeadModal=false; tabActiveFirst=true; tabActiveSecond=false;"  >
+            <button *ngIf="tabActiveFirst" class="cancel-btn" (click)="close();"  >
               Cancel
             </button>
             <button *ngIf="!tabActiveFirst" class="cancel-btn" (click)="tabActiveFirst=true; tabActiveSecond=false;"  >
               Back
             </button>
-            <button class="save-btn" (click)="clickSaveLead()"  >
+            <button class="save-btn" (click)="clickSave();">
               Save lead
             </button>
           </div>
