@@ -45,6 +45,25 @@ export class AddContactComponent implements OnInit {
   captains = ['Head Contact', 'Accounts Receivable'];
   captainsSource = ['Contact referal'];
 
+  invalidFirstname = false;
+  invalidLastname = false;
+  invalidBusinessName = false;
+  invalidAccountType = false;
+  invalidContactEmail = false;
+  invalidDefaultTerm = false;
+  invalidDefaultCurrency = false;
+  invalidDefaultPricing = false;
+  invalidPrimaryNumber = false;
+  invalidAddress = false;
+  invalidCity = false;
+  invalidProvince = false;
+  invalidCountry = false;
+  invalidPostalCode = false;
+  invalidPrimaryFormat = false;
+  invalidSecondaryFormat = false;
+  wrongEmailFormat = false;
+  provinceNotIncluded = false;
+
   addContactModalCollapsed = true;
   showAddContactModal = false;
   switchIconShipping = true;
@@ -59,11 +78,6 @@ export class AddContactComponent implements OnInit {
   businessType = 'PERSON';
   tabActiveFirst = true;
   tabActiveSecond = false;
-  invalidFirstname = false;
-  invalidLastname = false;
-  invalidBusinessName = false;
-  invalidAccountType = false;
-  invalidContactEmail = false;
   firstName = '';
   lastName = '';
   businessName = '';
@@ -71,15 +85,6 @@ export class AddContactComponent implements OnInit {
   defaultCurrency: any;
   defaultPricing: any;
   primaryNumber = '';
-  invalidDefaultTerm = false;
-  invalidDefaultCurrency = false;
-  invalidDefaultPricing = false;
-  invalidPrimaryNumber = false;
-  invalidAddress = false;
-  invalidCity = false;
-  invalidProvince = false;
-  invalidCountry = false;
-  invalidPostalCode = false;
   sourceValue = true;
   newEmail = '';
   newAddress = '';
@@ -91,11 +96,11 @@ export class AddContactComponent implements OnInit {
   jobTitle = '';
   email = '';
   notes = '';
-  billingAddress = '';
-  billingCity = '';
-  billingProvince = '';
-  billingCountry = '';
-  billingPostalCode = '';
+  billingAddress = undefined;
+  billingCity = undefined;
+  billingProvince = undefined;
+  billingCountry = undefined;
+  billingPostalCode = undefined;
   secondaryNumber = '';
   termsList = [];
   pricingCategoriesList = [];
@@ -105,17 +110,12 @@ export class AddContactComponent implements OnInit {
   sourcesNameList = [];
   selectedSourceId: any;
   businessAssociation: any;
-  newContact: any;
-  wrongEmailFormat = false;
   selectedCountry: any;
   selectedProvince: any;
   billingSelectedCountry: any;
   billingSelectedProvince: any;
-  invalidPrimaryFormat = false;
-  invalidSecondaryFormat = false;
   countriesNameList = countries.map(c => c.name);
   provincesNameList = provinces.map(p => p.name);
-  provinceNotIncluded = false;
   selectedProvincesNameList = [];
   contactsSource: CompleterData;
   businessAss: any;
@@ -130,22 +130,21 @@ export class AddContactComponent implements OnInit {
 
     this.sharedService.getCurrencies().subscribe(data => {
       this.currencyList = data.results;
-      this.defaultCurrency = data.results[0].id;
+      this.defaultCurrency = this.getDefaultCurrency();
     });
 
     this.sharedService.getTerms().subscribe(res => {
       this.termsList = res.results;
-      this.defaultTerm = res.results[0].id;
+      this.defaultTerm = this.getDefaultTerm();
     });
 
     this.sharedService.getPricingCategories().subscribe (res => {
       this.pricingCategoriesList = res.results;
-      this.defaultPricing = res.results[0].id;
+      this.defaultPricing = this.getDefaultPricing();
     });
 
     this.sharedService.getContacts().subscribe(res => {
       this.contactsList = res;
-      console.log('contactslist: ', this.contactsList);
       this.addContactName(this.contactsList);
       this.sharedService.getUsers().subscribe(user => {
         this.usersList = user;
@@ -171,17 +170,8 @@ export class AddContactComponent implements OnInit {
   }
 
   onAccountTypeChange(event) {
-    this.invalidFirstname = false;
-    this.invalidLastname = false;
-    this.invalidBusinessName = false;
-    this.invalidAccountType = false;
-    this.invalidPrimaryNumber = false;
-    this.invalidContactEmail = false;
-    this.invalidAddress = false;
-    this.invalidCity = false;
-    this.invalidProvince = false;
-    this.invalidCountry = false;
-    this.invalidPostalCode = false;
+    this.resetInputValidationFlags();
+
     if (event === 'PERSON') {
       this.typeAccountTypeChange = false;
     } else if (event === 'BUSINESS') {
@@ -197,7 +187,6 @@ export class AddContactComponent implements OnInit {
   }
 
   onSelectCustomer(event) {
-    console.log('event: ', event);
     this.businessAssociation = event.originalObject.id;
   }
 
@@ -212,12 +201,20 @@ export class AddContactComponent implements OnInit {
   }
 
   onSelectCountry(event) {
+    if(!event) {
+      return;
+    }
+
     this.selectedCountry = event.originalObject.code;
     const provincesSourceList = provinces.filter(p => p.country === this.selectedCountry);
     this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
   }
 
   onSelectProvince(event) {
+    if(!event) {
+      return;
+    }
+
     this.selectedProvince = event.originalObject.short;
     // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
     this.selectedCountry = event.originalObject.country;
@@ -225,12 +222,20 @@ export class AddContactComponent implements OnInit {
   }
 
   onSelectBillingCountry(event) {
+    if(!event) {
+      return;
+    }
+
     this.billingSelectedCountry = event.originalObject.code;
     const provincesSourceList = provinces.filter(p => p.country === this.billingSelectedCountry);
     this.provincesSource = this.completerService.local(provincesSourceList, 'name', 'name');
   }
 
   onSelectBillingProvince(event) {
+    if(!event) {
+      return;
+    }
+
     this.billingSelectedProvince = event.originalObject.short;
     // const countriesSourceList =  countries.filter(c => c.code === this.selectedProvince);
     this.billingSelectedCountry = event.originalObject.country;
@@ -241,7 +246,7 @@ export class AddContactComponent implements OnInit {
     this.keywordsIdList = event.map(k => k.id);
   }
 
-  clickNext() {
+  resetInputValidationFlags() {
     this.invalidFirstname = false;
     this.invalidLastname = false;
     this.invalidBusinessName = false;
@@ -253,129 +258,65 @@ export class AddContactComponent implements OnInit {
     this.invalidProvince = false;
     this.invalidCountry = false;
     this.invalidPostalCode = false;
+    this.wrongEmailFormat = false;
+    this.invalidPrimaryFormat = false;
+    this.invalidSecondaryFormat = false;
+    this.provinceNotIncluded = false;
+    this.invalidCountry = false;
+    this.invalidProvince = false;
+    this.invalidDefaultTerm = false;
+    this.invalidDefaultCurrency = false;
+    this.invalidDefaultPricing = false;
+  }
+
+  clickNext() {
+    this.resetInputValidationFlags();
+
+    if (!this.businessName) {
+      this.invalidBusinessName = true;
+    }
+    if (!this.firstName) {
+      this.invalidFirstname = true;
+    }
+    if (!this.lastName) {
+      this.invalidLastname = true;
+    }
+    if (!this.primaryNumber) {
+      this.invalidPrimaryNumber = true;
+    }
+    if (!this.email || this.wrongEmailFormat) {
+      this.invalidContactEmail = true;
+    }
+
     this.wrongEmailFormat = !this.checkEmailValidation(this.email);
     this.invalidPrimaryFormat = !this.phoneNumberValidation(this.primaryNumber);
     if (this.secondaryNumber) {
       this.invalidSecondaryFormat = !this.phoneNumberValidation(this.secondaryNumber);
     }
-    if (!this.countriesNameList.includes(this.country)) {
-      this.provinceNotIncluded = true;
-      this.invalidCountry = true;
-    } else if (!this.provincesNameList.includes(this.province)) {
-      this.provinceNotIncluded = true;
-      this.invalidProvince = true;
+
+    this.validateAddress(this.address, this.city, this.province, this.country, this.postalCode);
+
+    if (this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
+      !this.provinceNotIncluded && this.city && this.province && this.country && this.postalCode &&
+      !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
+        if (this.businessType === 'PERSON' && this.firstName && this.lastName) {
+          this.tabActiveFirst = false;
+          this.tabActiveSecond = true;
+        } else if (this.businessType === 'BUSINESS' && this.businessName) {
+          this.tabActiveFirst = false;
+          this.tabActiveSecond = true;
+        }
     }
 
-    if (this.businessType === 'PERSON') {
-      if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
-        !this.provinceNotIncluded && this.city && this.province && this.country && this.postalCode &&
-        !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
-        this.tabActiveFirst = false;
-        this.tabActiveSecond = true;
-      } else {
-        if (!this.firstName) {
-          this.invalidFirstname = true;
-        }
-        if (!this.lastName) {
-          this.invalidLastname = true;
-        }
-        if (!this.primaryNumber) {
-          this.invalidPrimaryNumber = true;
-        }
-        if (!this.email || this.wrongEmailFormat) {
-          this.invalidContactEmail = true;
-        }
-        if (!this.address) {
-          this.invalidAddress = true;
-        }
-        if (!this.city) {
-          this.invalidCity = true;
-        }
-        if (!this.province) {
-          this.invalidProvince = true;
-        }
-        if (!this.country) {
-          this.invalidCountry = true;
-        }
-        if (!this.postalCode) {
-          this.invalidPostalCode = true;
-        }
-      }
-    } else if (this.businessType === 'BUSINESS') {
-      if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat && this.address &&
-        this.city && this.province && this.country && this.postalCode && !this.provinceNotIncluded &&
-        !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
-        this.tabActiveFirst = false;
-        this.tabActiveSecond = true;
-      } else {
-        if (!this.businessName) {
-          this.invalidBusinessName = true;
-        }
-        if (!this.primaryNumber) {
-          this.invalidPrimaryNumber = true;
-        }
-        if (!this.email || this.wrongEmailFormat) {
-          this.invalidContactEmail = true;
-        }
-        if (!this.address) {
-          this.invalidAddress = true;
-        }
-        if (!this.city) {
-          this.invalidCity = true;
-        }
-        if (!this.province) {
-          this.invalidProvince = true;
-        }
-        if (!this.country) {
-          this.invalidCountry = true;
-        }
-        if (!this.postalCode) {
-          this.invalidPostalCode = true;
-        }
-      }
-    } else {
-      this.invalidAccountType = true;
-      if (!this.firstName) {
-        this.invalidFirstname = true;
-      }
-      if (!this.lastName) {
-        this.invalidLastname = true;
-      }
-      if (!this.primaryNumber) {
-        this.invalidPrimaryNumber = true;
-      }
-      if (!this.email || this.wrongEmailFormat) {
-        this.invalidContactEmail = true;
-      }
-      if (!this.address) {
-        this.invalidAddress = true;
-      }
-      if (!this.city) {
-        this.invalidCity = true;
-      }
-      if (!this.province) {
-        this.invalidProvince = true;
-      }
-      if (!this.country) {
-        this.invalidCountry = true;
-      }
-      if (!this.postalCode) {
-        this.invalidPostalCode = true;
-      }
-    }
     // check the switch and make billing address same as shipping address
     if (this.switchIconShipping) {
       this.billingAddress = this.address;
       this.billingCity = this.city;
       this.billingProvince = this.province;
       this.billingCountry = this.country;
+      this.billingSelectedProvince = this.selectedProvince;
+      this.billingSelectedCountry = this.selectedCountry;
       this.billingPostalCode = this.postalCode;
-    } else {
-      this.billingAddress = '';
-      this.billingCity = '';
-      this.billingProvince = '';
-      this.billingCountry = '';
-      this.billingPostalCode = '';
     }
   }
 
@@ -387,145 +328,29 @@ export class AddContactComponent implements OnInit {
         break;
       }
       case 'ADVANCED INFORMATION': {
-        this.tabActiveFirst = false;
-        this.tabActiveSecond = true;
-        this.invalidFirstname = false;
-        this.invalidLastname = false;
-        this.invalidBusinessName = false;
-        this.invalidAccountType = false;
-        this.invalidPrimaryNumber = false;
-        this.invalidContactEmail = false;
-        this.invalidAddress = false;
-        this.invalidCity = false;
-        this.invalidProvince = false;
-        this.invalidCountry = false;
-        this.invalidPostalCode = false;
-        this.wrongEmailFormat = !this.checkEmailValidation(this.email);
-        this.invalidPrimaryFormat = !this.phoneNumberValidation(this.primaryNumber);
-        if (this.secondaryNumber) {
-          this.invalidSecondaryFormat = !this.phoneNumberValidation(this.secondaryNumber);
-        }
-        if (!this.countriesNameList.includes(this.country)) {
-          this.provinceNotIncluded = true;
-          this.invalidCountry = true;
-        } else if (!this.provincesNameList.includes(this.province)) {
-          this.provinceNotIncluded = true;
-          this.invalidProvince = true;
-        }
+        this.clickNext();
 
-        if (this.businessType === 'PERSON') {
-          if (this.firstName && this.lastName && this.primaryNumber && this.email && !this.wrongEmailFormat && this.address &&
-            !this.provinceNotIncluded && this.city && this.province && this.country && this.postalCode &&
-            !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
-            this.tabActiveFirst = false;
-            this.tabActiveSecond = true;
-            break;
-          } else {
-            setTimeout(() => {
-              this.tabActiveFirst = true;
-              this.tabActiveSecond = false;
-            });
-            if (!this.firstName) {
-              this.invalidFirstname = true;
-            }
-            if (!this.lastName) {
-              this.invalidLastname = true;
-            }
-            if (!this.primaryNumber) {
-              this.invalidPrimaryNumber = true;
-            }
-            if (!this.email || this.wrongEmailFormat) {
-              this.invalidContactEmail = true;
-            }
-            if (!this.address) {
-              this.invalidAddress = true;
-            }
-            if (!this.city) {
-              this.invalidCity = true;
-            }
-            if (!this.province) {
-              this.invalidProvince = true;
-            }
-            if (!this.country) {
-              this.invalidCountry = true;
-            }
-            if (!this.postalCode) {
-              this.invalidPostalCode = true;
-            }
-          }
-        } else if (this.businessType === 'BUSINESS') {
-          if (this.businessName && this.email && this.primaryNumber && !this.wrongEmailFormat && this.address &&
-            this.city && this.province && this.country && this.postalCode && !this.provinceNotIncluded &&
-            !this.invalidPrimaryFormat && !this.invalidSecondaryFormat) {
-            this.tabActiveFirst = false;
-            this.tabActiveSecond = true;
-          } else {
-            setTimeout(() => {
-              this.tabActiveFirst = true;
-              this.tabActiveSecond = false;
-            });
-            if (!this.businessName) {
-              this.invalidBusinessName = true;
-            }
-            if (!this.primaryNumber) {
-              this.invalidPrimaryNumber = true;
-            }
-            if (!this.email || this.wrongEmailFormat) {
-              this.invalidContactEmail = true;
-            }
-            if (!this.address) {
-              this.invalidAddress = true;
-            }
-            if (!this.city) {
-              this.invalidCity = true;
-            }
-            if (!this.province) {
-              this.invalidProvince = true;
-            }
-            if (!this.country) {
-              this.invalidCountry = true;
-            }
-            if (!this.postalCode) {
-              this.invalidPostalCode = true;
-            }
-          }
-        } else {
+        // TODO: weird async issues requires us to do this
+        if (this.tabActiveFirst === true && this.tabActiveSecond === false) {
+          this.tabActiveFirst = false;
+          this.tabActiveSecond = true;
           setTimeout(() => {
             this.tabActiveFirst = true;
             this.tabActiveSecond = false;
           });
-          this.invalidAccountType = true;
-          if (!this.firstName) {
-            this.invalidFirstname = true;
-          }
-          if (!this.lastName) {
-            this.invalidLastname = true;
-          }
-          if (!this.primaryNumber) {
-            this.invalidPrimaryNumber = true;
-          }
-          if (!this.email || this.wrongEmailFormat) {
-            this.invalidContactEmail = true;
-          }
-          if (!this.address) {
-            this.invalidAddress = true;
-          }
-          if (!this.city) {
-            this.invalidCity = true;
-          }
-          if (!this.province) {
-            this.invalidProvince = true;
-          }
-          if (!this.country) {
-            this.invalidCountry = true;
-          }
-          if (!this.postalCode) {
-            this.invalidPostalCode = true;
-          }
         }
         break;
       }
     }
+  }
+
+  close() {
+    this.addContactModalCollapsed=true;
+    this.showAddContactModal=false;
+    this.tabActiveFirst=true;
+    this.tabActiveSecond=false;
+
+    this.reset();
   }
 
   checkEmailValidation(email) {
@@ -554,7 +379,47 @@ export class AddContactComponent implements OnInit {
     return re.test(number);
   }
 
-  clearInputs() {
+  getDefaultCurrency() {
+    return this.currencyList[0].id;
+  }
+
+  getDefaultTerm() {
+    return this.termsList[0].id;
+  }
+
+  getDefaultPricing() {
+    return this.pricingCategoriesList[0].id;
+  }
+
+  validateAddress(address, city, province, country, postalCode) {
+    if (!address) {
+      this.invalidAddress = true;
+    }
+    if (!city) {
+      this.invalidCity = true;
+    }
+    if (!province) {
+      this.invalidProvince = true;
+    }
+    if (!country) {
+      this.invalidCountry = true;
+    }
+    if (!postalCode) {
+      this.invalidPostalCode = true;
+    }
+
+    if (!this.countriesNameList.includes(country)) {
+      this.provinceNotIncluded = true;
+      this.invalidCountry = true;
+    } else if (!this.provincesNameList.includes(province)) {
+      this.provinceNotIncluded = true;
+      this.invalidProvince = true;
+    }
+  }
+
+  reset() {
+    this.resetInputValidationFlags();
+
     this.address = '';
     this.city = '';
     this.province = '';
@@ -566,188 +431,111 @@ export class AddContactComponent implements OnInit {
     this.businessType = 'PERSON';
     this.tabActiveFirst = true;
     this.tabActiveSecond = false;
-    this.invalidFirstname = false;
-    this.invalidLastname = false;
-    this.invalidBusinessName = false;
-    this.invalidAccountType = false;
     this.firstName = '';
     this.lastName = '';
     this.businessName = '';
-    this.defaultTerm = '';
-    this.defaultCurrency = '';
-    this.defaultPricing = '';
+    this.defaultTerm = this.getDefaultTerm();
+    this.defaultCurrency = this.getDefaultCurrency();
+    this.defaultPricing = this.getDefaultPricing();
     this.primaryNumber = '';
-    this.invalidDefaultTerm = false;
-    this.invalidDefaultCurrency = false;
-    this.invalidDefaultPricing = false;
-    this.invalidPrimaryNumber = false;
     this.sourceValue = true;
-    this.currencyList = [];
     this.keywordsIdList = [];
     this.headContact = undefined;
     this.jobTitle = '';
     this.email = '';
     this.notes = '';
-    this.billingAddress = '';
-    this.billingCity = '';
-    this.billingProvince = '';
-    this.billingCountry = '';
-    this.billingPostalCode = '';
+    this.billingAddress = undefined;
+    this.billingCity = undefined;
+    this.billingProvince = undefined;
+    this.billingCountry = undefined;
+    this.billingPostalCode =undefined;
     this.secondaryNumber = '';
     this.selectedSourceId = undefined;
     this.businessAssociation = undefined;
-    this.invalidContactEmail = false;
-    this.wrongEmailFormat = false;
-    this.invalidAddress = false;
-    this.invalidCity = false;
-    this.invalidProvince = false;
-    this.invalidCountry = false;
-    this.invalidPostalCode = false;
   }
 
-  // clean(obj) {
-  //   for (const propName in obj) {
-  //     if (obj[propName] === null || obj[propName] === undefined || isNaN(obj[propName])) {
-  //       delete obj[propName];
-  //     }
-  //   }
-  // }
-
   clickSaveContact() {
-    this.invalidDefaultTerm = false;
-    this.invalidDefaultCurrency = false;
-    this.invalidDefaultPricing = false;
-    if (this.defaultTerm && this.defaultCurrency && this.defaultPricing) {
+    this.resetInputValidationFlags();
+    if (!this.switchIconShipping) {
+      this.validateAddress(
+        this.billingAddress,
+        this.billingCity,
+        this.billingProvince,
+        this.billingCountry,
+        this.billingPostalCode
+      );
+    }
+    if (!this.invalidAddress && !this.invalidCity && !this.invalidProvince
+      && !this.invalidCountry && !this.invalidPostalCode && !this.invalidCountry
+      && !this.invalidProvince && !this.provinceNotIncluded) {
+      const newContact: any = {};
+      newContact.currencyId = this.defaultCurrency;
+      newContact.termId = this.defaultTerm;
+      newContact.sourceId = this.selectedSourceId ? this.selectedSourceId : undefined;
+      newContact.pricingCategoryId = this.defaultPricing ? this.defaultPricing : undefined;
+      newContact.keywordIds = this.keywordsIdList;
+      newContact.owner;
+      newContact.type = this.businessType;
+      newContact.shippingAddress = {
+        'address': this.address,
+        'city': this.city,
+        'province': this.selectedProvince,
+        'postalCode': this.postalCode,
+        'country': this.selectedCountry
+      };
+
+      if (!this.switchIconShipping) {
+        newContact.billingAddress = {
+          'address': this.billingAddress,
+          'city': this.billingCity,
+          'province': this.billingSelectedProvince,
+          'postalCode': this.billingPostalCode,
+          'country': this.billingSelectedCountry
+        };
+      }
+
+      newContact.email = this.email;
+      newContact.socialMediaUrl = {
+        'linkedIn': undefined,
+        'facebook': undefined,
+        'twitter': undefined
+      };
+      newContact.phoneNumbers = {
+        'primary': this.primaryNumber,
+        'secondary': this.secondaryNumber,
+      };
+      newContact.timezone = moment().utcOffset() / 60;
+      newContact.note = this.notes;
+
       if (this.businessType === 'PERSON') {
-        this.newContact = {
-          'currencyId': this.defaultCurrency,
-          'termId': this.defaultTerm,
-          'sourceId': this.selectedSourceId,
-          'pricingCategoryId': this.defaultPricing,
-          'keywordIds': this.keywordsIdList,
-          'owner': 'string',
-          'followers': [
-            'string'
-          ],
-          'type': this.businessType,
-          'person': {
-            'firstName': this.firstName,
-            'lastName': this.lastName,
-            'jobTitle': this.jobTitle ? this.jobTitle : 'a',
-            'department': this.captain ? this.captain : 'a',
-            'businessAssociation': this.businessAssociation,
-          },
-          'shippingAddress': {
-            'address': this.address,
-            'city': this.city,
-            'province': this.selectedProvince,
-            'postalCode': this.postalCode,
-            'country': this.selectedCountry
-          },
-          'billingAddress': {
-            'address': this.switchIconShipping ? this.address : this.billingAddress,
-            'city': this.switchIconShipping ? this.city : this.billingCity,
-            'province': this.switchIconShipping ? this.selectedProvince : this.billingSelectedProvince,
-            'postalCode': this.switchIconShipping ? this.postalCode : this.billingPostalCode,
-            'country': this.switchIconShipping ? this.selectedCountry : this.billingSelectedCountry
-          },
-          'email':  this.email,
-          'socialMediaUrl': {
-            'linkedIn': undefined,
-            'facebook': undefined,
-            'twitter': undefined
-          },
-          'phoneNumbers': {
-            'primary': this.primaryNumber,
-            'secondary': this.secondaryNumber,
-          },
-          'timezone': 1,
-          'note': this.notes,
-          'lastContacted': moment().format('YYYY-MM-DD')
+        newContact.person = {
+          'firstName': this.firstName,
+          'lastName': this.lastName,
+          'jobTitle': this.jobTitle ? this.jobTitle : undefined,
+          'department': this.captain ? this.captain : undefined,
+          'businessAssociation': this.businessAssociation && this.businessAssociation.length !== 0
+            ? this.businessAssociation
+            : undefined
         };
       } else {
-        this.newContact = {
-          'currencyId': this.defaultCurrency,
-          'termId': this.defaultTerm,
-          'sourceId': this.selectedSourceId,
-          'pricingCategoryId': this.defaultPricing,
-          'keywordIds': this.keywordsIdList,
-          'owner': 'string',
-          'followers': [
-            'string'
-          ],
-          'type': this.businessType,
-          'business': {
-            'name': this.businessName,
-            'headContact': this.headContact,
-            'accountReceivable': '',
-            'personAssociations': [
-              ''
-            ]
-          },
-          'shippingAddress': {
-            'address': this.address,
-            'city': this.city,
-            'province': this.selectedProvince,
-            'postalCode': this.postalCode,
-            'country': this.selectedCountry
-          },
-          'billingAddress': {
-            'address': this.switchIconShipping ? this.address : this.billingAddress,
-            'city': this.switchIconShipping ? this.city : this.billingCity,
-            'province': this.switchIconShipping ? this.selectedProvince : this.billingSelectedProvince,
-            'postalCode': this.switchIconShipping ? this.postalCode : this.billingPostalCode,
-            'country': this.switchIconShipping ? this.selectedCountry : this.billingSelectedCountry
-          },
-          'email':  this.email,
-          'socialMediaUrl': {
-            'linkedIn': undefined,
-            'facebook': undefined,
-            'twitter': undefined
-          },
-          'phoneNumbers': {
-            'primary': this.primaryNumber,
-            'secondary': this.secondaryNumber,
-          },
-          'timezone': 1,
-          'note': this.notes,
-          'lastContacted': moment().format('YYYY-MM-DD')
+        newContact.business = {
+          'name': this.businessName,
+          'headContact': this.headContact ? this.headContact : undefined,
+          'accountReceivable': '',
+          'personAssociations': [
+            ''
+          ]
         };
-        if (!this.newContact.business.headContact) {
-          delete(this.newContact.business.headContact);
-        }
       }
 
-      if (isNaN(this.newContact.sourceId)) {
-        delete this.newContact.sourceId;
-      }
-
-      if (this.newContact.person) {
-        if (isNaN(this.newContact.person.businessAssociation)) {
-          delete this.newContact.person.businessAssociation;
-        }
-      }
-
-      // this.clean(this.newContact);
-      console.log('new contact: ', this.newContact);
-      this.crmService.createContact(JSON.stringify(this.newContact)).subscribe(data => {
-        this.addContactModalCollapsed = true;
-        this.showAddContactModal = false;
-        this.tabActiveFirst = true;
-        this.tabActiveSecond = false;
-        // this.clearInputs();
+      this.crmService.createContact(JSON.stringify(newContact)).subscribe(data => {
         this.filterService.saveClicked.next(true);
       });
-    } else {
-      if (!this.defaultCurrency) {
-        this.invalidDefaultCurrency = true;
-      }
-      if (!this.defaultTerm) {
-        this.invalidDefaultTerm = true;
-      }
-      if (!this.defaultPricing) {
-        this.invalidDefaultPricing = true;
-      }
+      this.reset();
+      this.addContactModalCollapsed = true;
+      this.showAddContactModal = false;
+      this.tabActiveFirst = true;
+      this.tabActiveSecond = false;
     }
   }
 }
