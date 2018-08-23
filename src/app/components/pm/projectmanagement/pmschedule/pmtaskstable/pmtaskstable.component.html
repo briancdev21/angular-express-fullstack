@@ -20,7 +20,7 @@
                 </span>
                 <input [value]="task.id" type="hidden" class="taskId" >
                 <input [value]="milestone.id" type="hidden" class="taskGroupId" >
-                <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged($event)" >
+                <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged($event)" id="{{task.id}}autofocus">
                 <!-- <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (change)="taskTitleChanged(milestone.id, task.id, task)" > -->
               </div>
               <div class="task-owner">

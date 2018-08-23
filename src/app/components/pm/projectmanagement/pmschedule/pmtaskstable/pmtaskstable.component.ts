@@ -132,7 +132,6 @@ export class PmTasksTableComponent implements OnInit {
     // const dDate = new Intl.DateTimeFormat('en-US', options).format(event.value);
     // Add dDate field to panel info and update it with formatted date.
     selectedTaskData.startDate = moment(event.value).utc();
-    console.log('event value:', event.value);
     this.updateTask(milestoneId, taskId, selectedTaskData);
   }
 
@@ -205,6 +204,10 @@ export class PmTasksTableComponent implements OnInit {
       newTask.taskTitle = newTask.title;
       newTask.dependency = newTask.dependencyIds ? newTask.dependencyIds : [];
       this.milestones[pos].tasks.push(newTask);
+      const newInputId = newTask.id + 'autofocus';
+      setTimeout(() => {
+        document.getElementById(newInputId).focus();
+      }, 100);
       this.updateDataForGanttChart();
     });
   }
@@ -275,7 +278,6 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   updateDataForGanttChart() {
-    console.log('update Gantt Chart:');
     this.tasksTemp = [];
     this.pmTasksService.getTaskGroupsWithParams({projectId: this.currentProjectId}).subscribe(data => {
       const milestones = data.results;
@@ -306,7 +308,6 @@ export class PmTasksTableComponent implements OnInit {
       if (this.tasksTemp.length === milestoneLength) {
         this.allTasks = this.dependencyList.map(dependency => dependency.id);
         this.allTasks = _.uniq(this.allTasks);
-        console.log('all tasks:', this.allTasks);
         this.copyMilestones = this.tasksTemp;
         this.updateTaskOrderNumber();
         // set draggable class
@@ -554,12 +555,16 @@ export class PmTasksTableComponent implements OnInit {
   }
 
   confirmDeleteMainTask(event) {
-    const milestoneId = parseInt(event.srcElement.parentElement.querySelector('input.taskGroupId').value, 10);
-    const taskId = parseInt(event.srcElement.parentElement.querySelector('input.taskId').value, 10);
+    const milestoneId = event.srcElement.parentElement.querySelector('input.taskGroupId').value;
+    const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
     this.pmTasksService.deleteIndividualtask(milestoneId, taskId).subscribe(res => {
       console.log('task deleted:');
-      const taskElement = document.getElementById('' + taskId) as HTMLDivElement;
-      taskElement.style.display = 'none';
+      // const taskElement = document.getElementById('' + taskId) as HTMLDivElement;
+      // taskElement.style.display = 'none';
+
+      const milestonePos = this.milestones.map(m => m.id).indexOf(milestoneId);
+      const taskPos = this.milestones[milestonePos].tasks.map(t => t.id).indexOf(taskId);
+      this.milestones[milestonePos].tasks.splice(taskPos, 1);
       this.updateDataForGanttChart();
     });
   }

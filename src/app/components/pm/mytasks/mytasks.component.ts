@@ -276,6 +276,10 @@ export class MyTasksComponent implements OnInit {
       newTask.taskTitle = newTask.title;
       newTask.dependency = newTask.dependencyIds ? newTask.dependencyIds : [];
       const panelIndex = this.panels.map(p => p.id).indexOf(panel.id);
+      const newInputId = newTask.id + 'autofocus';
+      setTimeout(() => {
+        document.getElementById(newInputId).focus();
+      }, 100);
       this.panels[panelIndex].tasks.push(newTask);
     });
   }

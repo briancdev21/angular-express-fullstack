@@ -45,7 +45,7 @@
                 <div (click)="task.inputShow=true; task.maxHeight = 30;  $event.stopPropagation();" *ngIf="!task.inputShow" class="task-title-show">
                   {{task.taskTitle}}
                 </div> -->
-                <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (keydown.enter)="updateInfo(i, j);" (change)="updateInfo(i, j);">
+                <input placeholder="Enter task here" [(ngModel)]="task.taskTitle" (keydown.enter)="updateInfo(i, j);" (change)="updateInfo(i, j);" id="{{task.id}}autofocus">
               </div>
               <div class="task-owner" *ngIf="i==1 || i==2">
                 <img src="{{task.assigneeInfo == undefined ? 'assets/users/man.png' : task.assigneeInfo.pictureURI}}"  (click)="openOwnerModal(i, j); $event.stopPropagation();" *ngIf="i === 1">

@@ -261,6 +261,11 @@ app-activitiesbox {
   width: 100%;
 }
 
+.card-header .period {
+  font-size: 12px;
+  margin-right: 10px;
+}
+
 @media screen and (max-width: 1650px) {
 
   .approval-time {

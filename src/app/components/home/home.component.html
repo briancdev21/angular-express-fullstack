@@ -19,15 +19,15 @@
       </div>
       <div class="bar-chart card">
         <div class="card-header">
-          <span>PROJECT HOURS</span>
-          <select [(ngModel)]="barTimePeriod">
+          <span>TOTAL REVENUE</span>
+          <select [(ngModel)]="barTimePeriod" (ngModelChange)="fetchRevenueBarChartData(barTimePeriod)">
             <option value="WEEKLY">This Week</option>
             <option value="MONTHLY">This Month</option>
             <option value="QUARTERLY">This Quarter</option>
             <option value="YEARLY">This Year</option>
           </select>
         </div>
-        <app-morrisbarchart [morrisBarChartInfo]="morrisBarChartInfo"></app-morrisbarchart>
+        <app-morrisbarchart [morrisBarChartInfo]="morrisBarChartInfo" *ngIf="morrisBarChartInfo && showBarChart"></app-morrisbarchart>
       </div>
     </div>
     <app-activitiesbox [activitiesInfo]="activitiesInfo"></app-activitiesbox>
@@ -36,38 +36,38 @@
     <div class="card">
       <div class="card-header">
         <span>SALES MARGINS</span>
-        <select [(ngModel)]="barTimePeriod">
+        <select [(ngModel)]="salesMarginPeriod" (ngModelChange)="fetchSalesPipelineData(salesMarginPeriod)">
           <option value="WEEKLY">This Week</option>
           <option value="MONTHLY">This Month</option>
           <option value="QUARTERLY">This Quarter</option>
           <option value="YEARLY">This Year</option>
         </select>
       </div>
-      <app-salesmarginschart [morrisLineChartInfo]="salesMarginsLine"></app-salesmarginschart>
+      <app-salesmarginschart [morrisLineChartInfo]="salesMarginsLine" *ngIf="salesMarginsLine && showSalesMarginChart"></app-salesmarginschart>
     </div>
     <div class="card">
       <div class="card-header">
         <span>ACTIVE PROJECTS</span>
-        <select [(ngModel)]="barTimePeriod">
+        <select [(ngModel)]="activeProjectsPeriod" (ngModelChange)="fetchActiveProjectslineData(activeProjectsPeriod)">
           <option value="WEEKLY">This Week</option>
           <option value="MONTHLY">This Month</option>
           <option value="QUARTERLY">This Quarter</option>
           <option value="YEARLY">This Year</option>
         </select>
       </div>
-      <app-activeprojectschart [morrisLineChartInfo]="activeProjectsLine"></app-activeprojectschart>
+      <app-activeprojectschart [morrisLineChartInfo]="activeProjectsLine" *ngIf="activeProjectsLine && showActiveProjectsChart"></app-activeprojectschart>
     </div>
     <div class="card">
       <div class="card-header">
         <span>LEADS TO WIN</span>
-        <select [(ngModel)]="barTimePeriod">
+        <select [(ngModel)]="leadWinPeriod" (ngModelChange)="fetchLeadWinlineData(leadWinPeriod)">
           <option value="WEEKLY">This Week</option>
           <option value="MONTHLY">This Month</option>
           <option value="QUARTERLY">This Quarter</option>
           <option value="YEARLY">This Year</option>
         </select>
       </div>
-      <app-leadstowinchart [morrisLineChartInfo]="leadsToWinLine"></app-leadstowinchart>
+      <app-leadstowinchart [morrisLineChartInfo]="leadsToWinLine" *ngIf="leadsToWinLine && showLeadWinChart"></app-leadstowinchart>
     </div>
   </div>
 </div>
