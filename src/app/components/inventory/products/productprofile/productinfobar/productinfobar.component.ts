@@ -56,11 +56,11 @@ export class ProductInfoBarComponent implements OnInit {
 
   saveCrop() {
     this.showEditImageModal = false;
-    this.productInfo.pictureURI = this.croppedImage;
+    this._productInfo.pictureURI = this.croppedImage;
     const uploadData = new FormData();
     uploadData.append('productPicture', this.selectedUncroppedFile, this.selectedUncroppedFile.name);
 
-    this.productsService.uploadProductProfileImage(this.productInfo.id, uploadData).subscribe(res => {
+    this.productsService.uploadProductProfileImage(this._productInfo.id, uploadData).subscribe(res => {
       console.log('imga result: ', res);
     });
   }
