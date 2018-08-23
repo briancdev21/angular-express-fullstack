@@ -26,7 +26,6 @@ export class ProductsService {
   getProductsList (limit: number = 50, offset: number = 0): Observable<any> {
     const url = `${environment.apiUrl}/inventory/products/?limit=${limit}&offset=${offset}`;
     // const url = `${apiUrl}inventory/products/`;
-    console.log('id_token', apiHeaders());
     return this.http.get(url);
   }
 

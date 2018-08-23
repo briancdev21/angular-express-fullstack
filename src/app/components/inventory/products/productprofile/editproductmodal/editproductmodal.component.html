@@ -129,7 +129,7 @@
             </div>
           </div>
           <div class="stock-reorder-cost-lead">
-            <div class="stock-reorder">
+            <!-- <div class="stock-reorder">
               <div class="stock-level">
                 <span>Initial Stock Level</span>
                 <div class="greyed-input">
@@ -142,7 +142,7 @@
                   <input [ngClass]="{'greyed-layer': greyedNonStock}" placeholder="Enter the re-order point" [(ngModel)]="addedProduct.reorderPoint" [value]="addedProduct.reorderPoint" type="number">
                 </div>
                </div>
-            </div>
+            </div> -->
             <div class="cost-lead">
               <div class="unit-cost">
                 <span>Unit Cost</span>
@@ -181,7 +181,7 @@
               </div>
             </div>
           </div>
-          <div class="sku-supplier-upc">
+          <!-- <div class="sku-supplier-upc">
             <div class="sku-supplier">
               <div class="sku">
                 <div>
@@ -194,18 +194,18 @@
                 </div>
                 <input placeholder="Enter the sku number" [(ngModel)]="addedProduct.skuNumber" type="number" (ngModelChange)="skuChange($event)">
               </div>
-              <!-- <div class="supplier">
+              <div class="supplier">
                 <span>Supplier Code</span>
                 <input placeholder="Enter the supplier code" [(ngModel)]="addedProduct.supplierCode" [value]="addedProduct.supplierCode">
-              </div> -->
+              </div>
             </div>
-            <!-- <div class="upc">
+            <div class="upc">
               <span>UPC Number</span>
               <div class="greyed-input">
                 <input [ngClass]="{'greyed-layer': greyedService}" placeholder="Type in or scan for the UPC number" [(ngModel)]="addedProduct.upc" [value]="addedProduct.upc" type="number">
               </div>
-            </div> -->
-          </div>
+            </div>
+          </div> -->
           <div class="page-divider"></div>
           <div class="friend-royalty-retail" *ngIf="pricingCategoriesListInfo">
             <div class="friend" *ngFor="let pricing of pricingCategoriesListInfo; let i = index">
