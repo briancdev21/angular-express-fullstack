@@ -160,13 +160,13 @@ export class EsProfileTableComponent implements OnInit {
 
       this.estimateProductModel = {
         sku: this._productDetails[index].sku,
-        taxRateId: parseInt(this._productDetails[index].taxRateId, 10),
+        taxRateId: this._productDetails[index].taxRateId,
         discount: {
           value: this._productDetails[index].discountvalue ? this._productDetails[index].discountvalue : 0,
           unit: 'PERCENT'
         },
         received: 0,
-        serviceDate: this._productDetails[index].serviceDate.toISOString().slice(0, 10),
+        serviceDate: moment(this._productDetails[index].serviceDate).format('YYYY-MM-DD'),
         quantity: this._productDetails[index].quantity
       };
       this.estimatesService.updateEstimateProduct(this.estimateId, this._productDetails[index].id, this.estimateProductModel).
