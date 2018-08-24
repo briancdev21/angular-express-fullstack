@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FilterService } from '../../filter.service';
 import { InvoicesService } from '../../../../../services/invoices.service';
@@ -8,7 +8,7 @@ import { InvoicesService } from '../../../../../services/invoices.service';
   templateUrl: './invoiceprofilefooter.component.html',
   styleUrls: ['./invoiceprofilefooter.component.css']
 })
-export class InvoiceProfileFooterComponent implements OnInit {
+export class InvoiceProfileFooterComponent implements OnInit, OnDestroy {
 
   @Input() set createdInvoice(_createdInvoice) {
   }
@@ -97,5 +97,10 @@ export class InvoiceProfileFooterComponent implements OnInit {
 
   deleteInvoice() {
     this.filterService.deleteClicked.next( true );
+  }
+
+  ngOnDestroy() {
+    this.filterService.saveClicked.next( false );
+    this.filterService.deleteClicked.next( false );
   }
 }
