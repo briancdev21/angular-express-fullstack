@@ -86,7 +86,7 @@
                   <img *ngIf="i !== 2 && task.isImportant == true" src="assets/images/star.png"  (click)="task.isImportant = !task.isImportant; updateInfo(i, j);">
                   <img *ngIf="i !== 2 && task.isImportant == false" src="assets/images/star-empty.png" (click)="task.isImportant = !task.isImportant; updateInfo(i, j);">
                   <img *ngIf="i == 1 || i == 2" src="assets/images/alarm.png" [ngClass]="{'blured': !task.notify}" (click)="task.notify = !task.notify; updateInfo(i, j);">
-                  <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()">
+                  <!-- <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()"> -->
                   <img src="assets/images/menu(1).png" *ngIf="i !== 2" (click)='openShowSettingModal(i, j);$event.stopPropagation();' class="menu-icon">
                   <!--Dependency numbers-->
                   <div *ngIf="i === 2" class="dependency-numbers" (click)="openDependencyModal(i, j); editable=true;">
