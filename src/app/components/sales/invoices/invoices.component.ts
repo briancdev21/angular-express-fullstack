@@ -91,35 +91,47 @@ export class InvoicesComponent implements OnInit {
 
         this.estimatesService.getEstimates().subscribe(data => {
           this.estimatesListInfo = data.results;
-          this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['expiryDate'], i['status']));
-          this.estimatesListInfo = this.estimatesListInfo.map(element => {
-            element['isInvoice'] = false;
-            return element;
-          });
-          this.invoicesListInfo = this.invoicesListInfo.concat(this.estimatesListInfo);
-          this.invoicesListInfo.forEach(element => {
-            element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
-            element['balance'] = element['total'] - element['receivedPayment'] - element['deposit'];
-          });
-          this.invoicesListInfo = this.sortDateArray('createdAt');
-          this.invoicesListInfo.map(i => {
-            if (i['contactId']) {
-              i['customerName'] = this.getCustomerName(this.contactsList, i['contactId']);
-            } else if (i['leadId']) {
-              i['customerName'] = this.getCustomerNameFromLead(i['leadId']);
+          const leadIds = [];
+          const esContactIds = [];
+          this.estimatesListInfo.forEach(es => {
+            if (es['leadId']) {
+              leadIds.push(es['leadId']);
+            } else {
+              esContactIds.push(es['contactId']);
             }
-            return i;
+          });
+
+          this.sharedService.getMulipleContacts(esContactIds).subscribe(co => {
+            this.contactsList = this.contactsList.concat(this.addContactName(co));
+
+            this.crmService.getMulipleLeads(leadIds).subscribe(lead => {
+              this.leadsList = lead;
+              this.addContactName(this.leadsList);
+              console.log('leadslist *** ', lead, leadIds);
+
+              this.estimatesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['expiryDate'], i['status']));
+              this.estimatesListInfo = this.estimatesListInfo.map(element => {
+                element['isInvoice'] = false;
+                return element;
+              });
+              this.invoicesListInfo = this.invoicesListInfo.concat(this.estimatesListInfo);
+              this.invoicesListInfo.forEach(element => {
+                element['createdAt'] = moment(element['createdAt']).format('YYYY-MM-DD');
+                element['balance'] = element['total'] - element['receivedPayment'] - element['deposit'];
+              });
+              this.invoicesListInfo = this.sortDateArray('createdAt');
+              this.invoicesListInfo.map(i => {
+                if (i['contactId']) {
+                  i['customerName'] = this.getCustomerName(this.contactsList, i['contactId']);
+                } else if (i['leadId']) {
+                  i['customerName'] = this.getCustomerNameFromLead(i['leadId']);
+                }
+                return i;
+              });
+            });
           });
         });
       });
-      // this.invoicesListInfo.map(i => {
-      //   if (i['contactId']) {
-      //     i['customerName'] = this.getCustomerName(this.contactsList, parseInt(i['contactId'].split('-').pop(), 10));
-      //   } else {
-      //     i['customerName'] = this.getCustomerName(this.leadsList, parseInt(i['leadId'].split('-').pop(), 10));
-      //   }
-      //   return i;
-      // });
       console.log('invoiceslist: ', this.invoicesListInfo);
 
     });
@@ -269,6 +281,8 @@ export class InvoicesComponent implements OnInit {
   }
 
   getCustomerNameFromLead(id) {
+    const selectedLead = this.leadsList.filter(l => l.id === id)[0];
+    return selectedLead.name;
   }
 
   onSelectCustomerBeforeCreate(selectedIndex: any) {
