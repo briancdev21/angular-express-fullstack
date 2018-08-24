@@ -64,7 +64,7 @@ app-shippingaddress {
 }
 
 .product__table {
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 50px;
 }
 
@@ -216,10 +216,6 @@ input::placeholder {
   font-size: 12px;
   margin: 3px 0;
   display: inline-block;
-}
-
-app-in-termsfield, app-in-duedatefield, app-in-class {
-  margin-top: 7px;
 }
 
 .products-delivered {
@@ -430,4 +426,10 @@ img {
 .invalid-btn {
   background: lightgray !important;
   cursor: not-allowed;
+}
+
+.alert-table {
+  color: red;
+  font-size: 14px;
+  margin-left: 30px;
 }

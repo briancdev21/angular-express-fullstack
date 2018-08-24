@@ -70,6 +70,7 @@
         <div class="indi-category">
           <span>Terms</span>
           <select name="terms" [(ngModel)]="currentTermId" *ngIf="terms" (ngModelChange)="updatingInvoice()">
+            <option [value]="undefined">No Term</option>
             <option *ngFor = "let term of terms" [ngValue]="term.id">{{term.name}}</option>
           </select>
         </div>
@@ -77,7 +78,7 @@
           <span>Due Date</span>
           <div class="orderinfo-input" >
             <input [owlDateTimeTrigger]="owlduedate" [owlDateTime]="owlduedate" (dateTimeChange)="selectDueDate($event)" [(ngModel)]="dueDate" [min]="today" >
-            <owl-date-time [pickerType]="'calendar'" #owlduedate ></owl-date-time>
+            <owl-date-time [pickerType]="'calendar'" #owlduedate [disabled]="currentTermId"></owl-date-time>
           </div>
         </div>
         <div class="indi-category">
@@ -94,6 +95,7 @@
         </div>
       </div>
     </div>
+    <span *ngIf="projectName" class="alert-table">Cannot modify an Invoice generated from a project</span>
     <div class="product__table" *ngIf="currentInvoiceId">
       <app-in-profile-table [(productDetails)]="productDetails" (priceChange)="onPriceChanged()" [invoiceId]="currentInvoiceId"></app-in-profile-table>
     </div>

@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FilterService } from '../../filter.service';
 import { InvoicesService } from '../../../../../services/invoices.service';
@@ -9,7 +9,7 @@ import { EstimatesService } from '../../../../../services/estimates.service';
   templateUrl: './estimateprofilefooter.component.html',
   styleUrls: ['./estimateprofilefooter.component.css']
 })
-export class EstimateProfileFooterComponent implements OnInit {
+export class EstimateProfileFooterComponent implements OnInit, OnDestroy {
 
   @Input() createdInvoice;
 
@@ -34,7 +34,7 @@ export class EstimateProfileFooterComponent implements OnInit {
   chargeFeeUnit: string;
   chargeFeeValue: number;
   chargeSwitchOn: false;
-  currentEstimateId: number;
+  currentEstimateId: any;
   reminderSwitchOn = false;
   recurringSwitchOn = false;
   creditSwitchOn = false;
@@ -54,9 +54,8 @@ export class EstimateProfileFooterComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('created invoice: ', this.createdInvoice);
     // this.chargeFeeUnit = this.createdInvoice.
-    this.currentEstimateId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.currentEstimateId = this.route.snapshot.paramMap.get('id');
   }
 
   cancelInvoice() {
@@ -93,5 +92,10 @@ export class EstimateProfileFooterComponent implements OnInit {
 
   deleteInvoice() {
     this.filterService.deleteClicked.next( true );
+  }
+
+  ngOnDestroy() {
+    this.filterService.deleteClicked.next( false );
+    this.filterService.saveClicked.next( false );
   }
 }

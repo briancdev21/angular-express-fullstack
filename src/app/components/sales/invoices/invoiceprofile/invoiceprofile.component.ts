@@ -21,7 +21,6 @@ export class InvoiceProfileComponent implements OnInit {
   newInvoice = {};
   newEstimate = {};
   today = moment().format('YYYY-MM-DD');
-  public createdInvoice;
 
   constructor( private invoicesService: InvoicesService, private router: Router, private route: ActivatedRoute ) {
 

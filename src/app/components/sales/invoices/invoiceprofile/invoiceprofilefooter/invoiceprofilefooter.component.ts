@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FilterService } from '../../filter.service';
 import { InvoicesService } from '../../../../../services/invoices.service';
@@ -8,10 +8,7 @@ import { InvoicesService } from '../../../../../services/invoices.service';
   templateUrl: './invoiceprofilefooter.component.html',
   styleUrls: ['./invoiceprofilefooter.component.css']
 })
-export class InvoiceProfileFooterComponent implements OnInit {
-
-  @Input() set createdInvoice(_createdInvoice) {
-  }
+export class InvoiceProfileFooterComponent implements OnInit, OnDestroy {
 
   settingsCollapsed = true;
   showReminderModal = false;
@@ -44,16 +41,24 @@ export class InvoiceProfileFooterComponent implements OnInit {
   showRecurringModal = false;
   template: any;
   Interval = '';
+  currentInvoice: any;
+  invoiceStatus: any;
 
   constructor(
     private router: Router,
     private filterService: FilterService,
     private invoicesService: InvoicesService,
     private route: ActivatedRoute) {
+
+      this.currentInvoiceId = this.route.snapshot.paramMap.get('id');
+      this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+        console.log('current invoice', res);
+        this.currentInvoice = res.data;
+        this.invoiceStatus = res.data.status;
+      });
   }
 
   ngOnInit() {
-    console.log('created invoice: ', this.createdInvoice);
     // this.chargeFeeUnit = this.createdInvoice.
     this.currentInvoiceId = this.route.snapshot.paramMap.get('id');
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
@@ -81,6 +86,10 @@ export class InvoiceProfileFooterComponent implements OnInit {
     this.router.navigate(['./sales/invoices']);
   }
 
+  voidInvoice() {
+    this.filterService.voidClicked.next( true );
+  }
+
   onSwitchChanged(val) {
 
   }
@@ -97,5 +106,11 @@ export class InvoiceProfileFooterComponent implements OnInit {
 
   deleteInvoice() {
     this.filterService.deleteClicked.next( true );
+  }
+
+  ngOnDestroy() {
+    this.filterService.saveClicked.next( false );
+    this.filterService.deleteClicked.next( false );
+    this.filterService.voidClicked.next( false );
   }
 }

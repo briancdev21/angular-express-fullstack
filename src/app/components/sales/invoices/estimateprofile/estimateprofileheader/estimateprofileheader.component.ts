@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
 import { EstimatesService } from '../../../../../services/estimates.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FilterService } from '../../filter.service';
@@ -8,25 +8,30 @@ import { FilterService } from '../../filter.service';
   templateUrl: './estimateprofileheader.component.html',
   styleUrls: ['./estimateprofileheader.component.css']
 })
-export class EstimateProfileHeaderComponent implements OnInit {
+export class EstimateProfileHeaderComponent implements OnInit, OnDestroy {
 
   status = '';
-  invoiceId: Number;
+  invoiceId: string;
   constructor(private estimatesService: EstimatesService, private route: ActivatedRoute, private filterService: FilterService ) {
 
   }
   ngOnInit() {
     // this.status = this.route.snapshot.paramMap.get('title');
-    this.invoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.invoiceId = this.route.snapshot.paramMap.get('id');
     this.estimatesService.getIndividualEstimate(this.invoiceId).subscribe(res => {
       this.status = res.data.status;
     });
   }
 
   clickConvertButton() {
-    console.log('convert started:');
-    this.estimatesService.convertEstimateToInvoice(this.invoiceId).subscribe(res => {
-      console.log('converted:');
-    });
+    // console.log('convert started:');
+    // this.estimatesService.convertEstimateToInvoice(this.invoiceId).subscribe(res => {
+    //   console.log('converted:');
+    // });
+    this.filterService.convertClicked.next(true);
+  }
+
+  ngOnDestroy() {
+    this.filterService.convertClicked.next(false);
   }
 }
