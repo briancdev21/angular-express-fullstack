@@ -3,58 +3,163 @@
     <div class="main__info flex" >
       <div class="left-sidebar">
         <div class="flex aligntop" >
-          <app-in-customer-name class="flex1 mr-15" [userList]="userList" (selectedUser)="onSelectUser($event)" [searchStr]="currentOwner" ></app-in-customer-name>
+          <div class="customer-name">
+            <span>Customer name</span>
+            <ng2-completer class="mr-15" [(ngModel)]="customerName" [datasource]="contactsSource" [minSearchLength]="0" (keyup.enter)="onEnter()" (selected)="onSelectCustomer($event)" [ngClass]="{'validation-required': invalidName}" *ngIf="contactList" ></ng2-completer>
+          </div>
+          
           <div class="email-address">
             <span>Email address</span>
-            <app-multiemailselect [keywords]="emailAddresses" (multiEmails)="getMultiEmails($event)"></app-multiemailselect>
+            <app-multiemailselect [keywords]="emailAddresses" (multiEmails)="getMultiEmails($event)" [ngClass]="{'validation-required': invalidEmail}"></app-multiemailselect>
           </div>
         </div>
-        <app-shippingaddress class="shippingaddress" [customerAddress]="customerAddress" [(shippingAddress)]="shippingAddress" (updateAddress)="getUpdatedShippiingAddress($event)" (updateAddress)="getShippingAddress($event)"></app-shippingaddress>
-        <div class="project-log">
-          <app-in-project-selector class="flex1 mr-15" [projects]="projects" (changedProject)="onChangeProject($event)" ></app-in-project-selector>
-          <div class="log-number" (change)="onChooseChangeLog($event)" >
-            <select >
-              <option selected disabled>Enter the change log number here</option>
-              <option *ngFor="let logNumber of changeLogNumbers" [value]="logNumber.id">{{logNumber.title}}</option>
-            </select>
+        <div class="shipping-address ">
+          <div class="desc">
+            <span>Shipping Address</span>
+            <div class="switch-bar">
+              <img src="assets/images/switch.png" *ngIf="switchIconShipping" (click)="clickIconShipping()">
+              <img src="assets/images/switch-off.png" *ngIf="!switchIconShipping" (click)="clickIconShipping()">
+              <span>Use customer address</span>
+            </div>
           </div>
+          <input placeholder="Enter Shipping Address" class="address" [(ngModel)]="address" [ngClass]="{'validation-required': invalidAddress}" >
+          
+          <div class="city-state">
+
+            <input placeholder="Enter City" [(ngModel)]="city" [ngClass]="{'validation-required': invalidCity}" (blur)="updatingEstimate()">
+
+            <ng2-completer 
+              [(ngModel)]="province" 
+              [ngClass]="{'validation-required': invalidProvince}" 
+              [datasource]="provincesSource" 
+              [minSearchLength]="0" 
+              (keyup.enter)="onEnter()" 
+              (selected)="onSelectProvince($event)"
+              [placeholder]="'Enter Provice'">
+            </ng2-completer>
+
+          </div>
+          <div class="country-zip">
+
+            <ng2-completer 
+              [(ngModel)]="country" 
+              [ngClass]="{'validation-required': invalidCountry}" 
+              [datasource]="countriesSource" 
+              [minSearchLength]="0" 
+              (keyup.enter)="onEnter()" 
+              (selected)="onSelectCountry($event)"
+              [placeholder]="'Enter Country'">
+            </ng2-completer>
+            <input placeholder="Enter Zipcode" [(ngModel)]="postalCode" [ngClass]="{'validation-required': invalidPostalCode}" (blur)="updatingEstimate()" >
+          </div>
+        </div>
+        <div class="project-log">
+          <div class="uneditable-input">{{projectName}}</div>
+          <div class="uneditable-input">{{changeLogName}}</div>
         </div>
       </div>
       <div class="right-sidebar" *ngIf="in_id">
-        <app-in-orderidfield [in_id]="in_id" [title]="invoiceNumberTitle"></app-in-orderidfield>
-        <app-in-createddatefield [(createdDate)]="createdDate" (changedCreatedDate)="changedCreatedDate($event)"></app-in-createddatefield>
-        <app-in-duedatefield [(dueDate)]="dueDate" [title]="dueDateTitle" (changedDueDate)="changedDueDate($event)"></app-in-duedatefield>
-        <app-in-class  [classList]="classList" [currentClass]="currentClass" (selectedClass)="onSelectClass($event)" ></app-in-class>
-        <app-in-category  [categoryList]="categoryList" [currentCategory]="currentCategory" (selectedCategory)="onSelectCategory($event)" ></app-in-category>
+        <div class="indi-category">
+          <span>Estimate</span>
+          <div class="non-editable">ES - {{estimateNumber}}</div>
+        </div>
+        <div class="indi-category">
+          <span>Date created</span>
+          <div class="non-editable">{{createdDate}}</div>
+        </div>
+        <div class="indi-category">
+          <span>Expiry Date</span>
+          <div class="orderinfo-input" >
+            <input [owlDateTimeTrigger]="owlduedate" [owlDateTime]="owlduedate" (dateTimeChange)="selectDueDate($event)" [(ngModel)]="dueDate" [min]="today" >
+            <owl-date-time [pickerType]="'calendar'" #owlduedate ></owl-date-time>
+          </div>
+        </div>
+        <div class="indi-category">
+          <span>Class</span>
+          <select name="class" [(ngModel)]="currentClassId" *ngIf="classList"  (ngModelChange)="updatingEstimate()">
+            <option *ngFor = "let class of classList" [ngValue]="class.id">{{class.name}}</option>
+          </select>
+        </div>
+        <div class="indi-category">
+          <span>Category</span>
+          <select name="category" [(ngModel)]="currentCategoryId" *ngIf="categoryList"  (ngModelChange)="updatingEstimate()">
+            <option *ngFor = "let category of categoryList" [ngValue]="category.id">{{category.name}}</option>
+          </select>
+        </div>
       </div>
     </div>
-    <div class="product__table" *ngIf="currentInvoiceId">
-      <app-es-profile-table [(productDetails)]="productDetails" [estimateId]="currentInvoiceId" (priceChange)="onPriceChanged()"></app-es-profile-table>
+    <div class="product__table" *ngIf="currentEstimateId">
+      <app-in-profile-table [(productDetails)]="productDetails" (priceChange)="onPriceChanged()" [invoiceId]="currentEstimateId"></app-in-profile-table>
     </div>
     <div class="sub__info">
       <div class="notes-activity">
         <div class="flex" >
-          <div class="internal-memo">
-            <app-in-internalmemo [(internalMemo)]="internalMemo" (changedMemo)="onChangedMemo($event)"></app-in-internalmemo>
+          <div class="indi-note">
+            <span>Internal Memo</span>
+            <textarea [(ngModel)]="internalMemo" (blur)="updatingEstimate()"></textarea>
           </div>
-          <div class="notetosupplier">
-              <app-in-notetosupplier [(noteToSupplier)]="noteToSupplier" (changedNote)="onChangedNote($event)"></app-in-notetosupplier>
+          <div class="indi-note">
+            <span>Note to customer</span>
+            <textarea [(ngModel)]="noteToSupplier" (blur)="updatingEstimate()"></textarea>
           </div>
-          <div class="term-of-invoice">
-              <app-in-terms-of-invoice [(termsOfInvoice)]="termsOfInvoice" [(title)]="title" (changedTerm)="onChangedTermsOfInvoice($event)"></app-in-terms-of-invoice>
+          <div class="indi-note">
+            <span>Terms of invoice</span>
+            <textarea [(ngModel)]="termsOfEstimate" (blur)="updatingEstimate()"></textarea>
           </div>
         </div>
-        <!-- <div class="timeline-activity">
-          <app-ng2timeline [timelineData]="timelineData" [oneSide]="true"></app-ng2timeline>
-        </div> -->
       </div>
       <div class="bill-count" >
-          <app-in-subtotalproducts [subtotalproducts]="subtotalproducts" ></app-in-subtotalproducts>
-          <app-in-subtotalservices [subtotalservices]="subtotalServices" ></app-in-subtotalservices>
-          <app-in-discount [discounttype]="discountType" [discountamount]="discountAmount" (discountChange)="onTotalPriceChange($event)" ></app-in-discount>
-          <app-in-taxes [taxes]="taxes" ></app-in-taxes>
-          <app-in-deposits-credits [depositsAmount]="depositsAmount" (depositsChange)="onTotalPriceChange($event)" ></app-in-deposits-credits>
-          <app-in-totalamountdue [totalamountdue]="totalamountdue" ></app-in-totalamountdue>
+          <div class="indi-category">
+            <span>Sub Total Products</span>
+            <div class="non-editable">
+              <span>$</span>
+              <span>{{subtotalproducts | number: '1.2-2'}}</span>
+            </div>
+          </div>
+
+          <div class="indi-category">
+            <span>Sub Total Services</span>
+            <div class="non-editable">
+              <span>$</span>
+              <span>{{subtotalServices | number: '1.2-2'}}</span>
+            </div>
+          </div>
+
+          <div class="indi-category">
+            <span>Discount</span>
+            <div class="discount">
+              <select [(ngModel)]="discountType" (ngModelChange)="updatingEstimate()">
+                <option value="AMOUNT">$</option>
+                <option value="PERCENT">%</option>
+              </select>
+              <input [(ngModel)]="discountAmount" (blur)="updatingEstimate()" type="number">
+            </div>
+          </div>
+
+          <div class="indi-category">
+            <span>Taxes</span>
+            <div class="non-editable">
+              <span>$</span>
+              <span>{{taxes | number: '1.2-2'}}</span>
+            </div>
+          </div>
+
+          <div class="indi-category">
+            <span>Deposits / Credits</span>
+            <div class="non-editable">
+              <span>$</span>
+              <input [(ngModel)]="depositsAmount" (blur)="updatingEstimate()" type="number">
+            </div>
+          </div>
+
+          <div class="indi-category">
+            <span>Total Amount Due</span>
+            <div class="non-editable">
+              <span>$</span>
+              <span>{{totalamountdue | number: '1.2-2'}}</span>
+            </div>
+          </div>
+
       </div>
     </div>
     
@@ -84,5 +189,5 @@
 </div>  
 
 <div>
-  <app-alertmodal [(modalContent)]="modalContent"></app-alertmodal>
+  <app-alertmodal [(modalContent)]="alertModalContent"></app-alertmodal>
 </div>
