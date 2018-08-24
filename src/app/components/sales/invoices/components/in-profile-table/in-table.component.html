@@ -7,7 +7,8 @@
         <th>SKU</th>
         <th>MODEL</th>
         <th>Name</th>
-        <th>QUANTITY</th>
+        <th>QTY</th>
+        <th>DELIVERED</th>
         <th>UNIT PRICE</th>
         <th>DISCOUNT %</th>
         <th>TOTAL</th>
@@ -44,6 +45,9 @@
         </td>
         <td class="quantity">
           <input class="quantity" type="number" placeholder="0" min="0" [(ngModel)]="productDetailInfo.quantity" (blur)="calcualteTotalPrice(i)"  (input)="checkValue($event)" />
+        </td>
+        <td class="quantity">
+          <span>{{productDetailInfo.delivered}}</span>
         </td>
         <td class="unitprice">
           <div class="unit-price">
