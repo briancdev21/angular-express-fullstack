@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
 import { EstimatesService } from '../../../../../services/estimates.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FilterService } from '../../filter.service';
@@ -8,7 +8,7 @@ import { FilterService } from '../../filter.service';
   templateUrl: './estimateprofileheader.component.html',
   styleUrls: ['./estimateprofileheader.component.css']
 })
-export class EstimateProfileHeaderComponent implements OnInit {
+export class EstimateProfileHeaderComponent implements OnInit, OnDestroy {
 
   status = '';
   invoiceId: string;
@@ -24,9 +24,14 @@ export class EstimateProfileHeaderComponent implements OnInit {
   }
 
   clickConvertButton() {
-    console.log('convert started:');
-    this.estimatesService.convertEstimateToInvoice(this.invoiceId).subscribe(res => {
-      console.log('converted:');
-    });
+    // console.log('convert started:');
+    // this.estimatesService.convertEstimateToInvoice(this.invoiceId).subscribe(res => {
+    //   console.log('converted:');
+    // });
+    this.filterService.convertClicked.next(true);
+  }
+
+  ngOnDestroy() {
+    this.filterService.convertClicked.next(false);
   }
 }
