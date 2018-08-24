@@ -38,6 +38,7 @@ export class InvoicesComponent implements OnInit {
   today = moment().format('YYYY-MM-DD');
   contactsList: any;
   contactsSource: CompleterData;
+  estContactsSource: CompleterData;
 
   public filters  = {
     createdFrom: '',
@@ -59,9 +60,11 @@ export class InvoicesComponent implements OnInit {
   newInvoice = {};
   newEstimate = {};
   contactId: any;
+  leadId: any;
   contactName: any;
+  estContactName: any;
   showInvoiceCreateModal = false;
-  invoiceModal = true;
+  showEstimateCreateModal = false;
 
   constructor(
     private filterService: FilterService,
@@ -125,17 +128,16 @@ export class InvoicesComponent implements OnInit {
       const contacts = res;
       this.addContactName(contacts);
       this.contactsSource = this.completerService.local(contacts, 'name', 'name');
+      this.crmService.getLeadsList().subscribe(lead => {
+        const leads = lead.results;
+        leads.map(l => l.flag = 'lead');
+        this.addContactName(leads);
+        console.log('lead: ', leads);
+        this.estContactsSource = this.completerService.local(contacts.concat(leads), 'name', 'name');
+      });
     });
   }
 
-  // constructor( private filterService: FilterService, private router: Router, private invoicesService: InvoicesService ) {
-  //   this.filterAvaliableTo = 'everyone';
-  //   this.invoicesService.getInvoices().subscribe(res => {
-  //     console.log('invoices: ', res.results);
-  //     this.invoicesListInfo = res.results;
-  //     this.invoicesListInfo.map(i => i['overdueDays'] = this.calcOverDueDays(i['dueDate'], i['status']));
-  //   });
-  // }
 
   ngOnInit() {
     this.backUpInvoices = this.invoicesListInfo;
@@ -273,26 +275,50 @@ export class InvoicesComponent implements OnInit {
     this.contactId = selectedIndex.originalObject.id;
   }
 
+  onSelectEstCustomerBeforeCreate(selectedIndex: any) {
+    console.log('selected: ', selectedIndex);
+    if (selectedIndex.originalObject.flag) {
+      this.leadId = selectedIndex.originalObject.id;
+    } else {
+      this.contactId = selectedIndex.originalObject.id;
+    }
+  }
+
   createInvoice() {
     if (this.contactId) {
       const creatingData = {
         contactId: this.contactId
       };
-      if (this.invoiceModal) {
-        this.invoicesService.createInvoice(creatingData).subscribe(res => {
-          console.log('invoice created: ', res);
-          this.router.navigate([`./invoice-profile/${res.data.id}`]);
-          this.showInvoiceCreateModal = false;
-          this.contactId = undefined;
-        });
-      } else {
-        this.estimatesService.createEstimate(creatingData).subscribe(res => {
-          console.log('estimate created: ', res);
-          this.router.navigate([`./estimate-profile/${res.data.id}`]);
-          this.showInvoiceCreateModal = false;
-          this.contactId = undefined;
-        });
-      }
+      this.invoicesService.createInvoice(creatingData).subscribe(res => {
+        console.log('invoice created: ', res);
+        this.router.navigate([`./invoice-profile/${res.data.id}`]);
+        this.showInvoiceCreateModal = false;
+        this.contactId = undefined;
+      });
+    }
+  }
+
+  createEstimate() {
+    if (this.contactId) {
+      const creatingData = {
+        contactId: this.contactId
+      };
+      this.estimatesService.createEstimate(creatingData).subscribe(res => {
+        console.log('estimate created: ', res);
+        this.router.navigate([`./estimate-profile/${res.data.id}`]);
+        this.showEstimateCreateModal = false;
+        this.contactId = undefined;
+      });
+    } else if (this.leadId) {
+      const creatingData = {
+        leadId: this.leadId
+      };
+      this.estimatesService.createEstimate(creatingData).subscribe(res => {
+        console.log('estimate created: ', res);
+        this.router.navigate([`./estimate-profile/${res.data.id}`]);
+        this.showEstimateCreateModal = false;
+        this.leadId = undefined;
+      });
     }
   }
 }

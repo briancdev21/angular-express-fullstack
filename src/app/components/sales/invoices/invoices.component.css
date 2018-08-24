@@ -448,3 +448,13 @@ app-submenu {
   width: 22px;
   height: 22px;
 }
+
+/deep/ .confirm-modal ng2-completer .completer-dropdown-holder {
+	width: calc(100% - 60px);
+}
+
+/deep/ .confirm-modal ng2-completer .completer-dropdown {
+	max-height: 200px !important;
+	overflow: auto;
+	width: calc(100% - 60px);
+}
