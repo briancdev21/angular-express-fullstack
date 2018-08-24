@@ -26,14 +26,14 @@ export class CrmService {
   }
 
   getLeadsList (limit: number = 50, offset: number = 0): Observable<any> {
-    const url = `${environment.apiUrl}/crm/leads/?limit=${limit}&offset=${offset}`;
+    const url = `${environment.apiUrl}/crm/leads`;
     // const url = `${environment.apiUrl}/crm/leads/`;
     return this.http.get(url);
   }
 
   createLead (body): Observable<any> {
     // const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), method: 'POST' };
-    const url = `${environment.apiUrl}/crm/leads/`;
+    const url = `${environment.apiUrl}/crm/leads`;
     return this.http.post(url, body, this.options)
       .map((res) => res);
 
