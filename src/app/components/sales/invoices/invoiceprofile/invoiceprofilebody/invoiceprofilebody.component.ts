@@ -389,60 +389,10 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
     this.saveInvoiceData.shippingAddress = event.data;
   }
 
-  onChangeProject(event) {
-    this.saveInvoiceData.projectId = event;
-    this.projectsService.getProjectChangeLogs(event).subscribe(res => {
-      this.changeLogNumbers = res.results;
-      console.log('changeLog numbers:', this.changeLogNumbers);
-    });
-  }
-
-  onChooseChangeLog(event) {
-    this.saveInvoiceData.changeLog = event.target.value;
-  }
-
   onPriceChanged() {
     this.updatingInvoice();
   }
 
-  onTotalPriceChange(data) {
-    if (data.type) {
-      this.saveInvoiceData.discount.unit = data.type;
-      this.saveInvoiceData.discount.value = data.amount;
-    } else {
-      this.saveInvoiceData.deposit = data.depositsAmount;
-    }
-    this.saveInvoice();
-  }
-
-  saveInvoice() {
-    if (!this.saveInvoiceData.hasOwnProperty('deposit')) {
-      this.saveInvoiceData.deposit = 0;
-    }
-    if (this.saveInvoiceData.recurring === null) {
-      this.saveInvoiceData.recurring = [];
-    }
-    if (this.saveInvoiceData.terms === null) {
-      this.saveInvoiceData.terms = '';
-    }
-    if (this.saveInvoiceData.internalNote === null) {
-      this.saveInvoiceData.internalNote = '';
-    }
-    if (this.saveInvoiceData.customerNote === null) {
-      this.saveInvoiceData.customerNote = '';
-    }
-    if (this.saveInvoiceData.reminder === null) {
-      this.saveInvoiceData.reminder = [];
-    }
-    this.invoicesService.updateInvoice(this.currentInvoiceId, this.saveInvoiceData).subscribe( res => {
-      console.log('saved invoice: ', res);
-      this.taxes = res.data.taxTotal;
-      this.totalamountdue = res.data.total;
-      this.subtotalServices = res.data.serviceSubTotal;
-      this.subtotalproducts = res.data.productSubTotal;
-      this.invoicesService.sendEmail(this.currentInvoiceId).subscribe();
-    });
-  }
   addContactName(data) {
     data.forEach(element => {
       if (element.type === 'PERSON') {
