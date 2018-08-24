@@ -11,13 +11,13 @@ import { FilterService } from '../../filter.service';
 export class EstimateProfileHeaderComponent implements OnInit {
 
   status = '';
-  invoiceId: Number;
+  invoiceId: string;
   constructor(private estimatesService: EstimatesService, private route: ActivatedRoute, private filterService: FilterService ) {
 
   }
   ngOnInit() {
     // this.status = this.route.snapshot.paramMap.get('title');
-    this.invoiceId = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+    this.invoiceId = this.route.snapshot.paramMap.get('id');
     this.estimatesService.getIndividualEstimate(this.invoiceId).subscribe(res => {
       this.status = res.data.status;
     });
