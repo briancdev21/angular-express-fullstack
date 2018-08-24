@@ -153,10 +153,11 @@ export class PmDashboardComponent implements OnInit {
       this.projectsInfo.pendingProject = res.pendingProjectsCount;
     });
 
-    this.sharedService.getProjectsStatistics(11, 0, 'MONTHLY', 'actualProjectBugdetOverTime').subscribe(res => {
-      const areaActualData = res.actualProjectBugdetOverTime;
-      this.sharedService.getProjectsStatistics(11, 0, 'MONTHLY', 'estimatedProjectBugdetOverTime').subscribe(est => {
-        const areaEstimatedData = est.estimatedProjectBugdetOverTime;
+    this.sharedService.getProjectsStatistics(11, 0, 'MONTHLY', 'actualProjectBudgetOverTime').subscribe(res => {
+      const areaActualData = res.actualProjectBudgetOverTime;
+      console.log('actual : ', res);
+      this.sharedService.getProjectsStatistics(11, 0, 'MONTHLY', 'estimatedProjectBudgetOverTime').subscribe(est => {
+        const areaEstimatedData = est.estimatedProjectBudgetOverTime;
         this.areaChartInfo = [];
         for (let i = 0; i < 12; i ++) {
           const addingIndi = {

@@ -604,31 +604,31 @@ export class SharedService {
 
   getSalesStatistics(start, end, interval, fields): Observable<any> {
     const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
-    const url = `${environment.apiUrl}/organization/statistics/sales`;
+    const url = `${environment.apiUrl}/sales/statistics`;
     return this.http.get(url, {params: params});
   }
 
   getCrmStatistics(start, end, interval, fields): Observable<any> {
     const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
-    const url = `${environment.apiUrl}/organization/statistics/CRM`;
+    const url = `${environment.apiUrl}/CRM/statistics`;
     return this.http.get(url, {params: params});
   }
 
   getInventoryStatistics(start, end, interval, fields): Observable<any> {
     const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
-    const url = `${environment.apiUrl}/organization/statistics/inventory`;
+    const url = `${environment.apiUrl}/inventory/statistics`;
     return this.http.get(url, {params: params});
   }
 
   getCollaboratorsStatistics(start, end, interval, fields): Observable<any> {
     const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
-    const url = `${environment.apiUrl}/organization/statistics/collaborators`;
+    const url = `${environment.apiUrl}/collaborators/statistics`;
     return this.http.get(url, {params: params});
   }
 
   getProjectsStatistics(start, end, interval, fields): Observable<any> {
     const params = new HttpParams().set('startFrame', start).set('endFrame', end).set('interval', interval).set('fields', fields);
-    const url = `${environment.apiUrl}/organization/statistics/projects`;
+    const url = `${environment.apiUrl}/project-management/statistics`;
     return this.http.get(url, {params: params});
   }
   getInvoiceCategories(): Observable<any> {
