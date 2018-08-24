@@ -10,9 +10,6 @@ import { InvoicesService } from '../../../../../services/invoices.service';
 })
 export class InvoiceProfileFooterComponent implements OnInit, OnDestroy {
 
-  @Input() set createdInvoice(_createdInvoice) {
-  }
-
   settingsCollapsed = true;
   showReminderModal = false;
 
@@ -44,16 +41,24 @@ export class InvoiceProfileFooterComponent implements OnInit, OnDestroy {
   showRecurringModal = false;
   template: any;
   Interval = '';
+  currentInvoice: any;
+  invoiceStatus: any;
 
   constructor(
     private router: Router,
     private filterService: FilterService,
     private invoicesService: InvoicesService,
     private route: ActivatedRoute) {
+
+      this.currentInvoiceId = this.route.snapshot.paramMap.get('id');
+      this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
+        console.log('current invoice', res);
+        this.currentInvoice = res.data;
+        this.invoiceStatus = res.data.status;
+      });
   }
 
   ngOnInit() {
-    console.log('created invoice: ', this.createdInvoice);
     // this.chargeFeeUnit = this.createdInvoice.
     this.currentInvoiceId = this.route.snapshot.paramMap.get('id');
     this.invoicesService.getIndividualInvoice(this.currentInvoiceId).subscribe(res => {
@@ -81,6 +86,10 @@ export class InvoiceProfileFooterComponent implements OnInit, OnDestroy {
     this.router.navigate(['./sales/invoices']);
   }
 
+  voidInvoice() {
+    this.filterService.voidClicked.next( true );
+  }
+
   onSwitchChanged(val) {
 
   }
@@ -102,5 +111,6 @@ export class InvoiceProfileFooterComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.filterService.saveClicked.next( false );
     this.filterService.deleteClicked.next( false );
+    this.filterService.voidClicked.next( false );
   }
 }
