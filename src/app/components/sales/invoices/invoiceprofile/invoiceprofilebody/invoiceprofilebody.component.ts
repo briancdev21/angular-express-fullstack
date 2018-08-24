@@ -23,10 +23,6 @@ import { provinces } from '../../../../../../assets/json/provinces';
 export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   // @Input() createdInvoice;
 
-  @Input() set createdInvoice(_createdInvoice) {
-
-  }
-
   invoice_mock: any;
   userList = [];
   classList = [];
@@ -128,7 +124,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
   saveInvoiceData: any;
   currentOwner: string;
   invoiceStatus = 'NEW';
-  modalContent = 'You cannot update a PAID or VOID Invoice';
+  modalContent = 'You cannot update a CLOSED or VOID Invoice';
 
   contactsSource: CompleterData;
   currentInvoice: any;
@@ -170,7 +166,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
       console.log('current invoice', res);
       this.currentInvoice = res.data;
       this.invoiceStatus = res.data.status;
-      if (this.invoiceStatus === 'PAID' || this.invoiceStatus === 'CLOSED' ) {
+      if (this.invoiceStatus === 'VOID' || this.invoiceStatus === 'CLOSED' ) {
         this.commonService.showAlertModal.next(true);
       }
       this.sharedService.getMulipleContacts(this.currentInvoice.contactId).subscribe(contact => {
@@ -317,6 +313,13 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
     this.filterService.deleteClicked.subscribe(data => {
       if (data) {
         this.deleteService();
+      }
+    });
+
+    this.filterService.voidClicked.subscribe(data => {
+      if (data) {
+        this.currentInvoice.status = 'VOID';
+        this.updatingInvoice();
       }
     });
   }
@@ -492,7 +495,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
     this.invalidPostalCode = false;
     this.invalidName = false;
 
-    if (this.invoiceStatus === 'PAID' || this.invoiceStatus === 'CLOSED' ) {
+    if (this.invoiceStatus === 'VOID' || this.invoiceStatus === 'CLOSED' ) {
       this.commonService.showAlertModal.next(true);
     } else {
       if (this.address && this.province && this.city && this.country && this.postalCode && this.selectedContact) {
@@ -500,7 +503,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
           'contactId': this.selectedContact.id,
           'classificationId': this.currentClassId,
           'categoryId': this.currentCategoryId,
-          'termId': this.currentTermId,
+          'termId': undefined,
           'emails': this.emails,
           'shippingAddress': {
             'address': this.address,
@@ -529,7 +532,7 @@ export class InvoiceProfileBodyComponent implements OnInit, OnDestroy {
           'receivedPayment': this.currentInvoice.receivedPayment,
           'deliverProducts': this.currentInvoice.deliverProducts
         };
-        Object.keys(updatingData).forEach((key) => (updatingData[key] == null) && delete updatingData[key]);
+        Object.keys(updatingData).forEach((key) => (updatingData[key] === null) && delete updatingData[key]);
         this.invoicesService.updateInvoice(this.currentInvoiceId, updatingData).subscribe(res => {
           console.log('updated: ', res);
           this.subtotalproducts = res.data.productSubTotal;
