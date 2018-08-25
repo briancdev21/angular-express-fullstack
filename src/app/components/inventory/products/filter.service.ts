@@ -5,6 +5,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 
 export class FilterService {
+  openImageUploadModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  sendImageData: BehaviorSubject<any> = new BehaviorSubject({});
   constructor() {
   }
 }

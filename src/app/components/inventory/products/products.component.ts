@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
 import { ProductsService } from '../../../services/inventory/products.service';
@@ -14,7 +14,7 @@ import { ProposalService } from '../../sales/proposal/proposal.service';
   ],
   providers: [FilterService]
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, OnDestroy {
 
   menuCollapsed = true;
   saveFilterModalCollapsed = true;
@@ -29,6 +29,12 @@ export class ProductsComponent implements OnInit {
   public showAddProductModal = false;
   public addProductModalCollapsed = true;
   productsInfoAll: any;
+
+  showEditImageModal = false;
+  keywordsList;
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+  selectedUncroppedFile: any;
 
   constructor( private filterService: FilterService, private productsService: ProductsService, private proposalService: ProposalService ) {
     this.filterAvaliableTo = 'everyone';
@@ -69,6 +75,11 @@ export class ProductsComponent implements OnInit {
   public productTypes = ['Individual', 'Business'];
   ngOnInit() {
     this.backUpProducts = this.productsListInfo;
+    this.filterService.openImageUploadModal.subscribe(data => {
+      if (data) {
+        this.showEditImageModal = true;
+      }
+    });
   }
 
   retrieveProductsListData() {
@@ -150,5 +161,46 @@ export class ProductsComponent implements OnInit {
   openAddProductModal() {
     this.showAddProductModal = true;
     this.addProductModalCollapsed = false;
+  }
+
+  changeImage() {
+    this.showEditImageModal = true;
+  }
+
+  cancelCrop() {
+    this.showEditImageModal = false;
+  }
+
+  saveCrop() {
+    this.showEditImageModal = false;
+    const uploadData = new FormData();
+    uploadData.append('productPicture', this.selectedUncroppedFile, this.selectedUncroppedFile.name);
+    const sendingData = {
+      'cropped': this.croppedImage,
+      'saving': uploadData
+    };
+    this.filterService.sendImageData.next(sendingData);
+
+    // this.productsService.uploadProductProfileImage(this._productInfo.id, uploadData).subscribe(res => {
+    //   console.log('imga result: ', res);
+    // });
+  }
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+    this.selectedUncroppedFile = event.target.files[0];
+  }
+  imageCropped(image: string) {
+    this.croppedImage = image;
+  }
+
+  imageLoaded() {
+  }
+
+  loadImageFailed() {
+  }
+
+  ngOnDestroy() {
+    this.filterService.sendImageData.next(undefined);
   }
 }

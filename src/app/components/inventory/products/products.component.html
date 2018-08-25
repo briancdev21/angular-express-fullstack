@@ -84,3 +84,39 @@
 <div class="add-product-modal"  [ngClass]="{'show-add-product-modal': !addProductModalCollapsed, 'hide-add-product-modal': addProductModalCollapsed }">
   <app-addproductmodal [showAddProductModal]="showAddProductModal" [addProductModalCollapsed]="addProductModalCollapsed" [productsInfoAll]="productsInfoAll"></app-addproductmodal>
 </div>
+
+
+<!-- Image Edit Modal -->
+
+<div class="edit-image-modal-wrapper" *ngIf="showEditImageModal" ></div>
+<div [ngClass]="{'confirm-modal': showEditImageModal, 'confirm-modal-hide': !showEditImageModal }">
+  <div class="header">
+    <span>Change Image</span>
+    <img class="close-btn" src="assets/images/x-sign-red.png" (click)="cancelCrop();showEditImageModal=false" />
+  </div>
+  <div class="edit-modal-content">
+    <input type="file" (change)="fileChangeEvent($event)" />
+    <div class="image-content">
+      <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="1"
+          [resizeToWidth]="300"
+          format="png"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded()"
+          (loadImageFailed)="loadImageFailed()"
+      ></image-cropper>
+      
+      <img [src]="croppedImage" />
+    </div>
+  </div>
+  <div class="center-btn-section" >
+    <button class="cancel-btn" (click)="cancelCrop()">
+      Cancel
+    </button>
+    <button class="done-btn" (click)="saveCrop()">
+      Confirm
+    </button>
+  </div>
+</div>  

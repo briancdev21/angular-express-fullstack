@@ -20,16 +20,10 @@
               </div>
             </div>
             <div class="content-right">
-              <image-upload
-                [max]="6"
-                [buttonCaption]="''"
-                [dropBoxMessage]="'Drage and Drop images here!'"
-                [extensions]="['jpg','png','gif']"
-                [class]="customClass"
-                (removed)="onRemoved($event)"
-                (uploadFinished)="onUploadFinished($event)"
-                (uploadStateChanged)="onUploadStateChanged($event)">
-              </image-upload>
+              <div class="logo">
+                <img [src]='addedProduct.pictureURI' alt = "Add Profile Image Here"/>
+                <img src="assets/images/Cloud.png" class="img-settings" (click)="changeImage()"/>
+              </div>
             </div>
           </div>
           <div class="supplier-brand">

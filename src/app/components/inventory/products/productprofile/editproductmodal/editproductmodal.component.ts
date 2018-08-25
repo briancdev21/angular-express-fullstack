@@ -278,6 +278,10 @@ export class EditProductModalComponent implements OnInit {
   }
 
   clickNext(pos) {
+    this.tabActiveFirst = false;
+    this.tabActiveSecond = false;
+    this.tabActiveThird = false;
+    this.tabActiveFour = false;
     if (pos === 'tab-one') {
       this.invalidModelNumber = false;
       this.invalidProductType = false;
@@ -289,9 +293,7 @@ export class EditProductModalComponent implements OnInit {
       if (this.addedProduct.model && this.addedProduct.type && this.supplier && this.brand
         && this.addedProduct.productName && this.addedProduct.productDesc) {
         this.tabActiveSecond = true;
-        this.tabActiveFirst = false;
-        this.tabActiveThird = false;
-        this.tabActiveFour = false;
+        this.updateProduct();
       } else {
         if (!this.addedProduct.modelNumber) {
           this.invalidModelNumber = true;
@@ -312,22 +314,14 @@ export class EditProductModalComponent implements OnInit {
           this.invalidManufacturer = true;
         }
         setTimeout(() => {
-          this.tabActiveSecond = false;
           this.tabActiveFirst = true;
-          this.tabActiveThird = false;
-          this.tabActiveFour = false;
         });
       }
     } else if (pos === 'tab-two') {
       this.tabActiveThird = true;
-      this.tabActiveFirst = false;
-      this.tabActiveSecond = false;
-      this.tabActiveFour = false;
+      this.updateProduct();
     } else if (pos === 'tab-three') {
       this.tabActiveFour = true;
-      this.tabActiveFirst = false;
-      this.tabActiveThird = false;
-      this.tabActiveSecond = false;
     }
   }
 
@@ -367,6 +361,12 @@ export class EditProductModalComponent implements OnInit {
 
     if (!savingProductMd.leadTime.duration || !savingProductMd.leadTime.unit) {
       delete savingProductMd.leadTime;
+    }
+
+    if (savingProductMd.status !== 'INACTIVE') {
+      savingProductMd.status = `ACTIVE`;
+    } else {
+      savingProductMd.status = 'INACTIVE';
     }
 
     Object.keys(savingProductMd).forEach((key) => (savingProductMd[key] == null) && delete savingProductMd[key]);
@@ -695,22 +695,18 @@ export class EditProductModalComponent implements OnInit {
 
   onProductTypeSelected(item) {
     this.selectedProductTypeId = item.originalObject.id;
-    this.updateProduct();
   }
 
   onSupplierSelected(item) {
     this.selectedSupplierId = item.originalObject.id;
-    this.updateProduct();
   }
 
   onBrandSelected(item) {
     this.selectedBrandId = item.originalObject.id;
-    this.updateProduct();
   }
 
   getKeywordsId(event) {
     this.selectedKeywordsId = event.map(e => e.id);
-    this.updateProduct();
   }
 
   getKeywordsName(val) {
@@ -728,6 +724,9 @@ export class EditProductModalComponent implements OnInit {
   }
 
   onUploadStateChanged(event) {
+  }
+
+  changeImage() {
   }
 
   createVariants() {

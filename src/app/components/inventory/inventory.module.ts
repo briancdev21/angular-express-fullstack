@@ -9,6 +9,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule, MatButtonModule, MatButtonToggleModule, MatCheckboxModule } from '@angular/material';
 import { DragulaModule } from 'ng2-dragula';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { ProfileCmpModule } from '../profile/profile.module';
 import { CommonCmpModule } from '../common/common.module';
@@ -72,7 +73,8 @@ import { ReceiveInventoryDetailModule } from './receiveinventorydetail/receivein
     InventoryTRProfileModule,
     ReceiveInventoryModule,
     ReceiveInventoryDetailModule,
-    ProposalCmpModule
+    ProposalCmpModule,
+    ImageCropperModule
   ],
   exports: [
     MatInputModule,

@@ -26,7 +26,6 @@ export class ProductsService {
   getProductsList (limit: number = 50, offset: number = 0): Observable<any> {
     const url = `${environment.apiUrl}/inventory/products/?limit=${limit}&offset=${offset}`;
     // const url = `${apiUrl}inventory/products/`;
-    console.log('id_token', apiHeaders());
     return this.http.get(url);
   }
 
@@ -35,12 +34,6 @@ export class ProductsService {
     const url = `${environment.apiUrl}/inventory/products/`;
     return this.http.post(url, body, this.options)
       .map((res) => res);
-
-    // return this.http.post<any>(url, body);
-      // .pipe(tap(data => {
-      //   console.log('return post data: ', data);
-      // }));
-
   }
 
   getIndividualProduct(id): Observable<any>  {
