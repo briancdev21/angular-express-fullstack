@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MultiKeywordSelectComponent } from '../../../profile/multikeywordselect/multikeywordselect.component';
 import { ProposalService } from '../proposal.service';
@@ -6,6 +6,7 @@ import { SuppliersService } from '../../../../services/suppliers.service';
 import { SharedService } from '../../../../services/shared.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { ProductsService } from '../../../../services/inventory/products.service';
+import { FilterService } from '../../../inventory/products/filter.service';
 
 @Component({
   selector: 'app-addproductmodal',
@@ -18,7 +19,7 @@ import { ProductsService } from '../../../../services/inventory/products.service
   ]
 })
 
-export class AddProductModalComponent implements OnInit {
+export class AddProductModalComponent implements OnInit, OnDestroy {
   @ViewChild('tabsRef', {read: ElementRef}) tabsRef: ElementRef;
   @Input() showAddProductModal;
   @Input() addProductModalCollapsed;
@@ -106,7 +107,8 @@ export class AddProductModalComponent implements OnInit {
   missingSku = false;
 
   constructor(private proposalService: ProposalService, private completerService: CompleterService,
-     private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService) {
+    private suppliersService: SuppliersService, private sharedService: SharedService, private productsService: ProductsService,
+    private productFilterService: FilterService) {
 
     this.proposalService.newProductId.subscribe(data => {
       if (data.id) {
@@ -196,6 +198,16 @@ export class AddProductModalComponent implements OnInit {
   }
   ngOnInit() {
     this.autoGenerate();
+    this.productFilterService.sendImageData.subscribe(data => {
+      console.log('image: ', data, typeof data);
+      if (data.cropped) {
+        this.addedProduct.pictureURI = data.cropped;
+      }
+    });
+  }
+
+  changeImage() {
+    this.productFilterService.openImageUploadModal.next(true);
   }
 
   closeModal() {
@@ -660,6 +672,10 @@ export class AddProductModalComponent implements OnInit {
         console.log('saved acc: ', res);
       });
     });
+  }
+
+  ngOnDestroy() {
+    this.productFilterService.openImageUploadModal.next(false);
   }
 }
 

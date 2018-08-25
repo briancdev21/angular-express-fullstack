@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonComponent } from '../../common/common.component';
 import { FilterService } from './filter.service';
 import { ProductsService } from '../../../services/inventory/products.service';
@@ -14,7 +14,7 @@ import { ProposalService } from '../../sales/proposal/proposal.service';
   ],
   providers: [FilterService]
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, OnDestroy {
 
   menuCollapsed = true;
   saveFilterModalCollapsed = true;
@@ -75,6 +75,11 @@ export class ProductsComponent implements OnInit {
   public productTypes = ['Individual', 'Business'];
   ngOnInit() {
     this.backUpProducts = this.productsListInfo;
+    this.filterService.openImageUploadModal.subscribe(data => {
+      if (data) {
+        this.showEditImageModal = true;
+      }
+    });
   }
 
   retrieveProductsListData() {
@@ -170,6 +175,11 @@ export class ProductsComponent implements OnInit {
     this.showEditImageModal = false;
     const uploadData = new FormData();
     uploadData.append('productPicture', this.selectedUncroppedFile, this.selectedUncroppedFile.name);
+    const sendingData = {
+      'cropped': this.croppedImage,
+      'saving': uploadData
+    };
+    this.filterService.sendImageData.next(sendingData);
 
     // this.productsService.uploadProductProfileImage(this._productInfo.id, uploadData).subscribe(res => {
     //   console.log('imga result: ', res);
@@ -190,4 +200,7 @@ export class ProductsComponent implements OnInit {
   loadImageFailed() {
   }
 
+  ngOnDestroy() {
+    this.filterService.sendImageData.next(undefined);
+  }
 }
