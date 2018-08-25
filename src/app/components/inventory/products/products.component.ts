@@ -30,6 +30,12 @@ export class ProductsComponent implements OnInit {
   public addProductModalCollapsed = true;
   productsInfoAll: any;
 
+  showEditImageModal = false;
+  keywordsList;
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+  selectedUncroppedFile: any;
+
   constructor( private filterService: FilterService, private productsService: ProductsService, private proposalService: ProposalService ) {
     this.filterAvaliableTo = 'everyone';
 
@@ -151,4 +157,37 @@ export class ProductsComponent implements OnInit {
     this.showAddProductModal = true;
     this.addProductModalCollapsed = false;
   }
+
+  changeImage() {
+    this.showEditImageModal = true;
+  }
+
+  cancelCrop() {
+    this.showEditImageModal = false;
+  }
+
+  saveCrop() {
+    this.showEditImageModal = false;
+    const uploadData = new FormData();
+    uploadData.append('productPicture', this.selectedUncroppedFile, this.selectedUncroppedFile.name);
+
+    // this.productsService.uploadProductProfileImage(this._productInfo.id, uploadData).subscribe(res => {
+    //   console.log('imga result: ', res);
+    // });
+  }
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+    this.selectedUncroppedFile = event.target.files[0];
+  }
+  imageCropped(image: string) {
+    this.croppedImage = image;
+  }
+
+  imageLoaded() {
+  }
+
+  loadImageFailed() {
+  }
+
 }
