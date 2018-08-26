@@ -84,7 +84,7 @@
                   <input [value]="task.id" type="hidden" class="taskId" >
                   <input [value]="milestone.id" type="hidden" class="taskGroupId" >  
                   <img *ngIf="task.dependency" src="assets/images/link.png" [ngClass]="{'blured': task.dependency[0]}" (click)="openDependencyModal($event); editable=true; $event.stopPropagation();">
-                  <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.isImportant}" (click)="updateImportantTask($event)" >
+                  <img src="assets/images/alarm.png" [ngClass]="{'blured': !task.notify}" (click)="updateImportantTask($event)" >
                   <!-- <img src="assets/images/attachment.png" [ngClass]="{'blured': !task.attachment}" (click)="uploadAttachment()"> -->
                   <img src="assets/images/menu(1).png" (click)='openShowSettingModal(i, j);$event.stopPropagation();'>
                   <!--Dependency numbers-->

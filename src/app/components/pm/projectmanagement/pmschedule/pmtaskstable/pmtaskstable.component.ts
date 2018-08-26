@@ -544,9 +544,10 @@ export class PmTasksTableComponent implements OnInit {
   updateTask(milestoneId, taskId, taskData) {
     taskData.startDate = moment(taskData.startDate).format('YYYY-MM-DD');
     taskData.dependencyIds = taskData.dependency ? taskData.dependency : [];
-    taskData.followers = taskData.followers ? taskData.followers : [];
+    // taskData.followers = taskData.followers ? taskData.followers : [];
     taskData.keywordIds = taskData.keywordIds ? taskData.keywordIds : [];
     taskData.note = taskData.note ? taskData.note : '';
+    delete taskData['followers'];
 
     this.pmTasksService.updateIndividualTask(milestoneId, taskId, taskData).subscribe(res => {
       console.log('task updated:', res);
@@ -583,8 +584,8 @@ export class PmTasksTableComponent implements OnInit {
     const taskId = event.srcElement.parentElement.querySelector('input.taskId').value;
     const sourcePanelData = this.copyMilestones.filter(milestone => milestone.id.toString() === milestoneId.toString()).pop();
     const selectedTaskData = sourcePanelData.tasks.filter(task => task.id.toString() === taskId.toString()).pop();
-    selectedTaskData.isImportant = !selectedTaskData.isImportant;
-    event.srcElement.className = selectedTaskData.isImportant ? 'blured' : '';
+    selectedTaskData.notify = !selectedTaskData.notify;
+    event.srcElement.className = selectedTaskData.notify ? 'blured' : '';
     this.updateTask(milestoneId, taskId, selectedTaskData);
   }
 

@@ -59,9 +59,16 @@ export class MyTasksComponent implements OnInit {
   showSettingsModal = [[]];
   showDeleteConfirmModal = [[]];
   projectName = '';
+  currentUserName: any;
 
   constructor( private dragulaService: DragulaService, private fb: FormBuilder, private renderer: Renderer,
     private pmTasksService: PmTasksService, private sharedService: SharedService, private projectsService: ProjectsService ) {
+
+    const idToken = localStorage.getItem('id_token');
+    const parsedToken = this.parseJwt(idToken);
+    console.log('&&& parsed: ', parsedToken);
+    this.currentUserName = parsedToken.nickname;
+
     dragulaService.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });
@@ -546,5 +553,11 @@ export class MyTasksComponent implements OnInit {
       }
     }
     this.showSettingsModal[i][j] = true;
+  }
+
+  parseJwt (token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace('-', '+').replace('_', '/');
+    return JSON.parse(window.atob(base64));
   }
 }
